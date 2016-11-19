@@ -29,15 +29,16 @@ ttrace.debug.send("level2");
 ttrace.debug.unIndent("end level1", undefined, undefined, true);    
 
 // subnode 
-var Node = ttrace.debug.send("levelA using sub node method");
-Node.send("levelB as child from levelA");
-Node.send("levelB as child from levelA");
-Node.send("levelB as child from levelA");
+var Node = ttrace.debug.send("level1 using sub node method");
+Node.send("level2 as child from level1");
+Node.send("level2 as child from level1");
+Node.send("level2 as child from level1");
 
+// 3 levels subnodes 
 ttrace.debug
-    .send("level-I")
-       .send("level-II")
-           .send("level-III");
+    .send("level1")
+       .send("level2")
+           .send("level3");
 
 // enter method
 //...
@@ -46,9 +47,19 @@ ttrace.debug
 ttrace.debug.sendCaller ("caller");
 ttrace.debug.sendStack("stack");
 
+// color, font size and type
+ttrace.debug.send("bold").setFontDetail(-1, /*bold*/ true) ; // colId, bold, italic, color, size, fontName.
+
+var FontDetail = new ttrace.classes.FontDetail() ;
+FontDetail.colId = -1 ;
+FontDetail.italic = true ;
+ttrace.debug.send("Italic").setFontDetail(FontDetail) ; 
+
+
+//----------------------------------------------------------------------------------
+
 
 // http://127.0.0.1:3000
-
 
 const http = require('http');
 const hostname = '127.0.0.1';

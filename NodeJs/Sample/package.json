@@ -4,16 +4,16 @@
   "description": "",
   "main": "example.js",
   "dependencies": {
+    "@types/node": "^6.0.48",
     "caller-id": "^0.1.0",
     "ejs": "^2.5.2",
     "express": "^4.14.0",
     "express-generator": "^4.14.0",
     "jquery": "^3.1.1",
-    "npm": "^4.0.2",
+    "npm": "^4.0.3",
     "npm-windows-upgrade": "^3.1.1",
     "socket.io": "^1.5.1",
-    "stack-trace": "0.0.9",
-    "tracetool": "^12.9.1",
+    "tracetool": "^12.9.3",
     "typescript": "^2.1.1"
   },
   "devDependencies": {

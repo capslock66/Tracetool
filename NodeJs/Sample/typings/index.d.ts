@@ -7,3 +7,4 @@
 /// <reference path="globals/socket.io/index.d.ts" />
 /// <reference path="globals/stack-trace/index.d.ts" />
 /// <reference path="globals/typescript/index.d.ts" />
+/// <reference path="globals/uuid/index.d.ts" />

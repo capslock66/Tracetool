@@ -21,6 +21,7 @@
     <Compile Include="example.js" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="node_modules\" />
     <Folder Include="node_modules\tracetool\" />
     <Folder Include="node_modules\tracetool\lib\" />
     <Folder Include="typings\" />
@@ -37,6 +38,7 @@
     <Folder Include="typings\globals\socket.io\" />
     <Folder Include="typings\globals\stack-trace\" />
     <Folder Include="typings\globals\typescript\" />
+    <Folder Include="typings\globals\uuid\" />
   </ItemGroup>
   <ItemGroup>
     <TypeScriptCompile Include="typings\globals\ejs\index.d.ts" />
@@ -51,6 +53,7 @@
     <TypeScriptCompile Include="typings\globals\socket.io\index.d.ts" />
     <TypeScriptCompile Include="typings\globals\stack-trace\index.d.ts" />
     <TypeScriptCompile Include="typings\globals\typescript\index.d.ts" />
+    <TypeScriptCompile Include="typings\globals\uuid\index.d.ts" />
     <TypeScriptCompile Include="typings\index.d.ts" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.Common.targets" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
