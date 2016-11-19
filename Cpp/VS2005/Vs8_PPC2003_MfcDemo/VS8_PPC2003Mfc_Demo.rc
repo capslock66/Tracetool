@@ -1,0 +1,443 @@
+// Microsoft Visual C++ generated resource script.
+//
+#include "resourceppc.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#include "afxres.h"
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// English (U.S.) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
+#ifdef _WIN32
+LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
+#pragma code_page(1252)
+#endif //_WIN32
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Icon
+//
+
+// Icon with lowest ID value placed first to ensure application icon
+// remains consistent on all systems.
+IDR_MAINFRAME           ICON                    "res\\VS8_PPC2003Mfc_demo.ico"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Menu
+//
+
+IDR_MAINFRAME MENU 
+BEGIN
+    POPUP "Menu"
+    BEGIN
+        POPUP "Edit"
+        BEGIN
+            MENUITEM "Undo",                        ID_EDIT_UNDO
+            MENUITEM SEPARATOR
+            MENUITEM "Cut",                         ID_EDIT_CUT
+            MENUITEM "Copy",                        ID_EDIT_COPY
+            MENUITEM "Paste",                       ID_EDIT_PASTE
+        END
+        POPUP "Tools"
+        BEGIN
+            MENUITEM "About VS8_PPC2003_MFC...",    ID_APP_ABOUT
+        END
+    END
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Accelerator
+//
+
+IDR_MAINFRAME ACCELERATORS 
+BEGIN
+    "N",            ID_FILE_NEW,            VIRTKEY, CONTROL
+    "Z",            ID_EDIT_UNDO,           VIRTKEY, CONTROL
+    "X",            ID_EDIT_CUT,            VIRTKEY, CONTROL
+    "C",            ID_EDIT_COPY,           VIRTKEY, CONTROL
+    "V",            ID_EDIT_PASTE,          VIRTKEY, CONTROL
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_ABOUTBOX DIALOG  0, 0, 201, 225
+STYLE DS_SETFONT | DS_FIXEDSYS | WS_POPUP | WS_CAPTION
+EXSTYLE 0x80000000L
+CAPTION "About VS8_PPC2003_MFC"
+FONT 8, "MS Shell Dlg"
+BEGIN
+    ICON            IDR_MAINFRAME,IDC_STATIC_1,12,12,21,20,SS_REALSIZEIMAGE
+    LTEXT           "VS8_PPC2003_MFC Version 1.0",IDC_STATIC_2,12,36,70,8,SS_NOPREFIX
+    LTEXT           "Copyright (C) 2006",IDC_STATIC_3,12,48,66,8
+    CONTROL         "",IDC_TAB1,"SysTabControl32",0x0,27,69,150,135
+END
+
+IDD_ABOUTBOX_WIDE DIALOG  0, 0, 210, 129
+STYLE DS_SETFONT | DS_FIXEDSYS | WS_POPUP | WS_CAPTION
+EXSTYLE 0x80000000L
+CAPTION "About VS8_PPC2003_MFC"
+FONT 8, "MS Shell Dlg"
+BEGIN
+    ICON            IDR_MAINFRAME,IDC_STATIC_1,12,12,21,20,SS_REALSIZEIMAGE
+    LTEXT           "VS8_PPC2003_MFC Version 1.0",IDC_STATIC_2,48,12,66,8,SS_NOPREFIX
+    LTEXT           "Copyright (C) 2006",IDC_STATIC_3,48,24,66,8
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Version
+//
+
+VS_VERSION_INFO VERSIONINFO
+ FILEVERSION 1,0,0,1
+ PRODUCTVERSION 1,0,0,1
+ FILEFLAGSMASK 0x3fL
+#ifdef _DEBUG
+ FILEFLAGS 0x1L
+#else
+ FILEFLAGS 0x0L
+#endif
+ FILEOS 0x4L
+ FILETYPE 0x1L
+ FILESUBTYPE 0x0L
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "040904e4"
+        BEGIN
+            VALUE "CompanyName", "TODO: <Company name>"
+            VALUE "FileDescription", "TODO: <File description>"
+            VALUE "FileVersion", "1.0.0.1"
+            VALUE "InternalName", "VS8_PPC2003_MFC.exe"
+            VALUE "LegalCopyright", "TODO: (c) <Company name>.  All rights reserved."
+            VALUE "OriginalFilename", "VS8_PPC2003_MFC.exe"
+            VALUE "ProductName", "TODO: <Product name>"
+            VALUE "ProductVersion", "1.0.0.1"
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x409, 1252
+    END
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO 
+BEGIN
+    IDD_ABOUTBOX, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 194
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 218
+    END
+
+    IDD_ABOUTBOX_WIDE, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 203
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 122
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// String Table
+//
+
+STRINGTABLE 
+BEGIN
+    IDR_MAINFRAME           "VS8_PPC2003_MFC"
+END
+
+STRINGTABLE 
+BEGIN
+    AFX_IDS_APP_TITLE       "VS8_PPC2003_MFC"
+    AFX_IDS_IDLEMESSAGE     "Ready"
+END
+
+STRINGTABLE 
+BEGIN
+    ID_EDIT_COPY            "Copy the selection and put it on the Clipboard\nCopy"
+    ID_EDIT_CUT             "Cut the selection and put it on the Clipboard\nCut"
+    ID_EDIT_PASTE           "Insert Clipboard contents\nPaste"
+    ID_EDIT_UNDO            "Undo the last action\nUndo"
+END
+
+STRINGTABLE 
+BEGIN
+    IDS_NEW                 "New"
+    IDS_MENU                "Menu"
+END
+
+STRINGTABLE 
+BEGIN
+    AFX_IDS_SCCLOSE         "Close the active window and prompts to save the documents"
+END
+
+STRINGTABLE 
+BEGIN
+    AFX_IDS_SCTASKLIST      "Activate Task List"
+END
+
+STRINGTABLE 
+BEGIN
+    ID_INDICATOR_EXT        "EXT"
+    ID_INDICATOR_CAPS       "CAP"
+    ID_INDICATOR_NUM        "NUM"
+    ID_INDICATOR_SCRL       "SCRL"
+    ID_INDICATOR_OVR        "OVR"
+    ID_INDICATOR_REC        "REC"
+END
+
+STRINGTABLE 
+BEGIN
+    IDS_ABOUTBOX            "&About PPCDemo..."
+END
+
+#endif    // English (U.S.) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+/////////////////////////////////////////////////////////////////////////////
+// Neutral (Sys. Default) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_NEUSD)
+#ifdef _WIN32
+LANGUAGE LANG_NEUTRAL, SUBLANG_SYS_DEFAULT
+#pragma code_page(1252)
+#endif //_WIN32
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_BASIC DIALOG  0, 0, 168, 158
+STYLE DS_SETFONT | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Basic"
+FONT 8, "MS Shell Dlg"
+BEGIN
+    PUSHBUTTON      "Indent / UnIndent",IDC_INDENT,82,47,72,14
+    PUSHBUTTON      "SaveToText (""c:\\Log.txt"")",IDC_MAINSAVETEXT,7,71,147,14
+    PUSHBUTTON      "SaveToXml (""c:\\Log.xml"")",IDC_MAINSAVETOXML,7,89,147,14
+    PUSHBUTTON      "LoadXml (""c:\\Log.xml"")",IDC_MAINLOADXML,7,110,147,14
+    PUSHBUTTON      "Show viewer",IDC_SHOWVIEWER,7,131,67,14
+    PUSHBUTTON      "Clear main traces",IDC_MAINCLEAR,82,131,72,14
+    DEFPUSHBUTTON   "Sample traces",IDC_SAMPLE,7,47,67,14
+    PUSHBUTTON      "Show partner",IDC_PARTNER,7,27,67,14
+    PUSHBUTTON      "Show Hosts",IDC_HOSTS,82,27,72,14
+    LTEXT           "Tips : Ensure Tracetool is running. If the demo run under emulator, don't forget to cradle",IDC_STATIC,7,7,153,16
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO 
+BEGIN
+    IDD_BASIC, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 164
+        VERTGUIDE, 74
+        VERTGUIDE, 82
+        VERTGUIDE, 154
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 150
+        HORZGUIDE, 145
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+#endif    // Neutral (Sys. Default) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+/////////////////////////////////////////////////////////////////////////////
+// French (Belgium) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_FRB)
+#ifdef _WIN32
+LANGUAGE LANG_FRENCH, SUBLANG_FRENCH_BELGIAN
+#pragma code_page(1252)
+#endif //_WIN32
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_MULTIPAGES DIALOG  0, 0, 159, 209
+STYLE DS_SETFONT | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Multi pages"
+FONT 8, "MS Shell Dlg"
+BEGIN
+    PUSHBUTTON      "SaveToText (""c:\\Log2.txt"")",IDC_SAVETEXT,7,71,142,14
+    PUSHBUTTON      "SaveToXml (""c:\\Log2.xml"")",IDC_SAVETOXML,7,92,143,14
+    PUSHBUTTON      "LoadXml (""c:\\Log2.xml"")",IDC_LOADXML,7,111,143,14
+    DEFPUSHBUTTON   "Create a new trace window",IDC_NEWWIN,19,7,125,14
+    PUSHBUTTON      "Display that window on the viewer",IDC_DISPLAYWIN,12,29,128,14
+    PUSHBUTTON      "Say Hello",IDC_SAYHELLO,46,49,60,14
+    PUSHBUTTON      "Multi col test",IDC_MULTICOL,47,131,58,14
+END
+
+IDD_NODEEX DIALOG  0, 0, 141, 209
+STYLE DS_SETFONT | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Nodes Op."
+FONT 8, "MS Shell Dlg"
+BEGIN
+    DEFPUSHBUTTON   "Start 1",IDC_START1,7,7,50,14
+    PUSHBUTTON      "Resend()",IDC_RESEND,35,24,66,14
+    PUSHBUTTON      "SetSelected()",IDC_SETSELECTED,35,45,66,14
+    PUSHBUTTON      "Start 2",IDC_START2,7,85,50,14
+    PUSHBUTTON      "Append()",IDC_APPEND,35,106,66,14
+    PUSHBUTTON      "Show()",IDC_SHOWNODE,35,131,66,14
+    PUSHBUTTON      "Indent/Unindent",IDC_INDENT2,35,65,65,14
+END
+
+IDD_WATCHES DIALOG  0, 0, 186, 188
+STYLE DS_SETFONT | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Watches"
+FONT 8, "MS Shell Dlg"
+BEGIN
+    LTEXT           "Main watch window",IDC_STATIC,7,7,64,8
+    DEFPUSHBUTTON   "Send Watches",IDC_butWatch,35,18,83,14
+    PUSHBUTTON      "Clear Watch Window",IDC_butClearWatchWindow,35,36,83,14
+    PUSHBUTTON      "Display Watch Window",IDC_butDisplayWatchWindow,35,54,83,14
+    PUSHBUTTON      "Create new WinWatch",IDC_butCreateWinWatch,7,73,89,14
+    PUSHBUTTON      "Send Watches",IDC_butWinWatchSend,35,95,83,14
+    PUSHBUTTON      "Clear Watch Window",IDC_butWinWatchClear,35,113,83,14
+    PUSHBUTTON      "Display Watch Window",IDC_butWinWatchDisplay,35,131,83,14
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO 
+BEGIN
+    IDD_MULTIPAGES, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 152
+        VERTGUIDE, 76
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 202
+        HORZGUIDE, 145
+    END
+
+    IDD_NODEEX, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 134
+        VERTGUIDE, 35
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 202
+        HORZGUIDE, 145
+    END
+
+    IDD_WATCHES, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 179
+        VERTGUIDE, 35
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 181
+        HORZGUIDE, 145
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE 
+BEGIN
+    "resourceppc.h\0"
+END
+
+2 TEXTINCLUDE 
+BEGIN
+    "#include ""afxres.h""\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE 
+BEGIN
+    "#define _AFX_NO_SPLITTER_RESOURCES\r\n"
+    "#define _AFX_NO_OLE_RESOURCES\r\n"
+    "#define _AFX_NO_TRACKER_RESOURCES\r\n"
+    "#define _AFX_NO_PROPERTY_RESOURCES\r\n"
+    "\r\n"
+    "#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)\r\n"
+    "LANGUAGE 9, 1\r\n"
+    "#pragma code_page(1252)\r\n"
+    "#include ""res\\VS8_PPC2003Mfc_demo.rc2""  // non-Microsoft Visual C++ edited resources\r\n"
+    "#include ""afxres.rc""     // Standard components\r\n"
+    "#endif\r\n"
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+#endif    // French (Belgium) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+#define _AFX_NO_SPLITTER_RESOURCES
+#define _AFX_NO_OLE_RESOURCES
+#define _AFX_NO_TRACKER_RESOURCES
+#define _AFX_NO_PROPERTY_RESOURCES
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
+LANGUAGE 9, 1
+#pragma code_page(1252)
+#include "res\VS8_PPC2003Mfc_demo.rc2"  // non-Microsoft Visual C++ edited resources
+#include "afxres.rc"     // Standard components
+#endif
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+

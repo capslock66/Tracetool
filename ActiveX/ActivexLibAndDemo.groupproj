@@ -1,0 +1,44 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <ProjectGuid>{6e3483c7-f406-4a84-b952-09373b28ee51}</ProjectGuid>
+  </PropertyGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <Projects Include="Delphi ActiveX Demo\TraceToolActivexDemo.dproj" />
+    <Projects Include="Lib\TraceToolCom.dproj" />
+  </ItemGroup>
+  <ProjectExtensions>
+    <Borland.Personality>Default.Personality</Borland.Personality>
+    <Borland.ProjectType />
+    <BorlandProject>
+  <BorlandProject xmlns=""> <Default.Personality> </Default.Personality> </BorlandProject></BorlandProject>
+  </ProjectExtensions>
+  <Target Name="TraceToolCom">
+    <MSBuild Projects="Lib\TraceToolCom.dproj" Targets="" />
+  </Target>
+  <Target Name="TraceToolCom:Clean">
+    <MSBuild Projects="Lib\TraceToolCom.dproj" Targets="Clean" />
+  </Target>
+  <Target Name="TraceToolCom:Make">
+    <MSBuild Projects="Lib\TraceToolCom.dproj" Targets="Make" />
+  </Target>
+  <Target Name="TraceToolActivexDemo">
+    <MSBuild Projects="Delphi ActiveX Demo\TraceToolActivexDemo.dproj" Targets="" />
+  </Target>
+  <Target Name="TraceToolActivexDemo:Clean">
+    <MSBuild Projects="Delphi ActiveX Demo\TraceToolActivexDemo.dproj" Targets="Clean" />
+  </Target>
+  <Target Name="TraceToolActivexDemo:Make">
+    <MSBuild Projects="Delphi ActiveX Demo\TraceToolActivexDemo.dproj" Targets="Make" />
+  </Target>
+  <Target Name="Build">
+    <CallTarget Targets="TraceToolCom;TraceToolActivexDemo" />
+  </Target>
+  <Target Name="Clean">
+    <CallTarget Targets="TraceToolCom:Clean;TraceToolActivexDemo:Clean" />
+  </Target>
+  <Target Name="Make">
+    <CallTarget Targets="TraceToolCom:Make;TraceToolActivexDemo:Make" />
+  </Target>
+  <Import Condition="Exists('$(MSBuildBinPath)\Borland.Group.Targets')" Project="$(MSBuildBinPath)\Borland.Group.Targets" />
+</Project>

@@ -1,0 +1,34 @@
+Microsoft Visual Studio Solution File, Format Version 8.00
+Project("{20D4826A-C6FA-45DB-90F4-C717570B9F32}") = "Vs7_PPC2003_CF1_Demo", "Vs7_PPC2003_CF1_Demo\Vs7_PPC2003_CF1_Demo.csdproj", "{50ED4E06-EFF6-40F5-AEFE-7946FA6AD4E9}"
+	ProjectSection(ProjectDependencies) = postProject
+		{713FAB5E-6A7A-49A4-9CB9-855EE4CC91C0} = {713FAB5E-6A7A-49A4-9CB9-855EE4CC91C0}
+	EndProjectSection
+EndProject
+Project("{20D4826A-C6FA-45DB-90F4-C717570B9F32}") = "Vs7_PPC2003_CF1_Lib", "Vs7_PPC2003_CF1_Lib\Vs7_PPC2003_CF1_Lib.csdproj", "{713FAB5E-6A7A-49A4-9CB9-855EE4CC91C0}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfiguration) = preSolution
+		Debug = Debug
+		Release = Release
+	EndGlobalSection
+	GlobalSection(ProjectConfiguration) = postSolution
+		{50ED4E06-EFF6-40F5-AEFE-7946FA6AD4E9}.Debug.ActiveCfg = Debug|Pocket PC
+		{50ED4E06-EFF6-40F5-AEFE-7946FA6AD4E9}.Debug.Build.0 = Debug|Pocket PC
+		{50ED4E06-EFF6-40F5-AEFE-7946FA6AD4E9}.Debug.Deploy.0 = Debug|Pocket PC
+		{50ED4E06-EFF6-40F5-AEFE-7946FA6AD4E9}.Release.ActiveCfg = Release|Pocket PC
+		{50ED4E06-EFF6-40F5-AEFE-7946FA6AD4E9}.Release.Build.0 = Release|Pocket PC
+		{50ED4E06-EFF6-40F5-AEFE-7946FA6AD4E9}.Release.Deploy.0 = Release|Pocket PC
+		{713FAB5E-6A7A-49A4-9CB9-855EE4CC91C0}.Debug.ActiveCfg = Debug|Pocket PC
+		{713FAB5E-6A7A-49A4-9CB9-855EE4CC91C0}.Debug.Build.0 = Debug|Pocket PC
+		{713FAB5E-6A7A-49A4-9CB9-855EE4CC91C0}.Debug.Deploy.0 = Debug|Pocket PC
+		{713FAB5E-6A7A-49A4-9CB9-855EE4CC91C0}.Release.ActiveCfg = Release|Pocket PC
+		{713FAB5E-6A7A-49A4-9CB9-855EE4CC91C0}.Release.Build.0 = Release|Pocket PC
+		{713FAB5E-6A7A-49A4-9CB9-855EE4CC91C0}.Release.Deploy.0 = Release|Pocket PC
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+	EndGlobalSection
+	GlobalSection(ExtensibilityAddIns) = postSolution
+	EndGlobalSection
+EndGlobal

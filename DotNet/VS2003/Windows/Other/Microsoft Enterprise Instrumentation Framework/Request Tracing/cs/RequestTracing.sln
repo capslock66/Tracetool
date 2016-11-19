@@ -1,0 +1,21 @@
+Microsoft Visual Studio Solution File, Format Version 8.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RequestTracing", "RequestTracing.csproj", "{9DA6EE84-097B-45D2-A9C2-F3ADB59642DD}"
+EndProject
+Global
+	GlobalSection(SolutionConfiguration) = preSolution
+		ConfigName.0 = Debug
+		ConfigName.1 = Release
+	EndGlobalSection
+	GlobalSection(ProjectDependencies) = postSolution
+	EndGlobalSection
+	GlobalSection(ProjectConfiguration) = postSolution
+		{9DA6EE84-097B-45D2-A9C2-F3ADB59642DD}.Debug.ActiveCfg = Debug|.NET
+		{9DA6EE84-097B-45D2-A9C2-F3ADB59642DD}.Debug.Build.0 = Debug|.NET
+		{9DA6EE84-097B-45D2-A9C2-F3ADB59642DD}.Release.ActiveCfg = Release|.NET
+		{9DA6EE84-097B-45D2-A9C2-F3ADB59642DD}.Release.Build.0 = Release|.NET
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+	EndGlobalSection
+	GlobalSection(ExtensibilityAddIns) = postSolution
+	EndGlobalSection
+EndGlobal

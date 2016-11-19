@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<BorlandProject>
+  <PersonalityInfo>
+    <Option>
+      <Option Name="Personality">Default.Personality</Option>
+      <Option Name="ProjectType"></Option>
+      <Option Name="Version">1.0</Option>
+      <Option Name="GUID">{324C7917-849E-43DD-B801-B76A8C33A1F0}</Option>
+    </Option>
+  </PersonalityInfo>
+  <Default.Personality>
+    
+    <Projects>
+      <Projects Name="TraceToolCom.dll">Lib\TraceToolCom.bdsproj</Projects>
+      <Projects Name="TraceToolActivexDemo.exe">Delphi ActiveX Demo\TraceToolActivexDemo.bdsproj</Projects>
+      <Projects Name="Targets">TraceToolCom.dll TraceToolActivexDemo.exe</Projects>
+    </Projects>
+    <Dependencies/>
+  </Default.Personality>
+</BorlandProject>

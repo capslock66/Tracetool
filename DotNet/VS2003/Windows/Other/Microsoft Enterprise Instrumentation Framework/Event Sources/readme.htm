@@ -1,0 +1,365 @@
+<html xmlns:v="urn:schemas-microsoft-com:vml"
+xmlns:o="urn:schemas-microsoft-com:office:office"
+xmlns:w="urn:schemas-microsoft-com:office:word"
+xmlns:dt="uuid:C2F41010-65B3-11d1-A29F-00AA00C14882"
+xmlns="http://www.w3.org/TR/REC-html40">
+
+<head>
+<meta name="Microsoft Theme 2.00" content="blank 000">
+<meta http-equiv=Content-Type content="text/html; charset=windows-1252">
+<meta name=ProgId content=Word.Document>
+<meta name=Generator content="Microsoft Word 10">
+<meta name=Originator content="Microsoft Word 10">
+<link rel=File-List href="readme_files/filelist.xml">
+<title>Event Sources</title>
+<!--[if gte mso 9]><xml>
+ <o:DocumentProperties>
+  <o:Author>Microsoft Employee</o:Author>
+  <o:Template>Normal</o:Template>
+  <o:LastAuthor>Microsoft Employee</o:LastAuthor>
+  <o:Revision>2</o:Revision>
+  <o:TotalTime>0</o:TotalTime>
+  <o:Created>2002-09-04T19:50:00Z</o:Created>
+  <o:LastSaved>2002-09-04T19:50:00Z</o:LastSaved>
+  <o:Pages>1</o:Pages>
+  <o:Words>387</o:Words>
+  <o:Characters>2211</o:Characters>
+  <o:Company>Microsoft Corporation</o:Company>
+  <o:Lines>18</o:Lines>
+  <o:Paragraphs>5</o:Paragraphs>
+  <o:CharactersWithSpaces>2593</o:CharactersWithSpaces>
+  <o:Version>10.3501</o:Version>
+ </o:DocumentProperties>
+</xml><![endif]--><!--[if gte mso 9]><xml>
+ <w:WordDocument>
+  <w:BrowserLevel>MicrosoftInternetExplorer4</w:BrowserLevel>
+ </w:WordDocument>
+</xml><![endif]-->
+<style>
+<!--li
+	{margin-bottom: 6 pt ;}
+
+ /* Font Definitions */
+ @font-face
+	{font-family:"Arial Narrow";
+	panose-1:2 11 5 6 2 2 2 3 2 4;
+	mso-font-charset:0;
+	mso-generic-font-family:swiss;
+	mso-font-pitch:variable;
+	mso-font-signature:647 0 0 0 159 0;}
+ /* Style Definitions */
+ p.MsoNormal, li.MsoNormal, div.MsoNormal
+	{mso-style-parent:"";
+	margin:0in;
+	margin-bottom:.0001pt;
+	mso-pagination:widow-orphan;
+	font-size:12.0pt;
+	font-family:"Times New Roman";
+	mso-fareast-font-family:"Times New Roman";
+	color:black;}
+h3
+	{mso-margin-top-alt:auto;
+	margin-right:0in;
+	mso-margin-bottom-alt:auto;
+	margin-left:0in;
+	mso-pagination:widow-orphan;
+	mso-outline-level:3;
+	font-size:13.5pt;
+	font-family:"Times New Roman";
+	color:black;
+	font-weight:bold;}
+h4
+	{mso-margin-top-alt:auto;
+	margin-right:0in;
+	mso-margin-bottom-alt:auto;
+	margin-left:0in;
+	mso-pagination:widow-orphan;
+	mso-outline-level:4;
+	font-size:12.0pt;
+	font-family:"Times New Roman";
+	color:black;
+	font-weight:bold;}
+h5
+	{mso-margin-top-alt:auto;
+	margin-right:0in;
+	mso-margin-bottom-alt:auto;
+	margin-left:0in;
+	mso-pagination:widow-orphan;
+	mso-outline-level:5;
+	font-size:10.0pt;
+	font-family:"Times New Roman";
+	color:black;
+	font-weight:bold;}
+a:link, span.MsoHyperlink
+	{color:#999999;
+	text-decoration:underline;
+	text-underline:single;}
+a:visited, span.MsoHyperlinkFollowed
+	{color:#990000;
+	text-decoration:underline;
+	text-underline:single;}
+p
+	{mso-margin-top-alt:auto;
+	margin-right:0in;
+	mso-margin-bottom-alt:auto;
+	margin-left:0in;
+	mso-pagination:widow-orphan;
+	font-size:12.0pt;
+	font-family:"Times New Roman";
+	mso-fareast-font-family:"Times New Roman";
+	color:black;}
+code
+	{font-family:"Courier New";
+	mso-ascii-font-family:"Courier New";
+	mso-fareast-font-family:"Times New Roman";
+	mso-hansi-font-family:"Courier New";
+	mso-bidi-font-family:"Courier New";
+	color:navy;}
+@page Section1
+	{size:8.5in 11.0in;
+	margin:1.0in 1.25in 1.0in 1.25in;
+	mso-header-margin:.5in;
+	mso-footer-margin:.5in;
+	mso-paper-source:0;}
+div.Section1
+	{page:Section1;}
+ /* List Definitions */
+ @list l0
+	{mso-list-id:97798201;
+	mso-list-template-ids:-796512564;}
+@list l0:level1
+	{mso-level-number-format:bullet;
+	mso-level-text:\F0B7;
+	mso-level-tab-stop:.5in;
+	mso-level-number-position:left;
+	text-indent:-.25in;
+	mso-ansi-font-size:10.0pt;
+	font-family:Symbol;}
+@list l1
+	{mso-list-id:1039890147;
+	mso-list-template-ids:-736608624;}
+@list l1:level1
+	{mso-level-number-format:bullet;
+	mso-level-text:\F0B7;
+	mso-level-tab-stop:.5in;
+	mso-level-number-position:left;
+	text-indent:-.25in;
+	mso-ansi-font-size:10.0pt;
+	font-family:Symbol;}
+@list l2
+	{mso-list-id:1280525692;
+	mso-list-template-ids:-1168227678;}
+@list l3
+	{mso-list-id:1424111194;
+	mso-list-template-ids:-1100324458;}
+@list l3:level1
+	{mso-level-number-format:bullet;
+	mso-level-text:\F0B7;
+	mso-level-tab-stop:.5in;
+	mso-level-number-position:left;
+	text-indent:-.25in;
+	mso-ansi-font-size:10.0pt;
+	font-family:Symbol;}
+ol
+	{margin-bottom:0in;}
+ul
+	{margin-bottom:0in;}
+-->
+</style>
+<!--[if gte mso 10]>
+<style>
+ /* Style Definitions */
+ table.MsoNormalTable
+	{mso-style-name:"Table Normal";
+	mso-tstyle-rowband-size:0;
+	mso-tstyle-colband-size:0;
+	mso-style-noshow:yes;
+	mso-style-parent:"";
+	mso-padding-alt:0in 5.4pt 0in 5.4pt;
+	mso-para-margin:0in;
+	mso-para-margin-bottom:.0001pt;
+	mso-pagination:widow-orphan;
+	font-size:10.0pt;
+	font-family:"Times New Roman";}
+</style>
+<![endif]-->
+<meta http-equiv=Content-Language content=en-us>
+<meta name="Microsoft Border" content="tb, default">
+<!--[if gte mso 9]><xml>
+ <o:shapedefaults v:ext="edit" spidmax="2050"/>
+</xml><![endif]--><!--[if gte mso 9]><xml>
+ <o:shapelayout v:ext="edit">
+  <o:idmap v:ext="edit" data="1"/>
+ </o:shapelayout></xml><![endif]-->
+</head>
+
+<body bgcolor=white lang=EN-US link="#999999" vlink="#990000" style='tab-interval:
+.5in' alink="#666666">
+
+<div class=Section1>
+
+<h2 align=center style='text-align:center'>Microsoft Enterprise Instrumentation<br>
+Framework Samples<o:p></o:p></h2>
+
+<p align=center style='text-align:center'><span style='font-size:10.0pt;
+font-family:"Arial Narrow"'><nobr>[&nbsp;<a href="../CustomEvent/readme.htm">&lt;&lt;&nbsp;Prev</a>&nbsp;]</nobr>
+<nobr>[&nbsp;<a href="../readme.htm">Back&nbsp;to&nbsp;Introduction</a>&nbsp;]</nobr>
+<nobr>[&nbsp;<a href="../Request%20Tracing/readme.htm">Next&nbsp;&gt;&gt;</a>&nbsp;]</nobr>
+</span><o:p></o:p></p>
+
+<div align=center>
+
+<table class=MsoNormalTable border=0 cellspacing=0 cellpadding=0 width=575
+ style='width:431.25pt;mso-cellspacing:0in;mso-padding-alt:0in 0in 0in 0in'>
+ <tr style='mso-yfti-irow:0;mso-yfti-lastrow:yes'>
+  <td style='padding:0in 0in 0in 0in'><!--mstheme-->
+  <div style='border:none;border-top:solid windowtext 1.0pt;padding:0in 0in 0in 0in'>
+  <h3><span style='font-family:Arial'><!--mstheme--><!--mstheme--><!--mstheme--><!--mstheme-->Event
+  Source API</span><o:p></o:p></h3>
+  </div>
+  <table class=MsoNormalTable border=0 cellpadding=0 width="91%"
+   style='width:91.56%;mso-cellspacing:1.5pt;mso-padding-alt:0in 0in 0in 0in'>
+   <tr style='mso-yfti-irow:0'>
+    <td width="99%" style='width:99.24%;padding:.75pt .75pt .75pt .75pt'><!--mstheme-->
+    <p class=MsoNormal><b><span style='font-family:Arial'><!--mstheme--><!--mstheme-->Event
+    Source API Solutions</span></b></p>
+    </td>
+   </tr>
+<!--mstheme-->
+   <tr style='mso-yfti-irow:1'>
+    <td width="99%" style='width:99.24%;padding:.75pt .75pt .75pt .75pt'
+    msimagelist><!--mstheme-->
+    <ul style='margin-top:0in' type=disc>
+     <li class=MsoNormal style='mso-list:l1 level1 lfo1;tab-stops:list .5in'><span
+         style='font-family:Arial'><a href="cs/Event%20Source%20API.sln">C#</a>&nbsp;
+         | <a href="vb/Event%20Source%20API.sln">VB.NET</a></span></li>
+    </ul>
+    </td>
+   </tr>
+<!--mstheme-->
+   <tr style='mso-yfti-irow:2'>
+    <td width="99%" style='width:99.24%;padding:.75pt .75pt .75pt .75pt'><!--mstheme-->
+    <p class=MsoNormal><b><span style='font-family:Arial'><!--mstheme-->Event
+    Source API Source</span></b></p>
+    </td>
+   </tr>
+<!--mstheme-->
+   <tr style='mso-yfti-irow:3'>
+    <td width="99%" style='width:99.24%;padding:.75pt .75pt .75pt .75pt'
+    msimagelist><!--mstheme-->
+    <ul style='margin-top:0in' type=disc>
+     <li class=MsoNormal style='mso-list:l3 level1 lfo2;tab-stops:list .5in'><span
+         style='font-family:Arial'><a href="cs/Event%20Source%20API.cs">Event
+         Source API.cs</a> (2 KB)</span></li>
+    </ul>
+    </td>
+   </tr>
+<!--mstheme-->
+   <tr style='mso-yfti-irow:4;mso-yfti-lastrow:yes'>
+    <td width="99%" style='width:99.24%;padding:.75pt .75pt .75pt .75pt'
+    msimagelist><!--mstheme-->
+    <ul style='margin-top:0in' type=disc>
+     <li class=MsoNormal style='mso-list:l0 level1 lfo3;tab-stops:list .5in'><span
+         style='font-family:Arial'><a href="vb/Event%20Source%20API.vb">Event
+         Source API.vb</a> (2 KB)</span></li>
+    </ul>
+    </td>
+   </tr>
+<!--mstheme-->
+  </table>
+<!--mstheme-->
+  <p><span style='font-family:Arial'>Although most development projects will
+  standardize on one of these variations, the Event Sources API sample
+  demonstrates the different ways you can invoke the event source object.&nbsp;</span></p>
+  <h4><span style='font-family:Arial'>Features&nbsp;</span></h4>
+  <p class=MsoNormal style='margin-left:.5in;text-indent:-.25in'><span
+  style='font-family:Symbol'>·</span><span style='font-size:7.0pt'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  </span><span style='font-family:Arial'><!--mstheme--><!--mstheme-->A
+  class-static event source instance.</span></p>
+  <p class=MsoNormal style='margin-left:.5in;text-indent:-.25in'><span
+  style='font-family:Symbol'>·</span><span style='font-size:7.0pt'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  </span><span style='font-family:Arial'>Validation of enabled event types
+  prior to raising them.</span></p>
+  <p class=MsoNormal style='margin-left:.5in;text-indent:-.25in'><span
+  style='font-family:Symbol'>·</span><span style='font-size:7.0pt'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  </span><span style='font-family:Arial'>Events within the same method call
+  raised through multiple event sources.</span></p>
+  <h4><span style='font-family:Arial'>Classes and Keywords</span></h4>
+  <p><span style='font-family:Arial'>The sample uses the following classes,
+  methods, and properties from the Microsoft.EnterpriseInstrumentation and
+  Microsoft.EnterpriseInstrumentation.Schema namespaces:</span></p>
+  <p class=MsoNormal style='margin-left:.5in;text-indent:-.25in'><span
+  style='font-family:Symbol'>·</span><span style='font-size:7.0pt'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  </span><span style='font-family:Arial'><!--mstheme--><!--mstheme-->EventSource.Application</span></p>
+  <p class=MsoNormal style='margin-left:.5in;text-indent:-.25in'><span
+  style='font-family:Symbol'>·</span><span style='font-size:7.0pt'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  </span><span style='font-family:Arial'>EventSource.IsEnabledForType</span></p>
+  <p class=MsoNormal style='margin-left:.5in;text-indent:-.25in'><span
+  style='font-family:Symbol'>·</span><span style='font-size:7.0pt'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  </span><span style='font-family:Arial'>EventSource.Raise</span></p>
+  <p class=MsoNormal style='margin-left:.5in;text-indent:-.25in'><span
+  style='font-family:Symbol'>·</span><span style='font-size:7.0pt'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  </span><span style='font-family:Arial'>TraceMessageEvent</span></p>
+  <p class=MsoNormal style='margin-left:.5in;text-indent:-.25in'><span
+  style='font-family:Symbol'>·</span><span style='font-size:7.0pt'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  </span><span style='font-family:Arial'>ProjectInstaller</span></p>
+  <h4><span style='font-family:Arial'>Installing and Running the Event Sources
+  Sample</span></h4>
+  <h5><span style='font-family:Arial'>To build, install, and run the sample</span></h5>
+  <ol style='margin-top:0in' start=1 type=1>
+   <li class=MsoNormal style='mso-list:l2 level1 lfo4;tab-stops:list .5in'><span
+       style='font-family:Arial'>Open the &quot;Event Sources&quot; project in
+       Visual Studio .NET. Click one of the <b>Event Source API Solutions</b>
+       links above for the development language (C# or VB .NET) that you wish
+       to use. In the <b>File Download</b> dialog, select <b>Open this file
+       from its current location</b>, and then click <b>OK</b>.<br>
+       <br>
+       The Event Source API project opens in the Code Editor.</span></li>
+   <li class=MsoNormal style='mso-list:l2 level1 lfo4;tab-stops:list .5in'><span
+       style='font-family:Arial'>On the <b>Build</b> menu, click <b>Build
+       Solution</b>.</span></li>
+   <li class=MsoNormal style='mso-list:l2 level1 lfo4;tab-stops:list .5in'><span
+       style='font-family:Arial'>Using the Visual Studio .NET command prompt,
+       access the build output directory, for example &quot;Samples\Event
+       Sources\cs\bin\Debug&quot;. Run InstallUtil.exe from the command line
+       with <b>EventSourceAPI.exe</b> as a parameter. Type the following:<br>
+       <br>
+       </span><code><span style='font-size:10.0pt'>installutil
+       EventSourceAPI.exe</span></code></li>
+   <li class=MsoNormal style='mso-list:l2 level1 lfo4;tab-stops:list .5in'><span
+       style='font-family:Arial'>Edit the resulting <b>EnterpriseInstrumentation.config</b>
+       to add event filter bindings for desired event categories and event
+       sinks. For example, you can replace the <b>defaultSoftwareElementFilter</b>
+       definition with the following:<br>
+       <br>
+       </span><code><span style='font-size:10.0pt'>&lt;filter
+       name=&quot;defaultSoftwareElementFilter&quot; description=&quot; A
+       default filter for the SoftwareElement event sources.&quot;&gt;</span></code><span
+       style='font-size:10.0pt;font-family:"Courier New";color:navy'><br>
+       <code>&nbsp;&nbsp;&nbsp;&lt;eventCategoryRef name=&quot;All
+       Events&quot;&gt;</code><br>
+       <code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;eventSinkRef
+       name=&quot;wmiSink&quot; /&gt;</code><br>
+       <code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;eventSinkRef
+       name=&quot;traceSink&quot; /&gt;</code><br>
+       <code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;eventSinkRef
+       name=&quot;logSink&quot; /&gt;</code><br>
+       <code>&nbsp;&nbsp;&nbsp;&lt;/eventCategoryRef&gt;</code><br>
+       <code>&lt;/filter&gt;</code></span></li>
+   <li class=MsoNormal style='mso-list:l2 level1 lfo4;tab-stops:list .5in'><span
+       style='font-family:Arial'>On the Visual Studio <b>Debug</b> menu, click <b>Start</b>
+       or <b>Start Without Debugging</b>.</span></li>
+  </ol>
+  </td>
+ </tr>
+</table>
+
+</div>
+
+<p class=MsoNormal><span style='font-family:Arial'><!--mstheme-->&nbsp;</span><o:p></o:p></p>
+
+<!--mstheme--><!--mstheme--><!--mstheme--><!--mstheme--><!--mstheme--><!--mstheme--><!--mstheme--></div>
+
+</body>
+
+</html>

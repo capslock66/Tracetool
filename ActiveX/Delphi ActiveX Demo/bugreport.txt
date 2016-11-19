@@ -1,0 +1,1060 @@
+date/time         : 2009-03-30, 16:05:53, 284ms
+computer name     : SP3LITE
+user name         : New user <admin>
+registered owner  : seba
+operating system  : Windows XP Service Pack 3, v.3300 build 2600
+system language   : French
+system up time    : 1 day 14 hours
+program up time   : 44 seconds
+processor         : Intel(R) Pentium(R) 4 CPU 2.66GHz
+physical memory   : 254/519 MB (free/total)
+free disk space   : (C:) 9,28 GB
+display mode      : 1276x906, 32 bit
+process id        : $2d0
+allocated memory  : 10,54 MB
+executable        : TraceToolActivexDemo.exe
+exec. date/time   : 2009-03-30 16:05
+compiled with     : Delphi 2009
+madExcept version : 3.0i beta 2
+callstack crc     : $ef10ea77, $d67fa52b, $b3da9edd
+exception number  : 1
+exception class   : EAccessViolation
+exception message : Access violation at address 004C2ABA in module 'TraceToolActivexDemo.exe'. Read of address 00000000.
+
+main thread ($174):
+004c2aba +58e TraceToolActivexDemo.exe Unit1                187 +50 TForm4.butSimpleTestClick
+0049e9cf +06f TraceToolActivexDemo.exe Controls                     TControl.Click
+00486eda +01e TraceToolActivexDemo.exe StdCtrls                     TCustomButton.Click
+0048793c +010 TraceToolActivexDemo.exe StdCtrls                     TCustomButton.CNCommand
+0049e466 +2d2 TraceToolActivexDemo.exe Controls                     TControl.WndProc
+004a296b +513 TraceToolActivexDemo.exe Controls                     TWinControl.WndProc
+00486ba0 +06c TraceToolActivexDemo.exe StdCtrls                     TButtonControl.WndProc
+0049e0a0 +024 TraceToolActivexDemo.exe Controls                     TControl.Perform
+004a2abb +023 TraceToolActivexDemo.exe Controls                     DoControlMsg
+004a34b7 +00b TraceToolActivexDemo.exe Controls                     TWinControl.WMCommand
+0049e466 +2d2 TraceToolActivexDemo.exe Controls                     TControl.WndProc
+004a296b +513 TraceToolActivexDemo.exe Controls                     TWinControl.WndProc
+004a2084 +02c TraceToolActivexDemo.exe Controls                     TWinControl.MainWndProc
+00475ce4 +014 TraceToolActivexDemo.exe Classes                      StdWndProc
+7e41b8fe +044 USER32.dll                                            SendMessageW
+7e41c654 +016 USER32.dll                                            CallWindowProcW
+004a2a67 +0d7 TraceToolActivexDemo.exe Controls                     TWinControl.DefaultHandler
+0049edec +010 TraceToolActivexDemo.exe Controls                     TControl.WMLButtonUp
+0049e466 +2d2 TraceToolActivexDemo.exe Controls                     TControl.WndProc
+004a296b +513 TraceToolActivexDemo.exe Controls                     TWinControl.WndProc
+00486ba0 +06c TraceToolActivexDemo.exe StdCtrls                     TButtonControl.WndProc
+004a2084 +02c TraceToolActivexDemo.exe Controls                     TWinControl.MainWndProc
+00475ce4 +014 TraceToolActivexDemo.exe Classes                      StdWndProc
+7e418a0b +00a USER32.dll                                            DispatchMessageW
+004bddff +0f3 TraceToolActivexDemo.exe Forms                        TApplication.ProcessMessage
+004bde2a +00a TraceToolActivexDemo.exe Forms                        TApplication.HandleMessage
+004be155 +0c9 TraceToolActivexDemo.exe Forms                        TApplication.Run
+004c6a8b +03b TraceToolActivexDemo.exe TraceToolActivexDemo  18  +3 initialization
+
+thread $3c8:
+7c90da8a +0a ntdll.dll                          NtReplyWaitReceivePortEx
+00454085 +0d TraceToolActivexDemo.exe madExcept CallThreadProcSafe
+004540ef +37 TraceToolActivexDemo.exe madExcept ThreadExceptFrame
+>> created by main thread ($174) at:
+77e7df36 +00 RPCRT4.dll
+
+thread $36c:
+7c90d1fa +0a ntdll.dll                          NtDelayExecution
+7c8023eb +4b kernel32.dll                       SleepEx
+7c802450 +0a kernel32.dll                       Sleep
+00454085 +0d TraceToolActivexDemo.exe madExcept CallThreadProcSafe
+004540ef +37 TraceToolActivexDemo.exe madExcept ThreadExceptFrame
+>> created by main thread ($174) at:
+7752fd64 +00 ole32.dll
+
+thread $6fc:
+7c90df3a +0a ntdll.dll                          NtWaitForSingleObject
+7c8025d5 +85 kernel32.dll                       WaitForSingleObjectEx
+7c80253d +0d kernel32.dll                       WaitForSingleObject
+00454085 +0d TraceToolActivexDemo.exe madExcept CallThreadProcSafe
+004540ef +37 TraceToolActivexDemo.exe madExcept ThreadExceptFrame
+>> created by main thread ($174) at:
+7752fd64 +00 ole32.dll
+
+thread $2a8:
+7c90df3a +0a ntdll.dll                                        NtWaitForSingleObject
+7c8025d5 +85 kernel32.dll                                     WaitForSingleObjectEx
+7c80253d +0d kernel32.dll                                     WaitForSingleObject
+025ce4eb +13 TraceToolCom.dll         unt_XWinWatch    138 +0 TXWinWatch.Set_Id
+025ccbeb +1f TraceToolCom.dll         unt_XTraceNodeEx 230 +1 TXTraceNodeEx.AddFontDetail
+0257c592 +32 TraceToolCom.dll         Graphics                TBitmap.SaveToClipboardFormat
+025555d2 +5a TraceToolCom.dll         System                  @CopyArray
+00454085 +0d TraceToolActivexDemo.exe madExcept               CallThreadProcSafe
+004540ef +37 TraceToolActivexDemo.exe madExcept               ThreadExceptFrame
+>> created by thread $17c at:
+02555634 +bc TraceToolCom.dll         System                  @CopyArray
+
+thread $728:
+7c90df3a +0a ntdll.dll                          NtWaitForSingleObject
+7c8025d5 +85 kernel32.dll                       WaitForSingleObjectEx
+00454085 +0d TraceToolActivexDemo.exe madExcept CallThreadProcSafe
+004540ef +37 TraceToolActivexDemo.exe madExcept ThreadExceptFrame
+>> created by main thread ($174) at:
+7752fd64 +00 ole32.dll
+
+thread $550:
+7c90df3a +0a ntdll.dll                          NtWaitForSingleObject
+7c8025d5 +85 kernel32.dll                       WaitForSingleObjectEx
+00454085 +0d TraceToolActivexDemo.exe madExcept CallThreadProcSafe
+004540ef +37 TraceToolActivexDemo.exe madExcept ThreadExceptFrame
+>> created by main thread ($174) at:
+7752fd64 +00 ole32.dll
+
+modules:
+00400000 TraceToolActivexDemo.exe                  \\.host\Shared Folders\tracetool\ActiveX\Delphi ActiveX Demo
+01e80000 xpsp2res.dll             5.1.2600.3300    C:\WINDOWS\system32
+02550000 TraceToolCom.dll         11.0.0.0         \\.host\Shared Folders\tracetool\ActiveX\Lib
+5ad70000 UxTheme.dll              6.0.2900.3300    C:\WINDOWS\system32
+5d090000 comctl32.dll             5.82.2900.3300   C:\WINDOWS\system32
+5edd0000 olepro32.dll             5.1.2600.3300    C:\WINDOWS\system32
+71aa0000 WS2HELP.dll              5.1.2600.3300    C:\WINDOWS\system32
+71ab0000 WS2_32.dll               5.1.2600.3300    C:\WINDOWS\system32
+71ad0000 wsock32.dll              5.1.2600.3300    C:\WINDOWS\system32
+76380000 msimg32.dll              5.1.2600.3300    C:\WINDOWS\system32
+76390000 imm32.dll                5.1.2600.3300    C:\WINDOWS\system32
+763b0000 comdlg32.dll             6.0.2900.3300    C:\WINDOWS\system32
+76fd0000 CLBCATQ.DLL              2001.12.4414.700 C:\WINDOWS\system32
+77050000 COMRes.dll               2001.12.4414.700 C:\WINDOWS\system32
+77120000 oleaut32.dll             5.1.2600.3300    C:\WINDOWS\system32
+773d0000 comctl32.dll             6.0.2900.3300    C:\WINDOWS\WinSxS\x86_Microsoft.Windows.Common-Controls_6595b64144ccf1df_6.0.2600.3300_x-ww_d7ca0dc2
+774e0000 ole32.dll                5.1.2600.3300    C:\WINDOWS\system32
+77b40000 Apphelp.dll              5.1.2600.3300    C:\WINDOWS\system32
+77c00000 version.dll              5.1.2600.3300    C:\WINDOWS\system32
+77c10000 msvcrt.dll               7.0.2600.3300    C:\WINDOWS\system32
+77dd0000 ADVAPI32.dll             5.1.2600.3300    C:\WINDOWS\system32
+77e70000 RPCRT4.dll               5.1.2600.3300    C:\WINDOWS\system32
+77f10000 GDI32.dll                5.1.2600.3300    C:\WINDOWS\system32
+77f60000 SHLWAPI.dll              6.0.2900.3300    C:\WINDOWS\system32
+77fe0000 Secur32.dll              5.1.2600.3300    C:\WINDOWS\system32
+7c800000 kernel32.dll             5.1.2600.3300    C:\WINDOWS\system32
+7c900000 ntdll.dll                5.1.2600.3300    C:\WINDOWS\system32
+7c9c0000 shell32.dll              6.0.2900.3300    C:\WINDOWS\system32
+7d1e0000 msi.dll                  3.1.4001.3300    C:\WINDOWS\system32
+7e410000 USER32.dll               5.1.2600.3300    C:\WINDOWS\system32
+7e720000 SXS.DLL                  5.1.2600.3300    C:\WINDOWS\system32
+
+processes:
+000 Idle
+004 System                   normal
+0f4 smss.exe                 normal C:\WINDOWS\system32
+178 csrss.exe                normal C:\WINDOWS\system32
+194 winlogon.exe             high   C:\WINDOWS\system32
+1c0 services.exe             normal C:\WINDOWS\system32
+1cc lsass.exe                normal C:\WINDOWS\system32
+260 svchost.exe              normal C:\WINDOWS\system32
+294 svchost.exe              normal C:\WINDOWS\system32
+2f8 svchost.exe              normal C:\WINDOWS\System32
+334 svchost.exe              normal C:\WINDOWS\system32
+3d4 spoolsv.exe              normal C:\WINDOWS\system32
+454 Explorer.EXE             normal C:\WINDOWS
+4b8 VMwareTray.exe           normal C:\Program Files\VMware\VMware Tools
+4c0 VMwareUser.exe           normal C:\Program Files\VMware\VMware Tools
+504 VMwareService.exe        high   C:\Program Files\VMware\VMware Tools
+5f4 svchost.exe              normal C:\WINDOWS\system32
+78c svchost.exe              normal C:\WINDOWS\System32
+58c TraceTool.exe            normal \\.host\Shared Folders\tracetool\Viewer 2009
+768 bds.exe                  normal C:\Program Files\CodeGear\RAD Studio\6.0\bin
+2d0 TraceToolActivexDemo.exe normal \\.host\Shared Folders\tracetool\ActiveX\Delphi ActiveX Demo
+688 TraceTool.exe            normal \\.host\Shared Folders\tracetool\Viewer 2009
+140 TraceTool.exe            normal \\.host\Shared Folders\tracetool\Viewer 2009
+16c TraceTool.exe            normal \\.host\Shared Folders\tracetool\Viewer 2009
+364 TraceTool.exe            normal \\.host\Shared Folders\tracetool\Viewer 2009
+
+hardware:
++ Batteries
+  - Microsoft AC Adapter
++ Computer
+  - ACPI Uniprocessor PC
++ Disk drives
+  - VMware Virtual IDE Hard Drive
++ Display adapters
+  - VMware SVGA II (driver 11.4.3.1)
++ IDE ATA/ATAPI controllers
+  - Intel(R) 82371AB/EB PCI Bus Master IDE Controller
+  - Primary IDE Channel
++ Keyboards
+  - Standard 101/102-Key or Microsoft Natural PS/2 Keyboard
++ Mice and other pointing devices
+  - VMware Pointing Device (driver 12.4.0.2)
++ Network adapters
+  - VMware Accelerated AMD PCNet Adapter (driver 2.0.0.10)
++ Ports (COM & LPT)
+  - Communications Port (COM1)
+  - Communications Port (COM2)
+  - Printer Port (LPT1)
++ Processors
+  - Intel(R) Pentium(R) 4 CPU 2.66GHz
++ SCSI and RAID controllers
+  - VMware SCSI Controller (driver 1.2.0.6)
++ Sound, video and game controllers
+  - Audio Codecs
+  - Legacy Audio Drivers
+  - Legacy Video Capture Devices
+  - Media Control Devices
+  - Video Codecs
++ System devices
+  - ACPI Fixed Feature Button
+  - Direct memory access controller
+  - EISA programmable interrupt controller
+  - Generic Bus
+  - Intel 82371AB/EB PCI to ISA bridge (ISA mode)
+  - Intel 82443BX Pentium(R) II Processor to AGP Controller
+  - Intel 82443BX Pentium(R) II Processor to PCI Bridge
+  - ISAPNP Read Data Port
+  - Logical Disk Manager
+  - Microcode Update Device
+  - Microsoft ACPI-Compliant System
+  - Microsoft Composite Battery
+  - Microsoft System Management BIOS Driver
+  - Motherboard resources
+  - PCI bus
+  - PCI standard PCI-to-PCI bridge
+  - Plug and Play Software Device Enumerator
+  - Printer Port Logical Interface
+  - System CMOS/real time clock
+  - System speaker
+  - System timer
+  - Volume Manager
++ Universal Serial Bus controllers
+  - Intel(R) 82371AB/EB PCI to USB Universal Host Controller
+  - Standard Enhanced PCI to USB Host Controller
+  - USB Root Hub
+  - USB Root Hub
+
+cpu registers:
+eax = 00000000
+ebx = 00a838c0
+ecx = 00000020
+edx = 004c2aae
+esi = 00486ebc
+edi = 0012f78c
+eip = 004c2aba
+esp = 0012f428
+ebp = 0012f5ec
+
+stack dump:
+0012f428  00 00 00 00 01 00 00 00 - 00 00 00 00 00 00 00 00  ................
+0012f438  00 80 00 00 00 00 00 00 - 00 00 00 00 48 f5 12 00  ............H...
+0012f448  3c 35 4c 00 00 00 00 00 - 00 00 00 00 4c f5 12 00  <5L.........L...
+0012f458  00 00 00 00 00 00 00 00 - ff ff ff ff 00 00 00 00  ................
+0012f468  00 00 00 00 00 00 00 00 - 50 f5 12 00 30 f9 12 00  ........P...0...
+0012f478  bc 4a 40 00 ec f5 12 00 - 10 2e a7 00 00 00 00 00  .J@.............
+0012f488  00 00 00 00 00 00 00 00 - 00 00 00 00 00 00 00 00  ................
+0012f498  00 00 00 00 00 00 00 00 - 00 00 00 00 00 00 00 00  ................
+0012f4a8  00 00 00 00 00 00 00 00 - 00 00 00 00 00 00 00 00  ................
+0012f4b8  00 00 00 00 00 00 00 00 - 00 00 00 00 00 00 00 00  ................
+0012f4c8  00 00 00 00 00 00 00 00 - 00 00 00 00 00 00 00 00  ................
+0012f4d8  00 00 00 00 00 00 00 00 - 00 00 00 00 00 00 00 00  ................
+0012f4e8  00 00 00 00 00 00 00 00 - 00 00 00 00 00 00 00 00  ................
+0012f4f8  00 00 00 00 00 00 00 00 - 00 00 00 00 00 00 00 00  ................
+0012f508  00 00 00 00 00 00 00 00 - 00 00 00 00 00 00 00 00  ................
+0012f518  00 00 00 00 00 00 00 00 - 00 00 00 00 00 00 00 00  ................
+0012f528  00 00 00 00 00 00 00 00 - 00 00 00 00 00 00 00 00  ................
+0012f538  00 00 00 00 00 00 00 00 - 00 00 00 00 00 00 00 00  ................
+0012f548  00 00 00 00 00 00 00 00 - 00 00 00 00 00 00 00 00  ................
+0012f558  00 00 00 00 00 00 00 00 - 00 00 00 00 00 00 00 00  ................
+
+disassembling:
+[...]
+004c2aa9       mov     eax, [eax]
+004c2aab       call    dword ptr [eax+$40]
+004c2aae       call    -$ba97f ($408134)      ; System.@CheckAutoResult
+004c2ab3       mov     eax, [ebp-$a8]
+004c2ab9       push    eax
+004c2aba     > mov     eax, [eax]
+004c2abc       call    dword ptr [eax+$40]
+004c2abf       call    -$ba990 ($408134)      ; System.@CheckAutoResult
+004c2ac4       mov     eax, [ebp-$a4]
+004c2aca       push    eax
+004c2acb       mov     eax, [eax]
+[...]
+
+date/time         : 2009-03-30, 16:09:10, 455ms
+computer name     : SP3LITE
+user name         : New user <admin>
+registered owner  : seba
+operating system  : Windows XP Service Pack 3, v.3300 build 2600
+system language   : French
+system up time    : 1 day 14 hours
+program up time   : 38 seconds
+processor         : Intel(R) Pentium(R) 4 CPU 2.66GHz
+physical memory   : 281/519 MB (free/total)
+free disk space   : (C:) 9,28 GB
+display mode      : 1276x906, 32 bit
+process id        : $52c
+allocated memory  : 10,46 MB
+executable        : TraceToolActivexDemo.exe
+exec. date/time   : 2009-03-30 16:08
+compiled with     : Delphi 2009
+madExcept version : 3.0i beta 2
+callstack crc     : $ef10ea77, $d67fa52b, $d67fa52b
+exception number  : 1
+exception class   : EAccessViolation
+exception message : Access violation at address 004C2ABA in module 'TraceToolActivexDemo.exe'. Read of address 00000000.
+
+main thread ($53c):
+004c2aba +58e TraceToolActivexDemo.exe Unit1                187 +50 TForm4.butSimpleTestClick
+0049e9cf +06f TraceToolActivexDemo.exe Controls                     TControl.Click
+00486eda +01e TraceToolActivexDemo.exe StdCtrls                     TCustomButton.Click
+0048793c +010 TraceToolActivexDemo.exe StdCtrls                     TCustomButton.CNCommand
+0049e466 +2d2 TraceToolActivexDemo.exe Controls                     TControl.WndProc
+004a296b +513 TraceToolActivexDemo.exe Controls                     TWinControl.WndProc
+00486ba0 +06c TraceToolActivexDemo.exe StdCtrls                     TButtonControl.WndProc
+0049e0a0 +024 TraceToolActivexDemo.exe Controls                     TControl.Perform
+004a2abb +023 TraceToolActivexDemo.exe Controls                     DoControlMsg
+004a34b7 +00b TraceToolActivexDemo.exe Controls                     TWinControl.WMCommand
+0049e466 +2d2 TraceToolActivexDemo.exe Controls                     TControl.WndProc
+004a296b +513 TraceToolActivexDemo.exe Controls                     TWinControl.WndProc
+004a2084 +02c TraceToolActivexDemo.exe Controls                     TWinControl.MainWndProc
+00475ce4 +014 TraceToolActivexDemo.exe Classes                      StdWndProc
+7e41b8fe +044 USER32.dll                                            SendMessageW
+7e41c654 +016 USER32.dll                                            CallWindowProcW
+004a2a67 +0d7 TraceToolActivexDemo.exe Controls                     TWinControl.DefaultHandler
+0049edec +010 TraceToolActivexDemo.exe Controls                     TControl.WMLButtonUp
+0049e466 +2d2 TraceToolActivexDemo.exe Controls                     TControl.WndProc
+004a296b +513 TraceToolActivexDemo.exe Controls                     TWinControl.WndProc
+00486ba0 +06c TraceToolActivexDemo.exe StdCtrls                     TButtonControl.WndProc
+004a2084 +02c TraceToolActivexDemo.exe Controls                     TWinControl.MainWndProc
+00475ce4 +014 TraceToolActivexDemo.exe Classes                      StdWndProc
+7e418a0b +00a USER32.dll                                            DispatchMessageW
+004bddff +0f3 TraceToolActivexDemo.exe Forms                        TApplication.ProcessMessage
+004bde2a +00a TraceToolActivexDemo.exe Forms                        TApplication.HandleMessage
+004be155 +0c9 TraceToolActivexDemo.exe Forms                        TApplication.Run
+004c6a8b +03b TraceToolActivexDemo.exe TraceToolActivexDemo  18  +3 initialization
+
+thread $71c:
+7c90da8a +0a ntdll.dll                          NtReplyWaitReceivePortEx
+00454085 +0d TraceToolActivexDemo.exe madExcept CallThreadProcSafe
+004540ef +37 TraceToolActivexDemo.exe madExcept ThreadExceptFrame
+>> created by main thread ($53c) at:
+77e7df36 +00 RPCRT4.dll
+
+thread $410:
+7c90d1fa +0a ntdll.dll                          NtDelayExecution
+7c8023eb +4b kernel32.dll                       SleepEx
+7c802450 +0a kernel32.dll                       Sleep
+00454085 +0d TraceToolActivexDemo.exe madExcept CallThreadProcSafe
+004540ef +37 TraceToolActivexDemo.exe madExcept ThreadExceptFrame
+>> created by main thread ($53c) at:
+7752fd64 +00 ole32.dll
+
+thread $1a8:
+7c90df3a +0a ntdll.dll                          NtWaitForSingleObject
+7c8025d5 +85 kernel32.dll                       WaitForSingleObjectEx
+7c80253d +0d kernel32.dll                       WaitForSingleObject
+00454085 +0d TraceToolActivexDemo.exe madExcept CallThreadProcSafe
+004540ef +37 TraceToolActivexDemo.exe madExcept ThreadExceptFrame
+>> created by main thread ($53c) at:
+7752fd64 +00 ole32.dll
+
+thread $5b8:
+7c90df2a +0000a ntdll.dll                          NtWaitForMultipleObjects
+7c80956e +00000 kernel32.dll                       WaitForMultipleObjectsEx
+7c80a100 +00013 kernel32.dll                       WaitForMultipleObjects
+025eb17a +1bf86 TraceToolCom.dll                   initialization
+0257c592 +00032 TraceToolCom.dll         Graphics  TBitmap.SaveToClipboardFormat
+025555d2 +0005a TraceToolCom.dll         System    @CopyArray
+00454085 +0000d TraceToolActivexDemo.exe madExcept CallThreadProcSafe
+004540ef +00037 TraceToolActivexDemo.exe madExcept ThreadExceptFrame
+>> created by thread $7fc at:
+02555634 +000bc TraceToolCom.dll         System    @CopyArray
+
+thread $2dc:
+7c90df3a +0a ntdll.dll                          NtWaitForSingleObject
+7c8025d5 +85 kernel32.dll                       WaitForSingleObjectEx
+00454085 +0d TraceToolActivexDemo.exe madExcept CallThreadProcSafe
+004540ef +37 TraceToolActivexDemo.exe madExcept ThreadExceptFrame
+>> created by main thread ($53c) at:
+7752fd64 +00 ole32.dll
+
+modules:
+00400000 TraceToolActivexDemo.exe                  \\.host\Shared Folders\tracetool\ActiveX\Delphi ActiveX Demo
+01e80000 xpsp2res.dll             5.1.2600.3300    C:\WINDOWS\system32
+02550000 TraceToolCom.dll         11.0.0.0         \\.host\Shared Folders\tracetool\ActiveX\Lib
+5ad70000 UxTheme.dll              6.0.2900.3300    C:\WINDOWS\system32
+5d090000 comctl32.dll             5.82.2900.3300   C:\WINDOWS\system32
+5edd0000 olepro32.dll             5.1.2600.3300    C:\WINDOWS\system32
+71aa0000 WS2HELP.dll              5.1.2600.3300    C:\WINDOWS\system32
+71ab0000 WS2_32.dll               5.1.2600.3300    C:\WINDOWS\system32
+71ad0000 wsock32.dll              5.1.2600.3300    C:\WINDOWS\system32
+76380000 msimg32.dll              5.1.2600.3300    C:\WINDOWS\system32
+76390000 imm32.dll                5.1.2600.3300    C:\WINDOWS\system32
+763b0000 comdlg32.dll             6.0.2900.3300    C:\WINDOWS\system32
+76fd0000 CLBCATQ.DLL              2001.12.4414.700 C:\WINDOWS\system32
+77050000 COMRes.dll               2001.12.4414.700 C:\WINDOWS\system32
+77120000 oleaut32.dll             5.1.2600.3300    C:\WINDOWS\system32
+773d0000 comctl32.dll             6.0.2900.3300    C:\WINDOWS\WinSxS\x86_Microsoft.Windows.Common-Controls_6595b64144ccf1df_6.0.2600.3300_x-ww_d7ca0dc2
+774e0000 ole32.dll                5.1.2600.3300    C:\WINDOWS\system32
+77c00000 version.dll              5.1.2600.3300    C:\WINDOWS\system32
+77c10000 msvcrt.dll               7.0.2600.3300    C:\WINDOWS\system32
+77dd0000 ADVAPI32.dll             5.1.2600.3300    C:\WINDOWS\system32
+77e70000 RPCRT4.dll               5.1.2600.3300    C:\WINDOWS\system32
+77f10000 GDI32.dll                5.1.2600.3300    C:\WINDOWS\system32
+77f60000 SHLWAPI.dll              6.0.2900.3300    C:\WINDOWS\system32
+77fe0000 Secur32.dll              5.1.2600.3300    C:\WINDOWS\system32
+7c800000 kernel32.dll             5.1.2600.3300    C:\WINDOWS\system32
+7c900000 ntdll.dll                5.1.2600.3300    C:\WINDOWS\system32
+7c9c0000 shell32.dll              6.0.2900.3300    C:\WINDOWS\system32
+7d1e0000 msi.dll                  3.1.4001.3300    C:\WINDOWS\system32
+7e410000 USER32.dll               5.1.2600.3300    C:\WINDOWS\system32
+7e720000 SXS.DLL                  5.1.2600.3300    C:\WINDOWS\system32
+
+processes:
+000 Idle
+004 System                   normal
+0f4 smss.exe                 normal C:\WINDOWS\system32
+178 csrss.exe                normal C:\WINDOWS\system32
+194 winlogon.exe             high   C:\WINDOWS\system32
+1c0 services.exe             normal C:\WINDOWS\system32
+1cc lsass.exe                normal C:\WINDOWS\system32
+260 svchost.exe              normal C:\WINDOWS\system32
+294 svchost.exe              normal C:\WINDOWS\system32
+2f8 svchost.exe              normal C:\WINDOWS\System32
+334 svchost.exe              normal C:\WINDOWS\system32
+3d4 spoolsv.exe              normal C:\WINDOWS\system32
+454 Explorer.EXE             normal C:\WINDOWS
+4b8 VMwareTray.exe           normal C:\Program Files\VMware\VMware Tools
+4c0 VMwareUser.exe           normal C:\Program Files\VMware\VMware Tools
+504 VMwareService.exe        high   C:\Program Files\VMware\VMware Tools
+5f4 svchost.exe              normal C:\WINDOWS\system32
+78c svchost.exe              normal C:\WINDOWS\System32
+270 PROCEXP.EXE              high   C:\PROGRAM FILES\PROCESS EXPLORER
+220 TraceTool.exe            normal \\.host\Shared Folders\tracetool\Viewer 2009
+7c0 bds.exe                  normal C:\Program Files\CodeGear\RAD Studio\6.0\bin
+52c TraceToolActivexDemo.exe normal \\.host\Shared Folders\tracetool\ActiveX\Delphi ActiveX Demo
+
+hardware:
++ Batteries
+  - Microsoft AC Adapter
++ Computer
+  - ACPI Uniprocessor PC
++ Disk drives
+  - VMware Virtual IDE Hard Drive
++ Display adapters
+  - VMware SVGA II (driver 11.4.3.1)
++ IDE ATA/ATAPI controllers
+  - Intel(R) 82371AB/EB PCI Bus Master IDE Controller
+  - Primary IDE Channel
++ Keyboards
+  - Standard 101/102-Key or Microsoft Natural PS/2 Keyboard
++ Mice and other pointing devices
+  - VMware Pointing Device (driver 12.4.0.2)
++ Network adapters
+  - VMware Accelerated AMD PCNet Adapter (driver 2.0.0.10)
++ Ports (COM & LPT)
+  - Communications Port (COM1)
+  - Communications Port (COM2)
+  - Printer Port (LPT1)
++ Processors
+  - Intel(R) Pentium(R) 4 CPU 2.66GHz
++ SCSI and RAID controllers
+  - VMware SCSI Controller (driver 1.2.0.6)
++ Sound, video and game controllers
+  - Audio Codecs
+  - Legacy Audio Drivers
+  - Legacy Video Capture Devices
+  - Media Control Devices
+  - Video Codecs
++ System devices
+  - ACPI Fixed Feature Button
+  - Direct memory access controller
+  - EISA programmable interrupt controller
+  - Generic Bus
+  - Intel 82371AB/EB PCI to ISA bridge (ISA mode)
+  - Intel 82443BX Pentium(R) II Processor to AGP Controller
+  - Intel 82443BX Pentium(R) II Processor to PCI Bridge
+  - ISAPNP Read Data Port
+  - Logical Disk Manager
+  - Microcode Update Device
+  - Microsoft ACPI-Compliant System
+  - Microsoft Composite Battery
+  - Microsoft System Management BIOS Driver
+  - Motherboard resources
+  - PCI bus
+  - PCI standard PCI-to-PCI bridge
+  - Plug and Play Software Device Enumerator
+  - Printer Port Logical Interface
+  - System CMOS/real time clock
+  - System speaker
+  - System timer
+  - Volume Manager
++ Universal Serial Bus controllers
+  - Intel(R) 82371AB/EB PCI to USB Universal Host Controller
+  - Standard Enhanced PCI to USB Host Controller
+  - USB Root Hub
+  - USB Root Hub
+
+cpu registers:
+eax = 00000000
+ebx = 00a838c0
+ecx = 00000020
+edx = 004c2aae
+esi = 00486ebc
+edi = 0012f78c
+eip = 004c2aba
+esp = 0012f428
+ebp = 0012f5ec
+
+stack dump:
+0012f428  00 00 00 00 01 00 00 00 - 00 00 00 00 00 00 00 00  ................
+0012f438  00 80 00 00 00 00 00 00 - 00 00 00 00 48 f5 12 00  ............H...
+0012f448  3c 35 4c 00 00 00 00 00 - 00 00 00 00 4c f5 12 00  <5L.........L...
+0012f458  00 00 00 00 00 00 00 00 - ff ff ff ff 00 00 00 00  ................
+0012f468  00 00 00 00 00 00 00 00 - 50 f5 12 00 30 f9 12 00  ........P...0...
+0012f478  bc 4a 40 00 ec f5 12 00 - 10 2e a7 00 00 00 00 00  .J@.............
+0012f488  00 00 00 00 00 00 00 00 - 00 00 00 00 00 00 00 00  ................
+0012f498  00 00 00 00 00 00 00 00 - 00 00 00 00 00 00 00 00  ................
+0012f4a8  00 00 00 00 00 00 00 00 - 00 00 00 00 00 00 00 00  ................
+0012f4b8  00 00 00 00 00 00 00 00 - 00 00 00 00 00 00 00 00  ................
+0012f4c8  00 00 00 00 00 00 00 00 - 00 00 00 00 00 00 00 00  ................
+0012f4d8  00 00 00 00 00 00 00 00 - 00 00 00 00 00 00 00 00  ................
+0012f4e8  00 00 00 00 00 00 00 00 - 00 00 00 00 00 00 00 00  ................
+0012f4f8  00 00 00 00 00 00 00 00 - 00 00 00 00 00 00 00 00  ................
+0012f508  00 00 00 00 00 00 00 00 - 00 00 00 00 00 00 00 00  ................
+0012f518  00 00 00 00 00 00 00 00 - 00 00 00 00 00 00 00 00  ................
+0012f528  00 00 00 00 00 00 00 00 - 00 00 00 00 00 00 00 00  ................
+0012f538  00 00 00 00 00 00 00 00 - 00 00 00 00 00 00 00 00  ................
+0012f548  00 00 00 00 00 00 00 00 - 00 00 00 00 00 00 00 00  ................
+0012f558  00 00 00 00 00 00 00 00 - 00 00 00 00 00 00 00 00  ................
+
+disassembling:
+[...]
+004c2aa9       mov     eax, [eax]
+004c2aab       call    dword ptr [eax+$40]
+004c2aae       call    -$ba97f ($408134)      ; System.@CheckAutoResult
+004c2ab3       mov     eax, [ebp-$a8]
+004c2ab9       push    eax
+004c2aba     > mov     eax, [eax]
+004c2abc       call    dword ptr [eax+$40]
+004c2abf       call    -$ba990 ($408134)      ; System.@CheckAutoResult
+004c2ac4       mov     eax, [ebp-$a4]
+004c2aca       push    eax
+004c2acb       mov     eax, [eax]
+[...]
+
+date/time         : 2009-03-30, 16:27:55, 721ms
+computer name     : SP3LITE
+user name         : New user <admin>
+registered owner  : seba
+operating system  : Windows XP Service Pack 3, v.3300 build 2600
+system language   : French
+system up time    : 1 day 14 hours
+program up time   : 26 seconds
+processor         : Intel(R) Pentium(R) 4 CPU 2.66GHz
+physical memory   : 257/519 MB (free/total)
+free disk space   : (C:) 9,28 GB
+display mode      : 1276x906, 32 bit
+process id        : $d0
+allocated memory  : 10,44 MB
+executable        : TraceToolActivexDemo.exe
+exec. date/time   : 2009-03-30 16:27
+compiled with     : Delphi 2009
+madExcept version : 3.0i beta 2
+callstack crc     : $00000000, $fe7d58ce, $fe7d58ce
+exception number  : 1
+exception class   : EAccessViolation
+exception message : Access violation at address 00000000. Read of address 00000000.
+
+main thread ($2ec):
+00000000 +000 ???
+004c2609 +09d TraceToolActivexDemo.exe Unit1                142 +4 TForm4.butSimpleTestClick
+0049e9cf +06f TraceToolActivexDemo.exe Controls                    TControl.Click
+00486eda +01e TraceToolActivexDemo.exe StdCtrls                    TCustomButton.Click
+0048793c +010 TraceToolActivexDemo.exe StdCtrls                    TCustomButton.CNCommand
+0049e466 +2d2 TraceToolActivexDemo.exe Controls                    TControl.WndProc
+004a296b +513 TraceToolActivexDemo.exe Controls                    TWinControl.WndProc
+00486ba0 +06c TraceToolActivexDemo.exe StdCtrls                    TButtonControl.WndProc
+0049e0a0 +024 TraceToolActivexDemo.exe Controls                    TControl.Perform
+004a2abb +023 TraceToolActivexDemo.exe Controls                    DoControlMsg
+004a34b7 +00b TraceToolActivexDemo.exe Controls                    TWinControl.WMCommand
+0049e466 +2d2 TraceToolActivexDemo.exe Controls                    TControl.WndProc
+004a296b +513 TraceToolActivexDemo.exe Controls                    TWinControl.WndProc
+004a2084 +02c TraceToolActivexDemo.exe Controls                    TWinControl.MainWndProc
+00475ce4 +014 TraceToolActivexDemo.exe Classes                     StdWndProc
+7e41b8fe +044 USER32.dll                                           SendMessageW
+7e41c654 +016 USER32.dll                                           CallWindowProcW
+004a2a67 +0d7 TraceToolActivexDemo.exe Controls                    TWinControl.DefaultHandler
+0049edec +010 TraceToolActivexDemo.exe Controls                    TControl.WMLButtonUp
+0049ed62 +06e TraceToolActivexDemo.exe Controls                    TControl.WMMouseMove
+0049e466 +2d2 TraceToolActivexDemo.exe Controls                    TControl.WndProc
+004a296b +513 TraceToolActivexDemo.exe Controls                    TWinControl.WndProc
+00486ba0 +06c TraceToolActivexDemo.exe StdCtrls                    TButtonControl.WndProc
+004a2084 +02c TraceToolActivexDemo.exe Controls                    TWinControl.MainWndProc
+00475ce4 +014 TraceToolActivexDemo.exe Classes                     StdWndProc
+7e418a0b +00a USER32.dll                                           DispatchMessageW
+004bddff +0f3 TraceToolActivexDemo.exe Forms                       TApplication.ProcessMessage
+004bde2a +00a TraceToolActivexDemo.exe Forms                       TApplication.HandleMessage
+004be155 +0c9 TraceToolActivexDemo.exe Forms                       TApplication.Run
+004c6a8b +03b TraceToolActivexDemo.exe TraceToolActivexDemo  19 +3 initialization
+
+thread $100:
+7c90da8a +0a ntdll.dll                          NtReplyWaitReceivePortEx
+00454085 +0d TraceToolActivexDemo.exe madExcept CallThreadProcSafe
+004540ef +37 TraceToolActivexDemo.exe madExcept ThreadExceptFrame
+>> created by main thread ($2ec) at:
+77e7df36 +00 RPCRT4.dll
+
+thread $61c:
+7c90d1fa +0a ntdll.dll                          NtDelayExecution
+7c8023eb +4b kernel32.dll                       SleepEx
+7c802450 +0a kernel32.dll                       Sleep
+00454085 +0d TraceToolActivexDemo.exe madExcept CallThreadProcSafe
+004540ef +37 TraceToolActivexDemo.exe madExcept ThreadExceptFrame
+>> created by main thread ($2ec) at:
+7752fd64 +00 ole32.dll
+
+thread $6bc:
+7c90df3a +0a ntdll.dll                          NtWaitForSingleObject
+7c8025d5 +85 kernel32.dll                       WaitForSingleObjectEx
+7c80253d +0d kernel32.dll                       WaitForSingleObject
+00454085 +0d TraceToolActivexDemo.exe madExcept CallThreadProcSafe
+004540ef +37 TraceToolActivexDemo.exe madExcept ThreadExceptFrame
+>> created by main thread ($2ec) at:
+7752fd64 +00 ole32.dll
+
+thread $428:
+7c90df3a +0a ntdll.dll                          NtWaitForSingleObject
+7c8025d5 +85 kernel32.dll                       WaitForSingleObjectEx
+00454085 +0d TraceToolActivexDemo.exe madExcept CallThreadProcSafe
+004540ef +37 TraceToolActivexDemo.exe madExcept ThreadExceptFrame
+>> created by main thread ($2ec) at:
+7752fd64 +00 ole32.dll
+
+thread $6c0:
+7c90df2a +0000a ntdll.dll                          NtWaitForMultipleObjects
+7c80956e +00000 kernel32.dll                       WaitForMultipleObjectsEx
+7c80a100 +00013 kernel32.dll                       WaitForMultipleObjects
+025eb17a +1bf86 TraceToolCom.dll                   initialization
+0257c592 +00032 TraceToolCom.dll         Graphics  TBitmap.SaveToClipboardFormat
+025555d2 +0005a TraceToolCom.dll         System    @CopyArray
+00454085 +0000d TraceToolActivexDemo.exe madExcept CallThreadProcSafe
+004540ef +00037 TraceToolActivexDemo.exe madExcept ThreadExceptFrame
+>> created by thread $428 at:
+02555634 +000bc TraceToolCom.dll         System    @CopyArray
+
+thread $628:
+7c90df3a +0a ntdll.dll                          NtWaitForSingleObject
+7c8025d5 +85 kernel32.dll                       WaitForSingleObjectEx
+00454085 +0d TraceToolActivexDemo.exe madExcept CallThreadProcSafe
+004540ef +37 TraceToolActivexDemo.exe madExcept ThreadExceptFrame
+>> created by main thread ($2ec) at:
+7752fd64 +00 ole32.dll
+
+modules:
+00400000 TraceToolActivexDemo.exe                  \\.host\Shared Folders\tracetool\ActiveX\Delphi ActiveX Demo
+01e80000 xpsp2res.dll             5.1.2600.3300    C:\WINDOWS\system32
+02550000 TraceToolCom.dll         11.0.0.0         \\.host\Shared Folders\tracetool\ActiveX\Lib
+5ad70000 UxTheme.dll              6.0.2900.3300    C:\WINDOWS\system32
+5d090000 comctl32.dll             5.82.2900.3300   C:\WINDOWS\system32
+5edd0000 olepro32.dll             5.1.2600.3300    C:\WINDOWS\system32
+71aa0000 WS2HELP.dll              5.1.2600.3300    C:\WINDOWS\system32
+71ab0000 WS2_32.dll               5.1.2600.3300    C:\WINDOWS\system32
+71ad0000 wsock32.dll              5.1.2600.3300    C:\WINDOWS\system32
+76380000 msimg32.dll              5.1.2600.3300    C:\WINDOWS\system32
+76390000 imm32.dll                5.1.2600.3300    C:\WINDOWS\system32
+763b0000 comdlg32.dll             6.0.2900.3300    C:\WINDOWS\system32
+76fd0000 CLBCATQ.DLL              2001.12.4414.700 C:\WINDOWS\system32
+77050000 COMRes.dll               2001.12.4414.700 C:\WINDOWS\system32
+77120000 oleaut32.dll             5.1.2600.3300    C:\WINDOWS\system32
+773d0000 comctl32.dll             6.0.2900.3300    C:\WINDOWS\WinSxS\x86_Microsoft.Windows.Common-Controls_6595b64144ccf1df_6.0.2600.3300_x-ww_d7ca0dc2
+774e0000 ole32.dll                5.1.2600.3300    C:\WINDOWS\system32
+77c00000 version.dll              5.1.2600.3300    C:\WINDOWS\system32
+77c10000 msvcrt.dll               7.0.2600.3300    C:\WINDOWS\system32
+77dd0000 ADVAPI32.dll             5.1.2600.3300    C:\WINDOWS\system32
+77e70000 RPCRT4.dll               5.1.2600.3300    C:\WINDOWS\system32
+77f10000 GDI32.dll                5.1.2600.3300    C:\WINDOWS\system32
+77f60000 SHLWAPI.dll              6.0.2900.3300    C:\WINDOWS\system32
+77fe0000 Secur32.dll              5.1.2600.3300    C:\WINDOWS\system32
+7c800000 kernel32.dll             5.1.2600.3300    C:\WINDOWS\system32
+7c900000 ntdll.dll                5.1.2600.3300    C:\WINDOWS\system32
+7c9c0000 shell32.dll              6.0.2900.3300    C:\WINDOWS\system32
+7d1e0000 msi.dll                  3.1.4001.3300    C:\WINDOWS\system32
+7e410000 USER32.dll               5.1.2600.3300    C:\WINDOWS\system32
+7e720000 SXS.DLL                  5.1.2600.3300    C:\WINDOWS\system32
+
+processes:
+000 Idle
+004 System                   normal
+0f4 smss.exe                 normal C:\WINDOWS\system32
+178 csrss.exe                normal C:\WINDOWS\system32
+194 winlogon.exe             high   C:\WINDOWS\system32
+1c0 services.exe             normal C:\WINDOWS\system32
+1cc lsass.exe                normal C:\WINDOWS\system32
+260 svchost.exe              normal C:\WINDOWS\system32
+294 svchost.exe              normal C:\WINDOWS\system32
+2f8 svchost.exe              normal C:\WINDOWS\System32
+334 svchost.exe              normal C:\WINDOWS\system32
+3d4 spoolsv.exe              normal C:\WINDOWS\system32
+454 Explorer.EXE             normal C:\WINDOWS
+4b8 VMwareTray.exe           normal C:\Program Files\VMware\VMware Tools
+4c0 VMwareUser.exe           normal C:\Program Files\VMware\VMware Tools
+504 VMwareService.exe        high   C:\Program Files\VMware\VMware Tools
+5f4 svchost.exe              normal C:\WINDOWS\system32
+78c svchost.exe              normal C:\WINDOWS\System32
+270 PROCEXP.EXE              high   C:\PROGRAM FILES\PROCESS EXPLORER
+220 TraceTool.exe            normal \\.host\Shared Folders\tracetool\Viewer 2009
+7c0 bds.exe                  normal C:\Program Files\CodeGear\RAD Studio\6.0\bin
+70c TOTALCMD.EXE             normal C:\totalcmd
+0d0 TraceToolActivexDemo.exe normal \\.host\Shared Folders\tracetool\ActiveX\Delphi ActiveX Demo
+
+hardware:
++ Batteries
+  - Microsoft AC Adapter
++ Computer
+  - ACPI Uniprocessor PC
++ Disk drives
+  - VMware Virtual IDE Hard Drive
++ Display adapters
+  - VMware SVGA II (driver 11.4.3.1)
++ IDE ATA/ATAPI controllers
+  - Intel(R) 82371AB/EB PCI Bus Master IDE Controller
+  - Primary IDE Channel
++ Keyboards
+  - Standard 101/102-Key or Microsoft Natural PS/2 Keyboard
++ Mice and other pointing devices
+  - VMware Pointing Device (driver 12.4.0.2)
++ Network adapters
+  - VMware Accelerated AMD PCNet Adapter (driver 2.0.0.10)
++ Ports (COM & LPT)
+  - Communications Port (COM1)
+  - Communications Port (COM2)
+  - Printer Port (LPT1)
++ Processors
+  - Intel(R) Pentium(R) 4 CPU 2.66GHz
++ SCSI and RAID controllers
+  - VMware SCSI Controller (driver 1.2.0.6)
++ Sound, video and game controllers
+  - Audio Codecs
+  - Legacy Audio Drivers
+  - Legacy Video Capture Devices
+  - Media Control Devices
+  - Video Codecs
++ System devices
+  - ACPI Fixed Feature Button
+  - Direct memory access controller
+  - EISA programmable interrupt controller
+  - Generic Bus
+  - Intel 82371AB/EB PCI to ISA bridge (ISA mode)
+  - Intel 82443BX Pentium(R) II Processor to AGP Controller
+  - Intel 82443BX Pentium(R) II Processor to PCI Bridge
+  - ISAPNP Read Data Port
+  - Logical Disk Manager
+  - Microcode Update Device
+  - Microsoft ACPI-Compliant System
+  - Microsoft Composite Battery
+  - Microsoft System Management BIOS Driver
+  - Motherboard resources
+  - PCI bus
+  - PCI standard PCI-to-PCI bridge
+  - Plug and Play Software Device Enumerator
+  - Printer Port Logical Interface
+  - System CMOS/real time clock
+  - System speaker
+  - System timer
+  - Volume Manager
++ Universal Serial Bus controllers
+  - Intel(R) 82371AB/EB PCI to USB Universal Host Controller
+  - Standard Enhanced PCI to USB Host Controller
+  - USB Root Hub
+  - USB Root Hub
+
+cpu registers:
+eax = 0016c168
+ebx = 00a838c0
+ecx = 00000008
+edx = 004c25fe
+esi = 00486ebc
+edi = 0012f78c
+eip = 00000000
+esp = 0012f454
+ebp = 0012f5ec
+
+stack dump:
+0012f454  0c 26 4c 00 44 bf 16 00 - ff ff ff ff 30 f9 12 00  .&L.D.......0...
+0012f464  bc 4a 40 00 ec f5 12 00 - 10 2e a7 00 00 00 00 00  .J@.............
+0012f474  00 00 00 00 00 00 00 00 - 00 00 00 00 00 00 00 00  ................
+0012f484  00 00 00 00 00 00 00 00 - 00 00 00 00 00 00 00 00  ................
+0012f494  00 00 00 00 00 00 00 00 - 00 00 00 00 00 00 00 00  ................
+0012f4a4  00 00 00 00 00 00 00 00 - 00 00 00 00 00 00 00 00  ................
+0012f4b4  00 00 00 00 00 00 00 00 - 00 00 00 00 00 00 00 00  ................
+0012f4c4  00 00 00 00 00 00 00 00 - 00 00 00 00 00 00 00 00  ................
+0012f4d4  00 00 00 00 00 00 00 00 - 00 00 00 00 00 00 00 00  ................
+0012f4e4  00 00 00 00 00 00 00 00 - 00 00 00 00 00 00 00 00  ................
+0012f4f4  00 00 00 00 00 00 00 00 - 00 00 00 00 00 00 00 00  ................
+0012f504  00 00 00 00 00 00 00 00 - 00 00 00 00 00 00 00 00  ................
+0012f514  00 00 00 00 00 00 00 00 - 00 00 00 00 00 00 00 00  ................
+0012f524  00 00 00 00 00 00 00 00 - 00 00 00 00 00 00 00 00  ................
+0012f534  00 00 00 00 00 00 00 00 - 00 00 00 00 00 00 00 00  ................
+0012f544  00 00 00 00 00 00 00 00 - 00 00 00 00 00 00 00 00  ................
+0012f554  00 00 00 00 00 00 00 00 - 00 00 00 00 00 00 00 00  ................
+0012f564  00 00 00 00 00 00 00 00 - 00 00 00 00 00 00 00 00  ................
+0012f574  00 00 00 00 00 00 00 00 - 00 00 00 00 00 00 00 00  ................
+0012f584  00 00 00 00 00 00 00 00 - 00 00 00 00 00 00 00 00  ................
+
+disassembling:
+[...]
+004c25fb       call    dword ptr [eax+$28]
+004c25fe       call    -$ba4cf ($408134)      ; System.@CheckAutoResult
+004c2603       mov     eax, [ebp-$3c]
+004c2606       push    eax
+004c2607       mov     eax, [eax]
+004c2609     > call    dword ptr [eax+$60]
+004c260c       call    -$ba4dd ($408134)      ; System.@CheckAutoResult
+004c2611 143   push    1
+004c2613       lea     eax, [ebp-$40]
+004c2616       call    -$ba5f7 ($408024)      ; System.@IntfClear
+004c261b       push    eax
+[...]
+
+date/time         : 2009-03-30, 17:16:58, 784ms
+computer name     : SP3LITE
+user name         : New user <admin>
+registered owner  : seba
+operating system  : Windows XP Service Pack 3, v.3300 build 2600
+system language   : French
+system up time    : 1 day 15 hours
+program up time   : 21 seconds
+processor         : Intel(R) Pentium(R) 4 CPU 2.66GHz
+physical memory   : 222/519 MB (free/total)
+free disk space   : (C:) 9,28 GB
+display mode      : 1276x906, 32 bit
+process id        : $748
+allocated memory  : 10,45 MB
+executable        : TraceToolActivexDemo.exe
+exec. date/time   : 2009-03-30 17:11
+compiled with     : Delphi 2009
+madExcept version : 3.0i beta 2
+callstack crc     : $fbef1a7a, $e4164ce6, $cb827ac7
+exception number  : 1
+exception class   : EOleException
+exception message : Catastrophic failure.
+
+main thread ($108):
+004c8238 +08c TraceToolActivexDemo.exe Unit1                594 +3 TForm4.butSocketClick
+004a122b +06f TraceToolActivexDemo.exe Controls                    TControl.Click
+0048931e +01e TraceToolActivexDemo.exe StdCtrls                    TCustomButton.Click
+00489d80 +010 TraceToolActivexDemo.exe StdCtrls                    TCustomButton.CNCommand
+004a0cc2 +2d2 TraceToolActivexDemo.exe Controls                    TControl.WndProc
+004a51c7 +513 TraceToolActivexDemo.exe Controls                    TWinControl.WndProc
+00488fe4 +06c TraceToolActivexDemo.exe StdCtrls                    TButtonControl.WndProc
+004a08fc +024 TraceToolActivexDemo.exe Controls                    TControl.Perform
+004a5317 +023 TraceToolActivexDemo.exe Controls                    DoControlMsg
+004a5d13 +00b TraceToolActivexDemo.exe Controls                    TWinControl.WMCommand
+004a0cc2 +2d2 TraceToolActivexDemo.exe Controls                    TControl.WndProc
+004a51c7 +513 TraceToolActivexDemo.exe Controls                    TWinControl.WndProc
+004a48e0 +02c TraceToolActivexDemo.exe Controls                    TWinControl.MainWndProc
+00475d70 +014 TraceToolActivexDemo.exe Classes                     StdWndProc
+7e41b8fe +044 USER32.dll                                           SendMessageW
+7e41c654 +016 USER32.dll                                           CallWindowProcW
+004a52c3 +0d7 TraceToolActivexDemo.exe Controls                    TWinControl.DefaultHandler
+004a1648 +010 TraceToolActivexDemo.exe Controls                    TControl.WMLButtonUp
+004a0cc2 +2d2 TraceToolActivexDemo.exe Controls                    TControl.WndProc
+004a51c7 +513 TraceToolActivexDemo.exe Controls                    TWinControl.WndProc
+00488fe4 +06c TraceToolActivexDemo.exe StdCtrls                    TButtonControl.WndProc
+004a48e0 +02c TraceToolActivexDemo.exe Controls                    TWinControl.MainWndProc
+00475d70 +014 TraceToolActivexDemo.exe Classes                     StdWndProc
+7e418a0b +00a USER32.dll                                           DispatchMessageW
+004c06bf +0f3 TraceToolActivexDemo.exe Forms                       TApplication.ProcessMessage
+004c06ea +00a TraceToolActivexDemo.exe Forms                       TApplication.HandleMessage
+004c0a15 +0c9 TraceToolActivexDemo.exe Forms                       TApplication.Run
+004c9a8b +03b TraceToolActivexDemo.exe TraceToolActivexDemo  19 +3 initialization
+
+thread $760:
+7c90da8a +0a ntdll.dll                          NtReplyWaitReceivePortEx
+004540e9 +0d TraceToolActivexDemo.exe madExcept CallThreadProcSafe
+00454153 +37 TraceToolActivexDemo.exe madExcept ThreadExceptFrame
+>> created by main thread ($108) at:
+77e7df36 +00 RPCRT4.dll
+
+thread $588:
+7c90d1fa +0a ntdll.dll                          NtDelayExecution
+7c8023eb +4b kernel32.dll                       SleepEx
+7c802450 +0a kernel32.dll                       Sleep
+004540e9 +0d TraceToolActivexDemo.exe madExcept CallThreadProcSafe
+00454153 +37 TraceToolActivexDemo.exe madExcept ThreadExceptFrame
+>> created by main thread ($108) at:
+7752fd64 +00 ole32.dll
+
+thread $544:
+7c90df3a +0a ntdll.dll                          NtWaitForSingleObject
+7c8025d5 +85 kernel32.dll                       WaitForSingleObjectEx
+7c80253d +0d kernel32.dll                       WaitForSingleObject
+004540e9 +0d TraceToolActivexDemo.exe madExcept CallThreadProcSafe
+00454153 +37 TraceToolActivexDemo.exe madExcept ThreadExceptFrame
+>> created by main thread ($108) at:
+7752fd64 +00 ole32.dll
+
+thread $468:
+7c90df3a +0a ntdll.dll                          NtWaitForSingleObject
+7c8025d5 +85 kernel32.dll                       WaitForSingleObjectEx
+004540e9 +0d TraceToolActivexDemo.exe madExcept CallThreadProcSafe
+00454153 +37 TraceToolActivexDemo.exe madExcept ThreadExceptFrame
+>> created by main thread ($108) at:
+7752fd64 +00 ole32.dll
+
+thread $2d0:
+7c90df2a +0a ntdll.dll                                        NtWaitForMultipleObjects
+7c80956e +00 kernel32.dll                                     WaitForMultipleObjectsEx
+7c80a100 +13 kernel32.dll                                     WaitForMultipleObjects
+025cc981 +31 TraceToolCom.dll         unt_XTraceNodeEx 170 +1 TXTraceNodeEx.Set_ParentNodeId
+0257c592 +32 TraceToolCom.dll         Graphics                TBitmap.SaveToClipboardFormat
+025555d2 +5a TraceToolCom.dll         System                  @CopyArray
+004540e9 +0d TraceToolActivexDemo.exe madExcept               CallThreadProcSafe
+00454153 +37 TraceToolActivexDemo.exe madExcept               ThreadExceptFrame
+>> created by thread $468 at:
+02555634 +bc TraceToolCom.dll         System                  @CopyArray
+
+thread $174:
+7c90df3a +0a ntdll.dll                          NtWaitForSingleObject
+7c8025d5 +85 kernel32.dll                       WaitForSingleObjectEx
+004540e9 +0d TraceToolActivexDemo.exe madExcept CallThreadProcSafe
+00454153 +37 TraceToolActivexDemo.exe madExcept ThreadExceptFrame
+>> created by main thread ($108) at:
+7752fd64 +00 ole32.dll
+
+thread $318:
+7c90df3a +0a ntdll.dll                          NtWaitForSingleObject
+7c8025d5 +85 kernel32.dll                       WaitForSingleObjectEx
+004540e9 +0d TraceToolActivexDemo.exe madExcept CallThreadProcSafe
+00454153 +37 TraceToolActivexDemo.exe madExcept ThreadExceptFrame
+>> created by main thread ($108) at:
+7752fd64 +00 ole32.dll
+
+modules:
+00400000 TraceToolActivexDemo.exe                  \\.host\Shared Folders\tracetool\ActiveX\Delphi ActiveX Demo
+01e80000 xpsp2res.dll             5.1.2600.3300    C:\WINDOWS\system32
+02550000 TraceToolCom.dll         11.0.0.0         \\.host\Shared Folders\tracetool\ActiveX\Lib
+5ad70000 UxTheme.dll              6.0.2900.3300    C:\WINDOWS\system32
+5d090000 comctl32.dll             5.82.2900.3300   C:\WINDOWS\system32
+5edd0000 olepro32.dll             5.1.2600.3300    C:\WINDOWS\system32
+71aa0000 WS2HELP.dll              5.1.2600.3300    C:\WINDOWS\system32
+71ab0000 WS2_32.dll               5.1.2600.3300    C:\WINDOWS\system32
+71ad0000 wsock32.dll              5.1.2600.3300    C:\WINDOWS\system32
+76380000 msimg32.dll              5.1.2600.3300    C:\WINDOWS\system32
+76390000 imm32.dll                5.1.2600.3300    C:\WINDOWS\system32
+763b0000 comdlg32.dll             6.0.2900.3300    C:\WINDOWS\system32
+76fd0000 CLBCATQ.DLL              2001.12.4414.700 C:\WINDOWS\system32
+77050000 COMRes.dll               2001.12.4414.700 C:\WINDOWS\system32
+77120000 oleaut32.dll             5.1.2600.3300    C:\WINDOWS\system32
+773d0000 comctl32.dll             6.0.2900.3300    C:\WINDOWS\WinSxS\x86_Microsoft.Windows.Common-Controls_6595b64144ccf1df_6.0.2600.3300_x-ww_d7ca0dc2
+774e0000 ole32.dll                5.1.2600.3300    C:\WINDOWS\system32
+77c00000 version.dll              5.1.2600.3300    C:\WINDOWS\system32
+77c10000 msvcrt.dll               7.0.2600.3300    C:\WINDOWS\system32
+77dd0000 ADVAPI32.dll             5.1.2600.3300    C:\WINDOWS\system32
+77e70000 RPCRT4.dll               5.1.2600.3300    C:\WINDOWS\system32
+77f10000 GDI32.dll                5.1.2600.3300    C:\WINDOWS\system32
+77f60000 SHLWAPI.dll              6.0.2900.3300    C:\WINDOWS\system32
+77fe0000 Secur32.dll              5.1.2600.3300    C:\WINDOWS\system32
+7c800000 kernel32.dll             5.1.2600.3300    C:\WINDOWS\system32
+7c900000 ntdll.dll                5.1.2600.3300    C:\WINDOWS\system32
+7c9c0000 shell32.dll              6.0.2900.3300    C:\WINDOWS\system32
+7d1e0000 msi.dll                  3.1.4001.3300    C:\WINDOWS\system32
+7e410000 USER32.dll               5.1.2600.3300    C:\WINDOWS\system32
+7e720000 SXS.DLL                  5.1.2600.3300    C:\WINDOWS\system32
+
+processes:
+000 Idle
+004 System                   normal
+0f4 smss.exe                 normal C:\WINDOWS\system32
+178 csrss.exe                normal C:\WINDOWS\system32
+194 winlogon.exe             high   C:\WINDOWS\system32
+1c0 services.exe             normal C:\WINDOWS\system32
+1cc lsass.exe                normal C:\WINDOWS\system32
+260 svchost.exe              normal C:\WINDOWS\system32
+294 svchost.exe              normal C:\WINDOWS\system32
+2f8 svchost.exe              normal C:\WINDOWS\System32
+334 svchost.exe              normal C:\WINDOWS\system32
+3d4 spoolsv.exe              normal C:\WINDOWS\system32
+454 Explorer.EXE             normal C:\WINDOWS
+4b8 VMwareTray.exe           normal C:\Program Files\VMware\VMware Tools
+4c0 VMwareUser.exe           normal C:\Program Files\VMware\VMware Tools
+504 VMwareService.exe        high   C:\Program Files\VMware\VMware Tools
+5f4 svchost.exe              normal C:\WINDOWS\system32
+78c svchost.exe              normal C:\WINDOWS\System32
+270 PROCEXP.EXE              high   C:\PROGRAM FILES\PROCESS EXPLORER
+220 TraceTool.exe            normal \\.host\Shared Folders\tracetool\Viewer 2009
+7c0 bds.exe                  normal C:\Program Files\CodeGear\RAD Studio\6.0\bin
+70c TOTALCMD.EXE             normal C:\totalcmd
+748 TraceToolActivexDemo.exe normal \\.host\Shared Folders\tracetool\ActiveX\Delphi ActiveX Demo
+
+hardware:
++ Batteries
+  - Microsoft AC Adapter
++ Computer
+  - ACPI Uniprocessor PC
++ Disk drives
+  - VMware Virtual IDE Hard Drive
++ Display adapters
+  - VMware SVGA II (driver 11.4.3.1)
++ IDE ATA/ATAPI controllers
+  - Intel(R) 82371AB/EB PCI Bus Master IDE Controller
+  - Primary IDE Channel
++ Keyboards
+  - Standard 101/102-Key or Microsoft Natural PS/2 Keyboard
++ Mice and other pointing devices
+  - VMware Pointing Device (driver 12.4.0.2)
++ Network adapters
+  - VMware Accelerated AMD PCNet Adapter (driver 2.0.0.10)
++ Ports (COM & LPT)
+  - Communications Port (COM1)
+  - Communications Port (COM2)
+  - Printer Port (LPT1)
++ Processors
+  - Intel(R) Pentium(R) 4 CPU 2.66GHz
++ SCSI and RAID controllers
+  - VMware SCSI Controller (driver 1.2.0.6)
++ Sound, video and game controllers
+  - Audio Codecs
+  - Legacy Audio Drivers
+  - Legacy Video Capture Devices
+  - Media Control Devices
+  - Video Codecs
++ System devices
+  - ACPI Fixed Feature Button
+  - Direct memory access controller
+  - EISA programmable interrupt controller
+  - Generic Bus
+  - Intel 82371AB/EB PCI to ISA bridge (ISA mode)
+  - Intel 82443BX Pentium(R) II Processor to AGP Controller
+  - Intel 82443BX Pentium(R) II Processor to PCI Bridge
+  - ISAPNP Read Data Port
+  - Logical Disk Manager
+  - Microcode Update Device
+  - Microsoft ACPI-Compliant System
+  - Microsoft Composite Battery
+  - Microsoft System Management BIOS Driver
+  - Motherboard resources
+  - PCI bus
+  - PCI standard PCI-to-PCI bridge
+  - Plug and Play Software Device Enumerator
+  - Printer Port Logical Interface
+  - System CMOS/real time clock
+  - System speaker
+  - System timer
+  - Volume Manager
++ Universal Serial Bus controllers
+  - Intel(R) 82371AB/EB PCI to USB Universal Host Controller
+  - Standard Enhanced PCI to USB Host Controller
+  - USB Root Hub
+  - USB Root Hub
+
+disassembling:
+[...]
+004c822a       mov     eax, [ebp-$10]
+004c822d       push    eax
+004c822e       mov     eax, [eax]
+004c8230       call    dword ptr [eax+$20]
+004c8233       call    -$c0104 ($408134)      ; System.@CheckAutoResult
+004c8238 594 > lea     edx, [ebp-$14]
+004c823b       mov     eax, [ebx+$41c]
+004c8241       call    -$28caa ($49f59c)      ; Controls.TControl.GetText
+004c8246       mov     eax, [ebp-$14]
+004c8249       mov     edx, $1f9a
+004c824e       call    -$6ce47 ($45b40c)      ; SysUtils.StrToIntDef
+[...]
+

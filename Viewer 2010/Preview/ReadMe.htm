@@ -1,0 +1,1281 @@
+<html>
+<head>
+<title>ReadMe</title>
+<meta HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+</head>
+<body BGCOLOR="#FFFFFF" TEXT="#000000">
+<table WIDTH="100%" BORDER="0" CELLSPACING="5" CELLPADDING="5" BGCOLOR="#660000">
+  <tr> 
+    <td> 
+      <div ALIGN="CENTER"><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="6" COLOR="#FFFFFF"><b>Print 
+        Preview Suite v4.77</b></font></div>
+    </td>
+  </tr>
+</table>
+<p><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2">Copyright &copy; 
+  <a HREF="mailto:kambiz@delphiarea.com">Kambiz R. Khojasteh</a>. All rights reserved.<br>
+  Get future component updates from <a HREF="http://www.delphiarea.com">http://www.delphiarea.com</a>.<br>
+</font></p>
+<table BORDER="1" CELLSPACING="2" CELLPADDING="5" BORDERCOLOR="#FFFFFF" ALIGN="LEFT">
+  <tr BGCOLOR="#333333" ALIGN="CENTER" VALIGN="MIDDLE"> 
+    <td NOWRAP><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2" COLOR="#FFFFFF"><b>Delphi 
+      3</b></font></td>
+    <td NOWRAP><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2" COLOR="#FFFFFF"><b>Delphi 
+      4</b></font></td>
+    <td NOWRAP><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2" COLOR="#FFFFFF"><b>Delphi 
+      5</b></font></td>
+    <td NOWRAP><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2" COLOR="#FFFFFF"><b>Delphi 
+      6</b></font></td>
+    <td NOWRAP><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2" COLOR="#FFFFFF"><b>Delphi 7</b></font></td>
+    <td NOWRAP><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2" COLOR="#FFFFFF"><b>Delphi 2005 </b></font></td>
+    <td NOWRAP><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2" COLOR="#FFFFFF"><b>Delphi 2006</b></font></td>
+  </tr>
+</table>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="1">  
+<a href="#DESCRIPTION">Description</a>&nbsp; <a href="#INSTALLATION">Installation</a>&nbsp; <a href="#PROPERTIES">Key Properties</a>&nbsp; <a href="#METHODS">Key Methods</a>&nbsp; <a href="#EVENTS">Key Events</a>&nbsp; <a href="#GLOBAL_PROCEDURES">Global Procedures</a>&nbsp; <a href="#KEYBOARD_SHORTCUTS">Keyboard Shortcuts</a>&nbsp; <a href="#MOUSE_WHEEL">Mouse Wheel Functions</a>&nbsp;<a href="#ZLIB">Zlib Compression</a>&nbsp;<a href="#PDF">PDF Output</a>&nbsp;<a href="#TRANSPARENCY">Image Transparency</a>&nbsp; <a href="#KNOWN_BUGS">Known Issues</a>&nbsp;  <a href="#HISTORY"></a><a href="#HISTORY">History</a>&nbsp; <a href="#ACKNOWLEDGMENT">Acknowledgment</a>&nbsp; <a href="#LICENSE">License</a>&nbsp; <a href="#DISCLAIMER">Disclaimer</a>
+  <br>
+  </font></p>
+<p><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="4"><b><a NAME="DESCRIPTION"></a><br>
+  DESCRIPTION</b></font></p>
+<blockquote> 
+  <p><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2">TPrintPreview 
+    is a descendent of TScrollBox and has properties of both TScrollBox component 
+    and TPrinter class. The key features of TPrintPreview are:</font></p>
+  <ul>
+    <li><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2">Automatically 
+      adjusts printer's paper size and orientation at the print time</font></li>
+    <li><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2">Automatically 
+      adjusts mapping modes</font></li>
+    <li><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2">Preview pages 
+      can be scaled with an arbitrarily zoom factor</font></li>
+    <li><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2">Shows prepared 
+      pages while the new pages are still in progress to be prepared</font></li>
+    <li><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2">Displayed 
+      pages can be scrolled by mouse dragging</font></li>
+    <li><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2">Pages can 
+      be saved/restored to/from disk</font></li>
+    <li><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2">Each page 
+      is accessible as a Windows MetaFile image</font></li>
+    <li><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2">Regardless 
+      of number of previewed pages and their complexity, only consumes a small 
+      portion of Windows resources </font></li>
+    <li><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2">Easy to use 
+      for printing rich text and graphics</font></li>
+    <li><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2">Has a complete 
+      set of events</font></li>
+    <li><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2">Has a complementary 
+      control to show thumbnail pages</font></li>
+    <li><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2">Lets drawing of annotation 
+      and background on the preview pages.</font></li>
+  </ul>
+</blockquote>
+
+<p><font FACE="Verdana, Arial, Helvetica, sans-serif"><b><a NAME="INSTALLATION"></a><br>
+  </b> <b> <font SIZE="4">INSTALLATION</font></b></font></p>
+<blockquote> 
+  <p><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2">Add the following 
+    component's unit into a new or existing package:</font></p>
+  <ul>
+    <li><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2">Preview.pas</font></li>
+  </ul>
+  <p><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2">The following 
+    packages must be added to the <b>requires</b> clause of your package:</font></p>
+  <ul>
+    <li><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2">VCL</font></li>
+    <li><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2">RTL <font SIZE="1">(for 
+      Delphi 6 or higher only)</font></font></li>
+    <li><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2">DesignIDE 
+      <font SIZE="1">(for design-time package of Delphi 6 or higher only)</font></font></li>
+  </ul>
+  <p><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2">Notice that the component's files 
+    (Preview.pas and DELPHIAREA.INC) must be in the search path of Delphi.</font></p>
+</blockquote>
+<p><font FACE="Verdana, Arial, Helvetica, sans-serif"><b><a NAME="PROPERTIES"></a><br>
+  <font SIZE="4">KEY PROPERTIES</font></b></font></p>
+<ul>
+  <li><font FACE="Verdana, Arial, Helvetica, sans-serif"><b><font SIZE="2">Aborted 
+    </font></b><font SIZE="2">(Read-only)</font><b><font SIZE="2"><br>
+    </font></b><font SIZE="2"> Indicates whether the print process is aborted.<br>
+    <br>
+    </font></font></li>
+  <li><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2"><b>Annotation: 
+    Boolean<br>
+    </b>Indicates whether the annotation drawing is active.<br>
+    <br>
+    </font></li>
+  <li><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2"><b>Background: Boolean<br>
+    </b>Indicates whether the background drawing is active.<br>
+    <br>
+  </font></li>
+  <li><font FACE="Verdana, Arial, Helvetica, sans-serif"><b><font SIZE="2">Canvas: 
+    TCanvas </font></b><font SIZE="2">(Read-only)</font><b><font SIZE="2"><br>
+    </font></b><font SIZE="2"> Provides access to a drawing surface that represents 
+    the page. Each page has its own canvas and any access to this property must 
+    be inside the <i>BeginDoc</i> and <i>EndDoc</i> block.<br>
+    <br>
+    </font></font></li>
+  <li><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2"><b>CurrentPage: 
+    Integer<br>
+    </b>Determines the current showing page number.<br>
+    <br>
+    </font></li>
+  <li><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2"><b>DirectPrint: 
+    Boolean<br>
+    </b>Determines whether the control creates preview pages or directly print 
+    the pages on the printer.<br>
+    <br>
+    </font></li>
+  <li><font FACE="Verdana, Arial, Helvetica, sans-serif"><b><font SIZE="2">Grayscale: TGrayscaleOptions<br>
+    TGrayscaleOptions = set of TGrayscaleOption<br>
+    TGrayscaleOption = (gsPreview, gsPrint)
+    <br>
+    </font></b><font SIZE="2">Indicates whether the preview and/or print pages should be converted to grayscale. <b><br>
+      </b> </font><font FACE="Verdana, Arial, Helvetica, sans-serif"><font SIZE="2"><br>
+      </font></font> </font>
+    <table WIDTH="90%" BORDER="0" CELLSPACING="5" CELLPADDING="0" ALIGN="CENTER">
+      <tr>
+        <td WIDTH="15%" VALIGN="TOP"><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2"><b>gsPreview</b></font></td>
+        <td WIDTH="20">&nbsp;</td>
+        <td><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2">Shows preview pages in 256 grayscaled colors. Background and Anonation items will kept their original colors. </font></td>
+      </tr>
+      <tr>
+        <td WIDTH="15%" VALIGN="TOP"><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2"><b>gsPrint</b></font></td>
+        <td WIDTH="20">&nbsp;</td>
+        <td><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2">Reduces the colors of pages to 256 grayscaled colors and then print them.</font></td>
+      </tr>
+    </table>
+    <font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2"><br>
+    </font><font FACE="Verdana, Arial, Helvetica, sans-serif"><font SIZE="2">
+    </font></font></li>
+  <li><font FACE="Verdana, Arial, Helvetica, sans-serif"><b><font SIZE="2">Font: TFont<br>
+    </font></b><font SIZE="2">Specifies the default font for each new page. It is reommended to use a scalable font (e.g. TrueType and OpenType). </font><b><font SIZE="2"><br>
+      </font></b><font SIZE="2"> <br>
+  </font></font></li>
+  <li><font FACE="Verdana, Arial, Helvetica, sans-serif"><b><font SIZE="2">FormName: 
+    String<br>
+    </font></b><font SIZE="2">Determines the name of selected form for the paper 
+    size. </font><b><font SIZE="2"><br>
+    </font></b><font SIZE="2"> <br>
+    </font></font></li>
+  <li><font FACE="Verdana, Arial, Helvetica, sans-serif"><b><font SIZE="2">AutoFormName: 
+    String<br>
+    </font></b><font SIZE="2">Determines the name of the form that is added by 
+    the control automatically. </font><b><font SIZE="2"><br>
+    </font></b><font SIZE="2"> <br>
+    </font></font></li>
+  <li><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2"><b>Orientation: 
+    TPrinterOrientation<br>
+    TPrinterOrientation = (poPortrait, poLanscape)<br>
+    </b>Determines the the paper orientation of pages that will be created. The 
+    paper orientation could not change inside the <i>BeginDoc</i> and <i>EndDoc</i> 
+    block.<br>
+    <br>
+    </font></li>
+  <li><font FACE="Verdana, Arial, Helvetica, sans-serif"><b><font SIZE="2">Pages[PageNo: 
+    Integer]: TMetaFile </font></b><font SIZE="2">(Read-only)</font><b><font SIZE="2"><br>
+    </font></b><font SIZE="2">Contains the list of prepared pages.</font><b><font SIZE="2"><br>
+    </font></b></font><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2"><br>
+    </font></li>
+  <li><font FACE="Verdana, Arial, Helvetica, sans-serif"><b><font SIZE="2">PageBounds: 
+    TRect</font></b><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2"> 
+    (Read-only)</font><b><font SIZE="2"><br>
+    </font></b><font SIZE="2">Specifies the bounding rectangle of the page in 
+    logical coordinates. <br>
+    <br>
+    </font></font></li>
+  <li><font FACE="Verdana, Arial, Helvetica, sans-serif"><b><font SIZE="2">PageSize: 
+    TPoint</font></b><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2"> 
+    (Read-only)</font><b><font SIZE="2"><br>
+    </font></b><font SIZE="2">Specifies the paper size in logical coordinates. 
+    <br>
+    <br>
+    </font></font></li>
+  <li><font FACE="Verdana, Arial, Helvetica, sans-serif"><b><font SIZE="2">PagePixels: 
+    TPoint</font></b><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2"> 
+    (Read-only)</font><b><font SIZE="2"><br>
+    </font></b><font SIZE="2">Specifies the paper size in device coordinates. 
+    <br>
+    <br>
+    </font></font></li>
+  <li><font FACE="Verdana, Arial, Helvetica, sans-serif"><b><font SIZE="2">PaperType: 
+    TPaperType<br>
+    </font></b><font SIZE="2">Specifies the paper size by the paper's type. There 
+    are 68 predefined sizes however by setting this property to <i>pCustom</i> 
+    you can use <i>PaperWidth</i> and <i>PaperHeight</i> properties to set your 
+    own custom paper size.<br>
+    <br>
+    </font></font></li>
+  <li><font FACE="Verdana, Arial, Helvetica, sans-serif"><b><font SIZE="2">PaperHeight: 
+    Integer<br>
+    </font></b><font SIZE="2"> Determines the physical height of the paper in 
+    logical units. Changing this property will change <i>PaperType</i> to <i>pCustom</i>. 
+    The value of <i>PaperHeight</i> must be between 1 and 32767.<br>
+    <br>
+    </font></font></li>
+  <li><font FACE="Verdana, Arial, Helvetica, sans-serif"><b><font SIZE="2">PaperWidth: 
+    Integer<br>
+    </font></b><font SIZE="2"> Determines the physical width of the paper in logical 
+    units. Changing this property will change <i>PaperType</i> to <i>pCustom</i>. 
+    The value of <i>PaperWidth</i> must be between 1 and 32767.<br>
+    <br>
+    </font></font></li>
+  <li><font FACE="Verdana, Arial, Helvetica, sans-serif"><b><font SIZE="2">PrinterInstalled: 
+    Boolean</font></b><font SIZE="2"> (Read-only)<br>
+    Indicates whether is there any installed printer (driver) on the system.<br>
+    <br>
+    </font></font></li>
+  <li><font FACE="Verdana, Arial, Helvetica, sans-serif"><b><font SIZE="2">PrinterPageBounds: 
+    TRect</font></b><font SIZE="2"> (Read-only)<br>
+    </font><font SIZE="2" FACE="Verdana, Arial, Helvetica, sans-serif">Specifies the bounding rectangle of the printer's printable area in logical coordinates. </font><font SIZE="2"><br>
+    <br>
+    </font></font></li>
+  <li><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2"><b>PrintJobTitle: 
+    String<br>
+    </b>Specifies the title of the print job on the system's print queue.<br>
+    <br>
+    </font></li>
+  <li><font FACE="Verdana, Arial, Helvetica, sans-serif"><b><font SIZE="2">State: 
+    TPreviewState </font></b><font SIZE="2">(Read-only)<b><br>
+    TPreviewState = (psReady, psCreating, psPrinting, psEditing)<br>
+    </b> Determines the current state of the control.<br>
+    <br>
+    </font></font> 
+    <table WIDTH="90%" BORDER="0" CELLSPACING="5" CELLPADDING="0" ALIGN="CENTER">
+      <tr> 
+        <td WIDTH="15%" VALIGN="TOP"><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2"><b>psReady</b></font></td>
+        <td WIDTH="20">&nbsp;</td>
+        <td><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2">The control 
+          is idle.</font></td>
+      </tr>
+      <tr> 
+        <td WIDTH="15%" VALIGN="TOP"><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2"><b>psCreating</b></font></td>
+        <td WIDTH="20">&nbsp;</td>
+        <td><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2">The <i>BeginDoc</i> 
+          method has called and the control is preparing the preview pages to 
+          display. </font></td>
+      </tr>
+      <tr> 
+        <td WIDTH="15%" VALIGN="TOP"><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2"><b>psPrinting</b></font></td>
+        <td WIDTH="20">&nbsp;</td>
+        <td><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2"> One of 
+          the print methods has called and the control is printing pages on the 
+          printer.</font></td>
+      </tr>
+      <tr> 
+        <td WIDTH="15%" VALIGN="TOP"><b><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2">psEditing</font></b></td>
+        <td WIDTH="20">&nbsp;</td>
+        <td><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2">The <i>BeginEdit</i> 
+          methods has called and control is editing a page.</font></td>
+      </tr>
+    </table>
+    <font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2"><br>
+    </font></li>
+  <li><font FACE="Verdana, Arial, Helvetica, sans-serif"><b><font SIZE="2">TotalPages: 
+    Integer </font></b><font SIZE="2">(Read-only)</font><b><font SIZE="2"><br>
+    </font></b><font SIZE="2"> Determines the total number of available pages 
+    to preview/print.<br>
+    <br>
+    </font></font></li>
+  <li><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2"><b>Units: TUnits<br>
+    TUnits = (mmPixel, mmLoMetric, mmHiMetric, mmLoEnglish, mmHiEnglish, mmTWIPS, 
+    mmPoints)<br>
+    </b>Determines how the control interprets the measurement values (e.g. paper 
+    size, margins, font's size, font's height, pen's size, ...)<br>
+    <br>
+    </font> 
+    <table WIDTH="90%" BORDER="0" CELLSPACING="5" CELLPADDING="0" ALIGN="CENTER">
+      <tr> 
+        <td WIDTH="15%" VALIGN="TOP"><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2"><b>mmPixel</b></font></td>
+        <td WIDTH="20">&nbsp;</td>
+        <td><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2">1 unit 
+          = 1 pixel</font></td>
+      </tr>
+      <tr> 
+        <td WIDTH="15%" VALIGN="TOP"><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2"><b>mmLoMetric</b></font></td>
+        <td WIDTH="20">&nbsp;</td>
+        <td><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2">1 unit 
+          = 0.1 millimeter</font></td>
+      </tr>
+      <tr> 
+        <td WIDTH="15%" VALIGN="TOP"><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2"><b>mmHiMetric</b></font></td>
+        <td WIDTH="20">&nbsp;</td>
+        <td><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2"> 1 unit 
+          = 0.01 millimeter</font></td>
+      </tr>
+      <tr> 
+        <td WIDTH="15%" VALIGN="TOP"><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2"><b>mmLoEnglish</b></font></td>
+        <td WIDTH="20">&nbsp;</td>
+        <td><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2"> 1 unit 
+          = 0.01 inch</font></td>
+      </tr>
+      <tr> 
+        <td WIDTH="15%" VALIGN="TOP"><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2"><b>mmHiEnglish</b></font></td>
+        <td WIDTH="20">&nbsp;</td>
+        <td><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2"> 1 unit 
+          = 0.001 inch</font></td>
+      </tr>
+      <tr> 
+        <td WIDTH="15%" VALIGN="TOP"><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2"><b>mmTWIPS</b></font></td>
+        <td WIDTH="20">&nbsp;</td>
+        <td><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2"> 1 unit 
+          = 1 twip = 1/20 point = 1/1440 inch</font></td>
+      </tr>
+      <tr> 
+        <td WIDTH="15%" VALIGN="TOP"><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2"><b>mmPoints</b></font></td>
+        <td WIDTH="20">&nbsp;</td>
+        <td><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2"> 1 unit 
+          = 1 point = 1/72 inch</font></td>
+      </tr>
+    </table>
+    <font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2"><br>
+    </font></li>
+  <li><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2"><b>UseTempFile: 
+    Boolean<br>
+    </b>Indicates whether the control uses a temporary file for its internal storage. 
+    When there are more than 500 pages, it is recommended to use temporary files.<br>
+    <br>
+    </font></li>
+  <li><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2"><b>UsePrinterOptions: 
+    Boolean<br>
+    </b>Specifies where the control looks for page information. When UseUserPage 
+    is true, the control uses the printer's paper size and orientation to for 
+    the paper size, otherwise it uses the paper size and orientation set in the 
+    control.<br>
+    <br>
+    </font></li>
+  <li><font FACE="Verdana, Arial, Helvetica, sans-serif"><b><font SIZE="2">Zoom: 
+    Integer<br>
+    </font></b><font SIZE="2"> Specifies how much the control scales pages on 
+    the screen. Changing this property will change <i>ZoomState</i> to <i>zsZoomOther</i>.<br>
+    <br>
+    </font></font></li>
+  <li><font FACE="Verdana, Arial, Helvetica, sans-serif"><b><font SIZE="2">ZoomState: 
+    TZoomState<br>
+    TZoomState = (zsZoomOther, zsZoomToWidth, zsZoomToHeight, zsZoomToFit)<br>
+    </font></b><font SIZE="2"> Determines how the control scales pages on the 
+    screen. <br>
+    <br>
+    </font></font> 
+    <table WIDTH="90%" BORDER="0" CELLSPACING="5" CELLPADDING="0" ALIGN="CENTER">
+      <tr> 
+        <td WIDTH="15%" VALIGN="TOP" HEIGHT="11"><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2"><b>zsZoomOther</b></font></td>
+        <td WIDTH="20" HEIGHT="11">&nbsp;</td>
+        <td HEIGHT="11"><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2">Scaling 
+          factor determines by <i>Zoom</i> property.</font></td>
+      </tr>
+      <tr> 
+        <td WIDTH="15%" VALIGN="TOP"><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2"><b>zsZoomToWidth</b></font></td>
+        <td WIDTH="20">&nbsp;</td>
+        <td><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2">Whole 
+          the page's width will be visible.</font></td>
+      </tr>
+      <tr> 
+        <td WIDTH="15%" VALIGN="TOP"><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2"><b>zsZoomToHeight</b></font></td>
+        <td WIDTH="20">&nbsp;</td>
+        <td><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2"> Whole 
+          the page's height will be visible.</font></td>
+      </tr>
+      <tr> 
+        <td WIDTH="15%" VALIGN="TOP"><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2"><b>zsZoomToFit</b></font></td>
+        <td WIDTH="20">&nbsp;</td>
+        <td><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2">Whole 
+          the page will be visible.</font></td>
+      </tr>
+    </table>
+    <font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2"><br>
+    </font></li>
+  <li><font FACE="Verdana, Arial, Helvetica, sans-serif"><b><font SIZE="2">ZoomSavePos: 
+    Boolean<br>
+    </font></b><font SIZE="2">Indicates whether the control keeps the old scroll 
+    positions when the zoom is changing.<br>
+    <br>
+    </font></font></li>
+  <li><font FACE="Verdana, Arial, Helvetica, sans-serif"><b><font SIZE="2">ZoomStep: 
+    Integer<br>
+    </font></b><font SIZE="2">Determines the amount of changes in zoom percentage 
+    when it increments or decrements by a keyboard shurtcut or mouse wheel movement.<br>
+    <br>
+    </font></font></li>
+  <li><font FACE="Verdana, Arial, Helvetica, sans-serif"><b><font SIZE="2">ZoomMin: 
+    Integer<br>
+    </font></b><font SIZE="2">Determines the minimum allowed value for the <i>Zoom</i> 
+    property.</font><font SIZE="2"><br>
+    <br>
+    </font></font></li>
+  <li><font FACE="Verdana, Arial, Helvetica, sans-serif"><b><font SIZE="2">ZoomMax: 
+    Integer<br>
+    </font></b><font SIZE="2">Determines the maximum allowed value for the <i>Zoom</i> 
+    property.</font><font SIZE="2"> </font></font></li>
+</ul>
+<p><font FACE="Verdana, Arial, Helvetica, sans-serif"><b><a NAME="METHODS"></a><br>
+  <font SIZE="4">KEY METHODS</font></b></font></p>
+<ul>
+  <li><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2"><b>procedure 
+    BeginDoc<br>
+    </b> Initiates a new job and creates the <i>Canvas</i>.<br>
+    <br>
+    </font></li>
+  <li><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2"><b>procedure 
+    EndDoc<br>
+    </b>Finalizes the current job.<br>
+    <br>
+    </font></li>
+  <li><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2"><b>procedure 
+    NewPage<br>
+    </b>Starts a new page.</font><font FACE="Verdana, Arial, Helvetica, sans-serif"><br>
+    <br>
+    </font></li>
+  <li><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2"><b>procedure 
+    Abort<br>
+    </b>Aborts one of page creating or printing processes.<br>
+    <br>
+    </font></li>
+  <li><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2"><b>function 
+    BeginEdit(PageNo: Integer): Boolean<br>
+    </b>Intializes <i>Canvas</i> to edit an existing page.<br>
+    <br>
+    </font></li>
+  <li><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2"><b>procedure 
+    EndEdit<br>
+    </b>Finalizes editing a page.</font><br>
+  </li>
+</ul>
+<ul>
+  <li><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2"><b>procedure 
+    Clear<br>
+    </b>Clears all pages and resets the control.</font><font FACE="Verdana, Arial, Helvetica, sans-serif"><br>
+    <br>
+    </font></li>
+  <li> <font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2"><b>procedure 
+    Print<br>
+    </b>Sends all pages to the printer.</font><font FACE="Verdana, Arial, Helvetica, sans-serif"><br>
+    <font SIZE="2"><br>
+    </font></font></li>
+  <li><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2"><b> procedure 
+    PrintPages(FirstPage, LastPage: Integer)<br>
+    </b>Sends the selected range of pages to the printer.<br>
+    <br>
+    </font></li>
+  <li><font FACE="Verdana, Arial, Helvetica, sans-serif"><b><font SIZE="2">pr</font></b><font SIZE="2"><b>ocedure 
+    LoadFromStream(Stream: TStream)<br>
+    </b>Loads pages from a stream.</font><br>
+    <br>
+    </font></li>
+  <li> <font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2"><b>procedure 
+    SaveToStream(Stream: TStream)<br>
+    </b>Saves pages into a stream.</font><font FACE="Verdana, Arial, Helvetica, sans-serif"><br>
+    <font SIZE="2"><br>
+    </font></font></li>
+  <li><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2"><b>procedure 
+    LoadFromFile(const FileName: String)<br>
+    </b>Loads pages from a previously saved file.</font><font FACE="Verdana, Arial, Helvetica, sans-serif"><br>
+    <br>
+    </font></li>
+  <li> <font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2"><b>procedure 
+    SaveToFile(const Filename: String)<br>
+    </b>Saves pages into a file.</font><font FACE="Verdana, Arial, Helvetica, sans-serif"><br>
+    <font SIZE="2"><br>
+    </font></font></li>
+  <li><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2"><b>procedure SaveAsPDF(const Filename: String)<br>
+    </b>Saves pages as a PDF file.</font><font FACE="Verdana, Arial, Helvetica, sans-serif"><br>
+    <font SIZE="2"><br>
+  </font></font></li>
+  <li><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2"><b>function CanSaveAsPDF: Boolean <br>
+    </b>Returns True if PDF writer module is installed.</font><font FACE="Verdana, Arial, Helvetica, sans-serif"><br>
+    <font SIZE="2"><br>
+  </font></font></li>
+  <li><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2"><b>procedure 
+    UpdateAnnotation<br>
+    </b>Forces the control to redraw the current page's annotation and update 
+    the screen.</font><font FACE="Verdana, Arial, Helvetica, sans-serif"><br>
+    <font SIZE="2"><br>
+    </font></font></li>
+  <li><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2"><b>procedure UpdateBackground<br>
+    </b>Forces the control to redraw the current page's background and update the screen.</font><font FACE="Verdana, Arial, Helvetica, sans-serif"><br>
+      <font SIZE="2"><br>
+  </font></font></li>
+  <li><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2"><b>procedure 
+    UpdateZoom<br>
+    </b>Forces the control to recalculate zoom scale and update the screen.</font><font FACE="Verdana, Arial, Helvetica, sans-serif"><br>
+    <font SIZE="2"><br>
+    </font></font></li>
+  <li><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2"><b>procedure 
+    ConvertPoints(var Points; NumPoints: Integer; InUnits, OutUnits: TUnits)<br>
+    </b>Converts the Points coordinates from the input unit specified by InUnits 
+    parameter to the unit specified by the OutUnits. The metod uses the horizontal 
+    and vertical resolution of the target device</font><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2"> 
+    for the conversion</font><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2">.<br>
+    <br>
+    </font></li>
+  <li><font FACE="Verdana, Arial, Helvetica, sans-serif"><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2"><b>function 
+    ConvertXY(X, Y: Inetger; InUnits, OutUnits: TUnits): TPoint<br>
+    </b></font><font SIZE="2">Returns</font><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2"> 
+    the point coordinate converted from the input unit specified by InUnits parameter 
+    to the unit specified by the OutUnits. The metod uses the horizontal and vertical 
+    resolution of the target device</font><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2"> 
+    for the conversion</font><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2">.<br>
+    </font><font SIZE="2"><br>
+    </font></font></li>
+  <li><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2"><b>function 
+    ConvertX(Value: Integer</b></font><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2"><b>; 
+    InUnits, OutUnits: TUnits</b></font><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2"><b>): 
+    Integer<br>
+    </b></font><font FACE="Verdana, Arial, Helvetica, sans-serif"><font SIZE="2">Returns 
+    the conversion of a value specified by the Value parameter </font><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2">from 
+    the input unit specified by InUnits parameter to the unit specified by the 
+    OutUnits. The metod uses the horizontal resolution of the target device for 
+    the conversion.<br>
+    </font><font SIZE="2"><br>
+    </font></font></li>
+  <li><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2"><b>function 
+    ConvertY(Value: Integer</b></font><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2"><b>; 
+    InUnits, OutUnits: TUnits</b></font><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2"><b>): 
+    Integer<br>
+    </b></font><font FACE="Verdana, Arial, Helvetica, sans-serif"><font SIZE="2">Returns 
+    the conversion of a value specified by the Value parameter </font><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2">from 
+    the input unit specified by InUnits parameter to the unit specified by the 
+    OutUnits. The metod uses the vertical resolution of the target device for 
+    the conversion.<br>
+    <br>
+    </font></font></li>
+  <li><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2"><b>function 
+    PaintGraphic(X, Y: Integer; Graphic: TGraphic): TPoint<br>
+    </b>Renders the graphic specified by the Graphic parameter on the canvas at 
+    the location given by the coordinates (X, Y). The coordinates are in the control's 
+    unit. The function returns the size of the graphic in the control's unit.<br>
+    <br>
+    </font></li>
+  <li><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2"><b>function 
+    PaintGraphicEx(const Rect: TRect; Graphic: TGraphic; Proporional, ShrinkOnly, 
+    Cnter: Boolean): TRect<br>
+    </b>Draws the graphic specified by the Graphic parameter in the rectangle 
+    specified by the Rect parameter. The coordinates are in the control's unit. 
+    The function returns the bounding rectangle of the graphic in the control's 
+    unit. <br>
+    <br>
+    </font></li>
+  <li><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2"><b>function 
+    PaintGraphicEx2(const Rect: TRect; Graphic: TGraphic; VertAlign: TVertAlign; 
+    HorzAlign: THorzAlign): TRect; <br>
+    </b>Draws the graphic specified by the Graphic parameter in the rectangle 
+    specified by the Rect parameter. The coordinates are in the control's unit. 
+    The function returns the bounding rectangle of the graphic in the control's 
+    unit. <br>
+    <br>
+    </font></li>
+  <li><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2"><b>function 
+    PaintWinControl(X, Y: Integer; WinControl: TWinControl): TPoint<br>
+    </b>Renders the windowed control specified by the WinControl parameter on 
+    the canvas at the location given by the coordinates (X, Y). The coordinates 
+    are in the control's unit. The function returns the size of the rendered image 
+    in the control's unit.</font></li>
+</ul>
+<ul>
+  <li><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2"><b>function 
+    PaintWinControlEx(const Rect: TRect; WinControl: TWinControl; Proporional, 
+    ShrinkOnly, Cnter: Boolean): TRect<br>
+    </b>Draws the windowed control specified by the WinControl parameter in the 
+    rectangle specified by the Rect parameter. The coordinates are in the control's 
+    unit. The function returns the bounding rectangle of the graphic in the control's 
+    unit. <br>
+    <br>
+    </font></li>
+  <li><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2"><b>funtion PaintRichText(const 
+    Rect: TRect; RichEdit: TCustomRichEdit; MaxPages: Integer; pOffset: PInteger): 
+    Integer<br>
+    </b>Renders the content of the RichEdit control specified by the RichEdit 
+    parameter in the rectangle specified by the Rect parameter. The coordinates 
+    are in the control's unit. If the content does not fit to the specified rectangle, 
+    the functions draw the rest in a new page. The function returns the number 
+    of pages used to render the content. The maximum number of pages allowed to 
+    print can be controlled by the MaxPages parameter. When MaxPages is zero, 
+    the function prints all the pages. The pOffset parameter is a pointer to an 
+    integer containing the offset (zero based) of the text, which rendering begins 
+    from that point. When the function does not render all the pages, the variable 
+    pointed by pOffset updates to the offset of the next part of the text that 
+    should be rendered in the next call, otherwise it sets to -1. The pOffset 
+    parameter can be nil. The functions returns the number of pages that are rendered.<br>
+    <br>
+    </font></li>
+  <li><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2"><b>funtion GetRichTextRect(var 
+    Rect: TRect; RichEdit: TCustomRichEdit; pOffset: PInteger): Integer<br>
+    </b>Claulates the smallest bounding rectangle required for rendering one page 
+    of the content of the RichEdit control specified by the RichEdit parameter 
+    in the rectangle specified by the Rect parameter. The coordinates are in the 
+    control's unit. The pOffset parameter is a pointer to an integer containing 
+    the offset (zero based) of the text, which rendering begins from that point. 
+    When the content of the rich edit does not fit into the specified rectangle, 
+    the variable pointed by pOffset updates to the offset of the next part of 
+    the text that, otherwise it sets to -1. The pOffset parameter can be nil. 
+    The functions returns the number of bottom of the bounding rectangle..<br>
+    <br>
+    </font></li>
+  <li><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2"><b>procedure 
+    GetPrinterOptions</b><br>
+    Sets the paper size and orientation of the control to the currently selected 
+    printer's paper and orientation. When the <i>UsePrinterOptions</i> property 
+    is True, just after calling the <i>BeginDoc</i> method, the paper size and 
+    paper orientation of the control automatically set to the printer's ones.<br>
+    <br>
+    </font></li>
+  <li><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2"><b>procedure 
+    SetPrinterOptions</b><br>
+    Sets the paper and orientation of the currently selected printer to paper 
+    size and orientation of the control. When the <i>UsePrinterOptions</i> property 
+    is False, the control automatically calls this method before beginning to 
+    print.<br>
+    <br>
+    </font></li>
+  <li><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2"><b>function 
+    ClientToPaper(const Pt: TPoint): TPoint</b><br>
+    Translates a given point from client area coordinates to the paper coordinates. 
+    The paper coordinates are in the currently selected measurement unit.<br>
+    <br>
+    </font></li>
+  <li><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2"><b>function 
+    PaperToClient(const Pt: TPoint): TPoint</b><br>
+    Translates a given point from the paper coordinates to the client area coordinates. 
+    The paper coordinates are in the currently selected measurement unit.<br>
+    <br>
+    </font></li>
+  <li><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2"><b>function 
+    FetchFormNames(FormNames: TStrings): Boolean</b><br>
+    Fills the specified list with the name of available (predefined and custom) 
+    forms in the system.<br>
+    </font><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2"><br>
+    </font></li>
+  <li><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2"><b>function 
+    GetFormSize(const AFormName: String; out FormWidth, FormHeight: Integer): 
+    Boolean</b><br>
+    Gets width and height of the specified form in the selected measurement unit.<br>
+    <br>
+    </font></li>
+  <li><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2"> <b>function 
+    AddNewForm(const AFormName: String; FormWidth, FormHeight): Boolean;</b><br>
+    Adds a custom form to the system. The form's size should be expressed in the 
+    selected measurement unit. The user must have full rights to the printer driver 
+    to call this function.<br>
+    </font><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2"><br>
+    </font></li>
+  <li><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2"><b>function 
+    RemoveForm(const AFormName: String): Boolean</b><br>
+    Removes a custom form.</font><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2"> 
+    This function does not delete the standard forms that the operating system 
+    defines. The user must have full rights to the printer driver to call this 
+    function.<br>
+    </font></li>
+</ul>
+<p><font FACE="Verdana, Arial, Helvetica, sans-serif"><b><a NAME="EVENTS"></a><br>
+  <font SIZE="4">KEY EVENTS</font></b></font></p>
+<ul>
+  <li><font FACE="Verdana, Arial, Helvetica, sans-serif"><b><font SIZE="2">OnBeginDoc: 
+    TNotifyEvent<br>
+    </font></b><font SIZE="2"> Occurs when <i>BeginDoc</i> method calls.<br>
+    <br>
+    </font></font></li>
+  <li><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2"><b>OnEndDoc: 
+    TNotifyEvent<br>
+    </b></font><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2">Occurs 
+    when <i>EndDoc</i> method calls.<br>
+    <br>
+    </font></li>
+  <li><font FACE="Verdana, Arial, Helvetica, sans-serif"><b><font SIZE="2">OnNewPage: 
+    TNotifyEvent<br>
+    </font></b><font SIZE="2">Occurs immediately after a new page is created.</font><br>
+    <br>
+    </font></li>
+  <li><font FACE="Verdana, Arial, Helvetica, sans-serif"><b><font SIZE="2">OnEndPage: 
+    TNotifyEvent<br>
+    </font></b><font SIZE="2">Occurs when a page is finished.</font><br>
+    <br>
+    </font></li>
+  <li><font FACE="Verdana, Arial, Helvetica, sans-serif"><b><font SIZE="2">OnAbort: 
+    TNotifyEvent<br>
+    </font></b><font SIZE="2"> Occurs when an operation is aborted.<br>
+    <br>
+    </font></font></li>
+  <li><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2"><b>OnChange: 
+    TNotifyEvent<br>
+    </b>Occurs when the current page or content of the control changes.<br>
+    <br>
+    </font></li>
+  <li><font FACE="Verdana, Arial, Helvetica, sans-serif"><b><font SIZE="2">OnBeforePrint: 
+    TNotifyEvent<br>
+    </font></b><font SIZE="2"> Occurs just before sending pages to the printer.<br>
+    <br>
+    </font></font></li>
+  <li><font FACE="Verdana, Arial, Helvetica, sans-serif"><b><font SIZE="2">OnAfterPrint: 
+    TNotifyEvent<br>
+    </font></b><font SIZE="2"> Occurs when printing process is finished. <br>
+    <br>
+    </font></font></li>
+  <li><font FACE="Verdana, Arial, Helvetica, sans-serif"><b><font SIZE="2">OnPrintProgress: 
+    TPreviewPrintProgress<br>
+    TPreviewPrintProgress = procedure(Sender: TObject; PageNo, Progress: Integer; 
+    var AbortIt: Boolean) of object<br>
+    </font></b><font SIZE="2"> Occurs periodically during the print operation. 
+    Setting <i>AbortIt</i> to true, aborts the operation.<br>
+    <br>
+    </font></font></li>
+  <li><font FACE="Verdana, Arial, Helvetica, sans-serif"><b><font SIZE="2">OnZoomChange: 
+    TNotifyEvent<br>
+    </font></b><font SIZE="2"> Occurs when the zoom ratio of the view is changed. 
+    <br>
+    <br>
+    </font></font></li>
+  <li><font FACE="Verdana, Arial, Helvetica, sans-serif"><b><font SIZE="2">OnAutoCustomForm: 
+    TPreviewAutoCustomForm<br>
+    TPreviewAutoCustomForm = procedure(Sender: TObject; const CustomFormName: 
+    String; Operation: TOperation) of object<br>
+    </font></b><font SIZE="2"> Occurs when the control automatically adds/removes 
+    a custom form to/from the system. <br>
+    <br>
+    </font></font></li>
+  <li><font FACE="Verdana, Arial, Helvetica, sans-serif"><b><font SIZE="2">OnAnnotation: <font FACE="Verdana, Arial, Helvetica, sans-serif"><b>TPreviewPageDraw</b></font><br>
+    <font FACE="Verdana, Arial, Helvetica, sans-serif"><b>TPreviewPageDraw</b></font> = procedure(Sender: TObject; PageNo: Integer; Canvas: TCanvas) of object<br>
+    </font></b><font SIZE="2"> When Annotation proprty is True, occurs just before a page being displayed. The items drawn on the provided canvas will appear on top of the preview page, and do not appear on the print. <br>
+    <br>
+    </font></font></li>
+  <li><font FACE="Verdana, Arial, Helvetica, sans-serif"><b><font SIZE="2">OnAnnotation: 
+    TPreviewPageDraw<br>
+    TPreviewPageDraw 
+    = procedure(Sender: TObject; PageNo: Integer; Canvas: TCanvas) of object<br>
+    </font></b><font SIZE="2"> When Background proprty is True, occurs just before 
+    a page being displayed. <font FACE="Verdana, Arial, Helvetica, sans-serif">The items drawn on the provided canvas will appear on background of the preview page, and do not appear on the print.</font><br>
+    </font></font></li>
+</ul>
+<p><font FACE="Verdana, Arial, Helvetica, sans-serif"><b><a NAME="GLOBAL_PROCEDURES"></a><br>
+  <font SIZE="4">GLOBAL PROCEDURES</font></b></font></p>
+<ul>
+  <li><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2"><b>function ConvertUnits(Value, DPI: Integer; InUnits, OutUnits: TUnits): Integer<br>
+</b>Returns the conversion of the value specified by the Value parameter from the measurement unit specified by the InUnits parameter to the measurement unit specified by the OutUnit parameter. If neither source nor destination units are mmPixel, the DPI parameter will be ignored.<b><br>
+<br>
+</b></font></li>
+  <li><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2"><b>procedure DrawGraphic(Canvas: TCanvas; X, Y: Integer; Graphic: TGraphic)<br>
+            </b>Converts the graphic specified by the Graphic parameter to Device Independent Bitmap (DIB) and draws it at the position specified by the X and Y parameters on the canvas specified by the Canvas parameter. This procedure is useful for printing images on a printer canvas.<br>
+      <br>
+    </font></li>
+  <li><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2"><b>procedure 
+    StretchDrawGraphic(Canvas: TCanvas; Rect: TRect; Graphic: TGraphic)<br>
+    </b>Converts the graphic specified by the Graphic parameter to Device Independent 
+    Bitmap (DIB) and draws it in the rectangle specified by the Rect parameter 
+    on the canvas specified by the Canvas parameter. This procedure is useful 
+    for printing images on a printer canvas.<br>
+    <br>
+  </font></li>
+  <li><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2"><b>procedure DrawGrayscale(Canvas: TCanvas; X, Y: Integer; Graphic: TGraphic)<br>
+    </b>Converts the graphic specified by the Graphic parameter to 256 grayscaled colors  Device Independent Bitmap (DIB) and draws it at the position specified by the X and Y parameters on the canvas specified by the Canvas parameter. This procedure is useful for printing images on a printer canvas.<br>
+    <br>
+  </font></li>
+  <li><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2"><b>procedure StretchDrawGrayscale(Canvas: TCanvas; Rect: TRect; Graphic: TGraphic)<br>
+    </b>Converts the graphic specified by the Graphic parameter to 256 grayscaled colors  Device Independent Bitmap (DIB) and draws it in the rectangle specified by the Rect parameter on the canvas specified by the Canvas parameter. This procedure is useful for printing images on a printer canvas.<br>
+      <br>
+  </font></li>
+  <li><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2"><strong>procedure ConvertBitmapToGrayscale(Bitmap: TBitmap)</strong><br>
+    Converts colors of the bitmap specified by the Bitmap parameter to 256 
+  grayscaled colors. <br>
+  </font></li>
+</ul>
+<p><font FACE="Verdana, Arial, Helvetica, sans-serif"><b><a NAME="KEYBOARD_SHORTCUTS"></a><br>
+  <font SIZE="4">KEYBOARD SHURTCUTS</font></b></font></p>
+<ul>
+  <li><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2"><b>Home</b><br>
+    Scrolls the current page to the left most position.</font></li>
+  <li><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2"><b>Ctrl+Home</b><br>
+    Scrolls the current page to the top most position.</font></li>
+  <li><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2"><b>End</b><br>
+    Scrolls the current page to the right most position.</font></li>
+  <li><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2"><b>Ctrl+End</b><br>
+    Scrolls the current page to the bottom most position. </font></li>
+  <li><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2"><b>Left</b><br>
+    Scrolls the current page to the right with the number of pixels specified 
+    in <i>HorzScrollbar.Increment</i> property. </font></li>
+  <li><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2"><b>Shift+Left 
+    </b><br>
+    Scrolls the current page one pixel to the right.</font></li>
+  <li><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2"><b>Ctrl+Left</b><br>
+    Scrolls the current page one screen to the right.</font></li>
+  <li><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2"><b>Right</b><br>
+    Scrolls the current page to the left with the number of pixels specified in 
+    <i>HorzScrollbar.Increment</i> property. </font></li>
+  <li><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2"><b>Shift+Right</b><br>
+    Scrolls the current page one pixel to the left.</font></li>
+  <li><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2"><b>Ctrl+Right</b><br>
+    Scrolls the current page one screen to the left.</font></li>
+  <li><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2"><b>Up</b><br>
+    Scrolls the current page down with the number of pixels specified in <i>VertScrollbar.Increment</i> 
+    property. </font></li>
+  <li><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2"><b>Shift+Up</b><br>
+    Scrolls the current page one pixel down.</font></li>
+  <li><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2"><b>Ctrl+Up</b><br>
+    Scrolls the current page one screen down.</font></li>
+  <li><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2"><b>Down</b><br>
+    Scrolls the current page up with the number of pixels specified in <i>VertScrollbar.Increment</i> 
+    property. </font></li>
+  <li><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2"><b>Shift+Down</b><br>
+    Scrolls the current page one pixel up.</font></li>
+  <li><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2"><b>Ctrl+Down</b><br>
+    Scrolls the current page one screen up.</font></li>
+  <li><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2"><b>Page Up<br>
+    </b>Shows the previous page.</font></li>
+  <li><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2"><b>Ctrl+Page 
+    Up<br>
+    </b>Shows the first page.</font></li>
+  <li><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2"><b>Page Down<br>
+    </b>Shows the next page.</font></li>
+  <li><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2"><b>Ctrl+Page 
+    Down<br>
+    </b>Shows the last page.</font></li>
+  <li><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2"><b>Plus (Numeric 
+    Pad)</b><br>
+    Zoom in by the amount specified in the ZoomStep property.</font></li>
+  <li><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2"><b>Minus (Numeric 
+    Pad)</b><br>
+    Zoom out by the amount specified in the ZoomStep property.</font><br>
+  </li>
+</ul>
+<p><font FACE="Verdana, Arial, Helvetica, sans-serif"><b><a NAME="MOUSE_WHEEL"></a><br>
+  <font SIZE="4">MOUSE WHEEL FUNCTIONS</font></b></font></p>
+<ul>
+  <li><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2"><b>Wheel Down</b><br>
+    Scrolls the current page up with the number of pixels specified in <i>VertScrollbar.Increment</i> 
+    property.</font></li>
+  <li><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2"><b>Wheel Up<br>
+    </b>Scrolls the current page down with the number of pixels specified in <i>VertScrollbar.Increment</i> 
+    property.<b> </b></font></li>
+  <li><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2"><b>Ctrl+Wheel 
+    Down</b><br>
+    Zoom out by the amount specified in the ZoomStep property. </font></li>
+  <li><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2"><b>Ctrl+Wheel 
+    Up </b><br>
+    Zoom in by the amount specified in the ZoomStep property.</font></li>
+  <li><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2"><b>Shift+Wheel 
+    Down | Wheel Press + Wheel Down</b><br>
+    Shows the next page.</font></li>
+  <li><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2"><b>Shift+Wheel 
+    Up | Wheel Press + Wheel Up</b><br>
+    Shows the previous page.</font></li>
+</ul>
+<p><font FACE="Verdana, Arial, Helvetica, sans-serif"><b><a NAME="ZLIB"></a><br>
+  <font SIZE="4">ZLIB COMPRESSION</font></b></font></p>
+<blockquote> 
+  <p><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2">To save preview 
+    pages to a file (or stream) as compressed format:</font></p>
+  <ul>
+    <li><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2">If you are 
+      using Delphi 5 or lower, get the freeware <b>ZLib</b> library for your version 
+      of Delphi at <a HREF="http://www.gzip.org/zlib">http://www.gzip.org/zlib</a>. 
+      </font></li>
+    <li><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2">Open the Preview.pas 
+      file and define the <b>ZLIB</b> compiler directive in the begining of the 
+      file.</font></li>
+  </ul>
+  <p><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2">When the ZLib 
+    compression is active, the component can load both compressed and non-compressed 
+    files.</font></p>
+</blockquote>
+<p><font FACE="Verdana, Arial, Helvetica, sans-serif"><b><a NAME="PDF" id="PDF"></a><br>
+      <font SIZE="4">PDF Output </font></b></font></p>
+<blockquote>
+  <p><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2">To save preview pages as PDF format, you should obtain dsPDF library.<span class=postbody> You can find the library at <a class=postlink href="http://delphistep.cis.si" target=_blank 
+rel=nofollow>http://delphistep.cis.si</a>, under freeware components section. </span></font></p>
+  <p align="left"><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2">Please consider that dsPdf is postcardware, and demo version displays message &quot;This is demo&quot;. If you want to get the library without the demo message, you must send the author (<a href="mailto:odisej@email.si%20">Grega Loboda</a>) a postcard of the town or city you live via (snail) mail.</font></p>
+</blockquote>
+<p><font FACE="Verdana, Arial, Helvetica, sans-serif"><b><a NAME="TRANSPARENCY" id="TRANSPARENCY"></a><br>
+      <font SIZE="4">IMAGE TRANSPARENCY </font></b></font></p>
+<blockquote>
+  <p align="justify"><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2">As default TPrintPreview does not support image transparency because transparency on printers is not guaranteed. As a work around, you can combine images
+  as needed, and then draw the final image to the printer.</font></p>
+  <p><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2">If you need image transparency and you think that all of target printers of your application will support SrcErase, srcAnd, and SrcInvert raster operations, you can define IMAGE_TRANSPARENCY directive, so that the control takes care of transparent images. </font></p>
+</blockquote>
+<p><font FACE="Verdana, Arial, Helvetica, sans-serif"><b><a NAME="KNOWN_BUGS"></a><br>
+  <font SIZE="4">KNOWN ISSUES</font></b></font></p>
+<ul>
+  <li><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2">If <i>Units</i> 
+    property is set to <i>mmHiMetric</i> and width or height of the paper size 
+    is bigger than 32767 units, the page will not display correctly. This happens 
+    because SetWindowExtEx API function expects a two bytes signed integer (Smallint) 
+    as its X and Y parameters, so values bigger than 32767 are interpreted as 
+    negative values. <br>
+    <br>
+    </font></li>
+  <li><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2">When the zoom 
+    is not on the actual size (100%), the control may display the preview of the 
+    non-scalable fonts inproperly.<br>
+    <br>
+    </font></li>
+  <li><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2">The PaintRichText 
+    and GetRichTextRect methods use EM_FORMATRANGE message of the rich edit control. 
+    This message has different behavior on different versions of the rich edit 
+    control. In addition, this message ignores the embedded objects in the RTF 
+    text. <br>
+    <br>
+    </font></li>
+  <li><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2">The preview 
+    of a rich text may differ from its printed version. This issue is a known 
+    rich edit control problem.</font></li>
+</ul>
+<p><font FACE="Verdana, Arial, Helvetica, sans-serif"><b><a NAME="HISTORY"></a><br>
+  <font SIZE="4">HISTORY</font></b></font><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2">.</font></p>
+<ul>
+  <li><b><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2">Version 4.77 (December 18, 2007)<br>
+    </font></b><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2">- Fixed problem of calculating size of custom papers (Thanks to <a href="http://forum.delphiarea.com/profile.php?mode=viewprofile&u=1441">e.schmidtlein</a>). <br>
+    <br>
+  </font></li>
+  <li><b><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2">Version 4.76 (November 20, 2007)<br>
+    </font></b><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2">- Improved printing of windowed control. <br>
+    <br>
+    </font></li>
+  <li><b><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2">Version 4.75 (May 3, 2007)<br>
+    </font></b><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2">- Fixed a bug in Abort method (Thanks to <a href="mailto:JohnHodgson@qmap.co.uk">John Hodgson</a>).<br>
+    <br>
+    </font></li>
+  <li><b><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2">Version 4.74 (April 27, 2007)<br>
+    </font></b><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2">- The page size included in saving pages as PDF (Thanks to <a href="http://forum.delphiarea.com/profile.php?mode=viewprofile&u=1286">DwrCymru</a>).<br>
+    <br>
+    </font></li>
+  <li><b><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2">Version 4.73 (April 24, 2007)<br>
+    </font></b><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2">- The bug in saving landscape pages as PDF is fixed (Thanks to <a href="http://forum.delphiarea.com/profile.php?mode=viewprofile&u=126">akeix</a>).<br>
+    <br>
+  </font></li>
+  <li><b><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2">Version 4.72 (April 9, 2007)<br>
+    </font></b><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2">- SaveAsPDF and CanSaveAsPDF methods are added. These new methods need dsPDF library by <a href="mailto:odisej@email.si%20">Grega Loboda</a> to function.<br>
+    <br>
+    </font></li>
+  <li><b><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2">Version 4.71 (February 5, 2007)<br>
+    </font></b><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2">- For displaying and/or printing pages in grayscale, the Grayscale property is introduced.<br>
+    <br>
+    </font></li>
+  <li><b><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2">Version 4.70 (February 1, 2007)<br>
+    </font></b><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2">- To  be able to draw background for preview pages, Background property, OnBackground event, and UpdateBackground method are added. <br>
+    - As of this release, FastPrint property is obsolete. <br>
+    - 
+    Conditional support for image transparency is added. <br>
+    - As of this release, defining custom thumbnail class for thumbnail view is allowed.<br>
+    <br>
+    </font></li>
+  <li><b><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2">Version 4.64 (February 23, 2006)<br>
+    </font></b><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2">- The inavlid parameter type of BltBitmapAsDIB function where causing range check error is corrected (Thanks to <a HREF="mailto:mgd@satelier.com.br">Miguel Gastelumendi</a>). <br>
+    <br>
+    </font></li>
+  <li><b><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2">Version 4.63 (January 30, 2006)<br>
+    </font></b><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2">- The calculation of printer's printable area corrected (Thanks to Mixy).<b> <br>
+    </b>- Some minor tweaks.<br>
+    <br>
+  </font></li>
+  <li><b><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2">Version 4.62 (May 12, 2005)<br>
+    </font></b><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2">- Some minor tweaks.<br>
+    <br>
+    </font></li>
+  <li><b><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2">Version 4.61 (February 21, 2005)<br>
+    </font></b><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2">- A minor bug in thumbnail viewer fixed (Thanks to <a HREF="mailto:marco@wobben.com">MeW</a>).<br>
+      <br>
+    </font></li>
+  <li><b><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2">Version 4.60 
+    (July 28, 2004)<br>
+    </font></b><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2">- The 
+    Annotaton property, UpdateAnnotation method, and OnAnnotation event added 
+    to the TPrintPreview interface. <br>
+    - The new property PrinterPageBounds added. This property determines the printable 
+    bouding rectangle of the currently selected printer.<br>
+    <br>
+  </font></li>
+  <li><b><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2">Version 4.53 
+    (June 30, 2004)<br>
+    </font></b><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2">- The 
+    bug of setting paper orientation on Windows NT is fixed.<br>
+    <br>
+    </font></li>
+  <li><b><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2">Version 4.52 
+    (June 25, 2004)<br>
+    </font></b><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2">- Now, 
+    when a custom page size is set in the control, the control automatically adds 
+    it to the system. Consequently, the AutoFormName property and OnAutoCustomForm 
+    event are added.<br>
+    - A possible bug on custom page sizes on Windows 98 fixed.<br>
+    <b><br>
+    </b></font></li>
+  <li><b><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2">Version 4.50 
+    (June 19, 2004)<br>
+    </font></b><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2">- The 
+    new property <i>FormName</i>, and the new methods <i>FetchFormNames</i>, <i>GetFormSize</i>, 
+    <i>AddNewForm</i>, and <i>RemoveForm</i> added to TPrintPreview component.<b><br>
+    </b>- Now, the <i>StretchDrawGraphicAsDIB</i> procedure doesn't convert metafiles 
+    to DIB if the metafile doesn't have a DDB record.<br>
+    - Some minor tweaks.<br>
+    <b><br>
+    </b></font></li>
+  <li><b><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2">Version 4.40 
+    (May 14, 2004)<br>
+    </font></b><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2">- To 
+    make editing of an existing page easier, BeginEdit and EndEdit methods added. 
+    Consequently, The new state psEditing added to the list of available control's 
+    states.<br>
+    <br>
+    </font></li>
+  <li><b><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2">Version 4.36 
+    (May 13, 2004)<br>
+    </font></b><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2">- New 
+    OnEndPage event added.<br>
+    <br>
+    </font></li>
+  <li><b><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2">Version 4.35 
+    (April 10, 2004)<br>
+    </font></b><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2">- New 
+    method <i>PaintGraphicEx2</i> added to TPrintPreview component (Thanks to 
+    <a HREF="mailto:roy.magne@os.ino.no">Roy M Klever</a>).<br>
+    - The global variable <i>UseHalfTonePrinting</i> added (Thanks to <a HREF="mailto:roy.magne@os.ino.no">Roy 
+    M Klever</a>).<br>
+    </font><b><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2"><br>
+    </font></b></li>
+  <li><b><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2">Version 4.34.1 
+    (March 24, 2004)<br>
+    </font></b><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2">- A bug 
+    is fixed (Thanks to <a HREF="mailto:janet.agney@vaisala.com">Janet Agney</a>).<br>
+    <br>
+    </font></li>
+  <li><b><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2">Version 4.34 
+    (December 8, 2003)</font></b><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2"><br>
+    - Now, a preview page can be changed just by assigning a metafile to it.<br>
+    <br>
+    </font></li>
+  <li><b><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2">Version 4.33 
+    (December 6, 2003)</font></b><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2"><br>
+    - Now, the preview pages can be saved as compressed using the <a HREF="#ZLib">ZLib</a> 
+    library. As default this feature is disabled.<br>
+    - Two new methods ClientToPaper and PaperToClient are added to TPrintPreview 
+    component.<br>
+    - Now, the preview scrolls faster and smoother.<br>
+    - Some minore tweaks.<br>
+    <br>
+    </font></li>
+  <li><b><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2">Version 4.32 
+    (November 20, 2003)</font></b><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2"><br>
+    - Incorrect printing of the content when the measurement unit was mmPixel, 
+    is fixed (Thanks to <a HREF="mailto:briadorin@yahoo.com">Bria Dorin</a>).<br>
+    <br>
+    </font></li>
+  <li><b><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2">Version 4.31 
+    (November 2, 2003)</font></b><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2"><br>
+    - The ConvertUnit, ToPrinterUnit, and Screen2PrinterUnit methods are no longer 
+    exist in this release. Instead of the mentioned methods use the new <i>ConvertPoints</i>, 
+    <i>ConvertXY</i>, <i>ConvertX</i> and <i>ConvertY</i> methods.<br>
+    - For convenience the <i>PageBounds</i>, <i>PageSize</i>, and <i>PagePixels</i> 
+    peroperies added.<br>
+    - The new property <i>DirectPrint</i> added. To print pages directly on the 
+    printer without generating the preview pages, set this property to True.<br>
+    - And, some minor tweaks in rendering rich text and drawing preview pages.<br>
+    <br>
+    </font></li>
+  <li><b><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2">Version 4.30 
+    (October 19, 2003)</font></b><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2"><br>
+    - The bug in printing pages on a printer with different horizontal and vertical 
+    resolution fixed.<br>
+    - The bug in font size fixed.<br>
+    - The points unit added to measurement units.<br>
+    - The new component TThumbnailPreview added to the suite. This control shows 
+    the thumbnails of TPrintPreview pages.<br>
+    <br>
+    </font></li>
+  <li><b><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2">Version 4.21 
+    (September 18, 2003)</font></b><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2"><br>
+    - The paper size and paper orientation were missed in the saved preview files, 
+    which are added in this release. The old preview files are still readable 
+    by the control.<br>
+    - Now, the component can be compiled on C++Builder 3 (Thanks to <a HREF="mailto:pzelotti@libero.it">Patrizio 
+    Zelotti</a>).<br>
+    <br>
+    </font></li>
+  <li><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2"><b>Version 4.20 
+    (July 27, 2003)<br>
+    </b>- The new properties <i>ZoomMin, ZoomMax, </i>and <i>ZoomStep</i> added.<br>
+    - The new event <i>OnZoomChange</i> added.<br>
+    - The mouse wheel support added.<br>
+    <br>
+    </font></li>
+  <li><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2"><b>Version 4.19 
+    (July 8, 2003)<br>
+    </b>- The mistake in interpreting mmLoEnglish and mmHiEnglish units fixed.<br>
+    <b> <br>
+    </b></font></li>
+  <li><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2"><b> Version 
+    4.18 (July 6, 2003)<br>
+    </b>- The bug on zooming the pages fixed (Thanks to <a HREF="mailto:johnnybit@poczta.onet.pl">Hubert 
+    &quot;Johnny_Bit&quot; Kowalski</a>).<b><br>
+    </b>- Now changing the <i>ZoomState</i> property will update the value of 
+    the <i>Zoom</i> property.<b><br>
+    <br>
+    </b></font></li>
+  <li><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2"><b>Version 4.17 
+    (May 29, 2003)<br>
+    </b>- The new method GetRighTextRect added (Thanks to <a HREF="mailto:delphiarea@spamex.com">rgesswein</a>).<br>
+    - The PaintRichText method modified to support custom RichEdit controls (Thanks 
+    to <a HREF="mailto:sebastien.gravier@free.fr">Sebastien</a>).<br>
+    <b><br>
+    </b></font></li>
+  <li><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2"><b>Version 4.16 
+    (May 18, 2003)<br>
+    </b>- The component modified to use the resolution of the currently selected 
+    printer for more accurate print result.<b><br>
+    <br>
+    </b></font></li>
+  <li><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2"><b>Version 4.15 
+    (May 3, 2003)<br>
+    </b>- Bug in printing windowed controls fixed.<br>
+    - The <i>UsePrinterOptions</i> property added.<br>
+    - The <i>SetPrinterOptions</i> and <i>GetPrinterOptions</i> methods added.<br>
+    <br>
+    </font></li>
+  <li><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2"><b>Version 4.14 
+    (April 23, 2003)<br>
+    </b>- Bug in setting the printer's paper orientation to landscape fixed.<br>
+    <b><br>
+    </b></font></li>
+  <li><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2"><b> Version 
+    4.13 (April 16, 2003)<br>
+    </b>- Components' icons changed (Thanks to <a HREF="mailto:b06pxv@FDS.com">Paul 
+    Van Gundy</a>).<br>
+    - Now, two different cursor states for scrolling the page by dragging (Thanks 
+    to <a HREF="mailto:b06pxv@FDS.com">Paul Van Gundy</a>).<br>
+    <br>
+    </font></li>
+  <li><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2"><b>Version 4.12 
+    (April 8, 2003)<br>
+    </b>- Bug in printing pages with custom paper size fixed.<br>
+    <br>
+    </font></li>
+  <li> <font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2"><b>Version 
+    4.11 (March 31, 2003)<br>
+    </b>- Bug in rendering images on Windows 2000 and XP fixed (Thanks to <a HREF="mailto:roy.magne@os.ino.no">Roy 
+    M Klever</a>)<br>
+    <br>
+    </font></li>
+  <li><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2"><b>Version 4.10 
+    (March 29, 2003)</b><br>
+    - <i>PaintGraphicEx</i>, <i>PaintWinControlEx</i>, and <i>PaintRichText</i> 
+    methos added.<br>
+    <br>
+    </font></li>
+  <li> <font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2"><b>Version 
+    4.01 (May 11, 2002)<br>
+    </b>- A little optimization in <i>SaveToStream</i> and <i>LoadFromStream</i> 
+    methods.<br>
+    <br>
+    </font></li>
+  <li><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2"><b> Version 
+    4.00 (January 19, 2002)<br>
+    </b>- The control does not support 16bit platform anymore.<br>
+    - Peformance and stability of the control on both display and print parts 
+    has improved.<br>
+    - <i>SaveToStream</i> and <i>LoadFromStream</i> method added.<br>
+    - Memory leak bug fixed.<br>
+    - Definition of <i>PaintGraphic</i> and <i>PaintWinControl</i> methods changed.<br>
+    - Because of the applied improvements, the following properties are obsolete: 
+    <i>MarginLeft</i>, <i>MarginTop</i>, <i>MarginRight</i>, <i>MarginBottom</i>, 
+    <i>PageRect</i>, <i>PageWidth</i>, <i>PageHeight</i>, and <i>ZoomOrigion</i>.<br>
+    <br>
+    </font></li>
+  <li><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2"><b>Version 3.20 
+    (January 13, 2002)<br>
+    </b>- To improve the control functionality and speed, some internal procedures 
+    changed.<br>
+    - A value larger than 0.7mm limit for margin properties removed.<br>
+    <br>
+    </font></li>
+  <li><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2"><b>Version 3.10 
+    (January 6, 2002)<br>
+    </b>- New property <i>ZeroOrigion added</i>.<br>
+    <br>
+    </font></li>
+  <li><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2"><b>Version 3.01 
+    (April 26, 2001)<br>
+    </b>- <i>ZoomSavePos</i> property added to 32bit version of the component 
+    (Thanks to <a HREF="mailto:delphi@kopr.cz">Pavel Zidek</a>).<br>
+    <br>
+    </font></li>
+  <li><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2"><b>Older Versions</b> 
+    <b>(Unknown Date)</b><br>
+    - Unfortunately, I have missed tracks of the older versions.</font> </li>
+</ul>
+<p><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="4"><b><a NAME="ACKNOWLEDGMENT"></a><br>
+  ACKNOWLEDGMENT</b></font></p>
+<blockquote> 
+  <p><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2">Special thanks 
+    to:</font> </p>
+  <ul>
+    <li><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2">Rinaldo Andrea 
+      &lt;<a HREF="mailto:laser@nuovacs.it">laser@nuovacs.it</a>&gt;</font></li>
+    <li><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2">Jens Christian 
+      Fogtmann &lt;<a HREF="mailto:jefo@post2.tele.dk">jefo@post2.tele.dk</a>&gt;</font></li>
+    <li><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2">Damian Tarnawsky 
+      &lt;<a HREF="mailto:tarnawsky@ali.com.au">tarnawsky@ali.com.au</a>&gt;</font></li>
+    <li><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2">Bill Miller 
+      &lt;<a HREF="mailto:w2m@netheaven.com">w2m@netheaven.com</a>&gt;</font></li>
+    <li><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2">Peter Hedlund 
+      &lt;<a HREF="mailto:peter@peterandlinda.com">peter@peterandlinda.com</a>&gt; 
+      </font></li>
+    <li><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2">Pavel Zidek 
+      &lt;<a HREF="mailto:delphi@kopr.cz">delphi@kopr.cz</a>&gt;</font></li>
+    <li><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2">Roy M Klever 
+      &lt;<a HREF="mailto:roy.magne@os.ino.no">roy.magne@os.ino.no</a>&gt;</font></li>
+    <li><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2">Paul Van Gundy 
+      &lt;<a HREF="mailto:b06pxv@FDS.com">b06pxv@FDS.com</a>&gt;</font></li>
+    <li><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2">Hubert &quot;Johnny_Bit&quot; 
+      Kowalski &lt;<a HREF="mailto:johnnybit@poczta.onet.pl">johnnybit@poczta.onet.pl</a>&gt;</font></li>
+    <li><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2">Tomas Koutny 
+      &lt;<a HREF="mailto:rawos@rawos.com">rawos@rawos.com</a>&gt; </font></li>
+    <li><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2">Patrizio Zelotti 
+      &lt;<a HREF="mailto:pzelotti@libero.it">pzelotti@libero.it</a>&gt;</font></li>
+    <li><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2">Bria Dorin 
+      &lt;<a HREF="mailto:briadorin@yahoo.com">briadorin@yahoo.com</a>&gt;</font></li>
+    <li><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2">Arpad Toth 
+      &lt;<a HREF="mailto:atsoft@atsoftware.czweb.org">atsoft@atsoftware.czweb.org</a>&gt;</font></li>
+    <li><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2">Janet Agney 
+      &lt;<a HREF="mailto:janet.agney@vaisala.com">janet.agney@vaisala.com</a>&gt;</font></li>
+    <li><font SIZE="2" FACE="Verdana, Arial, Helvetica, sans-serif">MeW &lt;<a HREF="mailto:marco@wobben.com">marco@wobben.com</a>&gt; </font></li>
+    <li><font SIZE="2" FACE="Verdana, Arial, Helvetica, sans-serif">Mixy</font></li>
+    <li><font SIZE="2" FACE="Verdana, Arial, Helvetica, sans-serif">Miguel Gastelumendi &lt;<a HREF="mailto:mgd@satelier.com.br">mgd@satelier.com.br</a>&gt;</font></li>
+    <li><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2">akeix</font></li>
+    <li><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2">DwrCymru</font></li>
+    <li><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2">John Hodgson &lt;<a href="mailto:JohnHodgson@qmap.co.uk">JohnHodgson@qmap.co.uk</a>&gt;</font></li>
+    <li><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2">e.schmidtlein</font></li>
+  </ul>
+</blockquote>
+<p><font FACE="Verdana, Arial, Helvetica, sans-serif"><b><a NAME="LICENSE"></a><br>
+  <font SIZE="4">LICENSE</font></b></font></p>
+<blockquote> 
+  <p><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2">The Print Preview 
+    Suite (TPrintPreview, TThumbnailPreview, and TPaperPreview components) is 
+    freeware. You may copy components' files AS LONG AS YOU COPY ALL OF THEM. 
+    If you want to change the source code in order to improve the components' 
+    features, performance, etc. please send me the new source code so that I can 
+    have a look at it. The changed source code should contain descriptions what 
+    you have changed, and of course your name. The only thing you MAY NOT CHANGE 
+    is the ORIGINAL COPYRIGHT INFORMATION. </font></p>
+</blockquote>
+<p><font FACE="Verdana, Arial, Helvetica, sans-serif"><b><a NAME="DISCLAIMER"></a><br>
+  </b> <b> <font SIZE="4">DISCLAIMER</font></b></font></p>
+<blockquote> 
+  <p><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="2">The Print Preview 
+    Suite (TPrintPreview, TThumbnailPreview, and TPaperPreview components) is 
+    provided &quot;AS IS&quot; without any warranty of any kind, either express 
+    or implied. The entire risk as to the quality and performance of the software 
+    is with you. The author is NOT liable for any DAMAGES resulting from the use 
+    and misuse of the components, especially he is NOT liable for DAMAGES that 
+    were caused BY ANY VERSION WHICH HAS NOT BEEN PROGRAMMED BY THE AUTHOR HIMSELF.</font></p>
+</blockquote>
+<font FACE="Verdana, Arial, Helvetica, sans-serif"><br>
+</font> 
+<table WIDTH="100%" BORDER="0" CELLSPACING="0" CELLPADDING="0">
+  <tr> 
+    <td WIDTH="100%"> 
+      <hr NOSHADE>
+    </td>
+    <td NOWRAP><font FACE="Verdana, Arial, Helvetica, sans-serif" SIZE="1"><sup>&nbsp;END 
+      OF DOCUMENT</sup></font></td>
+  </tr>
+</table>
+</body>
+</html>

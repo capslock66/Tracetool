@@ -1,0 +1,5 @@
+<TraceTool>
+   <param name="SendMode" value="socket" />
+   <Param name="sockethost" value="localhost" />
+   <param Name="SendProcessName" Value="false" />
+</TraceTool>

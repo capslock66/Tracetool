@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Silverlight tracetool demo", "Silverlight tracetool demo\Silverlight tracetool demo.csproj", "{D001320A-5A02-42D3-AF29-45E51B2DEC41}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vs9_SilverLight2_Lib", "..\Lib\Vs9_SilverLight2_Lib\Vs9_SilverLight2_Lib.csproj", "{9A594E3E-12EA-4A6F-BB56-01994276913F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D001320A-5A02-42D3-AF29-45E51B2DEC41}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D001320A-5A02-42D3-AF29-45E51B2DEC41}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D001320A-5A02-42D3-AF29-45E51B2DEC41}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D001320A-5A02-42D3-AF29-45E51B2DEC41}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9A594E3E-12EA-4A6F-BB56-01994276913F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9A594E3E-12EA-4A6F-BB56-01994276913F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9A594E3E-12EA-4A6F-BB56-01994276913F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9A594E3E-12EA-4A6F-BB56-01994276913F}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vs9_PPC_F3_Lib", "Lib\Vs9_PPC_F3_Lib.csproj", "{D6B2DA6A-EC60-4866-A9B6-20B5DC1D05C1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Demo", "Demo\Demo.csproj", "{B6381ED4-EFEA-4C9D-AD39-ACD3D0FA8D42}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D6B2DA6A-EC60-4866-A9B6-20B5DC1D05C1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D6B2DA6A-EC60-4866-A9B6-20B5DC1D05C1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D6B2DA6A-EC60-4866-A9B6-20B5DC1D05C1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D6B2DA6A-EC60-4866-A9B6-20B5DC1D05C1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B6381ED4-EFEA-4C9D-AD39-ACD3D0FA8D42}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B6381ED4-EFEA-4C9D-AD39-ACD3D0FA8D42}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B6381ED4-EFEA-4C9D-AD39-ACD3D0FA8D42}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{B6381ED4-EFEA-4C9D-AD39-ACD3D0FA8D42}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B6381ED4-EFEA-4C9D-AD39-ACD3D0FA8D42}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B6381ED4-EFEA-4C9D-AD39-ACD3D0FA8D42}.Release|Any CPU.Deploy.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

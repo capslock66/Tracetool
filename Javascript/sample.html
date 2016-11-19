@@ -1,0 +1,376 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head><title>
+	Tracetool sample
+</title></head>
+<body>
+
+<!-- jsTrace.js and dom-drag.js are optional script used internaly to debug the tracetool API -->
+<!-- <script type="text/javascript" src="jsTrace.js"></script>-->
+<!-- <script type="text/javascript" src="dom-drag.js"></script>-->
+
+<!-- Not the best way to load the tracetool library : put the library on your server then set the host and ask for an unique client id -->
+<!-- <script type="text/javascript" src="tracetool.js" no-cache></script>-->
+
+<!-- Best way to load the client API : Ask the viewer to send it. 
+     Change the src tag to specify compression, viewer location and port -->
+<script type="text/javascript" src="http://localHost:81/tracetool.js?Compressed=false" no-cache></script>
+
+<script>
+
+// Use theses functions only if you don't load the Api from the viewer
+//ttrace.setHost("localHost:81");
+//ttrace.queryClientId() ;
+
+function SendObjectTest()
+{
+   var obj = document.getElementById("SendObjectTest") .value ;
+   ttrace.debug().sendObject(obj,eval(obj));
+   ttrace.display("done. " + ttrace.getWaitingMessageCount() + " message(s) to send") ;
+}
+
+//-------------------------------------------
+function SendValueTest()
+{
+   var obj = document.getElementById("SendObjectTest") .value ;
+   ttrace.debug().sendValue(obj,eval(obj),3,obj);
+   ttrace.display("done. " + ttrace.getWaitingMessageCount() + " message(s) to send") ;
+}
+
+//-------------------------------------------
+
+function butSample()
+{
+   
+   ttrace.debug().send('hello world') ;
+   ttrace.debug().send('hello','world') ;
+   var hello = ttrace.debug().send('hello') ;
+   hello.send('world') ;  // send traces under another node
+   ttrace.debug().send('>test é & = ? à<','ampersand') ;   // send any kind of chars
+   ttrace.debug().send('----------') ;  //separator
+   ttrace.error().sendStack() ;
+   ttrace.warning().sendCaller() ;
+   ttrace.debug().sendDump("Dump sample", "dump", "sample text with special chars >test é & = ? à< ") ; // , 30
+
+   // send array. 
+   var sampleArray = [] ;
+   sampleArray.push (hello) ;               
+   sampleArray [5] = "test1" ;              
+   sampleArray ["MyIndice"] = "test2" ;     
+   ttrace.debug().sendValue('sendValue array', sampleArray, 3, 'sampleArray');
+   
+   // xml
+   //-------
+   ttrace.debug().sendXml('xml','<?xml version="1.0" ?><Data> Hello XML </Data>') ;
+
+   // TraceNodeEx sample : create a node and add some informations before sending it (text, stack,object,xml,...)
+   //-----------------------
+   var f = new ttrace.classes.FontDetail();
+   f.colId = 3 ;
+   f.color = '#00FF00' ;    // light green
+   var nodeEx = new ttrace.classes.TraceNodeEx (ttrace.debug()) ; // parameters : parentNode, generateUniqueId
+   nodeEx.leftMsg = 'TraceNodeEx' ;
+   nodeEx.rightMsg = 'Sample' ;
+   nodeEx.threadName = 'MyThread' ;
+   nodeEx.addFontDetail (f) ;
+   //nodeEx.addFontDetail (3, true, true, '#00FF00') ;  // colId=left message column , bold, italic, color= light green, size, fontName
+
+   //nodeEx.members.add('my member', 'col2').setFontDetail (1,true);
+   f = new ttrace.classes.FontDetail();
+   f.colId = 1 ;
+   f.bold = true ;
+   nodeEx.members.add('my member', 'col2').setFontDetail (f);
+   nodeEx.addStackTrace() ;
+   nodeEx.addValue  (nodeEx) ;
+   nodeEx.addBackgroundColor ('#208020' , -1);   // dark green
+   nodeEx.addXML('<?xml version="1.0" ?><Data> Hello XML </Data>') ;
+   nodeEx.send() ;
+   
+   // send table. Note that the titles are taken from the first item in the array. 
+   // All items should then be of the same kind !!!
+   //---------------------------------------------------------
+   ttrace.debug().sendTable('sendTable array', sampleArray);
+
+   // Other way to send table : compose yourself titles and datas
+   //---------------------------------------------------------
+   var table = new ttrace.classes.TraceTable();        // create the table
+
+   // add titles. Individual columns titles can be added or multiple columns , separated by tabs
+   table.addColumnTitle("colA");          // first column title
+   table.addColumnTitle("colB");          // second column title
+   table.addColumnTitle("title column C\tcolD");  // other columns title (tab separated)
+
+   // add first line. Individual columns data can be added or multiple columns , separated by tabs
+   table.addRow();
+   table.addRowData("a");                           // add first col
+   table.addRowData("b" + "\t" + "c" + "\t" + "d" + "\t" + "e");            // then add other columns (tab separated)
+
+   // add second line
+   table.addRow();
+   table.addRowData("aa" + "\t" + "data second column" + "\t" + "cc" + "\t" + "dd" + "\t" + "ee");  // add all columns data in a single step (tab separated)
+
+   // finally send the table
+   ttrace.debug().sendTable("Mytable", table);
+   
+
+   ttrace.display("done. " + ttrace.getWaitingMessageCount() + " message(s) to send") ;
+} ;
+
+//-------------------------------------------
+
+function butIndent()
+{
+   ttrace.debug().indent("before indent", ttrace.debug().indentLevel()) ;
+   ttrace.debug().send("after indent", ttrace.debug().indentLevel()) ;
+   ttrace.debug().unIndent("unindent", ttrace.debug().indentLevel()) ;
+   ttrace.debug().send("after unindent") ;
+
+   var node1 = ttrace.debug().send("node1") ;
+   node1.send ('Under node1') ;
+   node1.indent ('Indent node1') ;
+   node1.send ('Under Indent') ;
+   node1.unIndent() ;
+
+   ttrace.debug().enterMethod("test2()",'','#00FF00') ;
+   ttrace.debug().send ('Inside method') ;
+   ttrace.debug().exitMethod("test2()");
+
+   ttrace.display("done. " + ttrace.getWaitingMessageCount() + " message(s) to send") ;
+}
+
+//-------------------------------------------
+
+function butSearch()
+{
+   // ttrace.winTrace().GotoBookmark(1); // second bookmark, noted [1]
+   // ttrace.winTrace().clearBookmark() ;
+   // ttrace.winTrace().GotoFirstNode() ;
+   // ttrace.winTrace().GotoLastNode() ;
+
+   // TTrace.Find just set the criterias and hightlight if asked, but don't move to the next matching node.
+  // ttrace.find("StRinG", false, true, true, true);// {Sensitive}{WholeWord}{Highlight}{SearchInAllPages}
+   ttrace.find("StRinG", false, true, true) ;
+   // from the current node : go to the next item matching criteria. Call ttrace.WinTrace.GotoFirstNode() before FindNext to start search from first node
+//   ttrace.winTrace().FindNext(true); //{SearForward}
+	
+}
+
+//-------------------------------------------
+
+function butFilter()
+{
+	
+}
+
+//-------------------------------------------
+
+function butClearFilter()
+{
+	
+}
+//-------------------------------------------
+
+var start1 ;
+function butStart1()
+{
+   start1 = ttrace.debug().send("Start 1 ..");
+   //start1.resendIconIndex (15);                        // change icon index
+   //start1.setBackgroundColor ('#00FF00', 3);           // change background color col3
+
+   var f = new ttrace.classes.FontDetail();
+   f.colId = 3 ;
+   f.color = '#00FF00' ;
+   start1.setFontDetail (f);                             //  change font
+   //start1.setFontDetail (3, true, false, '#00FF00');   //  change font (colId, bold, italic, color, size, fontName)
+   //start1.append(" AL1"," AR2") ;                      // append left and right
+   //start1.appendLeft(" AL2") ;                         // append left
+   //start1.appendRight (" AR2") ;                       // append right
+   //start1.deleteIt() ;                                 // delete the node and all children
+   //start1.send("under start1");                        // send text under the start1 node
+   //start1.deleteChildren() ;                           // then delete all children
+
+
+   document.getElementById("butResend"      ).disabled = false ;
+   document.getElementById("butSetSelected" ).disabled = false ;
+   document.getElementById("butNodeIndent"  ).disabled = false ;
+}
+
+function butNodeIndent()
+{
+    start1.send("before indent");    // send text under the start1 node
+    start1.indent("ident 1");        // send text under the start1 node and keep it this trace as the new target for further sub traces
+    start1.send("Level2");           // send text under the "indent 1" node
+    start1.unIndent("done");         // unindent and send text under the start1 node. Text is optional
+}
+
+
+var start2 ;
+function butStart2()
+{
+   start2 = ttrace.debug().send("Start 2 ..");
+   document.getElementById("butAppend"  ).disabled = false ;
+   document.getElementById("butShowNode").disabled = false ;
+}
+
+//-------------------------------------------
+
+var win ;
+function butWinTrace()
+{
+   // WinTrace sample
+   //-----------------------
+   win = new ttrace.classes.WinTrace("MyWinTrace","MyWinTrace") ;    // parameters : WinTrace Id and Text
+   win.debug().send('my trace') ;
+   //win.send('default icon');
+   //win.setLogFile ('c:\\mylog') ;
+
+   document.getElementById("butDisplayWindow").disabled = false ;
+   document.getElementById("butHelloWin"     ).disabled = false ;
+   document.getElementById("butSaveWinToText").disabled = false ;
+   document.getElementById("butSaveWinToXml" ).disabled = false ;
+   document.getElementById("butLoadWinXml"   ).disabled = false ;
+
+   ttrace.display("done. " + ttrace.getWaitingMessageCount() + " message(s) to send") ;
+}
+
+//-------------------------------------------
+
+var MultiColTrace ;
+function butMulticolTest()
+{
+   MultiColTrace = new ttrace.classes.WinTrace("MCOL", "MultiCol trace window");
+   MultiColTrace.setMultiColumn(1);  // must be called before calling setColumnsTitle
+   MultiColTrace.setColumnsTitle("col1 \t col2 \t col3");
+   MultiColTrace.setColumnsWidth("100:20:80 \t 200:50 \t 100");
+   MultiColTrace.displayWin();
+   MultiColTrace.debug().send("1 \t 2 \t 3");
+}
+
+//-------------------------------------------
+
+var WatchCounter = 123;
+var MyWinWatch;
+
+function butCreateWinWatches()
+{
+   MyWinWatch = new ttrace.classes.WinWatch("MyWinWatchID", "My watches");
+   document.getElementById("butSendWinWatches"    ).disabled = false ;
+   document.getElementById("butDisplayWinWatches" ).disabled = false ;
+   document.getElementById("butClearWinWatches"   ).disabled = false ;
+   document.getElementById("butCloseWinWatches"   ).disabled = false ;
+}
+
+//-------------------------------------------
+
+function butShowStatus()
+{
+   var msg ;
+
+   if (!window.ttrace)
+      msg = 'TraceTool client API not loaded. check if viewer is running and host and port (81 ?) are matching' ;
+   else {
+      msg  = '<br/>' + 'Client Id : ' + ttrace.getClientID() ;
+      msg += '<br/>' + 'Host : ' + ttrace.getHost() ;
+      msg += '<br/>' + 'Already Send : ' + ttrace.getSendMessageCount() ;
+      msg += '<br/>' + 'To Send : ' + ttrace.getWaitingMessageCount() ;
+   }
+
+   document.getElementById('stat').innerHTML = msg ;
+}
+setTimeout(butShowStatus, 0);
+
+//-------------------------------------------
+//-------------------------------------------
+
+</script>
+
+<div style="background-color:Silver;height:24px;width:540px;">
+    tracetool information
+</div>
+<div id="stat" > </div>
+<br />
+<input type="button" value="refresh status" onclick="butShowStatus();" />
+<br /> <br />
+<div style="background-color:Silver;border-style:None;height:24px;width:540px;">
+   Basic
+</div>
+<br />
+<div style="width:540px;">
+    &nbsp;Tips : Ensure TraceTool is running.<br />
+    <br />
+    <input type="button" value="Sample traces"                      onclick="butSample()"  /><br />
+    <input type="button" value="Indent/UnIndent"                    onclick="butIndent()" /><br /><br />
+
+    <input type="text"   value="window"     id="SendObjectTest" >
+    <input type="button" value="sendObject"                         onclick="SendObjectTest();">
+    <input type="button" value="sendValue"                          onclick="SendValueTest();"><br /><br />
+	
+    <input type="button" value="Search"                             onclick="butSearch();">
+    <input type="button" value="Filter"                             onclick="butFilter();">
+    <input type="button" value="Clear Filter"                       onclick="butClearFilter();"><br /><br />
+	
+	
+
+    <input type="button" value="saveToText('c:\\log.txt')"          onclick="ttrace.winTrace().saveToTextFile('c:\\log.txt');" /><br />
+    <input type="button" value="saveToXml('c:\\log.xml')"           onclick="ttrace.winTrace().saveToXml('c:\\log.xml');" /><br />
+    <input type="button" value="loadXml('c:\\log.xml')"             onclick="ttrace.winTrace().loadXml('c:\\log.xml');" /><br />
+    
+    <input type="button" value="Set Log File"                       onclick="ttrace.winTrace().setLogFile('c:\\logFromViewer.xml',1);" /><br /><br />
+    
+    <input type="button" value="Clear main traces"                  onclick="ttrace.winTrace().clearAll();" /><br /><br />
+    <input type="button" value="Show Viewer"                        onclick="ttrace.show();"  />
+
+</div>
+<br />
+
+<div style="background-color:Silver;height:24px;width:540px;">
+    Node operations
+</div>
+<br />
+<div style="width:540px;">
+    <input type="button"                     value="Start1"           OnClick="butStart1()" /><br />&nbsp; &nbsp; &nbsp;&nbsp;
+    <input type="button" id="butResend"      value="resendRight()"    onclick="start1.resendRight('Done 1');" disabled="disabled" /><br />&nbsp; &nbsp; &nbsp;&nbsp;
+    <input type="button" id="butSetSelected" value="setSelected()"    onclick="start1.setSelected();" disabled="disabled" /><br />&nbsp; &nbsp; &nbsp;&nbsp;
+    <input type="button" id="butNodeIndent"  value="Indent/Unindent"  onclick="butNodeIndent();" disabled="disabled" /><br />
+    <input type="button"                     value="Start2"           onclick="butStart2()" /><br />&nbsp; &nbsp; &nbsp;&nbsp;
+    <input type="button" id="butAppend"      value="append()"         onclick="start2.appendLeft('..Done');" disabled="disabled" /><br />&nbsp; &nbsp; &nbsp;&nbsp;
+    <input type="button" id="butShowNode"    value="show()"           onclick="start2.show();" disabled="disabled" />
+</div>
+<br />
+
+<div style="background-color:Silver;height:24px;width:540px;">
+    Multi pages
+</div>
+<br />
+<div style="width:540px;">
+    <input type="button" id="butCreateWindow"  value="Create a new trace window"           onclick="butWinTrace();" /><br />&nbsp; &nbsp; &nbsp;&nbsp;
+    <input type="button" id="butDisplayWindow" value="Display that window on the viewer"   onclick="win.displayWin()" disabled="disabled" /><br />&nbsp; &nbsp; &nbsp;&nbsp;
+    <input type="button" id="butHelloWin"      value="Say Hello"                           onclick="win.debug().send('Hello');" disabled="disabled" /><br />&nbsp; &nbsp; &nbsp;&nbsp;
+    <input type="button" id="butSaveWinToText" value="saveToText('c:\\log2.txt')"          onclick="win.saveToText('c:\\log2.txt')" disabled="disabled" /><br />&nbsp; &nbsp; &nbsp;&nbsp;
+    <input type="button" id="butSaveWinToXml"  value="saveToXml('c:\\log2.xml')"           onclick="win.saveToXml('c:\\log2.xml')" disabled="disabled" /><br />&nbsp; &nbsp; &nbsp;&nbsp;
+    <input type="button" id="butLoadWinXml"    value="loadXml('c:\\log2.xml')"             onclick="win.loadXml('c:\\log2.xml')" disabled="disabled" /><br />
+    <input type="button" id="butMulticolTest"  value="Multi col test"                      onclick="butMulticolTest()" />
+</div>
+<br />
+
+<div style="background-color:Silver;height:24px;width:540px;">
+    Watches
+</div>
+<br />
+<div style="width:540px;">
+    Main watch window<br />&nbsp; &nbsp; &nbsp;&nbsp;
+    <input type="button" id="butSendMainWatches"    value="Send watches"              onclick="ttrace.watches().send('test', WatchCounter); WatchCounter++;" /><br />&nbsp; &nbsp; &nbsp;&nbsp;
+    <input type="button" id="butDisplayMainWatches" value="Display main watch window" onclick="ttrace.watches().displayWin();" /><br />&nbsp; &nbsp; &nbsp;&nbsp;
+    <input type="button" id="butClearMainWatches"   value="Clear main watch window"   onclick="ttrace.watches().clearAll();" /><br />
+    <input type="button" id="butCreateWinWatches"   value="Create new WinWatch"       onclick="butCreateWinWatches()" /><br />&nbsp; &nbsp; &nbsp;&nbsp;
+    <input type="button" id="butSendWinWatches"     value="Send watches"              onclick="MyWinWatch.send('ttrace', ttrace);" disabled="disabled" /><br />&nbsp; &nbsp; &nbsp;&nbsp;
+    <input type="button" id="butDisplayWinWatches"  value="Display watch window"      onclick="MyWinWatch.displayWin();" disabled="disabled" /><br />&nbsp; &nbsp; &nbsp;&nbsp;
+    <input type="button" id="butClearWinWatches"    value="Clear watch window"        onclick="MyWinWatch.clearAll();" disabled="disabled" /><br />&nbsp; &nbsp; &nbsp;&nbsp;
+    <input type="button" id="butCloseWinWatches"    value="Close watch window"        onclick="MyWinWatch.close();" disabled="disabled" /><br />
+</div>
+
+
+</body>
+</html>

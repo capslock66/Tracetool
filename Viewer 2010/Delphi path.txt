@@ -1,0 +1,45 @@
+$(Delphi)\Bin;
+$(Delphi)\Imports;
+$(Delphi)\Projects\Bpl;
+$(Delphi)\Rave5\Lib;
+$(Delphi)\Source\ToolsAPI;
+$(Delphi)\Lib;
+
+d:\TraceTool\Delphi\Delphi Library;
+
+d:\develop\devTH\components\ics\Delphi\Vc32;
+d:\develop\devTH\components;
+d:\develop\devTH\components\jbmppanel;
+
+d:\develop\devTH\components\Jedi\JCL 1.96\source;
+d:\develop\devTH\components\Jedi\JCL 1.96\source\common;
+d:\develop\devTH\components\Jedi\JCL 1.96\source\windows;
+d:\develop\devTH\components\Jedi\JCL 1.96\lib\d7;
+
+
+d:\co407\Delphi7\Vcl;
+d:\develop\gfdi7\vcl\encrypt;
+d:\develop\gfdi7\vcl\eventlog;
+d:\develop\gfdi7\vcl\findprocnt;
+d:\develop\gfdi7\vcl\printctrl;
+d:\develop\gfdi7\vcl\scombobox;
+d:\develop\gfdi7\vcl\winshoes\winshoes;
+d:\develop\gfdi7\vcl\tablelist;
+d:\develop\gfdi7\vcl\fileversion;
+d:\develop\gfdi7\vcl\wordcap;
+d:\develop\gfdi7\vcl\vsscom32;
+d:\develop\gfdi7\vcl\gfdi400;
+d:\develop\gfdi7\vcl\gfditype;
+d:\develop\gfdi7\vcl\labellang;
+d:\develop\gfdi7\vcl\threadcall400;
+d:\develop\gfdi7\vcl\sisdriver;
+
+c:\Program Files\Indy 10 for Delphi 7\LibD7;
+c:\Program Files\Indy 10 for Delphi 7\Source\Core\;
+c:\Program Files\Indy 10 for Delphi 7\Source\Protocols;
+c:\Program Files\Indy 10 for Delphi 7\Source\SuperCore;
+c:\Program Files\Indy 10 for Delphi 7\Source\System;
+
+d:\develop\java\jniwrapper2_6\src\;
+
+c:\Program Files\Soft Gems\Virtual Treeview\Source

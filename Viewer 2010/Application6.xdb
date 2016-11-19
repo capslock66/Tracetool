@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ Thierry parent 
+-->
+<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xdb="http://www.borland.com/schemas/delphi/10.0/XMLDataBinding">
+	<xs:element name="Data">
+		<xs:annotation>
+			<xs:documentation>Root of tracetool file</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:annotation>
+        <xs:appinfo xdb:docElement="Data"/>
+      </xs:annotation>
+      <xs:complexContent>
+				<xs:extension base="NodeType">
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+	<xs:complexType mixed="true" name="NodeType">
+		<xs:annotation>
+			<xs:documentation>Define a Node tag. The text correspond to the first col of the master tree. 4 attributes</xs:documentation>  <xs:appinfo xdb:repeated="True"/>
+    </xs:annotation>
+		<xs:sequence>
+			<xs:element maxOccurs="unbounded" minOccurs="0" name="Node" type="NodeType">
+				<xs:annotation>
+					<xs:documentation>Each Node tag can have sub Node tags</xs:documentation>  <xs:appinfo/>
+        </xs:annotation>
+			</xs:element>
+			<xs:element minOccurs="0" name="Col2" type="xs:string">
+				<xs:annotation>
+					<xs:documentation>The optional second column of the master tree (when not in multicolum mode)</xs:documentation>  <xs:appinfo/>
+        </xs:annotation>
+			</xs:element>
+			<xs:element maxOccurs="unbounded" minOccurs="0" name="ColValue" type="Column">
+				<xs:annotation>
+					<xs:documentation>Column item text in multicolumn mode</xs:documentation>  <xs:appinfo/>
+        </xs:annotation>
+			</xs:element>
+			<xs:element maxOccurs="unbounded" minOccurs="0" name="ColTitle" type="Column">
+				<xs:annotation>
+					<xs:documentation>Columns titles in multicolumn mode. Used only in Root data node</xs:documentation>  <xs:appinfo/>
+        </xs:annotation>
+			</xs:element>
+			<xs:element minOccurs="0" name="MainColumn" type="xs:string">
+				<xs:annotation>
+					<xs:documentation>Index of the Tree column. Used only in Root data node</xs:documentation>  <xs:appinfo/>
+        </xs:annotation>
+			</xs:element>
+			<xs:element maxOccurs="unbounded" minOccurs="0" name="Member" type="MemberType">
+				<xs:annotation>
+					<xs:documentation>Each node can have a inner tree displayed on the member pane. The text correspond to the first member col.No attributes</xs:documentation>  <xs:appinfo/>
+        </xs:annotation>
+			</xs:element>
+			<xs:element maxOccurs="unbounded" minOccurs="0" name="FontDetail" type="FontDetail"/>
+		</xs:sequence>
+		<xs:attribute name="Id" type="xs:string" use="optional">
+			<xs:annotation>
+				<xs:documentation source="Node Id">Node Id</xs:documentation>  <xs:appinfo/>
+      </xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="Time" type="xs:string" use="optional">
+			<xs:annotation>
+				<xs:documentation source="Send Time">Send Time. Always empty in multi colun mode</xs:documentation>  <xs:appinfo/>
+      </xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="ThId" type="xs:string" use="optional">
+			<xs:annotation>
+				<xs:documentation source="Thread id or name">Thread Id or name (java). Always empty in multi colun mode</xs:documentation>  <xs:appinfo/>
+      </xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="Process" type="xs:string" use="optional">
+			<xs:annotation>
+				<xs:documentation source="Process Name">Process name. Always empty in multi colun mode or in Java</xs:documentation>  <xs:appinfo/>
+      </xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="Icon" type="xs:string" use="optional">
+			<xs:annotation>
+				<xs:documentation source="Icon index">Icon index. Always empty in multi colun mode</xs:documentation>  <xs:appinfo/>
+      </xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="Parent" type="xs:string">
+		</xs:attribute>
+	</xs:complexType>
+	<xs:complexType mixed="true" name="MemberType">
+		<xs:annotation>
+			<xs:documentation>Define a Member tag of a Node tag.The text correspond to the first member col.No attributes</xs:documentation>  <xs:appinfo xdb:repeated="True"/>
+    </xs:annotation>
+		<xs:sequence>
+			<xs:element maxOccurs="unbounded" minOccurs="0" name="Member" type="MemberType">
+				<xs:annotation>
+					<xs:documentation>Sub Members of this member</xs:documentation>  <xs:appinfo/>
+        </xs:annotation>
+			</xs:element>
+			<xs:element minOccurs="0" name="ColB" type="xs:string">
+				<xs:annotation>
+					<xs:documentation>The second member col</xs:documentation>  <xs:appinfo/>
+        </xs:annotation>
+			</xs:element>
+			<xs:element minOccurs="0" name="ColC" type="xs:string">
+				<xs:annotation>
+					<xs:documentation>The third member col</xs:documentation>  <xs:appinfo/>
+        </xs:annotation>
+			</xs:element>
+			<xs:element maxOccurs="unbounded" minOccurs="0" name="FontDetail" type="FontDetail"/>
+			<xs:element name="ViewerKind" type="xs:integer"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType mixed="true" name="Column">
+		<xs:annotation>
+			<xs:documentation>define text (title or item text) and order of a column</xs:documentation>  <xs:appinfo xdb:repeated="True"/>
+    </xs:annotation>
+		<xs:attribute name="Order" type="xs:integer" use="required">
+		</xs:attribute>
+	</xs:complexType>
+	<xs:complexType name="FontDetail">
+		<xs:annotation>
+      <xs:appinfo xdb:repeated="True"/>
+    </xs:annotation>
+    <xs:attribute name="ColId" type="xs:integer" use="required">
+		</xs:attribute>
+		<xs:attribute name="Bold" type="xs:boolean" use="optional">
+		</xs:attribute>
+		<xs:attribute name="Italic" type="xs:boolean" use="optional">
+		</xs:attribute>
+		<xs:attribute name="Color" type="xs:integer" use="optional">
+		</xs:attribute>
+		<xs:attribute name="Size" type="xs:integer" use="optional">
+		</xs:attribute>
+		<xs:attribute name="Name" type="xs:string" use="optional">
+		</xs:attribute>
+		<xs:attribute name="BackgroundColor" type="xs:integer">
+		</xs:attribute>
+	</xs:complexType>
+</xs:schema>

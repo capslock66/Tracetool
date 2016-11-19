@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<BorlandProject>
+	<PersonalityInfo>
+		<Option>
+			<Option Name="Personality">Default.Personality</Option>
+			<Option Name="ProjectType"></Option>
+			<Option Name="Version">1.0</Option>
+			<Option Name="GUID">{6711751D-49C8-459A-B145-AE05C82F351B}</Option>
+		</Option>
+	</PersonalityInfo>
+	<Default.Personality>  <Projects>
+      <Projects Name="Tracetool.dll">Framework1_Lib\Tracetool.bdsproj</Projects>
+      <Projects Name="CSharpDemo.exe">Framework1_Demo\CSharpDemo.bdsproj</Projects>
+      <Projects Name="Targets">Tracetool.dll CSharpDemo.exe</Projects>
+    </Projects>
+    <Dependencies>
+      <Dependency GUID="{7797A09A-0D98-4C63-9F8D-B62D71852992}">
+        <Dependency GUID="{0445DCD7-445A-4AB4-9E3A-911AD9FA3B66}"/>
+      </Dependency>
+    </Dependencies>
+  </Default.Personality>
+</BorlandProject>

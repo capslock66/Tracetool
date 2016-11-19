@@ -1,0 +1,6 @@
+; CppWin32Plugin.def : Declares the module parameters for the DLL.
+
+LIBRARY      "CppWin32Plugin"
+
+EXPORTS
+    ; Explicit exports can go here

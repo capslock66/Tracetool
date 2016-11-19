@@ -1,0 +1,1838 @@
+date/time         : 2007-06-10, 11:29:02, 718ms
+computer name     : LAPTOP-TPA
+user name         : TH <admin>
+registered owner  : TPA
+operating system  : Windows XP Service Pack 2 build 2600
+system language   : English
+system up time    : 10 days 1 hour
+program up time   : 37 seconds
+processor         : Intel(R) Pentium(R) 4 CPU 2.66GHz
+physical memory   : 216/957 MB (free/total)
+free disk space   : (C:) 13,26 GB (D:) 17,63 GB
+display mode      : 1280x1024, 32 bit
+process id        : $45c
+allocated memory  : 12,68 MB
+executable        : TraceTool.exe
+exec. date/time   : 2007-06-10 11:28
+version           : 9.0.0.366
+compiled with     : Delphi 7
+madExcept version : 3.0e
+callstack crc     : $4fe26b7b, $09872642, $6d63e365
+exception number  : 1
+exception class   : EAccessViolation
+exception message : Access violation at address 0056D8B1 in module 'TraceTool.exe'. Read of address 00000018.
+
+Main ($f74):
+0056d8b1 +04d TraceTool.exe unt_TraceWin        840 +13 TFrm_Trace.vstTraceGetImageIndex
+004ed9a4 +05c TraceTool.exe VirtualTrees      18480  +8 TBaseVirtualTree.DoGetImageIndex
+004f15fd +025 TraceTool.exe VirtualTrees      20772  +3 TBaseVirtualTree.HasImage
+004f6cb2 +2d6 TraceTool.exe VirtualTrees      24437 +89 TBaseVirtualTree.GetDisplayRect
+004fb3d9 +089 TraceTool.exe VirtualTrees      27921 +14 TBaseVirtualTree.ScrollIntoView
+004ed804 +1a4 TraceTool.exe VirtualTrees      18378 +31 TBaseVirtualTree.DoFocusNode
+004f51f1 +1c5 TraceTool.exe VirtualTrees      23269 +48 TBaseVirtualTree.AddChild
+004fb1d2 +02e TraceTool.exe VirtualTrees      27787  +5 TBaseVirtualTree.ReinitNode
+004e67c1 +01d TraceTool.exe VirtualTrees      13938  +2 TBaseVirtualTree.SetFocusedNode
+0056cdf7 +083 TraceTool.exe unt_TraceWin        534  +9 TFrm_Trace.InternalTrace
+0056cd40 +038 TraceTool.exe unt_TraceWin        516  +1 TFrm_Trace.InternalTrace
+0056dcee +36e TraceTool.exe unt_TraceWin        955 +78 TFrm_Trace.vstTraceFreeNode
+7c90eaf5 +009 ntdll.dll                                 KiUserExceptionDispatcher
+0040489a +002 TraceTool.exe System                      @ClassDestroy
+00468d98 +018 TraceTool.exe Classes                     TList.Destroy
+004044d8 +008 TraceTool.exe System                      TObject.Free
+00597fd5 +065 TraceTool.exe Unt_Tool            243 +11 TMember.BeforeDestruction
+004048b9 +009 TraceTool.exe System                      @BeforeDestruction
+004044c0 +000 TraceTool.exe System                      TObject.Destroy
+004044d8 +008 TraceTool.exe System                      TObject.Free
+0056dc01 +281 TraceTool.exe unt_TraceWin        935 +58 TFrm_Trace.vstTraceFreeNode
+004ed878 +044 TraceTool.exe VirtualTrees      18396  +4 TBaseVirtualTree.DoFreeNode
+004f6055 +14d TraceTool.exe VirtualTrees      23956 +47 TBaseVirtualTree.DeleteNode
+004f61fb +09b TraceTool.exe VirtualTrees      23996 +10 TBaseVirtualTree.DeleteSelectedNodes
+0056f990 +19c TraceTool.exe unt_TraceWin       1699 +39 TFrm_Trace.DeleteSelected
+00580ab2 +022 TraceTool.exe unt_PageContainer   305  +4 TFrmPageContainer.actDeleteExecute
+00472c43 +00f TraceTool.exe Classes                     TBasicAction.Execute
+004b655d +031 TraceTool.exe ActnList                    TContainedAction.Execute
+004b71ff +04f TraceTool.exe ActnList                    TCustomAction.Execute
+00472b17 +013 TraceTool.exe Classes                     TBasicActionLink.Execute
+004bce2b +08f TraceTool.exe Menus                       TMenuItem.Click
+004be1d2 +0ee TraceTool.exe Menus                       DoClick
+004be2ea +0b2 TraceTool.exe Menus                       TMenu.IsShortCut
+004affec +040 TraceTool.exe Controls                    TWinControl.IsMenuKey
+004b005d +01d TraceTool.exe Controls                    TWinControl.CNKeyDown
+004ab374 +188 TraceTool.exe Controls                    TControl.WndProc
+004ae3d3 +157 TraceTool.exe Controls                    TWinControl.WndProc
+004f4e37 +0f3 TraceTool.exe VirtualTrees      23074 +32 TBaseVirtualTree.WndProc
+004ae050 +02c TraceTool.exe Controls                    TWinControl.MainWndProc
+004732d8 +014 TraceTool.exe Classes                     StdWndProc
+7e42f3c7 +044 user32.dll                                SendMessageA
+004cbf03 +077 TraceTool.exe Forms                       TApplication.IsKeyMsg
+004cc04a +066 TraceTool.exe Forms                       TApplication.ProcessMessage
+004cc09e +00a TraceTool.exe Forms                       TApplication.HandleMessage
+004cc2ce +096 TraceTool.exe Forms                       TApplication.Run
+0059ee85 +145 TraceTool.exe TraceTool            82 +23 initialization
+
+TCPServer Listener #1 ($f58): <priority:2>
+7c90eb94 +00 ntdll.dll                                     KiFastSystemCallRet
+7c90e9be +0a ntdll.dll                                     NtWaitForSingleObject
+71aa150a +6a WS2HELP.dll                                   WahReferenceContextByHandle
+71ab2e64 +a4 WS2_32.dll                                    select
+0052de68 +5c TraceTool.exe IdStackWindows          820  +6 TIdSocketListWindows.FDSelect
+0052ddf5 +29 TraceTool.exe IdStackWindows          805  +3 TIdSocketListWindows.SelectRead
+00530279 +09 TraceTool.exe IdSocketHandle          472  +1 TIdSocketHandle.Select
+0053bbc1 +49 TraceTool.exe IdServerIOHandlerSocket 128  +5 TIdServerIOHandlerSocket.Accept
+0053d4b9 +55 TraceTool.exe IdTCPServer             852  +8 TIdListenerThread.Run
+00530e47 +d7 TraceTool.exe IdThread                327 +30 TIdThread.Execute
+00450e7f +2b TraceTool.exe madExcept                       HookedTThreadExecute
+00471d14 +34 TraceTool.exe Classes                         ThreadProc
+004053c4 +28 TraceTool.exe System                          ThreadWrapper
+00450d61 +0d TraceTool.exe madExcept                       CallThreadProcSafe
+00450dcb +37 TraceTool.exe madExcept                       ThreadExceptFrame
+>> created by Main ($f74) at:
+00531035 +65 TraceTool.exe IdThread                392 +20 TIdThread.Create
+
+thread $304 (TIdThreadWithTask): <suspended>
+7c810659 +00 kernel32.dll
+>> created by TCPServer Listener #1 ($f58) at:
+00531035 +65 TraceTool.exe IdThread 392 +20 TIdThread.Create
+
+thread $b54 (TWorkerThread):
+7c90eb94 +00 ntdll.dll                          KiFastSystemCallRet
+7c90e9be +0a ntdll.dll                          NtWaitForSingleObject
+7c8025c5 +85 kernel32.dll                       WaitForSingleObjectEx
+7c80252d +0d kernel32.dll                       WaitForSingleObject
+004d9ced +19 TraceTool.exe VirtualTrees 5153 +3 TWorkerThread.Execute
+00450e7f +2b TraceTool.exe madExcept            HookedTThreadExecute
+00471d14 +34 TraceTool.exe Classes              ThreadProc
+004053c4 +28 TraceTool.exe System               ThreadWrapper
+00450d61 +0d TraceTool.exe madExcept            CallThreadProcSafe
+00450dcb +37 TraceTool.exe madExcept            ThreadExceptFrame
+>> created by Main ($f74) at:
+004d9c2d +19 TraceTool.exe VirtualTrees 5116 +1 TWorkerThread.Create
+
+modules:
+00400000 TraceTool.exe 9.0.0.366        D:\TraceTool\Server
+58d40000 Wship6.dll    5.1.2600.2180    C:\WINDOWS\system32
+5ad70000 uxtheme.dll   6.0.2900.2523    C:\WINDOWS\system32
+5edd0000 olepro32.dll  5.1.2600.2180    C:\WINDOWS\system32
+662b0000 hnetcfg.dll   5.1.2600.2180    C:\WINDOWS\system32
+69b10000 msxml4.dll    4.20.9841.0      c:\WINDOWS\system32
+71a50000 mswsock.dll   5.1.2600.2180    C:\WINDOWS\System32
+71a90000 wshtcpip.dll  5.1.2600.2180    C:\WINDOWS\System32
+71aa0000 WS2HELP.dll   5.1.2600.2180    C:\WINDOWS\system32
+71ab0000 WS2_32.dll    5.1.2600.2180    C:\WINDOWS\system32
+71ad0000 wsock32.dll   5.1.2600.2180    C:\WINDOWS\system32
+74720000 MSCTF.dll     5.1.2600.2180    C:\WINDOWS\system32
+751d0000 wshbth.dll    5.1.2600.2180    C:\WINDOWS\system32
+76390000 imm32.dll     5.1.2600.2180    C:\WINDOWS\system32
+763b0000 comdlg32.dll  6.0.2900.2180    C:\WINDOWS\system32
+76b40000 winmm.dll     5.1.2600.2180    C:\WINDOWS\system32
+76f20000 DNSAPI.dll    5.1.2600.2938    C:\WINDOWS\system32
+76f60000 WLDAP32.dll   5.1.2600.2180    C:\WINDOWS\system32
+76fb0000 winrnr.dll    5.1.2600.2180    C:\WINDOWS\System32
+76fd0000 CLBCATQ.DLL   2001.12.4414.310 C:\WINDOWS\system32
+77050000 COMRes.dll    2001.12.4414.258 C:\WINDOWS\system32
+77120000 oleaut32.dll  5.1.2600.2180    C:\WINDOWS\system32
+773d0000 comctl32.dll  6.0.2900.2982    C:\WINDOWS\WinSxS\X86_Microsoft.Windows.Common-Controls_6595b64144ccf1df_6.0.2600.2982_x-ww_ac3f9c03
+774e0000 ole32.dll     5.1.2600.2846    C:\WINDOWS\system32
+77920000 SETUPAPI.dll  5.1.2600.2180    C:\WINDOWS\system32
+77c00000 version.dll   5.1.2600.2180    C:\WINDOWS\system32
+77c10000 msvcrt.dll    7.0.2600.2180    C:\WINDOWS\system32
+77dd0000 advapi32.dll  5.1.2600.2180    C:\WINDOWS\system32
+77e70000 RPCRT4.dll    5.1.2600.2794    C:\WINDOWS\system32
+77f10000 GDI32.dll     5.1.2600.3099    C:\WINDOWS\system32
+77f60000 SHLWAPI.dll   6.0.2900.3086    C:\WINDOWS\system32
+77fe0000 Secur32.dll   5.1.2600.2180    C:\WINDOWS\system32
+7c800000 kernel32.dll  5.1.2600.2991    C:\WINDOWS\system32
+7c900000 ntdll.dll     5.1.2600.2180    C:\WINDOWS\system32
+7c9c0000 shell32.dll   6.0.2900.3051    C:\WINDOWS\system32
+7e410000 user32.dll    5.1.2600.3099    C:\WINDOWS\system32
+
+processes:
+000 Idle
+004 System                normal
+22c smss.exe              normal C:\WINDOWS\system32
+25c csrss.exe
+278 winlogon.exe          high   C:\WINDOWS\system32
+2a4 services.exe          normal C:\WINDOWS\system32
+2b0 lsass.exe             normal C:\WINDOWS\system32
+348 svchost.exe           normal C:\WINDOWS\system32
+374 svchost.exe
+3c8 svchost.exe           normal C:\WINDOWS\System32
+3f4 svchost.exe
+42c svchost.exe
+5ac spoolsv.exe           normal C:\WINDOWS\system32
+600 schedul2.exe          normal C:\Program Files\Common Files\Acronis\Schedule2
+60c guard.exe             normal C:\Program Files\Grisoft\AVG Anti-Spyware 7.5
+620 avgamsvr.exe          normal C:\PROGRA~1\Grisoft\AVG7
+64c AGRSMMSG.exe          normal C:\WINDOWS
+65c avgcc.exe             normal C:\PROGRA~1\Grisoft\AVG7
+668 avgupsvc.exe          normal C:\PROGRA~1\Grisoft\AVG7
+67c QtDTAcer.EXE          normal C:\Program Files\Launch Manager
+684 avgemc.exe            normal C:\PROGRA~1\Grisoft\AVG7
+698 rundll32.exe          normal C:\WINDOWS\system32
+6d0 svchost.exe
+700 sistray.EXE           normal C:\WINDOWS\system32
+740 DkService.exe         normal C:\Program Files\Executive Software\Diskeeper
+764 khooker.exe           normal C:\WINDOWS\system32
+770 wcescomm.exe          normal C:\Program Files\Microsoft ActiveSync
+77c taskbarshuffle.exe    normal C:\Program Files\Taskbar Shuffle
+7ac inetinfo.exe          normal C:\WINDOWS\system32\inetsrv
+7c8 mdm.exe               normal C:\Program Files\Common Files\Microsoft Shared\VS7Debug
+7ec sqlservr.exe
+134 rapimgr.exe           normal C:\PROGRA~1\MICROS~3
+23c sqlbrowser.exe
+424 sqlwriter.exe         normal c:\Program Files\Microsoft SQL Server\90\Shared
+444 svchost.exe           normal C:\WINDOWS\System32
+a10 alg.exe
+664 svchost.exe           normal C:\WINDOWS\System32
+f6c LMabcoms.exe          high   C:\WINDOWS\system32
+e48 devenv.exe            normal C:\Program Files\Microsoft Visual Studio 8\Common7\IDE
+ba4 dexplore.exe          normal C:\Program Files\Common Files\Microsoft Shared\Help 8
+b58 ctfmon.exe            normal C:\WINDOWS\system32
+838 AcroRd32.exe          normal C:\Program Files\Adobe\Reader 8.0\Reader
+e0c CSharpDemo.vshost.exe idle   D:\TraceTool\DotNet\VS2005\Windows\Framework 2\Vs8_Windows_F2_Demo\bin\Debug
+f88 explorer.exe          normal C:\WINDOWS
+4f8 TOTALCMD.EXE          normal C:\Program Files\totalcmd7
+b9c OUTLOOK.EXE           normal C:\Program Files\Microsoft Office\OFFICE11
+364 WINWORD.EXE           normal C:\Program Files\Microsoft Office\OFFICE11
+9b4 FIREFOX.EXE           normal C:\PROGRA~1\MOZILL~1
+c90 delphi32.exe          normal C:\Program Files\Borland\Delphi7\Bin
+45c TraceTool.exe         normal D:\TraceTool\Server
+860 DelphiDemo.exe        normal D:\TraceTool\Delphi\Delphi Demo
+
+hardware:
++ Acronis Devices
+  - Acronis TrueImage Backup Archive Explorer (driver 3-13-2002)
++ Batteries
+  - Microsoft AC Adapter
+  - Microsoft ACPI-Compliant Control Method Battery
++ Computer
+  - ACPI Uniprocessor PC
++ Disk drives
+  - ST380012A
++ Display adapters
+  - SiS M650 (driver 6.13.10.2140)
++ DVD/CD-ROM drives
+  - MagicISO Virtual DVD-ROM0000
+  - QSI CDRW/DVD SBW-242
+  - ZY9385R LEE813I SCSI CdRom Device
+  - ZY9385R LEE813I SCSI CdRom Device
++ Floppy disk controllers
+  - Standard floppy disk controller
++ Floppy disk drives
+  - Floppy disk drive
++ Human Interface Devices
+  - Microsoft USB Wheel Mouse Optical
++ IDE ATA/ATAPI controllers
+  - Primary IDE Channel
+  - Secondary IDE Channel
+  - SiS PCI IDE Controller
++ IEEE 1394 Bus host controllers
+  - OHCI Compliant IEEE 1394 Host Controller
++ Keyboards
+  - Standard 101/102-Key or Microsoft Natural PS/2 Keyboard
++ Mice and other pointing devices
+  - Microsoft USB Wheel Mouse Optical
+  - PS/2 Compatible Mouse
++ Modems
+  - Agere Systems AC'97 Modem (driver 2.1.22.0)
++ Monitors
+  - Default Monitor
++ Network adapters
+  - 1394 Net Adapter
+  - SiS 900-Based PCI Fast Ethernet Adapter (driver 1.16.0.0)
++ PCMCIA adapters
+  - O2Micro OZ6912 CardBus Controller
++ Ports (COM & LPT)
+  - Communications Port (COM1)
+  - ECP Printer Port (LPT1)
++ Processors
+  - Intel(R) Pentium(R) 4 CPU 2.66GHz
++ SCSI and RAID controllers
+  - MagicISO SCSI Host Controller (driver 6.0.5384.4)
+  - SCSI/RAID Host Controller
++ Sound, video and game controllers
+  - Audio Codecs
+  - Legacy Audio Drivers
+  - Legacy Video Capture Devices
+  - Media Control Devices
+  - Realtek AC'97 Audio (driver 5.10.0.5120)
+  - Video Codecs
++ System devices
+  - ACPI Fixed Feature Button
+  - ACPI Lid
+  - ACPI Power Button
+  - ACPI Sleep Button
+  - ACPI Thermal Zone
+  - Direct memory access controller
+  - Extended IO Bus
+  - Generic Bus
+  - ISAPNP Read Data Port
+  - Logical Disk Manager
+  - Microcode Update Device
+  - Microsoft ACPI-Compliant Embedded Controller
+  - Microsoft ACPI-Compliant System
+  - Microsoft Composite Battery
+  - Microsoft System Management BIOS Driver
+  - Motherboard resources
+  - Numeric data processor
+  - PCI bus
+  - PCI standard host CPU bridge
+  - Plug and Play Software Device Enumerator
+  - Printer Port Logical Interface
+  - Programmable interrupt controller
+  - SiS Accelerated Graphics Port (driver 7.2.0.1150)
+  - SIS PCI to ISA bridge
+  - System CMOS/real time clock
+  - System speaker
+  - System timer
+  - Terminal Server Device Redirector
+  - Terminal Server Keyboard Driver
+  - Terminal Server Mouse Driver
+  - Virtual PC Application Services (driver 1.0.1.3)
+  - Volume Manager
++ Universal Serial Bus controllers
+  - SiS 7001 PCI to USB Open Host Controller
+  - SiS 7001 PCI to USB Open Host Controller
+  - SiS 7001 PCI to USB Open Host Controller
+  - SiS PCI to USB Enhanced Host Controller
+  - USB Root Hub
+  - USB Root Hub
+  - USB Root Hub
+  - USB Root Hub
++ VSO devices
+  - pcouffin device for 32 bits systems (driver 1.36.0.0)
+
+cpu registers:
+eax = 00000000
+ebx = 00bd5250
+ecx = 02b147a8
+edx = 02b14778
+esi = 0012f4a4
+edi = 00000003
+eip = 0056d8b1
+esp = 0012f454
+ebp = 0012f468
+
+stack dump:
+0012f454  08 51 4d 00 50 52 bd 00 - 50 52 bd 00 a8 47 b1 02  .QM.PR..PR...G..
+0012f464  78 47 b1 02 88 f4 12 00 - aa d9 4e 00 a4 f4 12 00  xG........N.....
+0012f474  ab f4 12 00 03 00 00 00 - 00 00 00 00 08 51 4d 00  .............QM.
+0012f484  00 00 00 00 ac f4 12 00 - 03 16 4f 00 a4 f4 12 00  ..........O.....
+0012f494  ab f4 12 00 03 00 00 00 - 08 51 4d 00 50 52 bd 00  .........QM.PR..
+0012f4a4  ff ff ff ff 78 47 b1 00 - fc f4 12 00 b8 6c 4f 00  ....xG.......lO.
+0012f4b4  03 00 00 00 50 52 bd 00 - 78 47 b1 02 00 00 00 00  ....PR..xG......
+0012f4c4  11 00 00 00 00 00 00 00 - 00 00 00 00 00 00 00 00  ................
+0012f4d4  00 00 00 00 00 00 00 00 - 00 00 00 00 00 00 00 00  ................
+0012f4e4  00 00 00 01 0b 00 00 00 - 00 00 00 00 0f 00 00 00  ................
+0012f4f4  00 00 00 00 03 00 00 00 - 38 f5 12 00 de b3 4f 00  ........8.....O.
+0012f504  1f f5 12 00 00 00 00 00 - 01 c5 cc 00 08 51 4d 00  .............QM.
+0012f514  50 52 bd 00 e0 c5 cc 00 - 50 52 bd 00 00 00 00 00  PR......PR......
+0012f524  00 00 00 95 00 00 00 0f - 00 00 00 01 60 c5 cb 00  ............`...
+0012f534  08 51 4d 00 70 f5 12 00 - 09 d8 4e 00 00 47 b1 02  .QM.p.....N..G..
+0012f544  08 51 4d 00 78 47 b1 02 - 50 52 bd 00 78 47 b1 02  .QM.xG..PR..xG..
+0012f554  00 00 00 00 f7 51 4f 00 - 78 47 b1 02 74 f5 12 00  .....QO.xG..t...
+0012f564  d8 b1 4f 00 d0 fa 12 01 - 78 47 b1 02 88 f5 12 00  ..O.....xG......
+0012f574  c7 67 4e 00 d0 fa 12 00 - b8 ab 5a 00 08 51 4d 00  .gN.......Z..QM.
+0012f584  a4 47 b1 01 b0 f5 12 00 - fc cd 56 00 bc f5 12 00  .G........V.....
+
+disassembling:
+[...]
+0056d8a1       mov     eax, ebx
+0056d8a3       call    -$756e4 ($4f81c4)      ; VirtualTrees.TBaseVirtualTree.GetNodeData
+0056d8a8       mov     [ebp-8], eax
+0056d8ab 840   mov     eax, [ebp-8]
+0056d8ae       mov     eax, [eax+$24]
+0056d8b1     > mov     eax, [eax+$18]
+0056d8b4       mov     eax, [eax+8]
+0056d8b7       dec     eax
+0056d8b8       test    eax, eax
+0056d8ba       jl      loc_56d972
+0056d8c0       inc     eax
+[...]
+
+date/time         : 2008-12-26, 04:28:05, 421ms
+computer name     : SP3LITE
+user name         : New user <admin>
+registered owner  : seba
+operating system  : Windows XP Service Pack 3, v.3300 build 2600
+system language   : French
+system up time    : 2 hours 14 minutes
+program up time   : 35 seconds
+processor         : Genuine Intel(R) CPU T2400 @ 1.83GHz
+physical memory   : 244/519 MB (free/total)
+free disk space   : (C:) 9.32 GB
+display mode      : 1440x900, 32 bit
+process id        : $24c
+allocated memory  : 16.07 MB
+command line      : "\\.host\Shared Folders\tracetool\Viewer 2009\TraceTool.exe" /debug
+executable        : TraceTool.exe
+exec. date/time   : 2008-12-26 04:27
+version           : 8.0.0.351
+compiled with     : Delphi 2009
+madExcept version : 3.0i beta 2
+callstack crc     : $3d41a5c5, $61823776, $2d59ff80
+exception number  : 1
+exception class   : EConvertError
+exception message : '' 24????|'' is not a valid integer value.
+
+main thread ($368):
+00460bfd +019 TraceTool.exe SysUtils           ConvertErrorFmt
+00461d3c +02c TraceTool.exe SysUtils           StrToInt
+0061f5cd +029 TraceTool.exe unt_Parse 120   +1 getInt
+006206be +96e TraceTool.exe unt_Parse 520 +205 ParseTraceMsg
+0062a5fb +0f3 TraceTool.exe Unt_Tool  819  +39 TFrm_Tool.TimerTracesTimer
+004adf17 +00f TraceTool.exe ExtCtrls           TTimer.Timer
+004addfb +02b TraceTool.exe ExtCtrls           TTimer.WndProc
+00484b5c +014 TraceTool.exe Classes            StdWndProc
+7e418a0b +00a USER32.dll                       DispatchMessageW
+0050ec6f +0f3 TraceTool.exe Forms              TApplication.ProcessMessage
+0050ecb2 +00a TraceTool.exe Forms              TApplication.HandleMessage
+0050efdd +0c9 TraceTool.exe Forms              TApplication.Run
+0065a5bf +177 TraceTool.exe TraceTool  85  +25 initialization
+
+thread $2f8:
+7c90da8a +0a ntdll.dll               NtReplyWaitReceivePortEx
+0045a111 +0d TraceTool.exe madExcept CallThreadProcSafe
+0045a17b +37 TraceTool.exe madExcept ThreadExceptFrame
+>> created by main thread ($368) at:
+77e7df36 +00 RPCRT4.dll
+
+thread $d8:
+7c90d1fa +0a ntdll.dll               NtDelayExecution
+7c8023eb +4b kernel32.dll            SleepEx
+7c802450 +0a kernel32.dll            Sleep
+0045a111 +0d TraceTool.exe madExcept CallThreadProcSafe
+0045a17b +37 TraceTool.exe madExcept ThreadExceptFrame
+>> created by main thread ($368) at:
+7752fd64 +00 ole32.dll
+
+thread $5e4:
+7c90da8a +0a ntdll.dll               NtReplyWaitReceivePortEx
+0045a111 +0d TraceTool.exe madExcept CallThreadProcSafe
+0045a17b +37 TraceTool.exe madExcept ThreadExceptFrame
+>> created by thread $2f8 at:
+77e7df36 +00 RPCRT4.dll
+
+thread $124: <priority:2>
+7c90df3a +0a ntdll.dll                                      NtWaitForSingleObject
+71ab314c +a4 WS2_32.dll                                     select
+71aa150a +6a WS2HELP.dll                                    WahReferenceContextByHandle
+71ab314c +a4 WS2_32.dll                                     select
+005888c1 +51 TraceTool.exe IdStackWindows          1018  +8 TIdSocketListWindows.FDSelect
+00588858 +20 TraceTool.exe IdStackWindows          1000  +3 TIdSocketListWindows.SelectRead
+0058bc2a +06 TraceTool.exe IdSocketHandle           533  +1 TIdSocketHandle.Select
+005987a8 +78 TraceTool.exe IdServerIOHandlerSocket  131 +11 TIdServerIOHandlerSocket.Accept
+0059a694 +98 TraceTool.exe IdCustomTCPServer        918 +11 TIdListenerThread.Run
+0058c844 +f0 TraceTool.exe IdThread                 351 +38 TIdThread.Execute
+00483382 +42 TraceTool.exe Classes                          ThreadProc
+00405c2c +28 TraceTool.exe System                   956  +0 ThreadWrapper
+0045a111 +0d TraceTool.exe madExcept                        CallThreadProcSafe
+0045a17b +37 TraceTool.exe madExcept                        ThreadExceptFrame
+>> created by main thread ($368) at:
+0048346c +78 TraceTool.exe Classes                          TThread.Create
+
+thread $494: <suspended>
+0048346c +78 TraceTool.exe Classes TThread.Create
+
+thread $5c0: <priority:2>
+7c90df3a +0a ntdll.dll                                      NtWaitForSingleObject
+71aa150a +6a WS2HELP.dll                                    WahReferenceContextByHandle
+71ab314c +a4 WS2_32.dll                                     select
+005888c1 +51 TraceTool.exe IdStackWindows          1018  +8 TIdSocketListWindows.FDSelect
+00588858 +20 TraceTool.exe IdStackWindows          1000  +3 TIdSocketListWindows.SelectRead
+0058bc2a +06 TraceTool.exe IdSocketHandle           533  +1 TIdSocketHandle.Select
+005987a8 +78 TraceTool.exe IdServerIOHandlerSocket  131 +11 TIdServerIOHandlerSocket.Accept
+0059a694 +98 TraceTool.exe IdCustomTCPServer        918 +11 TIdListenerThread.Run
+0058c844 +f0 TraceTool.exe IdThread                 351 +38 TIdThread.Execute
+00483382 +42 TraceTool.exe Classes                          ThreadProc
+00405c2c +28 TraceTool.exe System                   956  +0 ThreadWrapper
+0045a111 +0d TraceTool.exe madExcept                        CallThreadProcSafe
+0045a17b +37 TraceTool.exe madExcept                        ThreadExceptFrame
+>> created by main thread ($368) at:
+0048346c +78 TraceTool.exe Classes                          TThread.Create
+
+thread $35c:
+7c90df3a +0a ntdll.dll                          NtWaitForSingleObject
+7c8025d5 +85 kernel32.dll                       WaitForSingleObjectEx
+7c80253d +0d kernel32.dll                       WaitForSingleObject
+0051e7d2 +16 TraceTool.exe VirtualTrees 5407 +3 TWorkerThread.Execute
+00483382 +42 TraceTool.exe Classes              ThreadProc
+00405c2c +28 TraceTool.exe System        956 +0 ThreadWrapper
+0045a111 +0d TraceTool.exe madExcept            CallThreadProcSafe
+0045a17b +37 TraceTool.exe madExcept            ThreadExceptFrame
+>> created by main thread ($368) at:
+0048346c +78 TraceTool.exe Classes              TThread.Create
+
+thread $12c:
+7c90df2a +00a ntdll.dll                       NtWaitForMultipleObjects
+7c80956e +000 kernel32.dll                    WaitForMultipleObjectsEx
+7c80a100 +013 kernel32.dll                    WaitForMultipleObjects
+006121ae +112 TraceTool.exe unt_ODS   520 +32 TODSThread.Execute
+00483382 +042 TraceTool.exe Classes           ThreadProc
+00405c2c +028 TraceTool.exe System    956  +0 ThreadWrapper
+0045a111 +00d TraceTool.exe madExcept         CallThreadProcSafe
+0045a17b +037 TraceTool.exe madExcept         ThreadExceptFrame
+>> created by main thread ($368) at:
+0048346c +078 TraceTool.exe Classes           TThread.Create
+
+modules:
+00400000 TraceTool.exe            8.0.0.351        \\.host\Shared Folders\tracetool\Viewer 2009
+007b0000 FastMM_FullDebugMode.dll 1.40.0.2         \\.host\Shared Folders\tracetool\Viewer 2009
+022c0000 xpsp2res.dll             5.1.2600.3300    C:\WINDOWS\system32
+5ad70000 UxTheme.dll              6.0.2900.3300    C:\WINDOWS\system32
+5edd0000 olepro32.dll             5.1.2600.3300    C:\WINDOWS\system32
+662b0000 hnetcfg.dll              5.1.2600.3300    C:\WINDOWS\system32
+71a50000 mswsock.dll              5.1.2600.3300    C:\WINDOWS\system32
+71a90000 wshtcpip.dll             5.1.2600.3300    C:\WINDOWS\System32
+71aa0000 WS2HELP.dll              5.1.2600.3300    C:\WINDOWS\system32
+71ab0000 WS2_32.dll               5.1.2600.3300    C:\WINDOWS\system32
+71ad0000 wsock32.dll              5.1.2600.3300    C:\WINDOWS\system32
+73000000 winspool.drv             5.1.2600.3300    C:\WINDOWS\system32
+74720000 MSCTF.dll                5.1.2600.3300    C:\WINDOWS\system32
+74980000 msxml3.dll               8.90.1101.0      C:\WINDOWS\system32
+74c80000 oleacc.dll               4.2.5406.0       C:\WINDOWS\system32
+76080000 MSVCP60.dll              6.2.3104.0       C:\WINDOWS\system32
+76380000 msimg32.dll              5.1.2600.3300    C:\WINDOWS\system32
+76390000 imm32.dll                5.1.2600.3300    C:\WINDOWS\system32
+763b0000 comdlg32.dll             6.0.2900.3300    C:\WINDOWS\system32
+76b40000 winmm.dll                5.1.2600.3300    C:\WINDOWS\system32
+76fd0000 CLBCATQ.DLL              2001.12.4414.700 C:\WINDOWS\system32
+77050000 COMRes.dll               2001.12.4414.700 C:\WINDOWS\system32
+77120000 oleaut32.dll             5.1.2600.3300    C:\WINDOWS\system32
+773d0000 comctl32.dll             6.0.2900.3300    C:\WINDOWS\WinSxS\X86_Microsoft.Windows.Common-Controls_6595b64144ccf1df_6.0.2600.3300_x-ww_d7ca0dc2
+774e0000 ole32.dll                5.1.2600.3300    C:\WINDOWS\system32
+77c00000 version.dll              5.1.2600.3300    C:\WINDOWS\system32
+77c10000 msvcrt.dll               7.0.2600.3300    C:\WINDOWS\system32
+77dd0000 ADVAPI32.dll             5.1.2600.3300    C:\WINDOWS\system32
+77e70000 RPCRT4.dll               5.1.2600.3300    C:\WINDOWS\system32
+77f10000 GDI32.dll                5.1.2600.3300    C:\WINDOWS\system32
+77f60000 SHLWAPI.dll              6.0.2900.3300    C:\WINDOWS\system32
+77fe0000 Secur32.dll              5.1.2600.3300    C:\WINDOWS\system32
+7c800000 kernel32.dll             5.1.2600.3300    C:\WINDOWS\system32
+7c900000 ntdll.dll                5.1.2600.3300    C:\WINDOWS\system32
+7c9c0000 shell32.dll              6.0.2900.3300    C:\WINDOWS\system32
+7e410000 USER32.dll               5.1.2600.3300    C:\WINDOWS\system32
+
+processes:
+000 Idle
+004 System            normal
+14c smss.exe          normal C:\WINDOWS\system32
+184 csrss.exe         normal C:\WINDOWS\system32
+198 winlogon.exe      high   C:\WINDOWS\system32
+1c4 services.exe      normal C:\WINDOWS\system32
+1d0 lsass.exe         normal C:\WINDOWS\system32
+25c svchost.exe       normal C:\WINDOWS\system32
+294 svchost.exe       normal C:\WINDOWS\system32
+2e8 svchost.exe       normal C:\WINDOWS\System32
+328 svchost.exe       normal C:\WINDOWS\system32
+3d0 spoolsv.exe       normal C:\WINDOWS\system32
+45c Explorer.EXE      normal C:\WINDOWS
+49c VMwareTray.exe    normal C:\Program Files\VMware\VMware Tools
+4a4 VMwareUser.exe    normal C:\Program Files\VMware\VMware Tools
+4ac CTFMON.EXE        normal C:\WINDOWS\system32
+644 VMwareService.exe high   C:\Program Files\VMware\VMware Tools
+748 svchost.exe       normal C:\WINDOWS\system32
+414 bds.exe           normal C:\Program Files\CodeGear\RAD Studio\6.0\bin
+43c TOTALCMD.EXE      normal C:\totalcmd
+6e8 iexplore.exe      normal C:\Program Files\Internet Explorer
+24c TraceTool.exe     normal \\.host\Shared Folders\tracetool\Viewer 2009
+
+hardware:
++ Batteries
+  - Microsoft AC Adapter
++ Computer
+  - ACPI Uniprocessor PC
++ Disk drives
+  - VMware Virtual IDE Hard Drive
++ Display adapters
+  - VMware SVGA II (driver 11.4.3.1)
++ DVD/CD-ROM drives
+  - NECVMWar VMware IDE CDR10
++ Human Interface Devices
+  - USB Human Interface Device
+  - USB Human Interface Device
++ IDE ATA/ATAPI controllers
+  - Intel(R) 82371AB/EB PCI Bus Master IDE Controller
+  - Primary IDE Channel
+  - Secondary IDE Channel
++ Keyboards
+  - Standard 101/102-Key or Microsoft Natural PS/2 Keyboard
++ Mice and other pointing devices
+  - HID-compliant mouse
+  - HID-compliant mouse
+  - VMware Pointing Device (driver 12.4.0.2)
++ Network adapters
+  - VMware Accelerated AMD PCNet Adapter #2 (driver 2.0.0.10)
++ Ports (COM & LPT)
+  - Communications Port (COM1)
+  - Communications Port (COM2)
+  - Printer Port (LPT1)
++ Processors
+  - Genuine Intel(R) CPU           T2400  @ 1.83GHz
++ SCSI and RAID controllers
+  - VMware SCSI Controller (driver 1.2.0.6)
++ Sound, video and game controllers
+  - Audio Codecs
+  - Legacy Audio Drivers
+  - Legacy Video Capture Devices
+  - Media Control Devices
+  - Video Codecs
++ System devices
+  - ACPI Fixed Feature Button
+  - Direct memory access controller
+  - EISA programmable interrupt controller
+  - Generic Bus
+  - Intel 82371AB/EB PCI to ISA bridge (ISA mode)
+  - Intel 82443BX Pentium(R) II Processor to AGP Controller
+  - Intel 82443BX Pentium(R) II Processor to PCI Bridge
+  - ISAPNP Read Data Port
+  - Logical Disk Manager
+  - Microcode Update Device
+  - Microsoft ACPI-Compliant System
+  - Microsoft Composite Battery
+  - Microsoft System Management BIOS Driver
+  - Motherboard resources
+  - PCI bus
+  - PCI standard PCI-to-PCI bridge
+  - Plug and Play Software Device Enumerator
+  - Printer Port Logical Interface
+  - System CMOS/real time clock
+  - System speaker
+  - System timer
+  - Volume Manager
++ Universal Serial Bus controllers
+  - Generic USB Hub
+  - Intel(R) 82371AB/EB PCI to USB Universal Host Controller
+  - Standard Enhanced PCI to USB Host Controller
+  - USB Composite Device
+  - USB Root Hub
+  - USB Root Hub
+
+disassembling:
+[...]
+0061f5c0       push    eax
+0061f5c1       lea     eax, [ebp-8]
+0061f5c4       call    -$279 ($61f350)        ; unt_Parse.getStr
+0061f5c9       pop     ecx
+0061f5ca       mov     eax, [ebp-8]
+0061f5cd     > call    -$1bd8c2 ($461d10)     ; SysUtils.StrToInt
+0061f5d2       mov     [ebp-4], eax
+0061f5d5 121   xor     eax, eax
+0061f5d7       pop     edx
+0061f5d8       pop     ecx
+0061f5d9       pop     ecx
+[...]
+
+date/time         : 2008-12-26, 05:56:06, 937ms
+computer name     : SP3LITE
+user name         : New user <admin>
+registered owner  : seba
+operating system  : Windows XP Service Pack 3, v.3300 build 2600
+system language   : French
+system up time    : 3 hours 42 minutes
+program up time   : 1 hour 28 minutes
+processor         : Genuine Intel(R) CPU T2400 @ 1.83GHz
+physical memory   : 236/519 MB (free/total)
+free disk space   : (C:) 9.32 GB
+display mode      : 1440x900, 32 bit
+process id        : $24c
+allocated memory  : 25.75 MB
+command line      : "\\.host\Shared Folders\tracetool\Viewer 2009\TraceTool.exe" /debug
+executable        : TraceTool.exe
+exec. date/time   : 2008-12-26 04:27
+version           : 8.0.0.351
+compiled with     : Delphi 2009
+madExcept version : 3.0i beta 2
+callstack crc     : $32156423, $0038c95f, $af83f37e
+exception number  : 7
+exception class   : EExternalException
+exception message : External exception C0000006.
+
+main thread ($368):
+005fc2b8 +000 TraceTool.exe SynEdit           4231   +0 TCustomSynEdit.SetName
+004804bd +021 TraceTool.exe Classes                     TReader.SetName
+0047e80c +040 TraceTool.exe Classes                     SetCompName
+0047e9df +0cf TraceTool.exe Classes                     TReader.ReadComponent
+0047ec49 +089 TraceTool.exe Classes                     TReader.ReadDataInner
+0047eb88 +038 TraceTool.exe Classes                     TReader.ReadData
+00483f41 +001 TraceTool.exe Classes                     TComponent.ReadState
+004ea209 +02d TraceTool.exe Controls                    TControl.ReadState
+004ee339 +025 TraceTool.exe Controls                    TWinControl.ReadState
+0047fb27 +1d7 TraceTool.exe Classes                     TReader.ReadRootComponent
+0047cb92 +032 TraceTool.exe Classes                     TStream.ReadComponent
+004789cb +057 TraceTool.exe Classes                     InternalReadComponentRes
+00478b3b +05f TraceTool.exe Classes                     InitComponent
+00478bc9 +061 TraceTool.exe Classes                     InitInheritedComponent
+00504b3c +064 TraceTool.exe Forms                       TCustomFrame.Create
+005e28a3 +023 TraceTool.exe unt_Details_base    66   +1 Tframe_BaseDetails.Create
+0064fbb3 +49b TraceTool.exe unt_TraceWin      1245 +101 TFrm_Trace.vstTraceChange
+00537646 +036 TraceTool.exe VirtualTrees     18762   +3 TBaseVirtualTree.DoChange
+00535f0d +069 TraceTool.exe VirtualTrees     17896   +8 TBaseVirtualTree.Change
+0053511f +06f TraceTool.exe VirtualTrees     17534   +7 TBaseVirtualTree.AddToSelection
+0053d08e +84a TraceTool.exe VirtualTrees     21605 +205 TBaseVirtualTree.HandleMouseDown
+00533fa7 +057 TraceTool.exe VirtualTrees     16945   +6 TBaseVirtualTree.WMLButtonDown
+004ec792 +2d2 TraceTool.exe Controls                    TControl.WndProc
+004f0c97 +513 TraceTool.exe Controls                    TWinControl.WndProc
+00541e0d +135 TraceTool.exe VirtualTrees     24007  +32 TBaseVirtualTree.WndProc
+004f03b0 +02c TraceTool.exe Controls                    TWinControl.MainWndProc
+00484b5c +014 TraceTool.exe Classes                     StdWndProc
+7e418a0b +00a USER32.dll                                DispatchMessageW
+0050ec6f +0f3 TraceTool.exe Forms                       TApplication.ProcessMessage
+0050ecb2 +00a TraceTool.exe Forms                       TApplication.HandleMessage
+0050efdd +0c9 TraceTool.exe Forms                       TApplication.Run
+0065a5bf +177 TraceTool.exe TraceTool           85  +25 initialization
+
+thread $2f8:
+7c90da8a +0a ntdll.dll               NtReplyWaitReceivePortEx
+0045a111 +0d TraceTool.exe madExcept CallThreadProcSafe
+0045a17b +37 TraceTool.exe madExcept ThreadExceptFrame
+>> created by main thread ($368) at:
+77e7df36 +00 RPCRT4.dll
+
+thread $124: <priority:2>
+7c90df3a +0a ntdll.dll                                      NtWaitForSingleObject
+71ab314c +a4 WS2_32.dll                                     select
+71aa150a +6a WS2HELP.dll                                    WahReferenceContextByHandle
+71ab314c +a4 WS2_32.dll                                     select
+005888c1 +51 TraceTool.exe IdStackWindows          1018  +8 TIdSocketListWindows.FDSelect
+00588858 +20 TraceTool.exe IdStackWindows          1000  +3 TIdSocketListWindows.SelectRead
+0058bc2a +06 TraceTool.exe IdSocketHandle           533  +1 TIdSocketHandle.Select
+005987a8 +78 TraceTool.exe IdServerIOHandlerSocket  131 +11 TIdServerIOHandlerSocket.Accept
+0059a694 +98 TraceTool.exe IdCustomTCPServer        918 +11 TIdListenerThread.Run
+0058c844 +f0 TraceTool.exe IdThread                 351 +38 TIdThread.Execute
+00483382 +42 TraceTool.exe Classes                          ThreadProc
+00405c2c +28 TraceTool.exe System                   956  +0 ThreadWrapper
+0045a111 +0d TraceTool.exe madExcept                        CallThreadProcSafe
+0045a17b +37 TraceTool.exe madExcept                        ThreadExceptFrame
+>> created by main thread ($368) at:
+0048346c +78 TraceTool.exe Classes                          TThread.Create
+
+thread $494: <suspended>
+0048346c +78 TraceTool.exe Classes TThread.Create
+
+thread $5c0: <priority:2>
+7c90df3a +0a ntdll.dll                                      NtWaitForSingleObject
+71aa150a +6a WS2HELP.dll                                    WahReferenceContextByHandle
+71ab314c +a4 WS2_32.dll                                     select
+005888c1 +51 TraceTool.exe IdStackWindows          1018  +8 TIdSocketListWindows.FDSelect
+00588858 +20 TraceTool.exe IdStackWindows          1000  +3 TIdSocketListWindows.SelectRead
+0058bc2a +06 TraceTool.exe IdSocketHandle           533  +1 TIdSocketHandle.Select
+005987a8 +78 TraceTool.exe IdServerIOHandlerSocket  131 +11 TIdServerIOHandlerSocket.Accept
+0059a694 +98 TraceTool.exe IdCustomTCPServer        918 +11 TIdListenerThread.Run
+0058c844 +f0 TraceTool.exe IdThread                 351 +38 TIdThread.Execute
+00483382 +42 TraceTool.exe Classes                          ThreadProc
+00405c2c +28 TraceTool.exe System                   956  +0 ThreadWrapper
+0045a111 +0d TraceTool.exe madExcept                        CallThreadProcSafe
+0045a17b +37 TraceTool.exe madExcept                        ThreadExceptFrame
+>> created by main thread ($368) at:
+0048346c +78 TraceTool.exe Classes                          TThread.Create
+
+thread $35c:
+7e41b8fe +44 USER32.dll                          SendMessageW
+0051e7b0 +44 TraceTool.exe VirtualTrees 5391  +2 TWorkerThread.ChangeTreeStates
+0051e887 +cb TraceTool.exe VirtualTrees 5432 +28 TWorkerThread.Execute
+00483382 +42 TraceTool.exe Classes               ThreadProc
+00405c2c +28 TraceTool.exe System        956  +0 ThreadWrapper
+0045a111 +0d TraceTool.exe madExcept             CallThreadProcSafe
+0045a17b +37 TraceTool.exe madExcept             ThreadExceptFrame
+>> created by main thread ($368) at:
+0048346c +78 TraceTool.exe Classes               TThread.Create
+
+thread $12c:
+7c90df2a +00a ntdll.dll                       NtWaitForMultipleObjects
+7c80956e +000 kernel32.dll                    WaitForMultipleObjectsEx
+7c80a100 +013 kernel32.dll                    WaitForMultipleObjects
+006121ae +112 TraceTool.exe unt_ODS   520 +32 TODSThread.Execute
+00483382 +042 TraceTool.exe Classes           ThreadProc
+00405c2c +028 TraceTool.exe System    956  +0 ThreadWrapper
+0045a111 +00d TraceTool.exe madExcept         CallThreadProcSafe
+0045a17b +037 TraceTool.exe madExcept         ThreadExceptFrame
+>> created by main thread ($368) at:
+0048346c +078 TraceTool.exe Classes           TThread.Create
+
+thread $3a8: <suspended>
+0048346c +78 TraceTool.exe Classes TThread.Create
+
+modules:
+00400000 TraceTool.exe            8.0.0.351        \\.host\Shared Folders\tracetool\Viewer 2009
+007b0000 FastMM_FullDebugMode.dll 1.40.0.2         \\.host\Shared Folders\tracetool\Viewer 2009
+022c0000 xpsp2res.dll             5.1.2600.3300    C:\WINDOWS\system32
+5ad70000 UxTheme.dll              6.0.2900.3300    C:\WINDOWS\system32
+5edd0000 olepro32.dll             5.1.2600.3300    C:\WINDOWS\system32
+662b0000 hnetcfg.dll              5.1.2600.3300    C:\WINDOWS\system32
+71a50000 mswsock.dll              5.1.2600.3300    C:\WINDOWS\system32
+71a90000 wshtcpip.dll             5.1.2600.3300    C:\WINDOWS\System32
+71aa0000 WS2HELP.dll              5.1.2600.3300    C:\WINDOWS\system32
+71ab0000 WS2_32.dll               5.1.2600.3300    C:\WINDOWS\system32
+71ad0000 wsock32.dll              5.1.2600.3300    C:\WINDOWS\system32
+73000000 winspool.drv             5.1.2600.3300    C:\WINDOWS\system32
+74720000 MSCTF.dll                5.1.2600.3300    C:\WINDOWS\system32
+74980000 msxml3.dll               8.90.1101.0      C:\WINDOWS\system32
+74c80000 oleacc.dll               4.2.5406.0       C:\WINDOWS\system32
+76080000 MSVCP60.dll              6.2.3104.0       C:\WINDOWS\system32
+76380000 msimg32.dll              5.1.2600.3300    C:\WINDOWS\system32
+76390000 imm32.dll                5.1.2600.3300    C:\WINDOWS\system32
+763b0000 comdlg32.dll             6.0.2900.3300    C:\WINDOWS\system32
+76b40000 winmm.dll                5.1.2600.3300    C:\WINDOWS\system32
+76bf0000 psapi.dll                5.1.2600.3300    C:\WINDOWS\system32
+76c30000 WINTRUST.dll             5.131.2600.3300  C:\WINDOWS\system32
+76c90000 IMAGEHLP.dll             5.1.2600.3300    C:\WINDOWS\system32
+76fd0000 CLBCATQ.DLL              2001.12.4414.700 C:\WINDOWS\system32
+77050000 COMRes.dll               2001.12.4414.700 C:\WINDOWS\system32
+77120000 oleaut32.dll             5.1.2600.3300    C:\WINDOWS\system32
+773d0000 comctl32.dll             6.0.2900.3300    C:\WINDOWS\WinSxS\X86_Microsoft.Windows.Common-Controls_6595b64144ccf1df_6.0.2600.3300_x-ww_d7ca0dc2
+774e0000 ole32.dll                5.1.2600.3300    C:\WINDOWS\system32
+77a80000 CRYPT32.dll              5.131.2600.3300  C:\WINDOWS\system32
+77b20000 MSASN1.dll               5.1.2600.3300    C:\WINDOWS\system32
+77c00000 version.dll              5.1.2600.3300    C:\WINDOWS\system32
+77c10000 msvcrt.dll               7.0.2600.3300    C:\WINDOWS\system32
+77dd0000 ADVAPI32.dll             5.1.2600.3300    C:\WINDOWS\system32
+77e70000 RPCRT4.dll               5.1.2600.3300    C:\WINDOWS\system32
+77f10000 GDI32.dll                5.1.2600.3300    C:\WINDOWS\system32
+77f60000 SHLWAPI.dll              6.0.2900.3300    C:\WINDOWS\system32
+77fe0000 Secur32.dll              5.1.2600.3300    C:\WINDOWS\system32
+7c800000 kernel32.dll             5.1.2600.3300    C:\WINDOWS\system32
+7c900000 ntdll.dll                5.1.2600.3300    C:\WINDOWS\system32
+7c9c0000 shell32.dll              6.0.2900.3300    C:\WINDOWS\system32
+7e410000 USER32.dll               5.1.2600.3300    C:\WINDOWS\system32
+
+processes:
+000 Idle
+004 System            normal
+14c smss.exe          normal C:\WINDOWS\system32
+184 csrss.exe         normal C:\WINDOWS\system32
+198 winlogon.exe      high   C:\WINDOWS\system32
+1c4 services.exe      normal C:\WINDOWS\system32
+1d0 lsass.exe         normal C:\WINDOWS\system32
+25c svchost.exe       normal C:\WINDOWS\system32
+294 svchost.exe       normal C:\WINDOWS\system32
+2e8 svchost.exe       normal C:\WINDOWS\System32
+328 svchost.exe       normal C:\WINDOWS\system32
+3d0 spoolsv.exe       normal C:\WINDOWS\system32
+45c Explorer.EXE      normal C:\WINDOWS
+49c VMwareTray.exe    normal C:\Program Files\VMware\VMware Tools
+4a4 VMwareUser.exe    normal C:\Program Files\VMware\VMware Tools
+4ac CTFMON.EXE        normal C:\WINDOWS\system32
+644 VMwareService.exe high   C:\Program Files\VMware\VMware Tools
+748 svchost.exe       normal C:\WINDOWS\system32
+414 bds.exe           normal C:\Program Files\CodeGear\RAD Studio\6.0\bin
+43c TOTALCMD.EXE      normal C:\totalcmd
+6e8 iexplore.exe      normal C:\Program Files\Internet Explorer
+24c TraceTool.exe     normal \\.host\Shared Folders\tracetool\Viewer 2009
+
+hardware:
++ Batteries
+  - Microsoft AC Adapter
++ Computer
+  - ACPI Uniprocessor PC
++ Disk drives
+  - VMware Virtual IDE Hard Drive
++ Display adapters
+  - VMware SVGA II (driver 11.4.3.1)
++ DVD/CD-ROM drives
+  - NECVMWar VMware IDE CDR10
++ Human Interface Devices
+  - USB Human Interface Device
+  - USB Human Interface Device
++ IDE ATA/ATAPI controllers
+  - Intel(R) 82371AB/EB PCI Bus Master IDE Controller
+  - Primary IDE Channel
+  - Secondary IDE Channel
++ Keyboards
+  - Standard 101/102-Key or Microsoft Natural PS/2 Keyboard
++ Mice and other pointing devices
+  - HID-compliant mouse
+  - HID-compliant mouse
+  - VMware Pointing Device (driver 12.4.0.2)
++ Network adapters
+  - VMware Accelerated AMD PCNet Adapter #2 (driver 2.0.0.10)
++ Ports (COM & LPT)
+  - Communications Port (COM1)
+  - Communications Port (COM2)
+  - Printer Port (LPT1)
++ Processors
+  - Genuine Intel(R) CPU           T2400  @ 1.83GHz
++ SCSI and RAID controllers
+  - VMware SCSI Controller (driver 1.2.0.6)
++ Sound, video and game controllers
+  - Audio Codecs
+  - Legacy Audio Drivers
+  - Legacy Video Capture Devices
+  - Media Control Devices
+  - Video Codecs
++ System devices
+  - ACPI Fixed Feature Button
+  - Direct memory access controller
+  - EISA programmable interrupt controller
+  - Generic Bus
+  - Intel 82371AB/EB PCI to ISA bridge (ISA mode)
+  - Intel 82443BX Pentium(R) II Processor to AGP Controller
+  - Intel 82443BX Pentium(R) II Processor to PCI Bridge
+  - ISAPNP Read Data Port
+  - Logical Disk Manager
+  - Microcode Update Device
+  - Microsoft ACPI-Compliant System
+  - Microsoft Composite Battery
+  - Microsoft System Management BIOS Driver
+  - Motherboard resources
+  - PCI bus
+  - PCI standard PCI-to-PCI bridge
+  - Plug and Play Software Device Enumerator
+  - Printer Port Logical Interface
+  - System CMOS/real time clock
+  - System speaker
+  - System timer
+  - Volume Manager
++ Universal Serial Bus controllers
+  - Generic USB Hub
+  - Intel(R) 82371AB/EB PCI to USB Universal Host Controller
+  - Standard Enhanced PCI to USB Host Controller
+  - USB Composite Device
+  - USB Root Hub
+  - USB Root Hub
+
+cpu registers:
+eax = 7fe536f0
+ebx = 7fe536f0
+ecx = 0060c6b8
+edx = 7f95c15c
+esi = 0012f954
+edi = 00000000
+eip = 005fc2b8
+esp = 0012f8d0
+ebp = 0012f8fc
+
+stack dump:
+0012f8d0  c0 04 48 00 00 00 00 00 - 84 9f 4e 00 2c 71 47 00  ..H.......N.,qG.
+0012f8e0  0f e8 47 00 08 f9 12 00 - 5f 55 40 00 fc f8 12 00  ..G....._U@.....
+0012f8f0  00 00 00 00 ec 3e 48 00 - 2c 71 47 00 60 f9 12 00  .....>H.,qG.`...
+0012f900  e4 e9 47 00 60 f9 12 00 - 14 f9 12 00 5f 55 40 00  ..G.`......._U@.
+0012f910  60 f9 12 00 20 f9 12 00 - 80 53 40 00 60 f9 12 00  `........S@.`...
+0012f920  68 f9 12 00 80 53 40 00 - 60 f9 12 00 00 00 00 00  h....S@.`.......
+0012f930  ec 3e 48 00 a0 ab f3 7f - a0 ab f3 7f a0 ab f3 7f  .>H.............
+0012f940  d0 8e 6b 7f 00 00 00 00 - 00 00 00 00 00 00 00 00  ..k.............
+0012f950  a0 c9 64 7f 00 00 00 00 - 00 00 00 00 00 00 00 00  ..d.............
+0012f960  8c f9 12 00 4e ec 47 00 - 94 f9 12 00 80 53 40 00  ....N.G......S@.
+0012f970  8c f9 12 00 a0 c9 64 7f - a0 ab f3 7f a0 ab f3 7f  ......d.........
+0012f980  a0 ab f3 7f 00 00 00 00 - a0 c9 64 7f a8 f9 12 00  ..........d.....
+0012f990  8d eb 47 00 c4 f9 12 00 - 80 53 40 00 a8 f9 12 00  ..G......S@.....
+0012f9a0  a0 c9 64 7f a0 c9 64 7f - 00 00 00 00 46 3f 48 00  ..d...d.....F?H.
+0012f9b0  0e a2 4e 00 d8 f9 12 00 - ac c0 95 7f e8 fa 12 00  ..N.............
+0012f9c0  3e e3 4e 00 e0 f9 12 00 - 80 53 40 00 d8 f9 12 00  >.N......S@.....
+0012f9d0  08 f2 60 00 a0 ab f3 7f - 58 fa 12 00 2a fb 47 00  ..`.....X...*.G.
+0012f9e0  ec f9 12 00 80 53 40 00 - 58 fa 12 00 f8 f9 12 00  .....S@.X.......
+0012f9f0  80 53 40 00 58 fa 12 00 - 04 fa 12 00 5f 55 40 00  .S@.X......._U@.
+0012fa00  58 fa 12 00 10 fa 12 00 - 80 53 40 00 58 fa 12 00  X........S@.X...
+
+date/time         : 2009-02-15, 11:57:48, 981ms
+computer name     : EXPERIENCE
+user name         : Administrator <admin>
+registered owner  : eXPerience / eXPerience
+operating system  : Windows XP Service Pack 3 build 2600
+system language   : French
+system up time    : 21 hours 56 minutes
+program up time   : 4 seconds
+processor         : Intel(R) Pentium(R) 4 CPU 2.66GHz
+physical memory   : 100/957 MB (free/total)
+free disk space   : (C:) 14,03 GB (D:) 10,34 GB
+display mode      : 1280x1024, 32 bit
+process id        : $974
+allocated memory  : 13,55 MB
+command line      : "d:\tracetool\viewer 2009\TRACETOOL.EXE" /debug
+executable        : TRACETOOL.EXE
+exec. date/time   : 2009-02-08 17:30
+version           : 11.0.0.355
+compiled with     : Delphi 2009
+madExcept version : 3.0i beta 2
+callstack crc     : $1c2caaa1, $b9904e09, $b9904e09
+count             : 2
+exception number  : 1
+exception class   : EAccessViolation
+exception message : Access violation at address 005C1CFE in module 'TRACETOOL.EXE'. Read of address 00000000.
+
+main thread ($e10):
+005c1cfe +5e TRACETOOL.EXE unt_utility 596 +3 LowTrace
+005c0c3e +22 TRACETOOL.EXE unt_utility  80 +1 manyInstances
+0065d489 +31 TRACETOOL.EXE TraceTool    65 +5 initialization
+
+modules:
+00400000 TRACETOOL.EXE            11.0.0.355    d:\tracetool\viewer 2009
+007b0000 FastMM_FullDebugMode.dll 1.40.0.2      d:\tracetool\viewer 2009
+08370000 depends.dll                            D:\install\Best utilities\depends
+10000000 vlmshlp.dll              1.5.4.0       C:\Program Files\Volumouse
+5ad70000 uxtheme.dll              6.0.2900.5512 C:\WINDOWS\system32
+5edd0000 olepro32.dll             5.1.2600.5512 C:\WINDOWS\system32
+71aa0000 WS2HELP.dll              5.1.2600.5512 C:\WINDOWS\system32
+71ab0000 WS2_32.dll               5.1.2600.5512 C:\WINDOWS\system32
+71ad0000 wsock32.dll              5.1.2600.5512 C:\WINDOWS\system32
+73000000 winspool.drv             5.1.2600.5512 C:\WINDOWS\system32
+74720000 MSCTF.dll                5.1.2600.5512 C:\WINDOWS\system32
+74c80000 oleacc.dll               4.2.5406.0    C:\WINDOWS\system32
+755c0000 msctfime.ime             5.1.2600.5512 C:\WINDOWS\system32
+76080000 MSVCP60.dll              6.2.3104.0    C:\WINDOWS\system32
+76380000 msimg32.dll              5.1.2600.5512 C:\WINDOWS\system32
+76390000 imm32.dll                5.1.2600.5512 C:\WINDOWS\system32
+763b0000 comdlg32.dll             6.0.2900.5512 C:\WINDOWS\system32
+76b40000 winmm.dll                5.1.2600.5512 C:\WINDOWS\system32
+77120000 oleaut32.dll             5.1.2600.5512 C:\WINDOWS\system32
+773d0000 comctl32.dll             6.0.2900.5512 C:\WINDOWS\WinSxS\X86_Microsoft.Windows.Common-Controls_6595b64144ccf1df_6.0.2600.5512_x-ww_35d4ce83
+774e0000 ole32.dll                5.1.2600.5512 C:\WINDOWS\system32
+77c00000 version.dll              5.1.2600.5512 C:\WINDOWS\system32
+77c10000 msvcrt.dll               7.0.2600.5512 C:\WINDOWS\system32
+77dd0000 ADVAPI32.dll             5.1.2600.5512 C:\WINDOWS\system32
+77e70000 RPCRT4.dll               5.1.2600.5512 C:\WINDOWS\system32
+77f10000 GDI32.dll                5.1.2600.5698 C:\WINDOWS\system32
+77f60000 SHLWAPI.dll              6.0.2900.5512 C:\WINDOWS\system32
+77fe0000 Secur32.dll              5.1.2600.5512 C:\WINDOWS\system32
+7c800000 kernel32.dll             5.1.2600.5512 C:\WINDOWS\system32
+7c900000 ntdll.dll                5.1.2600.5512 C:\WINDOWS\system32
+7c9c0000 shell32.dll              6.0.2900.5512 C:\WINDOWS\system32
+7e410000 USER32.dll               5.1.2600.5512 C:\WINDOWS\system32
+
+processes:
+000 Idle
+004 System             normal
+380 smss.exe           normal C:\WINDOWS\system32
+3cc csrss.exe
+3e4 winlogon.exe       high   C:\WINDOWS\system32
+410 services.exe       normal C:\WINDOWS\system32
+41c lsass.exe          normal C:\WINDOWS\system32
+4c4 svchost.exe        normal C:\WINDOWS\system32
+500 svchost.exe
+0d0 svchost.exe        normal C:\WINDOWS\System32
+10c svchost.exe
+168 svchost.exe
+464 Explorer.EXE       normal C:\WINDOWS
+44c spoolsv.exe        normal C:\WINDOWS\system32
+5bc VistaDrive.exe     normal C:\WINDOWS\VistaDrive
+648 AGRSMMSG.exe       normal C:\WINDOWS
+6ac avgtray.exe        normal C:\PROGRA~1\AVG\AVG8
+6b4 vmware-tray.exe    normal C:\Program Files\VMware\VMware Workstation
+6bc hqtray.exe         normal C:\Program Files\VMware\VMware Workstation
+6c4 QtDTAcer.EXE       normal C:\Program Files\Launch Manager
+6d4 ctfmon.exe         normal C:\WINDOWS\system32
+6dc taskbarshuffle.exe normal C:\Program Files\Taskbar Shuffle
+6e8 volumouse.exe      normal C:\Program Files\Volumouse
+084 avgwdsvc.exe       normal C:\PROGRA~1\AVG\AVG8
+2e8 PDAgent.exe        normal C:\Program Files\Raxco\PerfectDisk
+128 vmware-authd.exe   normal C:\Program Files\VMware\VMware Workstation
+730 vmount2.exe        normal C:\Program Files\Common Files\VMware\VMware Virtual Image Editing
+758 vmnat.exe          normal C:\WINDOWS\system32
+368 vmnetdhcp.exe      normal C:\WINDOWS\system32
+600 avgrsx.exe         normal C:\PROGRA~1\AVG\AVG8
+edc svchost.exe        normal C:\WINDOWS\system32
+1e8 alg.exe
+da4 TOTALCMD.EXE       normal C:\Program Files\totalcmd
+c1c depends.exe        normal D:\install\Best utilities\depends
+1f0 SystemExplorer.exe normal D:\install\Best utilities\system explorer
+b5c VirtualBox.exe     normal C:\Program Files\Sun\xVM VirtualBox
+d48 VBoxSVC.exe        normal C:\PROGRA~1\Sun\XVMVIR~1
+7e0 VirtualBox.exe     normal C:\PROGRA~1\Sun\XVMVIR~1
+a98 TraceTool.exe      normal D:\TraceTool\Viewer 2009
+974 TRACETOOL.EXE      normal d:\tracetool\viewer 2009
+
+hardware:
++ Batteries
+  - Microsoft AC Adapter
+  - Microsoft ACPI-Compliant Control Method Battery
++ Computer
+  - ACPI Uniprocessor PC
++ Disk drives
+  - Freecom Mobile Drive XXS USB Device
+  - Maxtor 6L200P0
++ Display adapters
+  - SiS M650 (driver 6.14.10.3730)
++ DVD/CD-ROM drives
+  - QSI CDRW/DVD SBW-242
++ Floppy disk controllers
+  - Standard floppy disk controller
++ Floppy disk drives
+  - Floppy disk drive
++ Human Interface Devices
+  - Microsoft USB Wheel Mouse Optical
++ IDE ATA/ATAPI controllers
+  - Primary IDE Channel
+  - Secondary IDE Channel
+  - SiS 5513 IDE UDMA Controller (driver 5.1.1039.2041)
++ IEEE 1394 Bus host controllers
+  - OHCI Compliant IEEE 1394 Host Controller
++ Keyboards
+  - Standard 101/102-Key or Microsoft Natural PS/2 Keyboard
++ Mice and other pointing devices
+  - Microsoft USB Wheel Mouse Optical
+  - PS/2 Compatible Mouse
++ Modems
+  - Agere Systems AC'97 Modem (driver 2.1.22.0)
++ Network adapters
+  - 1394 Net Adapter
+  - SiS 900-Based PCI Fast Ethernet Adapter (driver 2.0.1039.1190)
+  - VMware Virtual Ethernet Adapter for VMnet1 (driver 4.0.1.0)
+  - VMware Virtual Ethernet Adapter for VMnet8 (driver 4.0.1.0)
++ PCMCIA adapters
+  - O2Micro OZ6912 CardBus Controller
++ Ports (COM & LPT)
+  - Communications Port (COM1)
+  - ECP Printer Port (LPT1)
++ Processors
+  - Intel(R) Pentium(R) 4 CPU 2.66GHz
++ Sound, video and game controllers
+  - Audio Codecs
+  - Legacy Audio Drivers
+  - Legacy Video Capture Devices
+  - Media Control Devices
+  - SiS 7012 Audio Driver  (driver 5.10.0.6120)
+  - Video Codecs
++ System devices
+  - ACPI Fixed Feature Button
+  - ACPI Lid
+  - ACPI Power Button
+  - ACPI Sleep Button
+  - ACPI Thermal Zone
+  - Direct memory access controller
+  - Generic Bus
+  - ISAPNP Read Data Port
+  - Logical Disk Manager
+  - Microcode Update Device
+  - Microsoft ACPI-Compliant Embedded Controller
+  - Microsoft ACPI-Compliant System
+  - Microsoft Composite Battery
+  - Microsoft System Management BIOS Driver
+  - Motherboard resources
+  - Numeric data processor
+  - PCI bus
+  - PCI standard host CPU bridge
+  - Plug and Play Software Device Enumerator
+  - Printer Port Logical Interface
+  - Programmable interrupt controller
+  - SiS Accelerated Graphics Port (driver 7.2.0.1170)
+  - SIS PCI to ISA bridge
+  - System CMOS/real time clock
+  - System speaker
+  - System timer
+  - Terminal Server Device Redirector
+  - Terminal Server Keyboard Driver
+  - Terminal Server Mouse Driver
+  - Volume Manager
++ Universal Serial Bus controllers
+  - SiS 7001 PCI to USB Open Host Controller
+  - SiS 7001 PCI to USB Open Host Controller
+  - SiS 7001 PCI to USB Open Host Controller
+  - SiS PCI to USB Enhanced Host Controller
+  - USB Mass Storage Device
+  - USB Root Hub
+  - USB Root Hub
+  - USB Root Hub
+  - USB Root Hub
+
+cpu registers:
+eax = 00000000
+ebx = 7ffdc000
+ecx = 00000000
+edx = 00000000
+esi = 00000002
+edi = 00000000
+eip = 005c1cfe
+esp = 0012fc20
+ebp = 0012ff34
+
+stack dump:
+0012fc20  3c ff 12 00 80 53 40 00 - 34 ff 12 00 00 00 00 00  <....S@.4.......
+0012fc30  02 00 00 00 00 c0 fd 7f - 00 00 00 00 9d 27 91 7c  .............'.|
+0012fc40  0c 04 09 00 a8 f1 71 00 - 74 fc 12 00 00 00 00 00  ......q.t.......
+0012fc50  6e a0 80 7c 00 00 40 00 - a8 f1 71 00 74 fc 12 00  n..|..@...q.t...
+0012fc60  85 a0 80 7c 50 ec 7a 00 - 00 00 40 00 01 00 00 00  ...|P.z...@.....
+0012fc70  00 00 00 00 08 91 74 00 - 50 ec 7a 00 64 fc 12 00  ......t.P.z.d...
+0012fc80  44 ca 42 7e 80 ff 12 00 - c0 9a 83 7c 88 a0 80 7c  D.B~.......|...|
+0012fc90  ff ff ff ff 85 a0 80 7c - 05 c1 41 7e 00 00 40 00  .......|..A~..@.
+0012fca0  a8 f1 71 00 20 00 00 00 - 20 00 00 00 b6 f0 00 00  ..q.............
+0012fcb0  44 ca 42 7e 08 91 74 00 - 00 00 40 00 20 00 00 00  D.B~..t...@.....
+0012fcc0  e4 fc 12 00 b8 c0 41 7e - 08 91 74 00 00 00 40 00  ......A~..t...@.
+0012fcd0  40 80 00 00 20 00 00 00 - 20 00 00 00 01 00 00 00  @...............
+0012fce0  9d 05 16 00 3c ff 12 00 - b5 c1 41 7e 00 00 40 00  ....<.....A~..@.
+0012fcf0  c4 d1 65 00 01 00 00 00 - 20 00 00 00 08 91 74 00  ..e...........t.
+0012fd00  40 80 00 00 ff 00 00 00 - c4 d1 65 00 60 9d 41 7e  @.........e.`.A~
+0012fd10  00 00 00 00 01 00 00 00 - 20 00 00 00 20 00 00 00  ................
+0012fd20  00 00 00 00 30 fd 12 00 - c4 d1 65 00 00 00 40 00  ....0.....e...@.
+0012fd30  64 00 3a 00 5c 00 74 00 - 72 00 61 00 63 00 65 00  d.:.\.t.r.a.c.e.
+0012fd40  74 00 6f 00 6f 00 6c 00 - 5c 00 76 00 69 00 65 00  t.o.o.l.\.v.i.e.
+0012fd50  77 00 65 00 72 00 20 00 - 32 00 30 00 30 00 39 00  w.e.r...2.0.0.9.
+
+disassembling:
+[...]
+005c1ceb       jz      loc_5c1e35
+005c1cf1 596   mov     eax, [$6671b0]
+005c1cf6       mov     eax, [eax]
+005c1cf8       mov     [ebp-8], eax
+005c1cfb       mov     eax, [ebp-8]
+005c1cfe     > mov     edx, [eax]
+005c1d00       call    dword ptr [edx]
+005c1d02 597   xor     eax, eax
+005c1d04       push    ebp
+005c1d05       push    $5c1e2e                ; System.@HandleFinally
+005c1d0a       push    dword ptr fs:[eax]
+[...]
+
+date/time         : 2009-03-24, 12:45:16, 92ms
+computer name     : SP3LITE
+user name         : New user <admin>
+registered owner  : seba
+operating system  : Windows XP Service Pack 3, v.3300 build 2600
+system language   : French
+system up time    : 5 hours 21 minutes
+program up time   : 2 minutes 32 seconds
+processor         : Intel(R) Pentium(R) 4 CPU 2.80GHz
+physical memory   : 253/519 MB (free/total)
+free disk space   : (C:) 9,00 GB
+display mode      : 1280x903, 32 bit
+process id        : $45c
+allocated memory  : 20,18 MB
+command line      : "\\.host\Shared Folders\tracetool\Viewer 2009\TraceTool.exe" /debug
+executable        : TraceTool.exe
+exec. date/time   : 2009-03-24 12:42
+version           : 11.0.0.362
+compiled with     : Delphi 2009
+madExcept version : 3.0i beta 2
+callstack crc     : $d174b5d5, $e6a6e8dd, $e6a6e8dd
+exception number  : 1
+exception class   : EExternalException
+exception message : External exception C0000006.
+
+main thread ($4d0):
+005f157c +000 TraceTool.exe SynEditKeyCmds 871  +0 Finalization
+00405771 +039 TraceTool.exe System         191  +0 FinalizeUnits
+004595ac +054 TraceTool.exe madExcept              InterceptFinalizeUnits
+00405b3f +073 TraceTool.exe System         191  +0 @Halt0
+0065f5d4 +17c TraceTool.exe TraceTool       86 +26 initialization
+
+thread $6e0:
+7c90da8a +0a ntdll.dll               NtReplyWaitReceivePortEx
+0045a119 +0d TraceTool.exe madExcept CallThreadProcSafe
+0045a183 +37 TraceTool.exe madExcept ThreadExceptFrame
+>> created by main thread ($4d0) at:
+77e7df36 +00 RPCRT4.dll
+
+thread $5d4:
+7c90da8a +0a ntdll.dll               NtReplyWaitReceivePortEx
+0045a119 +0d TraceTool.exe madExcept CallThreadProcSafe
+0045a183 +37 TraceTool.exe madExcept ThreadExceptFrame
+>> created by thread $6e0 at:
+77e7df36 +00 RPCRT4.dll
+
+modules:
+00400000 TraceTool.exe            11.0.0.362       \\.host\Shared Folders\tracetool\Viewer 2009
+007c0000 FastMM_FullDebugMode.dll 1.40.0.2         \\.host\Shared Folders\tracetool\Viewer 2009
+02280000 xpsp2res.dll             5.1.2600.3300    C:\WINDOWS\system32
+03920000 TPPRN.DLL                0.3.81.1         C:\WINDOWS\System32\spool\DRIVERS\W32X86\3
+10000000 TPPrnUI.DLL              7.6.202.3        C:\WINDOWS\System32\spool\DRIVERS\W32X86\3
+5ad70000 UxTheme.dll              6.0.2900.3300    C:\WINDOWS\system32
+5edd0000 olepro32.dll             5.1.2600.3300    C:\WINDOWS\system32
+5f800000 MFC42u.DLL               6.2.8071.0       C:\WINDOWS\system32
+662b0000 hnetcfg.dll              5.1.2600.3300    C:\WINDOWS\system32
+71a50000 mswsock.dll              5.1.2600.3300    C:\WINDOWS\system32
+71a90000 wshtcpip.dll             5.1.2600.3300    C:\WINDOWS\System32
+71aa0000 WS2HELP.dll              5.1.2600.3300    C:\WINDOWS\system32
+71ab0000 WS2_32.dll               5.1.2600.3300    C:\WINDOWS\system32
+71ad0000 wsock32.dll              5.1.2600.3300    C:\WINDOWS\system32
+73000000 winspool.drv             5.1.2600.3300    C:\WINDOWS\system32
+74980000 msxml3.dll               8.90.1101.0      C:\WINDOWS\system32
+74c80000 oleacc.dll               4.2.5406.0       C:\WINDOWS\system32
+76080000 MSVCP60.dll              6.2.3104.0       C:\WINDOWS\system32
+76380000 msimg32.dll              5.1.2600.3300    C:\WINDOWS\system32
+76390000 imm32.dll                5.1.2600.3300    C:\WINDOWS\system32
+763b0000 comdlg32.dll             6.0.2900.3300    C:\WINDOWS\system32
+76b40000 winmm.dll                5.1.2600.3300    C:\WINDOWS\system32
+76fd0000 CLBCATQ.DLL              2001.12.4414.700 C:\WINDOWS\system32
+77050000 COMRes.dll               2001.12.4414.700 C:\WINDOWS\system32
+77120000 oleaut32.dll             5.1.2600.3300    C:\WINDOWS\system32
+773d0000 comctl32.dll             6.0.2900.3300    C:\WINDOWS\WinSxS\X86_Microsoft.Windows.Common-Controls_6595b64144ccf1df_6.0.2600.3300_x-ww_d7ca0dc2
+774e0000 ole32.dll                5.1.2600.3300    C:\WINDOWS\system32
+77920000 SETUPAPI.dll             5.1.2600.3300    C:\WINDOWS\system32
+77c00000 version.dll              5.1.2600.3300    C:\WINDOWS\system32
+77c10000 msvcrt.dll               7.0.2600.3300    C:\WINDOWS\system32
+77dd0000 ADVAPI32.dll             5.1.2600.3300    C:\WINDOWS\system32
+77e70000 RPCRT4.dll               5.1.2600.3300    C:\WINDOWS\system32
+77f10000 GDI32.dll                5.1.2600.3300    C:\WINDOWS\system32
+77f60000 SHLWAPI.dll              6.0.2900.3300    C:\WINDOWS\system32
+77fe0000 Secur32.dll              5.1.2600.3300    C:\WINDOWS\system32
+7c800000 kernel32.dll             5.1.2600.3300    C:\WINDOWS\system32
+7c900000 ntdll.dll                5.1.2600.3300    C:\WINDOWS\system32
+7c9c0000 shell32.dll              6.0.2900.3300    C:\WINDOWS\system32
+7e410000 USER32.dll               5.1.2600.3300    C:\WINDOWS\system32
+
+processes:
+000 Idle
+004 System            normal
+148 smss.exe          normal C:\WINDOWS\system32
+184 csrss.exe         normal C:\WINDOWS\system32
+198 winlogon.exe      high   C:\WINDOWS\system32
+1c4 services.exe      normal C:\WINDOWS\system32
+1d0 lsass.exe         normal C:\WINDOWS\system32
+264 svchost.exe       normal C:\WINDOWS\system32
+294 svchost.exe       normal C:\WINDOWS\system32
+2e8 svchost.exe       normal C:\WINDOWS\System32
+338 svchost.exe       normal C:\WINDOWS\system32
+3d8 spoolsv.exe       normal C:\WINDOWS\system32
+460 Explorer.EXE      normal C:\WINDOWS
+4a8 VMwareTray.exe    normal C:\Program Files\VMware\VMware Tools
+4b0 VMwareUser.exe    normal C:\Program Files\VMware\VMware Tools
+660 VMwareService.exe high   C:\Program Files\VMware\VMware Tools
+750 svchost.exe       normal C:\WINDOWS\system32
+588 bds.exe           normal C:\Program Files\CodeGear\RAD Studio\6.0\bin
+214 TOTALCMD.EXE      normal C:\totalcmd
+5ac DelphiDemo.exe    normal \\.host\Shared Folders\tracetool\Delphi\Delphi Demo
+45c TraceTool.exe     normal \\.host\Shared Folders\tracetool\Viewer 2009
+
+hardware:
++ Batteries
+  - Microsoft AC Adapter
++ Computer
+  - ACPI Uniprocessor PC
++ Disk drives
+  - VMware Virtual IDE Hard Drive
++ Display adapters
+  - VMware SVGA II (driver 11.4.3.1)
++ IDE ATA/ATAPI controllers
+  - Intel(R) 82371AB/EB PCI Bus Master IDE Controller
+  - Primary IDE Channel
++ Keyboards
+  - Standard 101/102-Key or Microsoft Natural PS/2 Keyboard
++ Mice and other pointing devices
+  - VMware Pointing Device (driver 12.4.0.2)
++ Network adapters
+  - VMware Accelerated AMD PCNet Adapter (driver 2.0.0.10)
++ Ports (COM & LPT)
+  - Communications Port (COM1)
+  - Communications Port (COM2)
+  - Printer Port (LPT1)
++ Processors
+  - Intel(R) Pentium(R) 4 CPU 2.80GHz
++ SCSI and RAID controllers
+  - VMware SCSI Controller (driver 1.2.0.6)
++ Sound, video and game controllers
+  - Audio Codecs
+  - Legacy Audio Drivers
+  - Legacy Video Capture Devices
+  - Media Control Devices
+  - Video Codecs
++ System devices
+  - ACPI Fixed Feature Button
+  - Direct memory access controller
+  - EISA programmable interrupt controller
+  - Generic Bus
+  - Intel 82371AB/EB PCI to ISA bridge (ISA mode)
+  - Intel 82443BX Pentium(R) II Processor to AGP Controller
+  - Intel 82443BX Pentium(R) II Processor to PCI Bridge
+  - ISAPNP Read Data Port
+  - Logical Disk Manager
+  - Microcode Update Device
+  - Microsoft ACPI-Compliant System
+  - Microsoft Composite Battery
+  - Microsoft System Management BIOS Driver
+  - Motherboard resources
+  - PCI bus
+  - PCI standard PCI-to-PCI bridge
+  - Plug and Play Software Device Enumerator
+  - Printer Port Logical Interface
+  - System CMOS/real time clock
+  - System speaker
+  - System timer
+  - Volume Manager
++ Universal Serial Bus controllers
+  - Intel(R) 82371AB/EB PCI to USB Universal Host Controller
+  - Standard Enhanced PCI to USB Host Controller
+  - USB Root Hub
+  - USB Root Hub
+
+cpu registers:
+eax = 00000000
+ebx = 000000f4
+ecx = 0012ff70
+edx = 0012ff78
+esi = 005f157c
+edi = 0065d67c
+eip = 005f157c
+esp = 0012ff74
+ebp = 0012ff90
+
+stack dump:
+0012ff74  73 57 40 00 b4 ff 12 00 - 5f 55 40 00 90 ff 12 00  sW@....._U@.....
+0012ff84  50 a0 66 00 ec ca 66 00 - 00 00 00 00 c0 ff 12 00  P.f...f.........
+0012ff94  b2 95 45 00 44 5b 40 00 - c0 ff 12 00 f8 11 e5 0f  ..E.D[@.........
+0012ffa4  48 f2 36 12 00 d0 fd 7f - d9 f5 65 00 9c dc 90 7c  H.6.......e....|
+0012ffb4  e0 ff 12 00 50 56 40 00 - c0 ff 12 00 f0 ff 12 00  ....PV@.........
+0012ffc4  67 70 81 7c f8 11 e5 0f - 48 f2 36 12 00 d0 fd 7f  gp.|....H.6.....
+0012ffd4  b8 b6 54 80 c8 ff 12 00 - 50 f2 c4 81 ff ff ff ff  ..T.....P.......
+0012ffe4  c0 9a 83 7c 70 70 81 7c - 00 00 00 00 00 00 00 00  ...|pp.|........
+0012fff4  00 00 00 00 58 f4 65 00 - 00 00 00 00              ....X.e.....
+
+disassembling:
+005f157c     public SynEditKeyCmds.Finalization:  ; function entry point
+005f157c 871 > push    ebp
+005f157d       mov     ebp, esp
+005f157f       xor     eax, eax
+005f1581       push    ebp
+005f1582       push    $5f15b8                ; System.@HandleFinally
+[...]
+
+date/time         : 2009-10-05, 16:31:07, 390ms
+computer name     : EXPERIENCE
+user name         : Administrator <admin>
+registered owner  : eXPerience / eXPerience
+operating system  : Windows XP Service Pack 3 build 2600
+system language   : French
+system up time    : 6 days 1 hour
+program up time   : 8 hours 5 minutes
+processor         : Intel(R) Pentium(R) 4 CPU 2.66GHz
+physical memory   : 203/957 MB (free/total)
+free disk space   : (C:) 1,47 GB (D:) 3,20 GB
+display mode      : 1280x1024, 32 bit
+process id        : $7a8
+allocated memory  : 21,18 MB
+command line      : "D:\TraceTool\Viewer 2009\TraceTool.exe" /debug
+executable        : TraceTool.exe
+exec. date/time   : 2009-10-05 08:25
+version           : 11.3.0.368
+compiled with     : Delphi 2009
+madExcept version : 3.0i beta 2
+callstack crc     : $fd2c64e8, $81987e1e, $c1beb8b9
+exception number  : 11
+exception class   : EOleException
+exception message : An invalid character was found in text content.
+
+main thread ($d5c):
+00565c24 +078 TraceTool.exe XMLDoc                      TXMLNode.SetText
+00565d65 +065 TraceTool.exe XMLDoc                      TXMLNode.SetNodeValue
+005c8599 +069 TraceTool.exe Application6       559   +1 TXMLMemberType.Set_ColC
+0061f492 +0d6 TraceTool.exe unt_TraceWin      2936  +12 recurMembers
+0061fc59 +5fd TraceTool.exe unt_TraceWin      3090 +114 generateNodeXML
+0061fcb5 +659 TraceTool.exe unt_TraceWin      3101 +125 generateNodeXML
+00620000 +244 TraceTool.exe unt_TraceWin      3145  +39 TFrm_Trace.SaveToXML
+0061f311 +179 TraceTool.exe unt_TraceWin      2897  +19 TFrm_Trace.SaveWin
+0064e414 +03c TraceTool.exe unt_PageContainer  308   +4 TFrmPageContainer.actSaveToFileExecute
+00484e37 +00f TraceTool.exe Classes                     TBasicAction.Execute
+004fcab9 +031 TraceTool.exe ActnList                    TContainedAction.Execute
+004fd800 +050 TraceTool.exe ActnList                    TCustomAction.Execute
+00484cfb +013 TraceTool.exe Classes                     TBasicActionLink.Execute
+004eb064 +058 TraceTool.exe Controls                    TControl.Click
+004c940c +000 TraceTool.exe ComCtrls                    TToolButton.Click
+004eb4ee +066 TraceTool.exe Controls                    TControl.WMLButtonUp
+004eab12 +2d2 TraceTool.exe Controls                    TControl.WndProc
+004ea738 +024 TraceTool.exe Controls                    TControl.Perform
+004ee82a +0ae TraceTool.exe Controls                    GetControlAtPos
+004ee8f2 +0a6 TraceTool.exe Controls                    TWinControl.ControlAtPos
+004ea738 +024 TraceTool.exe Controls                    TControl.Perform
+004ee9a7 +097 TraceTool.exe Controls                    TWinControl.IsControlMouseMsg
+004eeec2 +3be TraceTool.exe Controls                    TWinControl.WndProc
+004cde38 +244 TraceTool.exe ComCtrls                    TToolBar.WndProc
+004ee730 +02c TraceTool.exe Controls                    TWinControl.MainWndProc
+004854d8 +014 TraceTool.exe Classes                     StdWndProc
+7e418a0b +00a USER32.dll                                DispatchMessageW
+0050d135 +11d TraceTool.exe Forms                       TApplication.ProcessMessage
+0050d17a +00a TraceTool.exe Forms                       TApplication.HandleMessage
+0050d4a5 +0c9 TraceTool.exe Forms                       TApplication.Run
+006605cb +177 TraceTool.exe TraceTool           85  +25 initialization
+
+thread $9d0 (TIdListenerThread): <priority:2>
+7c90df58 +0a ntdll.dll                                      NtWaitForSingleObject
+71aa150a +6a WS2HELP.dll                                    WahReferenceContextByHandle
+71ab314c +a4 WS2_32.dll                                     select
+00579631 +51 TraceTool.exe IdStackWindows          1018  +8 TIdSocketListWindows.FDSelect
+005795c8 +20 TraceTool.exe IdStackWindows          1000  +3 TIdSocketListWindows.SelectRead
+0057c9ea +06 TraceTool.exe IdSocketHandle           533  +1 TIdSocketHandle.Select
+0058a5d8 +78 TraceTool.exe IdServerIOHandlerSocket  131 +11 TIdServerIOHandlerSocket.Accept
+0058c6f4 +98 TraceTool.exe IdCustomTCPServer        918 +11 TIdListenerThread.Run
+0057daf4 +f0 TraceTool.exe IdThread                 351 +38 TIdThread.Execute
+0045abaf +2b TraceTool.exe madExcept                        HookedTThreadExecute
+00483cfe +42 TraceTool.exe Classes                          ThreadProc
+00405c7c +28 TraceTool.exe System                    47  +0 ThreadWrapper
+0045aa91 +0d TraceTool.exe madExcept                        CallThreadProcSafe
+0045aafb +37 TraceTool.exe madExcept                        ThreadExceptFrame
+>> created by main thread ($d5c) at:
+0057dcf6 +52 TraceTool.exe IdThread                 418 +20 TIdThread.Create
+
+thread $648 (TIdListenerThread): <priority:2>
+7c90df58 +0a ntdll.dll                                      NtWaitForSingleObject
+71aa150a +6a WS2HELP.dll                                    WahReferenceContextByHandle
+71ab314c +a4 WS2_32.dll                                     select
+00579631 +51 TraceTool.exe IdStackWindows          1018  +8 TIdSocketListWindows.FDSelect
+005795c8 +20 TraceTool.exe IdStackWindows          1000  +3 TIdSocketListWindows.SelectRead
+0057c9ea +06 TraceTool.exe IdSocketHandle           533  +1 TIdSocketHandle.Select
+0058a5d8 +78 TraceTool.exe IdServerIOHandlerSocket  131 +11 TIdServerIOHandlerSocket.Accept
+0058c6f4 +98 TraceTool.exe IdCustomTCPServer        918 +11 TIdListenerThread.Run
+0057daf4 +f0 TraceTool.exe IdThread                 351 +38 TIdThread.Execute
+0045abaf +2b TraceTool.exe madExcept                        HookedTThreadExecute
+00483cfe +42 TraceTool.exe Classes                          ThreadProc
+00405c7c +28 TraceTool.exe System                    47  +0 ThreadWrapper
+0045aa91 +0d TraceTool.exe madExcept                        CallThreadProcSafe
+0045aafb +37 TraceTool.exe madExcept                        ThreadExceptFrame
+>> created by main thread ($d5c) at:
+0057dcf6 +52 TraceTool.exe IdThread                 418 +20 TIdThread.Create
+
+thread $ff4 (TIdThreadWithTask): <suspended>
+0057dcf6 +52 TraceTool.exe IdThread 418 +20 TIdThread.Create
+
+thread $c78 (TIdListenerThread): <priority:2>
+7c90df58 +0a ntdll.dll                                      NtWaitForSingleObject
+71aa150a +6a WS2HELP.dll                                    WahReferenceContextByHandle
+71ab314c +a4 WS2_32.dll                                     select
+00579631 +51 TraceTool.exe IdStackWindows          1018  +8 TIdSocketListWindows.FDSelect
+005795c8 +20 TraceTool.exe IdStackWindows          1000  +3 TIdSocketListWindows.SelectRead
+0057c9ea +06 TraceTool.exe IdSocketHandle           533  +1 TIdSocketHandle.Select
+0058a5d8 +78 TraceTool.exe IdServerIOHandlerSocket  131 +11 TIdServerIOHandlerSocket.Accept
+0058c6f4 +98 TraceTool.exe IdCustomTCPServer        918 +11 TIdListenerThread.Run
+0057daf4 +f0 TraceTool.exe IdThread                 351 +38 TIdThread.Execute
+0045abaf +2b TraceTool.exe madExcept                        HookedTThreadExecute
+00483cfe +42 TraceTool.exe Classes                          ThreadProc
+00405c7c +28 TraceTool.exe System                    47  +0 ThreadWrapper
+0045aa91 +0d TraceTool.exe madExcept                        CallThreadProcSafe
+0045aafb +37 TraceTool.exe madExcept                        ThreadExceptFrame
+>> created by main thread ($d5c) at:
+0057dcf6 +52 TraceTool.exe IdThread                 418 +20 TIdThread.Create
+
+thread $c8 (TIdThreadWithTask): <suspended>
+0057dcf6 +52 TraceTool.exe IdThread 418 +20 TIdThread.Create
+
+thread $970 (TIdListenerThread): <priority:2>
+7c90df58 +0a ntdll.dll                                      NtWaitForSingleObject
+71aa150a +6a WS2HELP.dll                                    WahReferenceContextByHandle
+71ab314c +a4 WS2_32.dll                                     select
+00579631 +51 TraceTool.exe IdStackWindows          1018  +8 TIdSocketListWindows.FDSelect
+005795c8 +20 TraceTool.exe IdStackWindows          1000  +3 TIdSocketListWindows.SelectRead
+0057c9ea +06 TraceTool.exe IdSocketHandle           533  +1 TIdSocketHandle.Select
+0058a5d8 +78 TraceTool.exe IdServerIOHandlerSocket  131 +11 TIdServerIOHandlerSocket.Accept
+0058c6f4 +98 TraceTool.exe IdCustomTCPServer        918 +11 TIdListenerThread.Run
+0057daf4 +f0 TraceTool.exe IdThread                 351 +38 TIdThread.Execute
+0045abaf +2b TraceTool.exe madExcept                        HookedTThreadExecute
+00483cfe +42 TraceTool.exe Classes                          ThreadProc
+00405c7c +28 TraceTool.exe System                    47  +0 ThreadWrapper
+0045aa91 +0d TraceTool.exe madExcept                        CallThreadProcSafe
+0045aafb +37 TraceTool.exe madExcept                        ThreadExceptFrame
+>> created by main thread ($d5c) at:
+0057dcf6 +52 TraceTool.exe IdThread                 418 +20 TIdThread.Create
+
+thread $fe0 (TIdThreadWithTask): <suspended>
+0057dcf6 +52 TraceTool.exe IdThread 418 +20 TIdThread.Create
+
+thread $594 (TWorkerThread):
+7c90df58 +0a ntdll.dll                          NtWaitForSingleObject
+7c8025d5 +85 kernel32.dll                       WaitForSingleObjectEx
+7c80253d +0d kernel32.dll                       WaitForSingleObject
+0051eca2 +16 TraceTool.exe VirtualTrees 6002 +3 TWorkerThread.Execute
+0045abaf +2b TraceTool.exe madExcept            HookedTThreadExecute
+00483cfe +42 TraceTool.exe Classes              ThreadProc
+00405c7c +28 TraceTool.exe System         47 +0 ThreadWrapper
+0045aa91 +0d TraceTool.exe madExcept            CallThreadProcSafe
+0045aafb +37 TraceTool.exe madExcept            ThreadExceptFrame
+>> created by main thread ($d5c) at:
+0051ebc7 +23 TraceTool.exe VirtualTrees 5965 +1 TWorkerThread.Create
+
+thread $d4c (TODSThread):
+7c90df48 +00a ntdll.dll                       NtWaitForMultipleObjects
+7c80958a +000 kernel32.dll                    WaitForMultipleObjectsEx
+7c80a110 +013 kernel32.dll                    WaitForMultipleObjects
+005ee302 +112 TraceTool.exe unt_ODS   560 +32 TODSThread.Execute
+0045abaf +02b TraceTool.exe madExcept         HookedTThreadExecute
+00483cfe +042 TraceTool.exe Classes           ThreadProc
+00405c7c +028 TraceTool.exe System     47  +0 ThreadWrapper
+0045aa91 +00d TraceTool.exe madExcept         CallThreadProcSafe
+0045aafb +037 TraceTool.exe madExcept         ThreadExceptFrame
+>> created by main thread ($d5c) at:
+005eda51 +509 TraceTool.exe unt_ODS   248 +56 TFrm_ODS.FormCreate
+
+thread $22c (TIdThreadWithTask):
+7c90df58 +0a ntdll.dll                                NtWaitForSingleObject
+71aa150a +6a WS2HELP.dll                              WahReferenceContextByHandle
+71ab314c +a4 WS2_32.dll                               select
+00579631 +51 TraceTool.exe IdStackWindows    1018  +8 TIdSocketListWindows.FDSelect
+005795c8 +20 TraceTool.exe IdStackWindows    1000  +3 TIdSocketListWindows.SelectRead
+0057c9ea +06 TraceTool.exe IdSocketHandle     533  +1 TIdSocketHandle.Select
+0057c7d2 +42 TraceTool.exe IdSocketHandle     438  +2 CheckIsReadable
+0057c874 +78 TraceTool.exe IdSocketHandle     460 +19 TIdSocketHandle.Readable
+005893ce +06 TraceTool.exe IdIOHandlerStack   357  +0 TIdIOHandlerStack.Readable
+00582339 +81 TraceTool.exe IdIOHandler       1229 +15 TIdIOHandler.ReadFromSource
+00582822 +3a TraceTool.exe IdIOHandler       1373  +8 TIdIOHandler.ReadBytes
+00655897 +63 TraceTool.exe Unt_Tool          1588 +11 TFrm_Tool.TCPServerExecute
+00582a94 +0c TraceTool.exe IdIOHandler       1428  +1 TIdIOHandler.Connected
+005888b8 +10 TraceTool.exe IdIOHandlerSocket  273  +1 TIdIOHandlerSocket.Connected
+00588fba +12 TraceTool.exe IdIOHandlerStack   227  +2 TIdIOHandlerStack.Connected
+0058bbb1 +19 TraceTool.exe IdCustomTCPServer  511  +2 TIdCustomTCPServer.DoExecute
+0058a9a7 +0f TraceTool.exe IdContext          167  +2 TIdContext.Run
+0057d56a +02 TraceTool.exe IdTask             111  +0 TIdTask.DoRun
+0057e1aa +06 TraceTool.exe IdThread           588  +1 TIdThreadWithTask.Run
+0057daf4 +f0 TraceTool.exe IdThread           351 +38 TIdThread.Execute
+0045abaf +2b TraceTool.exe madExcept                  HookedTThreadExecute
+00483cfe +42 TraceTool.exe Classes                    ThreadProc
+00405c7c +28 TraceTool.exe System              47  +0 ThreadWrapper
+0045aa91 +0d TraceTool.exe madExcept                  CallThreadProcSafe
+0045aafb +37 TraceTool.exe madExcept                  ThreadExceptFrame
+>> created by thread $9d0 (TIdListenerThread) at:
+0057dcf6 +52 TraceTool.exe IdThread           418 +20 TIdThread.Create
+
+thread $ec8 (TIdThreadWithTask): <suspended>
+0057dcf6 +52 TraceTool.exe IdThread 418 +20 TIdThread.Create
+
+thread $aa0:
+7c90d218 +a ntdll.dll  NtDelayExecution
+
+thread $948:
+7c90da48 +a ntdll.dll  NtRemoveIoCompletion
+
+thread $adc:
+7c90df48 +0a ntdll.dll               NtWaitForMultipleObjects
+7c80958a +00 kernel32.dll            WaitForMultipleObjectsEx
+0045aa91 +0d TraceTool.exe madExcept CallThreadProcSafe
+0045aafb +37 TraceTool.exe madExcept ThreadExceptFrame
+>> created by main thread ($d5c) at:
+77df8c8c +00 ADVAPI32.dll
+
+thread $fd8:
+7c90daa8 +0a ntdll.dll               NtReplyWaitReceivePortEx
+0045aa91 +0d TraceTool.exe madExcept CallThreadProcSafe
+0045aafb +37 TraceTool.exe madExcept ThreadExceptFrame
+>> created by thread $948 at:
+77e7df36 +00 RPCRT4.dll
+
+thread $978:
+7c90d218 +0a ntdll.dll               NtDelayExecution
+7c8023eb +4b kernel32.dll            SleepEx
+7c802450 +0a kernel32.dll            Sleep
+0045aa91 +0d TraceTool.exe madExcept CallThreadProcSafe
+0045aafb +37 TraceTool.exe madExcept ThreadExceptFrame
+>> created by thread $948 at:
+7752fd64 +00 ole32.dll
+
+thread $6ec:
+7c90daa8 +0a ntdll.dll               NtReplyWaitReceivePortEx
+0045aa91 +0d TraceTool.exe madExcept CallThreadProcSafe
+0045aafb +37 TraceTool.exe madExcept ThreadExceptFrame
+>> created by thread $fd8 at:
+77e7df36 +00 RPCRT4.dll
+
+modules:
+00400000 TraceTool.exe            11.3.0.368       D:\TraceTool\Viewer 2009
+007c0000 FastMM_FullDebugMode.dll 1.40.0.2         D:\TraceTool\Viewer 2009
+02a00000 Normaliz.dll             6.0.5441.0       C:\WINDOWS\system32
+03e60000 xpsp2res.dll             5.1.2600.5512    C:\WINDOWS\system32
+10000000 vlmshlp.dll              1.5.4.0          C:\Program Files\Volumouse
+10930000 portabledeviceapi.dll    5.2.5721.5145    C:\WINDOWS\system32
+3d930000 WININET.dll              8.0.6001.18806   C:\WINDOWS\system32
+3dfd0000 iertutil.dll             8.0.6001.18806   C:\WINDOWS\system32
+5ad70000 uxtheme.dll              6.0.2900.5512    C:\WINDOWS\system32
+5b860000 NETAPI32.dll             5.1.2600.5694    C:\WINDOWS\system32
+5edd0000 olepro32.dll             5.1.2600.5512    C:\WINDOWS\system32
+662b0000 hnetcfg.dll              5.1.2600.5512    C:\WINDOWS\system32
+69b10000 msxml4.dll               4.20.9870.0      c:\WINDOWS\system32
+71a50000 mswsock.dll              5.1.2600.5625    C:\WINDOWS\system32
+71a90000 wshtcpip.dll             5.1.2600.5512    C:\WINDOWS\System32
+71aa0000 WS2HELP.dll              5.1.2600.5512    C:\WINDOWS\system32
+71ab0000 WS2_32.dll               5.1.2600.5512    C:\WINDOWS\system32
+71ad0000 wsock32.dll              5.1.2600.5512    C:\WINDOWS\system32
+71b20000 MPR.dll                  5.1.2600.5512    C:\WINDOWS\system32
+71bf0000 SAMLIB.dll               5.1.2600.5512    C:\WINDOWS\System32
+71c10000 ntlanman.dll             5.1.2600.5512    C:\WINDOWS\System32
+71c80000 NETRAP.dll               5.1.2600.5512    C:\WINDOWS\System32
+71c90000 NETUI1.dll               5.1.2600.5512    C:\WINDOWS\System32
+71cd0000 NETUI0.dll               5.1.2600.5512    C:\WINDOWS\System32
+73000000 winspool.drv             5.1.2600.5512    C:\WINDOWS\system32
+73ba0000 sti.dll                  5.1.2600.5512    C:\WINDOWS\system32
+74720000 MSCTF.dll                5.1.2600.5512    C:\WINDOWS\system32
+74ae0000 CFGMGR32.dll             5.1.2600.5512    C:\WINDOWS\system32
+74c80000 oleacc.dll               4.2.5406.0       C:\WINDOWS\system32
+754d0000 CRYPTUI.dll              5.131.2600.5512  C:\WINDOWS\system32
+755c0000 msctfime.ime             5.1.2600.5512    C:\WINDOWS\system32
+75f60000 drprov.dll               5.1.2600.5512    C:\WINDOWS\System32
+75f70000 davclnt.dll              5.1.2600.5512    C:\WINDOWS\System32
+75f80000 browseui.dll             6.0.2900.5512    C:\WINDOWS\system32
+76080000 MSVCP60.dll              6.2.3104.0       C:\WINDOWS\system32
+76380000 msimg32.dll              5.1.2600.5512    C:\WINDOWS\system32
+76390000 imm32.dll                5.1.2600.5512    C:\WINDOWS\system32
+763b0000 comdlg32.dll             6.0.2900.5512    C:\WINDOWS\system32
+76600000 CSCDLL.dll               5.1.2600.5512    C:\WINDOWS\System32
+76990000 ntshrui.dll              5.1.2600.5512    C:\WINDOWS\system32
+769c0000 USERENV.dll              5.1.2600.5512    C:\WINDOWS\system32
+76b20000 ATL.DLL                  3.5.2284.2       C:\WINDOWS\system32
+76b40000 winmm.dll                5.1.2600.5512    C:\WINDOWS\system32
+76bf0000 psapi.dll                5.1.2600.5512    C:\WINDOWS\system32
+76c30000 WINTRUST.dll             5.131.2600.5512  C:\WINDOWS\system32
+76c90000 IMAGEHLP.dll             5.1.2600.5512    C:\WINDOWS\system32
+76f60000 WLDAP32.dll              5.1.2600.5512    C:\WINDOWS\system32
+76fd0000 CLBCATQ.DLL              2001.12.4414.700 C:\WINDOWS\system32
+77050000 COMRes.dll               2001.12.4414.700 C:\WINDOWS\system32
+77120000 oleaut32.dll             5.1.2600.5512    C:\WINDOWS\system32
+773d0000 comctl32.dll             6.0.2900.5512    C:\WINDOWS\WinSxS\X86_Microsoft.Windows.Common-Controls_6595b64144ccf1df_6.0.2600.5512_x-ww_35d4ce83
+774e0000 ole32.dll                5.1.2600.5512    C:\WINDOWS\system32
+77920000 SETUPAPI.dll             5.1.2600.5512    C:\WINDOWS\system32
+77a20000 cscui.dll                5.1.2600.5512    C:\WINDOWS\System32
+77a80000 CRYPT32.dll              5.131.2600.5512  C:\WINDOWS\system32
+77b20000 MSASN1.dll               5.1.2600.5512    C:\WINDOWS\system32
+77b40000 appHelp.dll              5.1.2600.5512    C:\WINDOWS\system32
+77c00000 version.dll              5.1.2600.5512    C:\WINDOWS\system32
+77c10000 msvcrt.dll               7.0.2600.5512    C:\WINDOWS\system32
+77dd0000 ADVAPI32.dll             5.1.2600.5755    C:\WINDOWS\system32
+77e70000 RPCRT4.dll               5.1.2600.5795    C:\WINDOWS\system32
+77f10000 GDI32.dll                5.1.2600.5698    C:\WINDOWS\system32
+77f60000 SHLWAPI.dll              6.0.2900.5512    C:\WINDOWS\system32
+77fe0000 Secur32.dll              5.1.2600.5834    C:\WINDOWS\system32
+78130000 urlmon.dll               8.0.6001.18806   C:\WINDOWS\system32
+7c800000 kernel32.dll             5.1.2600.5781    C:\WINDOWS\system32
+7c900000 ntdll.dll                5.1.2600.5755    C:\WINDOWS\system32
+7c9c0000 shell32.dll              6.0.2900.5622    C:\WINDOWS\system32
+7e290000 shdocvw.dll              6.0.2900.5512    C:\WINDOWS\system32
+7e410000 USER32.dll               5.1.2600.5512    C:\WINDOWS\system32
+
+processes:
+000 Idle
+004 System                    normal
+4f8 smss.exe                  normal C:\WINDOWS\system32
+560 csrss.exe                 normal C:\WINDOWS\system32
+578 winlogon.exe              high   C:\WINDOWS\system32
+5a4 services.exe              normal C:\WINDOWS\system32
+5b0 lsass.exe                 normal C:\WINDOWS\system32
+658 svchost.exe               normal C:\WINDOWS\system32
+68c svchost.exe               normal C:\WINDOWS\system32
+308 svchost.exe               normal C:\WINDOWS\System32
+350 svchost.exe               normal C:\WINDOWS\system32
+3b8 svchost.exe               normal C:\WINDOWS\system32
+760 spoolsv.exe               normal C:\WINDOWS\system32
+0f0 Explorer.EXE              normal C:\WINDOWS
+138 VistaDrive.exe            normal C:\WINDOWS\VistaDrive
+140 AGRSMMSG.exe              normal C:\WINDOWS
+148 avgtray.exe               normal C:\PROGRA~1\AVG\AVG8
+158 vmware-tray.exe           normal C:\Program Files\VMware\VMware Workstation
+160 hqtray.exe                normal C:\Program Files\VMware\VMware Workstation
+16c QtDTAcer.EXE              normal C:\Program Files\Launch Manager
+18c ctfmon.exe                normal C:\WINDOWS\system32
+194 taskbarshuffle.exe        normal C:\Program Files\Taskbar Shuffle
+19c volumouse.exe             normal C:\Program Files\Volumouse
+2b4 svchost.exe               normal C:\WINDOWS\system32
+3a8 avgwdsvc.exe              normal C:\PROGRA~1\AVG\AVG8
+4ec jqs.exe                   idle   C:\Program Files\Java\jre6\bin
+54c PDAgent.exe               normal C:\Program Files\Raxco\PerfectDisk
+6d4 sqlwriter.exe             normal C:\Program Files\Microsoft SQL Server\90\Shared
+728 avgrsx.exe                normal C:\PROGRA~1\AVG\AVG8
+5d4 svchost.exe               normal C:\WINDOWS\system32
+628 vmware-authd.exe          normal C:\Program Files\VMware\VMware Workstation
+7d0 vmount2.exe               normal C:\Program Files\Common Files\VMware\VMware Virtual Image Editing
+28c vmnat.exe                 normal C:\WINDOWS\system32
+3b4 vmnetdhcp.exe             normal C:\WINDOWS\system32
+eb8 alg.exe                   normal C:\WINDOWS\System32
+8dc PresentationFontCache.exe normal C:\WINDOWS\Microsoft.NET\Framework\v3.0\WPF
+3c0 sqlservr.exe              normal C:\Program Files\Microsoft SQL Server\MSSQL.1\MSSQL\Binn
+cbc TOTALCMD.EXE              normal C:\Program Files\totalcmd
+908 eclipse.exe               normal D:\eclipse 3.4
+fa4 bds.exe                   normal C:\Program Files\CodeGear\RAD Studio\6.0\bin
+d54 PROCEXP.EXE               high   D:\INSTALL\BEST UTILITIES\SYSINTERNAL\PROCESS EXPLORER
+7a8 TraceTool.exe             normal D:\TraceTool\Viewer 2009
+df0 calc.exe                  normal C:\WINDOWS\system32
+210 javaw.exe                 normal C:\Program Files\Java\jre1.6.0_01\bin
+474 wuauclt.exe               normal C:\WINDOWS\system32
+
+hardware:
++ Batteries
+  - Microsoft AC Adapter
+  - Microsoft ACPI-Compliant Control Method Battery
++ Computer
+  - ACPI Uniprocessor PC
++ Disk drives
+  - Maxtor 6L200P0
++ Display adapters
+  - SiS M650 (driver 6.14.10.3730)
++ DVD/CD-ROM drives
+  - QSI CDRW/DVD SBW-242
++ Floppy disk controllers
+  - Standard floppy disk controller
++ Floppy disk drives
+  - Floppy disk drive
++ Human Interface Devices
+  - Microsoft USB Wheel Mouse Optical
++ IDE ATA/ATAPI controllers
+  - Primary IDE Channel
+  - Secondary IDE Channel
+  - SiS 5513 IDE UDMA Controller (driver 5.1.1039.2041)
++ IEEE 1394 Bus host controllers
+  - OHCI Compliant IEEE 1394 Host Controller
++ Keyboards
+  - Standard 101/102-Key or Microsoft Natural PS/2 Keyboard
++ Mice and other pointing devices
+  - Microsoft USB Wheel Mouse Optical
+  - PS/2 Compatible Mouse
++ Modems
+  - Agere Systems AC'97 Modem (driver 2.1.22.0)
++ Monitors
+  - Plug and Play Monitor
++ Network adapters
+  - 1394 Net Adapter
+  - SiS 900-Based PCI Fast Ethernet Adapter (driver 2.0.1039.1190)
+  - VirtualBox Host-Only Ethernet Adapter (driver 3.0.0.0)
+  - VMware Virtual Ethernet Adapter for VMnet1 (driver 4.0.1.0)
+  - VMware Virtual Ethernet Adapter for VMnet8 (driver 4.0.1.0)
++ PCMCIA adapters
+  - O2Micro OZ6912 CardBus Controller
++ Ports (COM & LPT)
+  - Communications Port (COM1)
+  - ECP Printer Port (LPT1)
++ Processors
+  - Intel(R) Pentium(R) 4 CPU 2.66GHz
++ Sound, video and game controllers
+  - Audio Codecs
+  - Legacy Audio Drivers
+  - Legacy Video Capture Devices
+  - Media Control Devices
+  - SiS 7012 Audio Driver  (driver 5.10.0.6120)
+  - Video Codecs
++ System devices
+  - ACPI Fixed Feature Button
+  - ACPI Lid
+  - ACPI Power Button
+  - ACPI Sleep Button
+  - ACPI Thermal Zone
+  - Direct memory access controller
+  - Generic Bus
+  - ISAPNP Read Data Port
+  - Logical Disk Manager
+  - Microcode Update Device
+  - Microsoft ACPI-Compliant Embedded Controller
+  - Microsoft ACPI-Compliant System
+  - Microsoft Composite Battery
+  - Microsoft System Management BIOS Driver
+  - Motherboard resources
+  - Numeric data processor
+  - PCI bus
+  - PCI standard host CPU bridge
+  - Plug and Play Software Device Enumerator
+  - Printer Port Logical Interface
+  - Programmable interrupt controller
+  - SiS Accelerated Graphics Port (driver 7.2.0.1170)
+  - SIS PCI to ISA bridge
+  - System CMOS/real time clock
+  - System speaker
+  - System timer
+  - Terminal Server Device Redirector
+  - Terminal Server Keyboard Driver
+  - Terminal Server Mouse Driver
+  - Volume Manager
++ Universal Serial Bus controllers
+  - SiS 7001 PCI to USB Open Host Controller
+  - SiS 7001 PCI to USB Open Host Controller
+  - SiS 7001 PCI to USB Open Host Controller
+  - SiS PCI to USB Enhanced Host Controller
+  - USB Root Hub
+  - USB Root Hub
+  - USB Root Hub
+  - USB Root Hub
+
+disassembling:
+[...]
+005c858b               edx, [ebp-8]
+005c858e               -$156553 ($472040)     ; Variants.@VarFromWStr
+005c8593               edx, [ebp-$30]
+005c8596               eax
+005c8597               ecx, [eax]
+005c8599     >         dword ptr [ecx+$60]
+005c859c 560           eax, eax
+005c859e               edx
+005c859f               ecx
+005c85a0               ecx
+005c85a1               fs:[eax], edx
+[...]
+

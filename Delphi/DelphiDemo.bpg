@@ -1,0 +1,26 @@
+#------------------------------------------------------------------------------
+VERSION = BWS.01
+#------------------------------------------------------------------------------
+!ifndef ROOT
+ROOT = $(MAKEDIR)\..
+!endif
+#------------------------------------------------------------------------------
+MAKE = $(ROOT)\bin\make.exe -$(MAKEFLAGS) -f$**
+DCC = $(ROOT)\bin\dcc32.exe $**
+BRCC = $(ROOT)\bin\brcc32.exe $**
+#------------------------------------------------------------------------------
+PROJECTS = DelphiDemo.exe gdebugCompatible.exe DelphiSamplePlugin.dll
+#------------------------------------------------------------------------------
+default: $(PROJECTS)
+#------------------------------------------------------------------------------
+
+DelphiDemo.exe: Delphi Demo\DelphiDemo.dpr
+  $(DCC)
+
+gdebugCompatible.exe: Delphi Demo\gdebugCompatible.dpr
+  $(DCC)
+
+DelphiSamplePlugin.dll: Delphi windows sample plugin\DelphiSamplePlugin.dpr
+  $(DCC)
+
+

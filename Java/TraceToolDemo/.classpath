@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path=""/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="var" path="AbsoluteLayout"/>
+	<classpathentry kind="var" path="Log4J 1.2.8" sourcepath="Log4J SRC"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/Tracetool"/>
+	<classpathentry kind="output" path=""/>
+</classpath>

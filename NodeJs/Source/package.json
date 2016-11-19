@@ -1,0 +1,18 @@
+{
+  "name": "tracetool",
+  "version": "12.10.0",
+  "description": "Send traces from your nodejs application to the windows tracetool viewer.",
+  "main": "lib/tracetool",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "tracetool"
+  ],
+  "author": "Thierry Parent",
+  "license": "ISC",
+  "dependencies": 
+   { "request": "^2.78.0"
+    ,"stack-trace": "^0.0.9"  
+  }
+}

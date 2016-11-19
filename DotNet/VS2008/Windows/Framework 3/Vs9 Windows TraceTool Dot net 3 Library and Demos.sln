@@ -1,0 +1,29 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vs9_Windows_F3_Lib", "Vs9_Windows_F3_Lib\Vs9_Windows_F3_Lib.csproj", "{7CF111BE-3614-4514-966A-FDF779773E51}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vs9_WPF_F3_Demo", "Vs9_WPF_F3_Demo\Vs9_WPF_F3_Demo.csproj", "{32ED9511-B1E1-4E0A-862B-07A39B05A6DD}"
+	ProjectSection(ProjectDependencies) = postProject
+		{7CF111BE-3614-4514-966A-FDF779773E51} = {7CF111BE-3614-4514-966A-FDF779773E51}
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{7CF111BE-3614-4514-966A-FDF779773E51}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7CF111BE-3614-4514-966A-FDF779773E51}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7CF111BE-3614-4514-966A-FDF779773E51}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7CF111BE-3614-4514-966A-FDF779773E51}.Release|Any CPU.Build.0 = Release|Any CPU
+		{32ED9511-B1E1-4E0A-862B-07A39B05A6DD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{32ED9511-B1E1-4E0A-862B-07A39B05A6DD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{32ED9511-B1E1-4E0A-862B-07A39B05A6DD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{32ED9511-B1E1-4E0A-862B-07A39B05A6DD}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

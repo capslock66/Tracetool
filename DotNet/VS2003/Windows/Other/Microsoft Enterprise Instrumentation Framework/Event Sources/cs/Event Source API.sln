@@ -1,0 +1,21 @@
+Microsoft Visual Studio Solution File, Format Version 8.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Event Source API", "Event Source API.csproj", "{3F4150A3-FE34-4F11-9C2C-CAE460526161}"
+EndProject
+Global
+	GlobalSection(SolutionConfiguration) = preSolution
+		ConfigName.0 = Debug
+		ConfigName.1 = Release
+	EndGlobalSection
+	GlobalSection(ProjectDependencies) = postSolution
+	EndGlobalSection
+	GlobalSection(ProjectConfiguration) = postSolution
+		{3F4150A3-FE34-4F11-9C2C-CAE460526161}.Debug.ActiveCfg = Debug|.NET
+		{3F4150A3-FE34-4F11-9C2C-CAE460526161}.Debug.Build.0 = Debug|.NET
+		{3F4150A3-FE34-4F11-9C2C-CAE460526161}.Release.ActiveCfg = Release|.NET
+		{3F4150A3-FE34-4F11-9C2C-CAE460526161}.Release.Build.0 = Release|.NET
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+	EndGlobalSection
+	GlobalSection(ExtensibilityAddIns) = postSolution
+	EndGlobalSection
+EndGlobal

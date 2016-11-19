@@ -1,0 +1,21 @@
+Microsoft Visual Studio Solution File, Format Version 8.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleInstrumentation", "SimpleInstrumentation.csproj", "{F7BF72DC-08C8-444F-A814-ABB7F4FDF905}"
+EndProject
+Global
+	GlobalSection(SolutionConfiguration) = preSolution
+		ConfigName.0 = Debug
+		ConfigName.1 = Release
+	EndGlobalSection
+	GlobalSection(ProjectDependencies) = postSolution
+	EndGlobalSection
+	GlobalSection(ProjectConfiguration) = postSolution
+		{F7BF72DC-08C8-444F-A814-ABB7F4FDF905}.Debug.ActiveCfg = Debug|.NET
+		{F7BF72DC-08C8-444F-A814-ABB7F4FDF905}.Debug.Build.0 = Debug|.NET
+		{F7BF72DC-08C8-444F-A814-ABB7F4FDF905}.Release.ActiveCfg = Release|.NET
+		{F7BF72DC-08C8-444F-A814-ABB7F4FDF905}.Release.Build.0 = Release|.NET
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+	EndGlobalSection
+	GlobalSection(ExtensibilityAddIns) = postSolution
+	EndGlobalSection
+EndGlobal

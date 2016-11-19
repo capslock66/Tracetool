@@ -1,0 +1,293 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<editmodel:ClassDiagramEditModel xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:editmodel="editmodel.xmi" xmlns:options="options.xmi" name="tracetool" size="1288,430" id="" metadata="uml2-1.0" initialized="true" tag="1000" key="32303037303533312D31303030205472616365746F6F6C2F5468696572727920506172656E74">
+  <children xsi:type="editmodel:PackageEditModel" name="tracetool" location="32,30" size="91,60" id="tracetool"/>
+  <children xsi:type="editmodel:ClassEditModel" name="TTrace" location="390,30" size="154,279" id="tracetool/TTrace" runTimeClassModel="clearAll(),find(Ljava.lang.String;ZZZZ),warning(),closeSocket(),winTrace(),show(Z),flush(),error(),closeViewer(),debug(),watches(),options">
+    <children xsi:type="editmodel:CompartmentEditModel" size="131,18">
+      <children xsi:type="editmodel:AttributeEditModel" name="options" id="tracetool/TTrace#options"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel" size="92,198">
+      <children xsi:type="editmodel:MethodEditModel" name="clearAll" id="tracetool/TTrace#clearAll()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="closeSocket" id="tracetool/TTrace#closeSocket()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="closeViewer" id="tracetool/TTrace#closeViewer()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="debug" id="tracetool/TTrace#debug()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="error" id="tracetool/TTrace#error()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="find" id="tracetool/TTrace#find(Ljava.lang.String;ZZZZ)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="flush" id="tracetool/TTrace#flush()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="show" id="tracetool/TTrace#show(Z)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="warning" id="tracetool/TTrace#warning()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="watches" id="tracetool/TTrace#watches()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="winTrace" id="tracetool/TTrace#winTrace()"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel" size="0,0"/>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showStaticInnerClasses="true" packageIndication="3" showAttributeProperty="true"/>
+  </children>
+  <children xsi:type="editmodel:ClassEditModel" name="TraceNode" location="1125,120" size="151,495" id="tracetool/TraceNode" runTimeClassModel="setSelected(),setBookmark(Z),resendLeft(Ljava.lang.String;),delete(),gotoNextSibling(),gotoPrevSibling(),setFontDetail(IZZLjava.awt.Color;ILjava.lang.String;),setBackgroundColor(I),resendRight(Ljava.lang.String;),resend(Ljava.lang.String;Ljava.lang.String;),setFontDetail(IZZ),deleteChildren(),append(Ljava.lang.String;Ljava.lang.String;),appendRight(Ljava.lang.String;),gotoLastChild(),appendLeft(Ljava.lang.String;),show(),setFontDetail(IZZLjava.awt.Color;),setBackgroundColor(II),gotoFirstChild(),resendIconIndex(I),setFontDetail(IZ),setVisible(Z),setFontDetail(IZZLjava.awt.Color;I)">
+    <children xsi:type="editmodel:CompartmentEditModel" size="0,0"/>
+    <children xsi:type="editmodel:CompartmentEditModel" size="128,432">
+      <children xsi:type="editmodel:MethodEditModel" name="append" id="tracetool/TraceNode#append(Ljava.lang.String;Ljava.lang.String;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="appendLeft" id="tracetool/TraceNode#appendLeft(Ljava.lang.String;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="appendRight" id="tracetool/TraceNode#appendRight(Ljava.lang.String;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="delete" id="tracetool/TraceNode#delete()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="deleteChildren" id="tracetool/TraceNode#deleteChildren()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="gotoFirstChild" id="tracetool/TraceNode#gotoFirstChild()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="gotoLastChild" id="tracetool/TraceNode#gotoLastChild()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="gotoNextSibling" id="tracetool/TraceNode#gotoNextSibling()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="gotoPrevSibling" id="tracetool/TraceNode#gotoPrevSibling()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="resend" id="tracetool/TraceNode#resend(Ljava.lang.String;Ljava.lang.String;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="resendIconIndex" id="tracetool/TraceNode#resendIconIndex(I)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="resendLeft" id="tracetool/TraceNode#resendLeft(Ljava.lang.String;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="resendRight" id="tracetool/TraceNode#resendRight(Ljava.lang.String;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setBackgroundColor" id="tracetool/TraceNode#setBackgroundColor(II)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setBackgroundColor" id="tracetool/TraceNode#setBackgroundColor(I)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setBookmark" id="tracetool/TraceNode#setBookmark(Z)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setFontDetail" id="tracetool/TraceNode#setFontDetail(IZZLjava.awt.Color;ILjava.lang.String;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setFontDetail" id="tracetool/TraceNode#setFontDetail(IZZ)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setFontDetail" id="tracetool/TraceNode#setFontDetail(IZ)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setFontDetail" id="tracetool/TraceNode#setFontDetail(IZZLjava.awt.Color;I)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setFontDetail" id="tracetool/TraceNode#setFontDetail(IZZLjava.awt.Color;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setSelected" id="tracetool/TraceNode#setSelected()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setVisible" id="tracetool/TraceNode#setVisible(Z)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="show" id="tracetool/TraceNode#show()"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel" size="0,0"/>
+    <sourceConnections xsi:type="editmodel:GeneralizationEditModel" autoLocated="true" id="tracetool/TraceToSend&lt;-tracetool/TraceNode" source="//@children.2" target="//@children.4" targetEnd="//@children.2/@sourceConnections.0/@children.1" sourceEnd="//@children.2/@sourceConnections.0/@children.0" connectionRouterKind="Manual">
+      <children xsi:type="editmodel:AssociationEndEditModel" location="0,360" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="160,135"/>
+    </sourceConnections>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showStaticInnerClasses="true" packageIndication="3" showAttributeProperty="true"/>
+  </children>
+  <children xsi:type="editmodel:ClassEditModel" targetConnections="//@children.4/@sourceConnections.0 //@children.6/@sourceConnections.0" name="TraceNodeBase" location="645,121" size="141,171" id="tracetool/TraceNodeBase" runTimeClassModel="id,enabled,winTraceId,tag,iconIndex,toString()">
+    <children xsi:type="editmodel:CompartmentEditModel" size="107,90">
+      <children xsi:type="editmodel:AttributeEditModel" name="enabled" id="tracetool/TraceNodeBase#enabled"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="iconIndex" id="tracetool/TraceNodeBase#iconIndex"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="id" id="tracetool/TraceNodeBase#id"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="tag" id="tracetool/TraceNodeBase#tag"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="winTraceId" id="tracetool/TraceNodeBase#winTraceId"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel" size="67,18">
+      <children xsi:type="editmodel:MethodEditModel" name="toString" id="tracetool/TraceNodeBase#toString()"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel" size="0,0"/>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showStaticInnerClasses="true" packageIndication="3" showAttributeProperty="true"/>
+  </children>
+  <children xsi:type="editmodel:ClassEditModel" targetConnections="//@children.2/@sourceConnections.0 //@children.7/@sourceConnections.0" name="TraceToSend" location="795,345" size="160,693" id="tracetool/TraceToSend">
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <children xsi:type="editmodel:CompartmentEditModel" size="137,630">
+      <children xsi:type="editmodel:MethodEditModel" name="enterMethod" id="tracetool/TraceToSend#enterMethod(Ljava.lang.String;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="enterMethod" id="tracetool/TraceToSend#enterMethod(Ljava.lang.String;Ljava.lang.String;Ljava.awt.Color;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="enterMethod" id="tracetool/TraceToSend#enterMethod(Ljava.lang.String;Ljava.lang.String;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="exitMethod" id="tracetool/TraceToSend#exitMethod(Ljava.lang.String;Ljava.lang.String;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="exitMethod" id="tracetool/TraceToSend#exitMethod(Ljava.lang.String;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="exitMethod" id="tracetool/TraceToSend#exitMethod()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="exitMethod" id="tracetool/TraceToSend#exitMethod(Ljava.lang.String;Ljava.lang.String;Ljava.awt.Color;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getIndentLevel" id="tracetool/TraceToSend#getIndentLevel()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="indent" id="tracetool/TraceToSend#indent(Ljava.lang.String;Ljava.lang.String;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="indent" id="tracetool/TraceToSend#indent(Ljava.lang.String;Ljava.lang.String;Ljava.awt.Color;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="indent" id="tracetool/TraceToSend#indent(Ljava.lang.String;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="indent" id="tracetool/TraceToSend#indent(Ljava.lang.String;Ljava.lang.String;Ljava.awt.Color;Z)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="send" id="tracetool/TraceToSend#send(Ljava.lang.String;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="send" id="tracetool/TraceToSend#send(Ljava.lang.String;Ljava.lang.String;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="sendBackgroundColor" id="tracetool/TraceToSend#sendBackgroundColor(Ljava.lang.String;Ljava.awt.Color;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="sendBackgroundColor" id="tracetool/TraceToSend#sendBackgroundColor(Ljava.lang.String;Ljava.awt.Color;I)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="sendCaller" id="tracetool/TraceToSend#sendCaller(Ljava.lang.String;I)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="sendDump" id="tracetool/TraceToSend#sendDump(Ljava.lang.String;Ljava.lang.String;[BI)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="sendObject" id="tracetool/TraceToSend#sendObject(Ljava.lang.String;Ljava.lang.Object;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="sendObject" id="tracetool/TraceToSend#sendObject(Ljava.lang.String;Ljava.lang.Object;I)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="sendStack" id="tracetool/TraceToSend#sendStack(Ljava.lang.String;I)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="sendTable" id="tracetool/TraceToSend#sendTable(Ljava.lang.String;Ljava.lang.Object;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="sendTable" id="tracetool/TraceToSend#sendTable(Ljava.lang.String;Ltracetool.TraceTable;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="sendType" id="tracetool/TraceToSend#sendType(Ljava.lang.String;Ljava.lang.Class;I)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="sendType" id="tracetool/TraceToSend#sendType(Ljava.lang.String;Ljava.lang.Class;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="sendValue" id="tracetool/TraceToSend#sendValue(Ljava.lang.String;Ljava.lang.Object;Z)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="sendValue" id="tracetool/TraceToSend#sendValue(Ljava.lang.String;Ljava.lang.Object;ZILjava.lang.String;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="sendValue" id="tracetool/TraceToSend#sendValue(Ljava.lang.String;Ljava.lang.Object;ZI)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="sendValue" id="tracetool/TraceToSend#sendValue(Ljava.lang.String;Ljava.lang.Object;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="sendXml" id="tracetool/TraceToSend#sendXml(Ljava.lang.String;Ljava.lang.String;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="unIndent" id="tracetool/TraceToSend#unIndent(Ljava.lang.String;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="unIndent" id="tracetool/TraceToSend#unIndent(Ljava.lang.String;Ljava.lang.String;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="unIndent" id="tracetool/TraceToSend#unIndent(Ljava.lang.String;Ljava.lang.String;Ljava.awt.Color;Z)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="unIndent" id="tracetool/TraceToSend#unIndent(Ljava.lang.String;Ljava.lang.String;Ljava.awt.Color;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="unIndent" id="tracetool/TraceToSend#unIndent()"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <sourceConnections xsi:type="editmodel:GeneralizationEditModel" id="tracetool/TraceNodeBase&lt;-tracetool/TraceToSend" source="//@children.4" target="//@children.3" targetEnd="//@children.4/@sourceConnections.0/@children.1" sourceEnd="//@children.4/@sourceConnections.0/@children.0" connectionRouterKind="Manual">
+      <children xsi:type="editmodel:AssociationEndEditModel" location="43,0" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="98,171"/>
+    </sourceConnections>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showStaticInnerClasses="true" packageIndication="3" showAttributeProperty="true"/>
+  </children>
+  <children xsi:type="editmodel:ClassEditModel" name="TMemberNode" location="16,270" size="157,423" id="tracetool/TMemberNode" runTimeClassModel="TMemberNode(Ljava.lang.String;Ljava.lang.String;Ljava.lang.String;),add(Ltracetool.TMemberNode;),setFontDetail(IZZLjava.awt.Color;ILjava.lang.String;),TMemberNode(),col1,tag,col3,add(Ljava.lang.String;),col2,setFontDetail(IZZ),TMemberNode(Ljava.lang.String;),setFontDetail(IZZLjava.awt.Color;),add(Ljava.lang.String;Ljava.lang.String;),setFontDetail(IZ),TMemberNode(Ljava.lang.String;Ljava.lang.String;),viewerKind,addToStringList(Ljava.util.ArrayList;),members,add(Ljava.lang.String;Ljava.lang.String;Ljava.lang.String;),setFontDetail(IZZLjava.awt.Color;I)">
+    <children xsi:type="editmodel:CompartmentEditModel" size="134,108">
+      <children xsi:type="editmodel:AttributeEditModel" name="col1" id="tracetool/TMemberNode#col1"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="col2" id="tracetool/TMemberNode#col2"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="col3" id="tracetool/TMemberNode#col3"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="members" id="tracetool/TMemberNode#members"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="tag" id="tracetool/TMemberNode#tag"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="viewerKind" id="tracetool/TMemberNode#viewerKind"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel" size="104,252">
+      <children xsi:type="editmodel:MethodEditModel" name="TMemberNode" id="tracetool/TMemberNode#TMemberNode(Ljava.lang.String;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="TMemberNode" id="tracetool/TMemberNode#TMemberNode()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="TMemberNode" id="tracetool/TMemberNode#TMemberNode(Ljava.lang.String;Ljava.lang.String;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="TMemberNode" id="tracetool/TMemberNode#TMemberNode(Ljava.lang.String;Ljava.lang.String;Ljava.lang.String;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="add" id="tracetool/TMemberNode#add(Ljava.lang.String;Ljava.lang.String;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="add" id="tracetool/TMemberNode#add(Ltracetool.TMemberNode;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="add" id="tracetool/TMemberNode#add(Ljava.lang.String;Ljava.lang.String;Ljava.lang.String;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="add" id="tracetool/TMemberNode#add(Ljava.lang.String;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="addToStringList" id="tracetool/TMemberNode#addToStringList(Ljava.util.ArrayList;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setFontDetail" id="tracetool/TMemberNode#setFontDetail(IZZ)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setFontDetail" id="tracetool/TMemberNode#setFontDetail(IZZLjava.awt.Color;ILjava.lang.String;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setFontDetail" id="tracetool/TMemberNode#setFontDetail(IZ)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setFontDetail" id="tracetool/TMemberNode#setFontDetail(IZZLjava.awt.Color;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setFontDetail" id="tracetool/TMemberNode#setFontDetail(IZZLjava.awt.Color;I)"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel" size="0,0"/>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showStaticInnerClasses="true" packageIndication="3" showAttributeProperty="true"/>
+  </children>
+  <children xsi:type="editmodel:ClassEditModel" name="TraceNodeEx" location="255,375" size="161,693" id="tracetool/TraceNodeEx" runTimeClassModel="addType(Ljava.lang.Class;),TraceNodeEx(Ltracetool.TraceToSend;),parentNodeId,addStackTrace(),addObject(Ljava.lang.Object;),addFontDetail(IZ),addTable(Ltracetool.TraceTable;),addFontDetail(IZZLjava.awt.Color;),addObject(Ljava.lang.Object;I),resend(),addDump(Ljava.lang.String;[BII),time,leftMsg,addValue(Ljava.lang.Object;ZI),addFontDetail(IZZ),addBackgroundColor(Ljava.awt.Color;),addFontDetail(IZZLjava.awt.Color;I),members,addXML(Ljava.lang.String;),addValue(Ljava.lang.Object;Z),addDump(Ljava.lang.String;[BI),addValue(Ljava.lang.Object;),addStackTrace(I),addCaller(),rightMsg,addFontDetail(IZZLjava.awt.Color;ILjava.lang.String;),TraceNodeEx(),addCaller(I),addTable(Ljava.lang.Object;),threadName,send(),addBackgroundColor(Ljava.awt.Color;I),TraceNodeEx(Ltracetool.TraceToSend;Z),addValue(Ljava.lang.Object;ZILjava.lang.String;),addType(Ljava.lang.Class;I)">
+    <children xsi:type="editmodel:CompartmentEditModel" size="138,108">
+      <children xsi:type="editmodel:AttributeEditModel" name="leftMsg" id="tracetool/TraceNodeEx#leftMsg"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="members" id="tracetool/TraceNodeEx#members"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="parentNodeId" id="tracetool/TraceNodeEx#parentNodeId"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="rightMsg" id="tracetool/TraceNodeEx#rightMsg"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="threadName" id="tracetool/TraceNodeEx#threadName"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="time" id="tracetool/TraceNodeEx#time"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel" size="131,522">
+      <children xsi:type="editmodel:MethodEditModel" name="TraceNodeEx" id="tracetool/TraceNodeEx#TraceNodeEx()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="TraceNodeEx" id="tracetool/TraceNodeEx#TraceNodeEx(Ltracetool.TraceToSend;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="TraceNodeEx" id="tracetool/TraceNodeEx#TraceNodeEx(Ltracetool.TraceToSend;Z)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="addBackgroundColor" id="tracetool/TraceNodeEx#addBackgroundColor(Ljava.awt.Color;I)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="addBackgroundColor" id="tracetool/TraceNodeEx#addBackgroundColor(Ljava.awt.Color;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="addCaller" id="tracetool/TraceNodeEx#addCaller()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="addCaller" id="tracetool/TraceNodeEx#addCaller(I)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="addDump" id="tracetool/TraceNodeEx#addDump(Ljava.lang.String;[BII)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="addDump" id="tracetool/TraceNodeEx#addDump(Ljava.lang.String;[BI)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="addFontDetail" id="tracetool/TraceNodeEx#addFontDetail(IZZLjava.awt.Color;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="addFontDetail" id="tracetool/TraceNodeEx#addFontDetail(IZZLjava.awt.Color;I)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="addFontDetail" id="tracetool/TraceNodeEx#addFontDetail(IZZ)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="addFontDetail" id="tracetool/TraceNodeEx#addFontDetail(IZZLjava.awt.Color;ILjava.lang.String;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="addFontDetail" id="tracetool/TraceNodeEx#addFontDetail(IZ)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="addObject" id="tracetool/TraceNodeEx#addObject(Ljava.lang.Object;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="addObject" id="tracetool/TraceNodeEx#addObject(Ljava.lang.Object;I)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="addStackTrace" id="tracetool/TraceNodeEx#addStackTrace(I)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="addStackTrace" id="tracetool/TraceNodeEx#addStackTrace()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="addTable" id="tracetool/TraceNodeEx#addTable(Ljava.lang.Object;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="addTable" id="tracetool/TraceNodeEx#addTable(Ltracetool.TraceTable;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="addType" id="tracetool/TraceNodeEx#addType(Ljava.lang.Class;I)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="addType" id="tracetool/TraceNodeEx#addType(Ljava.lang.Class;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="addValue" id="tracetool/TraceNodeEx#addValue(Ljava.lang.Object;ZILjava.lang.String;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="addValue" id="tracetool/TraceNodeEx#addValue(Ljava.lang.Object;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="addValue" id="tracetool/TraceNodeEx#addValue(Ljava.lang.Object;ZI)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="addValue" id="tracetool/TraceNodeEx#addValue(Ljava.lang.Object;Z)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="addXML" id="tracetool/TraceNodeEx#addXML(Ljava.lang.String;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="resend" id="tracetool/TraceNodeEx#resend()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="send" id="tracetool/TraceNodeEx#send()"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel" size="0,0"/>
+    <sourceConnections xsi:type="editmodel:GeneralizationEditModel" id="tracetool/TraceNodeBase&lt;-tracetool/TraceNodeEx" source="//@children.6" target="//@children.3" targetEnd="//@children.6/@sourceConnections.0/@children.1" sourceEnd="//@children.6/@sourceConnections.0/@children.0" connectionRouterKind="Manual">
+      <children xsi:type="editmodel:AssociationEndEditModel" location="99,0" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="5,171"/>
+    </sourceConnections>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showStaticInnerClasses="true" packageIndication="3" showAttributeProperty="true"/>
+  </children>
+  <children xsi:type="editmodel:ClassEditModel" name="WinTrace" location="510,450" size="136,603" id="tracetool/WinTrace" runTimeClassModel="saveToXml(Ljava.lang.String;Ljava.lang.String;),clearAll(),close(),setMultiColumn(),WinTrace(Ljava.lang.String;Ljava.lang.String;),gotoLastNode(),applyFilter(ZZZ),displayWin(),findNext(Z),error(),createResource(IIILjava.lang.String;),loadXml(Ljava.lang.String;),gotoFirstNode(),addFilter(IILjava.lang.String;),warning(),gotoBookmark(I),linkToPlugin(Ljava.lang.String;I),debug(),setTextResource(ILjava.lang.String;),setColumnsTitle(Ljava.lang.String;),disableResource(I),saveToXml(Ljava.lang.String;),WinTrace(),setColumnsWidth(Ljava.lang.String;),setLogFile(Ljava.lang.String;I),setLogFile(Ljava.lang.String;II),clearFilter(),setMultiColumn(I),saveToTextfile(Ljava.lang.String;),clearBookmark()">
+    <children xsi:type="editmodel:CompartmentEditModel" size="0,0"/>
+    <children xsi:type="editmodel:CompartmentEditModel" size="113,540">
+      <children xsi:type="editmodel:MethodEditModel" name="WinTrace" id="tracetool/WinTrace#WinTrace(Ljava.lang.String;Ljava.lang.String;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="WinTrace" id="tracetool/WinTrace#WinTrace()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="addFilter" id="tracetool/WinTrace#addFilter(IILjava.lang.String;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="applyFilter" id="tracetool/WinTrace#applyFilter(ZZZ)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="clearAll" id="tracetool/WinTrace#clearAll()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="clearBookmark" id="tracetool/WinTrace#clearBookmark()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="clearFilter" id="tracetool/WinTrace#clearFilter()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="close" id="tracetool/WinTrace#close()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="createResource" id="tracetool/WinTrace#createResource(IIILjava.lang.String;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="debug" id="tracetool/WinTrace#debug()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="disableResource" id="tracetool/WinTrace#disableResource(I)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="displayWin" id="tracetool/WinTrace#displayWin()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="error" id="tracetool/WinTrace#error()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="findNext" id="tracetool/WinTrace#findNext(Z)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="gotoBookmark" id="tracetool/WinTrace#gotoBookmark(I)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="gotoFirstNode" id="tracetool/WinTrace#gotoFirstNode()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="gotoLastNode" id="tracetool/WinTrace#gotoLastNode()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="linkToPlugin" id="tracetool/WinTrace#linkToPlugin(Ljava.lang.String;I)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="loadXml" id="tracetool/WinTrace#loadXml(Ljava.lang.String;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="saveToTextfile" id="tracetool/WinTrace#saveToTextfile(Ljava.lang.String;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="saveToXml" id="tracetool/WinTrace#saveToXml(Ljava.lang.String;Ljava.lang.String;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="saveToXml" id="tracetool/WinTrace#saveToXml(Ljava.lang.String;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setColumnsTitle" id="tracetool/WinTrace#setColumnsTitle(Ljava.lang.String;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setColumnsWidth" id="tracetool/WinTrace#setColumnsWidth(Ljava.lang.String;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setLogFile" id="tracetool/WinTrace#setLogFile(Ljava.lang.String;II)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setLogFile" id="tracetool/WinTrace#setLogFile(Ljava.lang.String;I)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setMultiColumn" id="tracetool/WinTrace#setMultiColumn(I)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setMultiColumn" id="tracetool/WinTrace#setMultiColumn()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setTextResource" id="tracetool/WinTrace#setTextResource(ILjava.lang.String;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="warning" id="tracetool/WinTrace#warning()"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel" size="0,0"/>
+    <sourceConnections xsi:type="editmodel:GeneralizationEditModel" autoLocated="true" id="tracetool/TraceToSend&lt;-tracetool/WinTrace" source="//@children.7" target="//@children.4" targetEnd="//@children.7/@sourceConnections.0/@children.1" sourceEnd="//@children.7/@sourceConnections.0/@children.0" connectionRouterKind="Manual">
+      <children xsi:type="editmodel:AssociationEndEditModel" location="136,294" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="0,399"/>
+    </sourceConnections>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showStaticInnerClasses="true" packageIndication="3" showAttributeProperty="true"/>
+  </children>
+  <children xsi:type="editmodel:ClassEditModel" name="SendMode" location="491,54" size="110,89" id="tracetool/SendMode" runTimeClassModel="socket,none">
+    <children xsi:type="editmodel:CompartmentEditModel" size="69,36">
+      <children xsi:type="editmodel:AttributeEditModel" name="none" id="tracetool/SendMode#none"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="socket" id="tracetool/SendMode#socket"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel" size="0,0"/>
+    <children xsi:type="editmodel:CompartmentEditModel" size="0,0"/>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showStaticInnerClasses="true" packageIndication="3" showAttributeProperty="true"/>
+  </children>
+  <children xsi:type="editmodel:ClassEditModel" name="TraceDisplayFlags" location="919,57" size="172,197" id="tracetool/TraceDisplayFlags" runTimeClassModel="showModifiers,showFields,showMethods,showClassInfo,showNonPublic,showEvents,showCustomAttributes,showInheritedMembers">
+    <children xsi:type="editmodel:CompartmentEditModel" size="149,144">
+      <children xsi:type="editmodel:AttributeEditModel" name="showClassInfo" id="tracetool/TraceDisplayFlags#showClassInfo"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="showCustomAttributes" id="tracetool/TraceDisplayFlags#showCustomAttributes"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="showEvents" id="tracetool/TraceDisplayFlags#showEvents"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="showFields" id="tracetool/TraceDisplayFlags#showFields"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="showInheritedMembers" id="tracetool/TraceDisplayFlags#showInheritedMembers"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="showMethods" id="tracetool/TraceDisplayFlags#showMethods"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="showModifiers" id="tracetool/TraceDisplayFlags#showModifiers"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="showNonPublic" id="tracetool/TraceDisplayFlags#showNonPublic"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel" size="0,0"/>
+    <children xsi:type="editmodel:CompartmentEditModel" size="0,0"/>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showStaticInnerClasses="true" packageIndication="3" showAttributeProperty="true"/>
+  </children>
+  <children xsi:type="editmodel:ClassEditModel" name="TraceTable" location="32,120" size="125,135" id="tracetool/TraceTable" runTimeClassModel="addRowData(Ljava.lang.String;),addColumnTitle(Ljava.lang.String;),addRow(),TraceTable()">
+    <children xsi:type="editmodel:CompartmentEditModel" size="0,0"/>
+    <children xsi:type="editmodel:CompartmentEditModel" size="102,72">
+      <children xsi:type="editmodel:MethodEditModel" name="TraceTable" id="tracetool/TraceTable#TraceTable()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="addColumnTitle" id="tracetool/TraceTable#addColumnTitle(Ljava.lang.String;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="addRow" id="tracetool/TraceTable#addRow()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="addRowData" id="tracetool/TraceTable#addRowData(Ljava.lang.String;)"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel" size="0,0"/>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showStaticInnerClasses="true" packageIndication="3" showAttributeProperty="true"/>
+  </children>
+  <children xsi:type="editmodel:ClassEditModel" name="TTraceOptions" location="195,30" size="171,233" id="tracetool/TTraceOptions" runTimeClassModel="sendDate,sendMode,sendPrivate,sendFunctions,sendThreadName,socketHost,socketPort,sendInherited,objectTreeDepth,socketUDP">
+    <children xsi:type="editmodel:CompartmentEditModel" size="148,180">
+      <children xsi:type="editmodel:AttributeEditModel" name="objectTreeDepth" id="tracetool/TTraceOptions#objectTreeDepth"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="sendDate" id="tracetool/TTraceOptions#sendDate"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="sendFunctions" id="tracetool/TTraceOptions#sendFunctions"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="sendInherited" id="tracetool/TTraceOptions#sendInherited"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="sendMode" id="tracetool/TTraceOptions#sendMode"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="sendPrivate" id="tracetool/TTraceOptions#sendPrivate"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="sendThreadName" id="tracetool/TTraceOptions#sendThreadName"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="socketHost" id="tracetool/TTraceOptions#socketHost"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="socketPort" id="tracetool/TTraceOptions#socketPort"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="socketUDP" id="tracetool/TTraceOptions#socketUDP"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel" size="0,0"/>
+    <children xsi:type="editmodel:CompartmentEditModel" size="0,0"/>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showStaticInnerClasses="true" packageIndication="3" showAttributeProperty="true"/>
+  </children>
+  <diagramOptions xsi:type="options:ClassDiagramOptions" properties="wireOptions=1;Product=eUML2" autoName="false"/>
+  <boardSetting snapToGeometry="true" gridEnabled="true" gridSpacing="15,15" gridOrigin="0,0" rulerUnit="pixel" gridVisibility="false">
+    <leftRuler/>
+    <topRuler/>
+  </boardSetting>
+  <classDiagramPreferences xsi:type="editmodel:UMLClassDiagramPreference" showPopupBars="true" showConnectionHandles="true" attributeSorter="Natural" methodSorter="Natural" showClassStereotype="true" showPackageStereotype="true" showDependencyStereotype="true" showInterfaceStereotype="true" innerClassSorter="Natural" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showStaticInnerClasses="true" packageIndication="3" showAttributeProperty="true"/>
+</editmodel:ClassDiagramEditModel>

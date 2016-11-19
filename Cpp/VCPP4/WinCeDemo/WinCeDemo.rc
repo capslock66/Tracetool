@@ -1,0 +1,378 @@
+//Microsoft eMbedded Visual C++ generated resource script.
+//
+#include "resource.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#include "afxres.h"
+#include "newres.h"
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// English (U.S.) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
+#ifdef _WIN32
+LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
+#pragma code_page(1252)
+#endif //_WIN32
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Menu
+//
+
+IDR_MENUBAR MENU DISCARDABLE 
+BEGIN
+    MENUITEM "",                            ID_MENUITEM32771
+END
+
+IDM_FILEINFO MENU DISCARDABLE 
+BEGIN
+    POPUP "File"
+    BEGIN
+        MENUITEM "E&xit",                       IDM_FILE_EXIT
+    END
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Data
+//
+
+IDR_MENUBAR RCDATA DISCARDABLE 
+BEGIN
+    0x0084, 0x0001, 0xfffe, 0x8003, 0x0004, 0x0010, 0x8005, 0x0000, 0xffff
+
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_SHEET DIALOGEX 0, 0, 146, 105
+STYLE DS_SETFOREGROUND | WS_VISIBLE | WS_CAPTION | WS_SYSMENU
+EXSTYLE WS_EX_APPWINDOW | 0x80000000L
+CAPTION "WinCeDemo"
+FONT 8, "System"
+BEGIN
+END
+
+
+#ifndef _MAC
+/////////////////////////////////////////////////////////////////////////////
+//
+// Version
+//
+
+VS_VERSION_INFO VERSIONINFO
+ FILEVERSION 1,0,0,1
+ PRODUCTVERSION 1,0,0,1
+ FILEFLAGSMASK 0x3fL
+#ifdef _DEBUG
+ FILEFLAGS 0x1L
+#else
+ FILEFLAGS 0x0L
+#endif
+ FILEOS 0x4L
+ FILETYPE 0x1L
+ FILESUBTYPE 0x0L
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "040904B0"
+        BEGIN
+            VALUE "CompanyName", " \0"
+            VALUE "FileDescription", "WinCeDemo WCE MFC Application\0"
+            VALUE "FileVersion", "1, 0, 0, 1\0"
+            VALUE "InternalName", "WinCeDemo\0"
+            VALUE "LegalCopyright", "Copyright © 2005\0"
+            VALUE "LegalTrademarks", "\0"
+            VALUE "OriginalFilename", "WinCeDemo.exe\0"
+            VALUE "ProductName", "WinCeDemo Application\0"
+            VALUE "ProductVersion", "1, 0, 0, 1\0"
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x409, 1200
+    END
+END
+
+#endif    // !_MAC
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO DISCARDABLE 
+BEGIN
+    IDD_SHEET, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 139
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 98
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// String Table
+//
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    IDP_SOCKETS_INIT_FAILED "Windows CE sockets initialization failed."
+END
+
+#endif    // English (U.S.) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+/////////////////////////////////////////////////////////////////////////////
+// French (Belgium) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_FRB)
+#ifdef _WIN32
+LANGUAGE LANG_FRENCH, SUBLANG_FRENCH_BELGIAN
+#pragma code_page(1252)
+#endif //_WIN32
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Menu
+//
+
+IDM_MENUBAR1 MENU DISCARDABLE 
+BEGIN
+    POPUP "File"
+    BEGIN
+        MENUITEM "Exit",                        ID_FILE_EXIT
+    END
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Data
+//
+
+IDM_MENUBAR1 RCDATA DISCARDABLE 
+BEGIN
+    0x0085, 0x0001, 0xfffe, 0x9c48, 0x0004, 0x0018, 0x8007, 0x0000, 0x0000
+
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_BASIC DIALOG DISCARDABLE  0, 0, 153, 139
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Basic"
+FONT 8, "System"
+BEGIN
+    PUSHBUTTON      "Sample traces",IDC_SAMPLE1,7,7,54,14
+    PUSHBUTTON      "Indent",IDC_INDENT,72,7,53,14
+    PUSHBUTTON      "SaveToText (""c:\\Log.txt"")",IDC_MAINSAVETEXT,7,28,118,
+                    14
+    PUSHBUTTON      "SaveToXml (""c:\\Log.xml"")",IDC_MAINSAVETOXML,7,61,118,
+                    14
+    PUSHBUTTON      "LoadXml (c:\\Log.xml"")",IDC_MAINLOADXML,7,84,118,14
+    PUSHBUTTON      "Show viewer",IDC_SHOWVIEWER,7,109,50,14
+    PUSHBUTTON      "Clear main traces",IDC_MAINCLEAR,61,109,64,14
+END
+
+IDD_NODEEX DIALOG DISCARDABLE  0, 0, 153, 139
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Nodes Op."
+FONT 8, "System"
+BEGIN
+    DEFPUSHBUTTON   "Start 1",IDC_START1,3,2,50,14
+    PUSHBUTTON      "Resend()",IDC_RESEND,27,20,50,14
+    PUSHBUTTON      "SetSelected()",IDC_SETSELECTED,27,38,50,14
+    PUSHBUTTON      "Start 2",IDC_START2,3,60,50,14
+    PUSHBUTTON      "Append()",IDC_APPEND,27,79,50,14
+    PUSHBUTTON      "Show()",IDC_SHOWNODE,27,97,50,14
+END
+
+IDD_MULTIPAGES DIALOG DISCARDABLE  0, 0, 153, 139
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Pages"
+FONT 8, "System"
+BEGIN
+    PUSHBUTTON      "Display that window on the viewer",IDC_DISPLAYWIN,7,33,
+                    117,14
+    PUSHBUTTON      "SaveToText(...)",IDC_SAVETEXT,7,82,56,14
+    PUSHBUTTON      "SaveToXml(...)",IDC_SAVETOXML,68,82,56,14
+    PUSHBUTTON      "LoadXml(...)",IDC_LOADXML,7,109,56,14
+    PUSHBUTTON      "Say Hello",IDC_SAYHELLO,32,58,63,14
+    PUSHBUTTON      "Multi col test",IDC_MULTICOL,66,109,58,14
+    DEFPUSHBUTTON   "Create a new trace window",IDC_NEWWIN,7,7,117,14
+END
+
+IDD_WATCH DIALOG DISCARDABLE  0, 0, 153, 139
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Watches"
+FONT 8, "System"
+BEGIN
+    LTEXT           "Main Watch window",IDC_STATIC,4,2,122,8
+    PUSHBUTTON      "Send Watches",IDC_SEND,7,17,87,14
+    PUSHBUTTON      "Clear Watches",IDC_CLEAR,7,38,56,14
+    PUSHBUTTON      "Display Watches",IDC_DISP,68,38,58,14
+    PUSHBUTTON      "Create new WinWatch",IDC_WINWATCH_CREATE,7,68,109,14
+    PUSHBUTTON      "Send Watches",IDC_WINWATCH_SEND,7,89,87,14
+    PUSHBUTTON      "Clear Watches",IDC_WINWATCH_CLEAR,7,109,56,14
+    PUSHBUTTON      "Display Watches",IDC_WINWATCH_DISPLAY,66,109,60,14
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO DISCARDABLE 
+BEGIN
+    IDD_BASIC, DIALOG
+    BEGIN
+        HORZGUIDE, 123
+    END
+
+    IDD_NODEEX, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 146
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 132
+    END
+
+    IDD_MULTIPAGES, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 122
+        VERTGUIDE, 63
+        VERTGUIDE, 124
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 123
+        HORZGUIDE, 123
+    END
+
+    IDD_WATCH, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 126
+        VERTGUIDE, 63
+        VERTGUIDE, 126
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 122
+        HORZGUIDE, 123
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "resource.h\0"
+END
+
+2 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "#include ""afxres.h""\r\n"
+    "#include ""newres.h""\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "#define _AFX_NO_SPLITTER_RESOURCES\r\n"
+    "#define _AFX_NO_OLE_RESOURCES\r\n"
+    "#define _AFX_NO_TRACKER_RESOURCES\r\n"
+    "#define _AFX_NO_PROPERTY_RESOURCES\r\n"
+    "\r\n"
+    "#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)\r\n"
+    "#ifdef _WIN32\r\n"
+    "LANGUAGE 9, 1\r\n"
+    "#pragma code_page(1252)\r\n"
+    "#endif //_WIN32\r\n"
+    "#include ""res\\WinCeDemo.rc2""  // non-Microsoft eMbedded Visual C++ edited resources\r\n"
+    "#include ""afxres.rc""         // Standard components\r\n"
+    "#include ""wceres.rc""         // WCE-specific components\r\n"
+    "#endif\r\n"
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Icon
+//
+
+// Icon with lowest ID value placed first to ensure application icon
+// remains consistent on all systems.
+IDR_MAINFRAME           ICON    DISCARDABLE     "res\\WinCeDemo.ico"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// String Table
+//
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    IDS_CAP_FILE            "File"
+END
+
+#endif    // French (Belgium) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+#define _AFX_NO_SPLITTER_RESOURCES
+#define _AFX_NO_OLE_RESOURCES
+#define _AFX_NO_TRACKER_RESOURCES
+#define _AFX_NO_PROPERTY_RESOURCES
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
+#ifdef _WIN32
+LANGUAGE 9, 1
+#pragma code_page(1252)
+#endif //_WIN32
+#include "res\WinCeDemo.rc2"  // non-Microsoft eMbedded Visual C++ edited resources
+#include "afxres.rc"         // Standard components
+#include "wceres.rc"         // WCE-specific components
+#endif
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+

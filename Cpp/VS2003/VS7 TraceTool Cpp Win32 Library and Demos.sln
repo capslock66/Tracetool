@@ -1,0 +1,66 @@
+Microsoft Visual Studio Solution File, Format Version 8.00
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CppWin32Plugin", "SamplePlugin\CppWin32Plugin.vcproj", "{3B2EE13E-905B-4334-9D4F-63EA63E109B5}"
+	ProjectSection(ProjectDependencies) = postProject
+		{2B98C36A-41F1-4C75-A142-5D1B5585CF3D} = {2B98C36A-41F1-4C75-A142-5D1B5585CF3D}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ClipBrdHistory", "ClipboardHistory\ClipBrdHistory.vcproj", "{3B2EE13E-905B-4334-9D4F-63EA63E109B5}"
+	ProjectSection(ProjectDependencies) = postProject
+		{2B98C36A-41F1-4C75-A142-5D1B5585CF3D} = {2B98C36A-41F1-4C75-A142-5D1B5585CF3D}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Vs7_WinMfc_Demo", "Vs7_WinMfc_Demo\Win32Demo.vcproj", "{BC6CBBF1-E5AF-4A7D-9139-A9AAB9AF32FF}"
+	ProjectSection(ProjectDependencies) = postProject
+		{2B98C36A-41F1-4C75-A142-5D1B5585CF3D} = {2B98C36A-41F1-4C75-A142-5D1B5585CF3D}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Vs7_Win_Lib", "VS7_Win_Lib\VS7_Win_Lib.vcproj", "{2B98C36A-41F1-4C75-A142-5D1B5585CF3D}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfiguration) = preSolution
+		Debug = Debug
+		Release = Release
+		Unicode Debug = Unicode Debug
+		Unicode Release = Unicode Release
+	EndGlobalSection
+	GlobalSection(ProjectConfiguration) = postSolution
+		{3B2EE13E-905B-4334-9D4F-63EA63E109B5}.Debug.ActiveCfg = Debug|Win32
+		{3B2EE13E-905B-4334-9D4F-63EA63E109B5}.Debug.Build.0 = Debug|Win32
+		{3B2EE13E-905B-4334-9D4F-63EA63E109B5}.Release.ActiveCfg = Release|Win32
+		{3B2EE13E-905B-4334-9D4F-63EA63E109B5}.Release.Build.0 = Release|Win32
+		{3B2EE13E-905B-4334-9D4F-63EA63E109B5}.Unicode Debug.ActiveCfg = Debug|Win32
+		{3B2EE13E-905B-4334-9D4F-63EA63E109B5}.Unicode Debug.Build.0 = Debug|Win32
+		{3B2EE13E-905B-4334-9D4F-63EA63E109B5}.Unicode Release.ActiveCfg = Release|Win32
+		{3B2EE13E-905B-4334-9D4F-63EA63E109B5}.Unicode Release.Build.0 = Release|Win32
+		{3B2EE13E-905B-4334-9D4F-63EA63E109B5}.Debug.ActiveCfg = Debug|Win32
+		{3B2EE13E-905B-4334-9D4F-63EA63E109B5}.Debug.Build.0 = Debug|Win32
+		{3B2EE13E-905B-4334-9D4F-63EA63E109B5}.Release.ActiveCfg = Release|Win32
+		{3B2EE13E-905B-4334-9D4F-63EA63E109B5}.Release.Build.0 = Release|Win32
+		{3B2EE13E-905B-4334-9D4F-63EA63E109B5}.Unicode Debug.ActiveCfg = Debug|Win32
+		{3B2EE13E-905B-4334-9D4F-63EA63E109B5}.Unicode Debug.Build.0 = Debug|Win32
+		{3B2EE13E-905B-4334-9D4F-63EA63E109B5}.Unicode Release.ActiveCfg = Release|Win32
+		{3B2EE13E-905B-4334-9D4F-63EA63E109B5}.Unicode Release.Build.0 = Release|Win32
+		{BC6CBBF1-E5AF-4A7D-9139-A9AAB9AF32FF}.Debug.ActiveCfg = Debug|Win32
+		{BC6CBBF1-E5AF-4A7D-9139-A9AAB9AF32FF}.Debug.Build.0 = Debug|Win32
+		{BC6CBBF1-E5AF-4A7D-9139-A9AAB9AF32FF}.Release.ActiveCfg = Release|Win32
+		{BC6CBBF1-E5AF-4A7D-9139-A9AAB9AF32FF}.Release.Build.0 = Release|Win32
+		{BC6CBBF1-E5AF-4A7D-9139-A9AAB9AF32FF}.Unicode Debug.ActiveCfg = Debug|Win32
+		{BC6CBBF1-E5AF-4A7D-9139-A9AAB9AF32FF}.Unicode Debug.Build.0 = Debug|Win32
+		{BC6CBBF1-E5AF-4A7D-9139-A9AAB9AF32FF}.Unicode Release.ActiveCfg = Release|Win32
+		{BC6CBBF1-E5AF-4A7D-9139-A9AAB9AF32FF}.Unicode Release.Build.0 = Release|Win32
+		{2B98C36A-41F1-4C75-A142-5D1B5585CF3D}.Debug.ActiveCfg = Debug|Win32
+		{2B98C36A-41F1-4C75-A142-5D1B5585CF3D}.Debug.Build.0 = Debug|Win32
+		{2B98C36A-41F1-4C75-A142-5D1B5585CF3D}.Release.ActiveCfg = Release|Win32
+		{2B98C36A-41F1-4C75-A142-5D1B5585CF3D}.Release.Build.0 = Release|Win32
+		{2B98C36A-41F1-4C75-A142-5D1B5585CF3D}.Unicode Debug.ActiveCfg = Debug|Win32
+		{2B98C36A-41F1-4C75-A142-5D1B5585CF3D}.Unicode Debug.Build.0 = Debug|Win32
+		{2B98C36A-41F1-4C75-A142-5D1B5585CF3D}.Unicode Release.ActiveCfg = Release|Win32
+		{2B98C36A-41F1-4C75-A142-5D1B5585CF3D}.Unicode Release.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+	EndGlobalSection
+	GlobalSection(ExtensibilityAddIns) = postSolution
+	EndGlobalSection
+EndGlobal

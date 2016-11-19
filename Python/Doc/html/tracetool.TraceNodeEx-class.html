@@ -1,0 +1,910 @@
+<?xml version="1.0" encoding="ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+          "DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>tracetool.TraceNodeEx</title>
+  <link rel="stylesheet" href="epydoc.css" type="text/css" />
+  <script type="text/javascript" src="epydoc.js"></script>
+</head>
+
+<body bgcolor="white" text="black" link="blue" vlink="#204080"
+      alink="#204080">
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+  <!-- Home link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="tracetool-module.html">Home</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Project homepage -->
+      <th class="navbar" align="right" width="100%">
+        <table border="0" cellpadding="0" cellspacing="0">
+          <tr><th class="navbar" align="center"
+            >tracetool for python</th>
+          </tr></table></th>
+  </tr>
+</table>
+<table width="100%" cellpadding="0" cellspacing="0">
+  <tr valign="top">
+    <td width="100%">
+      <span class="breadcrumbs">
+        <a href="tracetool-module.html">Module&nbsp;tracetool</a> ::
+        Class&nbsp;TraceNodeEx
+      </span>
+    </td>
+    <td>
+      <table cellpadding="0" cellspacing="0">
+        <!-- hide/show private -->
+        <tr><td align="right"><span class="options">[<a href="javascript:void(0);" class="privatelink"
+    onclick="toggle_private();">hide&nbsp;private</a>]</span></td></tr>
+        <tr><td align="right"><span class="options"
+            >[<a href="frames.html" target="_top">frames</a
+            >]&nbsp;|&nbsp;<a href="tracetool.TraceNodeEx-class.html"
+            target="_top">no&nbsp;frames</a>]</span></td></tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<!-- ==================== CLASS DESCRIPTION ==================== -->
+<h1 class="epydoc">Class TraceNodeEx</h1><p class="nomargin-top"><span class="codelink"><a href="tracetool-pysrc.html#TraceNodeEx">source&nbsp;code</a></span></p>
+<pre class="base-tree">
+   object --+    
+            |    
+<a href="tracetool.TraceNodeBase-class.html">TraceNodeBase</a> --+
+                |
+               <strong class="uidshort">TraceNodeEx</strong>
+</pre>
+
+<hr />
+<p>Alternate way to send traces : prepare a TraceNodeEx with all 
+  properties then send it.</p>
+  <p>Sample code :</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span>node = TraceNodeEx(TTrace.debug)                                   <span class="py-comment"># create a node </span>
+<span class="py-prompt">&gt;&gt;&gt; </span>node.leftMsg = <span class="py-string">&quot;Hello&quot;</span>                                             <span class="py-comment"># set left message</span>
+<span class="py-prompt">&gt;&gt;&gt; </span>node.rightMsg = <span class="py-string">&quot;World&quot;</span>                                            <span class="py-comment"># set right message </span>
+<span class="py-prompt">&gt;&gt;&gt; </span>node.addFontDetail(3, False, False, TTrace.RgbColors[<span class="py-string">&quot;Green&quot;</span>])     <span class="py-comment"># change font color for a specific column</span>
+<span class="py-prompt">&gt;&gt;&gt; </span>node.iconIndex = 8                                                 <span class="py-comment"># set icon</span>
+<span class="py-prompt">&gt;&gt;&gt; </span>member = node.members.add(<span class="py-string">&quot;My Members&quot;</span>, <span class="py-string">&quot;col2&quot;</span>, <span class="py-string">&quot;col3&quot;</span>)            <span class="py-comment"># add member</span>
+<span class="py-prompt">&gt;&gt;&gt; </span>member.setFontDetail(0, True)                                      <span class="py-comment"># set first column to bold</span>
+<span class="py-prompt">&gt;&gt;&gt; </span>member.setFontDetail(1, False, False, TTrace.RgbColors[<span class="py-string">&quot;Green&quot;</span>])   <span class="py-comment"># set second column to green</span>
+<span class="py-prompt">&gt;&gt;&gt; </span>submember = member.add(<span class="py-string">&quot;Sub members&quot;</span>)                              <span class="py-comment"># add sub member node</span>
+<span class="py-prompt">&gt;&gt;&gt; </span>submember.setFontDetail(0, False, True)                            <span class="py-comment"># set first column to Italic</span>
+<span class="py-prompt">&gt;&gt;&gt; </span>node.addStackTrace()                                               <span class="py-comment"># add stack info</span>
+<span class="py-prompt">&gt;&gt;&gt; </span>sendNode = node.send()                                             <span class="py-comment"># Finally send the node</span></pre>
+
+<!-- ==================== INSTANCE METHODS ==================== -->
+<a name="section-InstanceMethods"></a>
+<table class="summary" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Instance Methods</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-InstanceMethods"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="tracetool.TraceNodeEx-class.html#__init__" class="summary-sig-name">__init__</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">source</span>=<span class="summary-sig-default">None</span>,
+        <span class="summary-sig-arg">generateUniqueId</span>=<span class="summary-sig-default">False</span>)</span><br />
+      TraceNodeEx constructor : create a Node with an unique ID</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="tracetool-pysrc.html#TraceNodeEx.__init__">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="tracetool.TraceNodeEx-class.html#addObject" class="summary-sig-name">addObject</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">objToSend</span>,
+        <span class="summary-sig-arg">bypassFields</span>=<span class="summary-sig-default">None</span>)</span><br />
+      Call addObject to fill the &quot;member&quot; tree with the object 
+      value.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="tracetool-pysrc.html#TraceNodeEx.addObject">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="tracetool.TraceNodeEx-class.html#addValue" class="summary-sig-name">addValue</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">objToSend</span>,
+        <span class="summary-sig-arg">sendPrivate</span>=<span class="summary-sig-default">False</span>,
+        <span class="summary-sig-arg">maxLevel</span>=<span class="summary-sig-default">3</span>,
+        <span class="summary-sig-arg">title</span>=<span class="summary-sig-default">None</span>,
+        <span class="summary-sig-arg">alreadyParsedObject</span>=<span class="summary-sig-default">None</span>)</span><br />
+      Send Private and public values of an object.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="tracetool-pysrc.html#TraceNodeEx.addValue">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="tracetool.TraceNodeEx-class.html#_innerAddValue" class="summary-sig-name" onclick="show_private();">_innerAddValue</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">objToSend</span>,
+        <span class="summary-sig-arg">upperNode</span>,
+        <span class="summary-sig-arg">maxLevel</span>,
+        <span class="summary-sig-arg">sendPrivate</span>,
+        <span class="summary-sig-arg">alreadyParsedObject</span>)</span><br />
+      internal AddValue (recursive)</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="tracetool-pysrc.html#TraceNodeEx._innerAddValue">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="tracetool.TraceNodeEx-class.html#addTable" class="summary-sig-name">addTable</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">table</span>)</span><br />
+      Add table to node</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="tracetool-pysrc.html#TraceNodeEx.addTable">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="_innerAddTable"></a><span class="summary-sig-name">_innerAddTable</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">tableMembers</span>,
+        <span class="summary-sig-arg">rowObject</span>,
+        <span class="summary-sig-arg">rowNum</span>)</span></td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="tracetool-pysrc.html#TraceNodeEx._innerAddTable">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="tracetool.TraceNodeEx-class.html#addDump" class="summary-sig-name">addDump</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">bytesBuffer</span>,
+        <span class="summary-sig-arg">shortTitle</span>=<span class="summary-sig-default"><code class="variable-quote">'</code><code class="variable-string">Dump</code><code class="variable-quote">'</code></span>,
+        <span class="summary-sig-arg">index</span>=<span class="summary-sig-default">0</span>,
+        <span class="summary-sig-arg">count</span>=<span class="summary-sig-default">0</span>)</span><br />
+      Display dump</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="tracetool-pysrc.html#TraceNodeEx.addDump">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="addStackTrace"></a><span class="summary-sig-name">addStackTrace</span>(<span class="summary-sig-arg">self</span>)</span><br />
+      add stack trace</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="tracetool-pysrc.html#TraceNodeEx.addStackTrace">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="tracetool.TraceNodeEx-class.html#addCaller" class="summary-sig-name">addCaller</a>(<span class="summary-sig-arg">self</span>)</span><br />
+      show caller information.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="tracetool-pysrc.html#TraceNodeEx.addCaller">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="tracetool.TraceNodeEx-class.html#addXML" class="summary-sig-name">addXML</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">xml</span>)</span><br />
+      Add xml text</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="tracetool-pysrc.html#TraceNodeEx.addXML">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="tracetool.TraceNodeEx-class.html#addBackgroundColor" class="summary-sig-name">addBackgroundColor</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">color</span>,
+        <span class="summary-sig-arg">colId</span>=<span class="summary-sig-default">-1</span>)</span><br />
+      Change background font color</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="tracetool-pysrc.html#TraceNodeEx.addBackgroundColor">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="tracetool.TraceNodeEx-class.html#addFontDetail" class="summary-sig-name">addFontDetail</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">colId</span>,
+        <span class="summary-sig-arg">bold</span>=<span class="summary-sig-default">False</span>,
+        <span class="summary-sig-arg">italic</span>=<span class="summary-sig-default">False</span>,
+        <span class="summary-sig-arg">color</span>=<span class="summary-sig-default">-1</span>,
+        <span class="summary-sig-arg">size</span>=<span class="summary-sig-default">0</span>,
+        <span class="summary-sig-arg">fontName</span>=<span class="summary-sig-default"><code class="variable-quote">'</code><code class="variable-string"></code><code class="variable-quote">'</code></span>)</span><br />
+      Change font detail for an item in the trace</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="tracetool-pysrc.html#TraceNodeEx.addFontDetail">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="tracetool.TraceNodeEx-class.html#send" class="summary-sig-name">send</a>(<span class="summary-sig-arg">self</span>)</span><br />
+      Send the traceNodeEx to the viewer (left + right + members)</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="tracetool-pysrc.html#TraceNodeEx.send">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="resend"></a><span class="summary-sig-name">resend</span>(<span class="summary-sig-arg">self</span>)</span><br />
+      Re-send the trace to the viewer (only left and right message)</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="tracetool-pysrc.html#TraceNodeEx.resend">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+  <tr>
+    <td colspan="2" class="summary">
+    <p class="indent-wrapped-lines"><b>Inherited from <code>object</code></b>:
+      <code>__delattr__</code>,
+      <code>__format__</code>,
+      <code>__getattribute__</code>,
+      <code>__hash__</code>,
+      <code>__new__</code>,
+      <code>__reduce__</code>,
+      <code>__reduce_ex__</code>,
+      <code>__repr__</code>,
+      <code>__setattr__</code>,
+      <code>__sizeof__</code>,
+      <code>__str__</code>,
+      <code>__subclasshook__</code>
+      </p>
+    </td>
+  </tr>
+</table>
+<!-- ==================== INSTANCE VARIABLES ==================== -->
+<a name="section-InstanceVariables"></a>
+<table class="summary" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Instance Variables</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-InstanceVariables"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="parentNodeId"></a><span class="summary-name">parentNodeId</span><br />
+      Parent Node Id
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="leftMsg"></a><span class="summary-name">leftMsg</span><br />
+      Left message
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="rightMsg"></a><span class="summary-name">rightMsg</span><br />
+      right message (comment)
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="time"></a><span class="summary-name">time</span><br />
+      time
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="threadName"></a><span class="summary-name">threadName</span><br />
+      thread name
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="members"></a><span class="summary-name">members</span><br />
+      the root for the Member tree
+    </td>
+  </tr>
+<tr bgcolor="#e8f0f8" >
+  <th colspan="2" class="group-header"
+    >&nbsp;&nbsp;&nbsp;&nbsp;Inherited from <a href="tracetool.TraceNodeBase-class.html">TraceNodeBase</a></th></tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="tracetool.TraceNodeBase-class.html#enabled" class="summary-name">enabled</a><br />
+      When enabled is false, all traces are disabled.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="tracetool.TraceNodeBase-class.html#iconIndex" class="summary-name">iconIndex</a><br />
+      The index of the icon to use.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="tracetool.TraceNodeBase-class.html#id" class="summary-name">id</a><br />
+      The unique ID.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="tag"></a><span class="summary-name">tag</span><br />
+      User variable, provided for the convenience of developers
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="winTraceId"></a><span class="summary-name">winTraceId</span><br />
+      The parent win tree Id
+    </td>
+  </tr>
+</table>
+<!-- ==================== PROPERTIES ==================== -->
+<a name="section-Properties"></a>
+<table class="summary" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Properties</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-Properties"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+  <tr>
+    <td colspan="2" class="summary">
+    <p class="indent-wrapped-lines"><b>Inherited from <code>object</code></b>:
+      <code>__class__</code>
+      </p>
+    </td>
+  </tr>
+</table>
+<!-- ==================== METHOD DETAILS ==================== -->
+<a name="section-MethodDetails"></a>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Method Details</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-MethodDetails"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+</table>
+<a name="__init__"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">__init__</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">source</span>=<span class="sig-default">None</span>,
+        <span class="sig-arg">generateUniqueId</span>=<span class="sig-default">False</span>)</span>
+    <br /><em class="fname">(Constructor)</em>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="tracetool-pysrc.html#TraceNodeEx.__init__">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>TraceNodeEx constructor : create a Node with an unique ID</p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>source</code></strong> - In case of &quot;Copy constructor&quot; : source to duplicate, 
+          else None</li>
+        <li><strong class="pname"><code>generateUniqueId</code></strong> - If True, generated an unique id for the trace. If False an 
+          &quot;Copy constructor&quot; : same as the source</li>
+    </ul></dd>
+    <dt>Overrides:
+        object.__init__
+    </dt>
+  </dl>
+</td></tr></table>
+</div>
+<a name="addObject"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">addObject</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">objToSend</span>,
+        <span class="sig-arg">bypassFields</span>=<span class="sig-default">None</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="tracetool-pysrc.html#TraceNodeEx.addObject">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Call addObject to fill the &quot;member&quot; tree with the object 
+  value. To specify what to print, see the TraceOption flags Take care that
+  sendValue, sendObject , addValue and addObject functions are time 
+  consuming. Many informations are collected</p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>objToSend</code></strong> - the object to send.</li>
+        <li><strong class="pname"><code>bypassFields</code></strong> - Optional array of fieldName to don't print</li>
+    </ul></dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="addValue"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">addValue</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">objToSend</span>,
+        <span class="sig-arg">sendPrivate</span>=<span class="sig-default">False</span>,
+        <span class="sig-arg">maxLevel</span>=<span class="sig-default">3</span>,
+        <span class="sig-arg">title</span>=<span class="sig-default">None</span>,
+        <span class="sig-arg">alreadyParsedObject</span>=<span class="sig-default">None</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="tracetool-pysrc.html#TraceNodeEx.addValue">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Send Private and public values of an object. addValue is quite 
+  different from addObject : less verbal (no class info) but can show many 
+  level. Take care that sendValue, sendObject , addValue and addObject 
+  functions are time consuming. Many informations are collected</p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>objToSend</code></strong> - The object to examine</li>
+        <li><strong class="pname"><code>sendPrivate</code></strong> - flag to send private field</li>
+        <li><strong class="pname"><code>maxLevel</code></strong> - The number of sub element to display. Default is 3</li>
+        <li><strong class="pname"><code>title</code></strong> - Object title</li>
+        <li><strong class="pname"><code>alreadyParsedObject</code></strong> - List of already parsed objects</li>
+    </ul></dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="_innerAddValue"></a>
+<div class="private">
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">_innerAddValue</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">objToSend</span>,
+        <span class="sig-arg">upperNode</span>,
+        <span class="sig-arg">maxLevel</span>,
+        <span class="sig-arg">sendPrivate</span>,
+        <span class="sig-arg">alreadyParsedObject</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="tracetool-pysrc.html#TraceNodeEx._innerAddValue">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>internal AddValue (recursive)</p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>objToSend</code></strong> - The object to examine</li>
+        <li><strong class="pname"><code>upperNode</code></strong> - The upper node (recursive add sub objects)</li>
+        <li><strong class="pname"><code>maxLevel</code></strong> - The number of sub element to display.</li>
+        <li><strong class="pname"><code>sendPrivate</code></strong> - flag to send private field</li>
+        <li><strong class="pname"><code>alreadyParsedObject</code></strong> - List of already parsed objects</li>
+    </ul></dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="addTable"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">addTable</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">table</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="tracetool-pysrc.html#TraceNodeEx.addTable">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Add table to node</p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>table</code></strong> - Object collection(Array / Collection / Map) to send</li>
+    </ul></dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="addDump"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">addDump</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">bytesBuffer</span>,
+        <span class="sig-arg">shortTitle</span>=<span class="sig-default"><code class="variable-quote">'</code><code class="variable-string">Dump</code><code class="variable-quote">'</code></span>,
+        <span class="sig-arg">index</span>=<span class="sig-default">0</span>,
+        <span class="sig-arg">count</span>=<span class="sig-default">0</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="tracetool-pysrc.html#TraceNodeEx.addDump">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Display dump</p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>shortTitle</code></strong> - A short title displayed on top of the dump</li>
+        <li><strong class="pname"><code>bytesBuffer</code></strong> - The buffer to dump : string (single byte char or unicode) , 
+          bytearray or any array like object that has char or int elements</li>
+        <li><strong class="pname"><code>index</code></strong> - start index (default is first)</li>
+        <li><strong class="pname"><code>count</code></strong> - Number of byte to dump (default is all)</li>
+    </ul></dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="addCaller"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">addCaller</span>(<span class="sig-arg">self</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="tracetool-pysrc.html#TraceNodeEx.addCaller">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>show caller information. level 0 correspond at the first line of 
+  StackTrace(0) It's like the call stack, but display only 1 line</p>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="addXML"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">addXML</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">xml</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="tracetool-pysrc.html#TraceNodeEx.addXML">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Add xml text</p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>xml</code></strong> - xml text to send</li>
+    </ul></dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="addBackgroundColor"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">addBackgroundColor</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">color</span>,
+        <span class="sig-arg">colId</span>=<span class="sig-default">-1</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="tracetool-pysrc.html#TraceNodeEx.addBackgroundColor">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Change background font color</p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>color</code></strong> - xml background.-1 for the default color or tuple (R,G,B)</li>
+        <li><strong class="pname"><code>colId</code></strong> - Column index : All columns= -1,Icon=0, Time=1, thread=2, left 
+          msg=3, right msg =4 or user defined column</li>
+    </ul></dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="addFontDetail"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">addFontDetail</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">colId</span>,
+        <span class="sig-arg">bold</span>=<span class="sig-default">False</span>,
+        <span class="sig-arg">italic</span>=<span class="sig-default">False</span>,
+        <span class="sig-arg">color</span>=<span class="sig-default">-1</span>,
+        <span class="sig-arg">size</span>=<span class="sig-default">0</span>,
+        <span class="sig-arg">fontName</span>=<span class="sig-default"><code class="variable-quote">'</code><code class="variable-string"></code><code class="variable-quote">'</code></span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="tracetool-pysrc.html#TraceNodeEx.addFontDetail">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Change font detail for an item in the trace</p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>colId</code></strong> - Column index : All columns=-1, Icon=0, Time=1, thread=2, left 
+          msg=3, right msg =4 or user defined column</li>
+        <li><strong class="pname"><code>bold</code></strong> - Change font to bold</li>
+        <li><strong class="pname"><code>italic</code></strong> - Change font to Italic</li>
+        <li><strong class="pname"><code>color</code></strong> - Change Color. -1 for the default color or tuple (R,G,B)</li>
+        <li><strong class="pname"><code>size</code></strong> - Change font size, use zero to keep normal size</li>
+        <li><strong class="pname"><code>fontName</code></strong> - Change font name</li>
+    </ul></dd>
+    <dt>Returns:</dt>
+        <dd>The trace node</dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="send"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">send</span>(<span class="sig-arg">self</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="tracetool-pysrc.html#TraceNodeEx.send">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Send the traceNodeEx to the viewer (left + right + members)</p>
+  <dl class="fields">
+    <dt>Returns:</dt>
+        <dd>a traceNode</dd>
+  </dl>
+</td></tr></table>
+</div>
+<br />
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+  <!-- Home link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="tracetool-module.html">Home</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Project homepage -->
+      <th class="navbar" align="right" width="100%">
+        <table border="0" cellpadding="0" cellspacing="0">
+          <tr><th class="navbar" align="center"
+            >tracetool for python</th>
+          </tr></table></th>
+  </tr>
+</table>
+<table border="0" cellpadding="0" cellspacing="0" width="100%%">
+  <tr>
+    <td align="left" class="footer">
+    Generated by Epydoc 3.0.1 on Thu Dec 23 15:48:20 2010
+    </td>
+    <td align="right" class="footer">
+      <a target="mainFrame" href="http://epydoc.sourceforge.net"
+        >http://epydoc.sourceforge.net</a>
+    </td>
+  </tr>
+</table>
+
+<script type="text/javascript">
+  <!--
+  // Private objects are initially displayed (because if
+  // javascript is turned off then we want them to be
+  // visible); but by default, we want to hide them.  So hide
+  // them unless we have a cookie that says to show them.
+  checkCookie();
+  // -->
+</script>
+</body>
+</html>

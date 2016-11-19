@@ -1,0 +1,31 @@
+Microsoft Visual Studio Solution File, Format Version 9.00
+# Visual Studio 2005
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TraceToolEventSink", "TraceToolEventSink\TraceToolEventSink.csproj", "{E1FC9DD7-A017-44CE-95AA-B0D90948A3F8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EIFDemo", "TraceToolEventSinkDemo\EIFDemo.csproj", "{3F4150A3-FE34-4F11-9C2C-CAE460526161}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vs8_Windows_F2_Lib", "Framework 2\Vs8_Windows_F2_Lib\Vs8_Windows_F2_Lib.csproj", "{7CF111BE-3614-4514-966A-FDF779773E51}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E1FC9DD7-A017-44CE-95AA-B0D90948A3F8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E1FC9DD7-A017-44CE-95AA-B0D90948A3F8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E1FC9DD7-A017-44CE-95AA-B0D90948A3F8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E1FC9DD7-A017-44CE-95AA-B0D90948A3F8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3F4150A3-FE34-4F11-9C2C-CAE460526161}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3F4150A3-FE34-4F11-9C2C-CAE460526161}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3F4150A3-FE34-4F11-9C2C-CAE460526161}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3F4150A3-FE34-4F11-9C2C-CAE460526161}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7CF111BE-3614-4514-966A-FDF779773E51}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7CF111BE-3614-4514-966A-FDF779773E51}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7CF111BE-3614-4514-966A-FDF779773E51}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7CF111BE-3614-4514-966A-FDF779773E51}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

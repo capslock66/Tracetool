@@ -1,0 +1,605 @@
+// unit TraceTool.inc ;
+// used by viewer and client
+
+// version 11.0 
+
+{$ifdef CLR}  // The common language runtime symbol is only defined for the .NET platform.
+  {$define DELPHI.NET}
+  {$ifdef VER160}
+    {$define DELPHI.NET_1}
+  {$endif VER160}
+
+  // Compiler defines common to all .NET versions.
+  {$ifdef DELPHI.NET_1}
+    {$define DELHI.NET_1_UP}
+  {$endif DELPHI.NET_1}
+{$endif CLR}
+
+{$ifdef Win32}
+
+// Compiler defines not specific to a particlular platform.
+
+  {$ifdef VER200}
+    {$define COMPILER_12}
+    {$define DELPHI}
+    {$define DELPHI_12}
+  {$endif VER200}
+
+  {$ifdef VER190}
+    {$define COMPILER_11}
+    {$define DELPHI}
+    {$define DELPHI_11}
+  {$endif VER190}
+
+  {$ifdef VER180}
+    {$define COMPILER_10}
+    {$define DELPHI}
+    {$define DELPHI_10}
+  {$endif VER180}
+
+  {$ifdef VER170}
+    {$define COMPILER_9}
+    {$define DELPHI}
+    {$define DELPHI_9}
+  {$endif VER170}
+  
+  {$ifdef VER160}
+    {$define COMPILER_8}
+    {$define DELPHI}
+    {$define DELPHI_8}
+  {$endif VER160}
+
+  {$ifdef VER150}
+    {$define COMPILER_7}
+    {$define DELPHI}
+    {$define DELPHI_7}
+  {$endif}
+
+  {$ifdef VER140}
+    {$define COMPILER_6}
+    {$ifdef BCB}
+      {$define CPPB}
+      {$define CPPB_6}
+    {$else}
+      {$define DELPHI}
+      {$define DELPHI_6}
+    {$endif}
+  {$endif}
+
+  {$ifdef VER130}
+    {$define COMPILER_5}
+    {$ifdef BCB}
+      {$define CPPB}
+      {$define CPPB_5}
+    {$else}
+      {$define DELPHI}
+      {$define DELPHI_5}
+    {$endif}
+  {$endif}
+
+  {$ifdef VER125}
+    {$define COMPILER_4}
+    {$define CPPB}
+    {$define CPPB_4}
+  {$endif}
+
+  {$ifdef VER120}
+    {$define COMPILER_4}
+    {$define DELPHI}
+    {$define DELPHI_4}
+  {$endif}
+
+  {$ifdef VER110}
+    {$define COMPILER_3}
+    {$define CPPB}
+    {$define CPPB_3}
+  {$endif}
+
+  {$ifdef VER100}
+    {$define COMPILER_3}
+    {$define DELPHI}
+    {$define DELPHI_3}
+  {$endif}
+
+  {$ifdef VER93}
+    {$define COMPILER_2} // C++ Builder v1 compiler is really v2
+    {$define CPPB}
+    {$define CPPB_1}
+  {$endif}
+
+  {$ifdef VER90}
+    {$define COMPILER_2}
+    {$define DELPHI}
+    {$define DELPHI_2}
+  {$endif}
+
+  {$ifdef VER80}
+    {$define COMPILER_1}
+    {$define DELPHI}
+    {$define DELPHI_1}
+  {$endif}
+
+  {$ifdef DELPHI_2}
+    {$define DELPHI_2_UP}
+  {$endif}
+
+  {$ifdef DELPHI_3}
+    {$define DELPHI_2_UP}
+    {$define DELPHI_3_UP}
+  {$endif}
+
+  {$ifdef DELPHI_4}
+    {$define DELPHI_2_UP}
+    {$define DELPHI_3_UP}
+    {$define DELPHI_4_UP}
+  {$endif}
+
+  {$ifdef DELPHI_5}
+    {$define DELPHI_2_UP}
+    {$define DELPHI_3_UP}
+    {$define DELPHI_4_UP}
+    {$define DELPHI_5_UP}
+  {$endif}
+
+  {$ifdef DELPHI_6}
+    {$define DELPHI_2_UP}
+    {$define DELPHI_3_UP}
+    {$define DELPHI_4_UP}
+    {$define DELPHI_5_UP}
+    {$define DELPHI_6_UP}
+  {$endif}
+
+  {$ifdef DELPHI_7}
+    {$define DELPHI_2_UP}
+    {$define DELPHI_3_UP}
+    {$define DELPHI_4_UP}
+    {$define DELPHI_5_UP}
+    {$define DELPHI_6_UP}
+    {$define DELPHI_7_UP}
+  {$endif}
+
+  {$ifdef DELPHI_8}
+    {$define DELPHI_2_UP}
+    {$define DELPHI_3_UP}
+    {$define DELPHI_4_UP}
+    {$define DELPHI_5_UP}
+    {$define DELPHI_6_UP}
+    {$define DELPHI_7_UP}
+    {$define DELPHI_8_UP}
+  {$endif}
+
+  {$ifdef DELPHI_9}
+    {$define DELPHI_2_UP}
+    {$define DELPHI_3_UP}
+    {$define DELPHI_4_UP}
+    {$define DELPHI_5_UP}
+    {$define DELPHI_6_UP}
+    {$define DELPHI_7_UP}
+    {$define DELPHI_8_UP}
+    {$define DELPHI_9_UP}
+  {$endif}
+
+  {$ifdef DELPHI_10}
+    {$define DELPHI_2_UP}
+    {$define DELPHI_3_UP}
+    {$define DELPHI_4_UP}
+    {$define DELPHI_5_UP}
+    {$define DELPHI_6_UP}
+    {$define DELPHI_7_UP}
+    {$define DELPHI_8_UP}
+    {$define DELPHI_9_UP}
+    {$define DELPHI_10_UP}
+  {$endif}
+
+  {$ifdef DELPHI_11}
+    {$define DELPHI_2_UP}
+    {$define DELPHI_3_UP}
+    {$define DELPHI_4_UP}
+    {$define DELPHI_5_UP}
+    {$define DELPHI_6_UP}
+    {$define DELPHI_7_UP}
+    {$define DELPHI_8_UP}
+    {$define DELPHI_9_UP}
+    {$define DELPHI_10_UP}
+    {$define DELPHI_11_UP}
+  {$endif}
+
+  {$ifdef DELPHI_12}
+    {$define DELPHI_2_UP}
+    {$define DELPHI_3_UP}
+    {$define DELPHI_4_UP}
+    {$define DELPHI_5_UP}
+    {$define DELPHI_6_UP}
+    {$define DELPHI_7_UP}
+    {$define DELPHI_8_UP}
+    {$define DELPHI_9_UP}
+    {$define DELPHI_10_UP}
+    {$define DELPHI_11_UP}
+    {$define DELPHI_12_UP}
+  {$endif}
+
+  {$ifdef CPPB_3}
+    {$define CPPB_3_UP}
+  {$endif}
+
+  {$ifdef CPPB_4}
+    {$define CPPB_3_UP}
+    {$define CPPB_4_UP}
+  {$endif}
+
+  {$ifdef CPPB_5}
+    {$define CPPB_3_UP}
+    {$define CPPB_4_UP}
+    {$define CPPB_5_UP}
+  {$endif}
+
+  {$ifdef CPPB_6}
+    {$define CPPB_3_UP}
+    {$define CPPB_4_UP}
+    {$define CPPB_5_UP}
+    {$define CPPB_6_UP}
+  {$endif}
+
+  {$ifdef CPPB_3_UP}
+    // C++ Builder requires this if you use Delphi components in run-time packages.
+    {$ObjExportAll On}
+  {$endif}
+
+{$else (not Windows)}
+  // Linux is the target
+  {$define QT_CLX}
+
+  {$define KYLIX}
+
+  {$ifdef VER140}
+    {$define COMPILER_6}
+      {$ifdef conditionalexpressions}
+        {$if Declared(RTLVersion) and (RTLVersion = 14)}
+          {$define KYLIX_1}
+        {$ifend}
+
+        {$if Declared(RTLVersion) and (RTLVersion = 14.2)}
+          {$define KYLIX_2}
+        {$ifend}
+
+        {$if Declared(RTLVersion) and (RTLVersion = 14.5)}
+          {$define KYLIX_3}
+        {$ifend}
+      {$endif}
+  {$endif}
+
+  {$ifdef VER150}
+    {$define COMPILER_7}
+    {$define KYLIX_3}
+  {$endif}
+
+  {$ifdef VER140}
+    {$define COMPILER_6}
+    {$define KYLIX_2}
+  {$endif}
+
+  {$ifdef KYLIX_1}
+    {$define KYLIX_1_UP}
+  {$endif}
+
+  {$ifdef KYLIX_2}
+    {$define KYLIX_2_UP}
+  {$endif}
+
+  {$ifdef KYLIX_3}
+    {$define KYLIX_2_UP}
+    {$define KYLIX_3_UP}
+  {$endif}
+
+{$endif Win32}
+
+
+{$ifdef COMPILER_1}
+  {$define COMPILER_1_UP}
+{$endif}
+
+{$ifdef COMPILER_2}
+  {$define COMPILER_1_UP}
+  {$define COMPILER_2_UP}
+{$endif}
+
+{$ifdef COMPILER_3}
+  {$define COMPILER_1_UP}
+  {$define COMPILER_2_UP}
+  {$define COMPILER_3_UP}
+{$endif}
+
+{$ifdef COMPILER_4}
+  {$define COMPILER_1_UP}
+  {$define COMPILER_2_UP}
+  {$define COMPILER_3_UP}
+  {$define COMPILER_4_UP}
+{$endif}
+
+{$ifdef COMPILER_5}
+  {$define COMPILER_1_UP}
+  {$define COMPILER_2_UP}
+  {$define COMPILER_3_UP}
+  {$define COMPILER_4_UP}
+  {$define COMPILER_5_UP}
+{$endif}
+
+{$ifdef COMPILER_6}
+  {$define COMPILER_1_UP}
+  {$define COMPILER_2_UP}
+  {$define COMPILER_3_UP}
+  {$define COMPILER_4_UP}
+  {$define COMPILER_5_UP}
+  {$define COMPILER_6_UP}
+{$endif}
+
+{$ifdef COMPILER_7}
+  {$define COMPILER_1_UP}
+  {$define COMPILER_2_UP}
+  {$define COMPILER_3_UP}
+  {$define COMPILER_4_UP}
+  {$define COMPILER_5_UP}
+  {$define COMPILER_6_UP}
+  {$define COMPILER_7_UP}
+{$endif}
+
+{$ifdef COMPILER_8}
+  {$define COMPILER_1_UP}
+  {$define COMPILER_2_UP}
+  {$define COMPILER_3_UP}
+  {$define COMPILER_4_UP}
+  {$define COMPILER_5_UP}
+  {$define COMPILER_6_UP}
+  {$define COMPILER_7_UP}
+  {$define COMPILER_8_UP}
+{$endif}
+
+{$ifdef COMPILER_9}
+  {$define COMPILER_1_UP}
+  {$define COMPILER_2_UP}
+  {$define COMPILER_3_UP}
+  {$define COMPILER_4_UP}
+  {$define COMPILER_5_UP}
+  {$define COMPILER_6_UP}
+  {$define COMPILER_7_UP}
+  {$define COMPILER_8_UP}
+  {$define COMPILER_9_UP}
+{$endif}
+
+{$ifdef COMPILER_10}
+  {$define COMPILER_1_UP}
+  {$define COMPILER_2_UP}
+  {$define COMPILER_3_UP}
+  {$define COMPILER_4_UP}
+  {$define COMPILER_5_UP}
+  {$define COMPILER_6_UP}
+  {$define COMPILER_7_UP}
+  {$define COMPILER_8_UP}
+  {$define COMPILER_9_UP}
+  {$define COMPILER_10_UP}
+  // Backwards compatibility
+  {$define DELPHI_2_UP}
+  {$define DELPHI_3_UP}
+  {$define DELPHI_4_UP}
+  {$define DELPHI_5_UP}
+  {$define DELPHI_6_UP}
+  {$define DELPHI_7_UP}
+  {$define DELPHI_8_UP}
+  {$define DELPHI_9_UP}
+  {$define DELPHI_10_UP}
+  {$define CPPB_3_UP}
+  {$define CPPB_4_UP}
+  {$define CPPB_5_UP}
+  {$define CPPB_6_UP}
+{$endif}
+
+{$ifdef COMPILER_11}
+  {$define COMPILER_1_UP}
+  {$define COMPILER_2_UP}
+  {$define COMPILER_3_UP}
+  {$define COMPILER_4_UP}
+  {$define COMPILER_5_UP}
+  {$define COMPILER_6_UP}
+  {$define COMPILER_7_UP}
+  {$define COMPILER_8_UP}
+  {$define COMPILER_9_UP}
+  {$define COMPILER_10_UP}
+  {$define COMPILER_11_UP}
+  // Backwards compatibility
+  {$define DELPHI_2_UP}
+  {$define DELPHI_3_UP}
+  {$define DELPHI_4_UP}
+  {$define DELPHI_5_UP}
+  {$define DELPHI_6_UP}
+  {$define DELPHI_7_UP}
+  {$define DELPHI_8_UP}
+  {$define DELPHI_9_UP}
+  {$define DELPHI_10_UP}
+  {$define DELPHI_11_UP}
+  {$define CPPB_3_UP}
+  {$define CPPB_4_UP}
+  {$define CPPB_5_UP}
+  {$define CPPB_6_UP}
+
+  {$ifdef BCB}
+    {$define CPPB}
+  {$else}
+    {$define DELPHI}
+  {$endif} 
+
+{$endif}
+
+
+{$ifdef COMPILER_12}
+  {$define COMPILER_1_UP}
+  {$define COMPILER_2_UP}
+  {$define COMPILER_3_UP}
+  {$define COMPILER_4_UP}
+  {$define COMPILER_5_UP}
+  {$define COMPILER_6_UP}
+  {$define COMPILER_7_UP}
+  {$define COMPILER_8_UP}
+  {$define COMPILER_9_UP}
+  {$define COMPILER_10_UP}
+  {$define COMPILER_11_UP}
+  {$define COMPILER_12_UP}
+  // Backwards compatibility
+  {$define DELPHI_2_UP}
+  {$define DELPHI_3_UP}
+  {$define DELPHI_4_UP}
+  {$define DELPHI_5_UP}
+  {$define DELPHI_6_UP}
+  {$define DELPHI_7_UP}
+  {$define DELPHI_8_UP}
+  {$define DELPHI_9_UP}
+  {$define DELPHI_10_UP}
+  {$define DELPHI_11_UP}
+  {$define DELPHI_12_UP}
+  {$define CPPB_3_UP}
+  {$define CPPB_4_UP}
+  {$define CPPB_5_UP}
+  {$define CPPB_6_UP}
+
+  {$ifdef BCB}
+    {$define CPPB}
+  {$else}
+    {$define DELPHI}
+  {$endif} 
+
+{$endif}
+
+Const
+   RECIEVETIMEOUT           = 1000; // milliseconds
+   WMD                      = 123 ;  // identification code 'traceTool'
+   WM_SEND_TO_DEBUG         = WM_USER + 1 ;
+   WM_FROM_DEBUG            = WM_USER + 2 ;
+
+   // Icones
+   CST_ICO_DEFAULT          = -1 ;    // default
+   CST_ICO_FORM             = 0 ;     // Form
+   CST_ICO_COMPONENT        = 1 ;     // component
+   CST_ICO_CONTROL          = 3 ;     // control
+   CST_ICO_PROP             = 5 ;     // property
+   CST_ICO_MENU             = 15 ;    // menu
+   CST_ICO_MENU_ITEM        = 16 ;    // item menu
+   CST_ICO_COLLECT_ITEM     = 21 ;    // collection
+   CST_ICO_WARNING          = 22 ;    // Warning
+   CST_ICO_ERROR            = 23 ;    // Error
+   CST_ICO_INFO             = 24 ;    // Information (default)
+
+   // plugin
+   CST_PLUG_ONACTION        = 1 ;     // Action performed event
+   CST_PLUG_ONBEFOREDELETE  = 2 ;     // before delete event
+   CST_PLUG_ONTIMER         = 4 ;     // timer event
+
+   // viewer kind
+   CST_VIEWER_NONE          = 0 ;     // default viewer, no icon
+   CST_VIEWER_DUMP          = 1 ;     // dump viewer
+   CST_VIEWER_XML           = 2 ;     // xml viewer
+   CST_VIEWER_TABLE         = 3 ;     // table viewer
+   CST_VIEWER_STACK         = 4 ;     // stack
+   CST_VIEWER_BITMAP        = 5 ;     // bitmap viewer
+   CST_VIEWER_OBJECT        = 6 ;     // object structure
+   CST_VIEWER_VALUE         = 7 ;     // object value
+   CST_VIEWER_ENTER         = 8 ;     // enter method
+   CST_VIEWER_EXIT          = 9 ;     // exit method
+   CST_VIEWER_TXT           = 10 ;    // text added to default viewer
+
+   // resource kind
+   CST_RES_BUT_RIGHT        = 1 ;     // Button on right
+   CST_RES_BUT_LEFT         = 2 ;     // Button on left
+   CST_RES_LABEL_RIGHT      = 3 ;     // Label on right
+   CST_RES_LABELH_RIGHT     = 4 ;     // Label on right HyperLink
+   CST_RES_LABEL_LEFT       = 5 ;     // Label on left
+   CST_RES_LABELH_LEFT      = 6 ;     // Label on left hyperlink
+   CST_RES_MENU_ACTION      = 7 ;     // Item menu in the Actions Menu
+   CST_RES_MENU_WINDOW      = 8 ;     // Item menu in the Windows Menu. Call CreateResource on the main win trace to create this menu item
+
+   // resource id
+   CST_ACTION_CUT           = 1 ;     // cut same as copy then delete
+   CST_ACTION_COPY          = 2 ;     // copy
+   CST_ACTION_DELETE        = 3 ;     // delete selected
+   CST_ACTION_SELECT_ALL    = 4 ;     // select all
+   CST_ACTION_RESIZE_COLS   = 5 ;     // resize columns
+   CST_ACTION_VIEW_INFO     = 6 ;     // view trace info
+   CST_ACTION_VIEW_PROP     = 7 ;     // view properties
+   CST_ACTION_PAUSE         = 8 ;     // Pause on
+   CST_ACTION_SAVE          = 9 ;     // SaveToFile
+   CST_ACTION_CLEAR_ALL     = 10 ;    // clear all
+   CST_ACTION_CLOSE_WIN     = 11 ;    // Close win
+   CST_ACTION_RESUME        = 12 ;    // resume from Pause 
+
+   CST_ACTION_LABEL_INFO    = 20 ;    // TracesInfo label
+   CST_ACTION_LABEL_LOGFILE = 21 ;    // LabelLogFile label
+   CST_ACTION_VIEW_MAIN     = 50 ;    // View Main trace
+   CST_ACTION_VIEW_ODS      = 51 ;    // ODS
+   CST_ACTION_OPEN_XML      = 52 ;    // XML trace -> Tracetool XML traces
+   CST_ACTION_EVENTLOG      = 53 ;    // Event log
+   CST_ACTION_TAIL          = 54 ;    // Tail
+
+   // Command
+   CST_TREE_COLUMNWIDTH     = 93  ;   // change the columns widths   
+   CST_USE_MULTICOL_TREE    = 94  ;   // same as CST_USE_TREE but the tree is multicolumn
+   CST_TREE_MULTI_COLUMN    = 95  ;   // change the tree to display multiple column. Param : Main column index
+   CST_TREE_COLUMNTITLE     = 96  ;   // change the columns titles
+   CST_DISPLAY_TREE         = 97  ;   // display tree windows
+   CST_TREE_NAME            = 98  ;   // param : the new name of the tree (use CST_USE_TREE just before to specify the tree)
+   CST_USE_TREE             = 99  ;   // param : Id (CLSID for example) of the tree to use for other command.
+
+   CST_TRACE_ID             = 101 ;   // param : CLSID
+   CST_SHOW                 = 102 ;   // param : 1 : show.  0 : hide
+   CST_ICO_INDEX            = 103 ;   // param : image index
+   CST_CLEAR_ALL            = 104 ;   // no param
+   CST_CLOSE_WIN            = 105 ;   // no param. Close winwatch or wintrace
+   CST_CLOSE_VIEWER         = 106 ;   // no param : quit tracetool
+   CST_ENTER_DEBUG_MODE     = 107 ;   // no param
+   CST_LEAVE_DEBUG_MODE     = 108 ;   // no param
+   CST_OPEN_TAIL            = 109 ;   // param : file name
+
+   CST_WINWATCH_NAME        = 110 ;   // Watch Window name
+   CST_WINWATCH_ID          = 111 ;   // Watch Window ID
+   CST_WATCH_NAME           = 112 ;   // watch name
+   CST_WATCH_VALUE          = 113 ;   // watch value
+
+   CST_CLEAR_NODE           = 300 ;   // param : the node to clear
+   CST_CLEAR_SUBNODES       = 301 ;   // param : the parent node
+   CST_THREAD_ID            = 302 ;   // param : thread ID
+   CST_PROCESS_NAME         = 303 ;   // param process name
+   CST_MESSAGE_TIME         = 304 ;   // param : the time of the message
+   CST_THREAD_NAME          = 305 ;   // param : thread name (java)
+   CST_IP                   = 306 ;   // param : client IP adress
+
+   CST_CREATE_MEMBER        = 500 ;   // param : Member name
+   CST_MEMBER_FONT_DETAIL   = 501 ;   // param : ColId Bold Italic Color size  Fontname
+   CST_MEMBER_COL2          = 502 ;   // param : info col 2
+   CST_MEMBER_COL3          = 504 ;   // param : info col 3
+   CST_MEMBER_VIEWER_KIND   = 503 ;   // param : viewer id
+   CST_ADD_MEMBER           = 505 ;   // add member to upper level. No param (for now)
+
+   CST_NEW_NODE             = 550 ;   // param : parent node ID
+   CST_LEFT_MSG             = 551 ;   // param : left msg
+   CST_RIGHT_MSG            = 552 ;   // param : right msg
+   CST_SELECT_NODE          = 553 ;   // set the node as 'Selected' by the user.  param : Node id
+   CST_GET_NODE             = 554 ;   // return the node id
+   CST_USE_NODE             = 555 ;   // use an existing node. param : Node id
+   CST_APPEND_LEFT_MSG      = 556 ;   // param : left msg to append
+   CST_APPEND_RIGHT_MSG     = 557 ;   // param : right msg to append
+   CST_FOCUS_NODE           = 558 ;   // Focus to the node.
+   CST_SAVETOTEXT           = 559 ;   // save to text file, parameter : filename
+   CST_SAVETOXML            = 560 ;   // save to  XML file, parameter : filename
+   CST_LOADXML              = 561 ;   // load an XML file to the current wintrace
+   CST_LOGFILE              = 562 ;   // define the log file. Parameter : mode and filename
+   CST_LINKTOPLUGIN         = 563 ;   // link a wintrace to a plugin
+   CST_CREATE_RESOURCE      = 564 ;   // create a resource on a wintrace
+   CST_SET_TEXT_RESOURCE    = 565 ;   // set the text resource
+   CST_DISABLE_RESOURCE     = 566 ;   // disable a resource
+   CST_FONT_DETAIL          = 567 ;   // param : ColId Bold Italic Color size  Fontname
+   CST_BACKGROUND_COLOR     = 568 ;   // param : background color
+
+   CST_GET_OBJECT           = 700 ;   // the user interface ask to retreive an object
+   CST_FLUSH                = 800 ;   // special case to be interpreted by the sender thread (not to be send)
+
+
+// implementation
+//
+// end.

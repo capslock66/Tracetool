@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<ProfilingTarget xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <ProjectTarget>
+    <TargetProject>8069a242-9499-4ab1-a78a-a586eeac1c5c</TargetProject>
+    <FriendlyName>NodejsApp1</FriendlyName>
+  </ProjectTarget>
+  <Reports>
+    <Report>
+      <Filename>C:\compil\nodejs\NodejsApp1_20161112.vspx</Filename>
+    </Report>
+  </Reports>
+</ProfilingTarget>

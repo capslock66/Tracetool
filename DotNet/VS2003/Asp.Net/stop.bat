@@ -1,0 +1,1 @@
+net.exe stop w3svc 

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- This section contains the log4net configuration settings -->
+<log4net>
+	<!-- Define some output appenders -->	
+
+
+	<appender name="ConsoleAppender" type="log4net.Appender.ConsoleAppender" >
+		<Layout type="log4net.Layout.PatternLayout">
+			<param name="ConversionPattern" value="[demo1] %d [%t] %-5p %c - %m%n" />
+		</Layout>
+	</appender>
+	
+	
+	<appender name="traceToolAppender" type="TraceTool.Log4NetAppender,Log4NetAppender" >
+		<Layout type="log4net.Layout.PatternLayout">
+			<param name="ConversionPattern" value="[demo2] &#9; %d &#9; [%t] &#9; %-5p &#9; %c &#9; %m%n" />
+		</Layout>
+		<param name="SendLocationInfo" value="false" />
+		<param name="SendPrivateObjectInfo" value="true" />
+		<param name="RemoteHost" value="LocalHost" />
+		<param name="RemotePort" value="8090" />
+		<param name="TitleLayout" value="[prog] &#9; Date &#9; thread &#9; Level &#9; Logger &#9; message" />
+		<param name="WinTraceId" value="Log4Demo" />
+		<param name="WinTraceTitle" value="Log4Demo" />
+		<param name="ImmediateFlush" value="true" />
+		<param name="SendMode" value="WinMsg" /> 
+		<param name="LogFile" value="2,Log4NetDemo.xml" /> 
+				
+	</appender>
+	
+	<!-- Setup the root category, add the appenders and set the default level -->
+	<root>
+		<level value="DEBUG" />
+		<appender-ref ref="ConsoleAppender" />
+		<appender-ref ref="traceToolAppender" />
+	</root>
+
+</log4net>

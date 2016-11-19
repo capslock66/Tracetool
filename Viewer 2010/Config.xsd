@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+TraceTool configuration file
+-->
+<xs:schema 
+   attributeFormDefault="unqualified"
+   elementFormDefault="qualified"
+   xmlns:xs="http://www.w3.org/2001/XMLSchema">
+   <xs:complexType name="StringTagValue5">
+      <xs:attribute name="Value" type="xs:string" use="required">
+      </xs:attribute>
+   </xs:complexType>
+   <xs:complexType name="StringTagValue4">
+      <xs:attribute name="Value" type="xs:string" use="required">
+      </xs:attribute>
+   </xs:complexType>
+   <xs:complexType name="StringTagValue3">
+      <xs:attribute name="Value" type="xs:string" use="required">
+      </xs:attribute>
+   </xs:complexType>
+   <xs:complexType name="StringTagValue2">
+      <xs:attribute name="Value" type="xs:string" use="required">
+      </xs:attribute>
+   </xs:complexType>
+   <xs:complexType name="IntegerTagValue3">
+      <xs:attribute name="Value" type="xs:int" use="required">
+      </xs:attribute>
+   </xs:complexType>
+   <xs:complexType name="IntegerTagValue2">
+      <xs:attribute name="Value" type="xs:int" use="required">
+      </xs:attribute>
+   </xs:complexType>
+   <xs:element name="Config">
+      <xs:annotation>
+         <xs:documentation>Configuration file</xs:documentation>
+      </xs:annotation>
+      <xs:complexType>
+         <xs:sequence>
+            <xs:element name="General" type="General"/>
+            <xs:element name="AppDisplay" type="AppDisplay"/>
+            <xs:element name="Tail" type="Tail"/>
+            <xs:element name="TextExport" type="TextExport"/>
+            <xs:element name="Ods" type="Ods"/>
+            <xs:element name="EventLog" type="EventLog"/>
+            <xs:element name="Framework" type="Framework"/>
+            <xs:element name="Plugins" type="Plugins"/>
+            <xs:element name="Watches" type="Watches"/>
+         </xs:sequence>   
+      </xs:complexType>
+   </xs:element>
+   <xs:complexType name="General">
+      <xs:sequence>
+         <xs:element name="ShowSocketWarning" type="BooleanTagValue"/>
+         <xs:element name="LastSavedPath" type="StringTagValue"/>
+         <xs:element name="SocketPort" type="IntegerTagValue"/>
+         <xs:element name="SocketPort2" type="IntegerTagValue"/>
+         <xs:element name="HTTPPort" type="IntegerTagValue"/>
+         <xs:element name="SocketPolicyServer" type="BooleanTagValue"/>
+         <xs:element name="HttpPolicyServer" type="BooleanTagValue"/>
+         <xs:element name="LastStyleSheet" type="StringTagValue"/>
+         <xs:element name="Udp1" type="BooleanTagValue"/>
+         <xs:element name="Udp2" type="BooleanTagValue"/>
+      </xs:sequence>   
+   </xs:complexType>
+   <xs:complexType name="AppDisplay">
+      <xs:sequence>
+         <xs:element name="Left" type="IntegerTagValue"/>
+         <xs:element name="Top" type="IntegerTagValue"/>
+         <xs:element name="Width" type="IntegerTagValue"/>
+         <xs:element name="Height" type="IntegerTagValue"/>
+         <xs:element name="StayOnTop" type="BooleanTagValue"/>
+         <xs:element name="SmallBut" type="BooleanTagValue"/>
+         <xs:element name="ApplicationTitle" type="StringTagValue"/>
+         <xs:element name="ShowOnstartup" type="BooleanTagValue"/>
+         <xs:element name="ShowOnMessageReceived" type="BooleanTagValue"/>
+         <xs:element name="FocusToReceivedMessage" type="BooleanTagValue"/>
+         <xs:element name="IconFile" type="StringTagValue"/>
+         <xs:element name="Maximized" type="BooleanTagValue"/>
+         <xs:element name="MinimizeToSystray" type="BooleanTagValue"/>
+         <xs:element name="SearchUnderline" type="BooleanTagValue"/>
+         <xs:element name="ToolbarStandard" type="BooleanTagValue"/>
+         <xs:element name="ToolbarSearch" type="BooleanTagValue"/>
+         <xs:element name="ToolbarBookmark" type="BooleanTagValue"/>
+         <xs:element name="ToolbarFilter" type="BooleanTagValue"/>
+         <xs:element name="HideViewer" type="BooleanTagValue"/>
+         <xs:element name="DisableInternalLog" type="BooleanTagValue"/>
+      </xs:sequence>   
+   </xs:complexType>
+   <xs:complexType name="TextExport">
+      <xs:sequence>
+         <xs:element name="ProcessName" type="ColumnTagValue"/>
+         <xs:element name="ThreadId" type="ColumnTagValue"/>
+         <xs:element name="Time" type="ColumnTagValue"/>
+         <xs:element name="Col1" type="ColumnTagValue"/>
+         <xs:element name="Col2" type="ColumnTagValue"/>
+         <xs:element name="GenerateColumnHeader" type="BooleanTagValue"/>
+         <xs:element name="TextQualifier" type="StringTagValue"/>
+         <xs:element name="Separator" type="StringTagValue"/>
+         <xs:element name="TreeIndentation" type="IntegerTagValue"/>
+      </xs:sequence>   
+   </xs:complexType>
+   <xs:complexType name="Ods">
+      <xs:sequence>
+         <xs:element name="VisibleMenu" type="BooleanTagValue"/>
+         <xs:element name="AutoClear" type="BooleanTagValue"/>
+         <xs:element name="MaxNode" type="IntegerTagValue"/>
+         <xs:element name="MinNode" type="IntegerTagValue"/>
+         <xs:element name="Enabled" type="BooleanTagValue"/>
+         <xs:element name="Title" type="StringTagValue"/>
+         <xs:element name="Info" type="DisplayNode"/>
+         <xs:element name="Trace" type="DisplayNode"/>
+      </xs:sequence>   
+   </xs:complexType>
+   <xs:complexType name="Tail">
+      <xs:sequence>
+         <xs:element name="VisibleMenu" type="BooleanTagValue"/>
+         <xs:element name="AutoClear" type="BooleanTagValue"/>
+         <xs:element name="MaxNode" type="IntegerTagValue"/>
+         <xs:element name="MinNode" type="IntegerTagValue"/>
+         <xs:element name="SizeToLoad" type="IntegerTagValue"/>
+         <xs:element name="LastPath" type="StringTagValue"/>
+         <xs:element name="ColumnStyle" type="StringTagValue"/>
+         <xs:element name="AutoCreateColStyle" type="StringTagValue"/>
+         <xs:element name="TextQualifier" type="StringTagValue"/>
+         <xs:element name="Separator" type="StringTagValue"/>
+         <xs:element name="FirstcolIsTitle" type="BooleanTagValue"/>
+         <xs:element name="FixedColCount" type="IntegerTagValue"/>
+         <xs:element name="Favorites">
+            <xs:complexType>
+               <xs:sequence>
+                  <xs:element name="FileName" maxOccurs="unbounded" minOccurs="0" type="xs:string"/>
+               </xs:sequence>   
+            </xs:complexType>
+         </xs:element>
+         <xs:element name="OpenFromFavorites" type="BooleanTagValue"/>
+         <xs:element name="Trace" type="DisplayNode"/>
+         <xs:element name="Info" type="DisplayNode"/>
+      </xs:sequence>   
+   </xs:complexType>
+   <xs:complexType name="Framework">
+      <xs:sequence>
+         <xs:element name="VisibleMenu" type="BooleanTagValue"/>
+         <xs:element name="AutoClear" type="BooleanTagValue"/>
+         <xs:element name="MaxNode" type="IntegerTagValue"/>
+         <xs:element name="MinNode" type="IntegerTagValue"/>
+         <xs:element name="Enabled" type="BooleanTagValue"/>
+         <xs:element name="ShowMembers" type="BooleanTagValue"/>
+         <xs:element name="MainTraceTitle" type="StringTagValue"/>
+         <xs:element name="Trace" type="DisplayNode"/>
+         <xs:element name="Info" type="DisplayNode"/>
+         <xs:element name="Orphans" type="Orphans"/>
+      </xs:sequence>   
+   </xs:complexType>
+   <xs:complexType name="Watches">
+      <xs:sequence>
+         <xs:element name="VisibleMenu" type="BooleanTagValue"/>
+         <xs:element name="Enabled" type="BooleanTagValue"/>
+         <xs:element name="MainWatchesTitle" type="StringTagValue"/>
+         <xs:element name="Trace" type="DisplayNode"/>
+         <xs:element name="Info" type="DisplayNode"/>
+      </xs:sequence>   
+   </xs:complexType>
+   <xs:complexType name="EventLog">
+      <xs:sequence>
+         <xs:element name="VisibleMenu" type="BooleanTagValue"/>
+         <xs:element name="Trace" type="DisplayNode"/>
+         <xs:element name="Info" type="DisplayNode"/>
+      </xs:sequence>   
+   </xs:complexType>
+   <xs:complexType name="Plugins">
+      <xs:sequence>
+         <xs:element name="JVMEngine" type="StringTagValue">
+            <xs:annotation>
+               <xs:documentation>Java virtual Machine (dll)</xs:documentation>
+            </xs:annotation>
+         </xs:element>
+         <xs:element name="JavaPLuginClassPath" type="StringTagValue">
+            <xs:annotation>
+               <xs:documentation>Java plugin class path</xs:documentation>
+            </xs:annotation>
+         </xs:element>
+         <xs:element name="Plugin" maxOccurs="unbounded" minOccurs="0">
+            <xs:complexType>
+               <xs:sequence>
+                  <xs:element name="FileName" type="xs:string"/>
+                  <xs:element name="ClassName" type="xs:string"/>
+                  <xs:element name="Kind" type="xs:string"/>
+                  <xs:element name="Enabled" type="BooleanTagValue"/>
+               </xs:sequence>   
+            </xs:complexType>
+         </xs:element>
+      </xs:sequence>   
+   </xs:complexType>
+   <xs:complexType name="BooleanTagValue">
+      <xs:attribute name="Value" type="xs:boolean" use="required">
+      </xs:attribute>
+   </xs:complexType>
+   <xs:complexType name="StringTagValue">
+      <xs:attribute name="Value" type="xs:string" use="required">
+      </xs:attribute>
+   </xs:complexType>
+   <xs:complexType name="IntegerTagValue">
+      <xs:attribute name="Value" type="xs:int" use="required">
+      </xs:attribute>
+   </xs:complexType>
+   <xs:complexType name="ColumnTagValue">
+      <xs:attribute name="Value" type="xs:boolean" use="required">
+      </xs:attribute>
+      <xs:attribute name="Position" type="xs:int" use="required">
+      </xs:attribute>
+   </xs:complexType>
+   <xs:complexType name="DisplayNode">
+      <xs:sequence>
+         <xs:element name="NodeHeight" type="IntegerTagValue"/>
+         <xs:element name="FontSize" type="IntegerTagValue"/>
+         <xs:element name="FontName" type="StringTagValue"/>
+      </xs:sequence>   
+   </xs:complexType>
+   <xs:complexType name="Orphans">
+      <xs:sequence>
+         <xs:element name="DeletedNode" type="StringTagValue"/>
+         <xs:element name="DefaultLeftText" type="StringTagValue"/>
+         <xs:element name="DefaultRightText" type="StringTagValue"/>
+         <xs:element name="LostAndFoundLeftText" type="StringTagValue"/>
+         <xs:element name="LostAndFoundRightText" type="StringTagValue"/>
+      </xs:sequence>   
+   </xs:complexType>
+</xs:schema>

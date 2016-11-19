@@ -1,0 +1,32 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vs9_Windows_F2_Lib", "Vs9_Windows_F2_Lib\Vs9_Windows_F2_Lib.csproj", "{7CF111BE-3614-4514-966A-FDF779773E51}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vs9_Windows_F2_Demo", "Vs9_Windows_F2_Demo\Vs9_Windows_F2_Demo.csproj", "{F6E28C54-FCA5-4C5B-B2CF-ECB621ABD456}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vs9_Windows_F2_Service", "Vs9_Windows_F2_Service\Vs9_Windows_F2_Service.csproj", "{0437A261-56C6-46F9-A5D5-2092642CE0D8}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{7CF111BE-3614-4514-966A-FDF779773E51}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7CF111BE-3614-4514-966A-FDF779773E51}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7CF111BE-3614-4514-966A-FDF779773E51}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7CF111BE-3614-4514-966A-FDF779773E51}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F6E28C54-FCA5-4C5B-B2CF-ECB621ABD456}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F6E28C54-FCA5-4C5B-B2CF-ECB621ABD456}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F6E28C54-FCA5-4C5B-B2CF-ECB621ABD456}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F6E28C54-FCA5-4C5B-B2CF-ECB621ABD456}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0437A261-56C6-46F9-A5D5-2092642CE0D8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0437A261-56C6-46F9-A5D5-2092642CE0D8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0437A261-56C6-46F9-A5D5-2092642CE0D8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0437A261-56C6-46F9-A5D5-2092642CE0D8}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
