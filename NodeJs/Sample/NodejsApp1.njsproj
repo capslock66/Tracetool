@@ -16,7 +16,6 @@
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'" />
   <PropertyGroup Condition="'$(Configuration)' == 'Release'" />
   <ItemGroup>
-    <Compile Include="node_modules\tracetool\lib\tracetool.js2" />
     <Content Include="package.json" />
     <Compile Include="example.js" />
   </ItemGroup>

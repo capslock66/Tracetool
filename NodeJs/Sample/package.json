@@ -13,7 +13,7 @@
     "npm": "^4.0.3",
     "npm-windows-upgrade": "^3.1.1",
     "socket.io": "^1.6.0",
-    "tracetool": "^12.10.0",
+    "tracetool": "^12.10.1",
     "typescript": "^2.1.1",
     "uuid": "^3.0.0"
   },
