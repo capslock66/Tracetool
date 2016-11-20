@@ -1,5 +1,5 @@
 # Tracetool
 
 
-[<img alt="Viewer" src="https://raw.githubusercontent.com/capslock66/Tracetool/tree/master/Server1.jpg">]
+[<img alt="Viewer" src="https://raw.githubusercontent.com/capslock66/Tracetool/master/Server1.jpg">]
 
