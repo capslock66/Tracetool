@@ -1,10 +1,10 @@
 {
   "name": "tracetool",
-  "version": "12.10.0",
+  "version": "12.10.1",
   "description": "Send traces from your nodejs application to the windows tracetool viewer.",
   "main": "lib/tracetool",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"no test specified\" && exit 1"
   },
   "keywords": [
     "tracetool"
@@ -14,6 +14,6 @@
   "dependencies": 
    { "request": "^2.78.0"
     ,"stack-trace": "^0.0.9" 
-    ,"uuid"    
-  }
+    ,"uuid":"^3.0.0"
+   }
 }

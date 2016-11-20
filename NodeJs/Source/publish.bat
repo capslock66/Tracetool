@@ -1,2 +1,2 @@
-npm publish
+call npm publish
 pause
