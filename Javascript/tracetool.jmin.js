@@ -21,7 +21,7 @@ addMessage({msgId:msgId,msg:part,partNum:'Last'});partNum++;}}else{addMessage({m
 {objMessage.command=objMessage.command||"WMD";toSend.push(objMessage);if(toSend.length==1){setTimeout(Worker,0);}};function runScript(objMessage)
 {var ScriptUrl='http://'+host+'/'+objMessage.command+'?msgId='+objMessage.msgId+'&msg='+escape(objMessage.msg);if(objMessage.partNum!='')
 ScriptUrl=ScriptUrl+'&partNum='+objMessage.partNum;var script;script=document.createElement('script');script.type='text/javascript';script.setAttribute("id","ttraceScript");script.setAttribute("name","ttraceScript");script.src=ScriptUrl;script.timeSend=new Date();script.message=objMessage
-ttraceScript=script;headId.appendChild(script);setTimeout(Worker,20000);}
+ttraceScript=script;headID.appendChild(script);setTimeout(Worker,20000);}
 function Worker()
 {if(ttraceScript===null&&toSend.length!=0)
 {var objMessage=toSend.shift();runScript(objMessage);return}

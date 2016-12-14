@@ -189,7 +189,7 @@ if (!window.ttrace) {
       script.timeSend = new Date() ;
       script.message = objMessage
       ttraceScript = script ;        // set script as current script
-      headId.appendChild(script);           // Query to tracetool server a script to run
+      headID.appendChild(script);           // Query to tracetool server a script to run
 
       // tracetool server will return this kind of script that will be run :
       //    ttrace._done("1_2","");
