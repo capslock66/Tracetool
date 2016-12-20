@@ -1,8 +1,0 @@
-{
-  "resolution": "main",
-  "tree": {
-    "src": "https://raw.githubusercontent.com/DefinitelyTyped/DefinitelyTyped/0961889be53327e3a23a72d18c604e2a933a4575/ejs/ejs.d.ts",
-    "raw": "registry:dt/ejs#0.0.0+20161003130526",
-    "typings": "https://raw.githubusercontent.com/DefinitelyTyped/DefinitelyTyped/0961889be53327e3a23a72d18c604e2a933a4575/ejs/ejs.d.ts"
-  }
-}

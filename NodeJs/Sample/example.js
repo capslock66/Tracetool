@@ -7,7 +7,7 @@
 "use strict";
 
 const ttrace = require('tracetool');    // default host is 127.0.0.1:81
-ttrace.host = "127.0.0.1:81";
+ttrace.host = "127.0.0.1:85";
 ttrace.options.objectTreeDepth = 5;
 
 // clear all traces on the viewer (main traces)
@@ -55,9 +55,7 @@ FontDetail.colId = -1 ;
 FontDetail.italic = true ;
 ttrace.debug.send("Italic").setFontDetail(FontDetail) ; 
 
-
 //----------------------------------------------------------------------------------
-
 
 // http://127.0.0.1:3000
 

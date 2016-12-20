@@ -1,32 +1,96 @@
 //------------------------------------------------------------------------------
 //  TraceTool JavaScript API.
 //  Author : Thierry Parent
-//  Version : 12.10.0 
-//  sample use :  
-//     var ttrace = require('tracetool')
+//  Version : 13.0.0 
+//  sample use for NodeJs:    
+//     var ttrace = require('tracetool') ;
 //     ttrace.clearAll();
 //     ttrace.debug.send("Hello world");
+//
 //   See http://www.codeproject.com/Articles/5498/TraceTool-The-Swiss-Army-Knife-of-Trace for full sample use
 //------------------------------------------------------------------------------
 
+// NodeJs v6.x, v7.x use Chrome V8 JavaScript engine (ES5), but support some ES6 features (ECMAScript 2015)
+// https://kangax.github.io/compat-table/es6/
+// http://node.green/
+// https://nodejs.org/dist/latest-v6.x/docs/api/
+// https://nodejs.org/dist/latest-v7.x/docs/api/
+
 "use strict";
-const request    = require('request');
-const stackTrace = require('stack-trace');
-const uuid       = require('uuid');
+
+(function(global){    
+
+// private tracetool vars 
 
 //--------------------------------------------------------------------------------------------------------
-// private tracetool vars and functions
 
-var RequestId = 0 ;                         /** number of request                                       */
-var ToSend = [] ;                           /** array of script to run.                                 */
-var WinTraceSingeton = null;                /** main WinTrace                                           */
-var WatchesSingeton = null;                 /** main WinWatch                                           */
-var ClientId=uuid().replace(/-/g, '');      /** Communication ID with the viewer                        */  // replace all(using g) '-' by empty string
-var Host="127.0.0.1:81";                    /** Full Url to TraceTool viewer (localhost:81 for example) */
-var TraceClasses = {};                      /** Contains all tracetool classes                          */
+var ttraceScript = null;                   /** current trace script. Used by sendToClientUsingScript()  */
+var headId = null;                         /** Shortcut to head. Used by sendToClientUsingScript()      */
+
+var request ;                              /** nodejs library                                           */
+var stackTrace;                            /** nodejs library                                           */
+var uuid ;                                 /** nodejs library                                           */
+
+
+var requestId = 0;                         /** number of request                                        */
+var toSend = [];                           /** array of script to run.                                  */
+var nbDone = 0;                            /** number of message send                                   */ 
+var winTraceSingeton = null;               /** main WinTrace                                            */
+var watchesSingeton = null;                /** main WinWatch                                            */
+var clientId = "";                         /** Communication ID with the viewer                         */  
+var host = "127.0.0.1:81";                 /** Full Url to TraceTool viewer (localhost:81 for example)  */
+var traceClasses = {};                     /** Contains all tracetool classes                           */
+
+var isChromeExtension ;                    /** library run under chrome as an extension                 */
+var isBrowser;                             /** library run in a browser                                 */
+var isNodeJs;                              /** library run in Node Js                                   */
+
+//--------------------------------------------------------------------------------------------------------
+    
+detectEnvironment() ;
+console.log ("isChromeExtension : " + isChromeExtension);
+console.log ("isBrowser         : " + isBrowser);
+console.log ("isNodeJs          : " + isNodeJs);
+
+if (isNodeJs)    
+{
+    request    = require('request');
+    stackTrace = require('stack-trace');
+    uuid       = require('uuid');
+    clientId = uuid().replace(/-/g, '');   // replace all(using g) '-' by empty string
+} else if (isBrowser) {
+    ttraceScript = null;                                       
+    headId = global.document.getElementsByTagName("head")[0];
+}
 
 //--------------------------------------------------------------------------------------------------------
 // Private helpers : extend, getFormattedTime, ...
+//--------------------------------------------------------------------------------------------------------
+
+function detectEnvironment() 
+{
+    isChromeExtension = false;
+    isBrowser = false;
+    isNodeJs = false;
+    
+    try {
+
+        // ReSharper disable UndeclaredGlobalVariableUsing
+        if (typeof chrome === "object" && typeof chrome.extension === "object") 
+            isChromeExtension = true;
+        else if ((typeof require === "function")     // nodejs : 'function'
+              && (typeof process === "object")       // nodejs : 'object'
+              && (process.release.name.search(/node|io.js/) !== -1)) // process.release.name = 'node'
+            isNodeJs = true;
+        else
+            isBrowser = true;
+        // ReSharper restore UndeclaredGlobalVariableUsing
+    }
+    catch (e) {
+        console.log("detectEnvironment exception", e);
+    }
+}
+
 //--------------------------------------------------------------------------------------------------------
 
 /** extend object with another 
@@ -147,8 +211,8 @@ function sendToClient (commandList)
 function addMessage(objMessage)
 {
    objMessage.command = objMessage.command || "WMD" ;
-   ToSend.push(objMessage) ;          // add to end
-   if (ToSend.length === 1) 
+   toSend.push(objMessage) ;          // add to end
+   if (toSend.length === 1) 
       setTimeout(worker, 0);
 } ;
 
@@ -158,24 +222,140 @@ function addMessage(objMessage)
 */
 function worker()
 {
+    //console.log("tracetool:worker " + toSend.length) ;
     var objMessage;
-    if (ToSend.length !== 0) {
+    if (toSend.length !== 0)
+    {
         // no script is running.
-        objMessage = ToSend.shift(); // get first
-        sendToClientWorker(objMessage);
+        objMessage = toSend.shift(); // get first
+        var hostUrl = "http://" + host + "/" + objMessage.command + "?msgId=" + objMessage.msgId + "&msg=" + escape(objMessage.msg);  // '&method=script'  + '&crc=' + objMessage.crc
+        if (objMessage.partNum !== "")
+            hostUrl = hostUrl + "&partNum=" + objMessage.partNum;
+
+        nbDone++;
+        if (isNodeJs)
+            sendToClientUsingRequest(hostUrl);
+        else if (isBrowser)
+            sendToClientUsingScript(hostUrl);
+        else // if (IsChromeExtension)
+            sendToClientUsingXmlHttpRequest(hostUrl);
     }
 }
 
 //--------------------------------------------------------------------------------------------------------
-/** send message to the viewer 
-* @param {Object} objMessage Object message : {msgId , msg, partNum}
+/** Create a script and execute it. This script send message to the viewer 
+ * @param {string} hostUrl message 
+ * @returns {void}
+ */
+function sendToClientUsingScript(hostUrl)
+{
+    // script is executed only when added to head
+    var script = document.createElement("script");
+    script.type = "text/javascript";    // ttraceScript.setAttribute("type",'text/javascript')
+    script.setAttribute("id", "ttraceScript");
+    script.setAttribute("name", "ttraceScript");
+    script.src = hostUrl;
+    script.timeSend = new Date();
+    ttraceScript = script;        // set script as current script
+    headId.appendChild(script);           // run the script
+
+    /*
+    generated element in head :
+    
+    <script type="text/javascript" id="ttraceScript" name="ttraceScript" 
+       src="http://localhost:85/WMD?msgId=3_2&amp;msg= encoded Trace ...">
+    </script>
+
+    tracetool server will return this kind of script that will be run :
+    ttrace._done("1_2","");
+    ttrace.setClientID("123");
+    */
+
+    // check every 20 seconds if msg is send
+    setTimeout(Worker, 20000);
+}
+
+//--------------------------------------------------------------------------------------------------------
+/** Called by ttrace._done() when script is send by the viewer   
+ * @returns {void}
+ */
+function afterRun() 
+{
+    if (ttraceScript === null)
+        return;
+    // remove the script once loaded and executed.
+    headId.removeChild(ttraceScript);
+    ttraceScript = null;
+    setTimeout(worker, 0);    // send next
+};
+
+//--------------------------------------------------------------------------------------------------------
+/** send message to the viewer using XMLHttpRequest (Chrome extension solution)
+* @param {string} hostUrl message
+* @returns {void}
+*/
+function sendToClientUsingXmlHttpRequest(hostUrl)
+{
+
+    var xhr;
+    try {
+        xhr = new XMLHttpRequest();
+    } catch (e1) {
+        try {
+            xhr = new ActiveXObject("Microsoft.XMLHTTP");
+        } catch (e2) {
+            xhr = new ActiveXObject("Msxml2.XMLHTTP");
+        }
+    }
+
+    //xhr.addEventListener("load", function(e) {
+    //  console.log("tracetool:load callback");
+    //  }, false);
+
+    xhr.addEventListener("error", function (e3) {
+        //console.log("tracetool:error callback " + toSend.length);
+        setTimeout(worker, 0);    // send next
+    }, false);
+
+    xhr.onload = function (e4) {
+        // e : ProgressEvent
+        // e.currentTarget : XMLHttpRequest
+        var onloadRequest = e4.currentTarget;
+
+        // With the js tracetool API for browser, the response for "UniqueClientId" command is a single line script 
+        // Sample script for "UniqueClientId" : ttrace.setclientId("123");
+        // Sample script for other messages   : ttrace._done("_1",""); 
+        // On the browser, this script is executed.
+        // For compatibility, on NodeJs , the Id is extracted from this script
+
+        var script = onloadRequest.responseText;
+        if (script.startsWith("ttrace.setClientID("))
+            clientId = script.match(/\d+/)[0];  // extract first number anywhere in the string. Result is an array of string. first : 123
+        //console.log("tracetool:onload " + toSend.length);
+        setTimeout(worker, 0);    // send next
+    }
+    xhr.open("GET", hostUrl, true);     // xhrReq.open(method, url, async, user, password); 
+    //xhr.setRequestHeader("Content-Type", "text/javascript");
+
+    //xhr.setRequestHeader('Access-Control-Allow-Headers', '*');
+    //xhr.setRequestHeader('Content-type', 'application/ecmascript');
+    //xhr.setRequestHeader('Content-type', 'text/plain');
+    //xhr.setRequestHeader('Access-Control-Allow-Origin', '*');
+
+    xhr.send();                     // fire onload
+
+    // check every 20 seconds if msg is send
+    //setTimeout(worker, 20000);
+}
+
+//--------------------------------------------------------------------------------------------------------
+
+/** send message to the viewer using nodeJs request
+* @param {string} hostUrl message
 * @returns {void}
 */  
-function sendToClientWorker (objMessage)
+function sendToClientUsingRequest (hostUrl)
 {
-   var hostUrl = 'http://'+Host+'/' + objMessage.command + '?msgId=' + objMessage.msgId  + '&msg=' + escape(objMessage.msg) ;  // '&method=script'  + '&crc=' + objMessage.crc
-   if (objMessage.partNum !== '')
-      hostUrl = hostUrl + '&partNum=' + objMessage.partNum ;
 
    request(hostUrl, function (error, response) //, body)
    {
@@ -189,7 +369,7 @@ function sendToClientWorker (objMessage)
 
            var script = response.body ;
            if (script.startsWith("ttrace.setClientID("))
-               ClientId = script.match(/\d+/)[0];  // extract first number anywhere in the string. Result is an array of string. first : 123
+               clientId = script.match(/\d+/)[0];  // extract first number anywhere in the string. Result is an array of string. first : 123
                
            setTimeout(worker, 0);
        }
@@ -201,7 +381,7 @@ function sendToClientWorker (objMessage)
 
 //--------------------------------------------------------------------------------------------------------
 /** Remove extra left spaces 
-* @param {Object} str String to trim
+* @param {string} str String to trim
 * @returns {string} Trimmed string
 */
 function lTrim(str)
@@ -331,8 +511,8 @@ function rgbToBgr(color)
 */
 function newGuid ()
 {
-    RequestId++ ;
-    return ClientId + '_' + RequestId ;
+    requestId++ ;
+    return clientId + '_' + requestId ;
 } ;
 
 //--------------------------------------------------------------------------------------------------------
@@ -549,7 +729,7 @@ function prepareNewNode(parentNode, leftMsg, newId)
 * Theses 3 doors are displayed with a special icon (all of them have the 'enabled' property set to true).
 * @class ttrace is the entry point for all traces.
 */
-// ReSharper disable once InconsistentNaming
+
 var ttrace =
 {
    /** 
@@ -643,7 +823,20 @@ var ttrace =
 
        commandList.push( intToStr5(/*CST_FIND_TEXT*/ 100)  + intToStr11(flags) + text );
        sendToClient(commandList);
-   } 
+   } ,
+
+   /** Callback function called by the server 
+   * @function
+   * @param {string} msgId Message id
+   * @param {string} partNum part of the message
+   * @returns {void}
+   */
+   _done : function (msgId, partNum)
+   {
+       nbDone++;
+       //afterRun(msgId, partNum); // call protected function
+       afterRun(); // call protected function
+   }
 }; // ttrace
 
 Object.defineProperties(ttrace, 
@@ -658,9 +851,9 @@ Object.defineProperties(ttrace,
     * Full Url to TraceTool viewer (localhost:81 for example) 
     */
     "host" : {
-        get: function () { return Host; },
+        get: function () { return host; },
         set : function (value) {
-            Host = value;
+            host = value;
             //ttrace.queryClientId();        
         },
         enumerable : true,
@@ -668,21 +861,29 @@ Object.defineProperties(ttrace,
     },
 
     /** 
-    *  messages still to send to the viewer
+    *  messages already send to the viewer
     */
     "waitingMessageCount" : {
-        get: function () { return ToSend.length; },
+        get: function () { return nbDone; },
         enumerable : true,
         configurable : false
+    },
+    /** 
+    *  messages still to send to the viewer
+    */
+    "sendMessageCount": {
+        get: function () { return toSend.length; },
+        enumerable: true,
+        configurable: false
     },
     /**
     * Communication handle. Unique client id send by the viewer.
     */
     "clientId" : {
-        get: function () { return ClientId; },
+        get: function () { return clientId; },
         set : function (value) { 
             // User should not force the ClientId
-            ClientId = value; 
+            clientId = value; 
         },
         enumerable : true,
         configurable : false
@@ -694,9 +895,9 @@ Object.defineProperties(ttrace,
      */
     "winTrace" : {
         get: function () {
-            if (WinTraceSingeton === null)
-                WinTraceSingeton = new TraceClasses.WinTrace();
-            return WinTraceSingeton;
+            if (winTraceSingeton === null)
+                winTraceSingeton = new traceClasses.WinTrace();
+            return winTraceSingeton;
         },
         enumerable : true,
         configurable : false
@@ -707,9 +908,9 @@ Object.defineProperties(ttrace,
      */
     "watches" : {
         get: function () {
-            if (WatchesSingeton === null)
-                WatchesSingeton = new TraceClasses.WinWatch();
-            return WatchesSingeton;
+            if (watchesSingeton === null)
+                watchesSingeton = new traceClasses.WinWatch();
+            return watchesSingeton;
         },
         enumerable : true,
         configurable : false
@@ -741,13 +942,13 @@ Object.defineProperties(ttrace,
         enumerable : true,
         configurable : false
     } ,
-    
+
     /** 
     * internal classes
     */
     "classes" : {
         get: function () {
-            return TraceClasses;
+            return traceClasses;
         },
         enumerable : true,
         configurable : false
@@ -781,7 +982,7 @@ Object.defineProperties(ttrace,
 * @class Define a specific font for a cell or for a whole trace line .
 * @constructor
 */
-TraceClasses.FontDetail = function ()
+traceClasses.FontDetail = function ()
 {
    /** {integer} column id. -1 for the whole line */
    this.colId = 0 ;
@@ -811,7 +1012,7 @@ TraceClasses.FontDetail = function ()
 
 
 // add prototype to FontDetail
-Object.defineProperty(TraceClasses.FontDetail.prototype, 'classname', {
+Object.defineProperty(traceClasses.FontDetail.prototype, 'classname', {
   enumerable: true,     
   configurable: false,  
   writable: false,        
@@ -828,7 +1029,7 @@ Object.defineProperty(TraceClasses.FontDetail.prototype, 'classname', {
 * @constructor
 * @returns {void}
 */
-TraceClasses.Context = function()
+traceClasses.Context = function()
 {
    /** {Array} context queue */
    this.contextList = [] ;
@@ -847,7 +1048,7 @@ TraceClasses.Context = function()
 
 // add prototype to Context
 
-TraceClasses.Context.prototype =
+traceClasses.Context.prototype =
 
    /** @lends TraceClasses.Context.prototype */
    {
@@ -930,7 +1131,7 @@ TraceClasses.Context.prototype =
    }
 ;
 
-Object.defineProperty(TraceClasses.Context.prototype, 'classname', {
+Object.defineProperty(traceClasses.Context.prototype, 'classname', {
   enumerable: true,     
   configurable: false,  
   writable: false,       
@@ -945,7 +1146,7 @@ Object.defineProperty(TraceClasses.Context.prototype, 'classname', {
 * @description TraceToSend methodes create new traces and send it to the viewer
 * @constructor
 */
-TraceClasses.TraceToSend = function ()
+traceClasses.TraceToSend = function ()
 {
    /** {string} Unique node id */
    this.id           = '' ;
@@ -960,7 +1161,7 @@ TraceClasses.TraceToSend = function ()
    this.winTraceId   = '' ;
 
    /** {Context} Tell what is the current node for sub traces. Default is self */
-   this.context      = new TraceClasses.Context() ;
+   this.context      = new traceClasses.Context() ;
    this.context.list = {} ;
 
    Object.defineProperty(this, 'classname', {
@@ -976,7 +1177,7 @@ TraceClasses.TraceToSend = function ()
 //--------------------------------------------------------------------------------------------------------
 
 // TraceToSend prototype
-TraceClasses.TraceToSend.prototype =
+traceClasses.TraceToSend.prototype =
    /** @lends TraceClasses.TraceToSend.prototype */
    {
       //--------------------------------------------------------------------------------------------------------
@@ -990,10 +1191,10 @@ TraceClasses.TraceToSend.prototype =
       send : function (leftMsg,rightMsg)
       {
          if (this.enabled === false)
-            return new TraceClasses.TraceNode(this);
+            return new traceClasses.TraceNode(this);
 
          // create a node with same properties as "this" with new ID
-         var result = new TraceClasses.TraceNode(this, true);
+         var result = new traceClasses.TraceNode(this, true);
          var commandList = prepareNewNode(this, leftMsg, result.id);
          if (typeof (rightMsg) != "undefined" && ("" + rightMsg) !== "")
             commandList.push( intToStr5(/*CST_RIGHT_MSG*/ 552)+ rightMsg);                   // param : right string
@@ -1032,7 +1233,7 @@ TraceClasses.TraceToSend.prototype =
 
          if (isEnter)   // undefined is false
          {
-            var member = new TraceClasses.MemberNode(); // create root member
+            var member = new traceClasses.MemberNode(); // create root member
             member.add("").viewerKind = /*CST_VIEWER_ENTER*/ 8; // then add an empty member with special viewer
             member.addToStringList(commandList); // convert all groups and nested items/group to strings
          }
@@ -1074,7 +1275,7 @@ TraceClasses.TraceToSend.prototype =
 
             if (isExit)  // undefined is false
             {
-               var member = new TraceClasses.MemberNode(); // create root member
+               var member = new traceClasses.MemberNode(); // create root member
                member.add("").viewerKind = /*CST_VIEWER_EXIT*/ 9; // then add an empty member with special viewer
                member.addToStringList(commandList); // convert all groups and nested items/group to strings
             }
@@ -1096,10 +1297,10 @@ TraceClasses.TraceToSend.prototype =
       sendBackgroundColor : function (leftMsg, color, colId)
       {
          if (this.enabled === false)
-            return new TraceClasses.TraceNode(this);
+            return new traceClasses.TraceNode(this);
 
          // create a node with same properties as "this" with new ID
-         var result = new TraceClasses.TraceNode(this, true);
+         var result = new traceClasses.TraceNode(this, true);
          var commandList = prepareNewNode(this, leftMsg, result.id);
          var colorValue = rgbToBgr(color);
          commandList.push( intToStr5( /*CST_BACKGROUND_COLOR*/ 568) + intToStr11(colorValue) + intToStr5(colId)); // param : color, colId
@@ -1154,15 +1355,15 @@ TraceClasses.TraceToSend.prototype =
       sendValue : function (leftMsg, objToSend, maxLevel, title)
       {
          if (!this.enabled)
-            return new TraceClasses.TraceNode(this);
+            return new traceClasses.TraceNode(this);
 
-         var result = new TraceClasses.TraceNodeEx(this, true); // create a node with same properties as "this" with new ID
+         var result = new traceClasses.TraceNodeEx(this, true); // create a node with same properties as "this" with new ID
          var commandList = prepareNewNode(this, leftMsg || "Object" , result.id);
          result.addValue(objToSend, maxLevel, title);
          result.members.addToStringList(commandList); // convert all groups and nested items/group to strings
 
          sendToWinTraceClient(commandList, this.winTraceId);
-         return new TraceClasses.TraceNode(result);
+         return new traceClasses.TraceNode(result);
       } ,
          
       //--------------------------------------------------------------------------------------------------------
@@ -1177,15 +1378,15 @@ TraceClasses.TraceToSend.prototype =
       sendObject : function (leftMsg, objToSend, displayFunctions)
       {
          if (!this.enabled)
-            return new TraceClasses.TraceNode(this);
+            return new traceClasses.TraceNode(this);
 
-         var result = new TraceClasses.TraceNodeEx(this, true); // create a node with same properties as "this" with new ID
+         var result = new traceClasses.TraceNodeEx(this, true); // create a node with same properties as "this" with new ID
          var commandList = prepareNewNode(this, leftMsg || "Object" , result.id);
          result.addObject(objToSend, displayFunctions);
          result.members.addToStringList(commandList); // convert all groups and nested items/group to strings
 
          sendToWinTraceClient(commandList, this.winTraceId);
-         return new TraceClasses.TraceNode(result);
+         return new traceClasses.TraceNode(result);
       } ,
          
       //--------------------------------------------------------------------------------------------------------
@@ -1199,17 +1400,17 @@ TraceClasses.TraceToSend.prototype =
       sendStack: function (leftMsg, belowFn)
       {
          if (!this.enabled)
-            return new TraceClasses.TraceNode(this);
+            return new traceClasses.TraceNode(this);
 
          belowFn = belowFn || this.sendStack;
 
-         var result = new TraceClasses.TraceNodeEx(this, true); // create a node with same properties as "this" with new ID
+         var result = new traceClasses.TraceNodeEx(this, true); // create a node with same properties as "this" with new ID
          var commandList = prepareNewNode(this, leftMsg || "Stack" , result.id);
          result.addStackTrace(belowFn);
          result.members.addToStringList(commandList); // convert all groups and nested items/group to strings
 
          sendToWinTraceClient(commandList, this.winTraceId);
-         return new TraceClasses.TraceNode(result);
+         return new traceClasses.TraceNode(result);
 
       } ,
          
@@ -1224,17 +1425,17 @@ TraceClasses.TraceToSend.prototype =
       sendCaller: function (leftMsg, belowFn)
       {
          if (!this.enabled)
-            return new TraceClasses.TraceNode(this);
+            return new traceClasses.TraceNode(this);
 
          belowFn = belowFn || this.sendCaller;
 
-         var result = new TraceClasses.TraceNodeEx(this, true); // create a node with same properties as "this" with new ID
+         var result = new traceClasses.TraceNodeEx(this, true); // create a node with same properties as "this" with new ID
          var commandList = prepareNewNode(this, leftMsg || "Caller" , result.id);
          result.addCaller(belowFn);
          result.members.addToStringList(commandList); // convert all groups and nested items/group to strings
 
          sendToWinTraceClient(commandList, this.winTraceId);
-         return new TraceClasses.TraceNode(result);
+         return new traceClasses.TraceNode(result);
       } ,
 
       //--------------------------------------------------------------------------------------------------------
@@ -1250,15 +1451,15 @@ TraceClasses.TraceToSend.prototype =
       sendDump : function (leftMsg, shortTitle, buffer, count)
       {
          if (!this.enabled)
-             return new TraceClasses.TraceNode(this);
-         var result = new TraceClasses.TraceNodeEx(this, true); // create a node with same properties as "this" with new ID
+             return new traceClasses.TraceNode(this);
+         var result = new traceClasses.TraceNodeEx(this, true); // create a node with same properties as "this" with new ID
          var commandList = prepareNewNode(this, leftMsg || "Stack" , result.id);
 
          result.addDump(shortTitle, buffer, count);
          result.members.addToStringList(commandList); // convert all groups and nested items/group to strings
 
          sendToWinTraceClient(commandList, this.winTraceId);
-         return new TraceClasses.TraceNode(result);
+         return new traceClasses.TraceNode(result);
       } ,
 
       //--------------------------------------------------------------------------------------------------------
@@ -1272,16 +1473,16 @@ TraceClasses.TraceToSend.prototype =
       sendXml : function (leftMsg, xml)
       {
          if (!this.enabled)
-             return new TraceClasses.TraceNode(this);
+             return new traceClasses.TraceNode(this);
 
-         var result = new TraceClasses.TraceNodeEx(this, true); // create a node with same properties as "this" with new ID
+         var result = new traceClasses.TraceNodeEx(this, true); // create a node with same properties as "this" with new ID
          var commandList = prepareNewNode(this, leftMsg || "Stack" , result.id);
 
          result.addXML(xml);
          result.members.addToStringList(commandList); // convert all groups and nested items/group to strings
 
          sendToWinTraceClient(commandList, this.winTraceId);
-         return new TraceClasses.TraceNode(result);
+         return new traceClasses.TraceNode(result);
       } ,
 
       //--------------------------------------------------------------------------------------------------------
@@ -1295,15 +1496,15 @@ TraceClasses.TraceToSend.prototype =
       sendTable : function (leftMsg,table)
       {
          if (!this.enabled)
-             return new TraceClasses.TraceNode(this);
-         var result = new TraceClasses.TraceNodeEx(this, true);  // create a node with same properties as "this" with new ID
+             return new traceClasses.TraceNode(this);
+         var result = new traceClasses.TraceNodeEx(this, true);  // create a node with same properties as "this" with new ID
          var commandList = prepareNewNode(this, leftMsg, result.id);
 
          result.addTable(table);
          result.members.addToStringList(commandList); // convert all groups and nested items/group to strings
 
          sendToWinTraceClient(commandList, this.winTraceId);
-         return new TraceClasses.TraceNode(result);
+         return new traceClasses.TraceNode(result);
       } ,
          
       //--------------------------------------------------------------------------------------------------------
@@ -1319,7 +1520,7 @@ TraceClasses.TraceToSend.prototype =
    }
 ;
 
-Object.defineProperty(TraceClasses.TraceToSend.prototype, 'classname', {
+Object.defineProperty(traceClasses.TraceToSend.prototype, 'classname', {
   enumerable: true,     
   configurable: false,  
   writable: false,       
@@ -1335,7 +1536,7 @@ Object.defineProperty(TraceClasses.TraceToSend.prototype, 'classname', {
 * @param {string} parentNode Parent node id
 * @param {boolean} generateUniqueId If true, Generate the node id
 */
-TraceClasses.TraceNode = function (parentNode, generateUniqueId)
+traceClasses.TraceNode = function (parentNode, generateUniqueId)
 {
    Object.defineProperty(this, 'classname', {
      enumerable: true,     
@@ -1375,10 +1576,10 @@ TraceClasses.TraceNode = function (parentNode, generateUniqueId)
 //--------------------------------------------------------------------------------------------------------
 
 // TraceNode prototype. Inherit from TraceToSend class
-var TraceNodePrototype = new TraceClasses.TraceToSend() ;  // create a new prototype based on TraceToSend
-TraceClasses.TraceNode.prototype = TraceNodePrototype;
+var traceNodePrototype = new traceClasses.TraceToSend() ;  // create a new prototype based on TraceToSend
+traceClasses.TraceNode.prototype = traceNodePrototype;
 
-extend(TraceNodePrototype,
+extend(traceNodePrototype,
    /** @lends TraceClasses.TraceNode.prototype */
    {
       //--------------------------------------------------------------------------------------------------------
@@ -1836,7 +2037,7 @@ extend(TraceNodePrototype,
 
          var tempStr = "" ;
 
-         if (colId instanceof TraceClasses.FontDetail)
+         if (colId instanceof traceClasses.FontDetail)
          {
             var fontDetail = colId ;
             bold     = fontDetail.bold ;
@@ -1883,7 +2084,7 @@ extend(TraceNodePrototype,
    }
 ) ;
 
-Object.defineProperty(TraceClasses.TraceNode.prototype, 'classname', {
+Object.defineProperty(traceClasses.TraceNode.prototype, 'classname', {
   enumerable: true,     
   configurable: false,  
   writable: false,       
@@ -1903,7 +2104,7 @@ Object.defineProperty(TraceClasses.TraceNode.prototype, 'classname', {
 * @param {string} WinTraceText The Window Title on the viewer.If empty, a default name will be used
 */
 
-TraceClasses.WinTrace = function (winTraceId, winTraceText) // inherit from TraceToSend
+traceClasses.WinTrace = function (winTraceId, winTraceText) // inherit from TraceToSend
 {
    // private vars, accessible only by privileged method
    //-------------
@@ -2013,17 +2214,17 @@ TraceClasses.WinTrace = function (winTraceId, winTraceText) // inherit from Trac
    {
       that.winTraceId = that.id ;    // winTraceId need to be the same as 'id' if we want to call sendXxx() directly on WinTrace object
 
-      debugInstance = new  TraceClasses.TraceToSend(null,false,contextInstance) ;    // no parentNode, don't generate id, winTraceContext
+      debugInstance = new  traceClasses.TraceToSend(null,false,contextInstance) ;    // no parentNode, don't generate id, winTraceContext
       debugInstance.iconIndex = /*CST_ICO_INFO*/ 24 ;
       debugInstance.winTraceId = that.id ;
       debugInstance.enabled = true ;
 
-      warningInstance = new  TraceClasses.TraceToSend(null,false,contextInstance) ;  // no parentNode, don't generate id, winTraceContext
+      warningInstance = new  traceClasses.TraceToSend(null,false,contextInstance) ;  // no parentNode, don't generate id, winTraceContext
       warningInstance.iconIndex = /*CST_ICO_WARNING*/ 22 ;
       warningInstance.winTraceId = that.id ;
       warningInstance.enabled = true ;
 
-      errorInstance = new  TraceClasses.TraceToSend(null,false,contextInstance) ;    // no parentNode, don't generate id, winTraceContext
+      errorInstance = new  traceClasses.TraceToSend(null,false,contextInstance) ;    // no parentNode, don't generate id, winTraceContext
       errorInstance.iconIndex = /*CST_ICO_ERROR*/ 23 ;
       errorInstance.winTraceId = that.id ;
       errorInstance.enabled = true ;
@@ -2031,10 +2232,10 @@ TraceClasses.WinTrace = function (winTraceId, winTraceText) // inherit from Trac
 } ;   // WinTrace class
 
 // WinTrace prototype. Inherit from TraceToSend class
-var WinTracePrototype = new TraceClasses.TraceToSend() ;           // create a new prototype based on TraceToSend
-TraceClasses.WinTrace.prototype = WinTracePrototype;
+var winTracePrototype = new traceClasses.TraceToSend() ;           // create a new prototype based on TraceToSend
+traceClasses.WinTrace.prototype = winTracePrototype;
 
-extend(WinTracePrototype,
+extend(winTracePrototype,
    /** @lends TraceClasses.WinTrace.prototype */
    {
       //--------------------------------------------------------
@@ -2340,16 +2541,14 @@ extend(WinTracePrototype,
    }
 ) ;
 
-Object.defineProperty(TraceClasses.WinTrace.prototype, 'classname', {
+Object.defineProperty(traceClasses.WinTrace.prototype, 'classname', {
   enumerable: true,     
   configurable: false,  
   writable: false,       
   value: 'TraceClasses.WinTrace.prototype'
 });
 
-
 //=============================================================================================================
-
 
 /**
 * @class Alternate way to send traces : prepare a TraceNode with all properties then send it
@@ -2357,7 +2556,7 @@ Object.defineProperty(TraceClasses.WinTrace.prototype, 'classname', {
 * @param {string} parentNode The parent node where to place that trace. The IconIndex and the enabled properties are also recopied Parameters can be null : the root tree become the parent node, enabled is true and the default icon is used
 * @param {string} generateUniqueId if true, the id is generated automatically, else set the empty string
 */
-TraceClasses.TraceNodeEx = function (parentNode, generateUniqueId)
+traceClasses.TraceNodeEx = function (parentNode, generateUniqueId)
 {
    Object.defineProperty(this, 'classname', {
      enumerable: true,     
@@ -2385,7 +2584,7 @@ TraceClasses.TraceNodeEx = function (parentNode, generateUniqueId)
    this.threadName = '';
 
    /** {MemberNode} the root for the Member tree */
-   this.members = new TraceClasses.MemberNode();
+   this.members = new traceClasses.MemberNode();
 
    /** {string} Parent Node Id */
    this.parentNodeId = "";
@@ -2425,7 +2624,7 @@ TraceClasses.TraceNodeEx = function (parentNode, generateUniqueId)
 //--------------------------------------------------------
 
 // TraceNodeEx prototype
-TraceClasses.TraceNodeEx.prototype =
+traceClasses.TraceNodeEx.prototype =
    {
       //--------------------------------------------------------
       /**
@@ -2459,7 +2658,7 @@ TraceClasses.TraceNodeEx.prototype =
             return;
 
          count = count || buffer.length ;
-         var dumpGroup = new TraceClasses.MemberNode(shortTitle).setFontDetail(0, true);
+         var dumpGroup = new traceClasses.MemberNode(shortTitle).setFontDetail(0, true);
          dumpGroup.viewerKind = /* TraceConst.CST_VIEWER_DUMP */ 1;
          this.members.add(dumpGroup);
 
@@ -2520,11 +2719,11 @@ TraceClasses.TraceNodeEx.prototype =
          } else // already an object or array
              obj = table;
          
-         if (table instanceof TraceClasses.TraceTable) {     
+         if (table instanceof traceClasses.TraceTable) {     
             table.copyToNodeMembers(this.members); // copy member to node. Member viewer kind is already set
          } else if (objClassName === "Array") {
             // create table
-            var tableMembers = new TraceClasses.MemberNode('Index').setFontDetail(0, true); // Display the index on first column
+            var tableMembers = new traceClasses.MemberNode('Index').setFontDetail(0, true); // Display the index on first column
             tableMembers.viewerKind = /* TraceConst.CST_VIEWER_TABLE */ 3;
             this.members.add(tableMembers);
             var isFirst = true; // indicate first line (for column detection)
@@ -2585,9 +2784,9 @@ TraceClasses.TraceNodeEx.prototype =
                         var node;
                         var msg = "" + e;
                         if (msg === e.message) 
-                           node = new TraceClasses.MemberNode(memberName, e);
+                           node = new traceClasses.MemberNode(memberName, e);
                         else 
-                           node = new TraceClasses.MemberNode(memberName, e.message, e);
+                           node = new traceClasses.MemberNode(memberName, e.message, e);
                         tableMembers.add(node);
                      }
                   } // for (var memberName in itemObject)
@@ -2631,7 +2830,7 @@ TraceClasses.TraceNodeEx.prototype =
       {
          if (!this.enabled)
             return;
-         var fontDetail = new TraceClasses.FontDetail();
+         var fontDetail = new traceClasses.FontDetail();
          fontDetail.colId = colId;
          fontDetail.color = color;    // store the color and convert it to BGR when the node is send
          fontDetail.fontName = "BackgroundColor";  // special name. Indicate that color is for background, not font itself //$NON-NLS-1$
@@ -2657,10 +2856,10 @@ TraceClasses.TraceNodeEx.prototype =
          if (!this.enabled)
             return this ;
          var fontDetail ;
-         if (colId instanceof TraceClasses.FontDetail) {     
+         if (colId instanceof traceClasses.FontDetail) {     
             fontDetail = colId ;
          } else {
-            fontDetail = new TraceClasses.FontDetail();
+            fontDetail = new traceClasses.FontDetail();
             if (typeof(colId)    == "undefined") colId = -1 ;
             if (typeof(bold)     == "undefined") bold  = true ;
             if (typeof(italic)   == "undefined") italic = false;
@@ -2775,7 +2974,7 @@ TraceClasses.TraceNodeEx.prototype =
                         continue ;
 
 
-                     var node = new TraceClasses.MemberNode(memberName, "", "");
+                     var node = new traceClasses.MemberNode(memberName, "", "");
                      upperNode.add(node);
                      innerAddValue(memberValue, node, maxLevel - 1, alreadyParsedObject);
 
@@ -2783,15 +2982,15 @@ TraceClasses.TraceNodeEx.prototype =
                      var nodeEx ;
                      var msg = "" + e ;
                      if (msg === e.message)
-                        nodeEx = new TraceClasses.MemberNode(memberName, e);
+                        nodeEx = new traceClasses.MemberNode(memberName, e);
                      else
-                        nodeEx = new TraceClasses.MemberNode(memberName, e.message, e);
+                        nodeEx = new traceClasses.MemberNode(memberName, e.message, e);
                      upperNode.add(nodeEx);
                   }
                }
 
             } catch (e2) {
-               var nodeEx2 = new TraceClasses.MemberNode(e2.message);
+               var nodeEx2 = new traceClasses.MemberNode(e2.message);
                upperNode.add(nodeEx2);
             }
          } ; // innerAddValue()
@@ -2812,7 +3011,7 @@ TraceClasses.TraceNodeEx.prototype =
 
          // create the top node using only title.
          // Value (col2) and Type (col3) will be added by inner_addValue
-         var result = new TraceClasses.MemberNode(title);
+         var result = new traceClasses.MemberNode(title);
          result.viewerKind = /* TraceConst.CST_VIEWER_VALUE */ 7 ;
 
          // add top node to trace
@@ -2842,11 +3041,11 @@ TraceClasses.TraceNodeEx.prototype =
          var functionsGroup = null ;
          var classGroup = null ;
 
-         classGroup = new TraceClasses.MemberNode("Class information").setFontDetail(0, true);
+         classGroup = new traceClasses.MemberNode("Class information").setFontDetail(0, true);
          classGroup.viewerKind = /* CST_VIEWER_OBJECT */ 6 ;
          this.members.add(classGroup);
 
-         propertiesGroup = new TraceClasses.MemberNode("Properties").setFontDetail(0, true);
+         propertiesGroup = new traceClasses.MemberNode("Properties").setFontDetail(0, true);
          propertiesGroup.viewerKind = /* CST_VIEWER_OBJECT */ 6;
          this.members.add(propertiesGroup);
 
@@ -2908,7 +3107,7 @@ TraceClasses.TraceNodeEx.prototype =
                      {
                         if (functionsGroup === null)
                         {
-                           functionsGroup = new TraceClasses.MemberNode("Functions").setFontDetail(0, true);
+                           functionsGroup = new traceClasses.MemberNode("Functions").setFontDetail(0, true);
                            functionsGroup.viewerKind = /* CST_VIEWER_OBJECT */ 6;
                            this.members.add(functionsGroup);
                         }
@@ -2953,7 +3152,7 @@ TraceClasses.TraceNodeEx.prototype =
             return;
 
          belowFn = belowFn || this.addCaller;
-         var group = new TraceClasses.MemberNode("Call stack").setFontDetail(0, true);
+         var group = new traceClasses.MemberNode("Call stack").setFontDetail(0, true);
          group.viewerKind =  /* CST_VIEWER_STACK */ 4 ;
          this.members.add(group);
 
@@ -2986,7 +3185,7 @@ TraceClasses.TraceNodeEx.prototype =
 
          belowFn = belowFn || this.addStackTrace;
 
-         var group = new TraceClasses.MemberNode("Call stack").setFontDetail(0, true);
+         var group = new traceClasses.MemberNode("Call stack").setFontDetail(0, true);
          group.viewerKind =  /* CST_VIEWER_STACK */ 4 ;
          this.members.add(group);
          var stack = stackTrace.get(belowFn);
@@ -3012,7 +3211,7 @@ TraceClasses.TraceNodeEx.prototype =
       */
       send : function ()
       {
-         var result = new TraceClasses.TraceNode(this);
+         var result = new traceClasses.TraceNode(this);
          if (!this.enabled)
             return result;
          var commandList = new Array();
@@ -3073,7 +3272,7 @@ TraceClasses.TraceNodeEx.prototype =
    }
 ;
 
-Object.defineProperty(TraceClasses.TraceNodeEx.prototype, 'classname', {
+Object.defineProperty(traceClasses.TraceNodeEx.prototype, 'classname', {
   enumerable: true,     
   configurable: false,  
   writable: false,       
@@ -3087,7 +3286,7 @@ Object.defineProperty(TraceClasses.TraceNodeEx.prototype, 'classname', {
 * @description The table must be associated with a node. See TraceNodeEx.AddTable() and TraceSend.SendTable()
 * @constructor
 */
-TraceClasses.TraceTable = function ()
+traceClasses.TraceTable = function ()
 {
    Object.defineProperty(this, 'classname', {
      enumerable: true,     
@@ -3097,7 +3296,7 @@ TraceClasses.TraceTable = function ()
    });
 
    /** {MemberNode} the root for the Member tree */
-   this.members = new TraceClasses.MemberNode();
+   this.members = new traceClasses.MemberNode();
    this.members.viewerKind = 3 ; /*CST_VIEWER_TABLE*/;
 
    /** {string} the current row */
@@ -3106,7 +3305,7 @@ TraceClasses.TraceTable = function ()
 
 //--------------------------------------------------------
 // TraceTable prototype
-TraceClasses.TraceTable.prototype =
+traceClasses.TraceTable.prototype =
    {
       //--------------------------------------------------------
       /**
@@ -3169,7 +3368,7 @@ TraceClasses.TraceTable.prototype =
    }
 ;
 
-Object.defineProperty(TraceClasses.TraceTable.prototype, 'classname', {
+Object.defineProperty(traceClasses.TraceTable.prototype, 'classname', {
   enumerable: true,     
   configurable: false,  
   writable: false,       
@@ -3185,7 +3384,7 @@ Object.defineProperty(TraceClasses.TraceTable.prototype, 'classname', {
  * @param {string} winWatchId Required window trace Id. If empty, a guid will be generated
  * @param {string} winWatchText The Window Title on the viewer.If empty, a default name will be used
  */
-TraceClasses.WinWatch = function (winWatchId , winWatchText)
+traceClasses.WinWatch = function (winWatchId , winWatchText)
 {
    Object.defineProperty(this, 'classname', {
      enumerable: true,     
@@ -3226,7 +3425,7 @@ TraceClasses.WinWatch = function (winWatchId , winWatchText)
 //--------------------------------------------------------
 
 // WinWatch prototype
-TraceClasses.WinWatch.prototype =
+traceClasses.WinWatch.prototype =
     {
        /**
        * Switch viewer to this window
@@ -3283,7 +3482,7 @@ TraceClasses.WinWatch.prototype =
           commandList.push(intToStr5(/*CST_WATCH_NAME*/ 112) + watchName);
 
           // create a node to store members
-          var node = new TraceClasses.TraceNodeEx(null, false);  // no parent, don't generate node id
+          var node = new traceClasses.TraceNodeEx(null, false);  // no parent, don't generate node id
 
           node.addValue(watchValue  ,  ttrace.options.objectTreeDepth , "");    // no title
           node.members.addToStringList(commandList) ;   // convert all groups and nested items/group to strings
@@ -3293,7 +3492,7 @@ TraceClasses.WinWatch.prototype =
     }
 ;
 
-Object.defineProperty(TraceClasses.WinWatch.prototype, 'classname', {
+Object.defineProperty(traceClasses.WinWatch.prototype, 'classname', {
   enumerable: true,     
   configurable: false,  
   writable: false,       
@@ -3308,7 +3507,7 @@ Object.defineProperty(TraceClasses.WinWatch.prototype, 'classname', {
 * @param {string} [col2] text of second col
 * @param {string} [col3] text of third col
 */
-TraceClasses.MemberNode = function (col1, col2, col3)
+traceClasses.MemberNode = function (col1, col2, col3)
 {
    Object.defineProperty(this, 'classname', {
      enumerable: true,     
@@ -3339,7 +3538,7 @@ TraceClasses.MemberNode = function (col1, col2, col3)
 //--------------------------------------------------------------------------------------------------------
 
 // MemberNode prototype
-TraceClasses.MemberNode.prototype =
+traceClasses.MemberNode.prototype =
 {
    //--------------------------------------------------------------------------------------------------------
    /**
@@ -3352,11 +3551,11 @@ TraceClasses.MemberNode.prototype =
    add : function (col1, col2, col3)
    {
       var member ;
-      if (col1 instanceof TraceClasses.MemberNode)    
+      if (col1 instanceof traceClasses.MemberNode)    
       {
          member = col1 ; // strCol1 is already a MemberNode object. Add to array and return it
       } else {
-         member = new TraceClasses.MemberNode(col1, col2, col3) ;  // create a Member object
+         member = new traceClasses.MemberNode(col1, col2, col3) ;  // create a Member object
       }
       this.members.push(member);
       return member;
@@ -3382,7 +3581,7 @@ TraceClasses.MemberNode.prototype =
       {
          fontDetail = colId ;
       } else {
-         fontDetail = new TraceClasses.FontDetail();
+         fontDetail = new traceClasses.FontDetail();
 
          if (typeof(colId)    == "undefined") colId = -1 ;     // default : whole line
          if (typeof(bold)     == "undefined") bold  = false ;  // default : not bold
@@ -3493,7 +3692,7 @@ TraceClasses.MemberNode.prototype =
    }  // addToStringList
 };  // TraceClasses.MemberNode.prototype
 
-Object.defineProperty(TraceClasses.MemberNode.prototype, 'classname', {
+Object.defineProperty(traceClasses.MemberNode.prototype, 'classname', {
   enumerable: true,     
   configurable: false,  
   writable: false,       
@@ -3502,6 +3701,10 @@ Object.defineProperty(TraceClasses.MemberNode.prototype, 'classname', {
 
 //--------------------------------------------------------------------------------------------------------
 
-module.exports = ttrace;
+if (isNodeJs) 
+    module.exports = ttrace;
+else
+    global.ttrace = ttrace ;
 
-
+// ReSharper disable once ThisInGlobalContext
+})(typeof window !== "undefined" ? window : this);

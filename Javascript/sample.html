@@ -16,18 +16,17 @@
 
 <!-- Best way to load the client API : Ask the viewer to send it. 
      Change the src tag to specify compression, viewer location and port -->
-<script type="text/javascript" src="http://localHost:81/tracetool.js?Compressed=false" no-cache></script>
+<script type="text/javascript" src="http://localHost:85/tracetool.js?Compressed=false" no-cache></script>
 
 <script>
 
-// Use theses functions only if you don't load the Api from the viewer
-//ttrace.setHost("localHost:81");
+ttrace.host="localHost:85";
 //ttrace.queryClientId() ;
 
 function SendObjectTest()
 {
    var obj = document.getElementById("SendObjectTest") .value ;
-   ttrace.debug().sendObject(obj,eval(obj));
+   ttrace.debug.sendObject(obj,eval(obj));
    ttrace.display("done. " + ttrace.getWaitingMessageCount() + " message(s) to send") ;
 }
 
@@ -35,7 +34,7 @@ function SendObjectTest()
 function SendValueTest()
 {
    var obj = document.getElementById("SendObjectTest") .value ;
-   ttrace.debug().sendValue(obj,eval(obj),3,obj);
+   ttrace.debug.sendValue(obj,eval(obj),3,obj);
    ttrace.display("done. " + ttrace.getWaitingMessageCount() + " message(s) to send") ;
 }
 
@@ -44,33 +43,33 @@ function SendValueTest()
 function butSample()
 {
    
-   ttrace.debug().send('hello world') ;
-   ttrace.debug().send('hello','world') ;
-   var hello = ttrace.debug().send('hello') ;
+   ttrace.debug.send('hello world') ;
+   ttrace.debug.send('hello','world') ;
+   var hello = ttrace.debug.send('hello') ;
    hello.send('world') ;  // send traces under another node
-   ttrace.debug().send('>test é & = ? à<','ampersand') ;   // send any kind of chars
-   ttrace.debug().send('----------') ;  //separator
-   ttrace.error().sendStack() ;
-   ttrace.warning().sendCaller() ;
-   ttrace.debug().sendDump("Dump sample", "dump", "sample text with special chars >test é & = ? à< ") ; // , 30
+   ttrace.debug.send('>test é & = ? à<','ampersand') ;   // send any kind of chars
+   ttrace.debug.send('----------') ;  //separator
+//   ttrace.error.sendStack() ;
+//   ttrace.warning.sendCaller() ;
+   ttrace.debug.sendDump("Dump sample", "dump", "sample text with special chars >test é & = ? à< ") ; // , 30
 
    // send array. 
    var sampleArray = [] ;
    sampleArray.push (hello) ;               
    sampleArray [5] = "test1" ;              
    sampleArray ["MyIndice"] = "test2" ;     
-   ttrace.debug().sendValue('sendValue array', sampleArray, 3, 'sampleArray');
+   ttrace.debug.sendValue('sendValue array', sampleArray, 3, 'sampleArray');
    
    // xml
    //-------
-   ttrace.debug().sendXml('xml','<?xml version="1.0" ?><Data> Hello XML </Data>') ;
+   ttrace.debug.sendXml('xml','<?xml version="1.0" ?><Data> Hello XML </Data>') ;
 
    // TraceNodeEx sample : create a node and add some informations before sending it (text, stack,object,xml,...)
    //-----------------------
    var f = new ttrace.classes.FontDetail();
    f.colId = 3 ;
    f.color = '#00FF00' ;    // light green
-   var nodeEx = new ttrace.classes.TraceNodeEx (ttrace.debug()) ; // parameters : parentNode, generateUniqueId
+   var nodeEx = new ttrace.classes.TraceNodeEx (ttrace.debug) ; // parameters : parentNode, generateUniqueId
    nodeEx.leftMsg = 'TraceNodeEx' ;
    nodeEx.rightMsg = 'Sample' ;
    nodeEx.threadName = 'MyThread' ;
@@ -82,7 +81,7 @@ function butSample()
    f.colId = 1 ;
    f.bold = true ;
    nodeEx.members.add('my member', 'col2').setFontDetail (f);
-   nodeEx.addStackTrace() ;
+//   nodeEx.addStackTrace() ;
    nodeEx.addValue  (nodeEx) ;
    nodeEx.addBackgroundColor ('#208020' , -1);   // dark green
    nodeEx.addXML('<?xml version="1.0" ?><Data> Hello XML </Data>') ;
@@ -91,7 +90,7 @@ function butSample()
    // send table. Note that the titles are taken from the first item in the array. 
    // All items should then be of the same kind !!!
    //---------------------------------------------------------
-   ttrace.debug().sendTable('sendTable array', sampleArray);
+   ttrace.debug.sendTable('sendTable array', sampleArray);
 
    // Other way to send table : compose yourself titles and datas
    //---------------------------------------------------------
@@ -112,30 +111,30 @@ function butSample()
    table.addRowData("aa" + "\t" + "data second column" + "\t" + "cc" + "\t" + "dd" + "\t" + "ee");  // add all columns data in a single step (tab separated)
 
    // finally send the table
-   ttrace.debug().sendTable("Mytable", table);
+   ttrace.debug.sendTable("Mytable", table);
    
 
-   ttrace.display("done. " + ttrace.getWaitingMessageCount() + " message(s) to send") ;
+   console.log("done. " + ttrace.waitingMessageCount + " message(s) to send") ;
 } ;
 
 //-------------------------------------------
 
 function butIndent()
 {
-   ttrace.debug().indent("before indent", ttrace.debug().indentLevel()) ;
-   ttrace.debug().send("after indent", ttrace.debug().indentLevel()) ;
-   ttrace.debug().unIndent("unindent", ttrace.debug().indentLevel()) ;
-   ttrace.debug().send("after unindent") ;
+   ttrace.debug.indent("before indent", ttrace.debug.indentLevel()) ;
+   ttrace.debug.send("after indent", ttrace.debug.indentLevel()) ;
+   ttrace.debug.unIndent("unindent", ttrace.debug.indentLevel()) ;
+   ttrace.debug.send("after unindent") ;
 
-   var node1 = ttrace.debug().send("node1") ;
+   var node1 = ttrace.debug.send("node1") ;
    node1.send ('Under node1') ;
    node1.indent ('Indent node1') ;
    node1.send ('Under Indent') ;
    node1.unIndent() ;
 
-   ttrace.debug().enterMethod("test2()",'','#00FF00') ;
-   ttrace.debug().send ('Inside method') ;
-   ttrace.debug().exitMethod("test2()");
+   ttrace.debug.enterMethod("test2()",'','#00FF00') ;
+   ttrace.debug.send ('Inside method') ;
+   ttrace.debug.exitMethod("test2()");
 
    ttrace.display("done. " + ttrace.getWaitingMessageCount() + " message(s) to send") ;
 }
@@ -175,7 +174,7 @@ function butClearFilter()
 var start1 ;
 function butStart1()
 {
-   start1 = ttrace.debug().send("Start 1 ..");
+   start1 = ttrace.debug.send("Start 1 ..");
    //start1.resendIconIndex (15);                        // change icon index
    //start1.setBackgroundColor ('#00FF00', 3);           // change background color col3
 
@@ -209,7 +208,7 @@ function butNodeIndent()
 var start2 ;
 function butStart2()
 {
-   start2 = ttrace.debug().send("Start 2 ..");
+   start2 = ttrace.debug.send("Start 2 ..");
    document.getElementById("butAppend"  ).disabled = false ;
    document.getElementById("butShowNode").disabled = false ;
 }
@@ -222,7 +221,7 @@ function butWinTrace()
    // WinTrace sample
    //-----------------------
    win = new ttrace.classes.WinTrace("MyWinTrace","MyWinTrace") ;    // parameters : WinTrace Id and Text
-   win.debug().send('my trace') ;
+   win.debug.send('my trace') ;
    //win.send('default icon');
    //win.setLogFile ('c:\\mylog') ;
 
@@ -245,7 +244,7 @@ function butMulticolTest()
    MultiColTrace.setColumnsTitle("col1 \t col2 \t col3");
    MultiColTrace.setColumnsWidth("100:20:80 \t 200:50 \t 100");
    MultiColTrace.displayWin();
-   MultiColTrace.debug().send("1 \t 2 \t 3");
+   MultiColTrace.debug.send("1 \t 2 \t 3");
 }
 
 //-------------------------------------------
@@ -269,12 +268,12 @@ function butShowStatus()
    var msg ;
 
    if (!window.ttrace)
-      msg = 'TraceTool client API not loaded. check if viewer is running and host and port (81 ?) are matching' ;
+      msg = 'TraceTool client API not loaded. check if viewer is running and host and port (85 ?) are matching' ;
    else {
-      msg  = '<br/>' + 'Client Id : ' + ttrace.getClientID() ;
-      msg += '<br/>' + 'Host : ' + ttrace.getHost() ;
-      msg += '<br/>' + 'Already Send : ' + ttrace.getSendMessageCount() ;
-      msg += '<br/>' + 'To Send : ' + ttrace.getWaitingMessageCount() ;
+      msg  = '<br/>' + 'Client Id : ' + ttrace.clientId ;
+      msg += '<br/>' + 'Host : ' + ttrace.host ;
+      msg += '<br/>' + 'Already Send : ' + ttrace.sendMessageCount ;
+      msg += '<br/>' + 'To Send : ' + ttrace.waitingMessageCount ;
    }
 
    document.getElementById('stat').innerHTML = msg ;
@@ -347,7 +346,7 @@ setTimeout(butShowStatus, 0);
 <div style="width:540px;">
     <input type="button" id="butCreateWindow"  value="Create a new trace window"           onclick="butWinTrace();" /><br />&nbsp; &nbsp; &nbsp;&nbsp;
     <input type="button" id="butDisplayWindow" value="Display that window on the viewer"   onclick="win.displayWin()" disabled="disabled" /><br />&nbsp; &nbsp; &nbsp;&nbsp;
-    <input type="button" id="butHelloWin"      value="Say Hello"                           onclick="win.debug().send('Hello');" disabled="disabled" /><br />&nbsp; &nbsp; &nbsp;&nbsp;
+    <input type="button" id="butHelloWin"      value="Say Hello"                           onclick="win.debug.send('Hello');" disabled="disabled" /><br />&nbsp; &nbsp; &nbsp;&nbsp;
     <input type="button" id="butSaveWinToText" value="saveToText('c:\\log2.txt')"          onclick="win.saveToText('c:\\log2.txt')" disabled="disabled" /><br />&nbsp; &nbsp; &nbsp;&nbsp;
     <input type="button" id="butSaveWinToXml"  value="saveToXml('c:\\log2.xml')"           onclick="win.saveToXml('c:\\log2.xml')" disabled="disabled" /><br />&nbsp; &nbsp; &nbsp;&nbsp;
     <input type="button" id="butLoadWinXml"    value="loadXml('c:\\log2.xml')"             onclick="win.loadXml('c:\\log2.xml')" disabled="disabled" /><br />

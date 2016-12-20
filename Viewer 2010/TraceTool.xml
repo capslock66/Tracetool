@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
-<Config><General><LastSavedPath Value="C:\"/><SocketPort Value="8090"/><ShowSocketWarning Value="false"/><LastStyleSheet Value=""/><HTTPPort Value="81"/><SocketPort2 Value="4502"/><SocketPolicyServer Value="true"/><HttpPolicyServer Value="true"/><Udp1 Value="false"/><Udp2 Value="false"/></General>
+<Config><General><LastSavedPath Value="C:\"/><SocketPort Value="8090"/><ShowSocketWarning Value="false"/><LastStyleSheet Value=""/><HTTPPort Value="85"/><SocketPort2 Value="4502"/><SocketPolicyServer Value="true"/><HttpPolicyServer Value="true"/><Udp1 Value="false"/><Udp2 Value="false"/></General>
 	<AppDisplay>
 		<SmallBut Value="true"/>
-		<ApplicationTitle Value="Classic : 8090 / Silverlight : 4502 / Http : 81"/>
+		<ApplicationTitle Value="Classic : 8090 / Silverlight : 4502 / Http : 85"/>
 		<Left Value="722"/>
 		<Top Value="143"/>
 		<Width Value="1031"/><Height Value="830"/>
