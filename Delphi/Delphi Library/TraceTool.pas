@@ -7797,7 +7797,11 @@ begin
   info.ThreadID:=$FFFFFFFF;
   info.Flags:=0;
   try
-    RaiseException($406D1388, 0, SizeOf(info) div SizeOf(LongWord), PDWord (@info));  // PDWord for delphi < XE4,  PUINT_PTR >= XE4
+    {$ifdef COMPILER_18_UP}
+    RaiseException($406D1388, 0, SizeOf(info) div SizeOf(LongWord), PUINT_PTR (@info));  // PUINT_PTR >= XE4
+    {$else}
+    RaiseException($406D1388, 0, SizeOf(info) div SizeOf(LongWord), PDWord (@info));     // PDWord for delphi < XE4
+    {$endif}
   except
   end;
 end;
