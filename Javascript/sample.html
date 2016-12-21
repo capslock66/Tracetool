@@ -12,11 +12,11 @@
 <!-- <script type="text/javascript" src="dom-drag.js"></script>-->
 
 <!-- Not the best way to load the tracetool library : put the library on your server then set the host and ask for an unique client id -->
-<!-- <script type="text/javascript" src="tracetool.js" no-cache></script>-->
+<script type="text/javascript" src="tracetool.js" no-cache></script>
 
 <!-- Best way to load the client API : Ask the viewer to send it. 
      Change the src tag to specify compression, viewer location and port -->
-<script type="text/javascript" src="http://localHost:85/tracetool.js?Compressed=false" no-cache></script>
+<!-- <script type="text/javascript" src="http://localHost:85/tracetool.js?Compressed=false" no-cache></script> -->
 
 <script>
 
@@ -49,8 +49,8 @@ function butSample()
    hello.send('world') ;  // send traces under another node
    ttrace.debug.send('>test é & = ? à<','ampersand') ;   // send any kind of chars
    ttrace.debug.send('----------') ;  //separator
-//   ttrace.error.sendStack() ;
-//   ttrace.warning.sendCaller() ;
+   ttrace.error.sendStack("stack") ;
+   ttrace.warning.sendCaller() ;  // default trace is "Caller"
    ttrace.debug.sendDump("Dump sample", "dump", "sample text with special chars >test é & = ? à< ") ; // , 30
 
    // send array. 
@@ -81,7 +81,7 @@ function butSample()
    f.colId = 1 ;
    f.bold = true ;
    nodeEx.members.add('my member', 'col2').setFontDetail (f);
-//   nodeEx.addStackTrace() ;
+   nodeEx.addStackTrace() ;
    nodeEx.addValue  (nodeEx) ;
    nodeEx.addBackgroundColor ('#208020' , -1);   // dark green
    nodeEx.addXML('<?xml version="1.0" ?><Data> Hello XML </Data>') ;
