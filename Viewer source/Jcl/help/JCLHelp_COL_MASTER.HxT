@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE HelpTOC>
+<HelpTOC
+   DTDVersion = "1.0"
+   PluginStyle="Hierarchical"
+   PluginTitle="JEDI Code Library"
+>
+
+<HelpTOCNode NodeType="TOC" Url="JclHelp"/>
+</HelpTOC>

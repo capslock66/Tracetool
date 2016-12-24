@@ -1,0 +1,46 @@
+{$IFDEF MSWINDOWS}
+
+{$IFNDEF CLR}
+
+var
+  _GetCalendarInfoA: Pointer;
+
+function GetCalendarInfoA;
+begin
+  GetProcedureAddress(_GetCalendarInfoA, kernel32, 'GetCalendarInfoA');
+  asm
+    mov esp, ebp
+    pop ebp
+    jmp [_GetCalendarInfoA]
+  end;
+end;
+
+var
+  _GetCalendarInfoW: Pointer;
+
+function GetCalendarInfoW;
+begin
+  GetProcedureAddress(_GetCalendarInfoW, kernel32, 'GetCalendarInfoW');
+  asm
+    mov esp, ebp
+    pop ebp
+    jmp [_GetCalendarInfoW]
+  end;
+end;
+
+var
+  _EnumCalendarInfoExW: Pointer;
+
+function EnumCalendarInfoExW;
+begin
+  GetProcedureAddress(_EnumCalendarInfoExW, kernel32, 'EnumCalendarInfoExW');
+  asm
+    mov esp, ebp
+    pop ebp
+    jmp [_EnumCalendarInfoExW]
+  end;
+end;
+
+{$ENDIF ~CLR}
+
+{$ENDIF MSWINDOWS}

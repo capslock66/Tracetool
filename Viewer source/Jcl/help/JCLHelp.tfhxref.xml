@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<help2registration>
+  <register>
+    <namespace id="Jedi.Jcl" collectionfile="JCLHelp_COL_MASTER.HxC" description="JEDI Code Library">
+      <title id="JclHelp" langid="1033" helpfile="JCLHelp.HxS" indexfile="JCLHelp.HxI" queryfile="" attrfile=""></title>
+    </namespace>
+  </register>
+  <unregister>
+    <namespace id="Jedi.Jcl">
+      <title id="JclHelp" langid="1033"></title>
+    </namespace>
+    <namespace id="Jedi.Jcl"></namespace>
+  </unregister>
+</help2registration>

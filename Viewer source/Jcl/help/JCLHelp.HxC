@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE HelpCollection SYSTEM "MS-Help://Hx/Resources/HelpCollection.DTD">
+<HelpCollection
+   Id = "JCLHelp_COL_MASTER.HxC"
+   DTDVersion = "1.0"
+   Title = "JEDI Code Library"
+   Copyright = "Project JEDI"
+   FileVersion = "1.103.0.0"
+>
+<CompilerOptions
+    CompileResult = "HxiHxs "
+    OutputFile = "JCLHelp.HxS"
+    CreateFullTextIndex = "Yes" >
+<IncludeFile File = "JCLHelp.HxF" />
+</CompilerOptions>
+<TOCDef File = "JCLHelp.HxT" />
+<KeywordIndexDef File = "JCLHelp_K.HxK" />
+<KeywordIndexDef File = "JCLHelp_F.HxK" />
+<KeywordIndexDef File = "JCLHelp_A.HxK" />
+<KeywordIndexDef File = "JCLHelp_NamedURL.HxK" />
+    <ItemMoniker Name="!DefaultToc" ProgId="HxDs.HxHierarchy" InitData=""/>
+    <ItemMoniker Name="!DefaultFullTextSearch" ProgId="HxDs.HxFullTextSearch" InitData=""/>
+    <ItemMoniker Name="!DefaultKeywordIndex" ProgId="HxDs.HxIndex" InitData="K"/>
+    <ItemMoniker Name="!DefaultAssociativeIndex" ProgId="HxDs.HxIndex" InitData="A" />
+    <ItemMoniker Name="!DefaultContextWindowIndex" ProgId="HxDs.HxIndex" InitData="F" />
+    <ItemMoniker Name="!DefaultNamedUrlIndex" ProgId="HxDs.HxIndex" InitData="NamedURLIndex"/>
+</HelpCollection>

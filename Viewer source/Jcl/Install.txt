@@ -1,0 +1,72 @@
+JEDI Code Library v 1.103 Installation
+
+Supported development tools versions:
+
+- Delphi 2009 and C++Builder 2009
+- CodeGear RAD Studio 2007 (also known as Delphi 2007 for Win32, C++Builder 2007)
+- Borland Developer Studio 2006 (also known as Delphi 2006, C++Builder 2006)
+- Borland Delphi 2005
+- Borland Kylix 3
+- Borland Delphi 7
+- Borland Delphi 6 Update Pack #2 (including Personal Edition)
+- Borland Delphi 5 Update Pack #1
+- Borland C++ Builder 6
+- Borland C++ Builder 5
+
+For more detailed information, see docs\Readme.html.
+
+Please make sure you have installed latest update packs. You can download them
+from CodeGear Support web page: 
+  
+Delphi: http://support.codegear.com/delphi
+C++Builder: http://support.codegear.com/cppbuilder
+
+******************************* IMPORTANT **************************************
+*                                                                              *
+* If you have installed any previous version of the JCL/JVCL you have to       *
+* delete them.                                                                 *
+*                                                                              *
+*                                                                              *
+* It is also necessary to remove all installed JCL/JVCL packages from the IDE. *
+* Do not mix files or compiled packages from older versions of the JCL with    *
+* current version.                                                             *
+*                                                                              *
+********************************************************************************
+
+JEDI INSTALLER
+==============
+
+Helps you to integrate JCL with Delphi/BCB IDE. Currently it assists with:
+
+- Compiling library units (release and debug versions)
+- Compiling packages and installing design-time packages to the IDE
+- Adding sample JCL Debug extension dialogs to Object Repository
+- Adding JCL directories to Library Path / Browsing Path in Environment Options
+- Adding JCL debug .dcu directory to Debug DCU Path in Debugger Options
+- Integrating JCL help file to the IDE.
+- in undoing above changes to the IDE settings ("Uninstall", new in 1.94 final).
+
+To execute for
+
+1) Win32
+- click on "Install.bat" file in the JCL root directory.
+
+  Note:	If you have Delphi 8 for Microsoft .NET installed, you probably will have 
+        to specify the root directory of the make.exe to use for JCL installation; 
+        on the commandline, type (for example):
+
+        >install "C:\Program Files\Borland\Delphi5"
+
+        or
+
+        >install d5
+
+2) Kylix 3
+- open a shell window
+- cd into JCL root directory
+- at the command prompt, type "sh ./install.sh", then press "Enter".
+  You'll also need to do a "source kylixpath" first (see the README of your 
+  Kylix 3 installation) in case your system is not set up to do that at startup.
+
+--------------------------------
+Document last updated 2008-08-25

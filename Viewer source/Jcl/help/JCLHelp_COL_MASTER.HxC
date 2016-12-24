@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE HelpCollection>
+<HelpCollection
+   Id = "JCLHelp_COL_MASTER.HxC"
+   DTDVersion = "1.0"
+   Title = "JEDI Code Library"
+   Copyright = "Project JEDI"
+   FileVersion = "1.103.0.0"
+>
+<TOCDef File = "JCLHelp_COL_MASTER.HxT" />
+<KeywordIndexDef File = "JCLHelp_COL_MASTER_K.HxK" />
+<KeywordIndexDef File = "JCLHelp_COL_MASTER_F.HxK" />
+<KeywordIndexDef File = "JCLHelp_COL_MASTER_A.HxK" />
+<KeywordIndexDef File = "JCLHelp_COL_MASTER_NamedURL.HxK" />
+    <ItemMoniker Name="!DefaultToc" ProgId="HxDs.HxHierarchy" InitData=""/>
+    <ItemMoniker Name="!DefaultFullTextSearch" ProgId="HxDs.HxFullTextSearch" InitData=""/>
+    <ItemMoniker Name="!DefaultKeywordIndex" ProgId="HxDs.HxIndex" InitData="K"/>
+    <ItemMoniker Name="!DefaultAssociativeIndex" ProgId="HxDs.HxIndex" InitData="A" />
+    <ItemMoniker Name="!DefaultContextWindowIndex" ProgId="HxDs.HxIndex" InitData="F" />
+    <ItemMoniker Name="!DefaultNamedUrlIndex" ProgId="HxDs.HxIndex" InitData="NamedURLIndex"/>
+</HelpCollection>
