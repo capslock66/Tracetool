@@ -25,6 +25,8 @@ interface
 
 uses Classes , windows, ActiveX , sysutils, Registry , Messages, Forms, //Dialogs,
      comobj , AxCtrls , SyncObjs , Contnrs, Graphics , TypInfo,
+     SynCommons,
+
 
 {$ifdef COMPILER_10_UP}    // starting 2006
    WideStrings ,
@@ -4617,7 +4619,7 @@ end ;
 
 //------------------------------------------------------------------------------
 
-// called by addObject
+// called by all addTable flavors
 procedure TTraceNode.innerAddFieldsToTable(TableMembers : TMemberNode ; CurrentRow : TMemberNode ; const AObject: TObject ; isFirstRow,isFirstCol : bool) ;
 var
 
@@ -4669,13 +4671,13 @@ begin
          Prop_Name := String(PropInfo.Name) ;
          Prop_Value := '' ;
 
-         //  TTypeKind = (
-         //   tkInteger, tkString,tkWChar,tkLString, tkWString, tkInt64,
-         //   tkClass,
-         //   tkMethod,
-         //   tkChar, tkEnumeration, tkFloat, tkSet, tkUnknown, tkVariant, tkArray, tkRecord, tkInterface,  tkDynArray, tkUString);
+         //TTypeKind = (tkUnknown, tkInteger, tkChar, tkEnumeration, tkFloat,
+         //  tkString, tkSet, tkClass, tkMethod, tkWChar, tkLString, tkWString,
+         //  tkVariant, tkArray, tkRecord, tkInterface, tkInt64, tkDynArray, tkUString,
+         //  tkClassRef, tkPointer, tkProcedure {, tkMRecord});
+
          case PropInfo^.PropType^.Kind of
-            tkInteger,tkString,tkWChar,tkLString,tkWString,tkInt64 :
+            tkInteger,tkString,tkWChar,tkLString,tkWString,tkInt64, tkUString :
                begin
                   if AObject <> nil then begin
                      VariantPropValue := GetPropValue(AObject, String(PropInfo.Name),true) ;
@@ -4683,6 +4685,10 @@ begin
                   end ;
                   AddToFieldGroup() ;
                end ;
+            tkClassRef, tkPointer, tkProcedure {, tkMRecord} :
+               begin
+                  Prop_Value := '???' ;
+               end;
             tkClass :
                begin
                   intPropValue := GetOrdProp(AObject, PropInfo) ;
@@ -5868,7 +5874,61 @@ begin
    end ;
 end;
 
-//------------------------------------------------------------------------------
+//type
+//  TAccessStyle = (asFieldData, asAccessor, asIndexedAccessor);
+//
+////------------------------------------------------------------------------------
+//function GetAccessToProperty(Instance: TObject; PropInfo: PPropInfo;
+//  AccessorProc: Longint; out FieldData: Pointer;
+//  out Accessor: TMethod): TAccessStyle;
+//begin
+//  if (AccessorProc and $FF000000) = $FF000000 then
+//  begin  // field - Getter is the field's offset in the instance data
+//    FieldData := Pointer(Integer(Instance) + (AccessorProc and $00FFFFFF));
+//    Result := asFieldData;
+//  end
+//  else
+//  begin
+//    if (AccessorProc and $FF000000) = $FE000000 then
+//      // virtual method  - Getter is a signed 2 byte integer VMT offset
+//      Accessor.Code := Pointer(PInteger(PInteger(Instance)^ + SmallInt(AccessorProc))^)
+//    else
+//      // static method - Getter is the actual address
+//      Accessor.Code := Pointer(AccessorProc);
+//
+//    Accessor.Data := Instance;
+//    if PropInfo^.Index = Integer($80000000) then  // no index
+//      Result := asAccessor
+//    else
+//      Result := asIndexedAccessor;
+//  end;
+//end;
+//
+//function GetDynArrayProp(Instance: TObject; PropInfo: PPropInfo): Pointer;
+//type
+//  { Need a(ny) dynamic array type to force correct call setup.
+//    (Address of result passed in EDX) }
+//  TDynamicArray = array of Byte;
+//type
+//  TDynArrayGetProc = function: TDynamicArray of object;
+//  TDynArrayIndexedGetProc = function (Index: Integer): TDynamicArray of object;
+//var
+//  M: TMethod;
+//begin
+//  case GetAccessToProperty(Instance, PropInfo, Longint(PropInfo^.GetProc), Result, M) of
+//
+//    asFieldData:
+//      Result := PPointer(Result)^;  // null
+//
+//    asAccessor:
+//      Result := Pointer(TDynArrayGetProc(M)());
+//
+//    asIndexedAccessor:
+//      Result := Pointer(TDynArrayIndexedGetProc(M)(PropInfo^.Index));
+//
+//  end;
+//end;
+
 
 // ITraceNodeEx
 
@@ -5894,6 +5954,13 @@ var
    Prop_Type      : String ;
    Prop_Value     : string ;
    //Prop_ClassType : String ;
+
+   TypeData: PTypeData;
+   TypeInfoPP: PPTypeInfo;
+   DynArray: Pointer;
+
+type
+   PPPTypeInfo = ^PPTypeInfo;
 
 begin
    if AObject = nil then begin
@@ -5934,11 +6001,51 @@ begin
          Prop_Value := '' ;
          //Prop_ClassType := '' ;
 
-         //  TTypeKind = (tkUnknown, tkInteger, tkChar, tkEnumeration, tkFloat,
+         //TTypeKind = (tkUnknown, tkInteger, tkChar, tkEnumeration, tkFloat,
          //  tkString, tkSet, tkClass, tkMethod, tkWChar, tkLString, tkWString,
-         //  tkVariant, tkArray, tkRecord, tkInterface, tkInt64, tkDynArray, tkUString);
+         //  tkVariant, tkArray, tkRecord, tkInterface, tkInt64, tkDynArray, tkUString,
+         //  tkClassRef, tkPointer, tkProcedure {, tkMRecord});
+
+         // GetPropValue , GetOrdProp
+         // see also http://synopse.info/fossil/artifact/9460542e6edb87182effe53b15c7ce3c1bfee2bb
+         // see dynarray in http://synopse.info/forum/viewtopic.php?id=254
+         // function TPropInfo.GetDynArray(Instance: TObject): TDynArray;
+         //begin
+         //   result.Init(PropType^,GetFieldAddr(Instance)^);
+         //end;
+
+         // see System.TypInfo =>
+         // GetPropValue
+         //    tkInteger, tkChar, tkWChar, tkClass => GetOrdProp
+         //    tkEnumeration : GetEnumProp / GetOrdProp
+         //    tkSet : GetSetProp, GetOrdProp
+         //    tkFloat : GetFloatProp
+         //    tkMethod : GetTypeName
+         //    tkString, tkLString: GetStrProp
+         //    tkWString : GetWideStrProp
+         //    tkUString: GetUnicodeStrProp
+         //    tkVariant: GetVariantProp
+         //    tkInt64: GetInt64Prop
+         //    tkDynArray:
+         //       var DynArray: Pointer;
+         //       DynArray := GetDynArrayProp(Instance, PropInfo);
+         //       DynArrayToVariant(Result, DynArray, PropInfo^.PropType^);
+
          case PropInfo^.PropType^.Kind of
-            tkInteger,tkString,tkWChar,tkLString,tkWString,tkInt64 :
+            tkClassRef, tkPointer, tkProcedure {, tkMRecord} :
+               begin
+                  Prop_Type := '???' ;
+                  Prop_Value := '???' ;
+               end;
+            tkMethod : begin  end ;// events
+            tkClass  :
+               begin
+                  fieldNode := upperNode.Add( string(prop_name)) ;  // col2 (value) and col3 (type) will be added by recursion
+                  intPropValue := GetOrdProp(obj, PropInfo) ;
+                  subObj := TObject (intPropValue);
+                  inner_addValue (subObj ,fieldNode , MaxLevel-1, AlreadyParsedObject);
+               end ;
+            tkInteger,tkString,tkWChar,tkLString,tkWString,tkInt64,tkUString :
                begin
                   if obj <> nil then begin
                      VariantPropValue := GetPropValue(AObject, string(PropInfo.Name),true) ;
@@ -5946,16 +6053,47 @@ begin
                   end ;
                   upperNode.Add( string(prop_name) , prop_value,  string(prop_type)) ;
                end ;
-            tkClass :
+            tkDynArray :
                begin
-                  fieldNode := upperNode.Add( string(prop_name)) ;  // col2 (value) and col3 (type) will be added by recursion
-                  intPropValue := GetOrdProp(obj, PropInfo) ;
-                  subObj := TObject (intPropValue);
-                  inner_addValue (subObj ,fieldNode , MaxLevel-1, AlreadyParsedObject);
-               end ;
-            tkMethod : begin  end ;// events
+                  // from System.TypInfo => GetPropValue where kind = tkDynArray
+                  DynArray := GetDynArrayProp(AObject, PropInfo);   // TPropSet<TDynamicArray>.GetProc(Instance, PropInfo)
+
+                  // PTypeData = ^TTypeData;
+                  // TTypeData = packed record
+                  //   case TTypeKind of
+                  //    tkDynArray: (
+                  //     elSize: Longint;
+                  //     elType: PPTypeInfo;       // nil if type does not require cleanup
+                  //     varType: Integer;         // Ole Automation varType equivalent
+                  //     elType2: PPTypeInfo;      // independent of cleanup
+                  //     DynUnitName: ShortStringBase
+                  //    {DynArrElType: PPTypeInfo; // actual element type, even if dynamic array
+                  //     DynArrAttrData: TAttrData});
+
+
+
+                  // See more at: http://codeverge.com/embarcadero.delphi.general/getdynarrayprop-gave-pointer-and-i/1064266#sthash.0edEqMYr.dpuf
+                  // var TypeData: PTypeData;
+                  TypeData := GetTypeData(PropInfo^.PropType^);
+                  with TypeData^ do begin
+                     //TypeInfoPP := PPTypeInfo(Longint(@DynUnitName) + DynUnitName[0] + 1);
+                     TypeInfoPP := PPPTypeInfo(NativeInt(@DynUnitName) + Integer(DynUnitName[0]) > + 1)^;
+                  end;
+                  //VariantPropValue := null ;
+                  //DynArrayToVariant(VariantPropValue, DynArray, PropInfo^.PropType^);
+
+                  Prop_Value := '???' ; //tt_GetVarValue (VariantPropValue,strType) ;
+                  upperNode.Add(String(prop_name) , prop_value, String(prop_type)) ;
+
+               end;
             else
-               begin  // enumeration, ...
+               begin
+                  // tkSet
+                  // tkVariant
+                  // tkRecord
+                  // tkInterface
+                  // ,tkDynArray,tkArray
+
                   if obj <> nil then begin
                      VariantPropValue := GetPropValue(AObject,  string(PropInfo.Name),true) ;
                      Prop_Value := tt_GetVarValue (VariantPropValue,strType) ;
@@ -6190,11 +6328,13 @@ begin
          Prop_Value := '' ;
          //Prop_ClassType := '' ;
 
-         //  TTypeKind = (tkUnknown, tkInteger, tkChar, tkEnumeration, tkFloat,
+         //TTypeKind = (tkUnknown, tkInteger, tkChar, tkEnumeration, tkFloat,
          //  tkString, tkSet, tkClass, tkMethod, tkWChar, tkLString, tkWString,
-         //  tkVariant, tkArray, tkRecord, tkInterface, tkInt64, tkDynArray, tkUString);
+         //  tkVariant, tkArray, tkRecord, tkInterface, tkInt64, tkDynArray, tkUString,
+         //  tkClassRef, tkPointer, tkProcedure {, tkMRecord});
+
          case PropInfo^.PropType^.Kind of
-            tkInteger,tkString,tkWChar,tkLString,tkWString,tkInt64 :
+            tkInteger,tkString,tkWChar,tkLString,tkWString,tkInt64, tkUString :
                begin
                   if obj <> nil then begin
                      VariantPropValue := GetPropValue(AObject, String(PropInfo.Name),true) ;
@@ -6202,6 +6342,11 @@ begin
                   end ;
                   AddToFieldGroup() ;
                end ;
+            tkClassRef, tkPointer, tkProcedure {, tkMRecord} :
+               begin
+                  Prop_Type := '???' ;
+                  Prop_Value := '???' ;  // value is the adresse reference
+               end;
             tkClass :
                begin
                   intPropValue := GetOrdProp(obj, PropInfo) ;
@@ -6228,6 +6373,11 @@ begin
                   end ;
                   AddToEventGroup() ;
                end ;
+            tkDynArray :
+               begin
+                  prop_type := 'Array' ;
+                  Prop_Value := '???' ;
+               end
             else
                begin  // enumeration, ...
                   if obj <> nil then begin
@@ -6250,28 +6400,38 @@ end ;
 
 // ITraceNodeEx
 
+//TTypeKind = (tkUnknown, tkInteger, tkChar, tkEnumeration, tkFloat,
+//  tkString, tkSet, tkClass, tkMethod, tkWChar, tkLString, tkWString,
+//  tkVariant, tkArray, tkRecord, tkInterface, tkInt64, tkDynArray, tkUString,
+//  tkClassRef, tkPointer, tkProcedure {, tkMRecord});
+
 function TTraceNode.GetPropertyTypeString (const TypeKind : TypInfo.TTypeKind) : String ;
 begin
   result := '' ;
   case TypeKind of
-     tkUnknown      : result := 'Unknown' ;
-     tkInteger      : result := 'Integer' ;
-     tkChar         : result := 'Char' ;
-     tkEnumeration  : result := 'Enumeration' ;
-     tkFloat        : result := 'Float' ;
-     tkString       : result := 'String' ;
-     tkSet          : result := 'Set' ;
-     tkClass        : result := 'Class' ;
-     tkMethod       : result := 'Method' ;
-     tkWChar        : result := 'WChar' ;
-     tkLString      : result := 'LString' ;
-     tkWString      : result := 'WString' ;
-     tkVariant      : result := 'Variant' ;
-     tkArray        : result := 'Array' ;
-     tkRecord       : result := 'Record' ;
-     tkInterface    : result := 'Interface' ;
-     tkInt64        : result := 'Int64' ;
-     tkDynArray     : result := 'DynArray' ;
+     tkUnknown      : result := 'Unknown' ;      // A place holder value. Never used
+     tkInteger      : result := 'Integer' ;      // Used for any ordinal type and sub-range types
+     tkChar         : result := 'Char' ;         // Char and AnsiChar types (where Char and AnsiChar are synonyms)
+     tkEnumeration  : result := 'Enumeration' ;  // All enumerated types. This includes Boolean, ByteBool, WordBool, LongBool and Bool
+     tkFloat        : result := 'Float' ;        // Any floating point type except Real, which explains why Real properties are not fully supported
+     tkString       : result := 'String' ;       // Old-style string types, e.g. String[12] and ShortString
+     tkSet          : result := 'Set' ;          // Set types
+     tkClass        : result := 'Class' ;        // Class types
+     tkMethod       : result := 'Method' ;       // Procedure and function method types
+     tkWChar        : result := 'WChar' ;        // WideChar type, new in Delphi 2
+     tkLString      : result := 'LString' ;      // Delphi 2+ long strings (made of AnsiChars)
+     tkWString      : result := 'WString' ;      // The Delphi 3 constant which replaces tkLWString
+     tkVariant      : result := 'Variant' ;      // Variant type, new in Delphi 2
+     tkArray        : result := 'Array' ;        // Array types, new in Delphi 3
+     tkRecord       : result := 'Record' ;       // Record types, new in Delphi 3
+     tkInterface    : result := 'Interface' ;    // Interface types, new in Delphi 3
+     tkInt64        : result := 'Int64' ;        // 64-bit integers, new in Delphi 4
+     tkDynArray     : result := 'DynArray' ;     // Dynamic array types, new in Delphi 4
+     tkUString      : result := 'UString' ;      //
+     tkClassRef     : result := 'ClassRef' ;     //
+     tkPointer      : result := 'Pointer' ;      //
+     tkProcedure    : result := 'Procedure' ;    //
+     //tkMRecord      : result := 'MRecord' ;
   end ;
 end ;
 

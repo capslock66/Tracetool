@@ -20,6 +20,8 @@ uses
    SocketTrace, {note : remove the comment on front to enable socket mode (require indy 10)}
    StackTrace,      { note : remove the comment on front to enable stack trace (require jvcl 1.9)}
 
+//   SynCommons,
+
 {$IFDEF COMPILER_12_UP}    // delphi 2009 and upper
    generics.collections,
    generics.Defaults,
@@ -29,6 +31,7 @@ uses
 type
 
    // ---------------------------------------------------------------------------
+{$M+}
 
    // demo class
    TClassTest = class(TMemo)
@@ -42,17 +45,20 @@ type
       property test: TStringList read getTest write fTest;
    end;
 
-{$M+}
+   TTestList = array of TClassTest ; //integer ;
+
    // add type information
    TClassTest2 = class
    private
       ffield1: TClassTest2;
       ffield2: TStringList;
       fstep: integer;
+      fTestList : TTestList ;
    published
       property field1: TClassTest2 read ffield1 write ffield1;
       property field2: TStringList read ffield2 write ffield2;
       property step: integer read fstep write fstep;
+      property testList : TTestList read fTestList write fTestList;
    end;
 
    TClassTest3 = class(TClassTest2)
@@ -353,6 +359,7 @@ procedure Tform1.butSampleClick(Sender: TObject);
 var
    v: Variant;
    ClassTest: TClassTest;
+   ClassTest2: TClassTest2;
    ClassTest3: TClassTest3;
    XmlDoc: Variant;
    table: ITraceTable;
@@ -371,6 +378,15 @@ var
 {$ENDIF COMPILER_12_UP}
 
 begin
+
+   ClassTest2 := TClassTest2.Create;
+   SetLength(ClassTest2.fTestList,3);
+   TTrace.Debug.SendValue('array test',ClassTest2) ;
+
+   Exit;
+
+
+
    // the euro char is coded in $AC $20 in unicode and $80 in single byte
    WideStr := Edit1.Text;
    // 'é ù è $ €' ;          // $E9 $00 $20 $00 $F9 $00 $20 $00 $E8 $00 $20 $00 $24 $00 $20 $00 $AC $20

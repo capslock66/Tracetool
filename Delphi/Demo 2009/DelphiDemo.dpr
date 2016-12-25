@@ -1,14 +1,9 @@
 program DelphiDemo2009;
 
 uses
-  //fastmm4,
-  //madExcept,
-  //madLinkDisAsm,
-  //madListHardware,
-  //madListProcesses,
-  //madListModules,
   Forms,
-  unitTest1 in 'unitTest1.pas' {form1};
+  unitTest1 in 'unitTest1.pas' {form1},
+  TraceTool in '..\Delphi Library\TraceTool.pas';
 
 {$R *.RES}
 
