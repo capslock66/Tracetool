@@ -381,6 +381,9 @@ begin
 
    ClassTest2 := TClassTest2.Create;
    SetLength(ClassTest2.fTestList,3);
+   ClassTest2.testList[0] := TClassTest.Create(null);
+   ClassTest2.testList[1] := TClassTest.Create(null);
+   ClassTest2.testList[2] := TClassTest.Create(null);
    TTrace.Debug.SendValue('array test',ClassTest2) ;
 
    Exit;

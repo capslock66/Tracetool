@@ -5955,9 +5955,11 @@ var
    Prop_Value     : string ;
    //Prop_ClassType : String ;
 
-   TypeData: PTypeData;
-   TypeInfoPP: PPTypeInfo;
-   DynArray: Pointer;
+   //TypeData: PTypeData;
+   //TypeInfoPP: PPTypeInfo;
+   //DynArray: Pointer;
+
+   GroupA: TDynArray;
 
 type
    PPPTypeInfo = ^PPTypeInfo;
@@ -6074,13 +6076,11 @@ begin
 
                   // See more at: http://codeverge.com/embarcadero.delphi.general/getdynarrayprop-gave-pointer-and-i/1064266#sthash.0edEqMYr.dpuf
                   // var TypeData: PTypeData;
-                  TypeData := GetTypeData(PropInfo^.PropType^);
-                  with TypeData^ do begin
-                     //TypeInfoPP := PPTypeInfo(Longint(@DynUnitName) + DynUnitName[0] + 1);
-                     TypeInfoPP := PPPTypeInfo(NativeInt(@DynUnitName) + Integer(DynUnitName[0]) > + 1)^;
-                  end;
-                  //VariantPropValue := null ;
-                  //DynArrayToVariant(VariantPropValue, DynArray, PropInfo^.PropType^);
+                  //TypeData := GetTypeData(PropInfo^.PropType^);
+                  //with TypeData^ do begin
+                  //   TypeInfoPP := PPPTypeInfo(NativeInt(@DynUnitName) + Integer(DynUnitName[0]) > + 1)^;
+                  //end;
+
 
                   Prop_Value := '???' ; //tt_GetVarValue (VariantPropValue,strType) ;
                   upperNode.Add(String(prop_name) , prop_value, String(prop_type)) ;
