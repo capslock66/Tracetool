@@ -1736,20 +1736,6 @@ const
   POINTERSHR = {$ifdef CPU64}3{$else}2{$endif};
 
 
-/// return TRUE if the supplied content matchs to a grep-like pattern
-// - ?	   	Matches any single characer
-// - *	   	Matches any contiguous characters
-// - [abc]  	Matches a or b or c at that position
-// - [^abc]	Matches anything but a or b or c at that position
-// - [!abc]	Matches anything but a or b or c at that position
-// - [a-e]  	Matches a through e at that position
-// - [abcx-z]  Matches a or b or c or x or y or or z, as does [a-cx-z]
-// - 'ma?ch.*'	would match match.exe, mavch.dat, march.on, etc..
-// - 'this [e-n]s a [!zy]est' would match 'this is a test', but would not
-// match 'this as a test' nor 'this is a zest'
-// - initial C version by Kevin Boylan, first Delphi port by Sergey Seroukhov
-function IsMatch(const Pattern, Text: RawUTF8; CaseInsensitive: boolean=false): boolean;
-
 
 /// compare to floating point values, with IEEE 754 double precision
 // - use this function instead of raw = operator
@@ -6683,7 +6669,7 @@ begin
   fValue := @aValue;
   fTypeInfo := aTypeInfo;
   if PTypeKind(aTypeInfo)^<>tkDynArray then // inlined GetTypeInfo()
-    raise Exception.Create('TDynArray.Init('+PShortString(@PTypeInfo(aTypeInfo)^.NameLen)^+'): not a dynamic array');
+    raise Exception.Create('TDynArray.Init('+String( PShortString(@PTypeInfo(aTypeInfo)^.NameLen)^)+'): not a dynamic array');
   {$ifdef FPC_REQUIRES_PROPER_ALIGNMENT}
   aTypeInfo := GetFPCAlignPtr(aTypeInfo);
   {$else}
@@ -7306,172 +7292,6 @@ end;
 
 {$endif DELPHI5OROLDER}
 
-
-function IsMatch(const Pattern, Text: RawUTF8; CaseInsensitive: boolean): boolean;
-// code below adapted from ZMatchPattern.pas - http://www.zeoslib.sourceforge.net
-
-  type
-    TMatch = (mNONE, mABORT, mEND, mLITERAL, mPATTERN, mRANGE, mVALID);
-  const
-    SINGLE	= '?';
-    KLEENE_STAR = '*';
-    RANGE_OPEN	= '[';
-    RANGE = '-';
-    RANGE_CLOSE = ']';
-    CARET_NEGATE = '^';
-    EXCLAMATION_NEGATE	= '!';
-
-  function MatchAfterStar(Pattern, Text: RawUTF8): TMatch; forward;
-
-  function Matche(const Pattern, Text: RawUTF8): TMatch;
-  var RangeStart, RangeEnd, P, T, PLen, TLen: Integer;
-      Invert, MemberMatch: Boolean;
-  begin
-    P := 1;
-    T := 1;
-    PLen := Length(pattern);
-    TLen := Length(text);
-    result := mNONE;
-    while ((result = mNONE) and (P <= PLen)) do begin
-      if T > TLen then begin
-        if (Pattern[P] = KLEENE_STAR) and (P+1 > PLen) then
-          result := mVALID else
-          result := mABORT;
-        exit;
-      end else
-      case Pattern[P] of
-        KLEENE_STAR:
-          result := MatchAfterStar(Copy(Pattern,P,PLen),Copy(Text,T,TLen));
-        RANGE_OPEN: begin
-          inc(P);
-          Invert := False;
-          if (Pattern[P] = EXCLAMATION_NEGATE) or
-            (Pattern[P] = CARET_NEGATE) then begin
-            Invert := True;
-            inc(P);
-          end;
-          if (Pattern[P] = RANGE_CLOSE) then begin
-            result := mPATTERN;
-            exit;
-          end;
-          MemberMatch := False;
-          while Pattern[P] <> RANGE_CLOSE do begin
-            RangeStart := P;
-            RangeEnd := P;
-            inc(P);
-            if P > PLen then begin
-              result := mPATTERN;
-              exit;
-            end;
-            if Pattern[P] = RANGE then begin
-              inc(P);
-              RangeEnd := P;
-              if (P > PLen) or (Pattern[RangeEnd] = RANGE_CLOSE) then begin
-                result := mPATTERN;
-                exit;
-              end;
-              inc(P);
-            end;
-            if P > PLen then begin
-              result := mPATTERN;
-              exit;
-            end;
-            if RangeStart < RangeEnd then begin
-              if (Text[T] >= Pattern[RangeStart]) and
-                 (Text[T] <= Pattern[RangeEnd]) then begin
-                MemberMatch := True;
-                break;
-              end;
-            end
-            else begin
-              if (Text[T] >= Pattern[RangeEnd]) and
-                 (Text[T] <= Pattern[RangeStart]) then begin
-                MemberMatch := True;
-                break;
-              end;
-            end;
-          end;
-          if (Invert and MemberMatch) or not (Invert or MemberMatch) then begin
-            result := mRANGE;
-            exit;
-          end;
-          if MemberMatch then
-            while (P <= PLen) and (Pattern[P] <> RANGE_CLOSE) do
-              inc(P);
-          if P > PLen then begin
-            result := mPATTERN;
-            exit;
-          end;
-        end;
-      else
-        if Pattern[P] <> SINGLE then
-          if Pattern[P] <> Text[T] then
-            result := mLITERAL;
-      end;
-      inc(P);
-      inc(T);
-    end;
-    if result = mNONE then
-      if T <= TLen then
-        result := mEND else
-        result := mVALID;
-  end;
-
-  function MatchAfterStar(Pattern, Text: RawUTF8): TMatch;
-  var P, T, PLen, TLen: Integer;
-  begin
-    result := mNONE;
-    P := 1;
-    T := 1;
-    PLen := Length(Pattern);
-    TLen := Length(Text);
-    if TLen = 1 then begin
-      result := mVALID;
-      exit;
-    end else
-    if (PLen = 0) or (TLen = 0) then begin
-      result := mABORT;
-      exit;
-    end;
-    while ((T <= TLen) and (P < PLen)) and ((Pattern[P] = SINGLE) or
-      (Pattern[P] = KLEENE_STAR)) do begin
-      if Pattern[P] = SINGLE then
-        inc(T);
-      inc(P);
-    end;
-    if T >= TLen then begin
-      result := mABORT;
-      exit;
-    end else
-    if P >= PLen then begin
-      result := mVALID;
-      exit;
-    end;
-    repeat
-      if (Pattern[P] = Text[T]) or (Pattern[P] = RANGE_OPEN) then begin
-        Pattern := Copy(Pattern, P, PLen);
-        Text := Copy(Text, T, TLen);
-        PLen := Length(Pattern);
-        TLen := Length(Text);
-        p := 1;
-        t := 1;
-        result  := Matche(Pattern, Text);
-        if result <> mVALID then
-          result := mNONE; // retry until end of Text, (check below) or result valid
-      end;
-      inc(T);
-      if (T > TLen) or (P > PLen) then begin
-        result := mABORT;
-        exit;
-      end;
-    until result <> mNONE;
-  end;
-
-begin // IsMatch() main block
-  if CaseInsensitive then
-    result := (Matche(LowerCase(Pattern), LowerCase(Text)) = mVALID) else
-    result := (Matche(Pattern, Text) = mVALID);
-end;
 
 
 
