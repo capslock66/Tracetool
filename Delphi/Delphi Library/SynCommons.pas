@@ -442,32 +442,13 @@ function StrIComp2(Str1, Str2: pointer): PtrInt;
 // protected buffer
 function StrLenPas(S: pointer): PtrInt;
 
-{$ifdef FPC}
-/// FPC will use its internal optimized implementations
-function StrLen(S: pointer): sizeint; external name 'FPC_PCHAR_LENGTH';
-var FillcharFast: procedure(var Dest; count: PtrInt; Value: byte) = System.FillChar;
-{$else}
 
-/// our fast version of StrLen(), to be used with PUTF8Char/PAnsiChar
-// - this version will use fast SSE2/SSE4.2 instructions (if available), on both
-// Win32 and Win64 platforms: please note that in this case, it may read up to
-// 15 bytes before or beyond the string; this is rarely a problem but it can in
-// principle generate a protection violation (e.g. when used over mapped files):
-// you can use the slightly slower StrLenPas() function instead with such input
-var StrLen: function(S: pointer): PtrInt = StrLenPas;
-
-/// our fast version of FillChar()
-// - this version will use fast SSE2 instructions (if available), on both Win32
-// and Win64 platforms, or an optimized X86 revision on older CPUs
-var FillcharFast: procedure(var Dest; count: PtrInt; Value: byte);
-
-{$endif FPC}
 
 
 /// our fast version of move()
 // - this version will use fast SSE2 instructions (if available), on both Win32
 // and Win64 platforms, or an optimized X86 revision on older CPUs
-var MoveFast: procedure(const Source; var Dest; Count: PtrInt);
+//var MoveFast: procedure(const Source; var Dest; Count: PtrInt);
 
 /// our fast version of StrLen(), to be used with PWideChar
 function StrLenW(S: PWideChar): PtrInt;
@@ -1133,13 +1114,6 @@ type
 
 type
 
-  /// a fake TStream, which will just count the number of bytes written
-  TFakeWriterStream = class(TStream)
-  public
-    function Read(var Buffer; Count: Longint): Longint; override;
-    function Write(const Buffer; Count: Longint): Longint; override;
-    function Seek(Offset: Longint; Origin: Word): Longint; override;
-  end;
 
   /// a TStream using a RawByteString as internal storage
   // - default TStringStream uses WideChars since Delphi 2009, so it is
@@ -1398,100 +1372,6 @@ var
 {$define SORTCOMPAREMETHOD}
 { if defined, the field content comparison will use a method instead of fixed
   functions - could be mandatory for tftArray field kind }
-
-type
-  /// the available types for any TSynTable field property
-  // - this is used in our so-called SBF compact binary format
-  // (similar to BSON or Protocol Buffers)
-  // - those types are used for both storage and JSON conversion
-  // - basic types are similar to SQLite3, i.e. Int64/Double/UTF-8/Blob
-  // - storage can be of fixed size, or of variable length
-  // - you can specify to use WinAnsi encoding instead of UTF-8 for string storage
-  // (it can use less space on disk than UTF-8 encoding)
-  // - BLOB fields can be either internal (i.e. handled by TSynTable like a
-  // RawByteString text storage), either external (i.e. must be stored in a dedicated
-  // storage structure - e.g. another TSynBigTable instance)
-  TSynTableFieldType =
-    (// unknown or not defined field type
-     tftUnknown,
-     // some fixed-size field value
-     tftBoolean, tftUInt8, tftUInt16, tftUInt24, tftInt32, tftInt64,
-     tftCurrency, tftDouble,
-     // some variable-size field value
-     tftVarUInt32, tftVarInt32, tftVarUInt64,
-     // text storage
-     tftWinAnsi, tftUTF8,
-     // BLOB fields
-     tftBlobInternal, tftBlobExternal,
-     // other variable-size field value
-     tftVarInt64);
-
-  /// set of available field types for TSynTable
-  TSynTableFieldTypes = set of TSynTableFieldType;
-
-  /// available option types for a field property
-  // - tfoIndex is set if an index must be created for this field
-  // - tfoUnique is set if field values must be unique (if set, the tfoIndex
-  // will be always forced)
-  // - tfoCaseInsensitive can be set to make no difference between 'a' and 'A'
-  // (by default, comparison is case-sensitive) - this option has an effect
-  // not only if tfoIndex or tfoUnique is set, but also for iterating search
-  TSynTableFieldOption = (
-    tfoIndex, tfoUnique, tfoCaseInsensitive);
-
-  /// set of option types for a field
-  TSynTableFieldOptions = set of TSynTableFieldOption;
-
-  /// used to store bit set for all available fiels in a Table
-  // - with current format, maximum field count is 64
-  TSynTableFieldBits = set of 0..63;
-
-  /// an custom RawByteString type used to store internaly a data in
-  // our SBF compact binary format
-  TSBFString = type RawByteString;
-
-  /// function prototype used to retrieve the index of a specified property name
-  // - 'ID' is handled separately: here must be available only the custom fields
-  TSynTableFieldIndex = function(const PropName: RawUTF8): integer of object;
-
-  /// the recognized operators for a TSynTableStatement where clause
-  TSynTableStatementOperator = (
-     opEqualTo,
-     opNotEqualTo,
-     opLessThan,
-     opLessThanOrEqualTo,
-     opGreaterThan,
-     opGreaterThanOrEqualTo,
-     opIn,
-     opIsNull,
-     opIsNotNull,
-     opLike,
-     opContains,
-     opFunction);
-
-  {$ifdef SORTCOMPAREMETHOD}
-  /// internal value used by TSynTableFieldProperties.SortCompare() method to
-  // avoid stack allocation
-  TSortCompareTmp = record
-    PB1, PB2: PByte;
-    L1,L2: integer;
-  end;
-  {$endif}
-
-  /// SQL Query comparison operators
-  // - these operators are e.g. used by CompareOperator() functions
-  TCompareOperator = (
-     soEqualTo,
-     soNotEqualTo,
-     soLessThan,
-     soLessThanOrEqualTo,
-     soGreaterThan,
-     soGreaterThanOrEqualTo,
-     soBeginWith,
-     soContains,
-     soSoundsLikeEnglish,
-     soSoundsLikeFrench,
-     soSoundsLikeSpanish);
 
 
 
@@ -2017,7 +1897,7 @@ begin
       pointer(Dest) := pointer(PAnsiChar(P)+STRRECSIZE);
       PByteArray(Dest)[len] := 0;
     end;
-    MoveFast(pointer(text)^,pointer(Dest)^,len);
+    System.Move(pointer(text)^,pointer(Dest)^,len);
   end;
 end;
 
@@ -2582,7 +2462,7 @@ begin
         '9': begin
           S[prec] := '0';
           if ((prec=2) and (S[1]='-')) or (prec=1) then begin
-            MoveFast(S[prec],S[prec+1],result);
+            System.Move(S[prec],S[prec+1],result);
             S[prec] := '1';
             break;
           end;
@@ -2631,7 +2511,7 @@ begin
   P := pointer(Result);
   for i := 0 to high(Values) do begin
     L := length(Values[i]);
-    MoveFast(pointer(Values[i])^,P^,L);
+    System.Move(pointer(Values[i])^,P^,L);
     inc(P,L);
   end;
 end;
@@ -2642,7 +2522,7 @@ begin
   L := Length(buf);
   if L<>0 then begin
     SetLength(bytes,L);
-    MoveFast(pointer(buf)^,pointer(bytes)^,L);
+    System.Move(pointer(buf)^,pointer(bytes)^,L);
   end;
 end;
 
@@ -3796,9 +3676,9 @@ begin
   SetCount(n+1);
   if cardinal(Index)<cardinal(n) then begin
     P := pointer(PtrUInt(fValue^)+PtrUInt(Index)*ElemSize);
-    MoveFast(P[0],P[ElemSize],cardinal(n-Index)*ElemSize);
+    System.Move(P[0],P[ElemSize],cardinal(n-Index)*ElemSize);
     if ElemType<>nil then
-      FillcharFast(P[0],ElemSize,0); // avoid GPF in ElemCopy() below
+      System.FillChar(P[0],ElemSize,0); // avoid GPF in ElemCopy() below
   end else
     // Index>=Count -> add at the end
     P := pointer(PtrUInt(fValue^)+PtrUInt(n)*ElemSize);
@@ -3843,9 +3723,9 @@ begin
     zerolast := false;
   if n>aIndex then begin
     len := cardinal(n-aIndex)*ElemSize;
-    MoveFast(P[ElemSize],P[0],len);
+    System.Move(P[ElemSize],P[0],len);
     if zerolast then // avoid GPF
-      FillcharFast(P[len],ElemSize,0);
+      System.FillChar(P[len],ElemSize,0);
   end;
   SetCount(n);
 end;
@@ -4281,10 +4161,10 @@ begin // this method is faster than default System.DynArraySetLength() function
       minLength := newLength;
     if ElemType<>nil then begin
       pp := pa+Sizeof(TDynArrayRec);
-      FillcharFast(pp^,minLength*elemSize,0);
+      System.FillChar(pp^,minLength*elemSize,0);
       CopyArray(pp,fValue^,ElemType,minLength)
     end else
-      MoveFast(fValue^,pa[Sizeof(TDynArrayRec)],minLength*elemSize);
+      System.Move(fValue^,pa[Sizeof(TDynArrayRec)],minLength*elemSize);
   end;
   // set refCnt=1 and new length to the heap memory structure
   with p^ do begin
@@ -4299,7 +4179,7 @@ begin // this method is faster than default System.DynArraySetLength() function
   // reset new allocated elements content to zero
   if NewLength>OldLength then begin
     OldLength := OldLength*elemSize;
-    FillcharFast(pa[OldLength],neededSize-OldLength-Sizeof(TDynArrayRec),0);
+    System.FillChar(pa[OldLength],neededSize-OldLength-Sizeof(TDynArrayRec),0);
   end;
   fValue^ := p;
 end;
@@ -4378,7 +4258,7 @@ begin
   if aCount>0 then begin
     P := PAnsiChar(fValue^)+aFirstIndex*ElemSize;
     if ElemType=nil then
-      MoveFast(P^,D^^,aCount*ElemSize) else
+      System.Move(P^,D^^,aCount*ElemSize) else
       CopyArray(D^,P,ElemType,aCount);
   end;
 end;
@@ -4401,7 +4281,7 @@ begin
   PS := pointer(PtrUInt(DynArrayVar)+cardinal(aStartIndex)*ElemSize);
   PD := pointer(PtrUInt(fValue^)+cardinal(n)*ElemSize);
   if ElemType=nil then
-    MoveFast(PS^,PD^,cardinal(aCount)*ElemSize) else
+    System.Move(PS^,PD^,cardinal(aCount)*ElemSize) else
     CopyArray(PD,PS,ElemType,aCount);
 end;
 
@@ -4442,13 +4322,13 @@ begin
       {$endif}
       else exit;
     end;
-  FillcharFast(Elem,ElemSize,0); // always fill with zero binary content
+  System.FillChar(Elem,ElemSize,0); // always fill with zero binary content
 end;
 
 procedure TDynArray.ElemCopy(const A; var B);
 begin
   if ElemType=nil then begin
-    MoveFast(A,B,ElemSize);
+    System.Move(A,B,ElemSize);
     exit;
   end else begin
     case PTypeKind(ElemType)^ of
@@ -4483,7 +4363,7 @@ begin
       else begin
         {$ifdef FPC}
         RecordClear(B,ElemType); // inlined CopyArray()
-        MoveFast(A,B,RTTIManagedSize(ElemType));
+        System.Move(A,B,RTTIManagedSize(ElemType));
         RecordAddRef(B,ElemType);
         {$else}
         CopyArray(@B,@A,ElemType,1);
@@ -4499,7 +4379,7 @@ begin
   if (Source<>nil) and (ElemType=nil) then
     SetString(result,Source,ElemSize) else begin
     SetString(result,nil,ElemSize);
-    FillcharFast(pointer(result)^,ElemSize,0);
+    System.FillChar(pointer(result)^,ElemSize,0);
     ElemLoad(Source,pointer(result)^);
   end;
 end;
@@ -4509,7 +4389,7 @@ begin
   if Source=nil then
     exit; // avoid GPF
   if ElemType=nil then
-    MoveFast(Source^,Elem,ElemSize) else
+    System.Move(Source^,Elem,ElemSize) else
     case PTypeKind(ElemType)^ of
     tkLString{$ifdef FPC},tkLStringOld{$endif}: begin
       SetString(RawByteString(Elem),Source+4,PInteger(Source)^);
@@ -4652,7 +4532,7 @@ begin
     exit;
   dec(n);
   if n>result then
-    MoveFast(a[result+1],a[result],(n-result)*sizeof(pointer));
+    System.Move(a[result+1],a[result],(n-result)*sizeof(pointer));
   SetLength(a,n);
 end;
 
@@ -4700,7 +4580,7 @@ begin
     a[aItemIndex].Free;
   dec(n);
   if n>aItemIndex then
-    MoveFast(a[aItemIndex+1],a[aItemIndex],(n-aItemIndex)*sizeof(TObject));
+    System.Move(a[aItemIndex+1],a[aItemIndex],(n-aItemIndex)*sizeof(TObject));
   SetLength(a,n);
 end;
 
@@ -4799,7 +4679,7 @@ begin
   a[aItemIndex] := nil;
   dec(n);
   if n>aItemIndex then
-    MoveFast(a[aItemIndex+1],a[aItemIndex],(n-aItemIndex)*sizeof(IInterface));
+    System.Move(a[aItemIndex+1],a[aItemIndex],(n-aItemIndex)*sizeof(IInterface));
   TPointerDynArray(aInterfaceArray)[n] := nil; // avoid GPF in SetLength()
   SetLength(a,n);
 end;
@@ -5117,20 +4997,6 @@ const
 
 {$endif SORTCOMPAREMETHOD}
 
-const
-  FIELD_FIXEDSIZE: array[TSynTableFieldType] of Integer = (
-     0, // tftUnknown,
-     1, 1, 2, 3, 4, 8, 8, 8,
-     // tftBoolean, tftUInt8, tftUInt16, tftUInt24, tftInt32, tftInt64, tftCurrency, tftDouble
-     -1, -1, -1, // tftVarUInt32, tftVarInt32, tftVarUInt64 have -1 as size
-     -2, -2, -2, // tftWinAnsi, tftUTF8, tftBlobInternal have -2 as size
-     -3,  // tftBlobExternal has -3 as size
-     -1); //tftVarInt64
-
-  // note: boolean is not in this set, because it can be 'true' or 'false'
-  FIELD_INTEGER: TSynTableFieldTypes = [
-    tftUInt8, tftUInt16, tftUInt24, tftInt32, tftInt64,
-    tftVarUInt32, tftVarInt32, tftVarUInt64, tftVarInt64];
 
 function PropNameValid(P: PUTF8Char): boolean;
 begin
@@ -5170,7 +5036,7 @@ begin
     Result := Length(fDataString)-fPosition;
     if Result>Count then
       Result := Count;
-    MoveFast(PByteArray(fDataString)[fPosition],Buffer,Result);
+    System.Move(PByteArray(fDataString)[fPosition],Buffer,Result);
     inc(fPosition, Result);
   end;
 end;
@@ -5202,51 +5068,11 @@ begin
     Result := 0 else begin
     Result := Count;
     SetLength(fDataString,(fPosition+Result));
-    MoveFast(Buffer,PByteArray(fDataString)[fPosition],Result);
+    System.Move(Buffer,PByteArray(fDataString)[fPosition],Result);
     inc(FPosition,Result);
   end;
 end;
 
 
-{ TFakeWriterStream }
 
-function TFakeWriterStream.Read(var Buffer; Count: Longint): Longint;
-begin // do nothing
-  result := Count;
-end;
-
-function TFakeWriterStream.Write(const Buffer; Count: Longint): Longint;
-begin // do nothing
-  result := Count;
-end;
-
-function TFakeWriterStream.Seek(Offset: Longint; Origin: Word): Longint;
-begin
-  result := Offset;
-end;
-
-
-
-
-initialization
-  // initialization of global variables
-  MoveFast := @System.Move;
-  {$ifdef FPC}
-  FillCharFast := @System.FillChar;
-  {$else}
-  {$ifdef CPUARM}
-  FillCharFast := @System.FillChar;
-  {$else}
-  {$ifdef USEPACKAGES}
-  Pointer(@FillCharFast) := SystemFillCharAddress;
-  {$else}
-  {$endif USEPACKAGES}
-  {$endif CPUARM}
-  {$endif FPC}
-  // some type definition assertions
-  Assert(SizeOf(TSynTableFieldType)=1); // as expected by TSynTableFieldProperties
-  Assert(SizeOf(TSynTableFieldOptions)=1);
-
-
-finalization
 end.
