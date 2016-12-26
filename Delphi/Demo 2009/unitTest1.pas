@@ -20,7 +20,7 @@ uses
    SocketTrace, {note : remove the comment on front to enable socket mode (require indy 10)}
    StackTrace,      { note : remove the comment on front to enable stack trace (require jvcl 1.9)}
 
-//   SynCommons,
+   SynCommons,
 
 {$IFDEF COMPILER_12_UP}    // delphi 2009 and upper
    generics.collections,
@@ -373,6 +373,10 @@ var
    Allchars : AnsiString ;
    c : integer ;
 
+   //DynArrayObject: TDynArray;
+   DynArrayElementPointer : Pointer ;
+
+
 {$IFDEF COMPILER_12_UP}     // delphi 2009
    myTlist: TList<TForm>;
 {$ENDIF COMPILER_12_UP}
@@ -381,9 +385,14 @@ begin
 
    ClassTest2 := TClassTest2.Create;
    SetLength(ClassTest2.fTestList,3);
-   ClassTest2.testList[0] := TClassTest.Create(null);
-   ClassTest2.testList[1] := TClassTest.Create(null);
-   ClassTest2.testList[2] := TClassTest.Create(null);
+   ClassTest2.testList[0] := TClassTest.Create(nil);
+   ClassTest2.testList[1] := TClassTest.Create(nil);
+   ClassTest2.testList[2] := TClassTest.Create(nil);
+
+   //DynArrayObject.Init(PropInfo^.PropType^,DynArrayPointer) ;     // aTypeInfo: pointer; var aValue; aCountPointer: PInteger=nil);
+
+
+
    TTrace.Debug.SendValue('array test',ClassTest2) ;
 
    Exit;

@@ -5941,7 +5941,7 @@ end;
 procedure TTraceNode.inner_addValue (const AObject: TObject; const upperNode : TMemberNode; const MaxLevel : integer; AlreadyParsedObject:TObjectList);
 var
    obj, subObj : TObject ;
-   I, Count: Integer;
+   I,J, PropCount: Integer;
    TypeInfo : PTypeInfo ;
    PropInfo: PPropInfo;
    TempList: PPropList;
@@ -5955,11 +5955,9 @@ var
    Prop_Value     : string ;
    //Prop_ClassType : String ;
 
-   //TypeData: PTypeData;
-   //TypeInfoPP: PPTypeInfo;
-   //DynArray: Pointer;
-
-   GroupA: TDynArray;
+   DynArrayPointer: Pointer;
+   DynArrayObject: TDynArray;
+   DynArrayElementPointer : Pointer ;
 
 type
    PPPTypeInfo = ^PPTypeInfo;
@@ -5992,10 +5990,10 @@ begin
    if TypeInfo = nil then
       exit ;
    obj := AObject ;
-   Count := GetPropList(typeInfo, TempList);   // if Count is zero , FreeMem(TempList) don't have to be called
-   if Count > 0 then
+   PropCount := GetPropList(typeInfo, TempList);   // if Count is zero , FreeMem(TempList) don't have to be called
+   if PropCount > 0 then
    try
-      for I := 0 to Count - 1 do begin
+      for I := 0 to PropCount - 1 do begin
          PropInfo := TempList^[I];
 
          Prop_Name := String(PropInfo.Name) ;
@@ -6058,7 +6056,16 @@ begin
             tkDynArray :
                begin
                   // from System.TypInfo => GetPropValue where kind = tkDynArray
-                  DynArray := GetDynArrayProp(AObject, PropInfo);   // TPropSet<TDynamicArray>.GetProc(Instance, PropInfo)
+                  DynArrayPointer := GetDynArrayProp(AObject, PropInfo);   // TPropSet<TDynamicArray>.GetProc(Instance, PropInfo)
+
+                  // http://synopse.info/files/html/api-1.18/SynCommons.html#TDYNARRAY
+                  DynArrayObject.Init(PropInfo^.PropType^,DynArrayPointer) ;     // aTypeInfo: pointer; var aValue; aCountPointer: PInteger=nil);
+                  Prop_Value := 'Array ' + IntToStr(DynArrayObject.Count) ;
+
+                  for j := 0 to DynArrayObject.Count-1 do
+                  begin
+                     DynArrayElementPointer := DynArrayObject.ElemPtr(j) ;
+                  end;
 
                   // PTypeData = ^TTypeData;
                   // TTypeData = packed record
@@ -6073,16 +6080,7 @@ begin
                   //     DynArrAttrData: TAttrData});
 
 
-
-                  // See more at: http://codeverge.com/embarcadero.delphi.general/getdynarrayprop-gave-pointer-and-i/1064266#sthash.0edEqMYr.dpuf
-                  // var TypeData: PTypeData;
-                  //TypeData := GetTypeData(PropInfo^.PropType^);
-                  //with TypeData^ do begin
-                  //   TypeInfoPP := PPPTypeInfo(NativeInt(@DynUnitName) + Integer(DynUnitName[0]) > + 1)^;
-                  //end;
-
-
-                  Prop_Value := '???' ; //tt_GetVarValue (VariantPropValue,strType) ;
+                  //Prop_Value := '???' ; //tt_GetVarValue (VariantPropValue,strType) ;
                   upperNode.Add(String(prop_name) , prop_value, String(prop_type)) ;
 
                end;
