@@ -243,13 +243,6 @@ type
   PRawByteString = ^RawByteString;
   {$endif}
 
-  /// RawJSON will indicate that this variable content would stay in raw JSON
-  // - i.e. won't be serialized into values
-  // - could be any JSON content: number, string, object or array
-  // - e.g. interface-based service will use it for efficient and AJAX-ready
-  // transmission of TSQLTableJSON result
-  RawJSON = type RawUTF8;
-
   /// SynUnicode is the fastest available Unicode native string type, depending
   //  on the compiler used
   // - this type is native to the compiler, so you can use Length() Copy() and
@@ -267,7 +260,6 @@ type
   {$endif}
 
   PRawUnicode = ^RawUnicode;
-  PRawJSON = ^RawJSON;
   PRawUTF8 = ^RawUTF8;
   PWinAnsiString = ^WinAnsiString;
   PWinAnsiChar = type PAnsiChar;
@@ -280,205 +272,31 @@ type
   PUTF8Char = type PAnsiChar;
   PPUTF8Char = ^PUTF8Char;
 
-  /// a Row/Col array of PUTF8Char, for containing sqlite3_get_table() result
-  TPUtf8CharArray = array[0..MaxInt div SizeOf(PUTF8Char)-1] of PUTF8Char;
-  PPUtf8CharArray = ^TPUtf8CharArray;
+  PObject = ^TObject;
 
-  /// a pointer to a PAnsiChar array
-  TPAnsiCharArray = array[0..MaxInt div SizeOf(PAnsiChar)-1] of PAnsiChar;
-  PPAnsiCharArray = ^TPAnsiCharArray;
+  TInt64Array = array[0..MaxInt div SizeOf(Int64)-1] of Int64;
+  PInt64Array = ^TInt64Array;
 
-  /// a dynamic array of WinAnsi encoded strings
-  TWinAnsiDynArray = array of WinAnsiString;
-  PWinAnsiDynArray = ^TWinAnsiDynArray;
+  TPtrIntArray = array[0..MaxInt div SizeOf(PtrInt)-1] of PtrInt;
+  PPtrIntArray = ^TPtrIntArray;
 
-  /// a dynamic array of RawByteString
-  TRawByteStringDynArray = array of RawByteString;
+  TObjectArray = array [0..MaxInt div SizeOf(TObject)-1] of TObject;
+  PObjectArray = ^TObjectArray;
 
-  /// a dynamic array of TVarRec, i.e. could match an "array of const" parameter
-  TTVarRecDynArray = array of TVarRec;
+  TPointerDynArray = array of pointer;
+  PPointerDynArray = ^TPointerDynArray;
 
-  /// a dynamic array of generic VCL strings
-  TStringDynArray = array of string;
-  PStringDynArray = ^TStringDynArray;
+  TObjectDynArray = array of TObject;
+  PObjectDynArray = ^TObjectDynArray;
 
-  /// a dynamic array of TDateTime values
-  TDateTimeDynArray = array of TDateTime;
-  PDateTimeDynArray = ^TDateTimeDynArray;
+  TCardinalArray = array[0..MaxInt div SizeOf(cardinal)-1] of cardinal;
+  PCardinalArray = ^TCardinalArray;
 
   {$ifndef DELPHI5OROLDER}
   /// a dynamic array of interface values
   TInterfaceDynArray = array of IInterface;
   PInterfaceDynArray = ^TInterfaceDynArray;
   {$endif}
-
-  /// a dynamic array of WideString values
-  TWideStringDynArray = array of WideString;
-  PWideStringDynArray = ^TWideStringDynArray;
-
-  /// a dynamic array of SynUnicode values
-  TSynUnicodeDynArray = array of SynUnicode;
-  PSynUnicodeDynArray = ^TSynUnicodeDynArray;
-
-  PIntegerDynArray = ^TIntegerDynArray;
-  TIntegerDynArray = array of integer;
-  PCardinalDynArray = ^TCardinalDynArray;
-  TCardinalDynArray = array of cardinal;
-  PSingleDynArray = ^TSingleDynArray;
-  TSingleDynArray = array of Single;
-  PInt64DynArray = ^TInt64DynArray;
-  TInt64DynArray = array of Int64;
-  PDoubleDynArray = ^TDoubleDynArray;
-  TDoubleDynArray = array of double;
-  PCurrencyDynArray = ^TCurrencyDynArray;
-  TCurrencyDynArray = array of Currency;
-  TWordDynArray = array of word;
-  PWordDynArray = ^TWordDynArray;
-  TByteDynArray = array of byte;
-  PByteDynArray = ^TByteDynArray;
-  TObjectDynArray = array of TObject;
-  PObjectDynArray = ^TObjectDynArray;
-  TPersistentDynArray = array of TPersistent;
-  PPersistentDynArray = ^TPersistentDynArray;
-  TPointerDynArray = array of pointer;
-  PPointerDynArray = ^TPointerDynArray;
-  TPPointerDynArray = array of PPointer;
-  PPPointerDynArray = ^TPPointerDynArray;
-  TMethodDynArray = array of TMethod;
-  PMethodDynArray = ^TMethodDynArray;
-  TObjectListDynArray = array of TObjectList;
-  PObjectListDynArray = ^TObjectListDynArray;
-  TFileNameDynArray = array of TFileName;
-  PFileNameDynArray = ^TFileNameDynArray;
-  TBooleanDynArray = array of boolean;
-  PBooleanDynArray = ^TBooleanDynArray;
-
-  PByteArray = ^TByteArray;
-  TByteArray = array[0..MaxInt-1] of Byte; // redefine here with {$R-}
-
-  PBooleanArray = ^TBooleanArray;
-  TBooleanArray = array[0..MaxInt-1] of Boolean; 
-
-  TWordArray  = array[0..MaxInt div SizeOf(word)-1] of word;
-  PWordArray = ^TWordArray;
-
-  TIntegerArray = array[0..MaxInt div SizeOf(integer)-1] of integer;
-  PIntegerArray = ^TIntegerArray;
-
-  TCardinalArray = array[0..MaxInt div SizeOf(cardinal)-1] of cardinal;
-  PCardinalArray = ^TCardinalArray;
-
-  TInt64Array = array[0..MaxInt div SizeOf(Int64)-1] of Int64;
-  PInt64Array = ^TInt64Array;
-
-  TSmallIntArray = array[0..MaxInt div SizeOf(SmallInt)-1] of SmallInt;
-  PSmallIntArray = ^TSmallIntArray;
-
-  TSingleArray = array[0..MaxInt div SizeOf(Single)-1] of Single;
-  PSingleArray = ^TSingleArray;
-
-  TDoubleArray = array[0..MaxInt div SizeOf(double)-1] of double;
-  PDoubleArray = ^TDoubleArray;
-
-  TRawByteStringArray = array[0..MaxInt div SizeOf(RawByteString)-1] of RawByteString;
-  PRawByteStringArray = ^TRawByteStringArray;
-
-  PointerArray = array [0..MaxInt div SizeOf(pointer)-1] of Pointer;
-  PPointerArray = ^PointerArray;
-
-  TObjectArray = array [0..MaxInt div SizeOf(TObject)-1] of TObject;
-  PObjectArray = ^TObjectArray;
-
-  TPtrIntArray = array[0..MaxInt div SizeOf(PtrInt)-1] of PtrInt;
-  PPtrIntArray = ^TPtrIntArray;
-
-  TGUIDDynArray = array of TGUID;
-
-  PInt64Rec = ^Int64Rec;
-
-  {$ifndef DELPHI5OROLDER}
-  PIInterface = ^IInterface;
-  {$endif}
-
-  {$ifndef LVCL}
-  TCollectionClass = class of TCollection;
-  TCollectionItemClass = class of TCollectionItem;
-  {$endif}
-
-  /// class-reference type (metaclass) of a TStream
-  TStreamClass = class of TStream;
-
-  /// class-reference type (metaclass) of a TInterfacedObject
-  TInterfacedObjectClass = class of TInterfacedObject;
-
-  PObject = ^TObject;
-
-
-{ ************ fast UTF-8 / Unicode / Ansi types and conversion routines **** }
-
-const
-  /// HTTP header name for the content type, as defined in the corresponding RFC
-  HEADER_CONTENT_TYPE = 'Content-Type: ';
-
-  /// HTTP header name for the content type, in upper case
-  // - as defined in the corresponding RFC
-  // - could be used e.g. with IdemPChar() to retrieve the Content-Type value
-  HEADER_CONTENT_TYPE_UPPER = 'CONTENT-TYPE: ';
-
-  /// MIME content type used for JSON communication (as used by the Microsoft
-  // WCF framework and the YUI framework)
-  JSON_CONTENT_TYPE = 'application/json; charset=UTF-8';
-
-  /// HTTP header for MIME content type used for plain JSON
-  JSON_CONTENT_TYPE_HEADER = HEADER_CONTENT_TYPE+JSON_CONTENT_TYPE;
-
-  /// MIME content type used for plain JSON, in upper case
-  // - could be used e.g. with IdemPChar() to retrieve the Content-Type value
-  JSON_CONTENT_TYPE_UPPER = 'APPLICATION/JSON';
-
-  /// HTTP header for MIME content type used for plain JSON, in upper case
-  // - could be used e.g. with IdemPChar() to retrieve the Content-Type value
-  JSON_CONTENT_TYPE_HEADER_UPPER = HEADER_CONTENT_TYPE_UPPER+JSON_CONTENT_TYPE_UPPER;
-
-  /// MIME content type used for plain UTF-8 text
-  TEXT_CONTENT_TYPE = 'text/plain; charset=UTF-8';
-
-  /// HTTP header for MIME content type used for plain UTF-8 text
-  TEXT_CONTENT_TYPE_HEADER = HEADER_CONTENT_TYPE+TEXT_CONTENT_TYPE;
-
-  /// MIME content type used for UTF-8 encoded HTML
-  HTML_CONTENT_TYPE = 'text/html; charset=UTF-8';
-
-  /// HTTP header for MIME content type used for UTF-8 encoded HTML
-  HTML_CONTENT_TYPE_HEADER = HEADER_CONTENT_TYPE+HTML_CONTENT_TYPE;
-
-  /// MIME content type used for UTF-8 encoded XML
-  XML_CONTENT_TYPE = 'text/xml; charset=UTF-8';
-
-  /// HTTP header for MIME content type used for UTF-8 encoded XML
-  XML_CONTENT_TYPE_HEADER = HEADER_CONTENT_TYPE+XML_CONTENT_TYPE;
-
-  /// MIME content type used for raw binary data
-  BINARY_CONTENT_TYPE = 'application/octet-stream';
-
-  /// HTTP header for MIME content type used for raw binary data
-  BINARY_CONTENT_TYPE_HEADER = HEADER_CONTENT_TYPE+BINARY_CONTENT_TYPE;
-
-  /// MIME content type used for a JPEG picture
-  JPEG_CONTENT_TYPE = 'image/jpeg';
-
-var
-  /// MIME content type used for JSON communication
-  // - this global will be initialized with JSON_CONTENT_TYPE constant, to
-  // avoid a memory allocation each time it is assigned to a variable
-  JSON_CONTENT_TYPE_VAR: RawUTF8;
-
-  /// HTTP header for MIME content type used for plain JSON
-  // - this global will be initialized with JSON_CONTENT_TYPE_HEADER constant,
-  // to avoid a memory allocation each time it is assigned to a variable
-  JSON_CONTENT_TYPE_HEADER_VAR: RawUTF8;
-
-
 
 { note: those VariantToInteger*() functions are expected to be there }
 
@@ -543,6 +361,7 @@ procedure BytesToRawByteString(const bytes: TBytes; out buf: RawByteString);
 procedure ResourceToRawByteString(const ResName: string; ResType: PChar;
   out buf: RawByteString);
 
+
 var
   /// best possible precision when rendering a "single" kind of float
   // - can be used as parameter for ExtendedToString/ExtendedToStr
@@ -579,22 +398,6 @@ type
 /// convert a floating-point value to its numerical text equivalency
 // - returns the count of chars stored into S (S[0] is not set)
 function ExtendedToString(var S: ShortString; Value: TSynExtended; Precision: integer): integer;
-
-/// fast retrieve the position of a given character
-function PosChar(Str: PUTF8Char; Chr: AnsiChar): PUTF8Char;
-
-/// fast retrieve the position of any value of a given set of characters
-function PosCharAny(Str: PUTF8Char; Characters: PAnsiChar): PUTF8Char;
-
-/// a non case-sensitive RawUTF8 version of Pos()
-// - uppersubstr is expected to be already in upper case
-// - this version handle only 7 bit ASCII (no accentuated characters)
-function PosI(uppersubstr: PUTF8Char; const str: RawUTF8): Integer;
-
-/// a non case-sensitive version of Pos()
-// - uppersubstr is expected to be already in upper case
-// - this version handle only 7 bit ASCII (no accentuated characters)
-function StrPosI(uppersubstr,str: PUTF8Char): PUTF8Char;
 
 
 
@@ -673,43 +476,6 @@ function StrLenW(S: PWideChar): PtrInt;
 function StrCompW(Str1, Str2: PWideChar): PtrInt;
   {$ifdef HASINLINE}inline;{$endif}
 
-/// use our fast version of StrCompL(), to be used with PUTF8Char
-function StrCompL(P1,P2: PUTF8Char; L, Default: Integer): PtrInt;
-  {$ifdef HASINLINE}inline;{$endif}
-
-/// use our fast version of StrCompIL(), to be used with PUTF8Char
-function StrCompIL(P1,P2: PUTF8Char; L: Integer; Default: Integer=0): PtrInt;
-  {$ifdef HASINLINE}inline;{$endif}
-
-{$ifdef USENORMTOUPPER}
-{$ifdef OWNNORMTOUPPER}
-type
-  TNormTable = packed array[AnsiChar] of AnsiChar;
-  TNormTableByte = packed array[byte] of byte;
-
-var
-  /// the NormToUpper[] array is defined in our Enhanced RTL: define it now
-  //  if it was not installed
-  // - handle 8 bit upper chars as in WinAnsi / code page 1252 (e.g. accents)
-  NormToUpper: TNormTable;
-  NormToUpperByte: TNormTableByte absolute NormToUpper;
-
-  /// the NormToLower[] array is defined in our Enhanced RTL: define it now
-  //  if it was not installed
-  // - handle 8 bit upper chars as in WinAnsi / code page 1252 (e.g. accents)
-  NormToLower: TNormTable;
-  NormToLowerByte: TNormTableByte absolute NormToLower;
-{$endif}
-{$else}
-{$undef OWNNORMTOUPPER}
-{$endif}
-
-var
-  /// this table will convert 'a'..'z' into 'A'..'Z'
-  // - so it will work with UTF-8 without decoding, whereas NormToUpper[] expects
-  // WinAnsi encoding
-  NormToUpperAnsi7: TNormTable;
-  NormToUpperAnsi7Byte: TNormTableByte absolute NormToUpperAnsi7;
 
 /// get the signed 32-bit integer value stored in P^
 // - we use the PtrInt result type, even if expected to be 32-bit, to use
@@ -758,14 +524,6 @@ procedure SetInt64(P: PUTF8Char; var result: Int64);
 function GetInt64(P: PUTF8Char; var err: integer): Int64; overload;
   {$ifdef CPU64}inline;{$endif}
 
-/// get the extended floating point value stored in P^
-// - set the err content to the index of any faulty character, 0 if conversion
-// was successful (same as the standard val function)
-function GetExtended(P: PUTF8Char; out err: integer): TSynExtended; overload;
-
-/// get the extended floating point value stored in P^
-// - this overloaded version returns 0 as a result if the content of P is invalid
-function GetExtended(P: PUTF8Char): TSynExtended; overload;
 
 
 /// get the unsigned 32-bit cardinal value stored in a RawUTF8 string
@@ -787,11 +545,6 @@ function ToInt64(const text: RawUTF8; out value: Int64): boolean;
 function PropNameValid(P: PUTF8Char): boolean;
   {$ifdef HASINLINE}inline;{$endif}
 
-/// returns TRUE if the given text buffer contains simple characters as
-// recognized by JSON extended syntax
-// - follow GetJSONPropName and GotoNextJSONObjectOrArray expectations
-function JsonPropNameValid(P: PUTF8Char): boolean;
-  {$ifdef HASINLINE}inline;{$endif}
 
 /// case unsensitive test of P1 and P2 content
 // - use it with property names values (i.e. only including A..Z,0..9,_ chars)
@@ -831,218 +584,9 @@ function IdemPropNameUSameLen(P1,P2: PUTF8Char; P1P2Len: integer): boolean;
 function IdemPropNameU(const P1,P2: RawUTF8): boolean; overload;
   {$ifdef PUREPASCAL}{$ifdef HASINLINE}inline;{$endif}{$endif}
 
-/// returns true if the beginning of p^ is the same as up^
-// - ignore case - up^ must be already Upper
-// - chars are compared as 7 bit Ansi only (no accentuated characters): but when
-// you only need to search for field names e.g. IdemPChar() is prefered, because
-// it'll be faster than IdemPCharU(), if UTF-8 decoding is not mandatory
-// - if p is nil, will return FALSE
-// - if up is nil, will return TRUE
-function IdemPChar(p: PUTF8Char; up: PAnsiChar): boolean;
-  {$ifdef PUREPASCAL}{$ifdef HASINLINE}inline;{$endif}{$endif}
-
-/// returns true if the beginning of p^ is the same as up^, ignoring white spaces
-// - ignore case - up^ must be already Upper
-// - any white space in the input p^ buffer is just ignored
-// - chars are compared as 7 bit Ansi only (no accentuated characters): but when
-// you only need to search for field names e.g. IdemPChar() is prefered, because
-// it'll be faster than IdemPCharU(), if UTF-8 decoding is not mandatory
-// - if p is nil, will return FALSE
-// - if up is nil, will return TRUE
-function IdemPCharWithoutWhiteSpace(p: PUTF8Char; up: PAnsiChar): boolean;
-
-
-/// faster RawUTF8 Equivalent of standard StrUtils.PosEx
-function PosEx(const SubStr, S: RawUTF8; Offset: PtrUInt=1): Integer;
-
-
-/// fast version of StringReplace(S, OldPattern, NewPattern,[rfReplaceAll]);
-function StringReplaceAll(const S, OldPattern, NewPattern: RawUTF8): RawUTF8;
-
-/// fast replace of a specified char by a given string
-function StringReplaceChars(const Source: RawUTF8; OldChar, NewChar: AnsiChar): RawUTF8;
-
-/// fast replace of all #9 chars by a given string
-function StringReplaceTabs(const Source,TabText: RawUTF8): RawUTF8;
-
-
 /// return the index of Value in Values[], -1 if not found
 // - here name search would use fast IdemPropNameU() function
 function FindPropName(const Names: array of RawUTF8; const Name: RawUTF8): integer;
-
-/// fast search of an unsigned integer position in an integer array
-// - Count is the number of cardinal entries in P^
-// - returns P where P^=Value
-// - returns nil if Value was not found
-function IntegerScan(P: PCardinalArray; Count: PtrInt; Value: cardinal): PCardinal;
-
-/// fast search of an integer position in a 64 bit integer array
-// - Count is the number of Int64 entries in P^
-// - returns P where P^=Value
-// - returns nil if Value was not found
-function Int64Scan(P: PInt64Array; Count: PtrInt; const Value: Int64): PInt64;
-
-/// fast search of an unsigned integer in an integer array
-// - returns true if P^=Value within Count entries
-// - returns false if Value was not found
-function IntegerScanExists(P: PCardinalArray; Count: PtrInt; Value: cardinal): boolean;
-
-/// fast search of an integer value in a 64 bit integer array
-// - returns true if P^=Value within Count entries
-// - returns false if Value was not found
-function Int64ScanExists(P: PInt64Array; Count: PtrInt; const Value: Int64): boolean;
-
-/// fast search of an unsigned integer position in an integer array
-// - Count is the number of integer entries in P^
-// - return index of P^[index]=Value
-// - return -1 if Value was not found
-function IntegerScanIndex(P: PCardinalArray; Count: PtrInt; Value: cardinal): PtrInt;
-
-/// fast search of a pointer-sized unsigned integer position
-// in an pointer-sized integer array
-// - Count is the number of pointer-sized integer entries in P^
-// - return index of P^[index]=Value
-// - return -1 if Value was not found
-function PtrUIntScanIndex(P: PPtrUIntArray; Count: PtrInt; Value: PtrUInt): PtrInt;
-
-/// fast search of a pointer-sized unsigned integer position
-// in an pointer-sized integer array
-// - Count is the number of pointer-sized integer entries in P^
-// - returns true if P^=Value within Count entries
-// - returns false if Value was not found
-function PtrUIntScanExists(P: PPtrUIntArray; Count: PtrInt; Value: PtrUInt): boolean;
-  {$ifdef PUREPASCAL} {$ifdef HASINLINE}inline;{$endif} {$endif}
-  
-/// fast search of an unsigned Word value position in a Word array
-// - Count is the number of Word entries in P^
-// - return index of P^[index]=Value
-// - return -1 if Value was not found
-function WordScanIndex(P: PWordArray; Count: PtrInt; Value: word): integer;
-  {$ifdef HASINLINE}inline;{$endif}
-
-/// sort an Integer array, low values first
-procedure QuickSortInteger(ID: PIntegerArray; L, R: PtrInt); overload;
-
-/// sort an Integer array, low values first
-procedure QuickSortInteger(ID,CoValues: PIntegerArray; L, R: PtrInt); overload;
-
-/// sort an Integer array, low values first
-procedure QuickSortInteger(var ID: TIntegerDynArray); overload;
-
-/// sort a 64 bit Integer array, low values first
-procedure QuickSortInt64(ID: PInt64Array; L, R: PtrInt); overload;
-
-/// sort a 64 bit Integer array, low values first
-procedure QuickSortInt64(ID,CoValues: PInt64Array; L, R: PtrInt); overload;
-
-/// copy an integer array, then sort it, low values first
-procedure CopyAndSortInteger(Values: PIntegerArray; ValuesCount: integer;
-  var Dest: TIntegerDynArray);
-
-/// copy an integer array, then sort it, low values first
-procedure CopyAndSortInt64(Values: PInt64Array; ValuesCount: integer;
-  var Dest: TInt64DynArray);
-
-/// fast binary search of an integer value in a sorted integer array
-// - R is the last index of available integer entries in P^ (i.e. Count-1)
-// - return index of P^[result]=Value
-// - return -1 if Value was not found
-function FastFindIntegerSorted(P: PIntegerArray; R: PtrInt; Value: integer): PtrInt; overload;
-
-/// fast binary search of an integer value in a sorted integer array
-// - return index of Values[result]=Value
-// - return -1 if Value was not found
-function FastFindIntegerSorted(const Values: TIntegerDynArray; Value: integer): PtrInt; overload;
-
-/// fast binary search of a 64 bit integer value in a sorted array
-// - R is the last index of available integer entries in P^ (i.e. Count-1)
-// - return index of P^[result]=Value
-// - return -1 if Value was not found
-function FastFindInt64Sorted(P: PInt64Array; R: PtrInt; const Value: Int64): PtrInt; overload;
-
-/// sort a PtrInt array, low values first
-procedure QuickSortPtrInt(P: PPtrIntArray; L, R: PtrInt);
-  {$ifdef HASINLINE}inline;{$endif}
-
-/// fast binary search of a PtrInt value in a sorted array
-function FastFindPtrIntSorted(P: PPtrIntArray; R: PtrInt; Value: PtrInt): PtrInt; overload;
-  {$ifdef HASINLINE}inline;{$endif}
-
-/// sort a pointer array, low values first
-procedure QuickSortPointer(P: PPointerArray; L, R: PtrInt);
-  {$ifdef HASINLINE}inline;{$endif}
-
-/// fast binary search of a Pointer value in a sorted array
-function FastFindPointerSorted(P: PPointerArray; R: PtrInt; Value: Pointer): PtrInt; overload;
-  {$ifdef HASINLINE}inline;{$endif}
-
-/// retrieve the index where to insert an integer value in a sorted integer array
-// - R is the last index of available integer entries in P^ (i.e. Count-1)
-// - returns -1 if the specified Value was found (i.e. adding will duplicate a value)
-function FastLocateIntegerSorted(P: PIntegerArray; R: PtrInt; Value: integer): PtrInt;
-
-/// add an integer value in a sorted dynamic array of integers
-// - returns the index where the Value was added successfully in Values[]
-// - returns -1 if the specified Value was already present in Values[]
-//  (we must avoid any duplicate for binary search)
-// - if CoValues is set, its content will be moved to allow inserting a new
-// value at CoValues[result] position
-function AddSortedInteger(var Values: TIntegerDynArray; var ValuesCount: integer;
-  Value: integer; CoValues: PIntegerDynArray=nil): PtrInt; overload;
-
-/// add an integer value in a sorted dynamic array of integers
-// - overloaded function which do not expect an external Count variable
-function AddSortedInteger(var Values: TIntegerDynArray;
-  Value: integer; CoValues: PIntegerDynArray=nil): PtrInt; overload;
-
-/// insert an integer value at the specified index position of a dynamic array
-// of integers
-// - if Index is invalid, the Value is inserted at the end of the array
-function InsertInteger(var Values: TIntegerDynArray; var ValuesCount: integer;
-  Value: Integer; Index: PtrInt; CoValues: PIntegerDynArray=nil): PtrInt;
-
-/// add an integer value at the end of a dynamic array of integers
-// - returns TRUE if Value was added successfully in Values[], in this case
-// length(Values) will be increased
-function AddInteger(var Values: TIntegerDynArray; Value: integer;
-  NoDuplicates: boolean=false): boolean; overload;
-
-/// add an integer value at the end of a dynamic array of integers
-// - this overloaded function will use a separate Count variable (faster)
-// - it won't search for any existing duplicate
-procedure AddInteger(var Values: TIntegerDynArray; var ValuesCount: integer;
-  Value: integer); overload;
-  {$ifdef HASINLINE}inline;{$endif}
-
-/// add an integer value at the end of a dynamic array of integers
-// - this overloaded function will use a separate Count variable (faster),
-// and would allow to search for duplicates
-// - returns TRUE if Value was added successfully in Values[], in this case
-// ValuesCount will be increased, but length(Values) would stay fixed most
-// of the time (since it stores the Values[] array capacity)
-function AddInteger(var Values: TIntegerDynArray; var ValuesCount: integer;
-  Value: integer; NoDuplicates: boolean): boolean; overload;
-
-/// add a 64-bit integer value at the end of a dynamic array of integers
-procedure AddInt64(var Values: TInt64DynArray; var ValuesCount: integer; Value: Int64); overload;
-  {$ifdef HASINLINE}inline;{$endif}
-
-/// add a 64-bit integer value at the end of a dynamic array of integers
-procedure AddInt64(var Values: TInt64DynArray; Value: Int64); overload;
-  {$ifdef HASINLINE}inline;{$endif}
-
-/// delete any 32-bit integer in Values[]
-procedure DeleteInteger(var Values: TIntegerDynArray; Index: PtrInt); overload;
-
-/// delete any 32-bit integer in Values[]
-procedure DeleteInteger(var Values: TIntegerDynArray; var ValuesCount: Integer; Index: PtrInt); overload;
-
-/// delete any 64-bit integer in Values[]
-procedure DeleteInt64(var Values: TInt64DynArray; Index: PtrInt); overload;
-
-/// find the maximum 32-bit integer in Values[]
-function MaxInteger(const Values: TIntegerDynArray; ValuesCount: integer;
-  MaxStart: integer=-1): Integer;
 
 /// fill already allocated Reversed[] so that Reversed[Values[i]]=i
 procedure Reverse(const Values: TIntegerDynArray; ValuesCount: integer;
@@ -1405,7 +949,7 @@ procedure ObjArraySetLength(var aObjArray; aLength: integer);
 // - search is performed by address/reference, not by content
 // - returns -1 if the item is not found in the dynamic array
 function ObjArrayFind(const aObjArray; aItem: TObject): integer;
-  {$ifdef HASINLINE}inline;{$endif}
+
 
 /// wrapper to delete an item in a T*ObjArray dynamic array storage
 // - as expected by TJSONSerializer.RegisterObjArrayForJSON()
@@ -1448,7 +992,6 @@ procedure InterfaceArrayAddOnce(var aInterfaceArray; const aItem: IUnknown);
 // - return -1 if the item is not found in the dynamic array, or the index of
 // the matching entry otherwise
 function InterfaceArrayFind(const aInterfaceArray; const aItem: IUnknown): integer;
-  {$ifdef HASINLINE}inline;{$endif}
 
 /// wrapper to delete an item in a T*InterfaceArray dynamic array storage
 // - search is performed by address/reference, not by content
@@ -1460,28 +1003,6 @@ function InterfaceArrayDelete(var aInterfaceArray; const aItem: IUnknown): integ
 procedure InterfaceArrayDelete(var aInterfaceArray; aItemIndex: integer); overload;
 
 {$endif DELPHI5OROLDER}
-
-
-/// helper to retrieve the text of an enumerate item
-// - you'd better use RTTI related classes of mORMot.pas unit, e.g. TEnumType
-function GetEnumName(aTypeInfo: pointer; aIndex: integer): PShortString;
-
-/// helper to retrieve the index of an enumerate item from its text
-// - returns -1 if aValue was not found
-// - will search for the exact text and also trim the lowercase 'a'..'z' chars on
-// left side of the text if no exact match is found and AlsoTrimLowerCase is TRUE
-// - see also RTTI related classes of mORMot.pas unit, e.g. TEnumType
-function GetEnumNameValue(aTypeInfo: pointer; aValue: PUTF8Char; aValueLen: integer;
-  AlsoTrimLowerCase: boolean=false): Integer; overload;
-
-/// retrieve the index of an enumerate item from its left-trimmed text
-// - will trim the lowercase 'a'..'z' chars on left side of the supplied aValue text
-// - returns -1 if aValue was not found
-function GetEnumNameValueTrimmed(aTypeInfo: pointer; aValue: PUTF8Char; aValueLen: integer): integer;
-
-/// helper to retrieve the index of an enumerate item from its text
-function GetEnumNameValue(aTypeInfo: pointer; const aValue: RawUTF8;
-  AlsoTrimLowerCase: boolean=false): Integer; overload;
 
 
 /// fast search of an exact case-insensitive match of a RTTI's PShortString array
@@ -1506,10 +1027,6 @@ procedure TypeInfoToQualifiedName(aTypeInfo: pointer; var result: RawUTF8;
 
 /// retrieve the record size from its low-level RTTI
 function RecordTypeInfoSize(aRecordTypeInfo: pointer): integer;
-
-/// retrieve the item type information of a dynamic array low-level RTTI
-function DynArrayTypeInfoToRecordInfo(aDynArrayTypeInfo: pointer;
-  aDataSize: PInteger=nil): pointer;
 
 /// compute a dynamic array element information
 // - will raise an exception if the supplied RTTI is not a dynamic array
@@ -1699,20 +1216,6 @@ function SameValue(const A, B: Double; DoublePrec: double = 1E-12): Boolean;
 // - if you know the precision range of A and B, it's faster to check abs(A-B)<range
 function SameValueFloat(const A, B: TSynExtended; DoublePrec: TSynExtended = 1E-12): Boolean;
 
-/// returns TRUE if all bytes equal zero
-function IsZero(P: pointer; Length: integer): boolean; overload;
-
-/// returns TRUE if Value is nil or all supplied Values[] equal 0
-function IsZero(const Values: TIntegerDynArray): boolean; overload;
-
-/// returns TRUE if Value is nil or all supplied Values[] equal 0
-function IsZero(const Values: TInt64DynArray): boolean; overload;
-
-/// fill all entries of a supplied array of 32-bit integers with 0
-procedure FillZero(var Values: TIntegerDynArray); overload;
-
-/// fill all entries of a supplied array of 64-bit integers with 0
-procedure FillZero(var Values: TInt64DynArray); overload;
 
 
 {$ifndef ENHANCEDRTL}
@@ -1990,29 +1493,6 @@ type
      soSoundsLikeFrench,
      soSoundsLikeSpanish);
 
-/// low-level integer comparison according to a specified operator
-// - SBF must point to the values encoded in our SBF compact binary format
-// - Value must contain the plain integer value
-// - Value can be a Currency accessed via a PInt64
-// - will work only for tftBoolean, tftUInt8, tftUInt16, tftUInt24,
-// tftInt32, tftInt64 and tftCurrency field types
-// - will handle only soEqualTo...soGreaterThanOrEqualTo operators
-// - if SBFEnd is not nil, it will test for all values until SBF>=SBFEnd
-// (can be used for tftArray)
-// - returns true if both values match, or false otherwise
-function CompareOperator(FieldType: TSynTableFieldType; SBF, SBFEnd: PUTF8Char;
-  Value: Int64; Oper: TCompareOperator): boolean; overload;
-
-/// low-level floating-point comparison according to a specified operator
-// - SBF must point to the values encoded in our SBF compact binary format
-// - Value must contain the plain floating-point value
-// - will work only for tftDouble field type
-// - will handle only soEqualTo...soGreaterThanOrEqualTo operators
-// - if SBFEnd is not nil, it will test for all values until SBF>=SBFEnd
-// (can be used for tftArray)
-// - returns true if both values match, or false otherwise
-function CompareOperator(SBF, SBFEnd: PUTF8Char;
-  Value: double; Oper: TCompareOperator): boolean; overload;
 
 
 const
@@ -2430,46 +1910,6 @@ const
   // - used to calc the beginning of memory allocation of a string
   STRRECSIZE = SizeOf(TStrRec);
 
-function ToText(k: TTypeKind): PShortString; overload;
-begin
-  result := GetEnumName(TypeInfo(TTypeKind),ord(k));
-end;
-
-type
-  TTypeInfoSaved = type TRawByteStringDynArray;
-
-function TypeInfoFind(const rttitypes: TTypeInfoSaved;
-  const typename: RawUTF8): pointer;
-var i,len: integer;
-begin
-  len := length(typename);
-  if len<>0 then begin
-    for i := 0 to length(rttitypes)-1 do
-      with PTypeInfo(rttitypes[i])^ do
-      if (NameLen=len) and
-         IdemPropNameUSameLen(@NameFirst,pointer(typename),len) then begin
-        result := @kind;
-        exit;
-      end;
-  end;
-  result := nil;
-end;
-
-function TypeInfoFindIndex(const rttitypes: TTypeInfoSaved;
-  info: pointer): integer;
-var len: integer;
-begin
-  if info<>nil then begin
-    len := PTypeInfo(info)^.NameLen+2; // compare Kind+Name
-    for result := 0 to length(rttitypes)-1 do
-      if CompareMem(pointer(rttitypes[result]),info,len) then
-        exit;
-  end;
-  result := -1;
-end;
-
-var
-  KnownTypeInfo: array of PTypeInfo;
 
 {$ifdef HASDIRECTTYPEINFO}
 type
@@ -2493,33 +1933,9 @@ end;
 {$endif HASINLINE}
 {$endif HASDIRECTTYPEINFO}
 
-/// add some TypeInfo() RTTI for TypeInfoSave/TypeInfoLoad function
-// - warning: calling this after TypeInfoLoad() would trigger GPF
-procedure TypeInfoSaveRegisterKnown(const Types: array of pointer);
-var i,n: integer;
-begin
-  n := length(KnownTypeInfo);
-  SetLength(KnownTypeInfo,n+length(Types));
-  for i := 0 to high(Types) do
-    KnownTypeInfo[n+i] := Types[i];
-end;
 
-function FindKnownTypeInfoIndex(typeinfo: pointer): integer;
-  function Search(KindNameLen: word; Name: PUTF8Char; NameLen: integer): integer;
-  begin // compare Kind+NameLen, then case-insensitive Name
-    for result := 0 to length(KnownTypeInfo)-1 do
-      with PTypeInfo(KnownTypeInfo[result])^ do
-      if (PWord(kind)^=KindNameLen) and
-         IdemPropNameUSameLen(@NameFirst,Name,NameLen) then
-        exit;
-    result := -1;
-  end;
-begin
-  if typeinfo=nil then
-    result := -1 else
-    with PTypeInfo(typeinfo)^ do
-      result := Search(PWord(@kind)^,@NameFirst,NameLen);
-end;
+var
+  KnownTypeInfo: array of PTypeInfo;
 
 function DynArrayLength(Value: Pointer): integer;
   {$ifdef HASINLINE}inline;{$endif}
@@ -2587,19 +2003,6 @@ asm // eax=aTypeInfo edx=aExpectedKind
 end;
 {$endif}
 
-function DynArrayTypeInfoToRecordInfo(aDynArrayTypeInfo: pointer;
-  aDataSize: PInteger=nil): pointer;
-var info: PTypeInfo;
-begin
-  result := nil;
-  info := GetTypeInfo(aDynArrayTypeInfo,tkDynArray);
-  if info=nil then
-    exit;
-  if info^.elType<>nil then
-    result := Deref(info^.elType);
-  if aDataSize<>nil then
-    aDataSize^ := info^.elSize {$ifdef FPC}and $7FFFFFFF{$endif};
-end;
 
 procedure SetRawUTF8(var Dest: RawUTF8; text: pointer; len: integer);
 var P: PStrRec;
@@ -2656,115 +2059,6 @@ begin
     result := info^.recSize;
 end;
 
-function GetEnumInfo(aTypeInfo: pointer; out MaxValue: Integer;
-  out Names: PShortString): boolean;
-{$ifdef HASINLINE} inline;
-var info: PTypeInfo;
-begin
-  info := GetTypeInfo(aTypeInfo,tkEnumeration);
-  if info<>nil then begin
-    {$ifdef FPC}
-    if info^.{$ifdef FPC_ENUMHASINNER}inner.{$endif}EnumBaseType<>nil then
-    {$endif}
-      info := GetTypeInfo(Deref(info^.{$ifdef FPC_ENUMHASINNER}inner.{$endif}EnumBaseType),tkEnumeration);
-    MaxValue := info^.{$ifdef FPC_ENUMHASINNER}inner.{$endif}MaxValue;
-    Names := @info.NameList;
-    result := true;
-  end else
-    result := false;
-end;
-{$else}
-asm // eax=aTypeInfo edx=@MaxValue ecx=@Names
-        test    eax, eax
-        jz      @n
-        cmp     byte ptr[eax], tkEnumeration
-        jnz     @n
-        push    ecx
-        movzx   ecx, byte ptr[eax + TTypeInfo.NameLen]
-        mov     eax, [eax + ecx + TTypeInfo.EnumBaseType]
-        mov     eax, [eax]
-        movzx   ecx, byte ptr[eax + TTypeInfo.NameLen]
-        add     eax, ecx
-        mov     ecx, [eax + TTypeInfo.MaxValue]
-        mov     [edx], ecx
-        pop     ecx
-        lea     eax, [eax + TTypeInfo.NameList]
-        mov     [ecx], eax
-        mov     al, 1
-        ret
-@n:     xor     eax, eax
-end;
-{$endif}
-
-function GetSetInfo(aTypeInfo: pointer; out MaxValue: Integer;
-  out Names: PShortString): boolean;
-var info: PTypeInfo;
-begin
-  info := GetTypeInfo(aTypeInfo,tkSet);
-  if info<>nil then
-    {$ifdef FPC}
-    if info^.SetBaseType=nil then
-      result := GetEnumInfo(aTypeInfo,MaxValue,Names) else
-    {$endif}
-      result := GetEnumInfo(Deref(info^.SetBaseType),MaxValue,Names) else
-    result := false;
-end;
-
-function GetEnumName(aTypeInfo: pointer; aIndex: integer): PShortString;
-const NULL_SHORTSTRING: string[1] = '';
-{$ifdef HASINLINE}
-var MaxValue: integer;
-begin
-  if GetEnumInfo(aTypeInfo,MaxValue,result) and
-     (cardinal(aIndex)<=cardinal(MaxValue)) then
-    while aIndex>0 do begin
-      dec(aIndex);
-      inc(PByte(result),ord(result^[0])+1); // next short string
-    end else
-    result := @NULL_SHORTSTRING;
-end;
-{$else}
-asm // eax=aTypeInfo edx=aIndex
-        test    eax, eax
-        jz      @0
-        cmp     byte ptr[eax], tkEnumeration
-        jnz     @0
-        movzx   ecx, byte ptr[eax + TTypeInfo.NameLen]
-        mov     eax, [eax + ecx + TTypeInfo.EnumBaseType]
-        mov     eax, [eax]
-        movzx   ecx, byte ptr[eax + TTypeInfo.NameLen]
-        cmp     edx, [eax + ecx + TTypeInfo.MaxValue]
-        ja      @0
-        lea     eax, [eax + ecx + TTypeInfo.NameList]
-        test    edx, edx
-        jz      @z
-        push    edx
-        shr     edx, 2 // fast by-four scanning
-        jz      @1
-@4:     dec     edx
-        movzx   ecx, byte ptr[eax]
-        lea     eax, [eax + ecx + 1]
-        movzx   ecx, byte ptr[eax]
-        lea     eax, [eax + ecx + 1]
-        movzx   ecx, byte ptr[eax]
-        lea     eax, [eax + ecx + 1]
-        movzx   ecx, byte ptr[eax]
-        lea     eax, [eax + ecx + 1]
-        jnz     @4
-        pop     edx
-        and     edx, 3
-        jnz     @s
-        ret
-@1:     pop     edx
-@s:     movzx   ecx, byte ptr[eax]
-        dec     edx
-        lea     eax, [eax + ecx + 1] // next short string
-        jnz     @s
-        ret
-@z:     rep     ret
-@0:     lea     eax, NULL_SHORTSTRING
-end;
-{$endif}
 
 function FindShortStringListExact(List: PShortString; MaxValue: integer;
   aValue: PUTF8Char; aValueLen: integer): integer;
@@ -2798,78 +2092,6 @@ begin
   end;
   result := -1;
 end;
-
-function GetEnumNameValue(aTypeInfo: pointer; aValue: PUTF8Char; aValueLen: integer;
-  AlsoTrimLowerCase: boolean): Integer;
-var List: PShortString;
-    MaxValue: integer;
-begin
-  if GetEnumInfo(aTypeInfo,MaxValue,List) then begin
-    result := FindShortStringListExact(List,MaxValue,aValue,aValueLen);
-    if (result<0) and AlsoTrimLowerCase then
-      result := FindShortStringListTrimLowerCase(List,MaxValue,aValue,aValueLen);
-  end else
-    result := -1;
-end;
-
-function GetEnumNameValueTrimmed(aTypeInfo: pointer; aValue: PUTF8Char; aValueLen: integer): integer;
-var List: PShortString;
-    MaxValue: integer;
-begin
-  if GetEnumInfo(aTypeInfo,MaxValue,List) then
-    result := FindShortStringListTrimLowerCase(List,MaxValue,aValue,aValueLen) else
-    result := -1;
-end;
-
-function GetEnumNameValue(aTypeInfo: pointer; const aValue: RawUTF8;
-  AlsoTrimLowerCase: boolean=false): Integer;
-begin
-  result := GetEnumNameValue(aTypeInfo, pointer(aValue), length(aValue),
-    AlsoTrimLowerCase);
-end;
-
-//function GetSetNameValue(aTypeInfo: pointer; var P: PUTF8Char;
-//  out EndOfObject: AnsiChar): cardinal;
-//var Names: PShortString;
-//    Text: PUTF8Char;
-//    wasString: boolean;
-//    MaxValue, TextLen, i: integer;
-//begin
-//  result := 0;
-//  if (P<>nil) and GetSetInfo(aTypeInfo,MaxValue,Names) then begin
-//    P := GotoNextNotSpace(P);
-//    if P^='[' then begin
-//      P := GotoNextNotSpace(P+1);
-//      if P^=']' then begin
-//        EndOfObject := ']';
-//        P := GotoNextNotSpace(P+1);
-//      end else
-//      repeat
-//        Text := GetJSONField(P,P,@wasString,@EndOfObject,@TextLen);
-//        if (Text=nil) or not wasString then begin
-//          P := nil;
-//          break;
-//        end;
-//        if Text^='*' then begin
-//          if MaxValue<32 then
-//            result := ALLBITS_CARDINAL[MaxValue+1] else
-//            result := cardinal(-1);
-//          exit;
-//        end;
-//        if Text^ in ['a'..'z'] then
-//          i := FindShortStringListExact(Names,MaxValue,Text,TextLen) else
-//          i := -1;
-//        if i<0 then
-//          i := FindShortStringListTrimLowerCase(Names,MaxValue,Text,TextLen);
-//        if i>=0 then
-//          SetBit(result,i);
-//        // unknown enum names (i=-1) would just be ignored
-//      until EndOfObject=']';
-//    end else
-//      result := GetCardinal(GetJSONField(P,P,nil,@EndOfObject));
-//  end;
-//end;
-
 
 { note: those low-level VariantTo*() functions are expected to be there
         even if NOVARIANTS conditional is defined (used e.g. by SynDB.TQuery) }
@@ -3322,226 +2544,6 @@ begin
       result := Str else
       result := Copy(Str,StartPos,maxInt);
 end;
-
-function StringReplaceAll(const S, OldPattern, NewPattern: RawUTF8): RawUTF8;
-
-  procedure Process(j: integer);
-  var oldlen,newlen,i,last,posCount,sharedlen: integer;
-      pos: TIntegerDynArray;
-      src,dst: PAnsiChar;
-  begin
-    oldlen := length(OldPattern);
-    newlen := length(NewPattern);
-    SetLength(pos,64);
-    pos[0] := j;
-    posCount := 1;
-    repeat
-      j := PosEx(OldPattern,S,j+oldlen);
-      if j=0 then
-        break;
-      AddInteger(pos,posCount,j);
-    until false;
-    SetString(result,nil,Length(S)+(newlen-oldlen)*posCount);
-    last := 1;
-    src := pointer(s);
-    dst := pointer(result);
-    for i := 0 to posCount-1 do begin
-      sharedlen := pos[i]-last;
-      MoveFast(src^,dst^,sharedlen);
-      inc(src,sharedlen+oldlen);
-      inc(dst,sharedlen);
-      MoveFast(pointer(NewPattern)^,dst^,newlen);
-      inc(dst,newlen);
-      last := pos[i]+oldlen;
-    end;
-    MoveFast(src^,dst^,length(S)-last+1);
-  end;
-
-var j: integer;
-begin
-  if (S='') or (OldPattern='') or (OldPattern=NewPattern) then
-    result := S else begin
-    j := PosEx(OldPattern, S, 1); // our PosEx() is faster than Pos()
-    if j=0 then
-      result := S else
-      Process(j);
-  end;
-end;
-
-function StringReplaceTabs(const Source,TabText: RawUTF8): RawUTF8;
-
-  procedure Process(S,D,T: PAnsiChar; TLen: integer);
-  begin
-    repeat
-      if S^=#0 then
-        break else
-      if S^<>#9 then begin
-        D^ := S^;
-        inc(D);
-        inc(S);
-      end else begin
-        MoveFast(T^,D^,TLen);
-        inc(D,TLen);
-        inc(S);
-      end;
-    until false;
-  end;
-
-var L,i,n,ttl: integer;
-begin
-  ttl := length(TabText);
-  L := Length(Source);
-  n := 0;
-  if ttl<>0 then
-    for i := 1 to L do
-      if Source[i]=#9 then
-        inc(n);
-  if n=0 then begin
-    result := Source;
-    exit;
-  end;
-  SetLength(result,L+n*pred(ttl));
-  Process(pointer(Source),pointer(result),pointer(TabText),ttl);
-end;
-
-function PosChar(Str: PUTF8Char; Chr: AnsiChar): PUTF8Char;
-{$ifdef PUREPASCAL}
-begin
-  result := nil;
-  if Str<>nil then begin
-    repeat
-      if Str^=#0 then
-        exit else
-      if Str^=Chr then
-        break;
-      inc(Str);
-      if Str^=#0 then
-        exit else
-      if Str^=Chr then
-        break;
-      inc(Str);
-    until false;
-    result := Str;
-  end;
-end;
-{$else}
-asm // faster version by AB - eax=Str dl=Chr
-        test    eax, eax
-        jz      @z
-@1:     mov     ecx, [eax]
-        cmp     cl, dl
-        je      @z
-        lea     eax, [eax + 1]
-        test    cl, cl
-        jz      @e
-        cmp     ch, dl
-        je      @z
-        lea     eax, [eax + 1]
-        test    ch, ch
-        jz      @e
-        shr     ecx, 16
-        cmp     cl, dl
-        je      @z
-        lea     eax, [eax + 1]
-        test    cl, cl
-        jz      @e
-        cmp     ch, dl
-        je      @z
-        lea     eax, [eax + 1]
-        test    ch, ch
-        jnz     @1
-@e:     xor     eax, eax
-        ret
-@z:     db      $f3 // rep ret
-end;
-{$endif}
-
-function PosCharAny(Str: PUTF8Char; Characters: PAnsiChar): PUTF8Char;
-var s: PAnsiChar;
-    c: AnsiChar;
-begin
-  if (Str<>nil) and (Characters<>nil) then
-    repeat
-      c := Str^;
-      if c=#0 then
-        break;
-      s := Characters;
-      repeat
-        if s^=c then begin
-          result := Str;
-          exit;
-        end;
-        inc(s);
-      until s^=#0;
-      inc(Str);
-    until false;
-  result := nil;
-end;
-
-function StringReplaceChars(const Source: RawUTF8; OldChar, NewChar: AnsiChar): RawUTF8;
-var i,j,n: integer;
-begin
-  if (OldChar<>NewChar) and (Source<>'') then begin
-    n := length(Source);
-    for i := 0 to n-1 do
-      if PAnsiChar(pointer(Source))[i]=OldChar then begin
-        SetString(result,PAnsiChar(pointer(Source)),n);
-        for j := i to n-1 do
-          if PAnsiChar(pointer(result))[j]=OldChar then
-            PAnsiChar(pointer(result))[j] := NewChar;
-        exit;
-      end;
-  end;
-  result := Source;
-end;
-
-function PosI(uppersubstr: PUTF8Char; const str: RawUTF8): Integer;
-var C: AnsiChar;
-begin
-  if uppersubstr<>nil then begin
-    C := uppersubstr^;
-    for result := 1 to Length(str) do
-      if NormToUpperAnsi7[str[result]]=C then
-        if IdemPChar(@PUTF8Char(pointer(str))[result],PAnsiChar(uppersubstr)+1) then
-          exit;
-  end;
-  result := 0;
-end;
-
-function StrPosI(uppersubstr,str: PUTF8Char): PUTF8Char;
-var C: AnsiChar;
-begin
-  if (uppersubstr<>nil) and (str<>nil) then begin
-    C := uppersubstr^;
-    result := str;
-    while result^<>#0 do begin
-      if NormToUpperAnsi7[result^]=C then
-        if IdemPChar(result+1,PAnsiChar(uppersubstr)+1) then
-          exit;
-      inc(result);
-    end;
-  end;
-  result := nil;
-end;
-
-
-procedure AppendCharToRawUTF8(var Text: RawUTF8; Ch: AnsiChar);
-var L: integer;
-begin
-  L := length(Text);
-  SetLength(Text,L+1);
-  PByteArray(Text)[L] := ord(Ch);
-end;
-
-function GotoNextNotSpace(P: PUTF8Char): PUTF8Char;
-begin
-  if P^ in [#1..' '] then
-    repeat
-      inc(P)
-    until not(P^ in [#1..' ']);
-  result := P;
-end;
-
 
 
 
@@ -4192,328 +3194,6 @@ end;
 {$endif}
 
 
-
-
-function IntegerScanExists(P: PCardinalArray; Count: PtrInt; Value: cardinal): boolean;
-{$ifdef PUREPASCAL}
-var i: PtrInt; // very optimized code for speed
-begin
-  if P<>nil then begin
-    result := true;
-    for i := 1 to (Count shr 2) do   // 4 DWORD by loop - aligned read
-      if (P^[0]=Value) or (P^[1]=Value) or
-         (P^[2]=Value) or (P^[3]=Value) then
-        exit else
-        inc(PtrUInt(P),sizeof(P^[0])*4);
-    for i := 0 to (Count and 3)-1 do // last 0..3 DWORD
-      if P^[i]=Value then
-        exit;
-  end;
-  result := false;
-end;
-{$else}
-asm // eax=P, edx=Count, Value=ecx
-        test    eax, eax
-        jz      @z // avoid GPF
-        cmp     edx, 8
-        jae     @s1
-        jmp     dword ptr[edx * 4 + @Table]
-@Table: dd      @z, @1, @2, @3, @4, @5, @6, @7
-@s1:    // fast search by 8 integers (pipelined instructions)
-        sub     edx, 8
-        cmp     [eax], ecx
-        je      @ok
-        cmp     [eax + 4], ecx
-        je      @ok
-        cmp     [eax + 8], ecx
-        je      @ok
-        cmp     [eax + 12], ecx
-        je      @ok
-        cmp     [eax + 16], ecx
-        je      @ok
-        cmp     [eax + 20], ecx
-        je      @ok
-        cmp     [eax + 24], ecx
-        je      @ok
-        cmp     [eax + 28], ecx
-        je      @ok
-        cmp     edx, 8
-        lea     eax, [eax + 32] // preserve flags during 'cmp edx,8' computation
-@s2:    jae     @s1
-        jmp     dword ptr[edx * 4 + @Table]
-@7:     cmp     [eax + 24], ecx
-        je      @ok
-@6:     cmp     [eax + 20], ecx
-        je      @ok
-@5:     cmp     [eax + 16], ecx
-        je      @ok
-@4:     cmp     [eax + 12], ecx
-        je      @ok
-@3:     cmp     [eax + 8], ecx
-        je      @ok
-@2:     cmp     [eax + 4], ecx
-        je      @ok
-@1:     cmp     [eax], ecx
-        je      @ok
-@z:     xor     eax, eax
-        ret
-@ok:    mov     al, 1
-end;
-{$endif}
-
-function Int64ScanExists(P: PInt64Array; Count: PtrInt; const Value: Int64): boolean;
-var i: PtrInt;
-begin
-  if P<>nil then begin
-    result := true;
-    for i := 1 to (Count shr 2) do   // 4 QWORD by loop - aligned read
-      if (P^[0]=Value) or (P^[1]=Value) or
-         (P^[2]=Value) or (P^[3]=Value) then
-        exit else
-        inc(PtrUInt(P),sizeof(P^[0])*4);
-    for i := 0 to (Count and 3)-1 do // last 0..3 QWORD
-      if P^[i]=Value then
-        exit;
-  end;
-  result := false;
-end;
-
-function IntegerScan(P: PCardinalArray; Count: PtrInt; Value: cardinal): PCardinal;
-{$ifdef PUREPASCAL}
-var i: PtrInt;
-begin // very optimized code
-  if P<>nil then begin
-    for i := 1 to Count shr 2 do      // 4 DWORD by loop - aligned read
-      if P^[0]<>Value then
-      if P^[1]<>Value then
-      if P^[2]<>Value then
-      if P^[3]=Value then begin
-        result := @P^[3];
-        exit;
-      end else
-        inc(PtrUInt(P),sizeof(P^[0])*4) else begin
-        result := @P^[2];
-        exit;
-      end else begin
-        result := @P^[1];
-        exit;
-      end else begin
-        result := pointer(P);
-        exit;
-      end;
-    for i := 0 to (Count and 3)-1 do  // last 0..3 DWORD
-      if P^[i]=Value then begin
-        result := @P^[i];
-        exit;
-      end;
-  end;
-  result := nil;
-end;
-{$else}
-asm // eax=P, edx=Count, Value=ecx
-        test    eax, eax
-        jz      @ok0 // avoid GPF
-        cmp     edx, 8
-        jb      @s2
-        nop
-        nop
-        nop // @s1 loop align
-@s1:    sub     edx, 8
-        cmp     [eax], ecx
-        je      @ok0
-        cmp     [eax + 4], ecx
-        je      @ok4
-        cmp     [eax + 8], ecx
-        je      @ok8
-        cmp     [eax + 12], ecx
-        je      @ok12
-        cmp     [eax + 16], ecx
-        je      @ok16
-        cmp     [eax + 20], ecx
-        je      @ok20
-        cmp     [eax + 24], ecx
-        je      @ok24
-        cmp     [eax + 28], ecx
-        je      @ok28
-        cmp     edx, 8
-        lea     eax, [eax + 32]  // preserve flags during 'cmp edx,8' computation
-        jae     @s1
-@s2:    test    edx, edx
-        jz      @z
-        cmp     [eax], ecx
-        je      @ok0
-        dec     edx
-        jz      @z
-        cmp     [eax + 4], ecx
-        je      @ok4
-        dec     edx
-        jz      @z
-        cmp     [eax + 8], ecx
-        je      @ok8
-        dec     edx
-        jz      @z
-        cmp     [eax + 12], ecx
-        je      @ok12
-        dec     edx
-        jz      @z
-        cmp     [eax + 16], ecx
-        je      @ok16
-        dec     edx
-        jz      @z
-        cmp     [eax + 20], ecx
-        je      @ok20
-        dec     edx
-        jz      @z
-        cmp     [eax + 24], ecx
-        je      @ok24
-@z:     xor     eax, eax // return nil if not found
-        ret
-@ok0:   rep     ret
-@ok28:  lea     eax, [eax + 28]
-        ret
-@ok24:  lea     eax, [eax + 24]
-        ret
-@ok20:  lea     eax, [eax + 20]
-        ret
-@ok16:  lea     eax, [eax + 16]
-        ret
-@ok12:  lea     eax, [eax + 12]
-        ret
-@ok8:   lea     eax, [eax + 8]
-        ret
-@ok4:   lea     eax, [eax + 4]
-end;
-{$endif}
-
-function Int64Scan(P: PInt64Array; Count: PtrInt; const Value: Int64): PInt64;
-var i: PtrInt;
-begin
-  if P<>nil then begin
-    for i := 1 to Count shr 2 do      // 4 QWORD by loop - aligned read
-      if P^[0]<>Value then
-      if P^[1]<>Value then
-      if P^[2]<>Value then
-      if P^[3]=Value then begin
-        result := @P^[3];
-        exit;
-      end else
-        inc(PtrUInt(P),sizeof(P^[0])*4) else begin
-        result := @P^[2];
-        exit;
-      end else begin
-        result := @P^[1];
-        exit;
-      end else begin
-        result := pointer(P);
-        exit;
-      end;
-    for i := 0 to (Count and 3)-1 do  // last 0..3 QWORD
-      if P^[i]=Value then begin
-        result := @P^[i];
-        exit;
-      end;
-  end;
-  result := nil;
-end;
-
-function AddInteger(var Values: TIntegerDynArray; Value: integer;
-  NoDuplicates: boolean=false): boolean;
-var n: PtrInt;
-begin
-  n := Length(Values);
-  if NoDuplicates and IntegerScanExists(pointer(Values),n,Value) then begin
-    result := false;
-    exit;
-  end;
-  SetLength(Values,n+1);
-  Values[n] := Value;
-  result := true
-end;
-
-procedure AddInteger(var Values: TIntegerDynArray; var ValuesCount: integer;
-  Value: integer);
-begin
-  if ValuesCount=length(Values) then
-    SetLength(Values,ValuesCount+256+ValuesCount shr 3);
-  Values[ValuesCount] := Value;
-  inc(ValuesCount);
-end;
-
-function AddInteger(var Values: TIntegerDynArray; var ValuesCount: integer;
-  Value: integer; NoDuplicates: boolean): boolean; overload;
-begin
-  if NoDuplicates and IntegerScanExists(pointer(Values),ValuesCount,Value) then begin
-    result := false;
-    exit;
-  end;
-  if ValuesCount=length(Values) then
-    SetLength(Values,ValuesCount+256+ValuesCount shr 3);
-  Values[ValuesCount] := Value;
-  inc(ValuesCount);
-  result := true
-end;
-
-procedure AddInt64(var Values: TInt64DynArray; var ValuesCount: integer; Value: Int64);
-begin
-  if ValuesCount=length(Values) then
-    SetLength(Values,ValuesCount+256+ValuesCount shr 3);
-  Values[ValuesCount] := Value;
-  inc(ValuesCount);
-end;
-
-procedure AddInt64(var Values: TInt64DynArray; Value: Int64);
-var n: integer;
-begin
-  n := length(Values);
-  SetLength(Values,n+1);
-  Values[n] := Value;
-end;
-
-procedure DeleteInteger(var Values: TIntegerDynArray; Index: PtrInt);
-var n: PtrInt;
-begin
-  n := Length(Values);
-  if PtrUInt(Index)>=PtrUInt(n) then
-    exit; // wrong Index
-  dec(n);
-  if n>Index then
-    MoveFast(Values[Index+1],Values[Index],(n-Index)*sizeof(Integer));
-  SetLength(Values,n);
-end;
-
-procedure DeleteInt64(var Values: TInt64DynArray; Index: PtrInt); overload;
-var n: PtrInt;
-begin
-  n := Length(Values);
-  if PtrUInt(Index)>=PtrUInt(n) then
-    exit; // wrong Index
-  dec(n);
-  if n>Index then
-    MoveFast(Values[Index+1],Values[Index],(n-Index)*sizeof(Int64));
-  SetLength(Values,n);
-end;
-
-procedure DeleteInteger(var Values: TIntegerDynArray; var ValuesCount: Integer; Index: PtrInt); overload;
-var n: PtrInt;
-begin
-  n := ValuesCount;
-  if PtrUInt(Index)>=PtrUInt(n) then
-    exit; // wrong Index
-  dec(n,Index+1);
-  if n>0 then
-    MoveFast(Values[Index+1],Values[Index],n*sizeof(Integer));
-  dec(ValuesCount);
-end;
-
-function MaxInteger(const Values: TIntegerDynArray; ValuesCount, MaxStart: integer): Integer;
-var i: integer;
-begin
-  result := MaxStart;
-  for i := 0 to ValuesCount-1 do
-    if Values[i]>result then
-      result := Values[i];
-end;
-
 procedure Reverse(const Values: TIntegerDynArray; ValuesCount: integer;
   Reversed: PIntegerArray);
 var i: integer;
@@ -4548,382 +3228,6 @@ begin
 end;
 
 
-function IntegerScanIndex(P: PCardinalArray; Count: PtrInt; Value: cardinal): PtrInt;
-{$ifdef PUREPASCAL}
-var i: PtrInt; // very optimized code for speed
-begin
-  if P<>nil then begin
-    result := 0;
-    for i := 1 to Count shr 2 do // 4 DWORD by loop - aligned read
-      if P^[0]<>Value then
-      if P^[1]<>Value then
-      if P^[2]<>Value then
-      if P^[3]<>Value then begin
-        inc(PtrUInt(P),sizeof(P^[0])*4);
-        inc(result,4);
-      end else begin
-        inc(result,3);
-        exit;
-      end else begin
-        inc(result,2);
-        exit;
-      end else begin
-        inc(result,1);
-        exit;
-      end else
-        exit;
-    for i := 0 to (Count and 3)-1 do // last 0..3 DWORD
-      if P^[i]=Value then
-        exit else
-        inc(result);
-  end;
-  result := -1;
-end;
-{$else}
-asm
-        push    eax
-        call    IntegerScan
-        test    eax, eax
-        pop     edx
-        jnz     @e
-        dec     eax // returns -1
-        ret
-@e:     sub     eax, edx
-        shr     eax, 2
-end;
-{$endif}
-
-function PtrUIntScanExists(P: PPtrUIntArray; Count: PtrInt; Value: PtrUInt): boolean;
-{$ifdef PUREPASCAL}
-begin
-  {$ifdef CPU64}
-  result := Int64ScanExists(pointer(P),Count,Value);
-  {$else}
-  result := IntegerScanExists(pointer(P),Count,Value);
-  {$endif}
-end;
-{$else}
-asm
-  jmp IntegerScanExists;
-end;
-{$endif}
-
-function PtrUIntScanIndex(P: PPtrUIntArray; Count: PtrInt; Value: PtrUInt): PtrInt;
-{$ifdef PUREPASCAL}
-var i: PtrInt; // optimized code for speed
-begin
-  if P<>nil then begin
-    result := 0;
-    for i := 1 to Count shr 2 do // 4 PtrUInt by loop - aligned read
-      if P^[0]<>Value then
-      if P^[1]<>Value then
-      if P^[2]<>Value then
-      if P^[3]<>Value then begin
-        inc(PtrUInt(P),sizeof(P^[0])*4);
-        inc(result,4);
-      end else begin
-        inc(result,3);
-        exit;
-      end else begin
-        inc(result,2);
-        exit;
-      end else begin
-        inc(result,1);
-        exit;
-      end else
-        exit;
-    for i := 0 to (Count and 3)-1 do // last 0..3 PtrUInt
-      if P^[i]=Value then
-        exit else
-        inc(result);
-  end;
-  result := -1;
-end;
-{$else}
-asm // identical to IntegerScanIndex() asm stub
-        push    eax
-        call    IntegerScan
-        test    eax, eax
-        pop     edx
-        jnz     @e
-        dec     eax // returns -1
-        ret
-@e:     sub     eax, edx
-        shr     eax, 2
-end;
-{$endif}
-
-function WordScanIndex(P: PWordArray; Count: PtrInt; Value: word): integer;
-begin
-  for result := 0 to Count-1 do
-    if P^[result]=Value then
-      exit;
-  result := -1;
-end;
-
-procedure QuickSortInteger(ID: PIntegerArray; L,R: PtrInt);
-var I, J, P: PtrInt;
-    pivot, Tmp: integer;
-begin
-  if L<R then
-  repeat
-    I := L; J := R;
-    P := (L + R) shr 1;
-    repeat
-      pivot := ID^[P];
-      while ID[I]<pivot do inc(I);
-      while ID[J]>pivot do dec(J);
-      if I <= J then begin
-        Tmp := ID[J]; ID[J] := ID[I]; ID[I] := Tmp;
-        if P = I then P := J else if P = J then P := I;
-        inc(I); dec(J);
-      end;
-    until I > J;
-    if L < J then
-      QuickSortInteger(ID,L,J);
-    L := I;
-  until I >= R;
-end;
-
-procedure QuickSortInteger(var ID: TIntegerDynArray);
-begin
-  QuickSortInteger(pointer(ID),0,high(ID));
-end;
-
-procedure QuickSortInteger(ID,CoValues: PIntegerArray; L,R: PtrInt);
-var I, J, P: PtrInt;
-    pivot, Tmp: integer;
-begin
-  if L<R then
-  repeat
-    I := L; J := R;
-    P := (L + R) shr 1;
-    repeat
-      pivot := ID^[P];
-      while ID[I]<pivot do inc(I);
-      while ID[J]>pivot do dec(J);
-      if I <= J then begin
-        Tmp := ID[J]; ID[J] := ID[I]; ID[I] := Tmp;
-        Tmp := CoValues[J]; CoValues[J] := CoValues[I]; CoValues[I] := Tmp;
-        if P = I then P := J else if P = J then P := I;
-        inc(I); dec(J);
-      end;
-    until I > J;
-    if L < J then
-      QuickSortInteger(ID,CoValues,L,J);
-    L := I;
-  until I >= R;
-end;
-
-procedure QuickSortInt64(ID: PInt64Array; L, R: PtrInt); overload;
-var I, J, P: PtrInt;
-    pivot, Tmp: Int64;
-begin
-  if L<R then
-  repeat
-    I := L; J := R;
-    P := (L + R) shr 1;
-    repeat
-      pivot := ID^[P];
-      while ID[I]<pivot do inc(I);
-      while ID[J]>pivot do dec(J);
-      if I <= J then begin
-        Tmp := ID[J]; ID[J] := ID[I]; ID[I] := Tmp;
-        if P = I then P := J else if P = J then P := I;
-        inc(I); dec(J);
-      end;
-    until I > J;
-    if L < J then
-      QuickSortInt64(ID,L,J);
-    L := I;
-  until I >= R;
-end;
-
-procedure QuickSortInt64(ID,CoValues: PInt64Array; L, R: PtrInt); overload;
-var I, J, P: PtrInt;
-    pivot, Tmp: Int64;
-begin
-  if L<R then
-  repeat
-    I := L; J := R;
-    P := (L + R) shr 1;
-    repeat
-      pivot := ID^[P];
-      while ID[I]<pivot do inc(I);
-      while ID[J]>pivot do dec(J);
-      if I <= J then begin
-        Tmp := ID[J]; ID[J] := ID[I]; ID[I] := Tmp;
-        Tmp := CoValues[J]; CoValues[J] := CoValues[I]; CoValues[I] := Tmp;
-        if P = I then P := J else if P = J then P := I;
-        inc(I); dec(J);
-      end;
-    until I > J;
-    if L < J then
-      QuickSortInt64(ID,L,J);
-    L := I;
-  until I >= R;
-end;
-
-procedure QuickSortPtrInt(P: PPtrIntArray; L, R: PtrInt);
-begin
-  {$ifdef CPU64}
-  QuickSortInt64(PInt64Array(P),L,R);
-  {$else}
-  QuickSortInteger(PIntegerArray(P),L,R);
-  {$endif}
-end;
-
-function FastFindPtrIntSorted(P: PPtrIntArray; R: PtrInt; Value: PtrInt): PtrInt; overload;
-begin
-  {$ifdef CPU64}
-  result := FastFindInt64Sorted(PInt64Array(P),R,Value);
-  {$else}
-  result := FastFindIntegerSorted(PIntegerArray(P),R,Value);
-  {$endif}
-end;
-
-procedure QuickSortPointer(P: PPointerArray; L, R: PtrInt);
-begin
-  {$ifdef CPU64}
-  QuickSortInt64(PInt64Array(P),L,R);
-  {$else}
-  QuickSortInteger(PIntegerArray(P),L,R);
-  {$endif}
-end;
-
-function FastFindPointerSorted(P: PPointerArray; R: PtrInt; Value: pointer): PtrInt; overload;
-begin
-  {$ifdef CPU64}
-  result := FastFindInt64Sorted(PInt64Array(P),R,Int64(Value));
-  {$else}
-  result := FastFindIntegerSorted(PIntegerArray(P),R,integer(Value));
-  {$endif}
-end;
-
-procedure CopyAndSortInteger(Values: PIntegerArray; ValuesCount: integer;
-  var Dest: TIntegerDynArray);
-begin
-  if ValuesCount>length(Dest) then
-    SetLength(Dest,ValuesCount);
-  MoveFast(Values^[0],Dest[0],ValuesCount*sizeof(Integer));
-  QuickSortInteger(pointer(Dest),0,ValuesCount-1);
-end;
-
-procedure CopyAndSortInt64(Values: PInt64Array; ValuesCount: integer;
-  var Dest: TInt64DynArray);
-begin
-  if ValuesCount>length(Dest) then
-    SetLength(Dest,ValuesCount);
-  MoveFast(Values^[0],Dest[0],ValuesCount*sizeof(Int64));
-  QuickSortInt64(pointer(Dest),0,ValuesCount-1);
-end;
-
-function FastFindIntegerSorted(P: PIntegerArray; R: PtrInt; Value: integer): PtrInt;
-var L: PtrInt;
-    cmp: integer;
-begin
-  L := 0;
-  if 0<=R then
-  repeat
-    result := (L + R) shr 1;
-    cmp := P^[result]-Value;
-    if cmp=0 then
-      exit;
-    if cmp<0 then
-      L := result + 1 else
-      R := result - 1;
-  until (L > R);
-  result := -1
-end;
-
-function FastFindInt64Sorted(P: PInt64Array; R: PtrInt; const Value: Int64): PtrInt; overload;
-var L: PtrInt;
-    cmp: Int64;
-begin
-  L := 0;
-  if 0<=R then
-  repeat
-    result := (L + R) shr 1;
-    cmp := P^[result]-Value;
-    if cmp=0 then
-      exit;
-    if cmp<0 then
-      L := result + 1 else
-      R := result - 1;
-  until (L > R);
-  result := -1
-end;
-
-function FastFindIntegerSorted(const Values: TIntegerDynArray; Value: integer): PtrInt;
-begin
-  result := FastFindIntegerSorted(pointer(Values),length(Values)-1,Value);
-end;
-
-function FastLocateIntegerSorted(P: PIntegerArray; R: PtrInt; Value: integer): PtrInt;
-var L,i: PtrInt;
-   cmp: integer;
-begin
-  if R<0 then
-    result := 0 else begin
-    L := 0;
-    result := -1; // return -1 if found
-    repeat
-      i := (L + R) shr 1;
-      cmp := P^[i]-Value;
-      if cmp=0 then
-        exit;
-      if cmp<0 then
-        L := i + 1 else
-        R := i - 1;
-    until (L > R);
-    while (i>=0) and (P^[i]>=Value) do dec(i);
-    result := i+1; // return the index where to insert
-  end;
-end;
-
-function AddSortedInteger(var Values: TIntegerDynArray; var ValuesCount: integer;
-  Value: integer; CoValues: PIntegerDynArray=nil): PtrInt;
-begin
-  result := FastLocateIntegerSorted(pointer(Values),ValuesCount-1,Value);
-  if result>=0 then // if Value exists -> fails
-    result := InsertInteger(Values,ValuesCount,Value,result,CoValues);
-end;
-
-function AddSortedInteger(var Values: TIntegerDynArray;
-  Value: integer; CoValues: PIntegerDynArray=nil): PtrInt;
-var ValuesCount: integer;
-begin
-  ValuesCount := length(Values);
-  result := FastLocateIntegerSorted(pointer(Values),ValuesCount-1,Value);
-  if result>=0 then begin // if Value exists -> fails
-    SetLength(Values,ValuesCount+1); // manual size increase
-    result := InsertInteger(Values,ValuesCount,Value,result,CoValues);
-  end;
-end;
-
-function InsertInteger(var Values: TIntegerDynArray; var ValuesCount: integer;
-  Value: Integer; Index: PtrInt; CoValues: PIntegerDynArray=nil): PtrInt;
-var n: PtrInt;
-begin
-  result := Index;
-  n := Length(Values);
-  if ValuesCount=n then begin
-    inc(n,256+n shr 3);
-    SetLength(Values,n);
-    if CoValues<>nil then
-      SetLength(CoValues^,n);
-  end;
-  n := ValuesCount;
-  if PtrUInt(result)<PtrUInt(n) then begin
-    n := (n-result)*sizeof(Integer);
-    MoveFast(Values[result],Values[result+1],n);
-    if CoValues<>nil then
-      MoveFast(CoValues^[result],CoValues^[result+1],n);
-  end else
-    result := n;
-  Values[result] := Value;
-  inc(ValuesCount);
-end;
 
 function TIntegerDynArrayFrom(const Values: array of integer): TIntegerDynArray;
 var i: integer;
@@ -4933,25 +3237,7 @@ begin
     result[i] := Values[i];
 end;
 
-//function TIntegerDynArrayFrom64(const Values: TInt64DynArray;
-//  raiseExceptionOnOverflow: boolean=true): TIntegerDynArray;
-//var i: integer;
-//const MinInt = -MaxInt-1;
-//begin
-//  SetLength(result,length(Values));
-//  for i := 0 to high(Values) do
-//    if Values[i]>MaxInt then
-//      if raiseExceptionOnOverflow then
-//        raise ESynException.CreateUTF8('TIntegerDynArrayFrom64: Values[%]=%>%',
-//          [i,Values[i],MaxInt]) else
-//        result[i] := MaxInt else
-//    if Values[i]<MinInt then
-//      if raiseExceptionOnOverflow then
-//        raise ESynException.CreateUTF8('TIntegerDynArrayFrom64: Values[%]=%<%',
-//          [i,Values[i],MinInt]) else
-//        result[i] := MinInt else
-//    result[i] := Values[i];
-//end;
+
 
 function TInt64DynArrayFrom(const Values: TIntegerDynArray): TInt64DynArray;
 var i: integer;
@@ -5283,398 +3569,6 @@ begin
 end;
 {$endif}
 
-function GetExtended(P: PUTF8Char): TSynExtended;
-var err: integer;
-begin
-  result := GetExtended(P,err);
-  if err<>0 then
-    result := 0;
-end;
-
-{$ifdef PUREPASCAL}
-  {$define GETEXTENDEDPASCAL}
-{$endif}
-{$ifdef FPC}
-  {$define GETEXTENDEDPASCAL}
-{$endif}
-{$ifdef PIC}
-  {$define GETEXTENDEDPASCAL}
-{$endif}
-
-function GetExtended(P: PUTF8Char; out err: integer): TSynExtended;
-// adapted from ValExt_JOH_PAS_8_a and ValExt_JOH_IA32_8_a by John O'Harrow
-{$ifdef GETEXTENDEDPASCAL}
-const POW10: array[0..31] of TSynExtended = (
-  1E0,1E1,1E2,1E3,1E4,1E5,1E6,1E7,1E8,1E9,1E10,1E11,1E12,1E13,1E14,1E15,1E16,
-  1E17,1E18,1E19,1E20,1E21,1E22,1E23,1E24,1E25,1E26,1E27,1E28,1E29,1E30,1E31);
-function IntPower(Exponent: Integer): TSynExtended;
-var Y: Cardinal;
-    LBase: Int64;
-begin
-  Y := abs(Exponent);
-  LBase := 10;
-  result := 1.0;
-  repeat
-    while not odd(Y) do begin
-      Y := Y shr 1;
-      LBase := LBase*LBase;
-    end;
-    dec(Y);
-    result := result*LBase;
-  until Y=0;
-  if Exponent<0 then
-    result := 1.0/result;
-end;
-var Digits, ExpValue: Integer;
-    Ch: AnsiChar;
-    Neg, NegExp, Valid: Boolean;
-begin
-  result := 0.0;
-  err := 0;
-  if P=nil then begin
-    inc(err);
-    exit;
-  end;
-  Neg := False;
-  NegExp := False;
-  Valid := False;
-  while P[err]=' ' do
-    inc(err);
-  Ch := P[err];
-  if Ch in ['+','-'] then begin
-    inc(err);
-    Neg := (Ch='-');
-  end;
-  while true do begin
-    Ch := P[err];
-    inc(err);
-    if not (Ch in ['0'..'9']) then
-      break;
-    result := (result*10.0)+Ord(Ch)-Ord('0');
-    Valid := True;
-  end;
-  Digits := 0;
-  if Ch='.' then begin
-    while true do begin
-      Ch := P[err];
-      inc(err);
-      if not (Ch in ['0'..'9']) then begin
-        if not valid then // starts with '.'
-          if Ch=#0 then
-            dec(err); // P='.'
-        break;
-      end;
-      result := (result*10.0)+Ord(Ch)-Ord('0');
-      dec(Digits);
-      Valid := true;
-    end;
-    end;
-  ExpValue := 0;
-  if Ch in ['E','e'] then begin
-    Valid := false;
-    Ch := P[err];
-    if Ch in ['+','-'] then begin
-      inc(err);
-      NegExp := (Ch='-');
-    end;
-    while true do begin
-      Ch := P[err];
-      inc(err);
-      if not (Ch in ['0'..'9']) then
-        break;
-      ExpValue := (ExpValue*10)+Ord(Ch)-Ord('0');
-      Valid := true;
-    end;
-   if NegExp then
-     ExpValue := -ExpValue;
-  end;
-  inc(Digits,ExpValue);
-  case Digits of
-  -high(POW10)..-1: result := result/POW10[-Digits];
-  1..high(POW10):   result := result*POW10[Digits];
-  0: ;
-  else result := result*IntPower(Digits);
-  end;
-  if Neg then
-    result := -result;
-  if Valid and (ch=#0) then
-    err := 0;
-end;
-{$else}
-const Ten: double = 10.0;
-asm     // in: eax=text, edx=@err  out: st(0)=result
-        push    ebx                 // save used registers
-        push    esi
-        push    edi
-        mov     esi, eax            // string pointer
-        push    eax                 // save for error condition
-        xor     ebx, ebx
-        push    eax                 // allocate local storage for loading fpu
-        test    esi, esi
-        jz      @nil                // nil string
-@trim:  movzx   ebx, byte ptr[esi]  // strip leading spaces
-        inc     esi
-        cmp     bl, ' '
-        je      @trim
-        xor     ecx, ecx            // clear sign flag
-        fld     qword[Ten]          // load 10 into fpu
-        xor     eax, eax            // zero number of decimal places
-        fldz                        // zero result in fpu
-        cmp     bl, '0'
-        jl      @chksig             // check for sign character
-@dig1:  xor     edi, edi            // zero exponent value
-@digl:  sub     bl, '0'
-        cmp     bl, 9
-        ja      @frac               // non-digit
-        mov     cl, 1               // set digit found flag
-        mov     [esp], ebx          // store for fpu use
-        fmul    st(0), st(1)        // multply by 10
-        fiadd   dword ptr[esp]      // add next digit
-        movzx   ebx, byte ptr[esi]  // get next char
-        inc     esi
-        test    bl, bl              // end reached?
-        jnz     @digl               // no,get next digit
-        jmp     @finish             // yes,finished
-@chksig:cmp     bl, '-'
-        je      @minus
-        cmp     bl, '+'
-        je      @sigset
-@gdig1: test    bl, bl
-        jz      @error              // no digits found
-        jmp     @dig1
-@minus: mov     ch, 1               // set sign flag
-@sigset:movzx   ebx, byte ptr[esi]  // get next char
-        inc     esi
-        jmp     @gdig1
-@frac:  cmp     bl, '.' - '0'
-        jne     @exp                // no decimal point
-        movzx   ebx, byte ptr[esi]  // get next char
-        test    bl, bl
-        jz      @dotend             // string ends with '.'
-        inc     esi
-@fracl: sub     bl, '0'
-        cmp     bl, 9
-        ja      @exp                // non-digit
-        mov     [esp], ebx
-        dec     eax                 // -(number of decimal places)
-        fmul    st(0), st(1)        // multply by 10
-        fiadd   dword ptr[esp]      // add next digit
-        movzx   ebx, byte ptr[esi]  // get next char
-        inc     esi
-        test    bl, bl              // end reached?
-        jnz     @fracl              // no, get next digit
-        jmp     @finish             // yes, finished (no exponent)
-@dotend:test    cl, cl              // any digits found before '.'?
-        jnz     @finish             // yes, valid
-        jmp     @error              // no,invalid
-@exp:   or      bl, $20
-        cmp     bl, 'e' - '0'
-        jne     @error              // not 'e' or 'e'
-        movzx   ebx, byte ptr[esi]  // get next char
-        inc     esi
-        mov     cl, 0               // clear exponent sign flag
-        cmp     bl, '-'
-        je      @minexp
-        cmp     bl, '+'
-        je      @expset
-        jmp     @expl
-@minexp:mov     cl, 1               // set exponent sign flag
-@expset:movzx   ebx, byte ptr[esi]  // get next char
-        inc     esi
-@expl:  sub     bl, '0'
-        cmp     bl, 9
-        ja      @error              // non-digit
-        lea     edi, [edi + edi * 4]// multiply by 10
-        add     edi, edi
-        add     edi, ebx            // add next digit
-        movzx   ebx, byte ptr[esi]  // get next char
-        inc     esi
-        test    bl, bl              // end reached?
-        jnz     @expl               // no, get next digit
-@endexp:test    cl, cl              // positive exponent?
-        jz      @finish             // yes, keep exponent value
-        neg     edi                 // no, negate exponent value
-@finish:add     eax, edi            // exponent value - number of decimal places
-        mov     [edx], ebx          // result code = 0
-        jz      @pow                // no call to _pow10 needed
-        mov     edi, ecx            // save decimal sign flag
-        call    System.@Pow10       // raise to power of 10
-        mov     ecx, edi            // restore decimal sign flag
-@pow:   test    ch, ch              // decimal sign flag set?
-        jnz     @negate             // yes, negate value
-@ok:    add     esp, 8              // dump local storage and string pointer
-@exit:  ffree   st(1)               // remove ten value from fpu
-        pop     edi                 // restore used registers
-        pop     esi
-        pop     ebx
-        ret                         // finished
-@negate:fchs                        // negate result in fpu
-        jmp     @ok
-@nil:   inc     esi                 // force result code = 1
-        fldz                        // result value = 0
-@error: pop     ebx                 // dump local storage
-        pop     eax                 // string pointer
-        sub     esi, eax            // error offset
-        mov     [edx], esi          // set result code
-        test    ch, ch              // decimal sign flag set?
-        jz      @exit               // no,exit
-        fchs                        // yes. negate result in fpu
-        jmp     @exit               // exit setting result code
-end;
-{$endif}
-function IdemFileExt(p: PUTF8Char; extup: PAnsiChar; sepChar: AnsiChar): Boolean;
-var ext: PUTF8Char;
-begin
-  if (p<>nil) and (extup<>nil) then begin
-    ext := nil;
-    repeat
-      if p^=sepChar then
-        ext := p; // get last '.' position from p into ext
-      inc(p);
-    until p^=#0;
-    if ext<>nil then
-      result := IdemPChar(ext,extup) else
-      result := false;
-  end else
-    result := false;
-end;
-
-function IdemPCharWithoutWhiteSpace(p: PUTF8Char; up: PAnsiChar): boolean;
-begin
-  result := False;
-  if p=nil then
-    exit;
-  if up<>nil then
-    while up^<>#0 do begin
-      while p<=' ' do // trim white space
-        if p^=#0 then
-          exit else
-        inc(p);
-      if up^<>NormToUpperAnsi7[p^] then
-        exit;
-      inc(up);
-      inc(p);
-    end;
-  result := true;
-end;
-
-{$ifdef PUREPASCAL}
-function IdemPChar(p: PUTF8Char; up: PAnsiChar): boolean;
-// if the beginning of p^ is same as up^ (ignore case - up^ must be already Upper)
-begin
-  result := false;
-  if p=nil then
-    exit;
-  if (up<>nil) and (up^<>#0) then
-    repeat
-      if up^<>NormToUpperAnsi7[p^] then
-        exit;
-      inc(up);
-      inc(p);
-    until up^=#0;
-  result := true;
-end;
-{$else}
-function IdemPChar(p: PUTF8Char; up: PAnsiChar): boolean;
-// if the beginning of p^ is same as up^ (ignore case - up^ must be already Upper)
-// eax=p edx=up
-asm
-        test    eax, eax
-        jz      @e // P=nil -> false
-        test    edx, edx
-        push    ebx
-        jz      @t // up=nil -> true
-        mov     ecx, [edx] // cl=up^[0]
-        test    cl, cl
-        movzx   ebx, byte ptr[eax] // bl=p^[0]
-        jz      @t
-        cmp     cl, byte ptr[ebx + NormToUpperAnsi7] // bl=NormToUpperAnsi7[p^[0]]
-        jnz     @f // quick return in case of first invalid char
-        lea     eax, [eax + 1]
-        lea     edx, [edx + 1]
-        shr     ecx, 8 // cl=up^[1], ch=up^[2]
-@1:     mov     bl, [eax] // bl=p^[0]
-        test    cl, cl
-        jz      @t // up^[0]=#0 -> OK
-        cmp     cl, byte ptr[ebx + NormToUpperAnsi7] // bl=NormToUpperAnsi7[p^[0]]
-        mov     bl, [eax + 1] // bl=p^[1]
-        lea     eax, [eax + 2]
-        lea     edx, [edx + 2]
-        jne     @f
-        test    ch, ch
-        jz      @t // up^[1]=#0 -> OK
-        cmp     ch, byte ptr[ebx + NormToUpperAnsi7] // bl=NormToUpperAnsi7[p^[1]]
-        mov     ecx, [edx] // cl=up^[0] ch=up^[1]
-        je      @1
-@f:     pop     ebx // NormToUpperAnsi7[p^]<>up^ -> FALSE
-@e:     xor     eax, eax
-        ret
-@t:     pop     ebx // up^=#0 -> TRUE
-        mov     al, 1
-end;
-{$endif}
-
-function IsZero(P: pointer; Length: integer): boolean;
-var i: integer;
-begin
-  result := false;
-  for i := 1 to Length shr 4 do // 16 bytes (4 DWORD) by loop - aligned read
-    {$ifdef CPU64}
-    if (PInt64Array(P)^[0]<>0) or (PInt64Array(P)^[1]<>0) then
-    {$else}
-    if (PCardinalArray(P)^[0]<>0) or (PCardinalArray(P)^[1]<>0) or
-       (PCardinalArray(P)^[2]<>0) or (PCardinalArray(P)^[3]<>0) then
-    {$endif}
-      exit else
-      inc(PtrUInt(P),16);
-  for i := 1 to (Length shr 2)and 3 do // 4 bytes (1 DWORD) by loop
-    if PCardinal(P)^<>0 then
-      exit else
-      inc(PtrUInt(P),4);
-  for i := 1 to Length and 3 do // remaining content
-    if PByte(P)^<>0 then
-      exit else
-      inc(PtrUInt(P));
-  result := true;
-end;
-
-function IsZero(const Values: TIntegerDynArray): boolean;
-var i: integer;
-begin
-  result := false;
-  for i := 0 to length(Values)-1 do
-    if Values[i]<>0 then
-      exit;
-  result := true;
-end;
-
-function IsZero(const Values: TInt64DynArray): boolean;
-var i: integer;
-begin
-  result := false;
-  for i := 0 to length(Values)-1 do
-    if Values[i]<>0 then
-      exit;
-  result := true;
-end;
-
-{$WARNINGS OFF} // yes, we know there will be dead code below: we rely on it ;)
-
-
-procedure FillZero(var Values: TIntegerDynArray);
-begin
-  FillCharFast(Values[0],length(Values)*SizeOf(integer),0);
-end;
-
-procedure FillZero(var Values: TInt64DynArray); overload;
-begin
-  FillCharFast(Values[0],length(Values)*SizeOf(Int64),0);
-end;
-
-{$WARNINGS ON}
-
-
-{ ************  Custom record / dynamic array JSON serialization }
 
 const
   NULCHAR: AnsiChar = #0;
@@ -6082,36 +3976,7 @@ begin
     result := fKnownType;
     exit;
   end;
-  case ElemSize of
-  1: if fTypeInfo=TypeInfo(TBooleanDynArray) then
-       fKnownType := djBoolean;
-  4: if fTypeInfo=TypeInfo(TCardinalDynArray) then
-       fKnownType := djCardinal else
-     if fTypeInfo=TypeInfo(TSingleDynArray) then
-       fKnownType := djSingle
-  {$ifdef CPU64} ; 8: {$else} else {$endif}
-    if fTypeInfo=TypeInfo(TStringDynArray) then
-      fKnownType := djString else
-    if fTypeInfo=TypeInfo(TWinAnsiDynArray) then
-      fKnownType := djWinAnsi else
-    if fTypeInfo=TypeInfo(TRawByteStringDynArray) then
-      fKnownType := djRawByteString else
-    if fTypeInfo=TypeInfo(TSynUnicodeDynArray) then
-      fKnownType := djSynUnicode else
-    {$ifndef DELPHI5OROLDER}
-    if fTypeInfo=TypeInfo(TInterfaceDynArray) then
-      fKnownType := djInterface
-    {$endif}
-  {$ifdef CPU64} else {$else} ; 8: {$endif}
-     if fTypeInfo=TypeInfo(TDoubleDynArray) then
-       fKnownType := djDouble else
-     if fTypeInfo=TypeInfo(TCurrencyDynArray) then
-       fKnownType := djCurrency else
-     ///if fTypeInfo=TypeInfo(TTimeLogDynArray) then
-     ///  fKnownType := djTimeLog else
-     if fTypeInfo=TypeInfo(TDateTimeDynArray) then
-       fKnownType := djDateTime;
-  end;
+
   if (fKnownType=djNone) and not exactType then begin
     fKnownSize := 0;
     if ElemType=nil then
@@ -6710,10 +4575,64 @@ begin
   result.Init(aTypeInfo,aValue,aCountPointer);
 end;
 
+function IntegerScanExists(P: PCardinalArray; Count: PtrInt; Value: cardinal): boolean;
+var i: PtrInt; // very optimized code for speed
+begin
+  if P<>nil then begin
+    result := true;
+    for i := 1 to (Count shr 2) do   // 4 DWORD by loop - aligned read
+      if (P^[0]=Value) or (P^[1]=Value) or
+         (P^[2]=Value) or (P^[3]=Value) then
+        exit else
+        inc(PtrUInt(P),sizeof(P^[0])*4);
+    for i := 0 to (Count and 3)-1 do // last 0..3 DWORD
+      if P^[i]=Value then
+        exit;
+  end;
+  result := false;
+end;
+
+function PtrUIntScanExists(P: PPtrUIntArray; Count: PtrInt; Value: PtrUInt): boolean;
+begin
+  {$ifdef CPU64}
+  result := Int64ScanExists(pointer(P),Count,Value);
+  {$else}
+  result := IntegerScanExists(pointer(P),Count,Value);
+  {$endif}
+end;
 
 
 
-
+function PtrUIntScanIndex(P: PPtrUIntArray; Count: PtrInt; Value: PtrUInt): PtrInt;
+var i: PtrInt; // optimized code for speed
+begin
+  if P<>nil then begin
+    result := 0;
+    for i := 1 to Count shr 2 do // 4 PtrUInt by loop - aligned read
+      if P^[0]<>Value then
+      if P^[1]<>Value then
+      if P^[2]<>Value then
+      if P^[3]<>Value then begin
+        inc(PtrUInt(P),sizeof(P^[0])*4);
+        inc(result,4);
+      end else begin
+        inc(result,3);
+        exit;
+      end else begin
+        inc(result,2);
+        exit;
+      end else begin
+        inc(result,1);
+        exit;
+      end else
+        exit;
+    for i := 0 to (Count and 3)-1 do // last 0..3 PtrUInt
+      if P^[i]=Value then
+        exit else
+        inc(result);
+  end;
+  result := -1;
+end;
 
 function PtrArrayAdd(var aPtrArray; aItem: pointer): integer;
 var a: TPointerDynArray absolute aPtrArray;
@@ -7226,155 +5145,7 @@ begin
   result := true;
 end;
 
-function JsonPropNameValid(P: PUTF8Char): boolean;
-{$ifdef HASINLINE}
-begin
-  if (P<>nil) and (ord(P^) in IsJsonIdentifierFirstChar) then begin
-    repeat
-      inc(P);
-    until not(ord(P^) in IsJsonIdentifier);
-    if P^=#0 then begin
-      result := true;
-      exit;
-    end else begin
-      result := false;
-      exit;
-    end;
-  end else
-    result := false;
-end;
-{$else}
-asm
-        test    eax, eax
-        jz      @z
-        movzx   edx, byte ptr[eax]
-        bt      [offset @first], edx
-        mov     ecx, offset @chars
-        jb      @2
-@z:     xor     eax, eax
-        ret
-@first: dd      0, $03FF0010, $87FFFFFE, $07FFFFFE, 0, 0, 0, 0 // IsJsonIdentifierFirstChar
-@chars: dd      0, $03FF4000, $AFFFFFFE, $07FFFFFE, 0, 0, 0, 0 // IsJsonIdentifier
-@s:     mov     dl, [eax]
-        bt      [ecx], edx
-        jnb     @1
-@2:     mov     dl, [eax + 1]
-        bt      [ecx], edx
-        jnb     @1
-        mov     dl, [eax + 2]
-        bt      [ecx], edx
-        jnb     @1
-        mov     dl, [eax + 3]
-        bt      [ecx], edx
-        lea     eax, [eax + 4]
-        jb      @s
-@1:     test    dl, dl
-        setz    al
-end;
-{$endif}
 
-
-function CompareOperator(FieldType: TSynTableFieldType; SBF, SBFEnd: PUTF8Char;
-  Value: Int64; Oper: TCompareOperator): boolean; overload;
-var V: Int64;
-    PB: PByte absolute SBF;
-begin
-  result := true;
-  if PB<>nil then
-  repeat
-    case FieldType of
-      tftBoolean, tftUInt8:
-        V := PB^;
-      tftUInt16:
-        V := PWord(PB)^;
-      tftUInt24:
-        // PInteger()^ and $ffffff -> possible GPF on Memory Mapped file
-        V := PWord(PB)^+integer(PByteArray(PB)^[2])shl 16;
-      tftInt32:
-        V := PInteger(PB)^;
-      tftInt64:
-        V := PInt64(PB)^;
-      // some variable-size field value
-//      tftVarUInt32:
-//        V := FromVarUInt32(PB);
-//      tftVarInt32:
-//        V := FromVarInt32(PB);
-//      tftVarUInt64:
-//        V := FromVarUInt64(PB);
-//      tftVarInt64:
-//        V := FromVarInt64(PB);
-      else V := 0;  // makes compiler happy
-    end;
-    case Oper of
-      soEqualTo:              if V=Value then exit;
-      soNotEqualTo:           if V<>Value then exit;
-      soLessThan:             if V<Value then exit;
-      soLessThanOrEqualTo:    if V<=Value then exit;
-      soGreaterThan:          if V>Value then exit;
-      soGreaterThanOrEqualTo: if V>=Value then exit;
-      else break;
-    end;
-    // not found: go to next value
-    if SBFEnd=nil then
-      break; // only one value to be checked
-    if FIELD_FIXEDSIZE[FieldType]>0 then
-      inc(SBF,FIELD_FIXEDSIZE[FieldType]); // FromVar*() already updated PB/SBF
-  until SBF>=SBFEnd;
-  result := false; // not found
-end;
-
-function CompareOperator(SBF, SBFEnd: PUTF8Char;
-  Value: double; Oper: TCompareOperator): boolean; overload;
-begin
-  result := true;
-  if SBF<>nil then
-  repeat
-    case Oper of
-      soEqualTo:              if PDouble(SBF)^=Value then exit;
-      soNotEqualTo:           if PDouble(SBF)^<>Value then exit;
-      soLessThan:             if PDouble(SBF)^<Value then exit;
-      soLessThanOrEqualTo:    if PDouble(SBF)^<=Value then exit;
-      soGreaterThan:          if PDouble(SBF)^>Value then exit;
-      soGreaterThanOrEqualTo: if PDouble(SBF)^>=Value then exit;
-      else break;
-    end;
-    // not found: go to next value
-    if SBFEnd=nil then
-      break; // only one value to be checked
-    Inc(SBF,sizeof(Value));
-  until SBF>=SBFEnd;
-  result := false; // not found
-end;
-
-function StrCompL(P1,P2: PUTF8Char; L, Default: Integer): PtrInt;
-var i: PtrInt;
-begin
-  i := 0;
-  repeat
-    result := PtrInt(P1[i])-PtrInt(P2[i]);
-    if result=0 then begin
-      inc(i);
-      if i<L then continue else break;
-    end;
-    exit;
-  until false;
-  result := Default;
-end;
-
-function StrCompIL(P1,P2: PUTF8Char; L, Default: Integer): PtrInt;
-var i: PtrInt;
-begin
-  i := 0;
-  repeat
-    if NormToUpperAnsi7[P1[i]]=NormToUpperAnsi7[P2[i]] then begin
-      inc(i);
-      if i<L then continue else break;
-    end;
-    result := PtrInt(P1[i])-PtrInt(P2[i]);
-    exit;
-  until false;
-  result := Default;
-end;
 
 {$ifdef FPC}
 function BooleanNormalize(value: boolean): integer; inline;
