@@ -5941,7 +5941,7 @@ end;
 procedure TTraceNode.inner_addValue (const AObject: TObject; const upperNode : TMemberNode; const MaxLevel : integer; AlreadyParsedObject:TObjectList);
 var
    obj, subObj : TObject ;
-   I,J, PropCount: Integer;
+   I,J,K, PropCount: Integer;
    TypeInfo : PTypeInfo ;
    PropInfo: PPropInfo;
    TempList: PPropList;
@@ -5958,6 +5958,11 @@ var
    DynArrayPointer: Pointer;
    DynArrayObject: TDynArray;
    DynArrayElementPointer : Pointer ;
+  DynArrayElementValue1 : byte ;
+   DynArrayElementValue2 : word ;
+   DynArrayElementValue4 : int32 ;
+   //DynArrayElementValue8 : int64 ;
+
 
 type
    PPPTypeInfo = ^PPTypeInfo;
@@ -6061,10 +6066,49 @@ begin
                   // http://synopse.info/files/html/api-1.18/SynCommons.html#TDYNARRAY
                   DynArrayObject.Init(PropInfo^.PropType^,DynArrayPointer) ;     // aTypeInfo: pointer; var aValue; aCountPointer: PInteger=nil);
                   Prop_Value := 'Array ' + IntToStr(DynArrayObject.Count) ;
+                  prop_type := 'ElementSize ' + IntToStr(DynArrayObject.ElemSize) ;
+                 //property ArrayType: pointer read fTypeInfo;
+                  //property ArrayTypeName: RawUTF8 read GetArrayTypeName;
+                  //property ElemType: pointer read fElemType;
+                  //property IsObjArray: boolean read GetIsObjArray write SetIsObjArray;
 
                   for j := 0 to DynArrayObject.Count-1 do
                   begin
                      DynArrayElementPointer := DynArrayObject.ElemPtr(j) ;
+                    case DynArrayObject.ElemSize of
+                     1 : begin
+                         DynArrayElementValue1 := byte(DynArrayElementPointer^) ;               // 0 .. FF
+                         Prop_Value := Prop_Value + ' $' + inttohex (DynArrayElementValue1,2) ;
+                     end ;
+                     2 : begin
+                         DynArrayElementValue2 := word(DynArrayElementPointer^) ;               // 0.. FF FF
+                         Prop_Value := Prop_Value + ' $' + inttohex (DynArrayElementValue2,4) ;
+                     end ;
+                     4 : begin
+                         DynArrayElementValue4 := int32(DynArrayElementPointer^) ;              // 0 .. FF FF FF FF
+                         // is it an integer or a pointer ?
+
+                         try                         
+                            subObj := TObject (DynArrayElementValue4);
+                            prop_type := subObj.ClassName ;
+                         except                            
+                           // eat
+                         end;                                                    
+                         
+                          
+                         Prop_Value := Prop_Value + ' $' + inttohex (DynArrayElementValue4,8) ;
+                     end ;
+                     else begin
+                         Prop_Value := Prop_Value + ' Dump :' ;
+                         for k := 0 to DynArrayObject.ElemSize -1 do begin
+                            DynArrayElementValue1 := byte(DynArrayElementPointer^) ;               // 0 .. FF
+                            Prop_Value := Prop_Value + ' ' + inttohex (DynArrayElementValue1,2) ;
+                            DynArrayElementPointer := pbyte(DynArrayElementPointer) + 1;
+                         end;
+
+                     end ;
+                     end;
+                     // inner_addValue  (subObj ,fieldNode , MaxLevel-1, AlreadyParsedObject);
                   end;
 
                   // PTypeData = ^TTypeData;
