@@ -45,12 +45,7 @@ type
       property test: TStringList read getTest write fTest;
    end;
 
-   TRecordTest = record
-      a : integer ;
-      //b : string ;
-   end;
-
-   TTestList = array of TRecordTest ; //TClassTest ; // TRecordTest ; //integer ;
+   TTestList = array of TClassTest ; //integer ;
 
    // add type information
    TClassTest2 = class
@@ -73,8 +68,6 @@ type
    published
       property field4: integer read ffield4;
    end;
-
-
 
 {$M-}
 
@@ -383,10 +376,6 @@ var
    //DynArrayObject: TDynArray;
    DynArrayElementPointer : Pointer ;
 
-   subClassTest0: TClassTest ;
-   subClassTest1: TClassTest ;
-   subClassTest2: TClassTest ;
-
 
 {$IFDEF COMPILER_12_UP}     // delphi 2009
    myTlist: TList<TForm>;
@@ -396,22 +385,9 @@ begin
 
    ClassTest2 := TClassTest2.Create;
    SetLength(ClassTest2.fTestList,3);
-
-   subClassTest0 := TClassTest.Create(nil); ;
-   subClassTest1 := TClassTest.Create(nil); ;
-   subClassTest2 := TClassTest.Create(nil); ;
-
-//   TTrace.Debug.SendValue('subClassTest0',ClassTest2.testList[0]) ;
-//   TTrace.Debug.SendValue('subClassTest1',subClassTest1) ;
-//   TTrace.Debug.SendValue('subClassTest2',subClassTest2) ;
-
-   ClassTest2.testList[0].a := 125 ;
-   ClassTest2.testList[1].a := 126 ;
-   ClassTest2.testList[2].a := 127 ;
-
-//   ClassTest2.testList[0] := subClassTest0;
-//   ClassTest2.testList[1] := subClassTest1;
-//   ClassTest2.testList[2] := subClassTest2;
+   ClassTest2.testList[0] := TClassTest.Create(nil);
+   ClassTest2.testList[1] := TClassTest.Create(nil);
+   ClassTest2.testList[2] := TClassTest.Create(nil);
 
    //DynArrayObject.Init(PropInfo^.PropType^,DynArrayPointer) ;     // aTypeInfo: pointer; var aValue; aCountPointer: PInteger=nil);
 
