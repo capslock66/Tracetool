@@ -3,22 +3,11 @@
 // licensed under a MPL/GPL/LGPL tri-license; version 1.18
 unit SynCommons;
 
-(*
-    This file is part of Synopse framework.
-*)
-
-
-{$I Synopse.inc} // define HASINLINE USETYPEINFO CPU32 CPU64 OWNNORMTOUPPER
+{$I Synopse.inc}
 
 interface
 
 uses
-
-{$ifndef HASFASTMM4}
-  FastMM4,
-{$endif}
-
-
   Windows,
   Messages,
   Classes,
@@ -239,10 +228,6 @@ type
   PInterfaceDynArray = ^TInterfaceDynArray;
   {$endif}
 
-{$ifndef ISDELPHI2007ANDUP}
-type
-  TBytes = array of byte;
-{$endif}
 
 { ************ low-level RTTI types and conversion routines ***************** }
 
@@ -302,7 +287,7 @@ type
     fCountP: PInteger;
     fKnownSize: integer;
     fKnownType: TDynArrayKind;
-    function GetCount: integer; {$ifdef HASINLINE}inline;{$endif}
+    function GetCount: integer; inline;
     function GetCapacity: integer;
     function GetArrayTypeName: RawUTF8;
     /// will set fKnownType and fKnownOffset/fKnownSize fields
@@ -348,8 +333,7 @@ type
     // - Init and InitSpecific methods will reset the aCountPointer to 0: you
     // can use this method to set the external count variable without overriding
     // the current value
-    procedure UseExternalCount(var aCountPointer: Integer);
-      {$ifdef HASINLINE}inline;{$endif}
+    procedure UseExternalCount(var aCountPointer: Integer);  inline;
 
     /// returns a pointer to an element of the array
     // - returns nil if aIndex is out of range
@@ -390,8 +374,7 @@ type
 
 
 /// retrieve the type name from its low-level RTTI
-function TypeInfoToName(aTypeInfo: pointer): RawUTF8; overload;
-  {$ifdef HASINLINE}inline;{$endif}
+function TypeInfoToName(aTypeInfo: pointer): RawUTF8; overload; inline;
 
 /// retrieve the type name from its low-level RTTI
 procedure TypeInfoToName(aTypeInfo: pointer; var result: RawUTF8;  const default: RawUTF8=''); overload;
@@ -432,13 +415,9 @@ function DynArrayElementTypeName(TypeInfo: pointer; ElemTypeInfo: PPointer=nil):
 // !  end;
 // ! (...)
 // ! DynArray(TypeInfo(TIntegerDynArray),IntArrayA).SaveTo
-function DynArray(aTypeInfo: pointer; var aValue; aCountPointer: PInteger=nil): TDynArray;
-  {$ifdef HASINLINE}inline;{$endif}
-
+function DynArray(aTypeInfo: pointer; var aValue; aCountPointer: PInteger=nil): TDynArray; inline;
 
 implementation
-
-
 
 type
   /// available type families for Delphi 6 and up, similar to typinfo.pas
@@ -602,35 +581,17 @@ const
   // - used to calc the beginning of memory allocation of a string
   STRRECSIZE = SizeOf(TStrRec);
 
-
-{$ifdef HASDIRECTTYPEINFO}
-type
-  Deref = PTypeInfo;
-{$else}
-function Deref(Info: PTypeInfoStored): PTypeInfo;
-{$ifdef HASINLINE} inline;
+function Deref(Info: PTypeInfoStored): PTypeInfo; inline;
 begin
   if Info=nil then
     result := pointer(Info) else
     result := Info^;
 end;
-{$else}
-asm // Delphi is so bad at compiling above code...
-        or      eax, eax
-        jz      @z
-        mov     eax, [eax]
-        ret
-@z:     db      $f3 // rep ret
-end;
-{$endif HASINLINE}
-{$endif HASDIRECTTYPEINFO}
-
 
 var
   KnownTypeInfo: array of PTypeInfo;
 
-function DynArrayLength(Value: Pointer): integer;
-  {$ifdef HASINLINE}inline;{$endif}
+function DynArrayLength(Value: Pointer): integer; inline;
 begin
   if Value=nil then
     result := PtrInt(Value) else begin
@@ -638,8 +599,7 @@ begin
   end;
 end;
 
-function GetTypeInfo(aTypeInfo: pointer; aExpectedKind: TTypeKind): PTypeInfo; overload;
-{$ifdef HASINLINE} inline;
+function GetTypeInfo(aTypeInfo: pointer; aExpectedKind: TTypeKind): PTypeInfo; overload; inline;
 begin
   if (aTypeInfo<>nil) and (PTypeKind(aTypeInfo)^=aExpectedKind) then begin
     result := aTypeInfo;
@@ -647,21 +607,9 @@ begin
   end else
     result := nil;
 end;
-{$else}
-asm
-        test    eax, eax
-        jz      @n
-        cmp     dl, [eax]
-        movzx   ecx, byte ptr[eax + TTypeInfo.NameLen]
-        jne     @n
-        add     eax, ecx
-        ret
-@n:     xor     eax, eax
-end;
-{$endif}
 
-function GetTypeInfo(aTypeInfo: pointer; const aExpectedKind: TTypeKinds): PTypeInfo; overload;
-{$ifdef HASINLINE} inline;
+
+function GetTypeInfo(aTypeInfo: pointer; const aExpectedKind: TTypeKinds): PTypeInfo; overload; inline;
 begin
   result := aTypeInfo;
   if (result<>nil) and (result^.Kind in aExpectedKind) then
@@ -669,19 +617,6 @@ begin
   else
     result := nil;
 end;
-{$else}
-asm // eax=aTypeInfo edx=aExpectedKind
-        test    eax, eax
-        jz      @n
-        movzx   ecx, byte ptr[eax]
-        bt      edx, ecx
-        movzx   ecx, byte ptr[eax + TTypeInfo.NameLen]
-        jnb     @n
-        add     eax, ecx
-        ret
-@n:     xor     eax, eax
-end;
-{$endif}
 
 
 procedure SetRawUTF8(var Dest: RawUTF8; text: pointer; len: integer);
@@ -879,9 +814,7 @@ begin
   fElemSize := PTypeInfo(aTypeInfo)^.elSize ;
   fElemType := PTypeInfo(aTypeInfo)^.elType;
   if fElemType<>nil then begin
-
-    fElemType := PPointer(fElemType)^;
-
+     fElemType := PPointer(fElemType)^;
   end;
   fCountP := aCountPointer;
   if fCountP<>nil then

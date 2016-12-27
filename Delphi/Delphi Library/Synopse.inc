@@ -59,9 +59,7 @@
     {$if CompilerVersion >= 18}
       {$define ISDELPHI2006ANDUP} // Delphi 2006 or newer
       {$define HASNEWFILEAGE}
-      {$define HASINLINE}
       {$define HASREGION}
-      {$define HASFASTMM4}
     {$ifend}
     {$ifdef VER180}
       {$define ISDELPHI20062007} // to circumvent some specific bugs
