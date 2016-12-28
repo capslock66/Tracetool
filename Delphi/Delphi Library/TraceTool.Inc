@@ -19,6 +19,7 @@
 
 // Compiler defines not specific to a particlular platform.
 // http://docwiki.embarcadero.com/RADStudio/Berlin/en/Compiler_Versions
+// http://docwiki.embarcadero.com/RADStudio/Berlin/en/Conditional_compilation_(Delphi)
 
   {$ifdef VER310}                 // rad Berlin
     {$define COMPILER_24}
