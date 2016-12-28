@@ -6056,7 +6056,8 @@ begin
                             try                         
                                subObj := TObject (DynArrayElementValue4);
                                Prop_Value := '@' + inttohex (DynArrayElementValue4,8) ;
-                               if (ClassTypeFound = false) and (DynArrayElementValue4 <> 0) then begin                               
+                               if (ClassTypeFound = false) and (DynArrayElementValue4 <> 0) then begin
+                                  // if debugger stop here, ignore and continue
                                   ArrayNode.Col3 := ArrayNode.Col3 + ', class type = ' + subObj.ClassName ;
                                   ClassTypeFound := True;
                                end;
