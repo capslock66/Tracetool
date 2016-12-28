@@ -17,10 +17,8 @@ uses
    ComCtrls, svcmgr,
 
    TraceTool, {The API}
-   SocketTrace, {note : remove the comment on front to enable socket mode (require indy 10)}
-   StackTrace,      { note : remove the comment on front to enable stack trace (require jvcl 1.9)}
-
-   SynCommons,
+   SocketTrace,   { note : remove the comment on front to enable socket mode (require indy 10)}
+   StackTrace,    { note : remove the comment on front to enable stack trace (require jvcl 1.9)}
 
 {$IFDEF COMPILER_12_UP}    // delphi 2009 and upper
    generics.collections,
@@ -391,8 +389,6 @@ var
    SingleByteString: AnsiString;
    Allchars : AnsiString ;
    c : integer ;
-
-   DynArrayElementPointer : Pointer ;
 
 {$IFDEF COMPILER_12_UP}     // delphi 2009
    myTlist: TList<TForm>;

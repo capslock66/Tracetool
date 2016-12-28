@@ -1,7 +1,7 @@
 ///  TraceTool Delphi API.                                                                                 <p>
 ///                                                                                                        <p>
 ///  Author : Thierry Parent                                                                               <p>
-///  Version : 12.7                                                                                        <p>
+///  Version : 12.8                                                                                        <p>
 ///  See License.txt for license information                                                               <p>
 ///                                                                                                        <p>
 ///  Optional stack traces can be done using the provided StackTrace unit that use jedi code source,       <p>
@@ -16,6 +16,7 @@
 // 12.7 : 2015/11/08 : Added AppendStack
 // 12.7 : 2015/11/15 : Added SendStack overload with right and left msg.
 // 12.7 : 2015/11/15 : Added IndentWithStack
+// 12.8 : 2016/12/28 : AAdd support for properties arrays 
 
 unit TraceTool;
 

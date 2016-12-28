@@ -15,7 +15,6 @@ uses
   Variants,
   SysUtils;
 
-
 { ************ common types used for compatibility between compilers and CPU }
 
 const
