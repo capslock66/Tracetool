@@ -670,16 +670,16 @@ begin
    saBound[1].cElements := 15;
 
    // SafeArrayCreate last parameter differ from the 2 tested versions (Xe and Xe4). I don't in what category Xe2 and Xe3 has to be
-   if CompilerVersion >=25  then begin
+   {$if CompilerVersion >=25}
       //Xe4 : CompilerVersion = 25
       saBoundPointer := @saBound[0] ;
       psa := SafeArrayCreate(VT_VARIANT, 2 { dimension } , saBoundPointer);
-   end else begin
+   {$else}
       //Xe3 : CompilerVersion = 24
       //Xe2 : CompilerVersion = 23
       //Xe  : CompilerVersion = 22
       psa := SafeArrayCreate(VT_VARIANT, 2 { dimension } , saBound);
-   end;
+   {$ifend}
 
    // put some kind of variant on the first column
    index[0] := 0;
