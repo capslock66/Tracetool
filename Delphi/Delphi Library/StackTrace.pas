@@ -112,9 +112,9 @@ begin
         // Error here ? replace .CallerAdr by .CallerAddr 
         // Depend of the Jedi version you use.
 
-        if IsMapFileDetailled (Items[I].CallerAdr) then   // .CallerAddr 
+        if IsMapFileDetailled (Items[I].CallerAddr) then   // .CallerAddr
            isOneDebug := true ;
-        group.Add (GetLocationInfoStr(Items[I].CallerAdr)) ;
+        group.Add (GetLocationInfoStr(Items[I].CallerAddr)) ;
      end ;
         if isOneDebug = false then begin
            group.Add ('->No detailed map file') ;

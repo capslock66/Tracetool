@@ -8,7 +8,7 @@ unit unitTest1;
 
 interface
 
-{$INCLUDE TraceTool.Inc}
+//{$INCLUDE TraceTool.Inc}
 
 
 uses
@@ -18,7 +18,7 @@ uses
 
    TraceTool, {The API}
    SocketTrace,   { note : remove the comment on front to enable socket mode (require indy 10)}
-   StackTrace,    { note : remove the comment on front to enable stack trace (require jvcl 1.9)}
+   //StackTrace,    { note : remove the comment on front to enable stack trace (require jvcl 1.9)}
 
 {$IFDEF COMPILER_12_UP}    // delphi 2009 and upper
    generics.collections,
@@ -237,9 +237,8 @@ var
 implementation
 
 // needed to add variant for delphi 6 and upper
-{$INCLUDE TraceTool.Inc}
-
-{$IFDEF DELPHI_6_UP} uses variants; {$ENDIF}    // add variant for delphi 6 and upper
+//{$INCLUDE TraceTool.Inc}
+{$IFDEF CONDITIONALEXPRESSIONS}uses variants; {$ENDIF}    // add variant for delphi 6 and upper
 
 {$R *.DFM}
 
@@ -669,7 +668,19 @@ begin
    saBound[1].lLbound := 0;
    saBound[1].cElements := 15;
 
-   psa := SafeArrayCreate(VT_VARIANT, 2 { dimension } , saBound);
+   // function SafeArrayCreate(vt: TVarType; cDims: Integer; rgsabound: PSafeArrayBound): PSafeArray; stdcall;
+   //  PSafeArrayBound = ^TSafeArrayBound;
+   //  TSafeArrayBound = tagSAFEARRAYBOUND;
+   //  tagSAFEARRAYBOUND = record
+   //    cElements: Longint;
+   //    lLbound: Longint;
+   //  end;
+
+   // XE
+   //psa := SafeArrayCreate(VT_VARIANT, 2 { dimension } , saBound);
+
+   // XE4
+   psa := SafeArrayCreate(VT_VARIANT, 2 { dimension } , @saBound[0]);
 
    // put some kind of variant on the first column
    index[0] := 0;

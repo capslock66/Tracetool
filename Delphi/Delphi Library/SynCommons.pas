@@ -524,8 +524,8 @@ begin
     result := Info^;
 end;
 
-var
-  KnownTypeInfo: array of PTypeInfo;
+//var
+//  KnownTypeInfo: array of PTypeInfo;
 
 function DynArrayLength(Value: Pointer): integer; inline;
 begin
