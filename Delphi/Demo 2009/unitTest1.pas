@@ -648,6 +648,7 @@ var
 
    psa: psafearray; // PSafeArray = ^TSafeArray.   TSafeArray = tagSAFEARRAY = record
    saBound: array [0 .. 1] of TSafeArrayBound; // record
+   saBoundPointer : PSafeArrayBound ;
    c, d: integer;
    index: array [0 .. 1] of LongInt;
    v: Variant;
@@ -668,19 +669,17 @@ begin
    saBound[1].lLbound := 0;
    saBound[1].cElements := 15;
 
-   // function SafeArrayCreate(vt: TVarType; cDims: Integer; rgsabound: PSafeArrayBound): PSafeArray; stdcall;
-   //  PSafeArrayBound = ^TSafeArrayBound;
-   //  TSafeArrayBound = tagSAFEARRAYBOUND;
-   //  tagSAFEARRAYBOUND = record
-   //    cElements: Longint;
-   //    lLbound: Longint;
-   //  end;
-
-   // XE
-   //psa := SafeArrayCreate(VT_VARIANT, 2 { dimension } , saBound);
-
-   // XE4
-   psa := SafeArrayCreate(VT_VARIANT, 2 { dimension } , @saBound[0]);
+   // SafeArrayCreate last parameter differ from the 2 tested versions (Xe and Xe4). I don't in what category Xe2 and Xe3 has to be
+   if CompilerVersion >=25  then begin
+      //Xe4 : CompilerVersion = 25
+      saBoundPointer := @saBound[0] ;
+      psa := SafeArrayCreate(VT_VARIANT, 2 { dimension } , saBoundPointer);
+   end else begin
+      //Xe3 : CompilerVersion = 24
+      //Xe2 : CompilerVersion = 23
+      //Xe  : CompilerVersion = 22
+      psa := SafeArrayCreate(VT_VARIANT, 2 { dimension } , saBound);
+   end;
 
    // put some kind of variant on the first column
    index[0] := 0;
@@ -723,7 +722,7 @@ begin
    index[1] := 12;
    v := varArrayCreate([0, 1], varVariant);
    v[0] := '789';
-   OleCheck(SafeArrayPutElement(psa, index, v));
+   OleCheck(SafeArrayPutElement(psa, index, v) );
 
    // fill the other cells with integers
    for c := 1 to 2 do begin
@@ -731,7 +730,7 @@ begin
          index[0] := c; // 0..2
          index[1] := d; // 0..14
          v := c * 100 + d;
-         OleCheck(SafeArrayPutElement(psa, index, v));
+         OleCheck( SafeArrayPutElement(psa, index, v) );
       end;
    end;
 
