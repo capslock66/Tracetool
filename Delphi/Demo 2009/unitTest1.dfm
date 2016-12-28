@@ -27,10 +27,6 @@ object form1: Tform1
     TabOrder = 0
     object TabSheet1: TTabSheet
       Caption = 'Basic'
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object Image1: TImage
         Left = 499
         Top = 216
@@ -1782,10 +1778,6 @@ object form1: Tform1
     object TabSheet2: TTabSheet
       Caption = 'Nodes operations'
       ImageIndex = 1
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object butResend: TButton
         Left = 112
         Top = 24
@@ -1898,10 +1890,6 @@ object form1: Tform1
     object TabSheet3: TTabSheet
       Caption = 'Multi pages traces'
       ImageIndex = 2
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object butCreateTraceWin: TButton
         Left = 16
         Top = 24
@@ -1994,10 +1982,6 @@ object form1: Tform1
     object TabSheet5: TTabSheet
       Caption = 'Watches'
       ImageIndex = 4
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object Label6: TLabel
         Left = 24
         Top = 48
@@ -2085,10 +2069,6 @@ object form1: Tform1
     object TabSheet4: TTabSheet
       Caption = 'Other traces'
       ImageIndex = 3
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object Label2: TLabel
         Left = 248
         Top = 32

@@ -440,9 +440,7 @@ type
   PEnhancedFieldInfo = ^TEnhancedFieldInfo;
   {$endif}
 
-  TTypeInfo =
-    packed
-    record
+  TTypeInfo = packed record
     kind: TTypeKind;
     NameLen: byte;
     case TTypeKind of
@@ -502,6 +500,7 @@ type
       UnitNameLen: byte;
     );
   end;
+
   TPropInfo = packed record
     PropType: PTypeInfoStored;
     GetProc: PtrInt;
@@ -585,20 +584,6 @@ begin
   else
     result := default;
 end;
-
-//procedure TypeInfoToQualifiedName(aTypeInfo: pointer; var result: RawUTF8; const default: RawUTF8='');
-//var unitname: RawUTF8;
-//begin
-//  if aTypeInfo<>nil then begin
-//    SetRawUTF8(result,PAnsiChar(@PTypeInfo(aTypeInfo)^.NameLen)+1,
-//      PTypeInfo(aTypeInfo)^.NameLen);
-//    if PTypeInfo(aTypeInfo)^.Kind=tkClass then begin
-//      with GetTypeInfo(aTypeInfo,PTypeKind(aTypeInfo)^)^ do
-//        SetRawUTF8(unitname,PAnsiChar(@UnitNameLen)+1,UnitNameLen);
-//      result := unitname+'.'+result;
-//    end;
-//  end else result := default;
-//end;
 
 function RecordTypeInfoSize(aRecordTypeInfo: Pointer): integer;
 var info: PTypeInfo;

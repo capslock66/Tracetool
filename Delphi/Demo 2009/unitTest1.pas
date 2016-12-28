@@ -45,7 +45,13 @@ type
       property test: TStringList read getTest write fTest;
    end;
 
-   TTestList = array of TClassTest ; //integer ;
+   TRecordTest = record
+      a : Integer ;
+   end;
+
+   TRecList = array of TRecordTest ;
+   TObjList = array of TClassTest ;
+   TIntList = array of integer ;
 
    // add type information
    TClassTest2 = class
@@ -53,12 +59,18 @@ type
       ffield1: TClassTest2;
       ffield2: TStringList;
       fstep: integer;
-      fTestList : TTestList ;
+      fRecList : TRecList ;
+      fObjList : TObjList ;
+      fIntList : TIntList ;
+   public
+      procedure setListLength(Length : Integer);
    published
       property field1: TClassTest2 read ffield1 write ffield1;
       property field2: TStringList read ffield2 write ffield2;
       property step: integer read fstep write fstep;
-      property testList : TTestList read fTestList write fTestList;
+      property testListObj  : TObjList read fObjList write fObjList;
+      property testListRecord : TRecList read fRecList write fRecList;
+      property testListInt : TIntList read fIntList write fIntList;
    end;
 
    TClassTest3 = class(TClassTest2)
@@ -262,6 +274,13 @@ begin
    TTrace.Debug.SendObject('getTest', self);
 end;
 
+procedure TClassTest2.setListLength(Length: Integer);
+begin
+     SetLength(fObjList,Length);
+     SetLength(fRecList,Length);
+     SetLength(fIntList,Length);
+end;
+
 // ------------------------------------------------------------------------------
 // ------------------------------------------------------------------------------
 // ------------------------------------------------------------------------------
@@ -380,22 +399,6 @@ var
 {$ENDIF COMPILER_12_UP}
 
 begin
-
-   ClassTest2 := TClassTest2.Create;
-   SetLength(ClassTest2.fTestList,3);
-   ClassTest2.testList[0] := TClassTest.Create(nil);
-   ClassTest2.testList[1] := TClassTest.Create(nil);
-   ClassTest2.testList[2] := TClassTest.Create(nil);
-
-   //DynArrayObject.Init(PropInfo^.PropType^,DynArrayPointer) ;     // aTypeInfo: pointer; var aValue; aCountPointer: PInteger=nil);
-
-
-
-   TTrace.Debug.SendValue('array test',ClassTest2) ;
-
-   Exit;
-
-
 
    // the euro char is coded in $AC $20 in unicode and $80 in single byte
    WideStr := Edit1.Text;
@@ -539,6 +542,18 @@ begin
    node.AddBitmap(Image1.Picture.Bitmap);
    node.AddXML('<?xml version="1.0" ?><Data> Xml in traceNodeEx </Data>');
    node.Send;
+
+   // ClassTest2 contains 3 arrays of 3 elements each : testListObj , testListRecord  , testListInt
+   ClassTest2 := TClassTest2.Create;
+   ClassTest2.setListLength (3);
+   ClassTest2.testListObj[0] := TClassTest.Create(nil);
+   ClassTest2.testListObj[1] := TClassTest.Create(nil);  // [2] : undefined
+   ClassTest2.testListRecord[0].a := 123;                // [1] : undefined , [2] : undefined
+   ClassTest2.testListInt[0] := 456;
+
+   TTrace.Debug.SendValue ('SendValue object with array ',ClassTest2) ;
+   TTrace.Debug.SendObject('SendObject object with array ',ClassTest2) ;
+   ClassTest2.Free;
 
    // send table detail
    // --------------------------------------------
@@ -1327,5 +1342,8 @@ begin
 end;
 
 // ------------------------------------------------------------------------------
+
+{ TClassTest2 }
+
 
 end.

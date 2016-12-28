@@ -5940,7 +5940,7 @@ end;
 
 procedure TTraceNode.inner_addValue (const AObject: TObject; const upperNode : TMemberNode; const MaxLevel : integer; AlreadyParsedObject:TObjectList);
 var
-   obj, subObj : TObject ;
+   subObj : TObject ;
    I,J,K, PropCount: Integer;
    TypeInfo : PTypeInfo ;
    PropInfo: PPropInfo;
@@ -5948,7 +5948,7 @@ var
    VariantPropValue : variant ;
    strType : String ;
    intPropValue : LongInt ;
-   fieldNode : TMemberNode ;
+   ArrayNode, fieldNode : TMemberNode ;
 
    Prop_Name      : String ;
    Prop_Type      : String ;
@@ -5960,10 +5960,10 @@ var
    DynArrayElementPointer : Pointer ;
    DynArrayElementValue1 : byte ;
    DynArrayElementValue2 : word ;
-   DynArrayElementValue4 : int32 ;
-
+   DynArrayElementValue4 : int32 ;     
    TypeInfoName : RawUTF8 ;  // AnsiString
-
+   ClassTypeFound : boolean ;
+   
 type
    PPPTypeInfo = ^PPTypeInfo;
 
@@ -5994,144 +5994,108 @@ begin
    TypeInfo := PTypeInfo(AObject.ClassInfo) ;
    if TypeInfo = nil then
       exit ;
-   obj := AObject ;
    PropCount := GetPropList(typeInfo, TempList);   // if Count is zero , FreeMem(TempList) don't have to be called
    if PropCount > 0 then
    try
       for I := 0 to PropCount - 1 do begin
          PropInfo := TempList^[I];
-
          Prop_Name := String(PropInfo.Name) ;
-         Prop_Type := GetPropertyTypeString (PropInfo^.PropType^.Kind);
-         Prop_Value := '' ;
-         //Prop_ClassType := '' ;
-
-         //TTypeKind = (tkUnknown, tkInteger, tkChar, tkEnumeration, tkFloat,
-         //  tkString, tkSet, tkClass, tkMethod, tkWChar, tkLString, tkWString,
-         //  tkVariant, tkArray, tkRecord, tkInterface, tkInt64, tkDynArray, tkUString,
-         //  tkClassRef, tkPointer, tkProcedure {, tkMRecord});
-
-
-         // see System.TypInfo =>
-         // GetPropValue
-         //    tkInteger, tkChar, tkWChar, tkClass => GetOrdProp
-         //    tkEnumeration : GetEnumProp / GetOrdProp
-         //    tkSet : GetSetProp, GetOrdProp
-         //    tkFloat : GetFloatProp
-         //    tkMethod : GetTypeName
-         //    tkString, tkLString: GetStrProp
-         //    tkWString : GetWideStrProp
-         //    tkUString: GetUnicodeStrProp
-         //    tkVariant: GetVariantProp
-         //    tkInt64: GetInt64Prop
-         //    tkDynArray:
-         //       var DynArray: Pointer;
-         //       DynArray := GetDynArrayProp(Instance, PropInfo);
-         //       DynArrayToVariant(Result, DynArray, PropInfo^.PropType^);
 
          case PropInfo^.PropType^.Kind of
-            tkClassRef, tkPointer, tkProcedure {, tkMRecord} :
+            tkInteger,tkString,tkChar,tkWChar,tkLString,tkWString,tkInt64,tkUString,tkFloat :
                begin
-                  Prop_Type := '???' ;
-                  Prop_Value := '???' ;
-               end;
-            tkMethod : begin  end ;// events
+                   VariantPropValue := GetPropValue(AObject, string(PropInfo.Name),true) ;
+                   Prop_Value := VariantPropValue ;
+                   upperNode.Add( string(prop_name) , prop_value) ;   // no type
+               end ;
+               
             tkClass  :
                begin
-                  fieldNode := upperNode.Add( string(prop_name)) ;  // col2 (value) and col3 (type) will be added by recursion
-                  intPropValue := GetOrdProp(obj, PropInfo) ;
-                  subObj := TObject (intPropValue);
-                  inner_addValue (subObj ,fieldNode , MaxLevel-1, AlreadyParsedObject);
+                  fieldNode := upperNode.Add( string(prop_name)) ;   // col2 (value) will be added by recursion
+                  intPropValue := GetOrdProp(AObject, PropInfo) ;    // property value can be nil
+                  subObj := TObject (intPropValue);  
+                  inner_addValue (subObj ,fieldNode , MaxLevel-1, AlreadyParsedObject);   // recursion.
                end ;
-            tkInteger,tkString,tkWChar,tkLString,tkWString,tkInt64,tkUString :
+               
+            tkClassRef, tkPointer, tkProcedure, tkMethod {, tkMRecord} :
                begin
-                  if obj <> nil then begin
-                     VariantPropValue := GetPropValue(AObject, string(PropInfo.Name),true) ;
-                     Prop_Value := VariantPropValue ;
-                  end ;
-                  upperNode.Add( string(prop_name) , prop_value,  string(prop_type)) ;
-               end ;
-            tkDynArray :
-               begin
-                  // from System.TypInfo => GetPropValue where kind = tkDynArray
-                  DynArrayPointer := GetDynArrayProp(AObject, PropInfo);   // TPropSet<TDynamicArray>.GetProc(Instance, PropInfo)
+
+               end;
+              
+            tkDynArray :   // tkArray
+               begin                                                                 
+                  DynArrayPointer := GetDynArrayProp(AObject, PropInfo);  // from System.TypInfo => GetPropValue where kind = tkDynArray 
                   TypeInfoName := TypeInfoToName(PropInfo^.PropType^) ;
                  
                   DynArrayObject.Init(PropInfo^.PropType^,DynArrayPointer) ;     // aTypeInfo: pointer; var aValue; aCountPointer: PInteger=nil);
-                  Prop_Value := '' ;
-                  prop_type := TypeInfoName + ' : ' + prop_type + '[' + IntToStr(DynArrayObject.Count) + ']' + ', element size = ' + IntToStr(DynArrayObject.ElemSize) ;
+                  prop_type := string(TypeInfoName) + ' : ' + GetPropertyTypeString (PropInfo^.PropType^.Kind) + '[' + IntToStr(DynArrayObject.Count) + ']' + ', element size = ' + IntToStr(DynArrayObject.ElemSize) ;
+                  Prop_Value := '@' + inttohex (Integer(DynArrayPointer),2) ; 
+                  subObj := nil ;
 
+                  ArrayNode := upperNode.Add(prop_name , prop_value, prop_type) ; 
+                  
+                  ClassTypeFound := false ;
                   for j := 0 to DynArrayObject.Count-1 do
                   begin
                      DynArrayElementPointer := DynArrayObject.ElemPtr(j) ;
-                    case DynArrayObject.ElemSize of
-                     1 : begin
-                         DynArrayElementValue1 := byte(DynArrayElementPointer^) ;               // 0 .. FF
-                         Prop_Value := Prop_Value + ' $' + inttohex (DynArrayElementValue1,2) ;
-                     end ;
-                     2 : begin
-                         DynArrayElementValue2 := word(DynArrayElementPointer^) ;               // 0.. FF FF
-                         Prop_Value := Prop_Value + ' $' + inttohex (DynArrayElementValue2,4) ;
-                     end ;
-                     4 : begin
-                         DynArrayElementValue4 := int32(DynArrayElementPointer^) ;              // 0 .. FF FF FF FF
-                         // is it an integer or a pointer ?      
-                         try                         
-                            subObj := TObject (DynArrayElementValue4);
-                            if (j = 0) then                               
-                               prop_type := prop_type + ', class type ' + subObj.ClassName ;
-                         except                            
-                           // eat exception. Element is not a class instance
-                         end;                                              
-                          
-                         Prop_Value := Prop_Value + ' $' + inttohex (DynArrayElementValue4,8) ;
-                     end ;
-                     else begin
-                         Prop_Value := Prop_Value + ' Dump :' ;
-                         for k := 0 to DynArrayObject.ElemSize -1 do begin
+                     case DynArrayObject.ElemSize of
+                        1 : begin
                             DynArrayElementValue1 := byte(DynArrayElementPointer^) ;               // 0 .. FF
-                            Prop_Value := Prop_Value + ' ' + inttohex (DynArrayElementValue1,2) ;
-                            DynArrayElementPointer := pbyte(DynArrayElementPointer) + 1;
-                         end;
-
-                     end ;
-                     end;
-                     // inner_addValue  (subObj ,fieldNode , MaxLevel-1, AlreadyParsedObject);
-                  end;
-
-                  // PTypeData = ^TTypeData;
-                  // TTypeData = packed record
-                  //   case TTypeKind of
-                  //    tkDynArray: (
-                  //     elSize: Longint;
-                  //     elType: PPTypeInfo;       // nil if type does not require cleanup
-                  //     varType: Integer;         // Ole Automation varType equivalent
-                  //     elType2: PPTypeInfo;      // independent of cleanup
-                  //     DynUnitName: ShortStringBase
-                  //    {DynArrElType: PPTypeInfo; // actual element type, even if dynamic array
-                  //     DynArrAttrData: TAttrData});
-
-
-                  //Prop_Value := '???' ; //tt_GetVarValue (VariantPropValue,strType) ;
-                  upperNode.Add(String(prop_name) , prop_value, String(prop_type)) ;
-
+                            Prop_Value := '$' + inttohex (DynArrayElementValue1,2) ;
+                            ArrayNode.Add('[' + inttostr(j) + ']' , prop_value) ;       // no recursion
+                        end ;
+                        2 : begin
+                            DynArrayElementValue2 := word(DynArrayElementPointer^) ;               // 0.. FF FF
+                            Prop_Value := '$' + inttohex (DynArrayElementValue2,4) ;
+                            ArrayNode.Add('[' + inttostr(j) + ']' , prop_value) ;
+                        end ;
+                        SizeOf(TObject) : begin
+                            DynArrayElementValue4 := int32(DynArrayElementPointer^) ;              // 0 .. FF FF FF FF
+                            // is it an integer or a pointer or a 4 bytes value ?      
+                            try                         
+                               subObj := TObject (DynArrayElementValue4);
+                               Prop_Value := '@' + inttohex (DynArrayElementValue4,8) ;
+                               if (ClassTypeFound = false) and (DynArrayElementValue4 <> 0) then begin                               
+                                  ArrayNode.Col3 := ArrayNode.Col3 + ', class type = ' + subObj.ClassName ;
+                                  ClassTypeFound := True;
+                               end;
+                            except 
+                               on e : Exception do begin // eat exception. Element is not a class instance. Is it a pointer or a 4 bytes value like an int32?
+                                  Prop_Value := '$' + inttohex (DynArrayElementValue4,8) ;
+                                  subObj := nil ;                              
+                               end;
+                            end;                                              
+                          
+                            fieldNode := ArrayNode.Add('[' + inttostr(j) + ']' , prop_value) ;
+                            if subObj <> nil then                  
+                               inner_addValue  (subObj ,fieldNode , MaxLevel-1, AlreadyParsedObject);   // Recursive                          
+                        end ;
+                        else begin    // 3 bytes or more than 4 bytes
+                            Prop_Value := 'Dump :' ;
+                            for k := 0 to DynArrayObject.ElemSize -1 do begin
+                               DynArrayElementValue1 := byte(DynArrayElementPointer^) ;               // 0 .. FF
+                               Prop_Value := Prop_Value + ' $' + inttohex (DynArrayElementValue1,2) ;
+                               DynArrayElementPointer := pbyte(DynArrayElementPointer) + 1;
+                            end;
+                            ArrayNode.Add('[' + inttostr(j) + ']' , prop_value) ;
+                        end ;
+                     end;                        
+                  end;                   
                end;
+               
             else
                begin
-                  // tkSet
+                  // tkSet 
+                  // tkEnumeration
+                  // tkUnknown
                   // tkVariant
                   // tkRecord
                   // tkInterface
-                  // ,tkDynArray,tkArray
+                  
+                  VariantPropValue := GetPropValue(AObject,  string(PropInfo.Name),true) ;
+                  Prop_Value := tt_GetVarValue (VariantPropValue,strType) ;
 
-                  if obj <> nil then begin
-                     VariantPropValue := GetPropValue(AObject,  string(PropInfo.Name),true) ;
-                     Prop_Value := tt_GetVarValue (VariantPropValue,strType) ;
-                     if PropInfo^.PropType^.Kind = tkVariant then
-                        Prop_Type := Prop_Type + '(' + strType + ')' ;
-
-                  end ;
-                  upperNode.Add(String(prop_name) , prop_value, String(prop_type)) ;
+                  upperNode.Add(String(prop_name) , prop_value) ;
                end ;
          end ;
       end;  // for each prop
@@ -6296,8 +6260,8 @@ procedure TTraceNode.DisplayFields (const AObject: TObject; const flags : TraceD
 var
    FieldGroup : TMemberNode ;
    EventGroup : TMemberNode ;
-   obj, subObj : TObject ;
-   I, Count: Integer;
+   subObj : TObject ;
+   I,J,K, Count: Integer;
    TypeInfo : PTypeInfo ;
    PropInfo: PPropInfo;
    TempList: PPropList;
@@ -6308,7 +6272,16 @@ var
    Prop_Name      : String ;
    Prop_Type      : String ;
    Prop_Value     : string ;
-   //Prop_ClassType : String ;
+
+   DynArrayPointer: Pointer;
+   DynArrayObject: TDynArray;
+   DynArrayElementPointer : Pointer ;
+   DynArrayElementValue1 : byte ;
+   DynArrayElementValue2 : word ;
+   DynArrayElementValue4 : int32 ;
+   TypeInfoName : RawUTF8 ;  // AnsiString
+   ClassTypeFound : Boolean ;
+   
 
    //------------------------------------------------------
    // add to the property group
@@ -6340,10 +6313,14 @@ var
    //------------------------------------------------------
 
 begin
+   if AObject = nil then begin
+      fMembers.Add( TMemberNode.create ('nil').SetFontDetail(0,true)) ;
+      exit ;
+   end ;
+
    TypeInfo := PTypeInfo(AObject.ClassInfo) ;
    if TypeInfo = nil then
       exit ;
-   obj := AObject ;
    Count := GetPropList(typeInfo, TempList);   // if Count is zero , FreeMem(TempList) don't have to be called
    if Count > 0 then
    try
@@ -6355,68 +6332,110 @@ begin
 
          Prop_Name := String(PropInfo.Name) ;
          Prop_Type := GetPropertyTypeString (PropInfo^.PropType^.Kind);
-         Prop_Value := '' ;
-         //Prop_ClassType := '' ;
-
-         //TTypeKind = (tkUnknown, tkInteger, tkChar, tkEnumeration, tkFloat,
-         //  tkString, tkSet, tkClass, tkMethod, tkWChar, tkLString, tkWString,
-         //  tkVariant, tkArray, tkRecord, tkInterface, tkInt64, tkDynArray, tkUString,
-         //  tkClassRef, tkPointer, tkProcedure {, tkMRecord});
 
          case PropInfo^.PropType^.Kind of
             tkInteger,tkString,tkWChar,tkLString,tkWString,tkInt64, tkUString :
                begin
-                  if obj <> nil then begin
-                     VariantPropValue := GetPropValue(AObject, String(PropInfo.Name),true) ;
-                     Prop_Value := VariantPropValue ;
-                  end ;
-                  AddToFieldGroup() ;
+
+                  VariantPropValue := GetPropValue(AObject, String(PropInfo.Name),true) ;
+                  Prop_Value := VariantPropValue ;   
+                  AddToFieldGroup() ;   // prop_name , prop_value, prop_type
                end ;
-            tkClassRef, tkPointer, tkProcedure {, tkMRecord} :
-               begin
-                  Prop_Type := '???' ;
-                  Prop_Value := '???' ;  // value is the adresse reference
-               end;
+
             tkClass :
                begin
-                  intPropValue := GetOrdProp(obj, PropInfo) ;
+                  intPropValue := GetOrdProp(AObject, PropInfo) ;
                   if intPropValue = 0 then  // the property point to a nil TObject
                      Prop_Value := 'nil'
                   else begin
                      subObj := TObject (intPropValue);
-                     // get the className of the object property
                      Prop_Type := subObj.ClassName ;
-                     Prop_Value := intToStr (intPropValue) ;  // value is the adresse reference
-                     //Prop_ClassType := subObj.ClassName ;
+                     Prop_Value := '@' + inttohex (integer(intPropValue),2) ;  // value is the adresse reference
                   end;
-                  AddToFieldGroup() ;
+                  AddToFieldGroup() ;  // prop_name , prop_value, prop_type
                end ;
+
+            tkClassRef, tkPointer, tkProcedure {, tkMRecord} :
+               begin
+
+               end;
+               
             tkMethod :   // events
                begin
                   prop_type := MethodSyntax (PropInfo) ;
-                  if obj <> nil then begin
-                     intPropValue := GetOrdProp(AObject, PropInfo) ;  // how to handle that value ? negative or small
-                     if intPropValue = 0 then
-                        Prop_Value := 'nil'
-                     else
-                        Prop_Value := 'Pointer' ;
-                  end ;
+
+                  intPropValue := GetOrdProp(AObject, PropInfo) ;  // how to handle that value ? negative or small
+                  if intPropValue = 0 then
+                     Prop_Value := 'nil'
+                  else
+                     Prop_Value := '@' + inttohex (integer(intPropValue),2) ;
+
                   AddToEventGroup() ;
                end ;
-            tkDynArray :
-               begin
-                  prop_type := 'Array' ;
-                  Prop_Value := '???' ;
-               end
-            else
-               begin  // enumeration, ...
-                  if obj <> nil then begin
-                     VariantPropValue := GetPropValue(AObject, string(PropInfo.Name),true) ;
-                     Prop_Value := tt_GetVarValue (VariantPropValue,strType) ;
-                     if PropInfo^.PropType^.Kind = tkVariant then
-                        Prop_Type := Prop_Type + '(' + strType + ')' ;
+               
+            tkDynArray :   // tkArray
+               begin                                                                 
+                  DynArrayPointer := GetDynArrayProp(AObject, PropInfo);  // from System.TypInfo => GetPropValue where kind = tkDynArray 
+                  TypeInfoName := TypeInfoToName(PropInfo^.PropType^) ;
+                 
+                  DynArrayObject.Init(PropInfo^.PropType^,DynArrayPointer) ;     // aTypeInfo: pointer; var aValue; aCountPointer: PInteger=nil);
+                  prop_type := string(TypeInfoName) + ' : ' + GetPropertyTypeString (PropInfo^.PropType^.Kind) + '[' + IntToStr(DynArrayObject.Count) + ']' + ', element size = ' + IntToStr(DynArrayObject.ElemSize) ;
+                  Prop_Value := '@' + inttohex (Integer(DynArrayPointer),2) + ' :' ; 
 
-                  end ;
+                  ClassTypeFound := False ;
+                  for j := 0 to DynArrayObject.Count-1 do
+                  begin
+                     DynArrayElementPointer := DynArrayObject.ElemPtr(j) ;
+                     case DynArrayObject.ElemSize of
+                        1 : begin
+                            DynArrayElementValue1 := byte(DynArrayElementPointer^) ;               // 0 .. FF
+                            Prop_Value := Prop_Value + ' $' + inttohex (DynArrayElementValue1,2) ;
+                        end ;
+                        2 : begin
+                            DynArrayElementValue2 := word(DynArrayElementPointer^) ;               // 0.. FF FF
+                            Prop_Value := Prop_Value + ' $' + inttohex (DynArrayElementValue2,4) ;
+                        end ;
+                        SizeOf(TObject) : begin
+                            DynArrayElementValue4 := int32(DynArrayElementPointer^) ;              // 0 .. FF FF FF FF
+                            // is it an integer or a pointer ?      
+                            try                         
+                               subObj := TObject (DynArrayElementValue4);
+                               if (ClassTypeFound = false) and (DynArrayElementValue4 <> 0) then begin                               
+                                  prop_type := prop_type + ', class type = ' + subObj.ClassName ;
+                                  ClassTypeFound := True;
+                               end;
+                            except 
+                                // eat exception. Element is not a class instance                                                         
+                            end;                                              
+                          
+                            Prop_Value := Prop_Value + ' $' + inttohex (DynArrayElementValue4,8) ;
+                        end ;
+                        else begin  // record ?
+                            for k := 0 to DynArrayObject.ElemSize -1 do begin
+                               DynArrayElementValue1 := byte(DynArrayElementPointer^) ;               // 0 .. FF
+                               Prop_Value := Prop_Value + ' $' + inttohex (DynArrayElementValue1,2) ;
+                               DynArrayElementPointer := pbyte(DynArrayElementPointer) + 1;
+                            end;
+                        end ;
+                     end;                        
+                  end;                   
+                  AddToFieldGroup() ;  // prop_name , prop_value, prop_type
+               end;
+
+            else
+               begin  
+                  // tkSet 
+                  // tkEnumeration
+                  // tkUnknown
+                  // tkVariant
+                  // tkRecord
+                  // tkInterface
+
+                  VariantPropValue := GetPropValue(AObject, string(PropInfo.Name),true) ;
+                  Prop_Value := tt_GetVarValue (VariantPropValue,strType) ;
+                  if PropInfo^.PropType^.Kind = tkVariant then
+                     Prop_Type := Prop_Type + '(' + strType + ')' ;
+
                   AddToFieldGroup() ;
                end ;
          end ;
