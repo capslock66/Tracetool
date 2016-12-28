@@ -232,38 +232,6 @@ type
 { ************ low-level RTTI types and conversion routines ***************** }
 
 type
-
-  /// internal enumeration used to specify some standard Delphi arrays
-  // - will be used e.g. to match JSON serialization or TDynArray search
-  // (see TDynArray and TDynArrayHash InitSpecific method)
-  // - djBoolean would generate an array of JSON boolean values
-  // - djByte .. djTimeLog match numerical JSON values
-  // - djDateTime .. djSynUnicode match textual JSON values
-  // - djVariant will match standard variant JSON serialization (including
-  // TDocVariant or other custom types, if any)
-  // - djCustom will be used for registered JSON serializer (invalid for
-  // InitSpecific methods call)
-  // - is used also by TDynArray.InitSpecific() to define the main field type
-  TDynArrayKind = (
-    djNone,
-    djBoolean, djByte, djWord, djInteger, djCardinal, djSingle,
-    djInt64, djDouble, djCurrency,
-    djTimeLog, djDateTime, djRawUTF8, djWinAnsi, djString, djRawByteString,
-    djWideString, djSynUnicode, djInterface,
-    djVariant,
-    djCustom);
-
-  /// internal set to specify some standard Delphi arrays
-  TDynArrayKinds = set of TDynArrayKind;
-
-const
-  /// TDynArrayKind alias for a pointer field hashing / comparison
-  djPointer = {$ifdef CPU64}djInt64{$else}djCardinal{$endif};
-
-  /// TDynArrayKind alias for a TObject field hashing / comparison
-  djObject = djPointer;
-
-type
   /// a wrapper around a dynamic array with one dimension
   // - provide TList-like methods using fast RTTI information
   // - can be used to fast save/retrieve all memory content to a TStream
@@ -286,12 +254,10 @@ type
     fElemType: pointer;
     fCountP: PInteger;
     fKnownSize: integer;
-    fKnownType: TDynArrayKind;
     function GetCount: integer; inline;
     function GetCapacity: integer;
     function GetArrayTypeName: RawUTF8;
     /// will set fKnownType and fKnownOffset/fKnownSize fields
-    function ToKnownType(exactType: boolean=false): TDynArrayKind;
   public
     /// initialize the wrapper with a one-dimension dynamic array
     // - the dynamic array must have been defined with its own type
@@ -321,20 +287,6 @@ type
     // !    DA.Add(i); // MUCH faster using the ACount variable
     // ! (...)   // now you should use DA.Count or Count instead of length(A)
     procedure Init(aTypeInfo: pointer; var aValue; aCountPointer: PInteger=nil);
-    /// initialize the wrapper with a one-dimension dynamic array
-    // - this version accepts to specify how comparison should occur, using
-    // TDynArrayKind  kind of first field
-    // - djNone and djCustom are too vague, and will raise an exception
-    // - no RTTI check is made over the corresponding array layout: you shall
-    // ensure that the aKind parameter matches the dynamic array element definition
-    // - aCaseInsensitive will be used for djRawUTF8..djSynUnicode comparison
-    procedure InitSpecific(aTypeInfo: pointer; var aValue; aKind: TDynArrayKind; aCountPointer: PInteger=nil; aCaseInsensitive: boolean=false);
-    /// define the reference to an external count integer variable
-    // - Init and InitSpecific methods will reset the aCountPointer to 0: you
-    // can use this method to set the external count variable without overriding
-    // the current value
-    procedure UseExternalCount(var aCountPointer: Integer);  inline;
-
     /// returns a pointer to an element of the array
     // - returns nil if aIndex is out of range
     // - since TDynArray is just a wrapper around an existing array, you should
@@ -359,8 +311,6 @@ type
     property Capacity: integer read GetCapacity ;
     /// low-level direct access to the storage variable
     property Value: PPointer read fValue;
-    /// the known type, possibly retrieved from dynamic array RTTI
-    property KnownType: TDynArrayKind read fKnownType;
     /// the known RTTI information of the whole array
     property ArrayType: pointer read fTypeInfo;
     /// the known type name of the whole array
@@ -371,8 +321,6 @@ type
     property ElemType: pointer read fElemType;
   end;
 
-
-
 /// retrieve the type name from its low-level RTTI
 function TypeInfoToName(aTypeInfo: pointer): RawUTF8; overload; inline;
 
@@ -380,20 +328,10 @@ function TypeInfoToName(aTypeInfo: pointer): RawUTF8; overload; inline;
 procedure TypeInfoToName(aTypeInfo: pointer; var result: RawUTF8;  const default: RawUTF8=''); overload;
 
 /// retrieve the unit name and type name from its low-level RTTI
-procedure TypeInfoToQualifiedName(aTypeInfo: pointer; var result: RawUTF8; const default: RawUTF8='');
+//procedure TypeInfoToQualifiedName(aTypeInfo: pointer; var result: RawUTF8; const default: RawUTF8='');
 
 /// retrieve the record size from its low-level RTTI
 function RecordTypeInfoSize(aRecordTypeInfo: pointer): integer;
-
-/// compute a dynamic array element information
-// - will raise an exception if the supplied RTTI is not a dynamic array
-// - will return the element type name and set ElemTypeInfo otherwise
-// - if there is no element type information, an approximative element type name
-// will be returned (e.g. 'byte' for an array of 1 byte items), and ElemTypeInfo
-// will be set to nil
-// - this low-level function is used e.g. by mORMotWrappers unit
-function DynArrayElementTypeName(TypeInfo: pointer; ElemTypeInfo: PPointer=nil): RawUTF8;
-
 
 /// initialize the structure with a one-dimension dynamic array
 // - the dynamic array must have been defined with its own type
@@ -608,7 +546,6 @@ begin
     result := nil;
 end;
 
-
 function GetTypeInfo(aTypeInfo: pointer; const aExpectedKind: TTypeKinds): PTypeInfo; overload; inline;
 begin
   result := aTypeInfo;
@@ -636,6 +573,11 @@ begin
   end;
 end;
 
+function TypeInfoToName(aTypeInfo: pointer): RawUTF8;
+begin
+  TypeInfoToName(aTypeInfo,Result,'');
+end;
+
 procedure TypeInfoToName(aTypeInfo: pointer; var result: RawUTF8;  const default: RawUTF8='');
 begin
   if aTypeInfo<>nil then
@@ -644,25 +586,19 @@ begin
     result := default;
 end;
 
-procedure TypeInfoToQualifiedName(aTypeInfo: pointer; var result: RawUTF8;
-  const default: RawUTF8='');
-var unitname: RawUTF8;
-begin
-  if aTypeInfo<>nil then begin
-    SetRawUTF8(result,PAnsiChar(@PTypeInfo(aTypeInfo)^.NameLen)+1,
-      PTypeInfo(aTypeInfo)^.NameLen);
-    if PTypeInfo(aTypeInfo)^.Kind=tkClass then begin
-      with GetTypeInfo(aTypeInfo,PTypeKind(aTypeInfo)^)^ do
-        SetRawUTF8(unitname,PAnsiChar(@UnitNameLen)+1,UnitNameLen);
-      result := unitname+'.'+result;
-    end;
-  end else result := default;
-end;
-
-function TypeInfoToName(aTypeInfo: pointer): RawUTF8;
-begin
-  TypeInfoToName(aTypeInfo,Result,'');
-end;
+//procedure TypeInfoToQualifiedName(aTypeInfo: pointer; var result: RawUTF8; const default: RawUTF8='');
+//var unitname: RawUTF8;
+//begin
+//  if aTypeInfo<>nil then begin
+//    SetRawUTF8(result,PAnsiChar(@PTypeInfo(aTypeInfo)^.NameLen)+1,
+//      PTypeInfo(aTypeInfo)^.NameLen);
+//    if PTypeInfo(aTypeInfo)^.Kind=tkClass then begin
+//      with GetTypeInfo(aTypeInfo,PTypeKind(aTypeInfo)^)^ do
+//        SetRawUTF8(unitname,PAnsiChar(@UnitNameLen)+1,UnitNameLen);
+//      result := unitname+'.'+result;
+//    end;
+//  end else result := default;
+//end;
 
 function RecordTypeInfoSize(aRecordTypeInfo: Pointer): integer;
 var info: PTypeInfo;
@@ -674,27 +610,6 @@ begin
 end;
 
 { ****************** TDynArray wrapper }
-
-function DynArrayElementTypeName(TypeInfo: pointer; ElemTypeInfo: PPointer): RawUTF8;
-var DynArray: TDynArray;
-    VoidArray: pointer;
-const KNOWNTYPE_ITEMNAME: array[TDynArrayKind] of RawUTF8 = ('',
-  'boolean','byte','word','integer','cardinal','single','Int64','double','currency',
-  'TTimeLog','TDateTime','RawUTF8','WinAnsiString','string','RawByteString',
-  'WideString','SynUnicode','IInterface','variant','');
-begin
-  VoidArray := nil;
-  DynArray.Init(TypeInfo,VoidArray);
-  result := '';
-  if ElemTypeInfo<>nil then
-    ElemTypeInfo^ := DynArray.ElemType;
-  if DynArray.ElemType<>nil then
-    TypeInfoToName(ElemTypeInfo,result) else
-    result := KNOWNTYPE_ITEMNAME[DynArray.ToKnownType];
-end;
-
-
-
 
 function TDynArray.ElemPtr(aIndex: integer): pointer;
 begin
@@ -729,79 +644,9 @@ begin
   end;
 end;
 
-
-const
-  PTRSIZ = sizeof(Pointer);
-  KNOWNTYPE_SIZE: array[TDynArrayKind] of byte = (
-    0, 1,1, 2, 4,4,4, 8,8,8,8,8, PTRSIZ,PTRSIZ,PTRSIZ,PTRSIZ,PTRSIZ,PTRSIZ,PTRSIZ,
-    sizeof(Variant), 0);
-
 function TDynArray.GetArrayTypeName: RawUTF8;
 begin
   TypeInfoToName(fTypeInfo,result);
-end;
-
-function TDynArray.ToKnownType(exactType: boolean): TDynArrayKind;
-var nested: PTypeInfo;
-label Bin, Rec;
-begin
-  if fKnownType<>djNone then begin
-    result := fKnownType;
-    exit;
-  end;
-
-  if (fKnownType=djNone) and not exactType then begin
-    fKnownSize := 0;
-    if ElemType=nil then
-Bin:  case ElemSize of
-      1: fKnownType := djByte;
-      2: fKnownType := djWord;
-      4: fKnownType := djInteger;
-      8: fKnownType := djInt64;
-      else fKnownSize := ElemSize;
-      end else
-    case PTypeKind(ElemType)^ of
-      tkLString: fKnownType := djRawUTF8;
-      tkWString: fKnownType := djWideString;
-      {$ifdef UNICODE}
-      tkUString: fKnownType := djString;
-      {$endif}
-      tkVariant: fKnownType := djVariant;
-      tkInterface: fKnownType := djInterface;
-      tkRecord: begin
-        nested := ElemType; // inlined GetTypeInfo()
-rec:    inc(PtrUInt(nested),(nested^.NameLen));
-        if nested^.ManagedCount=0 then // only binary content -> full content
-          goto Bin;
-        with nested^.ManagedFields[0] do
-        case Offset of
-        0: case TypeInfo^.Kind of
-            tkLString: fKnownType := djRawUTF8;
-            tkWString: fKnownType := djWideString;
-            {$ifdef UNICODE}
-            tkUString: fKnownType := djString;
-            {$endif}
-            tkRecord: begin
-              nested := Deref(TypeInfo);
-              goto Rec;
-            end;
-            tkVariant: fKnownType := djVariant;
-            else begin
-              goto bin;
-            end;
-           end;
-        1: fKnownType := djByte;
-        2: fKnownType := djWord;
-        4: fKnownType := djInteger;
-        8: fKnownType := djInt64;
-        else fKnownSize := Offset;
-        end;
-      end;
-    end;
-  end;
-  if KNOWNTYPE_SIZE[fKnownType]<>0 then
-    fKnownSize := KNOWNTYPE_SIZE[fKnownType];
-  result := fKnownType;
 end;
 
 procedure TDynArray.Init(aTypeInfo: pointer; var aValue; aCountPointer: PInteger=nil);
@@ -820,40 +665,7 @@ begin
   if fCountP<>nil then
     fCountP^ := 0;
   fKnownSize := 0;
-  fKnownType := djNone;
 end;                
-
-procedure TDynArray.InitSpecific(aTypeInfo: pointer; var aValue; aKind: TDynArrayKind;
-  aCountPointer: PInteger=nil; aCaseInsensitive: boolean=false);
-begin
-  Init(aTypeInfo,aValue,aCountPointer);
-  fKnownType := aKind;
-  fKnownSize := KNOWNTYPE_SIZE[aKind];
-end;
-
-procedure TDynArray.UseExternalCount(var aCountPointer: Integer);
-begin
-  fCountP := @aCountPointer;
-end;
-
-procedure _DynArrayClear(var a: Pointer; typeInfo: Pointer);
-
-asm
-{$ifdef CPU64}
-  .NOFRAME
-{$endif}
-  jmp System.@DynArrayClear
-end;
-
-
-procedure _FinalizeArray(p: Pointer; typeInfo: Pointer; elemCount: PtrUInt);
-
-asm
-{$ifdef CPU64}
-  .NOFRAME
-{$endif}
-  jmp System.@FinalizeArray
-end;
 
 function TDynArray.GetCapacity: integer;
 begin // capacity := length(DynArray)

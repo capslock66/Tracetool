@@ -373,9 +373,7 @@ var
    Allchars : AnsiString ;
    c : integer ;
 
-   //DynArrayObject: TDynArray;
    DynArrayElementPointer : Pointer ;
-
 
 {$IFDEF COMPILER_12_UP}     // delphi 2009
    myTlist: TList<TForm>;

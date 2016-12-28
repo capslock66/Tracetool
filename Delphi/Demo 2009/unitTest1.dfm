@@ -27,6 +27,10 @@ object form1: Tform1
     TabOrder = 0
     object TabSheet1: TTabSheet
       Caption = 'Basic'
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       object Image1: TImage
         Left = 499
         Top = 216

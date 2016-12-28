@@ -5958,11 +5958,11 @@ var
    DynArrayPointer: Pointer;
    DynArrayObject: TDynArray;
    DynArrayElementPointer : Pointer ;
-  DynArrayElementValue1 : byte ;
+   DynArrayElementValue1 : byte ;
    DynArrayElementValue2 : word ;
    DynArrayElementValue4 : int32 ;
-   //DynArrayElementValue8 : int64 ;
 
+   TypeInfoName : RawUTF8 ;  // AnsiString
 
 type
    PPPTypeInfo = ^PPTypeInfo;
@@ -6011,13 +6011,6 @@ begin
          //  tkVariant, tkArray, tkRecord, tkInterface, tkInt64, tkDynArray, tkUString,
          //  tkClassRef, tkPointer, tkProcedure {, tkMRecord});
 
-         // GetPropValue , GetOrdProp
-         // see also http://synopse.info/fossil/artifact/9460542e6edb87182effe53b15c7ce3c1bfee2bb
-         // see dynarray in http://synopse.info/forum/viewtopic.php?id=254
-         // function TPropInfo.GetDynArray(Instance: TObject): TDynArray;
-         //begin
-         //   result.Init(PropType^,GetFieldAddr(Instance)^);
-         //end;
 
          // see System.TypInfo =>
          // GetPropValue
@@ -6062,15 +6055,11 @@ begin
                begin
                   // from System.TypInfo => GetPropValue where kind = tkDynArray
                   DynArrayPointer := GetDynArrayProp(AObject, PropInfo);   // TPropSet<TDynamicArray>.GetProc(Instance, PropInfo)
-
-                  // http://synopse.info/files/html/api-1.18/SynCommons.html#TDYNARRAY
+                  TypeInfoName := TypeInfoToName(PropInfo^.PropType^) ;
+                 
                   DynArrayObject.Init(PropInfo^.PropType^,DynArrayPointer) ;     // aTypeInfo: pointer; var aValue; aCountPointer: PInteger=nil);
-                  Prop_Value := 'Array ' + IntToStr(DynArrayObject.Count) ;
-                  prop_type := 'ElementSize ' + IntToStr(DynArrayObject.ElemSize) ;
-                 //property ArrayType: pointer read fTypeInfo;
-                  //property ArrayTypeName: RawUTF8 read GetArrayTypeName;
-                  //property ElemType: pointer read fElemType;
-                  //property IsObjArray: boolean read GetIsObjArray write SetIsObjArray;
+                  Prop_Value := '' ;
+                  prop_type := TypeInfoName + ' : ' + prop_type + '[' + IntToStr(DynArrayObject.Count) + ']' + ', element size = ' + IntToStr(DynArrayObject.ElemSize) ;
 
                   for j := 0 to DynArrayObject.Count-1 do
                   begin
@@ -6086,15 +6075,14 @@ begin
                      end ;
                      4 : begin
                          DynArrayElementValue4 := int32(DynArrayElementPointer^) ;              // 0 .. FF FF FF FF
-                         // is it an integer or a pointer ?
-
+                         // is it an integer or a pointer ?      
                          try                         
                             subObj := TObject (DynArrayElementValue4);
-                            prop_type := subObj.ClassName ;
+                            if (j = 0) then                               
+                               prop_type := prop_type + ', class type ' + subObj.ClassName ;
                          except                            
-                           // eat
-                         end;                                                    
-                         
+                           // eat exception. Element is not a class instance
+                         end;                                              
                           
                          Prop_Value := Prop_Value + ' $' + inttohex (DynArrayElementValue4,8) ;
                      end ;
@@ -6468,7 +6456,7 @@ begin
      tkRecord       : result := 'Record' ;       // Record types, new in Delphi 3
      tkInterface    : result := 'Interface' ;    // Interface types, new in Delphi 3
      tkInt64        : result := 'Int64' ;        // 64-bit integers, new in Delphi 4
-     tkDynArray     : result := 'DynArray' ;     // Dynamic array types, new in Delphi 4
+     tkDynArray     : result := 'Array' ;        // Dynamic array types, new in Delphi 4
      tkUString      : result := 'UString' ;      //
      tkClassRef     : result := 'ClassRef' ;     //
      tkPointer      : result := 'Pointer' ;      //
