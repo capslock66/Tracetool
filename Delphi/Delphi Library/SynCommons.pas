@@ -23,9 +23,6 @@ const
 
 type
 
-
-  RawUTF8 = type AnsiString;
-
   /// a CPU-dependent unsigned integer type cast of a pointer / register
   // - used for 64 bits compatibility, native under Free Pascal Compiler
 {$if CompilerVersion = 20} // DELPHI 2009
@@ -141,7 +138,7 @@ type
     fKnownSize: integer;
     function GetCount: integer; inline;
     function GetCapacity: integer;
-    function GetArrayTypeName: RawUTF8;
+    function GetArrayTypeName: AnsiString;
     /// will set fKnownType and fKnownOffset/fKnownSize fields
   public
     /// initialize the wrapper with a one-dimension dynamic array
@@ -199,7 +196,7 @@ type
     /// the known RTTI information of the whole array
     property ArrayType: pointer read fTypeInfo;
     /// the known type name of the whole array
-    property ArrayTypeName: RawUTF8 read GetArrayTypeName;
+    property ArrayTypeName: AnsiString read GetArrayTypeName;
     /// the internal in-memory size of one element, as retrieved from RTTI
     property ElemSize: PtrUInt read fElemSize;
     /// the internal type information of one element, as retrieved from RTTI
@@ -207,38 +204,7 @@ type
   end;
 
 /// retrieve the type name from its low-level RTTI
-function TypeInfoToName(aTypeInfo: pointer): RawUTF8; overload; inline;
-
-/// retrieve the type name from its low-level RTTI
-procedure TypeInfoToName(aTypeInfo: pointer; var result: RawUTF8;  const default: RawUTF8=''); overload;
-
-/// retrieve the unit name and type name from its low-level RTTI
-//procedure TypeInfoToQualifiedName(aTypeInfo: pointer; var result: RawUTF8; const default: RawUTF8='');
-
-/// retrieve the record size from its low-level RTTI
-function RecordTypeInfoSize(aRecordTypeInfo: pointer): integer;
-
-/// initialize the structure with a one-dimension dynamic array
-// - the dynamic array must have been defined with its own type
-// (e.g. TIntegerDynArray = array of Integer)
-// - if aCountPointer is set, it will be used instead of length() to store
-// the dynamic array items count - it will be much faster when adding
-// elements to the array, because the dynamic array won't need to be
-// resized each time - but in this case, you should use the Count property
-// instead of length(array) or high(array) when accessing the data: in fact
-// length(array) will store the memory size reserved, not the items count
-// - if aCountPointer is set, its content will be set to 0, whatever the
-// array length is, or the current aCountPointer^ value is
-// - a typical usage could be:
-// !var IntArray: TIntegerDynArray;
-// !begin
-// !  with DynArray(TypeInfo(TIntegerDynArray),IntArray) do
-// !  begin
-// !    (...)
-// !  end;
-// ! (...)
-// ! DynArray(TypeInfo(TIntegerDynArray),IntArrayA).SaveTo
-function DynArray(aTypeInfo: pointer; var aValue; aCountPointer: PInteger=nil): TDynArray; inline;
+procedure TypeInfoToName(aTypeInfo: pointer; var result: AnsiString;  const default: AnsiString=''); overload;
 
 implementation
 
@@ -403,23 +369,6 @@ const
   // - used to calc the beginning of memory allocation of a string
   STRRECSIZE = SizeOf(TStrRec);
 
-function Deref(Info: PTypeInfoStored): PTypeInfo; inline;
-begin
-  if Info=nil then
-    result := pointer(Info) else
-    result := Info^;
-end;
-
-//var
-//  KnownTypeInfo: array of PTypeInfo;
-
-function DynArrayLength(Value: Pointer): integer; inline;
-begin
-  if Value=nil then
-    result := PtrInt(Value) else begin
-    result := PInteger(PtrUInt(Value)-sizeof(PtrInt))^;
-  end;
-end;
 
 function GetTypeInfo(aTypeInfo: pointer; aExpectedKind: TTypeKind): PTypeInfo; overload; inline;
 begin
@@ -439,13 +388,13 @@ begin
     result := nil;
 end;
 
-
-procedure SetRawUTF8(var Dest: RawUTF8; text: pointer; len: integer);
+procedure SetRawUTF8(var Dest: AnsiString; text: pointer; len: integer);
 var P: PStrRec;
 begin
-  if (len>128) or (len=0) or (PtrInt(Dest)=0) or     // Dest=''
+  if (len>128) or (len=0) or (PtrInt(Dest)=0) or
     (PStrRec(PtrInt(Dest)-STRRECSIZE)^.refCnt<>1) then
-    SetString(Dest,PAnsiChar(text),len) else begin
+    SetString(Dest,PAnsiChar(text),len)
+  else begin
     if PStrRec(Pointer(PtrInt(Dest)-STRRECSIZE))^.length<>len then begin
       P := Pointer(PtrInt(Dest)-STRRECSIZE);
       ReallocMem(P,len+(STRRECSIZE+1));
@@ -457,29 +406,39 @@ begin
   end;
 end;
 
-function TypeInfoToName(aTypeInfo: pointer): RawUTF8;
-begin
-  TypeInfoToName(aTypeInfo,Result,'');
-end;
 
-procedure TypeInfoToName(aTypeInfo: pointer; var result: RawUTF8;  const default: RawUTF8='');
+procedure TypeInfoToName(aTypeInfo: pointer; var result: AnsiString;  const default: AnsiString='');
 begin
   if aTypeInfo<>nil then
-    SetRawUTF8(result,PAnsiChar(@PTypeInfo(aTypeInfo)^.NameLen)+1,  PTypeInfo(aTypeInfo)^.NameLen) 
+    SetRawUTF8(result,PAnsiChar(@PTypeInfo(aTypeInfo)^.NameLen)+1,  PTypeInfo(aTypeInfo)^.NameLen)
   else
     result := default;
 end;
 
-function RecordTypeInfoSize(aRecordTypeInfo: Pointer): integer;
-var info: PTypeInfo;
+{ ****************** TDynArray wrapper }
+
+procedure TDynArray.Init(aTypeInfo: pointer; var aValue; aCountPointer: PInteger=nil);
 begin
-  info := GetTypeInfo(aRecordTypeInfo,tkRecordTypeOrSet);
-  if info=nil then
-    result := 0 else
-    result := info^.recSize;
+  fValue := @aValue;
+  fTypeInfo := aTypeInfo;
+  if PTypeKind(aTypeInfo)^<>tkDynArray then // inlined GetTypeInfo()
+    raise Exception.Create('TDynArray.Init('+String( PShortString(@PTypeInfo(aTypeInfo)^.NameLen)^)+'): not a dynamic array');
+  inc(PtrUInt(aTypeInfo),PTypeInfo(aTypeInfo)^.NameLen);
+  fElemSize := PTypeInfo(aTypeInfo)^.elSize ;
+  fElemType := PTypeInfo(aTypeInfo)^.elType;
+  if fElemType<>nil then begin
+     fElemType := PPointer(fElemType)^;
+  end;
+  fCountP := aCountPointer;
+  if fCountP<>nil then
+    fCountP^ := 0;
+  fKnownSize := 0;
 end;
 
-{ ****************** TDynArray wrapper }
+function TDynArray.GetArrayTypeName: AnsiString;
+begin
+  TypeInfoToName(fTypeInfo,result);
+end;
 
 function TDynArray.ElemPtr(aIndex: integer): pointer;
 begin
@@ -514,29 +473,6 @@ begin
   end;
 end;
 
-function TDynArray.GetArrayTypeName: RawUTF8;
-begin
-  TypeInfoToName(fTypeInfo,result);
-end;
-
-procedure TDynArray.Init(aTypeInfo: pointer; var aValue; aCountPointer: PInteger=nil);
-begin
-  fValue := @aValue;
-  fTypeInfo := aTypeInfo;
-  if PTypeKind(aTypeInfo)^<>tkDynArray then // inlined GetTypeInfo()
-    raise Exception.Create('TDynArray.Init('+String( PShortString(@PTypeInfo(aTypeInfo)^.NameLen)^)+'): not a dynamic array');
-  inc(PtrUInt(aTypeInfo),PTypeInfo(aTypeInfo)^.NameLen);
-  fElemSize := PTypeInfo(aTypeInfo)^.elSize ;
-  fElemType := PTypeInfo(aTypeInfo)^.elType;
-  if fElemType<>nil then begin
-     fElemType := PPointer(fElemType)^;
-  end;
-  fCountP := aCountPointer;
-  if fCountP<>nil then
-    fCountP^ := 0;
-  fKnownSize := 0;
-end;                
-
 function TDynArray.GetCapacity: integer;
 begin // capacity := length(DynArray)
   if (fValue<>nil) and (PtrInt(fValue^)<>0) then
@@ -544,10 +480,6 @@ begin // capacity := length(DynArray)
     result := 0;
 end;
 
-function DynArray(aTypeInfo: pointer; var aValue; aCountPointer: PInteger=nil): TDynArray;
-begin
-  result.Init(aTypeInfo,aValue,aCountPointer);
-end;
 
 
 end.

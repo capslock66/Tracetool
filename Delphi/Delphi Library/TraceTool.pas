@@ -5962,7 +5962,6 @@ var
    DynArrayElementValue1 : byte ;
    DynArrayElementValue2 : word ;
    DynArrayElementValue4 : int32 ;     
-   TypeInfoName : RawUTF8 ;  // AnsiString
    ClassTypeFound : boolean ;
    
 type
@@ -6026,10 +6025,11 @@ begin
             tkDynArray :   // tkArray
                begin                                                                 
                   DynArrayPointer := GetDynArrayProp(AObject, PropInfo);  // from System.TypInfo => GetPropValue where kind = tkDynArray 
-                  TypeInfoName := TypeInfoToName(PropInfo^.PropType^) ;
-                 
+
                   DynArrayObject.Init(PropInfo^.PropType^,DynArrayPointer) ;     // aTypeInfo: pointer; var aValue; aCountPointer: PInteger=nil);
-                  prop_type := string(TypeInfoName) + ' : ' + GetPropertyTypeString (PropInfo^.PropType^.Kind) + '[' + IntToStr(DynArrayObject.Count) + ']' + ', element size = ' + IntToStr(DynArrayObject.ElemSize) ;
+                  //TypeInfoName := DynArrayObject.ArrayTypeName ;
+
+                  prop_type := string(DynArrayObject.ArrayTypeName) + ' : ' + GetPropertyTypeString (PropInfo^.PropType^.Kind) + '[' + IntToStr(DynArrayObject.Count) + ']' + ', element size = ' + IntToStr(DynArrayObject.ElemSize) ;
                   Prop_Value := '@' + inttohex (Integer(DynArrayPointer),2) ; 
                   subObj := nil ;
 
@@ -6281,9 +6281,7 @@ var
    DynArrayElementValue1 : byte ;
    DynArrayElementValue2 : word ;
    DynArrayElementValue4 : int32 ;
-   TypeInfoName : RawUTF8 ;  // AnsiString
    ClassTypeFound : Boolean ;
-   
 
    //------------------------------------------------------
    // add to the property group
@@ -6378,10 +6376,9 @@ begin
             tkDynArray :   // tkArray
                begin                                                                 
                   DynArrayPointer := GetDynArrayProp(AObject, PropInfo);  // from System.TypInfo => GetPropValue where kind = tkDynArray 
-                  TypeInfoName := TypeInfoToName(PropInfo^.PropType^) ;
                  
                   DynArrayObject.Init(PropInfo^.PropType^,DynArrayPointer) ;     // aTypeInfo: pointer; var aValue; aCountPointer: PInteger=nil);
-                  prop_type := string(TypeInfoName) + ' : ' + GetPropertyTypeString (PropInfo^.PropType^.Kind) + '[' + IntToStr(DynArrayObject.Count) + ']' + ', element size = ' + IntToStr(DynArrayObject.ElemSize) ;
+                  prop_type := string(DynArrayObject.ArrayTypeName) + ' : ' + GetPropertyTypeString (PropInfo^.PropType^.Kind) + '[' + IntToStr(DynArrayObject.Count) + ']' + ', element size = ' + IntToStr(DynArrayObject.ElemSize) ;
                   Prop_Value := '@' + inttohex (Integer(DynArrayPointer),2) + ' :' ; 
 
                   ClassTypeFound := False ;
