@@ -56,8 +56,9 @@
 			<DCCReference Include="unitTest1.pas">
 				<Form>form1</Form>
 			</DCCReference>
-			<DCCReference Include="..\Delphi Library\TraceTool.pas"/>
-			<DCCReference Include="..\Delphi Library\SynCommons.pas"/>
+			<DCCReference Include="..\Delphi Library\TraceTool.pas">
+				<Form>$R *.RES</Form>
+			</DCCReference>
 			<BuildConfiguration Include="Debug">
 				<Key>Cfg_2</Key>
 				<CfgParent>Base</CfgParent>
@@ -83,7 +84,7 @@
 					<Parameters/>
 					<Language>
 						<Language Name="ProjectLang">$0000080C</Language>
-						<Language Name="RootDir">..\..\..\..\GitHub\Tracetool\Delphi\Demo 2009\</Language>
+						<Language Name="RootDir">D:\GitHub\Tracetool\Delphi\Demo 2009\</Language>
 					</Language>
 					<VersionInfo>
 						<VersionInfo Name="IncludeVerInfo">False</VersionInfo>

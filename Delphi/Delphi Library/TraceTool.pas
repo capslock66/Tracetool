@@ -1,14 +1,15 @@
-///  TraceTool Delphi API.                                                                                 <p>
-///                                                                                                        <p>
-///  Author : Thierry Parent                                                                               <p>
-///  Version : 12.8                                                                                        <p>
-///  See License.txt for license information                                                               <p>
-///                                                                                                        <p>
-///  Optional stack traces can be done using the provided StackTrace unit that use jedi code source,       <p>
-///  See http://www.delphi-jedi.org then go to "JCL Code Library" Or http://sourceforge.net/projects/jcl/  <p>
-///                                                                                                        <p>
-///  Optional Socket mode can be done using the provided SocketTrace unt that use Indy component.          <p>
-///  If you use another socket library, you have to create a TSocketTrace descendant class                 <p>
+///  TraceTool Delphi API.
+///
+///  Author : Thierry Parent
+///  Version : 12.8
+///  See License.txt for license information
+///
+///  Optional stack traces can be done using the provided StackTrace unit that use jedi code source,
+///  See http://www.delphi-jedi.org then go to "JCL Code Library" Or http://sourceforge.net/projects/jcl/
+///
+///  Optional Socket mode can be done using the provided SocketTrace unt that use Indy component.
+///  If you use another socket library, you have to create a TSocketTrace descendant class
+//   The TDynArray class comes from the freeware Synopse mORMot framework at https://github.com/synopse/mORMot
 
 // history :
 // 12.6 : 2015/05/13 : removed deprecated warning on HtmlEncode
@@ -24,9 +25,9 @@ interface
 
 {$Include TraceTool.Inc}      
 
-uses Classes , windows, ActiveX , sysutils, Registry , Messages, Forms, //Dialogs,
+uses Classes , windows, ActiveX , SysUtils, Registry , Messages, Forms, //Dialogs,
      comobj , AxCtrls , SyncObjs , Contnrs, Graphics , TypInfo,
-     SynCommons,
+     //SynCommons,
 
 
 {$ifdef COMPILER_10_UP}    // starting 2006
@@ -50,6 +51,9 @@ uses Classes , windows, ActiveX , sysutils, Registry , Messages, Forms, //Dialog
 {$endif COMPILER_7_UP}
 
 type
+
+
+
 
    // forward declaration
 
@@ -1276,7 +1280,380 @@ var
 
 implementation
 
-{$ifdef DELPHI_6_UP}uses variants; {$endif}    // add variant for delphi 6 and upper
+{$ifdef DELPHI_6_UP} uses variants; {$endif}
+type
+
+///////////////// begin SynCommons /////////////////////////////
+
+/// a CPU-dependent unsigned integer type cast of a pointer / register
+// - used for 64 bits compatibility, native under Free Pascal Compiler
+{$if CompilerVersion = 20} // DELPHI 2009
+  PtrUInt = cardinal; { see http://synopse.info/forum/viewtopic.php?id=136 }
+{$else}
+  {$ifdef UNICODE}
+  PtrUInt = NativeUInt;
+  {$else}
+  PtrUInt = cardinal;
+  {$endif}
+{$ifend}
+
+/// a CPU-dependent unsigned integer type cast of a pointer of pointer
+// - used for 64 bits compatibility, native under Free Pascal Compiler
+PPtrUInt = ^PtrUInt;
+
+/// a CPU-dependent signed integer type cast of a pointer / register
+// - used for 64 bits compatibility, native under Free Pascal Compiler
+{$if CompilerVersion = 20} // DELPHI 2009
+  PtrInt = integer;
+{$else}
+  {$ifdef UNICODE}
+  PtrInt = NativeInt;
+  {$else}
+  PtrInt = integer;
+  {$endif}
+{$ifend}
+
+/// a CPU-dependent signed integer type cast of a pointer of pointer
+// - used for 64 bits compatibility, native under Free Pascal Compiler
+PPtrInt = ^PtrInt;
+
+{$ifndef CONDITIONALEXPRESSIONS}
+// missing definitions prior to delphi 7
+
+const
+  varShortInt = $0010;
+  varInt64 = $0014;
+
+type
+  UInt64 = Int64;
+  PPointer = ^Pointer;
+  PPAnsiChar = ^PAnsiChar;
+  PInteger = ^Integer;
+  PCardinal = ^Cardinal;
+  PWord = ^Word;
+  PByte = ^Byte;
+  PBoolean = ^Boolean;
+  PComp = ^Comp;
+  THandle = LongWord;
+  PVarData = ^TVarData;
+  TVarData = packed record
+    // mostly used for varNull, varInt64, varDouble, varString and varAny
+    VType: word;
+    case Integer of
+      0: (Reserved1: Word;
+          case Integer of
+            0: (Reserved2, Reserved3: Word;
+                case Integer of
+                  varSmallInt: (VSmallInt: SmallInt);
+                  varInteger:  (VInteger: Integer);
+                  varSingle:   (VSingle: Single);
+                  varDouble:   (VDouble: Double);     // DOUBLE
+                  varCurrency: (VCurrency: Currency);
+                  varDate:     (VDate: TDateTime);
+                  varOleStr:   (VOleStr: PWideChar);
+                  varDispatch: (VDispatch: Pointer);
+                  varError:    (VError: HRESULT);
+                  varBoolean:  (VBoolean: WordBool);
+                  varUnknown:  (VUnknown: Pointer);
+                  varByte:     (VByte: Byte);
+                  varInt64:    (VInt64: Int64);      // INTEGER
+                  varString:   (VString: Pointer);   // TEXT
+                  varAny:      (VAny: Pointer);
+                  varArray:    (VArray: PVarArray);
+                  varByRef:    (VPointer: Pointer);
+               );
+            1: (VLongs: array[0..2] of LongInt); );
+  end;
+{$endif}
+
+type
+  /// a wrapper around a dynamic array with one dimension
+  /// http://synopse.info/fossil/wiki/Synopse+OpenSource
+  TDynArray = record
+  private
+    fValue: PPointer;
+    fTypeInfo: pointer;
+    fElemSize: PtrUInt;
+    fElemType: pointer;
+    fCountP: PInteger;
+    fKnownSize: integer;
+    function GetCount: integer; inline;
+    function GetArrayTypeName: AnsiString;
+    /// will set fKnownType and fKnownOffset/fKnownSize fields
+  public
+    /// initialize the wrapper with a one-dimension dynamic array
+    procedure Init(aTypeInfo: pointer; var aValue; aCountPointer: PInteger=nil);
+    /// returns a pointer to an element of the array
+    function ElemPtr(aIndex: integer): pointer;
+    /// retrieve or set the number of elements of the dynamic array
+    property Count: integer read GetCount ;
+    /// low-level direct access to the storage variable
+    property Value: PPointer read fValue;
+    /// the known RTTI information of the whole array
+    property ArrayType: pointer read fTypeInfo;
+    /// the known type name of the whole array
+    property ArrayTypeName: AnsiString read GetArrayTypeName;
+    /// the internal in-memory size of one element, as retrieved from RTTI
+    property ElemSize: PtrUInt read fElemSize;
+    /// the internal type information of one element, as retrieved from RTTI
+    property ElemType: pointer read fElemType;
+  end;
+
+type
+  /// available type families for Delphi 6 and up, similar to typinfo.pas
+  SC_TTypeKind = (tk_SC_Unknown, tk_SC_Integer, tk_SC_Char, tk_SC_Enumeration, tk_SC_Float,
+    tk_SC_String, tk_SC_Set, tk_SC_Class, tk_SC_Method, tk_SC_WChar, tk_SC_LString, tk_SC_WString,
+    tk_SC_Variant, tk_SC_Array, tk_SC_Record, tk_SC_Interface, tk_SC_Int64, tk_SC_DynArray
+    {$ifdef UNICODE}, tk_SC_UString, tk_SC_ClassRef, tk_SC_Pointer, tk_SC_Procedure{$endif});
+
+const
+  // maps record or object types
+  tkRecordTypes = [tk_SC_Record];
+  tkRecordTypeOrSet = tk_SC_Record;
+
+
+type
+  T_SC_OrdType = (otSByte,otUByte,otSWord,otUWord,otSLong,otULong);
+  T_SC_FloatType = (ftSingle,ftDoub,ftExtended,ftComp,ftCurr);
+  T_SC_TypeKinds = set of SC_TTypeKind;
+  P_SC_TypeKind = ^SC_TTypeKind;
+
+  P_SC_StrRec = ^T_SC_StrRec;
+  /// map the Delphi string header, as defined in System.pas
+  T_SC_StrRec = record
+  {$ifdef UNICODE}
+    {$ifdef CPU64}
+    /// padding bytes for 16 byte alignment of the header
+    _Padding: LongInt;
+    {$endif}
+    /// the associated code page used for this string
+    // - exist only since Delphi 2009
+    // - 0 or 65535 for RawByteString
+    // - 1200=CP_UTF16 for UnicodeString
+    // - 65001=CP_UTF8 for RawUTF8
+    // - the current code page for AnsiString
+    codePage: Word;
+    /// either 1 (for AnsiString) or 2 (for UnicodeString)
+    // - exist only since Delphi 2009
+    elemSize: Word;
+  {$endif UNICODE}
+    /// COW string reference count (basic garbage memory mechanism)
+    refCnt: Longint;
+    /// length in characters
+    // - size in bytes = length*elemSize
+    length: Longint;
+  end;
+
+  /// map the Delphi dynamic array header (stored before each instance)
+  T_SC_DynArrayRec = packed record
+    /// dynamic array reference count (basic garbage memory mechanism)
+    {$ifdef CPUX64}
+    _Padding: LongInt; // Delphi XE2+ expects 16 byte alignment
+    {$endif}
+    refCnt: Longint;
+    /// length in element count
+    // - size in bytes = length*ElemSize
+    length: PtrInt;
+  end;
+  P_SC_DynArrayRec = ^T_SC_DynArrayRec;
+
+  P_SC_TypeInfo = ^T_SC_TypeInfo;
+  P_SC_TypeInfoStored = ^P_SC_TypeInfo;
+
+  /// map the Delphi record field RTTI
+  T_SC_FieldInfo =  record
+    TypeInfo: P_SC_TypeInfoStored;
+    Offset: PtrUInt;
+  end;
+  {$if CompilerVersion >= 21.0}  // DELPHI 2010
+  /// map the Delphi record field enhanced RTTI (available since Delphi 2010)
+  T_SC_EnhancedFieldInfo = packed record
+    TypeInfo: P_SC_TypeInfoStored;
+    Offset: PtrUInt;
+    Flags: Byte;
+    NameLen: byte; // = Name[0] = length(Name)
+  end;
+  P_SC_EnhancedFieldInfo = ^T_SC_EnhancedFieldInfo;
+  {$ifend}
+
+  T_SC_TypeInfo = packed record
+    kind: SC_TTypeKind;
+    NameLen: byte;
+    case SC_TTypeKind of
+    tk_SC_Unknown: (
+      NameFirst: AnsiChar;
+    );
+    tk_SC_DynArray: (
+      // storage byte count for this field
+      elSize: Longint;
+      // nil for unmanaged field
+      elType: P_SC_TypeInfoStored;
+      // OleAuto compatible type
+      varType: Integer;
+      // also unmanaged field
+      elType2: P_SC_TypeInfoStored;
+    );
+    tk_SC_Array: (
+      arraySize: Integer;
+      // product of lengths of all dimensions
+      elCount: Integer;
+      arrayType: P_SC_TypeInfoStored;
+      dimCount: Byte;
+      dims: array[0..255 {DimCount-1}] of P_SC_TypeInfoStored;
+    );
+    tk_SC_Record: (
+      recSize: cardinal;
+      ManagedCount: integer;
+      ManagedFields: array[0..0] of T_SC_FieldInfo;
+      {$if CompilerVersion >= 21.0} // DELPHI 2010 // enhanced RTTI containing info about all fields
+      NumOps: Byte;
+      AllCount: Integer;
+      AllFields: array[0..0] of T_SC_EnhancedFieldInfo;
+      {$ifend}
+    );
+    tk_SC_Enumeration: (
+      EnumType: T_SC_OrdType;
+      MinValue: longint;
+      MaxValue: longint;
+      EnumBaseType: P_SC_TypeInfoStored;
+      NameList: string[255];
+    );
+    tk_SC_Integer: (
+      IntegerType: T_SC_OrdType;
+    );
+    tk_SC_Set: (
+      SetType: T_SC_OrdType;
+      SetBaseType: P_SC_TypeInfoStored;
+    );
+    tk_SC_Float: (
+      FloatType: T_SC_FloatType;
+    );
+    tk_SC_Class: (
+      ClassType: PAnsiChar; // TClass;
+      ParentInfo: P_SC_TypeInfoStored;
+      PropCount: SmallInt;
+      UnitNameLen: byte;
+    );
+  end;
+  T_SC_PropInfo = packed record
+    PropType: P_SC_TypeInfoStored;
+    GetProc: PtrInt;
+    SetProc: PtrInt;
+    StoredProc: PtrInt;
+    Index: Integer;
+    Default: Longint;
+    NameIndex: SmallInt;
+    NameLen: byte;
+  end;
+  P_SC_PropInfo = ^T_SC_PropInfo;
+
+const
+  /// codePage offset = string header size
+  // - used to calc the beginning of memory allocation of a string
+  SC_STRRECSIZE = SizeOf(T_SC_StrRec);
+
+function SC_GetTypeInfo(aTypeInfo: pointer; aExpectedKind: SC_TTypeKind): P_SC_TypeInfo; overload; inline;
+begin
+  if (aTypeInfo<>nil) and (P_SC_TypeKind(aTypeInfo)^=aExpectedKind) then begin
+    result := aTypeInfo;
+    inc(PtrUInt(result),result^.NameLen);
+  end else
+    result := nil;
+end;
+
+function SC_GetTypeInfo(aTypeInfo: pointer; const aExpectedKind: T_SC_TypeKinds): P_SC_TypeInfo; overload; inline;
+begin
+  result := aTypeInfo;
+  if (result<>nil) and (result^.Kind in aExpectedKind) then
+    inc(PtrUInt(result),result^.NameLen)
+  else
+    result := nil;
+end;
+
+procedure SC_SetRawUTF8(var Dest: AnsiString; text: pointer; len: integer);
+var P: P_SC_StrRec;
+begin
+  if (len>128) or (len=0) or (PtrInt(Dest)=0) or
+    (P_SC_StrRec(PtrInt(Dest)-SC_STRRECSIZE)^.refCnt<>1) then
+    SetString(Dest,PAnsiChar(text),len)
+  else begin
+    if P_SC_StrRec(Pointer(PtrInt(Dest)-SC_STRRECSIZE))^.length<>len then begin
+      P := Pointer(PtrInt(Dest)-SC_STRRECSIZE);
+      ReallocMem(P,len+(SC_STRRECSIZE+1));
+      P^.length := len;
+      pointer(Dest) := pointer(PAnsiChar(P)+SC_STRRECSIZE);
+      PByteArray(Dest)[len] := 0;
+    end;
+    System.Move(pointer(text)^,pointer(Dest)^,len);
+  end;
+end;
+
+/// retrieve the type name from its low-level RTTI
+procedure SC_TypeInfoToName(aTypeInfo: pointer; var result: AnsiString;  const default: AnsiString='');
+begin
+  if aTypeInfo<>nil then
+    SC_SetRawUTF8(result,PAnsiChar(@P_SC_TypeInfo(aTypeInfo)^.NameLen)+1,  P_SC_TypeInfo(aTypeInfo)^.NameLen)
+  else
+    result := default;
+end;
+
+procedure TDynArray.Init(aTypeInfo: pointer; var aValue; aCountPointer: PInteger=nil);
+begin
+  fValue := @aValue;
+  fTypeInfo := aTypeInfo;
+  if P_SC_TypeKind(aTypeInfo)^<>tk_SC_DynArray then // inlined GetTypeInfo()
+    raise Exception.Create('TDynArray.Init('+String( PShortString(@P_SC_TypeInfo(aTypeInfo)^.NameLen)^)+'): not a dynamic array');
+  inc(PtrUInt(aTypeInfo),P_SC_TypeInfo(aTypeInfo)^.NameLen);
+  fElemSize := P_SC_TypeInfo(aTypeInfo)^.elSize ;
+  fElemType := P_SC_TypeInfo(aTypeInfo)^.elType;
+  if fElemType<>nil then begin
+     fElemType := PPointer(fElemType)^;
+  end;
+  fCountP := aCountPointer;
+  if fCountP<>nil then
+    fCountP^ := 0;
+  fKnownSize := 0;
+end;
+
+function TDynArray.GetArrayTypeName: AnsiString;
+begin
+  SC_TypeInfoToName(fTypeInfo,result);
+end;
+
+function TDynArray.ElemPtr(aIndex: integer): pointer;
+begin
+  result := nil;
+  if (fValue=nil) or (fValue^=nil) then
+    exit;
+  if fCountP<>nil then begin
+    if cardinal(aIndex)>=PCardinal(fCountP)^ then
+      exit;
+  end else
+    if cardinal(aIndex)>=PCardinal(PtrUInt(fValue^)-sizeof(PtrInt))^ then
+      exit;
+  result := pointer(PtrUInt(fValue^)+PtrUInt(aIndex)*ElemSize);
+end;
+
+function TDynArray.GetCount: integer;
+begin
+  if fValue<>nil then
+    if fCountP=nil then
+      if PtrInt(fValue^)<>0 then begin
+        result := PInteger(PtrUInt(fValue^)-sizeof(PtrInt))^;
+        exit;
+      end else begin
+        result := 0;
+        exit;
+      end else begin
+      result := fCountP^;
+      exit;
+    end else begin
+    result := 0; // avoid GPF if void
+    exit;
+  end;
+end;
+
+///////////////// end SynCommons /////////////////////////////
 
 type
 

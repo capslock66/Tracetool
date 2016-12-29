@@ -1,7 +1,7 @@
 // unit TraceTool.inc ;
 // used by viewer and client
 
-// version 12.3
+// version 12.8
 
 {$ifdef CLR}  // The common language runtime symbol is only defined for the .NET platform.
   {$define DELPHI.NET}
@@ -14,6 +14,48 @@
     {$define DELHI.NET_1_UP}
   {$endif DELPHI.NET_1}
 {$endif CLR}
+
+{$ifdef CPUX64}
+  {$define CPU64} // Delphi compiler for 64 bit CPU
+  {$define CPU64DELPHI}
+  {$undef CPU32}
+{$else CPUX64}
+  {$define CPU32} // Delphi compiler for 32 bit CPU
+  {$undef CPU64}
+  {$define CPUX86} // for compatibility with older versions of Delphi
+{$endif CPUX64}
+
+{$IFDEF CONDITIONALEXPRESSIONS}  // Delphi 6 or newer
+   {$ifdef VER140}
+   {$else}
+      {$warn UNSAFE_CODE OFF} // Delphi for .Net does not exist any more!
+      {$warn UNSAFE_TYPE OFF}
+      {$warn UNSAFE_CAST OFF}
+      {$warn DUPLICATE_CTOR_DTOR OFF} // avoid W1029 unneeded hints
+   {$endif}
+
+   {$ifdef VER150}
+     {$WARN SYMBOL_DEPRECATED OFF}
+     {$WARN UNSAFE_TYPE OFF}
+     {$WARN UNSAFE_CODE OFF}
+     {$WARN UNSAFE_CAST OFF}
+   {$ENDIF}
+{$ENDIF}
+
+{$WARN SYMBOL_PLATFORM OFF}
+{$WARN UNIT_PLATFORM OFF}
+
+
+{$R-} // disable Range checking in our code
+{$S-} // disable Stack checking in our code
+{$X+} // expect extended syntax
+{$W-} // disable stack frame generation
+{$Q-} // disable overflow checking in our code
+{$B-} // expect short circuit boolean
+{$V-} // disable Var-String Checking
+{$T-} // Typed @ operator
+{$Z1} // enumerators stored as byte by default
+{$P+} // Open string params
 
 {$ifdef Win32}
 
