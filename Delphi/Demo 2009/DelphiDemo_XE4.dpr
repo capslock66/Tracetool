@@ -4,7 +4,6 @@ uses
   Forms,
   unitTest1 in 'unitTest1.pas' {form1},
   TraceTool in '..\Delphi Library\TraceTool.pas',
-  SynCommons in '..\Delphi Library\SynCommons.pas',
   SocketTrace in '..\Delphi Library\SocketTrace.pas';
 
 {$R *.RES}
