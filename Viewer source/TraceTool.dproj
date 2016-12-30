@@ -179,7 +179,7 @@
 						<VersionInfo Name="MajorVer">12</VersionInfo>
 						<VersionInfo Name="MinorVer">8</VersionInfo>
 						<VersionInfo Name="Release">0</VersionInfo>
-						<VersionInfo Name="Build">531</VersionInfo>
+						<VersionInfo Name="Build">532</VersionInfo>
 						<VersionInfo Name="Debug">False</VersionInfo>
 						<VersionInfo Name="PreRelease">False</VersionInfo>
 						<VersionInfo Name="Special">False</VersionInfo>
@@ -191,7 +191,7 @@
 					<VersionInfoKeys>
 						<VersionInfoKeys Name="CompanyName">Thierry Parent</VersionInfoKeys>
 						<VersionInfoKeys Name="FileDescription">TraceTool utility</VersionInfoKeys>
-						<VersionInfoKeys Name="FileVersion">12.8.0.531</VersionInfoKeys>
+						<VersionInfoKeys Name="FileVersion">12.8.0.532</VersionInfoKeys>
 						<VersionInfoKeys Name="InternalName">TraceTool</VersionInfoKeys>
 						<VersionInfoKeys Name="LegalCopyright">Thierry Parent</VersionInfoKeys>
 						<VersionInfoKeys Name="LegalTrademarks">Thierry Parent</VersionInfoKeys>
