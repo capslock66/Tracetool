@@ -51,6 +51,9 @@ var
    TempStr : string ;
 
 begin
+   if pAnsiMsg = nil then     // nothing to do
+      Exit ;
+
    PAnsiMsgBackup := pAnsiMsg ;
    MsgList := TStringList.create ;   // freed by TimerTracesTimer after processing the message
    try
@@ -95,7 +98,7 @@ begin
    except
       on E:Exception do begin
          errorNode := TFrm_Trace.InternalTrace(e.Message) ;
-         TFrm_Trace.InternalTrace(errorNode, 'source : ' + PAnsiMsgBackup) ;
+         TFrm_Trace.InternalTrace(errorNode, 'SplitMessage source : ' + PAnsiMsgBackup) ;
       end ;
    end ;
 
@@ -131,7 +134,6 @@ begin
    // accept only WMD_ACTION
    if TypeMsg <> WMD then
       exit ;
-
    SplitMessage (PAnsichar(pCDS^.lpData), LenMsg) ;
 end;
 

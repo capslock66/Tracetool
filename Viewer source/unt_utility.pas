@@ -129,11 +129,15 @@ begin
          MessageString := Format('%5d%s', [CST_OPEN_TAIL,filename]) + #0 + #0 ;
          CDS.cbData := length(MessageString) ; // 5 + len + 1 + 1
       end ;
-      // send mesage to other instance
-      CDS.dwData := WMD ;   // identification code "123"
-      CDS.lpData := pAnsiString (AnsiString(MessageString)) ; // no need to add #0, because String are null terminated
-      SendMessage(DebugWin, WM_COPYDATA, 0, LParam(@CDS));  //WParam(Application.Handle)
 
+      if MessageString <> '' then begin
+
+         // send mesage to other instance
+         CDS.dwData := WMD ;   // identification code "123"
+         CDS.lpData := pAnsiString (AnsiString(MessageString)) ; // no need to add #0, because String are null terminated
+         SendMessage(DebugWin, WM_COPYDATA, 0, LParam(@CDS));  //WParam(Application.Handle)
+
+      end;
       // finish with the CST_SHOW message
       MessageString := Format('%5d%11d', [CST_SHOW,1])  + #0 + #0 ;
       CDS.cbData := 18 ; // 5 + 11 + 1 + 1

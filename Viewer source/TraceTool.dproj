@@ -172,16 +172,14 @@
 					<Source>
 						<Source Name="MainSource">TraceTool.dpr</Source>
 					</Source>
-					<Parameters>
-						<Parameters Name="RunParams">/debug</Parameters>
-					</Parameters>
+					<Parameters/>
 					<VersionInfo>
 						<VersionInfo Name="IncludeVerInfo">True</VersionInfo>
 						<VersionInfo Name="AutoIncBuild">True</VersionInfo>
 						<VersionInfo Name="MajorVer">12</VersionInfo>
-						<VersionInfo Name="MinorVer">7</VersionInfo>
+						<VersionInfo Name="MinorVer">8</VersionInfo>
 						<VersionInfo Name="Release">0</VersionInfo>
-						<VersionInfo Name="Build">530</VersionInfo>
+						<VersionInfo Name="Build">531</VersionInfo>
 						<VersionInfo Name="Debug">False</VersionInfo>
 						<VersionInfo Name="PreRelease">False</VersionInfo>
 						<VersionInfo Name="Special">False</VersionInfo>
@@ -193,14 +191,14 @@
 					<VersionInfoKeys>
 						<VersionInfoKeys Name="CompanyName">Thierry Parent</VersionInfoKeys>
 						<VersionInfoKeys Name="FileDescription">TraceTool utility</VersionInfoKeys>
-						<VersionInfoKeys Name="FileVersion">12.7.0.530</VersionInfoKeys>
+						<VersionInfoKeys Name="FileVersion">12.8.0.531</VersionInfoKeys>
 						<VersionInfoKeys Name="InternalName">TraceTool</VersionInfoKeys>
 						<VersionInfoKeys Name="LegalCopyright">Thierry Parent</VersionInfoKeys>
 						<VersionInfoKeys Name="LegalTrademarks">Thierry Parent</VersionInfoKeys>
 						<VersionInfoKeys Name="OriginalFilename">none</VersionInfoKeys>
 						<VersionInfoKeys Name="ProductName">TraceTool</VersionInfoKeys>
-						<VersionInfoKeys Name="ProductVersion">12.7</VersionInfoKeys>
-						<VersionInfoKeys Name="Comments">Freeware Trace utility for C++, Delphi, html , Dot Net and Java</VersionInfoKeys>
+						<VersionInfoKeys Name="ProductVersion">12.8</VersionInfoKeys>
+						<VersionInfoKeys Name="Comments">Freeware Trace utility for C++, Delphi, Javascript, Python, Dot Net and Java</VersionInfoKeys>
 					</VersionInfoKeys>
 					<Excluded_Packages>
 						<Excluded_Packages Name="$(BDSBIN)\dcloffice2k140.bpl">Microsoft Office 2000 Sample Automation Server Wrapper Components</Excluded_Packages>

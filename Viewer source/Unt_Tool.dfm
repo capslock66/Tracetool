@@ -2,12 +2,12 @@ object Frm_Tool: TFrm_Tool
   Left = 320
   Top = 221
   Caption = 'Trace and Object inspector Tool'
-  ClientHeight = 709
-  ClientWidth = 833
+  ClientHeight = 576
+  ClientWidth = 677
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
-  Font.Height = -14
+  Font.Height = -11
   Font.Name = 'MS Sans Serif'
   Font.Style = []
   Menu = MainMenu
@@ -15,17 +15,13 @@ object Frm_Tool: TFrm_Tool
   OnClose = FormClose
   OnCloseQuery = FormCloseQuery
   OnCreate = FormCreate
-  PixelsPerInch = 120
-  TextHeight = 16
+  PixelsPerInch = 96
+  TextHeight = 13
   object imgMessage: TImage
-    Left = 325
-    Top = 118
+    Left = 264
+    Top = 96
     Width = 32
     Height = 32
-    Margins.Left = 4
-    Margins.Top = 4
-    Margins.Right = 4
-    Margins.Bottom = 4
     AutoSize = True
     Picture.Data = {
       055449636F6E0000010001002020000000000000A80800001600000028000000
@@ -102,13 +98,9 @@ object Frm_Tool: TFrm_Tool
   end
   object StatusBar: TStatusBar
     Left = 0
-    Top = 690
-    Width = 833
+    Top = 557
+    Width = 677
     Height = 19
-    Margins.Left = 4
-    Margins.Top = 4
-    Margins.Right = 4
-    Margins.Bottom = 4
     Panels = <
       item
         Bevel = pbRaised
@@ -128,6 +120,8 @@ object Frm_Tool: TFrm_Tool
         Text = '0'
         Width = 50
       end>
+    ExplicitTop = 561
+    ExplicitWidth = 833
   end
   object MainMenu: TMainMenu
     Images = ilActions
@@ -191,7 +185,7 @@ object Frm_Tool: TFrm_Tool
     Left = 176
     Top = 104
     Bitmap = {
-      494C01012A002C00140010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
+      494C01012A002C00180010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
       000000000000360000002800000040000000B0000000010020000000000000B0
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
@@ -1758,7 +1752,7 @@ object Frm_Tool: TFrm_Tool
     Left = 24
     Top = 168
     Bitmap = {
-      494C010119001B00140010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
+      494C010119001B00180010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000400000007000000001002000000000000070
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
@@ -2729,7 +2723,7 @@ object Frm_Tool: TFrm_Tool
     Left = 96
     Top = 232
     Bitmap = {
-      494C01010D000F00140010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
+      494C01010D000F00180010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000400000004000000001002000000000000040
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
