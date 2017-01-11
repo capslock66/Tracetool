@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 //  TraceTool JavaScript API.
 //  Author : Thierry Parent
-//  Version : 13.1.0 
+//  Version : 13.1.1 
 //  sample use for NodeJs:    
 //     var ttrace = require('tracetool') ;
 //     ttrace.clearAll();
@@ -15,6 +15,17 @@
 // http://node.green/
 // https://nodejs.org/dist/latest-v6.x/docs/api/
 // https://nodejs.org/dist/latest-v7.x/docs/api/
+
+
+// Loader competitive (I will never finish with all of them)
+// http://benmccormick.org/2015/05/28/moving-past-requirejs
+
+// https://nodejs.org/docs/latest/api/modules.html   (CommonJS = NodeJs)
+// http://requirejs.org                              (Asynchronous Module Definition = AMD)
+// https://github.com/systemjs/systemjs              (AMD, CommonJS, ES6 , using promise) 
+// http://browserify.org                             (CommonJS on browser)
+// http://webpack.github.io                          (AMD, CommonJS)
+// ...
 
 "use strict";
 
@@ -55,9 +66,6 @@ var isRequireJs;                           /** library load by require.js       
 //--------------------------------------------------------------------------------------------------------
     
 detectEnvironment() ;
-//console.log ("isChromeExtension : " + isChromeExtension);
-//console.log ("isBrowser         : " + isBrowser);
-//console.log ("isNodeJs          : " + isNodeJs);
 
 if (isNodeJs)    
 {
@@ -85,16 +93,18 @@ function detectEnvironment()
 
         // ReSharper disable UndeclaredGlobalVariableUsing
 
+
         if ((typeof require === "function") && 
              (typeof define === "function"))
-            isRequireJs = true;
+            isRequireJs = true;  // AMD module
 
         if ((typeof chrome === "object") && (typeof chrome.extension === "object"))
             isChromeExtension = true;
         else if ((typeof require === "function") &&      
-                 (typeof process === "object")   &&    
+              // (typeof module === "object") && (typeof module.exports === "object")       // to do : check module.exports (CommonJS syntax used by nodeJs) and suppress check for process.release.name
+                 (typeof process === "object") &&
                  (process.release.name.search(/node|io.js/) !== -1)) // process.release.name = 'node'
-            isNodeJs = true;
+            isNodeJs = true;  // CommonJS
         else
             isBrowser = true;
         // ReSharper restore UndeclaredGlobalVariableUsing
@@ -3793,16 +3803,29 @@ Object.defineProperty(traceClasses.MemberNode.prototype, 'classname', {
 
 //--------------------------------------------------------------------------------------------------------
 
-if (isNodeJs) 
-    module.exports = ttrace;
+// http://benmccormick.org/2015/05/28/moving-past-requirejs/
 
-if (isRequireJs)
+// CommonJS syntax (synchronous nodejs)
+if (isNodeJs)
+{
+   module.exports = ttrace;
+}
+
+// ES6 syntax :
+//export default ttrace ;
+
+// AMD modules syntaxe . RequireJS requires developers to use AMD modules (asynchronous)
+if (isRequireJs) {
    define({
       ttrace: ttrace
    });
+}
 
+// simple browser mode : put it global (window)
 if (isBrowser)
-    global.ttrace = ttrace ;
+{
+   global.ttrace = ttrace;
+}
 
 // ReSharper disable once ThisInGlobalContext
 })(typeof window !== "undefined" ? window : this);
