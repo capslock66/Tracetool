@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 //  TraceTool JavaScript API.
 //  Author : Thierry Parent
-//  Version : 13.0.1 
+//  Version : 13.1.0 
 //  sample use for NodeJs:    
 //     var ttrace = require('tracetool') ;
 //     ttrace.clearAll();
@@ -18,11 +18,17 @@
 
 "use strict";
 
-(function(global){    
+// ReSharper disable once InconsistentNaming
+var define;        // in case RequireJs is not used. Remove warning for use strict
+
+(function (global)
+{
 
 // private tracetool vars 
 
 //--------------------------------------------------------------------------------------------------------
+
+var ttrace = null ;                        /** the tracetool api instance                               */ 
 
 var ttraceScript = null;                   /** current trace script. Used by sendToClientUsingScript()  */
 var headId = null;                         /** Shortcut to head. Used by sendToClientUsingScript()      */
@@ -44,6 +50,7 @@ var traceClasses = {};                     /** Contains all tracetool classes   
 var isChromeExtension ;                    /** library run under chrome as an extension                 */
 var isBrowser;                             /** library run in a browser                                 */
 var isNodeJs;                              /** library run in Node Js                                   */
+var isRequireJs;                           /** library load by require.js                               */
 
 //--------------------------------------------------------------------------------------------------------
     
@@ -72,15 +79,21 @@ function detectEnvironment()
     isChromeExtension = false;
     isBrowser = false;
     isNodeJs = false;
+    isRequireJs = false;
     
     try {
 
         // ReSharper disable UndeclaredGlobalVariableUsing
-        if (typeof chrome === "object" && typeof chrome.extension === "object") 
+
+        if ((typeof require === "function") && 
+             (typeof define === "function"))
+            isRequireJs = true;
+
+        if ((typeof chrome === "object") && (typeof chrome.extension === "object"))
             isChromeExtension = true;
-        else if ((typeof require === "function")     // nodejs : 'function'
-              && (typeof process === "object")       // nodejs : 'object'
-              && (process.release.name.search(/node|io.js/) !== -1)) // process.release.name = 'node'
+        else if ((typeof require === "function") &&      
+                 (typeof process === "object")   &&    
+                 (process.release.name.search(/node|io.js/) !== -1)) // process.release.name = 'node'
             isNodeJs = true;
         else
             isBrowser = true;
@@ -312,15 +325,15 @@ function sendToClientUsingXmlHttpRequest(hostUrl)
     //  console.log("tracetool:load callback");
     //  }, false);
 
-    xhr.addEventListener("error", function (e3) {
+    xhr.addEventListener("error", function ( /*errorEvent*/) {
         //console.log("tracetool:error callback " + toSend.length);
         setTimeout(worker, 0);    // send next
     }, false);
 
-    xhr.onload = function (e4) {
+    xhr.onload = function (onloadEvent) {
         // e : ProgressEvent
         // e.currentTarget : XMLHttpRequest
-        var onloadRequest = e4.currentTarget;
+        var onloadRequest = onloadEvent.currentTarget;
 
         // With the js tracetool API for browser, the response for "UniqueClientId" command is a single line script 
         // Sample script for "UniqueClientId" : ttrace.setclientId("123");
@@ -730,7 +743,7 @@ function prepareNewNode(parentNode, leftMsg, newId)
 * @class ttrace is the entry point for all traces.
 */
 
-var ttrace =
+ttrace =
 {
    /** 
    * ask an unique client id to the viewer.
@@ -831,7 +844,7 @@ var ttrace =
    * @param {string} partNum part of the message
    * @returns {void}
    */
-   _done : function (msgId, partNum)
+   _done : function () // msgId, partNum
    {
        nbDone++;
        //afterRun(msgId, partNum); // call protected function
@@ -3146,6 +3159,13 @@ traceClasses.TraceNodeEx.prototype =
       {
          if (!this.enabled)
             return;
+
+         var stack ;
+         var stackList ;
+         var stackLength ;
+         var callObj ;
+         var callName ;
+
          level = level || 0 ;
 
          var group = new traceClasses.MemberNode("Call stack").setFontDetail(0, true);
@@ -3154,17 +3174,17 @@ traceClasses.TraceNodeEx.prototype =
 
          if (isNodeJs)
          {
-             var stack = stackTrace.get(this.addCaller);
-             var stackLength = stack.length;
-             for (var i = 0; i < stackLength; i++)
+             stack = stackTrace.get(this.addCaller);
+             stackLength = stack.length;
+             for (let i = 0; i < stackLength; i++)
              {
-                var callObj = stack[i];
+                callObj = stack[i];
                 if (callObj.getFileName().includes("tracetool.js") === false)
                 {
                    if (level > 0)
                       level-- ;
                    else {
-                      var callName = callObj.toString();
+                      callName = callObj.toString();
                       group.add(callName);
                       return;
                    }
@@ -3172,12 +3192,12 @@ traceClasses.TraceNodeEx.prototype =
              }
          } else {
            
-            var stack = new Error().stack ;
-            var stackList = stack.split('\n') ;
-            var stackLength = stackList.length;
-            for (var i = 0; i < stackLength; i++)
+            stack = new Error().stack ;
+            stackList = stack.split('\n') ;
+            stackLength = stackList.length;
+            for (let i = 0; i < stackLength; i++)
             {
-               var callObj = stackList[i].trim();
+               callObj = stackList[i].trim();
                if (callObj === "Error")
                    continue ;
                
@@ -3189,7 +3209,7 @@ traceClasses.TraceNodeEx.prototype =
                   if (level > 0)
                      level-- ;
                   else {
-                     var callName = callObj.substring(3);
+                     callName = callObj.substring(3);
                      group.add(callName);
                      return ;
                   }
@@ -3215,25 +3235,32 @@ traceClasses.TraceNodeEx.prototype =
          group.viewerKind =  /* CST_VIEWER_STACK */ 4 ;
          this.members.add(group);
          
+         var stack ;
+         var stackList ;
+         var stackLength ;
+         var callObj ;
+         var callName ;
+         
+
          if (isNodeJs)
          {
-            var stack = stackTrace.get(this.addStackTrace);
-            var stackLength = stack.length;
-            for (var i = 0; i < stackLength; i++)
+            stack = stackTrace.get(this.addStackTrace);
+            stackLength = stack.length;
+            for (let i = 0; i < stackLength; i++)
             {
-               var callObj = stack[i];
+               callObj = stack[i];
                if (callObj.getFileName().includes("tracetool.js") === false)
                {
                   if (level > 0)
                      level-- ;
                   else {
-                     var callName = callObj.toString();
+                     callName = callObj.toString();
                      group.add(callName);
                   }
                }
             }
          } else {
-            var stack = new Error().stack ;
+            stack = new Error().stack ;
             
             /*
             typeof stack : string 
@@ -3244,11 +3271,11 @@ traceClasses.TraceNodeEx.prototype =
                 at HTMLInputElement.onclick (file:///C:/Thierry/ChromeExtensions/Page%20checker/components/tracetool/sample.html:302:94)
             */
             
-            var stackList = stack.split('\n') ;
-            var stackLength = stackList.length;
-            for (var i = 0; i < stackLength; i++)
+            stackList = stack.split('\n') ;
+            stackLength = stackList.length;
+            for (let i = 0; i < stackLength; i++)
             {
-               var callObj = stackList[i].trim();
+               callObj = stackList[i].trim();
                if (callObj === "Error")
                    continue ;
                
@@ -3260,7 +3287,7 @@ traceClasses.TraceNodeEx.prototype =
                   if (level > 0)
                      level-- ;
                   else {
-                     var callName = callObj.substring(3);
+                     callName = callObj.substring(3);
                      group.add(callName);
                   }
                }  
@@ -3642,7 +3669,7 @@ traceClasses.MemberNode.prototype =
    {
       var fontDetail ;
 
-      if (getClassName(colId) === "TraceClasses.FontDetail") // TODO : explain !!!!
+      if (getClassName(colId) === "TraceClasses.FontDetail") 
       {
          fontDetail = colId ;
       } else {
@@ -3768,7 +3795,13 @@ Object.defineProperty(traceClasses.MemberNode.prototype, 'classname', {
 
 if (isNodeJs) 
     module.exports = ttrace;
-else
+
+if (isRequireJs)
+   define({
+      ttrace: ttrace
+   });
+
+if (isBrowser)
     global.ttrace = ttrace ;
 
 // ReSharper disable once ThisInGlobalContext
