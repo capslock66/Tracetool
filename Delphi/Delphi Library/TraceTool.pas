@@ -12,12 +12,14 @@
 //   The TDynArray class comes from the freeware Synopse mORMot framework at https://github.com/synopse/mORMot
 
 // history :
-// 12.6 : 2015/05/13 : removed deprecated warning on HtmlEncode
+// 12.6 : 2015/05/13 : remove deprecated warning on HtmlEncode
 // 12.7 : 2015/10/18 : EnterMethod and Indent return the node
-// 12.7 : 2015/11/08 : Added AppendStack
-// 12.7 : 2015/11/15 : Added SendStack overload with right and left msg.
-// 12.7 : 2015/11/15 : Added IndentWithStack
-// 12.8 : 2016/12/28 : AAdd support for properties arrays 
+// 12.7 : 2015/11/08 : Add AppendStack
+// 12.7 : 2015/11/15 : Add SendStack overload with right and left msg.
+// 12.7 : 2015/11/15 : Add IndentWithStack
+// 12.7 : 2016/01/14 : Add TTrace.IsLive
+// 12.8 : 2016/12/28 : Add support for properties arrays 
+// 12.8 : 2017/03/16 : Add 'Unknow' in tt_GetVarValue
 
 unit TraceTool;
 
@@ -82,6 +84,7 @@ type
 
    public
       class procedure SendToClient (CommandList : TStringList) ; overload ;   // SendToClient is now public to allow transfert commands 
+      class function IsLive() : boolean ;
 
    public
 
@@ -2079,6 +2082,7 @@ var
    ClosedEvent  : THandle ;     // signal that the thread is terminated
    CloseEvent   : THandle ;     // Handle to close the thread.
    MessageReady : THandle ;     // signal that messages are ready to be send
+   MsgThreadInLoop : Boolean ;
 
    pushedMessageCount : integer ;
    sendMessageCount : integer ;
@@ -3400,6 +3404,17 @@ begin
          result := -111 ;
       end ;
    end ;
+end;
+
+//------------------------------------------------------------------------------
+class function TTrace.IsLive: boolean;
+
+
+begin
+   if (MsgThread = nil) or (MsgThreadInLoop = False) then
+      result := false
+   else
+      result := true ;
 end;
 
 //------------------------------------------------------------------------------
@@ -7534,6 +7549,7 @@ begin
    // We will be waiting on these objects.
    HandlesToWaitFor[0] := CloseEvent;
    HandlesToWaitFor[1] := MessageReady ;
+   MsgThreadInLoop := true ;
 
    // This is the main loop.  Loop until we break out.
    while True do
@@ -7692,6 +7708,7 @@ begin
               end;
        end; // case dwHandleSignaled of
     end; {main loop}
+    MsgThreadInLoop := false ;
     // freeOnterminate = true
 end;
 
@@ -8333,6 +8350,7 @@ begin
    case vt of
       VT_EMPTY : result := 'Empty' ;       // better than display empty ('') string
       VT_NULL : result := 'Null' ;         // better than display empty ('') string
+      VT_UNKNOWN : result := 'Unknow' ;
 
       VT_DISPATCH :
       begin
@@ -8394,6 +8412,7 @@ end;
 
 initialization
    LoadCharTypes;          // this table first
+   MsgThreadInLoop := false ;
    criticalSection := TCriticalSection.Create ;
    FormTraceList   := TObjectList.Create (true) ;  // internal list of form
    setMessageList := TObjectList.Create (false) ;  // don't own object
