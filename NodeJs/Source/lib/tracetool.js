@@ -1,11 +1,26 @@
-//------------------------------------------------------------------------------
+﻿//------------------------------------------------------------------------------
 //  TraceTool JavaScript API.
 //  Author : Thierry Parent
-//  Version : 13.1.1 
+//  Version : 13.2.0 
+//
 //  sample use for NodeJs:    
 //     var ttrace = require('tracetool') ;
 //     ttrace.clearAll();
 //     ttrace.debug.send("Hello world");
+//
+//  sample use for typescript using SystemJs:
+//     systemjs.config.js : (assuming here tracetool.js is installed via nodeJs/Npm). Ensure format is set to 'global'
+//     paths   : {..., 'npm:': 'node_modules/'                           , ...},
+//     map     : {..., 'tracetool': 'npm:tracetool/lib/tracetool.js'     , ...},
+//     packages: {..., tracetool: {format: 'global', exports: 'ttrace' } , ...}   
+//
+//     sample.ts :
+//     import 'tracetool';  
+//     var ttrace:any ;
+//     ttrace = window["ttrace"] ;
+//     ttrace.host = "127.0.0.1:85"; 
+//     ttrace.debug.send("Hello world");
+//
 //
 //   See http://www.codeproject.com/Articles/5498/TraceTool-The-Swiss-Army-Knife-of-Trace for full sample use
 //------------------------------------------------------------------------------
@@ -16,9 +31,9 @@
 // https://nodejs.org/dist/latest-v6.x/docs/api/
 // https://nodejs.org/dist/latest-v7.x/docs/api/
 
-
 // Loader competitive (I will never finish with all of them)
 // http://benmccormick.org/2015/05/28/moving-past-requirejs
+// https://github.com/systemjs/systemjs/blob/master/docs/module-formats.md
 
 // https://nodejs.org/docs/latest/api/modules.html   (CommonJS = NodeJs)
 // http://requirejs.org                              (Asynchronous Module Definition = AMD)
@@ -62,17 +77,23 @@ var isChromeExtension ;                    /** library run under chrome as an ex
 var isBrowser;                             /** library run in a browser                                 */
 var isNodeJs;                              /** library run in Node Js                                   */
 var isRequireJs;                           /** library load by require.js                               */
+var isCommonJS;                            /** library load by CommonJS                                 */
+var isSystemJS;                            /** library load by SystemJS                                 */
 
 //--------------------------------------------------------------------------------------------------------
     
 detectEnvironment() ;
 
+if (isRequireJs) 
+{
+  stackTrace = require('stack-trace');
+  uuid       = require('uuid');
+  clientId   = uuid().replace(/-/g, '');   // replace all(using g) '-' by empty string
+}
+
 if (isNodeJs)    
 {
-    request    = require('request');
-    stackTrace = require('stack-trace');
-    uuid       = require('uuid');
-    clientId = uuid().replace(/-/g, '');   // replace all(using g) '-' by empty string
+    request = require('request');
 } else if (isBrowser) {
     ttraceScript = null;                                       
     headId = global.document.getElementsByTagName("head")[0];
@@ -84,27 +105,46 @@ if (isNodeJs)
 
 function detectEnvironment() 
 {
+    // Note : Trying to detect SystemJS to call register is not possible
+    // because SystemJs transpile tracetool.js to detect the call to register as the FIRST statement (comments on top are ignored)
+    // This will break the single file solution
+    // The only solution is to configure systemJS to load tracetool.js as a 'global' format (ttrace is saved in global window object)
+
     isChromeExtension = false;
-    isBrowser = false;
-    isNodeJs = false;
-    isRequireJs = false;
-    
+    isBrowser         = false;
+    isNodeJs          = false;
+    isRequireJs       = false;
+    isCommonJS        = false;
+    isSystemJS        = false;
+
+    //console.log("chrome         (Chrome)    " , typeof chrome);
+    //console.log("require        (AMD,NodeJs)" , typeof require);
+    //console.log("define         (AMD)       " , typeof define);
+    //console.log("process        (NodeJs)    " , typeof process);
+    //console.log("module         (NodeJs)    " , typeof module);
+    //console.log("System         (System JS) " , typeof System);
+    //if (typeof module === "object") 
+    //    console.log("module.exports (CommonJs) " , typeof module.exports);
+
     try {
 
         // ReSharper disable UndeclaredGlobalVariableUsing
 
-
-        if ((typeof require === "function") && 
-             (typeof define === "function"))
+        if (typeof require === "function") 
             isRequireJs = true;  // AMD module
+
+        if ((typeof module === "object") && (typeof module.exports === "object"))
+            isCommonJS = true ;  
 
         if ((typeof chrome === "object") && (typeof chrome.extension === "object"))
             isChromeExtension = true;
-        else if ((typeof require === "function") &&      
-              // (typeof module === "object") && (typeof module.exports === "object")       // to do : check module.exports (CommonJS syntax used by nodeJs) and suppress check for process.release.name
-                 (typeof process === "object") &&
-                 (process.release.name.search(/node|io.js/) !== -1)) // process.release.name = 'node'
-            isNodeJs = true;  // CommonJS
+        else if ((typeof require === "function")       
+            &&(typeof process === "object") 
+            &&(typeof process.release === "object") 
+            &&(typeof process.release.name === "string") 
+            &&(process.release.name.search(/node|io.js/) !== -1) // process.release.name = 'node'
+            )
+            isNodeJs = true;  
         else
             isBrowser = true;
         // ReSharper restore UndeclaredGlobalVariableUsing
@@ -3182,7 +3222,7 @@ traceClasses.TraceNodeEx.prototype =
          group.viewerKind =  /* CST_VIEWER_STACK */ 4 ;
          this.members.add(group);
 
-         if (isNodeJs)
+         if (isRequireJs)  // isNodeJs
          {
              stack = stackTrace.get(this.addCaller);
              stackLength = stack.length;
@@ -3806,20 +3846,39 @@ Object.defineProperty(traceClasses.MemberNode.prototype, 'classname', {
 // http://benmccormick.org/2015/05/28/moving-past-requirejs/
 
 // CommonJS syntax (synchronous nodejs)
-if (isNodeJs)
+if (isCommonJS)
 {
    module.exports = ttrace;
+} else if (isRequireJs) {
+
+   // AMD modules syntaxe . RequireJS requires developers to use AMD modules (asynchronous)
+   define({
+      ttrace: ttrace
+   });
 }
 
 // ES6 syntax :
 //export default ttrace ;
 
-// AMD modules syntaxe . RequireJS requires developers to use AMD modules (asynchronous)
-if (isRequireJs) {
-   define({
-      ttrace: ttrace
-   });
-}
+//if (isSystemJS) {
+//  System.register(["tracetool"], function (exports_1, context_1) {
+//    "use strict";
+//    console.log("exports_1", exports_1);
+//    console.log("context_1", context_1);
+//    var __moduleName = context_1 && context_1.id;
+//    return {
+//      setters: [
+//        function (_1) {
+//        }
+//      ],
+//      execute: function () {
+//          console.log("System.register execute");
+//          exports_1("default", ttrace);
+//      }
+//    };
+//  });  
+//}
+
 
 // simple browser mode : put it global (window)
 if (isBrowser)
