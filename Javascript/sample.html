@@ -113,7 +113,8 @@ function butSample()
    // finally send the table
    ttrace.debug.sendTable("Mytable", table);
    
-
+   //ttrace.debug.send("environment", ttrace.environment);
+   
    console.log("done. " + ttrace.waitingMessageCount + " message(s) to send") ;
 } ;
 
@@ -143,16 +144,16 @@ function butIndent()
 
 function butSearch()
 {
-   // ttrace.winTrace().GotoBookmark(1); // second bookmark, noted [1]
-   // ttrace.winTrace().clearBookmark() ;
-   // ttrace.winTrace().GotoFirstNode() ;
-   // ttrace.winTrace().GotoLastNode() ;
+   // ttrace.winTrace.GotoBookmark(1); // second bookmark, noted [1]
+   // ttrace.winTrace.clearBookmark() ;
+   // ttrace.winTrace.GotoFirstNode() ;
+   // ttrace.winTrace.GotoLastNode() ;
 
    // TTrace.Find just set the criterias and hightlight if asked, but don't move to the next matching node.
   // ttrace.find("StRinG", false, true, true, true);// {Sensitive}{WholeWord}{Highlight}{SearchInAllPages}
    ttrace.find("StRinG", false, true, true) ;
    // from the current node : go to the next item matching criteria. Call ttrace.WinTrace.GotoFirstNode() before FindNext to start search from first node
-//   ttrace.winTrace().FindNext(true); //{SearForward}
+//   ttrace.winTrace.FindNext(true); //{SearForward}
 	
 }
 
@@ -312,13 +313,13 @@ setTimeout(butShowStatus, 0);
 	
 	
 
-    <input type="button" value="saveToText('c:\\log.txt')"          onclick="ttrace.winTrace().saveToTextFile('c:\\log.txt');" /><br />
-    <input type="button" value="saveToXml('c:\\log.xml')"           onclick="ttrace.winTrace().saveToXml('c:\\log.xml');" /><br />
-    <input type="button" value="loadXml('c:\\log.xml')"             onclick="ttrace.winTrace().loadXml('c:\\log.xml');" /><br />
+    <input type="button" value="saveToText('c:\\log.txt')"          onclick="ttrace.winTrace.saveToTextFile('c:\\log.txt');" /><br />
+    <input type="button" value="saveToXml('c:\\log.xml')"           onclick="ttrace.winTrace.saveToXml('c:\\log.xml');" /><br />
+    <input type="button" value="loadXml('c:\\log.xml')"             onclick="ttrace.winTrace.loadXml('c:\\log.xml');" /><br />
     
-    <input type="button" value="Set Log File"                       onclick="ttrace.winTrace().setLogFile('c:\\logFromViewer.xml',1);" /><br /><br />
+    <input type="button" value="Set Log File"                       onclick="ttrace.winTrace.setLogFile('c:\\logFromViewer.xml',1);" /><br /><br />
     
-    <input type="button" value="Clear main traces"                  onclick="ttrace.winTrace().clearAll();" /><br /><br />
+    <input type="button" value="Clear main traces"                  onclick="ttrace.winTrace.clearAll();" /><br /><br />
     <input type="button" value="Show Viewer"                        onclick="ttrace.show();"  />
 
 </div>
