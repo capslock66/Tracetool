@@ -924,6 +924,24 @@ Object.defineProperties(ttrace,
     },
 
     /** 
+    *  How tracetool is loaded
+    */
+    "environment" : {
+        get: function () { 
+            var result = '' ;
+            result += 'isBrowser:'         ; if (isBrowser        ) result += 'true'; else result += 'false' ;                             
+            result += ',isNodeJs:'         ; if (isNodeJs         ) result += 'true'; else result += 'false' ;                             
+            result += ',isRequireJs:'      ; if (isRequireJs      ) result += 'true'; else result += 'false' ;                            
+            result += ',isCommonJS:'       ; if (isCommonJS       ) result += 'true'; else result += 'false' ;                           
+            result += ',isSystemJS:'       ; if (isSystemJS       ) result += 'true'; else result += 'false' ; 
+            result += ',isChromeExtension:'; if (isChromeExtension) result += 'true'; else result += 'false' ;                           
+            return result; 
+        },
+        enumerable : true,
+        configurable : false
+    },
+    
+    /** 
     *  messages already send to the viewer
     */
     "waitingMessageCount" : {
@@ -931,6 +949,7 @@ Object.defineProperties(ttrace,
         enumerable : true,
         configurable : false
     },
+    
     /** 
     *  messages still to send to the viewer
     */

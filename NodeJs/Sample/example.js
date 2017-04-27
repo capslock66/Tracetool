@@ -55,6 +55,8 @@ FontDetail.colId = -1 ;
 FontDetail.italic = true ;
 ttrace.debug.send("Italic").setFontDetail(FontDetail) ; 
 
+//ttrace.debug.send("environment", ttrace.environment);
+
 //----------------------------------------------------------------------------------
 
 // http://127.0.0.1:3000
