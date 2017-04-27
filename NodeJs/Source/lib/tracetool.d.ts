@@ -1,4 +1,4 @@
-﻿
+﻿// typescript type information for tracetool 13.2.*
 
 interface ITracetool {
     host                : string ;
