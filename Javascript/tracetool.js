@@ -1,7 +1,7 @@
 ﻿//------------------------------------------------------------------------------
 //  TraceTool JavaScript API.
 //  Author : Thierry Parent
-//  Version : 13.2.0 
+//  Version : 13.2.1 
 //
 //  sample use for NodeJs:    
 //     var ttrace = require('tracetool') ;
@@ -1435,7 +1435,7 @@ traceClasses.TraceToSend.prototype =
       * @function
       * @param {string} leftMsg The left trace message to send
       * @param {Object} objToSend The object to inspect
-      * @param {boolean} displayFunctions Let you specify what to send
+      * @param {boolean} [displayFunctions] Let you specify what to send
       * @returns {TraceNode} A trace node
       */
       sendObject : function (leftMsg, objToSend, displayFunctions)
@@ -1504,7 +1504,7 @@ traceClasses.TraceToSend.prototype =
       * @param {string} leftMsg Trace message
       * @param {string} shortTitle A short title displayed on top of the dump
       * @param {string} buffer The buffer to dump
-      * @param {integer} count Number of byte to dump
+      * @param {integer} [count] Number of byte to dump
       * @returns {TraceNode} a Trace node
       */
       sendDump : function (leftMsg, shortTitle, buffer, count)
@@ -1608,7 +1608,6 @@ traceClasses.TraceNode = function (parentNode, generateUniqueId)
    parentNode = parentNode || null ;
    if (typeof (generateUniqueId) == "undefined")
        generateUniqueId = true;
-
 
    /** {string} Unique node id */
    this.id = '' ;
@@ -1721,7 +1720,7 @@ extend(traceNodePrototype,
       /**
       * Change the Icon index
       * @function
-      * @param {string} index Index of the icon to use
+      * @param {number} index Index of the icon to use
       * @returns {TraceNode} The trace node
       */
       resendIconIndex : function(index)
@@ -2159,8 +2158,8 @@ Object.defineProperty(traceClasses.TraceNode.prototype, 'classname', {
 * @description The Window Trace is create on the viewer (if not already done)
 * if no parameters are gived, the WinTrace object represent an already created a windows tree. In this case nothing is send to the viewer
 * @constructor
-* @param {string} WinTraceID Window trace Id. If empty, a guid will be generated
-* @param {string} WinTraceText The Window Title on the viewer.If empty, a default name will be used
+* @param {string} [WinTraceID] Window trace Id. If empty, a guid will be generated
+* @param {string} [WinTraceText] The Window Title on the viewer.If empty, a default name will be used
 */
 
 traceClasses.WinTrace = function (winTraceId, winTraceText) // inherit from TraceToSend
@@ -2273,17 +2272,17 @@ traceClasses.WinTrace = function (winTraceId, winTraceText) // inherit from Trac
    {
       that.winTraceId = that.id ;    // winTraceId need to be the same as 'id' if we want to call sendXxx() directly on WinTrace object
 
-      debugInstance = new  traceClasses.TraceToSend(null,false,contextInstance) ;    // no parentNode, don't generate id, winTraceContext
+      debugInstance = new traceClasses.TraceToSend() ; // (null,false,contextInstance) ;    // no parentNode, don't generate id, winTraceContext
       debugInstance.iconIndex = /*CST_ICO_INFO*/ 24 ;
       debugInstance.winTraceId = that.id ;
       debugInstance.enabled = true ;
 
-      warningInstance = new  traceClasses.TraceToSend(null,false,contextInstance) ;  // no parentNode, don't generate id, winTraceContext
+      warningInstance = new traceClasses.TraceToSend() ; // (null,false,contextInstance) ;  // no parentNode, don't generate id, winTraceContext
       warningInstance.iconIndex = /*CST_ICO_WARNING*/ 22 ;
       warningInstance.winTraceId = that.id ;
       warningInstance.enabled = true ;
 
-      errorInstance = new  traceClasses.TraceToSend(null,false,contextInstance) ;    // no parentNode, don't generate id, winTraceContext
+      errorInstance = new traceClasses.TraceToSend() ; // (null,false,contextInstance) ;    // no parentNode, don't generate id, winTraceContext
       errorInstance.iconIndex = /*CST_ICO_ERROR*/ 23 ;
       errorInstance.winTraceId = that.id ;
       errorInstance.enabled = true ;
@@ -2349,9 +2348,9 @@ extend(winTracePrototype,
       * Set the Viewer log file. Local log file is not supported in javascript.
       * @function
       * @param {string} fileName target filename.(Path is relative to the viewer)
-      * @param {integer} mode <p>When 0, Log is disabled. <p>When 1, Enabled.<p>
+      * @param {integer} [mode] <p>When 0, Log is disabled. <p>When 1, Enabled.<p>
       * When 2, a new file is create each day (CCYYMMDD is appended to the filename)
-      * @param {integer} MaxLines Number of lines before starting a new file (default : -1 = unlimited)
+      * @param {integer} [MaxLines] Number of lines before starting a new file (default : -1 = unlimited)
       * @returns {void}
       */
       setLogFile : function(fileName, mode, maxLines)
@@ -2381,7 +2380,7 @@ extend(winTracePrototype,
       /**
       * change the tree to display user defined multiple columns
       * @function
-      * @param {integer} mainColIndex The Main column index (default is 0)
+      * @param {integer} [mainColIndex] The Main column index (default is 0)
       * @returns {void}
       */
       setMultiColumn : function (mainColIndex)
@@ -2612,8 +2611,8 @@ Object.defineProperty(traceClasses.WinTrace.prototype, 'classname', {
 /**
 * @class Alternate way to send traces : prepare a TraceNode with all properties then send it
 * @constructor
-* @param {string} parentNode The parent node where to place that trace. The IconIndex and the enabled properties are also recopied Parameters can be null : the root tree become the parent node, enabled is true and the default icon is used
-* @param {string} generateUniqueId if true, the id is generated automatically, else set the empty string
+* @param {string} [parentNode] The parent node where to place that trace. The IconIndex and the enabled properties are also recopied Parameters can be null : the root tree become the parent node, enabled is true and the default icon is used
+* @param {string} [generateUniqueId] if true, the id is generated automatically, else set the empty string
 */
 traceClasses.TraceNodeEx = function (parentNode, generateUniqueId)
 {
@@ -2708,7 +2707,7 @@ traceClasses.TraceNodeEx.prototype =
       * @function
       * @param {string} shortTitle A short title displayed on top of the dump
       * @param {string} buffer The buffer to dump
-      * @param {integer} count Number of byte to dump
+      * @param {integer} [count] Number of byte to dump
       * @returns {void}
       */
       addDump : function (shortTitle, buffer, count)
@@ -3523,8 +3522,8 @@ Object.defineProperty(traceClasses.TraceTable.prototype, 'classname', {
  * @class WinWatch represent a windows tree where you put watches.
  * @description Windows watch. The Window watch is create on the viewer (if not already done). Sample code : TTrace.watches().send("test2", mySet);
  * @constructor
- * @param {string} winWatchId Required window trace Id. If empty, a guid will be generated
- * @param {string} winWatchText The Window Title on the viewer.If empty, a default name will be used
+ * @param {string} [winWatchId] Required window trace Id. If empty, a guid will be generated
+ * @param {string} [winWatchText] The Window Title on the viewer.If empty, a default name will be used
  */
 traceClasses.WinWatch = function (winWatchId , winWatchText)
 {
