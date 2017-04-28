@@ -338,6 +338,8 @@ this.fontDetails=new Array();this.fontDetails.push(fontDetail);return this;},add
 {try
 {if(objToSend===null)
 {upperNode.col2="Null";return;}
+if(typeof(objToSend)==="undefined")
+{upperNode.col2="undefined";return;}
 var objClass=getClassName(objToSend);upperNode.col3=upperNode.col3+objClass;if(typeof(objToSend)!="object")
 {upperNode.col2=''+objToSend.toString();return;}
 for(var i=0;i<alreadyParsedObject.length;i++)
