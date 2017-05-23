@@ -3,6 +3,7 @@
   "version": "13.2.2",
   "description": "Send traces from your nodejs application to the windows tracetool viewer.",
   "main": "lib/tracetool",
+  "typings": "lib/tracetool", 
   "scripts": {
     "test": "echo \"no test specified\" && exit 1"
   },
