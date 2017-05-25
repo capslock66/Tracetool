@@ -1878,15 +1878,23 @@ var
 
    procedure AddTrace (msg1 : string; msg2 : string = '') ;
    begin
-      TreeRec.Members.SubMembers.Add(TMember.create(msg1,msg2));
+      if TraceConfig.AppDisplay_DisableInternalLog = true then
+         unt_utility.LowTrace(msg1 + ' ' + msg2)
+      else
+         TreeRec.Members.SubMembers.Add(TMember.create(msg1,msg2));
    end ;
 begin
+   TreeRec := nil ;
    report := string (exceptIntf.BugReport) ; // same as GetBugReport (true) ;
 
-   ParentNode := TFrm_Trace.InternalTrace (string(exceptIntf.ExceptClass),string(exceptIntf.ExceptMessage)) ;
-   TreeRec := FrmInternalTraces.vstTrace.GetNodeData(ParentNode) ;
-   if TreeRec.Members = nil then
-      TreeRec.Members := TMember.create();
+   if TraceConfig.AppDisplay_DisableInternalLog = true then
+      unt_utility.LowTrace(string(exceptIntf.ExceptClass) + ' ' + string(exceptIntf.ExceptMessage))
+   else begin
+      ParentNode := TFrm_Trace.InternalTrace (string(exceptIntf.ExceptClass),string(exceptIntf.ExceptMessage)) ;
+      TreeRec := FrmInternalTraces.vstTrace.GetNodeData(ParentNode) ;
+      if TreeRec.Members = nil then
+         TreeRec.Members := TMember.create();
+   end;
 
    repList := TStringList.create() ;
    repList.Text := report ;
@@ -1895,7 +1903,7 @@ begin
    IsLinkedListAddToList := false ;
    for c := 0 to repList.Count-1 do begin
       report := trim(repList.Strings[c]) ;
-      if pos (report,'ParseTraceMsg') <> -1 then
+      if pos (report,'ParseTraceMsg') <> 0 then
          IsParse := true ;
 
       p := pos (report,'TNodeLinkedList.AddToList') ;
@@ -1922,22 +1930,25 @@ begin
 
    end ;
 
-   if IsLinkedListAddToList = true then begin
+   if  (IsLinkedListAddToList = true) then begin
       AddTrace ('') ;
       AddTrace('NodeLinkedList exception');
-      AddTrace('========================');
 
-      // move prepared traces to members
-      while BeforeAddList.count > 0 do begin
-         member := TMember (BeforeAddList[0]) ;
-         BeforeAddList.Delete(0);
-         TreeRec.Members.SubMembers.Add(member);
-      end ;
+      if (TraceConfig.AppDisplay_DisableInternalLog = false) then begin
+         AddTrace('========================');
 
-      AddTrace('---');
-      AddTrace('list after crashing :') ;
-      if CurrentNodeLinkedList <> nil then
-         CurrentNodeLinkedList.DumpToList (TreeRec.Members.SubMembers) ;
+         // move prepared traces to members
+         while BeforeAddList.count > 0 do begin
+            member := TMember (BeforeAddList[0]) ;
+            BeforeAddList.Delete(0);
+            TreeRec.Members.SubMembers.Add(member);
+         end ;
+
+         AddTrace('---');
+         AddTrace('list after crashing :') ;
+         if CurrentNodeLinkedList <> nil then
+            CurrentNodeLinkedList.DumpToList (TreeRec.Members.SubMembers) ;
+      end;
 
    end ;
 

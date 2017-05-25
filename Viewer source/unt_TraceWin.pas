@@ -653,8 +653,8 @@ implementation
       if TraceConfig.AppDisplay_DisableInternalLog = true then
          exit;
 
-      // todo : remove this line
-      unt_utility.LowTrace(leftMsg + ' ' + RightMsg) ;
+      // todo : comment this line for production
+      // unt_utility.LowTrace(leftMsg + ' ' + RightMsg) ;
 
       if FrmInternalTraces.Visible = false then begin
          FrmInternalTraces.Visible := true;

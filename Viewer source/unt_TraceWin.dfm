@@ -2,66 +2,50 @@ object Frm_Trace: TFrm_Trace
   Left = 323
   Top = 184
   Caption = 'TTRACE'
-  ClientHeight = 400
-  ClientWidth = 704
+  ClientHeight = 325
+  ClientWidth = 572
   Color = clBtnFace
   DragKind = dkDock
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
-  Font.Height = -14
+  Font.Height = -11
   Font.Name = 'MS Sans Serif'
   Font.Style = []
   OldCreateOrder = False
   OnClose = FormClose
   OnCreate = FormCreate
   OnEndDock = FormEndDock
-  PixelsPerInch = 120
-  TextHeight = 16
+  PixelsPerInch = 96
+  TextHeight = 13
   object PanelTTraces: TPanel
     Left = 0
     Top = 0
-    Width = 704
-    Height = 400
-    Margins.Left = 4
-    Margins.Top = 4
-    Margins.Right = 4
-    Margins.Bottom = 4
+    Width = 572
+    Height = 325
     Align = alClient
     BevelOuter = bvNone
     TabOrder = 0
     object VSplitter: TSplitter
-      Left = 271
-      Top = 27
-      Width = 6
-      Height = 373
-      Margins.Left = 4
-      Margins.Top = 4
-      Margins.Right = 4
-      Margins.Bottom = 4
+      Left = 220
+      Top = 22
+      Width = 5
+      Height = 303
       Align = alRight
       Visible = False
     end
     object PanelLeft: TPanel
       Left = 0
-      Top = 27
-      Width = 271
-      Height = 373
-      Margins.Left = 4
-      Margins.Top = 4
-      Margins.Right = 4
-      Margins.Bottom = 4
+      Top = 22
+      Width = 220
+      Height = 303
       Align = alClient
       BevelOuter = bvNone
       TabOrder = 0
       object vstTrace: TVirtualStringTree
-        Left = 15
+        Left = 12
         Top = 0
-        Width = 256
-        Height = 373
-        Margins.Left = 4
-        Margins.Top = 4
-        Margins.Right = 4
-        Margins.Bottom = 4
+        Width = 208
+        Height = 303
         Align = alClient
         BevelInner = bvLowered
         BevelOuter = bvRaised
@@ -73,7 +57,7 @@ object Frm_Trace: TFrm_Trace
         DragOperations = []
         Font.Charset = ANSI_CHARSET
         Font.Color = clWindowText
-        Font.Height = -15
+        Font.Height = -12
         Font.Name = 'MS Sans Serif'
         Font.Style = []
         Header.AutoSizeIndex = -1
@@ -156,12 +140,8 @@ object Frm_Trace: TFrm_Trace
       object PanelGutter: TPanel
         Left = 0
         Top = 0
-        Width = 15
-        Height = 373
-        Margins.Left = 4
-        Margins.Top = 4
-        Margins.Right = 4
-        Margins.Bottom = 4
+        Width = 12
+        Height = 303
         Align = alLeft
         BevelOuter = bvNone
         TabOrder = 1
@@ -169,14 +149,10 @@ object Frm_Trace: TFrm_Trace
       end
     end
     object PanelRight: TPanel
-      Left = 277
-      Top = 27
-      Width = 427
-      Height = 373
-      Margins.Left = 4
-      Margins.Top = 4
-      Margins.Right = 4
-      Margins.Bottom = 4
+      Left = 225
+      Top = 22
+      Width = 347
+      Height = 303
       Align = alRight
       BevelOuter = bvNone
       TabOrder = 1
@@ -185,62 +161,46 @@ object Frm_Trace: TFrm_Trace
     object PanelTop: TPanel
       Left = 0
       Top = 0
-      Width = 704
-      Height = 27
-      Margins.Left = 4
-      Margins.Top = 4
-      Margins.Right = 4
-      Margins.Bottom = 4
+      Width = 572
+      Height = 22
       Align = alTop
       BevelOuter = bvNone
       Color = clCream
       ParentBackground = False
       TabOrder = 2
       DesignSize = (
-        704
-        27)
+        572
+        22)
       object TracesInfo: TLabel
-        Left = 4
-        Top = 6
-        Width = 64
-        Height = 16
-        Margins.Left = 4
-        Margins.Top = 4
-        Margins.Right = 4
-        Margins.Bottom = 4
+        Left = 3
+        Top = 5
+        Width = 51
+        Height = 13
         Caption = 'TracesInfo'
         OnClick = TracesInfoClick
       end
       object LabelLogFile: TLabel
-        Left = 594
-        Top = 6
-        Width = 79
-        Height = 16
+        Left = 487
+        Top = 5
+        Width = 60
+        Height = 13
         Cursor = crHandPoint
-        Margins.Left = 4
-        Margins.Top = 4
-        Margins.Right = 4
-        Margins.Bottom = 4
         Alignment = taRightJustify
         Anchors = [akTop, akRight]
         Caption = 'LabelLogFile'
         Font.Charset = DEFAULT_CHARSET
         Font.Color = clWindowText
-        Font.Height = -15
+        Font.Height = -12
         Font.Name = 'MS Sans Serif'
         Font.Style = [fsUnderline]
         ParentFont = False
         OnClick = LabelLogFileClick
       end
       object butClose: TBitBtn
-        Left = 676
+        Left = 549
         Top = 0
-        Width = 27
-        Height = 27
-        Margins.Left = 4
-        Margins.Top = 4
-        Margins.Right = 4
-        Margins.Bottom = 4
+        Width = 22
+        Height = 22
         Anchors = [akTop, akRight]
         DoubleBuffered = True
         Glyph.Data = {

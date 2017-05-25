@@ -3,8 +3,8 @@
 	<AppDisplay>
 		<SmallBut Value="true"/>
 		<ApplicationTitle Value="Classic : 8090 / Silverlight : 4502 / Http : 85"/>
-		<Left Value="299"/>
-		<Top Value="73"/>
+		<Left Value="475"/>
+		<Top Value="28"/>
 		<Width Value="1374"/><Height Value="946"/>
 		<StayOnTop Value="false"/>
 		<ShowOnstartup Value="true"/><ShowOnMessageReceived Value="false"/>
@@ -15,7 +15,7 @@
 		<ToolbarBookmark Value="true"/>
 		<ToolbarFilter Value="true"/>
 		<HideViewer Value="false"/>
-		<DisableInternalLog Value="false"/>
+		<DisableInternalLog Value="true"/>
 	</AppDisplay>
 	<Framework>
 		<ShowMembers Value="true"/><AutoClear Value="false"/><MaxNode Value="20"/><MinNode Value="10"/>
@@ -28,5 +28,5 @@
 	<Plugins>
 		<JVMEngine Value="C:\Program Files\j2sdk1.4.2_06,JRE\bin\client\jvm.dll"/><JavaPLuginClassPath Value=""/>
 	</Plugins>
-	<Watches><Enabled Value="false"/><VisibleMenu Value="true"/><MainWatchesTitle Value="Watches"/><Trace><FontName Value="MS Sans Serif"/><FontSize Value="8"/><NodeHeight Value="18"/></Trace><Info><FontName Value="Tahoma"/><FontSize Value="8"/></Info></Watches>
+	<Watches><Enabled Value="true"/><VisibleMenu Value="true"/><MainWatchesTitle Value="Watches"/><Trace><FontName Value="MS Sans Serif"/><FontSize Value="8"/><NodeHeight Value="18"/></Trace><Info><FontName Value="Tahoma"/><FontSize Value="8"/></Info></Watches>
 </Config>

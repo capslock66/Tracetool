@@ -2,7 +2,7 @@
 		<PropertyGroup>
 			<ProjectGuid>{DDE1B30F-3590-4AE9-953D-1919A1B24350}</ProjectGuid>
 			<MainSource>TraceTool.dpr</MainSource>
-			<Config Condition="'$(Config)'==''">Debug</Config>
+			<Config Condition="'$(Config)'==''">Release</Config>
 			<DCC_DCCCompiler>DCC32</DCC_DCCCompiler>
 			<ProjectVersion>12.2</ProjectVersion>
 			<Base>True</Base>
@@ -177,9 +177,9 @@
 						<VersionInfo Name="IncludeVerInfo">True</VersionInfo>
 						<VersionInfo Name="AutoIncBuild">True</VersionInfo>
 						<VersionInfo Name="MajorVer">12</VersionInfo>
-						<VersionInfo Name="MinorVer">8</VersionInfo>
+						<VersionInfo Name="MinorVer">9</VersionInfo>
 						<VersionInfo Name="Release">0</VersionInfo>
-						<VersionInfo Name="Build">532</VersionInfo>
+						<VersionInfo Name="Build">536</VersionInfo>
 						<VersionInfo Name="Debug">False</VersionInfo>
 						<VersionInfo Name="PreRelease">False</VersionInfo>
 						<VersionInfo Name="Special">False</VersionInfo>
@@ -191,14 +191,14 @@
 					<VersionInfoKeys>
 						<VersionInfoKeys Name="CompanyName">Thierry Parent</VersionInfoKeys>
 						<VersionInfoKeys Name="FileDescription">TraceTool utility</VersionInfoKeys>
-						<VersionInfoKeys Name="FileVersion">12.8.0.532</VersionInfoKeys>
+						<VersionInfoKeys Name="FileVersion">12.9.0.536</VersionInfoKeys>
 						<VersionInfoKeys Name="InternalName">TraceTool</VersionInfoKeys>
 						<VersionInfoKeys Name="LegalCopyright">Thierry Parent</VersionInfoKeys>
 						<VersionInfoKeys Name="LegalTrademarks">Thierry Parent</VersionInfoKeys>
 						<VersionInfoKeys Name="OriginalFilename">none</VersionInfoKeys>
 						<VersionInfoKeys Name="ProductName">TraceTool</VersionInfoKeys>
-						<VersionInfoKeys Name="ProductVersion">12.8</VersionInfoKeys>
-						<VersionInfoKeys Name="Comments">Freeware Trace utility for C++, Delphi, Javascript, Python, Dot Net and Java</VersionInfoKeys>
+						<VersionInfoKeys Name="ProductVersion">12.9</VersionInfoKeys>
+						<VersionInfoKeys Name="Comments">Freeware Trace utility for  Dot Net, Javascript, Java, Delphi,  C++ and Python</VersionInfoKeys>
 					</VersionInfoKeys>
 					<Excluded_Packages>
 						<Excluded_Packages Name="$(BDSBIN)\dcloffice2k140.bpl">Microsoft Office 2000 Sample Automation Server Wrapper Components</Excluded_Packages>

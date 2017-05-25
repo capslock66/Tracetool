@@ -672,6 +672,7 @@ procedure LowTrace(msg: string);
 var
    f:textfile;
 begin
+   OutputDebugString (PWideChar(msg));
    if (TraceConfig.DebugMode = false) and (TraceConfig.AppDisplay_DisableInternalLog = true) then
       exit ;
    if FileCriticalSection <> nil then
