@@ -1,7 +1,7 @@
 ﻿//------------------------------------------------------------------------------
 //  TraceTool JavaScript API.
 //  Author : Thierry Parent
-//  Version : 13.2.2
+//  Version : 13.2.3
 //
 //  sample use for NodeJs:    
 //     var ttrace = require('tracetool') ;

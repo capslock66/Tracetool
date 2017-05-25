@@ -1,7 +1,7 @@
 ﻿//------------------------------------------------------------------------------
 //  TraceTool JavaScript API.
 //  Author : Thierry Parent
-//  Version : 13.2.1 
+//  Version : 13.2.3
 //
 //  sample use for NodeJs:    
 //     var ttrace = require('tracetool') ;
@@ -2979,6 +2979,12 @@ traceClasses.TraceNodeEx.prototype =
                if (objToSend === null)
                {
                   upperNode.col2 = "Null";
+                  return;
+               }
+
+               if (typeof (objToSend) === "undefined")
+               {
+                  upperNode.col2 = "undefined";
                   return;
                }
 
