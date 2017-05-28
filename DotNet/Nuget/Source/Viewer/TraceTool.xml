@@ -3,8 +3,8 @@
 	<AppDisplay>
 		<SmallBut Value="true"/>
 		<ApplicationTitle Value="socket: 8090 / 4502,  Http : 85"/>
-		<Left Value="333"/>
-		<Top Value="42"/>
+		<Left Value="475"/>
+		<Top Value="28"/>
 		<Width Value="1374"/><Height Value="946"/>
 		<StayOnTop Value="false"/>
 		<ShowOnstartup Value="true"/><ShowOnMessageReceived Value="false"/>

@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>Tracetool.DotNet.Api</id>
+    <version>12.8.5</version>
+    <authors>Parent Thierry</authors>
+    <owners>Parent Thierry</owners>
+    <projectUrl>https://github.com/capslock66/Tracetool</projectUrl>
+    <iconUrl>https://raw.githubusercontent.com/capslock66/Tracetool/master/Viewer source/TraceTool_Icon.ico</iconUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Tracetool Library for dot net</description>
+    <releaseNotes>Viewer added in viewer folder</releaseNotes>
+    <copyright>Copyright 2017</copyright>
+    <tags>Tracetool Dot net trace log logs logger</tags>
+    <dependencies/>
+  </metadata>
+</package>
