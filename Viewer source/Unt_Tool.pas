@@ -28,7 +28,7 @@ uses
   JavaRuntime,fastmm4,pscMenu, madExceptVcl,
   IdHTTPServer,
   FileViewer,          // d:\dev\Tracetool\Viewer 2010\dependencyviewer\
-  IdCustomTCPServer, IdRawBase, IdRawClient,
+  IdCustomTCPServer, IdRawBase, IdRawClient, IdURI,
   IdUDPBase, IdUDPServer; //, IdCustomTCPServer;
 
 {$Include TraceTool.Inc}
@@ -1873,7 +1873,7 @@ var
    CommandIndex : integer ;
    SingleMsg : string ;
    member : TMember ;
-   p : integer ;
+   //p : integer ;
    //command : integer ;
 
    procedure AddTrace (msg1 : string; msg2 : string = '') ;
@@ -1903,11 +1903,10 @@ begin
    IsLinkedListAddToList := false ;
    for c := 0 to repList.Count-1 do begin
       report := trim(repList.Strings[c]) ;
-      if pos (report,'ParseTraceMsg') <> 0 then
+      if pos ('ParseTraceMsg',report) > 0 then
          IsParse := true ;
 
-      p := pos (report,'TNodeLinkedList.AddToList') ;
-      if p > 0 then
+      if pos ('TNodeLinkedList.AddToList',report) > 0 then
          IsLinkedListAddToList := true ;
 
       AddTrace(report);
@@ -1981,6 +1980,7 @@ var
      strHtml : string ;
      p : integer ;
      str : string ;
+     decoded : string ;
      str_len : integer ;
      msg,msgId,partNum : string ;
      msgLen : integer ;
@@ -1991,20 +1991,7 @@ var
      strFileToLoad : string ;
      DebugWin: hWnd;
      CDS: TCopyDataStruct;
-     //browserCrc : string ;
-
-     //function Calc_Crc (str : string) : integer ;
-     //var
-     //   ptr : pchar ;
-     //   c : integer ;
-     //begin
-     //   result := 0 ;
-     //   ptr := pchar(str) ;
-     //   for c := 0 to length(str)-1 do begin
-     //      result := result + integer((ptr)^) + 1 ;
-     //      inc(ptr) ;
-     //   end ;
-     //end ;
+     requestInfoParameters : TStringList ;
 begin
    doc := ARequestInfo.Document ;
    AResponseInfo.CacheControl := 'no-store,no-cache' ;
@@ -2019,38 +2006,50 @@ begin
                                           ' (' + inttostr(sender.DefaultPort) + ') ' + // (81)
                                           doc + '?' + ARequestInfo.UnparsedParams) ;   // /WMD?msgId=6_6&msg=%20%20304...
 
-   // browserCrc := '' ;
-   // first decompose the message to individual parameters
-   for c := 0 to ARequestInfo.Params.Count-1 do begin
-      str := ARequestInfo.Params.Strings[c] ;
-      str_len := length(str) ;  // get all bytes
+   //UnparsedParams : 
+   // msgId=6d3638ef881a4c2aa40fecaf10afd36a_2&msg=
+   //%20%2030423%3A04%3A24%3A943%00
+   //%20%20550%00
+   //%20%201016d3638ef881a4c2aa40fecaf10afd36a_1%00
+   //%20%20551description%00
+   //%20%20103%20%20%20%20%20%20%20%20%2024%00
+   //%20%20552a%B0a
 
-      p := pos('msgId=',str) ;     //6
-      if p = 1 then begin
-         msgId := copy(str, 7, str_len-6) ;
-      end;
+   // decompose the message to individual parameters
+   // bug with ARequestInfo.Params.Strings[c] : parameters are not decoded with the correct encoding (ascii or other)
+   requestInfoParameters := TStringList.Create ;
+   requestInfoParameters.Delimiter := '&';
+   requestInfoParameters.DelimitedText := ARequestInfo.UnparsedParams ;     
 
-      p := pos('partNum=',str) ;    //8
-      if p = 1 then begin
-         partNum := copy(str, 9, str_len-8) ;
-      end;
+   for c := 0 to requestInfoParameters.Count-1 do begin
+      str := requestInfoParameters[c] ;
+      decoded := TIdURI.URLDecode(str) ;     // ,TIdTextEncoding.ASCII
+      if decoded = '' then begin
+         decoded := TIdURI.URLDecode(str,TIdTextEncoding.ASCII);  // use ascii decoding if default decoding don't work. 
+      end ;   
 
-      p := pos('msg=',str) ;        //4
+      str_len := length(decoded) ;  // get all bytes
+      //TFrm_Trace.InternalTraceFromThread('param after decode: ' + decoded) ;
+
+      p := pos('msgId=',decoded) ;     //6
+      if p = 1 then 
+         msgId := copy(decoded, 7, str_len-6) ;
+
+      p := pos('partNum=',decoded) ;    //8
+      if p = 1 then 
+         partNum := copy(decoded, 9, str_len-8) ;
+
+      p := pos('msg=',decoded) ;        //4
       if p = 1 then begin
-         msg := copy(str, 5, str_len-4) ;
+         msg := copy(decoded, 5, str_len-4) ;
          msgLen := str_len-4 ;
       end;
 
-      p := pos('Compressed=',str) ;   //11
-      if p = 1 then begin
-         Compressed := UpperCase(copy(str, 12, str_len-11)) ;
-      end;
-
-      //p := pos('crc=',str) ;
-      //if p = 1 then begin
-      //   browserCrc := copy(str, 5, str_len-4) ;
-      //end;
+      p := pos('Compressed=',decoded) ;   //11
+      if p = 1 then 
+         Compressed := UpperCase(copy(decoded, 12, str_len-11)) ;
    end ;
+   requestInfoParameters.Free;
 
    if StrIComp (pchar(doc),'/WMD') = 0 then begin
       strHtml := '   ttrace._done("' + msgId + '","' + partNum + '"); ' ;
@@ -2068,7 +2067,6 @@ begin
 
          // if -1 then this is the first part
          if IndexOfMsgId = -1 then begin
-            //LowTrace('Create temp msg : ' + msgId);
             if partNum = '1' then begin
                ScriptMessages.Add(msgId  + '=' + msg)  ;
                IndexOfMsgId := ScriptMessages.IndexOfName(msgId) ;
@@ -2077,13 +2075,11 @@ begin
                exit ;
             end ;
          end else begin
-            //LowTrace('add to temp msg : ' + msgId);
             ScriptMessages[IndexOfMsgId] := ScriptMessages[IndexOfMsgId] + msg ;
          end ;
 
          // if message is completed, process it.
          if partNum = 'Last' then begin
-            //LowTrace('end of ' + msgId) ;
             msg := ScriptMessages.Values[msgId] ;
             msgLen := length (msg) ;
             ScriptMessages.Delete(IndexOfMsgId);

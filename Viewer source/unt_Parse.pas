@@ -825,7 +825,7 @@ begin
                                      end else begin
                                         ActiveNodeChanged := true ;    // for filtering
                                         MemberToAdd := CurrentMember ;
-                                        if stack.Count <> 0 then begin   // stach should have at least one element
+                                        if stack.Count <> 0 then begin   // stack should have at least one element
                                            CurrentMember := TMember (stack.pop() ) ;
                                            CurrentMember.SubMembers.Add(MemberToAdd) ;
                                         end ;

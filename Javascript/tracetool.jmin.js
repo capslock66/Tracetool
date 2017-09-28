@@ -32,7 +32,7 @@ addMessage({msgId:msgId,msg:part,partNum:'Last'});partNum++;}}else{addMessage({m
 {objMessage.command=objMessage.command||"WMD";toSend.push(objMessage);if(toSend.length===1)
 setTimeout(worker,0);};function worker()
 {var objMessage;if(toSend.length!==0)
-{objMessage=toSend.shift();var hostUrl="http://"+host+"/"+objMessage.command+"?msgId="+objMessage.msgId+"&msg="+escape(objMessage.msg);if(objMessage.partNum!=="")
+{objMessage=toSend.shift();var hostUrl="http://"+host+"/"+objMessage.command+"?msgId="+objMessage.msgId+"&msg="+encodeURI(objMessage.msg);if(objMessage.partNum!=="")
 hostUrl=hostUrl+"&partNum="+objMessage.partNum;nbDone++;if(isNodeJs)
 sendToClientUsingRequest(hostUrl);else if(isBrowser)
 sendToClientUsingScript(hostUrl);else

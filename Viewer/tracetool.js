@@ -1,7 +1,7 @@
 ﻿//------------------------------------------------------------------------------
 //  TraceTool JavaScript API.
 //  Author : Thierry Parent
-//  Version : 13.2.3
+//  Version : 13.2.4
 //
 //  sample use for NodeJs:    
 //     var ttrace = require('tracetool') ;
@@ -291,7 +291,7 @@ function worker()
     {
         // no script is running.
         objMessage = toSend.shift(); // get first
-        var hostUrl = "http://" + host + "/" + objMessage.command + "?msgId=" + objMessage.msgId + "&msg=" + escape(objMessage.msg);  // '&method=script'  + '&crc=' + objMessage.crc
+        var hostUrl = "http://" + host + "/" + objMessage.command + "?msgId=" + objMessage.msgId + "&msg=" + encodeURI(objMessage.msg);  // escape is deprecated. Generate bad encoding.
         if (objMessage.partNum !== "")
             hostUrl = hostUrl + "&partNum=" + objMessage.partNum;
 

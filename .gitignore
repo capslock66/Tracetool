@@ -100,7 +100,6 @@ artifacts/
 *.pgd
 *.rsp
 *.sbr
-*.tlb
 *.tli
 *.tlh
 *.tmp
@@ -310,24 +309,20 @@ paket-files/
 __pycache__/
 *.pyc
 
-# Cake - Uncomment if you are using it
-# tools/
-
 #tracetool
 #--------------------------------------------
 
-#NoGit anf Doc-o-matic Pro folder on any path
+#NoGit on any path
 NoGit/
+
+#Doc-o-matic Pro folder on any path
 Doc-o-matic Pro/
 
-Android/
-#Deploiement/
+#code project Deploiement
 Deploiement 12/
+
+Android/
 Java/Lib/tracetool/
 backupToCloud*.bat
-
-
-
-
 Viewer source/Jcl/jcl-1.103.0.3110-partnerdvd.zip
 NodeJs/Sample/typings/
