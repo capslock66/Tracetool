@@ -15,7 +15,7 @@
 
 using System;
 using System.Reflection;
-using System.Collections ;
+//using System.Collections ;
 using System.Runtime.InteropServices ;
 using System.IO ;
 using System.Text;
@@ -35,29 +35,29 @@ namespace TraceTool
       static internal Hashtable typeNames= new Hashtable();  // list all short name for know types
       static internal Hashtable OperatorsNames = new Hashtable();  // list all operators
       #else
-      static internal Dictionary<System.Type, string> typeNames = new Dictionary<Type,string>();    // list all short name for know types
-      static internal Dictionary<string, string> OperatorsNames = new Dictionary<string,string>();  // list all operators
+      private static readonly Dictionary<Type, string>   TypeNames = new Dictionary<Type,string>();    // list all short name for know types
+      private static readonly Dictionary<string, string> OperatorsNames = new Dictionary<string,string>();  // list all operators
       #endif
 
       static ReflectionHelper ()
       {
          // store short name for know types.
-         typeNames.Add(typeof(void),           "void");
-         typeNames.Add(typeof(System.Object),  "object");
-         typeNames.Add(typeof(System.String),  "string");
-         typeNames.Add(typeof(System.SByte),   "sbyte");
-         typeNames.Add(typeof(System.Byte),    "byte");
-         typeNames.Add(typeof(System.Int16),   "short");
-         typeNames.Add(typeof(System.UInt16),  "ushort");
-         typeNames.Add(typeof(System.Int32),   "int");
-         typeNames.Add(typeof(System.UInt32),  "uint");
-         typeNames.Add(typeof(System.Int64),   "long");
-         typeNames.Add(typeof(System.UInt64),  "ulong");
-         typeNames.Add(typeof(System.Char),    "char");
-         typeNames.Add(typeof(System.Boolean), "bool");
-         typeNames.Add(typeof(System.Single),  "float");
-         typeNames.Add(typeof(System.Double),  "double");
-         typeNames.Add(typeof(System.Decimal), "decimal");
+         TypeNames.Add(typeof(void),    "void");
+         TypeNames.Add(typeof(object),  "object");
+         TypeNames.Add(typeof(string),  "string");
+         TypeNames.Add(typeof(sbyte),   "sbyte");
+         TypeNames.Add(typeof(byte),    "byte");
+         TypeNames.Add(typeof(short),   "short");
+         TypeNames.Add(typeof(ushort),  "ushort");
+         TypeNames.Add(typeof(int),     "int");
+         TypeNames.Add(typeof(uint),    "uint");
+         TypeNames.Add(typeof(long),    "long");
+         TypeNames.Add(typeof(ulong),   "ulong");
+         TypeNames.Add(typeof(Char),    "char");
+         TypeNames.Add(typeof(bool),    "bool");
+         TypeNames.Add(typeof(float),   "float");
+         TypeNames.Add(typeof(double),  "double");
+         TypeNames.Add(typeof(decimal), "decimal");
 
          OperatorsNames.Add ("op_Addition"            , "operator +") ;
          OperatorsNames.Add ("op_BitwiseAnd"          , "operator &") ;
@@ -100,7 +100,7 @@ namespace TraceTool
 
               if (IsArray(type))
               {
-                  result = Type2ShortString (type.GetElementType());
+                  result = Type2ShortString (type.GetElementType());    // recursive
                   result += '[';
 #if ((!NETCF1) )  // GetArrayRank start from CF 2. Silverlight ?     || (NETCF2)|| (NETCF3)
                   for (int i = type.GetArrayRank(); i > 1; i--)
@@ -114,14 +114,14 @@ namespace TraceTool
               }
 
               if (type.IsByRef)
-                  return " ref " + Type2ShortString (type.GetElementType()) ;
+                  return " ref " + Type2ShortString (type.GetElementType()) ;   // recursive
 
               if (type.IsPointer)
-                  return Type2ShortString (type.GetElementType()) + "*" ;
+                  return Type2ShortString (type.GetElementType()) + "*" ;       // recursive
 
               string name;
-              if (typeNames.ContainsKey(type))
-                  name = (string)typeNames[type];
+              if (TypeNames.ContainsKey(type))
+                  name = TypeNames[type];
               else if (type.FullName != null)
                   name = type.FullName;
               else
@@ -178,7 +178,7 @@ namespace TraceTool
                           }
                           if ((attributes & GenericParameterAttributes.DefaultConstructorConstraint) != 0) {
                               strParamPos += ch + "new()";
-                              ch = ",";
+                              //ch = ",";
                           }
 
                           if (strParamPos != "") 
@@ -207,15 +207,15 @@ namespace TraceTool
       public string ArrayBounds (Array array)
       {
          StringBuilder arrTitle = new StringBuilder() ;
-         int DimCount = array.Rank ;
-         int[] BoundsArray  = new int[DimCount] ;
+         int dimCount = array.Rank ;
+         int[] boundsArray  = new int[dimCount] ;
 
          arrTitle.Append (array.GetLowerBound(0)).Append ("..").Append (array.GetUpperBound(0)) ;
-         BoundsArray[0] = array.GetLowerBound(0) ;
-         for (int i = 1 ; i < DimCount ; i++)
+         boundsArray[0] = array.GetLowerBound(0) ;
+         for (int i = 1 ; i < dimCount ; i++)
          {
             arrTitle.Append(",").Append (array.GetLowerBound(i)).Append ("..").Append (array.GetUpperBound(i)) ;
-            BoundsArray[i] = array.GetLowerBound(i) ;   // set bounds array to low index
+            boundsArray[i] = array.GetLowerBound(i) ;   // set bounds array to low index
          }
          return arrTitle.ToString() ;
       }
@@ -299,15 +299,22 @@ namespace TraceTool
       /// <summary>
       /// return the modifiers and the name of a constructor (similar to a method)
       /// </summary>
+
+      // ReSharper disable RedundantAssignment
       public static void Constructor2String (ConstructorInfo ctor, ref string strModifier , ref string strName)
+      // ReSharper restore RedundantAssignment
       {
+          //if (strModifier == null) throw new ArgumentNullException(nameof(strModifier));
+
           strModifier = "?" ;
           strName = "?" ;
           try
           {
               strModifier = Method2StringModifier (ctor) ;
               //  ctor.Name can be 'ctor' or 'cctor' Beter is to use the class name
-              strName = ctor.DeclaringType.Name + " (" + MethodParams2String(ctor) + ")";
+              if (ctor.DeclaringType != null)
+                  strName = ctor.DeclaringType.Name ;
+              strName += " (" + MethodParams2String(ctor) + ")";
           }
           catch (Exception)
           {
@@ -319,7 +326,7 @@ namespace TraceTool
       /// <summary>
       /// return the modifiers of a field
       /// </summary>
-      public static string getFieldModifier (FieldInfo field)
+      public static string GetFieldModifier (FieldInfo field)
       {
          string result = "" ;
           try
@@ -355,7 +362,7 @@ namespace TraceTool
       {
           try
           {
-              strModifier = getFieldModifier (field) ;
+              strModifier = GetFieldModifier (field) ;
               strModifier += Type2ShortString (field.FieldType) ;
               // add the declaring type if not the actual type
               if  (field.DeclaringType != field.ReflectedType)
@@ -373,30 +380,30 @@ namespace TraceTool
       /// <summary>
       /// return the modifiers and the name of a property
       /// </summary>
-      public static void Property2String (PropertyInfo field, ref string strModifier , ref string strType,  ref string strName, ref bool HasPublic)
+      public static void Property2String (PropertyInfo field, ref string strModifier , ref string strType,  ref string strName, ref bool hasPublic)
       {
           try
           {
               // get the "get" method of the property, if don't exist, take the "set" one
               MethodInfo getMethod = field.GetGetMethod (true);
               MethodInfo setMethod = field.GetSetMethod (true);
-              MethodInfo OneMethod ;
+              MethodInfo oneMethod ;
 
               // if the get or set method is public, HasPublic become true
               if (getMethod != null)
-                  HasPublic = getMethod.IsPublic ;
+                  hasPublic = getMethod.IsPublic ;
               if (setMethod != null)
                   if (setMethod.IsPublic)
-                      HasPublic = true ;
+                      hasPublic = true ;
 
               if (getMethod != null)
-                  OneMethod = getMethod;
+                  oneMethod = getMethod;
               else
-                  OneMethod = setMethod;
+                  oneMethod = setMethod;
 
               // retreive private, public, abstract, ... of that method
-              if (OneMethod != null)
-                  strModifier += Method2StringModifier (OneMethod) ;
+              if (oneMethod != null)
+                  strModifier += Method2StringModifier (oneMethod) ;
 
               // add it the return type of the field (same as for the get method)
               strType = Type2ShortString (field.PropertyType) ;
@@ -410,7 +417,7 @@ namespace TraceTool
               if (parameters.Length == 0)
                   strName += field.Name + " ";
               else
-                  strName += "this [" +  MethodParams2String(OneMethod) + "] " ;
+                  strName += "this [" +  MethodParams2String(oneMethod) + "] " ;
 
               // indicate the read/write accessor
               if (field.CanRead)
@@ -429,16 +436,16 @@ namespace TraceTool
       /// <summary>
       /// return the modifiers and the name of an event
       /// </summary>
-      public static void event2String (EventInfo field, ref string strModifier , ref string strName)
+      public static void Event2String (EventInfo field, ref string strModifier , ref string strName)
       {
           try
           {
               // get the "add" method of the event
-              MethodInfo OneMethod = field.GetAddMethod (true);
+              MethodInfo oneMethod = field.GetAddMethod (true);
 
               // retreive private, public, abstract, ... of that method
-              if (OneMethod != null)
-                  strModifier += Method2StringModifier (OneMethod) ;
+              if (oneMethod != null)
+                  strModifier += Method2StringModifier (oneMethod) ;
 
               if (field.IsMulticast)
                   strModifier += "[multi] " ;
@@ -480,16 +487,16 @@ namespace TraceTool
 
               // get the method name
 
-              string MethodName;
+              string methodName;
               if (OperatorsNames.ContainsKey(method.Name))
               {
-                  MethodName = (string)OperatorsNames[method.Name];
+                  methodName = OperatorsNames[method.Name];
                   result = true;
               }
               else
               {
-                  MethodName = method.Name;
-                  result = false;
+                  methodName = method.Name;
+                  //result = false;
               }
  
               //Console.WriteLine("\tIs this a generic method definition? {0}", method.IsGenericMethodDefinition);
@@ -501,14 +508,14 @@ namespace TraceTool
               string strParam = "";
               if (method.IsGenericMethod)
               {
-                  MethodName += "<";
+                  methodName += "<";
                   int genpos = 0;
                   foreach (Type t in method.GetGenericArguments())
                   {
                       if (genpos == 0)
-                          MethodName += t.Name;
+                          methodName += t.Name;
                       else
-                          MethodName += "," + t.Name;
+                          methodName += "," + t.Name;
                       genpos++;
 #if (!NETCF1 && !NETCF2 && !NETCF3 && !SILVERLIGHT)
                       if (t.IsGenericParameter)
@@ -540,18 +547,18 @@ namespace TraceTool
                           if ((attributes & GenericParameterAttributes.DefaultConstructorConstraint) != 0)
                           {
                               strParamPos += ch + "new()";
-                              ch = ",";
+                              //ch = ",";
                           }
                           if (strParamPos != "")
                               strParam += " where " + t.Name + ":" + strParamPos;
                       }  // if (t.IsGenericParameter)
 #endif
                   } // foreach (Type t in method.GetGenericArguments())
-                  MethodName += ">";
+                  methodName += ">";
               }
  
               // add parameters
-              strName += MethodName + " (" + MethodParams2String(method) + ")" + strParam;
+              strName += methodName + " (" + MethodParams2String(method) + ")" + strParam;
           }
           catch (Exception)
           {
@@ -566,44 +573,44 @@ namespace TraceTool
       /// return the modifier (private,...) of a method (without the method type and name)
       /// called by Property2String,Constructor2String and Method2String
       /// </summary>
-      public static string Method2StringModifier (MethodBase OneMethod)
+      public static string Method2StringModifier (MethodBase oneMethod)
       {
          string strModifier = "" ;
 
           try
           {
-              MethodAttributes attrs = OneMethod.Attributes ;
-              if (OneMethod.IsPrivate)           strModifier += "private ";
-              if (OneMethod.IsPublic)            strModifier += "public ";
-              if (OneMethod.IsFamily)            strModifier += "protected ";
-              if (OneMethod.IsStatic)            strModifier += "static ";
-              if (OneMethod.IsAssembly)          strModifier += "internal ";
-              if (OneMethod.IsFamilyOrAssembly)  strModifier += "protected internal ";
-              if (OneMethod.IsFamilyAndAssembly) strModifier += "protected and internal ";
+              MethodAttributes attrs = oneMethod.Attributes ;
+              if (oneMethod.IsPrivate)           strModifier += "private ";
+              if (oneMethod.IsPublic)            strModifier += "public ";
+              if (oneMethod.IsFamily)            strModifier += "protected ";
+              if (oneMethod.IsStatic)            strModifier += "static ";
+              if (oneMethod.IsAssembly)          strModifier += "internal ";
+              if (oneMethod.IsFamilyOrAssembly)  strModifier += "protected internal ";
+              if (oneMethod.IsFamilyAndAssembly) strModifier += "protected and internal ";
 
               // special case : if Virtual + final + NewSlot then it's an interface implementation
               // it's not possible to create (then NewSlot) a fct virtual and final : it's an interface fct
-              if (OneMethod.IsVirtual && OneMethod.IsFinal && ((attrs & MethodAttributes.NewSlot) != 0))
+              if (oneMethod.IsVirtual && oneMethod.IsFinal && ((attrs & MethodAttributes.NewSlot) != 0))
               {
                   strModifier += "[interface] " ;
                   return strModifier;
               }
 
-              if (OneMethod.IsFinal)
+              if (oneMethod.IsFinal)
                   strModifier += "final ";
 
               // virtual is a complicated case.
               // 'NewSlot means not redefined since the base class where the fct is defined
               // 'virtual' and not 'newslot' is then an 'override' over that fct
-              if (OneMethod.IsVirtual)
+              if (oneMethod.IsVirtual)
               {
                   if ((attrs & MethodAttributes.NewSlot) != 0)   // not redefined
-                      if (OneMethod.IsAbstract)
+                      if (oneMethod.IsAbstract)
                           strModifier += "abstract ";              // only for type, no instance possible
                       else
                           strModifier += "virtual ";               // virtual fct not redefined
                   else                                           // redefined in sub class
-                      if (OneMethod.IsAbstract)
+                      if (oneMethod.IsAbstract)
                           strModifier += "abstract override";      // abtract fct redefined. Not tested
                       else
                           strModifier += "override ";              // virtual fct redefined
@@ -774,15 +781,15 @@ namespace TraceTool
       {
           try
           {
-              string AssemblyFileName = oType.Assembly.Location ;
-              string XmlDocFileName = Path.ChangeExtension (AssemblyFileName, ".xml");
-              if (! File.Exists(XmlDocFileName))
+              string assemblyFileName = oType.Assembly.Location ;
+              string xmlDocFileName = Path.ChangeExtension (assemblyFileName, ".xml");
+              if (! File.Exists(xmlDocFileName))
               {
-                  XmlDocFileName = RuntimeEnvironment.GetRuntimeDirectory() + Path.GetFileName(XmlDocFileName);
-                  if (! File.Exists(XmlDocFileName))
-                      XmlDocFileName = "" ;
+                  xmlDocFileName = RuntimeEnvironment.GetRuntimeDirectory() + Path.GetFileName(xmlDocFileName);
+                  if (! File.Exists(xmlDocFileName))
+                      xmlDocFileName = "" ;
               }
-              return XmlDocFileName ;
+              return xmlDocFileName ;
           }
           catch (Exception e)  // 2015 10 06 : this method can return exception when type/assembly is generated dynamically 
           {

@@ -13,18 +13,18 @@
 // NETCF1 (dot net compact framework 1)  , NETCF2 (dot net compact framework 2) , NETCF3 (dot net compact framework 3)
 
 using System;
-using System.Collections;  // ArrayList, queue
-using System.Diagnostics;  // Process
-using System.Reflection;
+//using System.Collections;  // ArrayList, queue
+//using System.Diagnostics;  // Process
+//using System.Reflection;
 using System.Text;
 
 // generic start in F2
 #if (!NETCF1 && !NETF1)
-using System.Collections.Generic;
+//using System.Collections.Generic;
 #endif
 
 #if (!NETCF1 && !SILVERLIGHT)
-using System.Xml.XPath;
+//using System.Xml.XPath;
 #endif
 
 
@@ -49,28 +49,28 @@ namespace TraceTool
       /// Create a Node with an unique ID (true)
       /// You can also recreated an already send node if you still have the id
       /// </summary>
-      /// <param name="ParentNode">The parent node where to place that trace.
+      /// <param name="parentNode">The parent node where to place that trace.
       /// The IconIndex and the enabled properties are also recopied
       /// Can be null : the root tree become the parent node, enabled is true and the default icon is used
       /// </param>
       /// <param name="generateUniqueId">When true, a unique ID (a guid) is generated for the trace.
       /// </param>
 
-      public TraceNode(TraceNode ParentNode, bool generateUniqueId)  // TraceToSend base class don't have constructor
+      public TraceNode(TraceNode parentNode, bool generateUniqueId)  // TraceToSend base class don't have constructor
       {
          if (generateUniqueId)
             Id = Helper.NewGuid().ToString();// else : no more reset to empty string if generateUniqueId is false
 
-         if (ParentNode == null)
+         if (parentNode == null)
          {
-            this.IconIndex = TraceConst.CST_ICO_DEFAULT;
-            this.Enabled   = true;
+            IconIndex = TraceConst.CST_ICO_DEFAULT;
+            Enabled   = true;
          }
          else
          {
-            this.IconIndex  = ParentNode.IconIndex;
-            this.Enabled    = ParentNode.Enabled;
-            this.WinTraceId = ParentNode.WinTraceId;
+            IconIndex  = parentNode.IconIndex;
+            Enabled    = parentNode.Enabled;
+            WinTraceId = parentNode.WinTraceId;
          }
       }
 
@@ -79,14 +79,14 @@ namespace TraceTool
       /// <summary>
       /// Copy constructor : create a TraceNode copy of a TraceToSend
       /// </summary>
-      /// <param name="Source">TraceNode to copy</param>
-      internal TraceNode(TraceToSend Source)   // TraceToSend base class don't have constructor
+      /// <param name="source">TraceNode to copy</param>
+      internal TraceNode(TraceToSend source)   // TraceToSend base class don't have constructor
       {
-         this.IconIndex  = Source.IconIndex;
-         this.Enabled    = Source.Enabled;
-         this.WinTraceId = Source.WinTraceId;
-         this.Id         = Source.Id;
-         this.Tag        = Source.Tag ;
+         IconIndex  = source.IconIndex;
+         Enabled    = source.Enabled;
+         WinTraceId = source.WinTraceId;
+         Id         = source.Id;
+         Tag        = source.Tag ;
       }
 
       //----------------------------------------------------------------------
@@ -94,14 +94,14 @@ namespace TraceTool
       /// <summary>
       /// Copy constructor : create a TraceNode copy of a TraceNodeEx
       /// </summary>
-      /// <param name="Source">TraceNodeEx to copy</param>
-      internal TraceNode(TraceNodeEx Source)   // TraceToSend base class don't have constructor
+      /// <param name="source">TraceNodeEx to copy</param>
+      internal TraceNode(TraceNodeEx source)   // TraceToSend base class don't have constructor
       {
-         this.IconIndex  = Source.IconIndex;
-         this.Enabled    = Source.Enabled;
-         this.WinTraceId = Source.WinTraceId;
-         this.Id         = Source.Id;
-         this.Tag        = Source.Tag ;
+         IconIndex  = source.IconIndex;
+         Enabled    = source.Enabled;
+         WinTraceId = source.WinTraceId;
+         Id         = source.Id;
+         Tag        = source.Tag ;
       }
 
       //----------------------------------------------------------------------
@@ -109,10 +109,10 @@ namespace TraceTool
       /// <summary>
       /// Resend the left and right trace message to the viewer
       /// </summary>
-      /// <param name="NewLeftMsg">new left message</param>
-      /// <param name="NewRightMsg">new right message</param>
+      /// <param name="newLeftMsg">new left message</param>
+      /// <param name="newRightMsg">new right message</param>
       /// <returns>The trace node</returns>
-      public TraceNode Resend(string NewLeftMsg, string NewRightMsg)
+      public TraceNode Resend(string newLeftMsg, string newRightMsg)
       {
          if (Enabled == false)
             return this;
@@ -120,14 +120,14 @@ namespace TraceTool
          if (Id == "")
             throw new Exception("Node Id is null, root node cannot be modified (for now)");
 
-         StringList CommandList = new StringList();
+         StringList commandList = new StringList();
 
-         Helper.addCommand(CommandList, TraceConst.CST_USE_NODE, Id);           // param : guid
-         Helper.addCommand(CommandList, TraceConst.CST_LEFT_MSG, NewLeftMsg);       // param : left string
-         Helper.addCommand(CommandList, TraceConst.CST_RIGHT_MSG, NewRightMsg);      // param : right string
+         Helper.AddCommand(commandList, TraceConst.CST_USE_NODE, Id);           // param : guid
+         Helper.AddCommand(commandList, TraceConst.CST_LEFT_MSG, newLeftMsg);       // param : left string
+         Helper.AddCommand(commandList, TraceConst.CST_RIGHT_MSG, newRightMsg);      // param : right string
 
          // don't resend members and icon
-         TTrace.SendToWinTraceClient(CommandList, WinTraceId);
+         TTrace.SendToWinTraceClient(commandList, WinTraceId);
 
          return this;
       }
@@ -137,9 +137,9 @@ namespace TraceTool
       /// <summary>
       /// ReSend left trace to the server
       /// </summary>
-      /// <param name="NewLeftMsg">new left message</param>
+      /// <param name="newLeftMsg">new left message</param>
       /// <returns>The trace node</returns>
-      public TraceNode ResendLeft(string NewLeftMsg)
+      public TraceNode ResendLeft(string newLeftMsg)
       {
          if (Enabled == false)
             return this;
@@ -147,13 +147,13 @@ namespace TraceTool
          if (Id == "")
             throw new Exception("Node Id is null, root node cannot be modified (for now)");
 
-         StringList CommandList = new StringList();
+         StringList commandList = new StringList();
 
-         Helper.addCommand(CommandList, TraceConst.CST_USE_NODE, Id);              // param : guid
-         Helper.addCommand(CommandList, TraceConst.CST_LEFT_MSG, NewLeftMsg);       // param : left string
+         Helper.AddCommand(commandList, TraceConst.CST_USE_NODE, Id);              // param : guid
+         Helper.AddCommand(commandList, TraceConst.CST_LEFT_MSG, newLeftMsg);       // param : left string
 
          // don't resend members and icon
-         TTrace.SendToWinTraceClient(CommandList, WinTraceId);
+         TTrace.SendToWinTraceClient(commandList, WinTraceId);
          return this;
       }
 
@@ -162,9 +162,9 @@ namespace TraceTool
       /// <summary>
       /// ReSend right trace to the server
       /// </summary>
-      /// <param name="NewRightMsg">new right message</param>
+      /// <param name="newRightMsg">new right message</param>
       /// <returns>The trace node</returns>
-      public TraceNode ResendRight(string NewRightMsg)
+      public TraceNode ResendRight(string newRightMsg)
       {
          if (Enabled == false)
             return this;
@@ -172,13 +172,13 @@ namespace TraceTool
          if (Id == "")
             throw new Exception("Node Id is null, root node cannot be modified (for now)");
 
-         StringList CommandList = new StringList();
+         StringList commandList = new StringList();
 
-         Helper.addCommand(CommandList, TraceConst.CST_USE_NODE, Id);              // param : guid
-         Helper.addCommand(CommandList, TraceConst.CST_RIGHT_MSG, NewRightMsg);      // param : right string
+         Helper.AddCommand(commandList, TraceConst.CST_USE_NODE, Id);              // param : guid
+         Helper.AddCommand(commandList, TraceConst.CST_RIGHT_MSG, newRightMsg);      // param : right string
 
          // don't resend members and icon
-         TTrace.SendToWinTraceClient(CommandList, WinTraceId);
+         TTrace.SendToWinTraceClient(commandList, WinTraceId);
          return this;
       }
 
@@ -187,9 +187,9 @@ namespace TraceTool
       /// <summary>
       /// Change the Icon index
       /// </summary>
-      /// <param name="Index">Index of the icon to use</param>
+      /// <param name="index">Index of the icon to use</param>
       /// <returns>The trace node</returns>
-      public TraceNode ResendIconIndex(int Index)
+      public TraceNode ResendIconIndex(int index)
       {
          if (Enabled == false)
             return this;
@@ -197,11 +197,11 @@ namespace TraceTool
          if (Id == "")
             throw new Exception("Node Id is null, root node cannot be modified (for now)");
 
-         StringList CommandList = new StringList();
+         StringList commandList = new StringList();
 
-         Helper.addCommand(CommandList, TraceConst.CST_USE_NODE, Id);             // param : the node that receive the string
-         Helper.addCommand(CommandList, TraceConst.CST_ICO_INDEX, Index);         // param : left string
-         TTrace.SendToWinTraceClient(CommandList, WinTraceId);
+         Helper.AddCommand(commandList, TraceConst.CST_USE_NODE, Id);             // param : the node that receive the string
+         Helper.AddCommand(commandList, TraceConst.CST_ICO_INDEX, index);         // param : left string
+         TTrace.SendToWinTraceClient(commandList, WinTraceId);
          return this;
       }
 
@@ -233,11 +233,11 @@ namespace TraceTool
          if (Id == "")
             throw new Exception("Node Id is null, root node cannot be modified (for now)");
 
-         StringList CommandList = new StringList();
+         StringList commandList = new StringList();
 
-         Helper.addCommand(CommandList, TraceConst.CST_USE_NODE, Id);             // param : the node that receive font change
-         Helper.addCommand(CommandList, TraceConst.CST_BACKGROUND_COLOR, color, colId.ToString());      // param : color, colId
-         TTrace.SendToWinTraceClient(CommandList, WinTraceId);
+         Helper.AddCommand(commandList, TraceConst.CST_USE_NODE, Id);             // param : the node that receive font change
+         Helper.AddCommand(commandList, TraceConst.CST_BACKGROUND_COLOR, color, colId.ToString());      // param : color, colId
+         TTrace.SendToWinTraceClient(commandList, WinTraceId);
          return this;
       }
 
@@ -318,41 +318,41 @@ namespace TraceTool
          if (Id == "")
             throw new Exception("Node Id is null, root node cannot be modified (for now)");
 
-         StringList CommandList = new StringList();
+         StringList commandList = new StringList();
 
-         Helper.addCommand(CommandList, TraceConst.CST_USE_NODE, Id);              // param : guid
+         Helper.AddCommand(commandList, TraceConst.CST_USE_NODE, Id);              // param : guid
 
-         StringBuilder TempStr = new StringBuilder();
+         StringBuilder tempStr = new StringBuilder();
 
-         TempStr.Append(String.Format("{0,5}{1,3}", TraceConst.CST_FONT_DETAIL, colId));
+         tempStr.Append(String.Format("{0,5}{1,3}", TraceConst.CST_FONT_DETAIL, colId));
 
 
          if (bold)
-            TempStr.Append("1");
+            tempStr.Append("1");
          else
-            TempStr.Append("0");
+            tempStr.Append("0");
 
          if (italic)
-            TempStr.Append("1");
+            tempStr.Append("1");
          else
-            TempStr.Append("0");
+            tempStr.Append("0");
 
          if (color != -1)
          {
             // remove Alpha blending
             color = color & 0xFFFFFF;
             // Color is coded as RGB. convert to BGR
-            int B = color & 0xff;
-            int G = (color >> 8) & 0xff;
-            int R = (color >> 0x10) & 0xff;
-            color = (B << 0x10) + (G << 8) + R;
+            int b = color & 0xff;
+            int g = (color >> 8) & 0xff;
+            int r = (color >> 0x10) & 0xff;
+            color = (b << 0x10) + (g << 8) + r;
          }
 
-         TempStr.Append(String.Format("{0,11}{1,11}", color, size)).Append(fontName);
+         tempStr.Append(String.Format("{0,11}{1,11}", color, size)).Append(fontName);
 
-         CommandList.Add(TempStr.ToString());
+         commandList.Add(tempStr.ToString());
 
-         TTrace.SendToWinTraceClient(CommandList, WinTraceId);
+         TTrace.SendToWinTraceClient(commandList, WinTraceId);
          return this;
       }
 
@@ -360,10 +360,10 @@ namespace TraceTool
       /// <summary>
       /// append right and left texts to an existing node
       /// </summary>
-      /// <param name="LeftMsgtoAdd">left message</param>
-      /// <param name="RightMsgtoAdd">right message</param>
+      /// <param name="leftMsgtoAdd">left message</param>
+      /// <param name="rightMsgtoAdd">right message</param>
       /// <returns>The trace node</returns>
-      public TraceNode Append(string LeftMsgtoAdd, string RightMsgtoAdd)
+      public TraceNode Append(string leftMsgtoAdd, string rightMsgtoAdd)
       {
          if (Enabled == false)
             return this;
@@ -371,13 +371,13 @@ namespace TraceTool
          if (Id == "")
             throw new Exception("Node Id is null, root node cannot be modified (for now)");
 
-         StringList CommandList = new StringList();
-         Helper.addCommand(CommandList, TraceConst.CST_USE_NODE, Id);                  // param : guid
-         Helper.addCommand(CommandList, TraceConst.CST_APPEND_LEFT_MSG, LeftMsgtoAdd);   // param : right string
-         Helper.addCommand(CommandList, TraceConst.CST_APPEND_RIGHT_MSG, RightMsgtoAdd);  // param : right string
+         StringList commandList = new StringList();
+         Helper.AddCommand(commandList, TraceConst.CST_USE_NODE, Id);                  // param : guid
+         Helper.AddCommand(commandList, TraceConst.CST_APPEND_LEFT_MSG, leftMsgtoAdd);   // param : right string
+         Helper.AddCommand(commandList, TraceConst.CST_APPEND_RIGHT_MSG, rightMsgtoAdd);  // param : right string
 
          // don't resend members and icon
-         TTrace.SendToWinTraceClient(CommandList, WinTraceId);
+         TTrace.SendToWinTraceClient(commandList, WinTraceId);
          return this;
       }
 
@@ -385,9 +385,9 @@ namespace TraceTool
       /// <summary>
       /// append left text to an existing node
       /// </summary>
-      /// <param name="LeftMsgtoAdd">left message</param>
+      /// <param name="leftMsgtoAdd">left message</param>
       /// <returns>The trace node</returns>
-      public TraceNode AppendLeft(string LeftMsgtoAdd)
+      public TraceNode AppendLeft(string leftMsgtoAdd)
       {
          if (Enabled == false)
             return this;
@@ -395,12 +395,12 @@ namespace TraceTool
          if (Id == "")
             throw new Exception("Node Id is null, root node cannot be modified (for now)");
 
-         StringList CommandList = new StringList();
-         Helper.addCommand(CommandList, TraceConst.CST_USE_NODE, Id);                  // param : guid
-         Helper.addCommand(CommandList, TraceConst.CST_APPEND_LEFT_MSG, LeftMsgtoAdd);   // param : right string
+         StringList commandList = new StringList();
+         Helper.AddCommand(commandList, TraceConst.CST_USE_NODE, Id);                  // param : guid
+         Helper.AddCommand(commandList, TraceConst.CST_APPEND_LEFT_MSG, leftMsgtoAdd);   // param : right string
 
          // don't resend members and icon
-         TTrace.SendToWinTraceClient(CommandList, WinTraceId);
+         TTrace.SendToWinTraceClient(commandList, WinTraceId);
          return this;
       }
 
@@ -408,9 +408,9 @@ namespace TraceTool
       /// <summary>
       /// append right text to an existing node
       /// </summary>
-      /// <param name="RightMsgtoAdd">right message</param>
+      /// <param name="rightMsgtoAdd">right message</param>
       /// <returns>The trace node</returns>
-      public TraceNode AppendRight(string RightMsgtoAdd)
+      public TraceNode AppendRight(string rightMsgtoAdd)
       {
          if (Enabled == false)
             return this;
@@ -418,12 +418,12 @@ namespace TraceTool
          if (Id == "")
             throw new Exception("Node Id is null, root node cannot be modified (for now)");
 
-         StringList CommandList = new StringList();
-         Helper.addCommand(CommandList, TraceConst.CST_USE_NODE, Id);                  // param : guid
-         Helper.addCommand(CommandList, TraceConst.CST_APPEND_RIGHT_MSG, RightMsgtoAdd);  // param : right string
+         StringList commandList = new StringList();
+         Helper.AddCommand(commandList, TraceConst.CST_USE_NODE, Id);                  // param : guid
+         Helper.AddCommand(commandList, TraceConst.CST_APPEND_RIGHT_MSG, rightMsgtoAdd);  // param : right string
 
          // don't resend members and icon
-         TTrace.SendToWinTraceClient(CommandList, WinTraceId);
+         TTrace.SendToWinTraceClient(commandList, WinTraceId);
          return this;
       }
 
@@ -440,14 +440,14 @@ namespace TraceTool
          if (Id == "")
             throw new Exception("Node Id is null, root node cannot be modified (for now)");
 
-         StringList CommandList = new StringList();
-         Helper.addCommand(CommandList, TraceConst.CST_USE_NODE, Id);                  // param : guid
+         StringList commandList = new StringList();
+         Helper.AddCommand(commandList, TraceConst.CST_USE_NODE, Id);                  // param : guid
 
          TraceNodeEx result = new TraceNodeEx(this, true);  // create a node with same properties as "this" with new ID
          result.AddStackTrace(1);
-         result.Members.AddToStringList(CommandList); // convert all groups and nested items/group to strings
+         result.Members.AddToStringList(commandList); // convert all groups and nested items/group to strings
 
-         TTrace.SendToWinTraceClient(CommandList, WinTraceId);
+         TTrace.SendToWinTraceClient(commandList, WinTraceId);
          return this;
       }
 
@@ -465,9 +465,9 @@ namespace TraceTool
          if (Id == "")
             throw new Exception("Node Id is null, root node cannot be modified (for now)");
 
-         StringList CommandList = new StringList();
-         Helper.addCommand(CommandList, TraceConst.CST_FOCUS_NODE, Id);                  // param : guid
-         TTrace.SendToWinTraceClient(CommandList, WinTraceId);
+         StringList commandList = new StringList();
+         Helper.AddCommand(commandList, TraceConst.CST_FOCUS_NODE, Id);                  // param : guid
+         TTrace.SendToWinTraceClient(commandList, WinTraceId);
          return this;
       }
 
@@ -484,9 +484,9 @@ namespace TraceTool
          if (Id == "")
             throw new Exception("Node Id is null, root node cannot be modified (for now)");
 
-         StringList CommandList = new StringList();
-         Helper.addCommand(CommandList, TraceConst.CST_SELECT_NODE, Id);                  // param : guid
-         TTrace.SendToWinTraceClient(CommandList, WinTraceId);
+         StringList commandList = new StringList();
+         Helper.AddCommand(commandList, TraceConst.CST_SELECT_NODE, Id);                  // param : guid
+         TTrace.SendToWinTraceClient(commandList, WinTraceId);
          return this;
       }
 
@@ -503,9 +503,9 @@ namespace TraceTool
          if (Id == "")
             throw new Exception("Node Id is null, root node cannot be modified (for now)");
 
-         StringList CommandList = new StringList();
-         Helper.addCommand(CommandList, TraceConst.CST_CLEAR_NODE, Id);                  // param : guid
-         TTrace.SendToWinTraceClient(CommandList, WinTraceId);
+         StringList commandList = new StringList();
+         Helper.AddCommand(commandList, TraceConst.CST_CLEAR_NODE, Id);                  // param : guid
+         TTrace.SendToWinTraceClient(commandList, WinTraceId);
          return this;
       }
 
@@ -522,9 +522,9 @@ namespace TraceTool
          if (Id == "")
             throw new Exception("Node Id is null, root node cannot be modified (for now)");
 
-         StringList CommandList = new StringList();
-         Helper.addCommand(CommandList, TraceConst.CST_CLEAR_SUBNODES, Id);                  // param : guid
-         TTrace.SendToWinTraceClient(CommandList, WinTraceId);
+         StringList commandList = new StringList();
+         Helper.AddCommand(commandList, TraceConst.CST_CLEAR_SUBNODES, Id);                  // param : guid
+         TTrace.SendToWinTraceClient(commandList, WinTraceId);
          return this;
       }
 
@@ -533,20 +533,20 @@ namespace TraceTool
       /// <summary>
       /// Set or reset the bookmark for the node
       /// </summary>
-      /// <param name="Bookmarked">true/false</param>
+      /// <param name="bookmarked">true/false</param>
       /// <returns>The trace node</returns>
-      public TraceNode SetBookmark(bool Bookmarked) 
+      public TraceNode SetBookmark(bool bookmarked) 
       {
          if (Enabled == false)
             return this;
 
          if (Id == "")
             throw new Exception("Node Id is null, root node cannot be modified (for now)");
-         StringList CommandList = new StringList();
+         StringList commandList = new StringList();
 
-         Helper.addCommand(CommandList,  TraceConst.CST_USE_NODE , Id);
-         Helper.addCommand(CommandList,  TraceConst.CST_SET_BOOKMARK , Bookmarked);
-         TTrace.SendToWinTraceClient(CommandList, WinTraceId);
+         Helper.AddCommand(commandList,  TraceConst.CST_USE_NODE , Id);
+         Helper.AddCommand(commandList,  TraceConst.CST_SET_BOOKMARK , bookmarked);
+         TTrace.SendToWinTraceClient(commandList, WinTraceId);
          return this;
       }
 
@@ -555,20 +555,20 @@ namespace TraceTool
       /// <summary>
       /// set a node visible or invisible
       /// </summary>
-      /// <param name="Visible">true/false</param>
+      /// <param name="visible">true/false</param>
       /// <returns>The trace node</returns>
-      public TraceNode SetVisible(bool Visible)
+      public TraceNode SetVisible(bool visible)
       {
          if (Enabled == false)
             return this;
 
          if (Id == "")
             throw new Exception("Node Id is null, root node cannot be modified (for now)");
-         StringList CommandList = new StringList();
+         StringList commandList = new StringList();
 
-         Helper.addCommand(CommandList,  TraceConst.CST_USE_NODE , Id);             // param : the node
-         Helper.addCommand(CommandList, TraceConst.CST_VISIBLE_NODE , Visible);    // param : visible flag
-         TTrace.SendToWinTraceClient(CommandList, WinTraceId);
+         Helper.AddCommand(commandList,  TraceConst.CST_USE_NODE , Id);             // param : the node
+         Helper.AddCommand(commandList, TraceConst.CST_VISIBLE_NODE , visible);    // param : visible flag
+         TTrace.SendToWinTraceClient(commandList, WinTraceId);
          return this;
       }
 
@@ -585,9 +585,9 @@ namespace TraceTool
 
          if (Id == "")
             throw new Exception("Node Id is null, root node cannot be modified (for now)");
-         StringList CommandList = new StringList();
-         Helper.addCommand(CommandList, TraceConst.CST_GOTO_NEXTSIBLING , Id);
-         TTrace.SendToWinTraceClient(CommandList, WinTraceId);
+         StringList commandList = new StringList();
+         Helper.AddCommand(commandList, TraceConst.CST_GOTO_NEXTSIBLING , Id);
+         TTrace.SendToWinTraceClient(commandList, WinTraceId);
          return this;
       }
 
@@ -604,10 +604,10 @@ namespace TraceTool
 
          if (Id == "")
             throw new Exception("Node Id is null, root node cannot be modified (for now)");
-         StringList CommandList = new StringList();
-         Helper.addCommand(CommandList, TraceConst.CST_GOTO_PREVSIBLING , Id);
+         StringList commandList = new StringList();
+         Helper.AddCommand(commandList, TraceConst.CST_GOTO_PREVSIBLING , Id);
 
-         TTrace.SendToWinTraceClient(CommandList, WinTraceId);
+         TTrace.SendToWinTraceClient(commandList, WinTraceId);
          return this;
       }
 
@@ -624,10 +624,10 @@ namespace TraceTool
 
          if (Id == "")
             throw new Exception("Node Id is null, root node cannot be modified (for now)");
-         StringList CommandList = new StringList();
-         Helper.addCommand(CommandList,  TraceConst.CST_GOTO_FIRST_CHILD , Id);
+         StringList commandList = new StringList();
+         Helper.AddCommand(commandList,  TraceConst.CST_GOTO_FIRST_CHILD , Id);
 
-         TTrace.SendToWinTraceClient(CommandList, WinTraceId);
+         TTrace.SendToWinTraceClient(commandList, WinTraceId);
          return this;
       }
 
@@ -644,9 +644,9 @@ namespace TraceTool
 
          if (Id == "")
             throw new Exception("Node Id is null, root node cannot be modified (for now)");
-         StringList CommandList = new StringList();
-         Helper.addCommand(CommandList,  TraceConst.CST_GOTO_LAST_CHILD , Id);
-         TTrace.SendToWinTraceClient(CommandList, WinTraceId);
+         StringList commandList = new StringList();
+         Helper.AddCommand(commandList,  TraceConst.CST_GOTO_LAST_CHILD , Id);
+         TTrace.SendToWinTraceClient(commandList, WinTraceId);
          return this;
       }
    }

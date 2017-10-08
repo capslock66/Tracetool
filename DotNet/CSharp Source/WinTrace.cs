@@ -13,11 +13,11 @@
 // NETCF1 (dot net compact framework 1)  , NETCF2 (dot net compact framework 2) , NETCF3 (dot net compact framework 3)
 
 using System;
-using System.Collections;                 // ArrayList, queue
+//using System.Collections;                 // ArrayList, queue
 
 // generic start in F2
 #if (!NETCF1 && !NETF1)
-using System.Collections.Generic;
+//using System.Collections.Generic;
 #endif
 
 namespace TraceTool
@@ -27,9 +27,9 @@ namespace TraceTool
    /// </summary>
    public class WinTrace : TraceToSend
    {
-      internal TraceToSend fWarning ;
-      internal TraceToSend fError;
-      internal TraceToSend fDebug;
+      private TraceToSend _warning ;
+      private TraceToSend _error;
+      private TraceToSend _debug;
 
       //------------------------------------------------------------------------------
 
@@ -46,27 +46,27 @@ namespace TraceTool
       /// <summary>
       /// WinTrace constructor. The Window Trace is create on the viewer (if not already done)
       /// </summary>
-      /// <param name="WinTraceID">Required window trace Id. If empty, a guid will be generated</param>
-      /// <param name="WinTraceText">The Window Title on the viewer.If empty, a default name will be used</param>
-      public WinTrace (string WinTraceID , string WinTraceText)
+      /// <param name="winTraceId">Required window trace Id. If empty, a guid will be generated</param>
+      /// <param name="winTraceText">The Window Title on the viewer.If empty, a default name will be used</param>
+      public WinTrace (string winTraceId , string winTraceText)
       {
-         if (WinTraceID == null || WinTraceID == "")
+         if (winTraceId == null || winTraceId == "")
             Id = Helper.NewGuid ().ToString() ;
          else
-            Id = WinTraceID ;
+            Id = winTraceId ;
 
          CreateNodes();
 
-         if (WinTraceID != null && WinTraceID == "_")
+         if (winTraceId != null && winTraceId == "_")
             return ;  // don't create new window on the viewer
 
-         if (WinTraceText == null || WinTraceText == "")
-            WinTraceText = Id ;
+         if (winTraceText == null || winTraceText == "")
+            winTraceText = Id ;
 
          // create the trace window
-         StringList CommandList = new StringList();
-         CommandList.Insert(0, String.Format("{0,5}{1}", TraceConst.CST_TREE_NAME, WinTraceText));
-         TTrace.SendToWinTraceClient (CommandList,this.Id);
+         StringList commandList = new StringList();
+         commandList.Insert(0, String.Format("{0,5}{1}", TraceConst.CST_TREE_NAME, winTraceText));
+         TTrace.SendToWinTraceClient (commandList,Id);
       }
 
       //------------------------------------------------------------------------------
@@ -78,27 +78,27 @@ namespace TraceTool
          Enabled = true;
          WinTraceId = Id ;    // winTraceId need to be the same as 'id' if we want to call sendXxx() directly on WinTrace object
 
-         fContextList = new NodeContextList();
+         ContextList = new NodeContextList();
 
          //fWinTraceContext = null ;
 
-         fWarning = new TraceNode(null, false);
-         fWarning.IconIndex = TraceConst.CST_ICO_WARNING;
-         fWarning.WinTraceId = this.Id;
-         fWarning.fWinTraceContext = fContextList;
-         fWarning.Enabled = true;
+         _warning = new TraceNode(null, false);
+         _warning.IconIndex = TraceConst.CST_ICO_WARNING;
+         _warning.WinTraceId = Id;
+         _warning.WinTraceContext = ContextList;
+         _warning.Enabled = true;
 
-         fError = new TraceNode(null, false);
-         fError.IconIndex = TraceConst.CST_ICO_ERROR;
-         fError.WinTraceId = this.Id;
-         fError.fWinTraceContext = fContextList;
-         fError.Enabled = true;
+         _error = new TraceNode(null, false);
+         _error.IconIndex = TraceConst.CST_ICO_ERROR;
+         _error.WinTraceId = Id;
+         _error.WinTraceContext = ContextList;
+         _error.Enabled = true;
 
-         fDebug = new TraceNode(null, false);
-         fDebug.IconIndex = TraceConst.CST_ICO_INFO;
-         fDebug.WinTraceId = this.Id;
-         fDebug.fWinTraceContext = fContextList;
-         fDebug.Enabled = true;
+         _debug = new TraceNode(null, false);
+         _debug.IconIndex = TraceConst.CST_ICO_INFO;
+         _debug.WinTraceId = Id;
+         _debug.WinTraceContext = ContextList;
+         _debug.Enabled = true;
       }
 
       //------------------------------------------------------------------------------
@@ -115,7 +115,7 @@ namespace TraceTool
       /// </summary>
       public TraceToSend Warning
       {
-         get { return fWarning ; }
+         get { return _warning ; }
       }
 
       //------------------------------------------------------------------------------
@@ -131,7 +131,7 @@ namespace TraceTool
       /// </summary>
       public TraceToSend Error
       {
-         get { return fError ; }
+         get { return _error ; }
       }
 
       //------------------------------------------------------------------------------
@@ -148,7 +148,7 @@ namespace TraceTool
       /// </summary>
       public TraceToSend Debug
       {
-         get  { return fDebug ; }
+         get  { return _debug ; }
       }
 
       //------------------------------------------------------------------------------
@@ -156,12 +156,12 @@ namespace TraceTool
       /// <summary>
       /// Save the window tree traces to a text file
       /// </summary>
-      /// <param name="FileName">file to save</param>
-      public void SaveToTextfile (string FileName)
+      /// <param name="fileName">file to save</param>
+      public void SaveToTextfile (string fileName)
       {
-         StringList CommandList = new StringList();
-         CommandList.Insert(0, String.Format("{0,5}{1}", TraceConst.CST_SAVETOTEXT, FileName));
-         TTrace.SendToWinTraceClient (CommandList,this.Id);
+         StringList commandList = new StringList();
+         commandList.Insert(0, String.Format("{0,5}{1}", TraceConst.CST_SAVETOTEXT, fileName));
+         TTrace.SendToWinTraceClient (commandList,Id);
       }
 
       //------------------------------------------------------------------------------
@@ -169,12 +169,12 @@ namespace TraceTool
       /// <summary>
       /// Save the window tree traces to an XML file
       /// </summary>
-      /// <param name="FileName">file to save</param>
-      public void SaveToXml (string FileName)
+      /// <param name="fileName">file to save</param>
+      public void SaveToXml (string fileName)
       {
-         StringList CommandList = new StringList();
-         Helper.addCommand(CommandList,TraceConst.CST_SAVETOXML , FileName);
-         TTrace.SendToWinTraceClient(CommandList, this.Id);
+         StringList commandList = new StringList();
+         Helper.AddCommand(commandList,TraceConst.CST_SAVETOXML , fileName);
+         TTrace.SendToWinTraceClient(commandList, Id);
       }
 
       //------------------------------------------------------------------------------
@@ -182,13 +182,13 @@ namespace TraceTool
       /// <summary>
       /// Save the window tree traces to an XML file
       /// </summary>
-      /// <param name="FileName">file to save</param>
-      /// <param name="StyleSheet">optional StyleSheet file name added in xml</param>
-      public void SaveToXml (string FileName, string StyleSheet)
+      /// <param name="fileName">file to save</param>
+      /// <param name="styleSheet">optional StyleSheet file name added in xml</param>
+      public void SaveToXml (string fileName, string styleSheet)
       {
-         StringList CommandList = new StringList();
-         Helper.addCommand(CommandList,TraceConst.CST_SAVETOXML, FileName + '|' + StyleSheet);
-         TTrace.SendToWinTraceClient(CommandList, this.Id);
+         StringList commandList = new StringList();
+         Helper.AddCommand(commandList,TraceConst.CST_SAVETOXML, fileName + '|' + styleSheet);
+         TTrace.SendToWinTraceClient(commandList, Id);
       }
 
       //------------------------------------------------------------------------------
@@ -196,12 +196,12 @@ namespace TraceTool
       /// <summary>
       /// Load an XML file to the window tree traces
       /// </summary>
-      /// <param name="FileName">file to open</param>
-      public void LoadXml (string FileName)
+      /// <param name="fileName">file to open</param>
+      public void LoadXml (string fileName)
       {
-         StringList CommandList = new StringList();
-         Helper.addCommand(CommandList,TraceConst.CST_LOADXML, FileName);
-         TTrace.SendToWinTraceClient(CommandList, this.Id);
+         StringList commandList = new StringList();
+         Helper.AddCommand(commandList,TraceConst.CST_LOADXML, fileName);
+         TTrace.SendToWinTraceClient(commandList, Id);
       }
 
       //------------------------------------------------------------------------------
@@ -211,9 +211,9 @@ namespace TraceTool
       /// </summary>
       public void DisplayWin ()
       {
-         StringList CommandList = new StringList();
-         CommandList.Insert(0, String.Format("{0,5}", TraceConst.CST_DISPLAY_TREE));
-         TTrace.SendToWinTraceClient(CommandList, this.Id);
+         StringList commandList = new StringList();
+         commandList.Insert(0, String.Format("{0,5}", TraceConst.CST_DISPLAY_TREE));
+         TTrace.SendToWinTraceClient(commandList, Id);
       }
 
       //------------------------------------------------------------------------------
@@ -224,12 +224,12 @@ namespace TraceTool
 
       public void SetMultiColumn()
       {
-         InternalWinTrace TraceForm = TTrace.getInternalTraceForm(this.Id, true);
-         TraceForm.IsMultiColTree = true;
+         InternalWinTrace traceForm = TTrace.GetInternalTraceForm(Id, true);
+         traceForm.IsMultiColTree = true;
 
-         StringList CommandList = new StringList();
-         CommandList.Insert(0, String.Format("{0,5}{1,11}", TraceConst.CST_TREE_MULTI_COLUMN, 0));
-         TTrace.SendToWinTraceClient(CommandList, this.Id);
+         StringList commandList = new StringList();
+         commandList.Insert(0, String.Format("{0,5}{1,11}", TraceConst.CST_TREE_MULTI_COLUMN, 0));
+         TTrace.SendToWinTraceClient(commandList, Id);
       }
 
       //------------------------------------------------------------------------------
@@ -238,17 +238,17 @@ namespace TraceTool
       /// change the tree to display user defined multiple columns
       /// must be called before setting column titles
       /// </summary>
-      /// <param name="MainColIndex">The Main column index (default is 0)</param>
+      /// <param name="mainColIndex">The Main column index (default is 0)</param>
 
-      public void SetMultiColumn(int MainColIndex)
+      public void SetMultiColumn(int mainColIndex)
       {
-         InternalWinTrace TraceForm = TTrace.getInternalTraceForm(this.Id, true);
-         TraceForm.IsMultiColTree = true;
-         TraceForm.MainCol = MainColIndex;
+         InternalWinTrace traceForm = TTrace.GetInternalTraceForm(Id, true);
+         traceForm.IsMultiColTree = true;
+         traceForm.MainCol = mainColIndex;
 
-         StringList CommandList = new StringList();
-         CommandList.Insert(0, String.Format("{0,5}{1,11}", TraceConst.CST_TREE_MULTI_COLUMN, MainColIndex));
-         TTrace.SendToWinTraceClient(CommandList, this.Id);
+         StringList commandList = new StringList();
+         commandList.Insert(0, String.Format("{0,5}{1,11}", TraceConst.CST_TREE_MULTI_COLUMN, mainColIndex));
+         TTrace.SendToWinTraceClient(commandList, Id);
       }
 
       //------------------------------------------------------------------------------
@@ -268,12 +268,12 @@ namespace TraceTool
       ///   5, Local log enabled. A new file is create each day (CCYYMMDD is appended to the filename). Ignored in silverlight 2
       ///   </code>
       ///   </summary>
-      ///   <param name="FileName">\File to open</param>
-      ///   <param name="Mode">Local and viewer site log mode. </param>                                 
+      ///   <param name="fileName">\File to open</param>
+      ///   <param name="mode">Local and viewer site log mode. </param>                                 
       
-      public void SetLogFile(string FileName, int Mode)
+      public void SetLogFile(string fileName, int mode)
       {
-         SetLogFile(FileName, Mode, -1);
+         SetLogFile(fileName, mode, -1);
       }
 
       //------------------------------------------------------------------------------
@@ -293,28 +293,28 @@ namespace TraceTool
       ///   5, Local log enabled. A new file is create each day (CCYYMMDD is appended to the filename). Ignored in silverlight 2
       ///   </code>
       ///   </summary>
-      ///   <param name="FileName">\File to open</param>
-      ///   <param name="Mode">Local and viewer site log mode. </param>
-      ///   <param name="MaxLines">Number of lines before starting a new
+      ///   <param name="fileName">\File to open</param>
+      ///   <param name="mode">Local and viewer site log mode. </param>
+      ///   <param name="maxLines">Number of lines before starting a new
       ///                          \file (default \: \-1 = unlimited). </param>                         
 
-      public void SetLogFile(string FileName, int Mode, int MaxLines)
+      public void SetLogFile(string fileName, int mode, int maxLines)
       {
          // 3, Local log is disabled
          // 4, Local log enabled. No size limit.
          // 5, Local log enabled. A new file is create each day (CCYYMMDD is appended to the filename)
-         if (Mode >= 3) {
-            InternalWinTrace TraceForm = TTrace.getInternalTraceForm(this.Id, true);
-            if (TraceForm == null)
+         if (mode >= 3) {
+            InternalWinTrace traceForm = TTrace.GetInternalTraceForm(Id, true);
+            if (traceForm == null)
                return;
-            TraceForm.LogFileName = FileName;
-            TraceForm.LogFileType = Mode;
-            TraceForm.MaxLines = MaxLines;
+            traceForm.LogFileName = fileName;
+            traceForm.LogFileType = mode;
+            traceForm.MaxLines = maxLines;
             // don't send anything to the viewer.
          } else {
-            StringList CommandList = new StringList();
-            Helper.addCommand(CommandList,TraceConst.CST_LOGFILE, Mode, MaxLines, FileName);
-            TTrace.SendToWinTraceClient(CommandList, this.Id);
+            StringList commandList = new StringList();
+            Helper.AddCommand(commandList,TraceConst.CST_LOGFILE, mode, maxLines, fileName);
+            TTrace.SendToWinTraceClient(commandList, Id);
          }
       }
 
@@ -326,10 +326,10 @@ namespace TraceTool
 
       public string GetLocalLogFile()
       {
-         InternalWinTrace TraceForm = TTrace.getInternalTraceForm(this.Id, true);
-         if (TraceForm == null)
+         InternalWinTrace traceForm = TTrace.GetInternalTraceForm(Id, true);
+         if (traceForm == null)
             return "";
-         return TraceForm.LastLocalLogFileName;
+         return traceForm.LastLocalLogFileName;
   
       }
 
@@ -338,18 +338,18 @@ namespace TraceTool
       /// <summary>
       /// set columns title
       /// </summary>
-      /// <param name="Titles">Tab separated columns titles
+      /// <param name="titles">Tab separated columns titles
       /// Example : Title1 \t title2
       /// </param>
-      public void SetColumnsTitle (string Titles)
+      public void SetColumnsTitle (string titles)
       {
-         InternalWinTrace TraceForm = TTrace.getInternalTraceForm(this.Id, true);
-         TraceForm.IsMultiColTree = true;
-         TraceForm.TitleList = Titles ;
+         InternalWinTrace traceForm = TTrace.GetInternalTraceForm(Id, true);
+         traceForm.IsMultiColTree = true;
+         traceForm.TitleList = titles ;
 
-         StringList CommandList = new StringList();
-         Helper.addCommand(CommandList,TraceConst.CST_TREE_COLUMNTITLE, Titles);
-         TTrace.SendToWinTraceClient(CommandList, this.Id);
+         StringList commandList = new StringList();
+         Helper.AddCommand(commandList,TraceConst.CST_TREE_COLUMNTITLE, titles);
+         TTrace.SendToWinTraceClient(commandList, Id);
       }
 
       //------------------------------------------------------------------------------
@@ -357,17 +357,17 @@ namespace TraceTool
       /// <summary>
       /// set columns widths
       /// </summary>
-      /// <param name="Widths">Tab separated columns width.
+      /// <param name="widths">Tab separated columns width.
       /// The format for each column is width[:Min[:Max]] <p/>
       /// where Min and Max are optional minimum and maximum column width for resizing purpose.<p/>
       /// Example : 100:20:80 \t 200:50 \t 100
       /// </param>
-      public void SetColumnsWidth (string Widths)
+      public void SetColumnsWidth (string widths)
       {
-         StringList CommandList = new StringList();
+         StringList commandList = new StringList();
 
-         Helper.addCommand(CommandList,TraceConst.CST_TREE_COLUMNWIDTH , Widths);
-         TTrace.SendToWinTraceClient(CommandList, this.Id);
+         Helper.AddCommand(commandList,TraceConst.CST_TREE_COLUMNWIDTH , widths);
+         TTrace.SendToWinTraceClient(commandList, Id);
       }
 
       //------------------------------------------------------------------------------
@@ -377,9 +377,9 @@ namespace TraceTool
       /// </summary>
       public void GotoFirstNode() 
       {
-         StringList CommandList = new StringList();
-         Helper.addCommand(CommandList,TraceConst.CST_GOTO_FIRST_NODE);
-         TTrace.SendToWinTraceClient(CommandList, this.Id);
+         StringList commandList = new StringList();
+         Helper.AddCommand(commandList,TraceConst.CST_GOTO_FIRST_NODE);
+         TTrace.SendToWinTraceClient(commandList, Id);
       }
        
       //------------------------------------------------------------------------------
@@ -389,9 +389,9 @@ namespace TraceTool
       /// </summary>
       public void GotoLastNode() 
       {
-         StringList CommandList = new StringList();
-         Helper.addCommand(CommandList,TraceConst.CST_GOTO_LAST_NODE);
-         TTrace.SendToWinTraceClient(CommandList, this.Id);
+         StringList commandList = new StringList();
+         Helper.AddCommand(commandList,TraceConst.CST_GOTO_LAST_NODE);
+         TTrace.SendToWinTraceClient(commandList, Id);
       }
 
       //------------------------------------------------------------------------------
@@ -399,12 +399,12 @@ namespace TraceTool
       /// <summary>
       /// Set the focus to the next matching node
       /// </summary>
-      /// <param name="SearForward">If true search down, else search up  </param>
-      public void FindNext(bool SearForward) 
+      /// <param name="searForward">If true search down, else search up  </param>
+      public void FindNext(bool searForward) 
       {
-         StringList CommandList = new StringList();
-         Helper.addCommand(CommandList,TraceConst.CST_FIND_NEXT,SearForward);
-         TTrace.SendToWinTraceClient(CommandList, this.Id);
+         StringList commandList = new StringList();
+         Helper.AddCommand(commandList,TraceConst.CST_FIND_NEXT,searForward);
+         TTrace.SendToWinTraceClient(commandList, Id);
       }
 
       //------------------------------------------------------------------------------
@@ -412,12 +412,12 @@ namespace TraceTool
       /// <summary>
       /// Set the focus to a bookmarked node identified by his position. Bookmarks are cheched by the user or with the node.SetBookmark() function
       /// </summary>
-      /// <param name="Pos">Indice of the bookmark </param>
-      public void GotoBookmark(int Pos)
+      /// <param name="pos">Indice of the bookmark </param>
+      public void GotoBookmark(int pos)
       {
-         StringList CommandList = new StringList();
-         Helper.addCommand(CommandList,TraceConst.CST_GOTO_BOOKMARK,Pos);
-         TTrace.SendToWinTraceClient(CommandList, this.Id);
+         StringList commandList = new StringList();
+         Helper.AddCommand(commandList,TraceConst.CST_GOTO_BOOKMARK,pos);
+         TTrace.SendToWinTraceClient(commandList, Id);
       }
 
       //------------------------------------------------------------------------------
@@ -427,9 +427,9 @@ namespace TraceTool
       /// </summary>
       public void ClearBookmark()
       {
-         StringList CommandList = new StringList();
-         Helper.addCommand(CommandList,TraceConst.CST_CLEAR_BOOKMARK);
-         TTrace.SendToWinTraceClient(CommandList, this.Id);
+         StringList commandList = new StringList();
+         Helper.AddCommand(commandList,TraceConst.CST_CLEAR_BOOKMARK);
+         TTrace.SendToWinTraceClient(commandList, Id);
       }
 
       //------------------------------------------------------------------------------
@@ -439,9 +439,9 @@ namespace TraceTool
       /// </summary>
       public void ClearFilter() 
       {
-         StringList CommandList = new StringList();
-         Helper.addCommand(CommandList,TraceConst.CST_CLEAR_FILTER);
-         TTrace.SendToWinTraceClient(CommandList, this.Id);
+         StringList commandList = new StringList();
+         Helper.AddCommand(commandList,TraceConst.CST_CLEAR_FILTER);
+         TTrace.SendToWinTraceClient(commandList, Id);
       }
 
       //------------------------------------------------------------------------------
@@ -449,7 +449,7 @@ namespace TraceTool
       /// <summary>
       /// Add a filter to node. Multiple calls to this function can be done. Call ApplyFilter() to apply filtering
       /// </summary>
-      /// <param name="Column">Column to apply filter.<p/>
+      /// <param name="column">Column to apply filter.<p/>
       ///   In multicolumn mode the first column start at 0 <p/>
       ///   In normal mode : <p/>
       ///   col icone   = 999    <p/>
@@ -459,19 +459,19 @@ namespace TraceTool
       ///   col Comment = 4      <p/>
       ///   col members = 998
       /// </param>
-      /// <param name="Compare">There is 5 kinds of filters : <p/>
+      /// <param name="compare">There is 5 kinds of filters : <p/>
       ///    Equal           = 0  <p/>
       ///    Not equal       = 1  <p/>
       ///    contains       = 2  <p/>
       ///    Don't contains  = 3  <p/>
       ///    (Ignore this filter) = 4 or -1
       ///</param>
-      /// <param name="Text">The text to search (insensitive) </param>
-      public void AddFilter(int Column , int Compare , string Text) 
+      /// <param name="text">The text to search (insensitive) </param>
+      public void AddFilter(int column , int compare , string text) 
       {
-         StringList CommandList = new StringList();
-         Helper.addCommand(CommandList, TraceConst.CST_ADD_FILTER , Column, Compare , Text);
-         TTrace.SendToWinTraceClient(CommandList, this.Id);
+         StringList commandList = new StringList();
+         Helper.AddCommand(commandList, TraceConst.CST_ADD_FILTER , column, compare , text);
+         TTrace.SendToWinTraceClient(commandList, Id);
       }
 
       //------------------------------------------------------------------------------
@@ -480,23 +480,23 @@ namespace TraceTool
       /// <summary>
       /// Apply filters after calls to AddFilter().
       /// </summary>
-      /// <param name="ConditionAnd">If true, use an 'AND' condition for each filters, else use a "OR" </param>
-      /// <param name="ShowMatch">If true, show node that match filter and hide others. If false hide matching node and show others</param>
-      /// <param name="IncludeChildren">If true, search in subnodes</param>
-      public void ApplyFilter(bool ConditionAnd, bool ShowMatch, bool IncludeChildren) 
+      /// <param name="conditionAnd">If true, use an 'AND' condition for each filters, else use a "OR" </param>
+      /// <param name="showMatch">If true, show node that match filter and hide others. If false hide matching node and show others</param>
+      /// <param name="includeChildren">If true, search in subnodes</param>
+      public void ApplyFilter(bool conditionAnd, bool showMatch, bool includeChildren) 
       {
          int flags = 0;
          // ConditionAnd<<2+ShowMatch<<1+IncludeChildren
-         if (ConditionAnd)
+         if (conditionAnd)
             flags += 4;
-         if (ShowMatch)
+         if (showMatch)
             flags += 2;
-         if (IncludeChildren)
+         if (includeChildren)
             flags += 1;
 
-         StringList CommandList = new StringList();
-         Helper.addCommand(CommandList, TraceConst.CST_APPLY_FILTER, flags);
-         TTrace.SendToWinTraceClient(CommandList, this.Id);
+         StringList commandList = new StringList();
+         Helper.AddCommand(commandList, TraceConst.CST_APPLY_FILTER, flags);
+         TTrace.SendToWinTraceClient(commandList, Id);
       }
 
       //------------------------------------------------------------------------------
@@ -506,9 +506,9 @@ namespace TraceTool
       /// </summary>
       public void ClearAll ()
       {
-         StringList CommandList = new StringList();
-         Helper.addCommand(CommandList,TraceConst.CST_CLEAR_ALL);
-         TTrace.SendToWinTraceClient(CommandList, this.Id);
+         StringList commandList = new StringList();
+         Helper.AddCommand(commandList,TraceConst.CST_CLEAR_ALL);
+         TTrace.SendToWinTraceClient(commandList, Id);
       }
 
       //------------------------------------------------------------------------------
@@ -518,9 +518,9 @@ namespace TraceTool
       /// </summary>
       public void Close()
       {
-         StringList CommandList = new StringList();
-         Helper.addCommand(CommandList,TraceConst.CST_CLOSE_WIN);
-         TTrace.SendToWinTraceClient(CommandList, this.Id);
+         StringList commandList = new StringList();
+         Helper.AddCommand(commandList,TraceConst.CST_CLOSE_WIN);
+         TTrace.SendToWinTraceClient(commandList, Id);
       }
 
       //------------------------------------------------------------------------------
@@ -530,8 +530,8 @@ namespace TraceTool
       /// <summary>
       /// Plugin API : Create a resource.
       /// </summary>
-      /// <param name="ResId">The resource Id (must be >= 100)</param>
-      /// <param name="ResType">Resource type. See TraceConst
+      /// <param name="resId">The resource Id (must be >= 100)</param>
+      /// <param name="resType">Resource type. See TraceConst
       /// <code>
       /// CST_RES_BUT_RIGHT    : Button on right
       /// CST_RES_BUT_LEFT     : Button on left
@@ -544,14 +544,14 @@ namespace TraceTool
       ///                        Call CreateResource on the main win trace to create this menu item
       /// </code>
       ///</param>
-      /// <param name="ResWidth">Width of the resource. Applicable only to button and labels</param>
-      /// <param name="ResText">Resource text</param>
+      /// <param name="resWidth">Width of the resource. Applicable only to button and labels</param>
+      /// <param name="resText">Resource text</param>
 
-      public void CreateResource (int ResId , int ResType , int ResWidth , string ResText)
+      public void CreateResource (int resId , int resType , int resWidth , string resText)
       {
-         StringList CommandList = new StringList();
-         Helper.addCommand(CommandList, TraceConst.CST_CREATE_RESOURCE, ResId, ResType, ResWidth, ResText);
-         TTrace.SendToWinTraceClient(CommandList, this.Id);
+         StringList commandList = new StringList();
+         Helper.AddCommand(commandList, TraceConst.CST_CREATE_RESOURCE, resId, resType, resWidth, resText);
+         TTrace.SendToWinTraceClient(commandList, Id);
       }
 
       //------------------------------------------------------------------------------
@@ -559,7 +559,7 @@ namespace TraceTool
       /// <summary>
       /// Plugin API : Disable tracetool or user created resources
       /// </summary>
-      /// <param name="ResId">The resource Id
+      /// <param name="resId">The resource Id
       /// ResId: resource id to disable. Tracetool resources :
       /// <code>
       /// CST_ACTION_CUT            : Cut. Same as copy then delete
@@ -583,11 +583,11 @@ namespace TraceTool
       /// </code>
       /// </param>
 
-      public void DisableResource(int ResId)
+      public void DisableResource(int resId)
       {
-         StringList CommandList = new StringList();
-         Helper.addCommand(CommandList,TraceConst.CST_DISABLE_RESOURCE, ResId);
-         TTrace.SendToWinTraceClient(CommandList, this.Id);
+         StringList commandList = new StringList();
+         Helper.AddCommand(commandList,TraceConst.CST_DISABLE_RESOURCE, resId);
+         TTrace.SendToWinTraceClient(commandList, Id);
       }
 
       //------------------------------------------------------------------------------
@@ -595,14 +595,14 @@ namespace TraceTool
       /// <summary>
       /// Plugin API : Set the resource text (tracetool or user created resources), specified by his Id
       /// </summary>
-      /// <param name="ResId">The resource Id </param>
-      /// <param name="ResText">Resource text</param>
+      /// <param name="resId">The resource Id </param>
+      /// <param name="resText">Resource text</param>
 
-      public void SetTextResource(int ResId, string ResText)
+      public void SetTextResource(int resId, string resText)
       {
-         StringList CommandList = new StringList();
-         Helper.addCommand(CommandList, TraceConst.CST_SET_TEXT_RESOURCE, ResId, ResText);
-         TTrace.SendToWinTraceClient(CommandList, this.Id);
+         StringList commandList = new StringList();
+         Helper.AddCommand(commandList, TraceConst.CST_SET_TEXT_RESOURCE, resId, resText);
+         TTrace.SendToWinTraceClient(commandList, Id);
       }
 
       //------------------------------------------------------------------------------
@@ -614,14 +614,14 @@ namespace TraceTool
       /// The plugin is identified by his internal name (not dll name).
       /// When linked, the plugin can receive event (see ITracePLugin).
       /// </summary>
-      /// <param name="PluginName">name of the plugin</param>
+      /// <param name="pluginName">name of the plugin</param>
       /// <param name="flags">combinaison of CST_PLUG_ONACTION , CST_PLUG_ONBEFOREDELETE , CST_PLUG_ONTIMER</param>
 
-      public void LinkToPlugin(string PluginName, int flags)
+      public void LinkToPlugin(string pluginName, int flags)
       {
-         StringList CommandList = new StringList();
-         Helper.addCommand(CommandList, TraceConst.CST_LINKTOPLUGIN, flags, PluginName);
-         TTrace.SendToWinTraceClient(CommandList, this.Id);
+         StringList commandList = new StringList();
+         Helper.AddCommand(commandList, TraceConst.CST_LINKTOPLUGIN, flags, pluginName);
+         TTrace.SendToWinTraceClient(commandList, Id);
       }
    }
 }

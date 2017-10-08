@@ -12,9 +12,9 @@
 // NETF1  (dot net framework 1)          , NETF2 ((dot net framework 2) ,
 // NETCF1 (dot net compact framework 1)  , NETCF2 (dot net compact framework 2) , NETCF3 (dot net compact framework 3)
 
-using System;
+//using System;
 //using System.Collections.Generic;
-using System.Text;
+//using System.Text;
 
 namespace TraceTool
 {

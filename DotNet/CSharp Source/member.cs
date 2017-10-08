@@ -13,12 +13,12 @@
 // NETCF1 (dot net compact framework 1)  , NETCF2 (dot net compact framework 2) , NETCF3 (dot net compact framework 3)
 
 using System;
-using System.Collections;  // ArrayList, queue
+//using System.Collections;  // ArrayList, queue
 using System.Text;         // StringBuilder
 
 // generic start in F2
 #if (!NETCF1 && !NETF1)
-using System.Collections.Generic;
+//using System.Collections.Generic;
 #endif
 
 namespace TraceTool
@@ -27,12 +27,13 @@ namespace TraceTool
    /// TMemberNode represent a node inside the right object tree
    /// </summary>
 
+   // ReSharper disable once InconsistentNaming
    public class TMemberNode
    {
       /// <summary>
       /// The 3 columns to display
       /// </summary>
-      public string Col1, Col2, Col3 ;
+      public string Col1, Col2, Col3, DefaultCol2 ;
       /// <summary>
       /// an array of sub members (TMemberNode)
       /// </summary>
@@ -129,76 +130,76 @@ namespace TraceTool
       /// <summary>
       /// Change font detail for an item in the trace
       /// </summary>
-      /// <param name="ColId">Column index : All columns=-1, Col1=0, Col2=1, Col3=2</param>
-      /// <param name="Bold">Change font to bold</param>
+      /// <param name="colId">Column index : All columns=-1, Col1=0, Col2=1, Col3=2</param>
+      /// <param name="bold">Change font to bold</param>
       /// <returns>The TMember node</returns>
-      public TMemberNode SetFontDetail(int ColId, bool Bold)
+      public TMemberNode SetFontDetail(int colId, bool bold)
       {
-         return SetFontDetail(ColId, Bold, false, -1, 0, "");
+         return SetFontDetail(colId, bold, false, -1, 0, "");
       }
 
       //----------------------------------------------------------------------
       /// <summary>
       /// Change font detail for an item in the trace
       /// </summary>
-      /// <param name="ColId">Column index : All columns=-1, Col1=0, Col2=1, Col3=2</param>
-      /// <param name="Bold">Change font to bold</param>
-      /// <param name="Italic">Change font to Italic</param>
+      /// <param name="colId">Column index : All columns=-1, Col1=0, Col2=1, Col3=2</param>
+      /// <param name="bold">Change font to bold</param>
+      /// <param name="italic">Change font to Italic</param>
       /// <returns>The TMember node</returns>
-      public TMemberNode SetFontDetail(int ColId, bool Bold, bool Italic)
+      public TMemberNode SetFontDetail(int colId, bool bold, bool italic)
       {
-         return SetFontDetail(ColId, Bold, Italic, -1, 0, "");
+         return SetFontDetail(colId, bold, italic, -1, 0, "");
       }
 
       //----------------------------------------------------------------------
       /// <summary>
       /// Change font detail for an item in the trace
       /// </summary>
-      /// <param name="ColId">Column index : All columns=-1, Col1=0, Col2=1, Col3=2</param>
-      /// <param name="Bold">Change font to bold</param>
-      /// <param name="Italic">Change font to Italic</param>
-      /// <param name="Color">Change Color. To reduce the number assembly reference, the Color structure is not used. Use YourColor.ToArgb() instead. </param>
+      /// <param name="colId">Column index : All columns=-1, Col1=0, Col2=1, Col3=2</param>
+      /// <param name="bold">Change font to bold</param>
+      /// <param name="italic">Change font to Italic</param>
+      /// <param name="color">Change Color. To reduce the number assembly reference, the Color structure is not used. Use YourColor.ToArgb() instead. </param>
       /// <returns>The TMember node</returns>
-      public TMemberNode SetFontDetail(int ColId, bool Bold, bool Italic, int Color)
+      public TMemberNode SetFontDetail(int colId, bool bold, bool italic, int color)
       {
-         return SetFontDetail(ColId, Bold, Italic, Color, 0, "");
+         return SetFontDetail(colId, bold, italic, color, 0, "");
       }
 
       //----------------------------------------------------------------------
       /// <summary>
       /// Change font detail for an item in the trace
       /// </summary>
-      /// <param name="ColId">Column index : All columns=-1, Col1=0, Col2=1, Col3=2</param>
-      /// <param name="Bold">Change font to bold</param>
-      /// <param name="Italic">Change font to Italic</param>
-      /// <param name="Color">Change Color. To reduce the number assembly reference, the Color structure is not used. Use YourColor.ToArgb() instead. Use -1 to keep default color</param>
-      /// <param name="Size">Change font size</param>
+      /// <param name="colId">Column index : All columns=-1, Col1=0, Col2=1, Col3=2</param>
+      /// <param name="bold">Change font to bold</param>
+      /// <param name="italic">Change font to Italic</param>
+      /// <param name="color">Change Color. To reduce the number assembly reference, the Color structure is not used. Use YourColor.ToArgb() instead. Use -1 to keep default color</param>
+      /// <param name="size">Change font size</param>
       /// <returns>The TMember node</returns>
-      public TMemberNode SetFontDetail(int ColId, bool Bold, bool Italic, int Color, int Size)
+      public TMemberNode SetFontDetail(int colId, bool bold, bool italic, int color, int size)
       {
-         return SetFontDetail(ColId, Bold, Italic, Color, Size, "");
+         return SetFontDetail(colId, bold, italic, color, size, "");
       }
 
       //----------------------------------------------------------------------
       /// <summary>
       /// Change font detail for an item in the trace
       /// </summary>
-      /// <param name="ColId">Column index : All columns=-1, Col1=0, Col2=1, Col3=2</param>
-      /// <param name="Bold">Change font to bold</param>
-      /// <param name="Italic">Change font to Italic</param>
-      /// <param name="Color">Change Color. To reduce the number assembly reference, the Color structure is not used. Use YourColor.ToArgb() instead. Use -1 to keep default color</param>
-      /// <param name="Size">Change font size, use zero to keep normal size</param>
-      /// <param name="FontName">Change font name</param>
+      /// <param name="colId">Column index : All columns=-1, Col1=0, Col2=1, Col3=2</param>
+      /// <param name="bold">Change font to bold</param>
+      /// <param name="italic">Change font to Italic</param>
+      /// <param name="color">Change Color. To reduce the number assembly reference, the Color structure is not used. Use YourColor.ToArgb() instead. Use -1 to keep default color</param>
+      /// <param name="size">Change font size, use zero to keep normal size</param>
+      /// <param name="fontName">Change font name</param>
       /// <returns>The TMember node</returns>
-      public TMemberNode SetFontDetail(int ColId, bool Bold, bool Italic, int Color, int Size, string FontName)
+      public TMemberNode SetFontDetail(int colId, bool bold, bool italic, int color, int size, string fontName)
       {
          FontDetail fontDetail = new FontDetail();
-         fontDetail.ColId    = ColId;
-         fontDetail.Bold     = Bold;
-         fontDetail.Italic   = Italic;
-         fontDetail.Color    = Color;
-         fontDetail.Size     = Size;
-         fontDetail.FontName = FontName;
+         fontDetail.ColId    = colId;
+         fontDetail.Bold     = bold;
+         fontDetail.Italic   = italic;
+         fontDetail.Color    = color;
+         fontDetail.Size     = size;
+         fontDetail.FontName = fontName;
 
          if (FontDetails == null)
             FontDetails = new FontDetailList();
@@ -211,8 +212,8 @@ namespace TraceTool
       /// <summary>
       /// recursively add members to the node CommandList
       /// </summary>
-      /// <param name="CommandList">target command list</param>
-      public void AddToStringList(StringList CommandList)
+      /// <param name="commandList">target command list</param>
+      public void AddToStringList(StringList commandList)
       {
          // the root node node itself is not send for now.
          // Later we can send the 3 columns text to specify the header, if specfied.
@@ -221,7 +222,7 @@ namespace TraceTool
          foreach (TMemberNode node in Members)
          {
             if (node != null)
-               node._AddToStringList (CommandList) ;
+               node._AddToStringList (commandList) ;
          }
 
          // once copied to Commandlist, clear the array
@@ -230,40 +231,40 @@ namespace TraceTool
 
       //----------------------------------------------------------------------
       // internal use only, used to recursively add sub members to the array
-      internal void _AddToStringList(StringList CommandList)
+      internal void _AddToStringList(StringList commandList)
       {
          // create the member and set col1
-         Helper.addCommand (CommandList, TraceConst.CST_CREATE_MEMBER, Col1);
+         Helper.AddCommand (commandList, TraceConst.CST_CREATE_MEMBER, Col1);
          // add command if col2 and/or col3 exist
          if (Col2 != "")
-            Helper.addCommand(CommandList, TraceConst.CST_MEMBER_COL2, Col2);
+            Helper.AddCommand(commandList, TraceConst.CST_MEMBER_COL2, Col2);
 
          if (Col3 != "")
-            Helper.addCommand(CommandList, TraceConst.CST_MEMBER_COL3, Col3);
+            Helper.AddCommand(commandList, TraceConst.CST_MEMBER_COL3, Col3);
 
          // add viewer kind
          if (ViewerKind != 0)
-            Helper.addCommand(CommandList, TraceConst.CST_MEMBER_VIEWER_KIND, ViewerKind);
+            Helper.AddCommand(commandList, TraceConst.CST_MEMBER_VIEWER_KIND, ViewerKind);
 
          // add font detail
          if (FontDetails != null)
          {
             foreach (FontDetail fontDetail in FontDetails)
             {
-               StringBuilder TempStr = new StringBuilder() ;
+               StringBuilder tempStr = new StringBuilder() ;
 
-               TempStr.Append(String.Format("{0,5}{1,3}", TraceConst.CST_MEMBER_FONT_DETAIL , fontDetail.ColId)) ;
+               tempStr.Append(String.Format("{0,5}{1,3}", TraceConst.CST_MEMBER_FONT_DETAIL , fontDetail.ColId)) ;
 
 
                if (fontDetail.Bold)
-                  TempStr.Append("1");
+                  tempStr.Append("1");
                else
-                  TempStr.Append("0");
+                  tempStr.Append("0");
 
                if (fontDetail.Italic)
-                  TempStr.Append("1");
+                  tempStr.Append("1");
                else
-                  TempStr.Append("0");
+                  tempStr.Append("0");
 
                int colorValue ;
                if (fontDetail.Color == -1)
@@ -275,14 +276,14 @@ namespace TraceTool
                   // remove Alpha blending
                   colorValue = fontDetail.Color & 0xFFFFFF;
                   // Color is coded as RGB. convert to BGR
-                  int B = colorValue & 0xff;
-                  int G = (colorValue >> 8) & 0xff;
-                  int R = (colorValue >> 0x10) & 0xff;
-                  colorValue = (B << 0x10) + (G << 8) + R;
+                  int b = colorValue & 0xff;
+                  int g = (colorValue >> 8) & 0xff;
+                  int r = (colorValue >> 0x10) & 0xff;
+                  colorValue = (b << 0x10) + (g << 8) + r;
                }
 
-               TempStr.Append(String.Format("{0,11}{1,11}", colorValue, fontDetail.Size)).Append(fontDetail.FontName);
-               CommandList.Add(TempStr.ToString());
+               tempStr.Append(String.Format("{0,11}{1,11}", colorValue, fontDetail.Size)).Append(fontDetail.FontName);
+               commandList.Add(tempStr.ToString());
 
             }
             FontDetails.Clear() ;
@@ -292,10 +293,10 @@ namespace TraceTool
          // recursive add sub nodes, if any
          foreach (TMemberNode node in Members)
             if (node != null)
-               node._AddToStringList (CommandList) ;
+               node._AddToStringList (commandList) ;
 
          // close the member group
-         Helper.addCommand(CommandList, TraceConst.CST_ADD_MEMBER);
+         Helper.AddCommand(commandList, TraceConst.CST_ADD_MEMBER);
 
       }
    }       // TMemberNode class

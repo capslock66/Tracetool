@@ -13,7 +13,6 @@
 // NETCF1 (dot net compact framework 1)  , NETCF2 (dot net compact framework 2) , NETCF3 (dot net compact framework 3)
 
 using System.Diagnostics;
-using TraceTool;
 
 namespace TraceTool
 {
@@ -21,13 +20,14 @@ namespace TraceTool
    /// TTraceListener is the trace listener, if you want to use the classic Microsoft Trace class.
    /// </summary>
 
+   // ReSharper disable once InconsistentNaming
    public class TTraceListener :  TraceListener
    {
 
       /// <summary>
       /// Specify at any time what is top node that receive the traces
       /// </summary>
-      public TraceToSend listener;
+      public readonly TraceToSend Listener;
 
       private TraceNode _currentNode ;
       /// <summary>
@@ -41,19 +41,19 @@ namespace TraceTool
       /// </summary>
       public TTraceListener ()
       {
-         listener = TTrace.Debug ;
-         base.NeedIndent = true;
+         Listener = TTrace.Debug ;
+         NeedIndent = true;
       }
 
       //----------------------------------------------------------------------
       /// <summary>
       /// Create a listener giving a TraceNode as the parent node.
       /// </summary>
-      /// <param name="TraceDoor">Specify Debug,Warning,Error or user TraceNode object</param>
-      public TTraceListener (TraceNode TraceDoor)
+      /// <param name="traceDoor">Specify Debug,Warning,Error or user TraceNode object</param>
+      public TTraceListener (TraceNode traceDoor)
       {
-         listener = TraceDoor ;
-         base.NeedIndent = true;
+         Listener = traceDoor ;
+         NeedIndent = true;
       }
 
       //----------------------------------------------------------------------
@@ -63,10 +63,10 @@ namespace TraceTool
       /// <param name="message">the message</param>
       public override void Write(string message)
       {
-         if (this.listener == null)
+         if (Listener == null)
             return;
 
-         if (base.NeedIndent)
+         if (NeedIndent)
             WriteIndent();
 
          _currentNode.AppendLeft(message);
@@ -79,14 +79,14 @@ namespace TraceTool
       /// <param name="message">the message</param>
       public override void WriteLine(string message)
       {
-         if (this.listener == null)
+         if (Listener == null)
             return;
 
-         if (base.NeedIndent)
+         if (NeedIndent)
             WriteIndent();
 
          _currentNode.AppendLeft(message);
-         base.NeedIndent = true;
+         NeedIndent = true;
       }
 
       //----------------------------------------------------------------------
@@ -95,10 +95,10 @@ namespace TraceTool
       /// </summary>
       protected override void WriteIndent()
       {
-         if (this.listener == null)
+         if (Listener == null)
             return;
-         _currentNode = listener.Send ("") ;
-         this.NeedIndent = false;
+         _currentNode = Listener.Send ("") ;
+         NeedIndent = false;
       }
    }
 }

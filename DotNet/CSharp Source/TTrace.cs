@@ -7,7 +7,6 @@
 // send the trace using socket or windows messages
 //
 // Author : Thierry Parent
-// Version : 12.9
 //
 // HomePage :  http://www.codeproject.com/csharp/TraceTool.asp
 // Download :  http://sourceforge.net/projects/tracetool/
@@ -18,23 +17,23 @@
 // NETCF1 (dot net compact framework 1)  , NETCF2 (dot net compact framework 2) , NETCF3 (dot net compact framework 3)
 
 // History :
-// 12.7 : 2015 10 06 : Some method no more raise exception.
-// 12.7 : 2015 10 06 : Fix AssemblyDocumentationFileName exception
-// 12.7 : 2015 10 07 : Added default options in TTraceOptions (from TraceDisplayFlags)
-// 12.7 : 2015 10 26 : Added SendStack with default level
-// 12.7 : 2015 11 08 : TraceNode constructor is public
-// 12.7 : 2015 11 08 : TraceNode.AppendStack()
-// 12.7 : 2015 11 08 : TraceToSend.Indent() and TraceToSend.EnterMethod() returns a TraceNode
-// 12.8 : 2016 07 26 : Fix stack trace with Lambda
-// 12.8 : 2016 07 28 : Fix addDependencyPropertiesValues, DisplayDependencyProperties
-// 12.9 : 2016 10 05 : stack trace display the class of the method. Modifier is removed (public static,...)
+// 12.7  : 2015 10 06 : Some method no more raise exception.
+// 12.7   : 2015 10 06 : Fix AssemblyDocumentationFileName exception
+// 12.7   : 2015 10 07 : Added default options in TTraceOptions (from TraceDisplayFlags)
+// 12.7   : 2015 10 26 : Added SendStack with default level
+// 12.7   : 2015 11 08 : TraceNode constructor is public
+// 12.7   : 2015 11 08 : TraceNode.AppendStack()
+// 12.7   : 2015 11 08 : TraceToSend.Indent() and TraceToSend.EnterMethod() returns a TraceNode
+// 12.8   : 2016 07 26 : Fix stack trace with Lambda
+// 12.8   : 2016 07 28 : Fix addDependencyPropertiesValues, DisplayDependencyProperties
+// 12.8.5 : 2016 10 05 : stack trace display the class of the method. Modifier is removed (public static,...)
 
 
 using System.Text;
 using System;
 using System.Xml;
 using System.Configuration;
-using System.Collections;                 // ArrayList, queue
+//using System.Collections;                 // ArrayList, queue
 using System.Threading ;                  // thead pool, ResetEvent
 using System.Net;
 using System.Net.Sockets;
@@ -45,7 +44,7 @@ using System.Runtime.InteropServices;
 
 // generic start in F2
 #if (!NETCF1 && !NETF1)
-using System.Collections.Generic;
+//using System.Collections.Generic;
 #endif
 
 #if (!NETCF1)
@@ -62,38 +61,38 @@ namespace TraceTool
    /// That class is fully static.
    /// </summary>
 
+   // ReSharper disable once InconsistentNaming
    public class TTrace
    {
       // internal members
       //-----------------
 
-      static internal MsgQueueList MsgQueue;         // store all messages to send
-      static internal StrKeyObjectList flushList;    // AutoResetEvent flush list
-      private static Thread TraceThread;
-      private static  AutoResetEvent DataReady ;     // data is ready to send
-      private static  AutoResetEvent SendDone;       // message is send. Next message can be send.
-      static internal bool _isSocketError = false ;
-      static internal long _errorTime = 0;
-      static internal long ConnectTime = 0;
-      static internal string _LastError = "";
-      static internal WinTrace _winTrace ;
-      static internal WinWatch _winWatch ;
-      static internal InternalWinTrace DefaultWinTrace ;
-      static internal InternalWinTraceList FormTraceList ;
-      static internal byte[] buffToSend;  // buffer to send to viewer
-      static internal Socket _socket;
-      static internal TextWriter _out;
+      private static readonly AutoResetEvent DataReady ;     // data is ready to send
+      private static readonly StrKeyObjectList FlushList;    // AutoResetEvent flush list
+      private static readonly InternalWinTrace DefaultWinTrace ;
+      private static readonly InternalWinTraceList FormTraceList ;
+      private static Thread _traceThread;
+      private static MsgQueueList _msgQueue;         // store all messages to send
+      private static bool _isSocketError;
+      private static long _errorTime;
+      private static string _lastError = "";
+      private static WinTrace _winTrace ;
+      private static WinWatch _winWatch ;
+      private static byte[] _buffToSend;  // buffer to send to viewer
+      private static Socket _socket;
+      private static TextWriter _writterOut;
+      //private static  AutoResetEvent _sendDone;       // message is send. Next message can be send.
 
 #if (SILVERLIGHT)
       static internal DnsEndPoint _hostEntry;
       static internal SocketAsyncEventArgs _socketEventArg; 
 #else
-      static internal UdpClient _UdpSocket;
+       private static UdpClient _udpSocket;
 #endif
       /// number of message discarded (socket error)
-      public static long nbDiscarded = 0;
+      public static long NbDiscarded;
       /// number of message send by silverlight (socket error)
-      public static long nbSend = 0;
+      public static long NbSend = 0;
 
       /// TTrace Options (socket, show functions, ...)
       public static TTraceOptions Options ;
@@ -102,23 +101,23 @@ namespace TraceTool
       //static initializer , initialise the class
       static TTrace()
       {       
-         flushList = new StrKeyObjectList();              // AutoResetEvent flush list
+         FlushList = new StrKeyObjectList();              // AutoResetEvent flush list
          FormTraceList = new InternalWinTraceList();
          DefaultWinTrace = new InternalWinTrace() ;       // main InternalWinTrace. Id is empty
          FormTraceList.Add (DefaultWinTrace) ;
-         MsgQueue      = new MsgQueueList();              // store all messages to send
+         _msgQueue      = new MsgQueueList();              // store all messages to send
          //DataReady     = new AutoResetEvent (false) ;   // data is ready to send
          Options       = new TTraceOptions () ;           // TTrace Options (socket, show functions, ...)
          //StopEvent   = new ManualResetEvent (false) ;   // ask the thread to quit
 
          // create the lock system and the thread
          DataReady = new AutoResetEvent(false);  // initial state false
-         SendDone = new AutoResetEvent(false);   // initial state false
-         TraceThread = new Thread(new ThreadStart(SendThreadEntryPoint)); //  new Thread(SendThreadEntryPoint);
+         //_sendDone = new AutoResetEvent(false);   // initial state false
+         _traceThread = new Thread(SendThreadEntryPoint); //  new Thread(SendThreadEntryPoint);
          // force the thread to be killed when all foreground thread are terminated.
          // compatibility : don't work on compact framework 1. Work on all platform.
-         TraceThread.IsBackground = true;  
-         TraceThread.Start();
+         _traceThread.IsBackground = true;  
+         _traceThread.Start();
 
          try {   // since 12.5 : protect if configuration file is bad
 
@@ -154,7 +153,7 @@ namespace TraceTool
 
             if (_config != null) {
                //Debug.Send ("App.Config file exist") ;
-               readConfig(_config);
+               ReadConfig(_config);
                return;
             } else {
                //Debug.Send ("no App.Config file") ;
@@ -169,7 +168,7 @@ namespace TraceTool
 
 #if (!NETCF1 && !NETCF2 && !NETCF3)
             configFile = AppDomain.CurrentDomain.SetupInformation.ConfigurationFile;
-            if (getConfigFomFile(configFile) == true)
+            if (GetConfigFomFile(configFile))
                return;
 #endif
 
@@ -182,7 +181,7 @@ namespace TraceTool
 #else
          configFile = Helper.GetCurrentProcessName() + ".TraceTool";
 #endif
-            if (getConfigFomFile(configFile) == true)
+            if (GetConfigFomFile(configFile))
                return;
 
             // 4) check the existence of tracetool.dll.TraceTool file
@@ -194,21 +193,19 @@ namespace TraceTool
 #endif
             configFile = configFile + ".TraceTool";
 
-            if (getConfigFomFile(configFile) == true)
+            if (GetConfigFomFile(configFile))
                return;
 
             // 5) last chance : a "traceTool.xml" file in the current folder
             configFile = "traceTool.xml";
-            if (getConfigFomFile(configFile) == true)
-               return;
+            GetConfigFomFile(configFile) ;
 
 
 #endif  // !SILVERLIGHT
 
          }
          catch (Exception ex) {
-            _LastError = ex.Message;
-            return;
+            _lastError = ex.Message;
          }
 
       }  // TTrace constructor
@@ -218,7 +215,7 @@ namespace TraceTool
 #if (!SILVERLIGHT)
       //------------------------------------------------------------------------------
       // get the configuration from specified file
-      internal static bool getConfigFomFile (string fileName)
+      private static bool GetConfigFomFile (string fileName)
       {
          try {
 
@@ -270,17 +267,17 @@ namespace TraceTool
             }
 
             //Debug.Send (fileName + " file exist with TraceTool section") ;
-            return readConfig(config);
+            return ReadConfig(config);
          }
          catch (Exception ex) {
-            _LastError = ex.Message;
+            _lastError = ex.Message;
             return true;   // don't continue if error (else we can miss the error)
          }
       }
 
       //------------------------------------------------------------------------------
       // read configuration from XML node
-      internal static bool readConfig (XmlNode config)
+      private static bool ReadConfig (XmlNode config)
       {
          if (config == null)
             return false;
@@ -291,23 +288,25 @@ namespace TraceTool
             foreach (XmlNode node in config.ChildNodes) {
                // detect 'param' tag not case sensitive
                string tagName = node.Name.ToLower();
+               // ReSharper disable StringCompareToIsCultureSpecific
                if (tagName.CompareTo("param") == 0) {
                   // get the name and value attributes
-                  string ParamName = "";
-                  string ParamValue = "";
-                  getParamNameAndValue(node, out ParamName, out ParamValue);
+                  string paramName;
+                  string paramValue;
+                  GetParamNameAndValue(node, out paramName, out paramValue);
 
-                  InitOptions(ParamName, ParamValue);
+                  InitOptions(paramName, paramValue);
                } else if (tagName.CompareTo("debug") == 0)
                   InitTraceNode(node, Debug);
                else if (tagName.CompareTo("warning") == 0)
                   InitTraceNode(node, Warning);
                else if (tagName.CompareTo("error") == 0)
                   InitTraceNode(node, Error);
+               // ReSharper restore StringCompareToIsCultureSpecific
             }  // next tag in config section
          }
          catch (Exception ex) {
-            _LastError = ex.Message;
+            _lastError = ex.Message;
             return false;
          }
          return true;
@@ -315,54 +314,60 @@ namespace TraceTool
 
       //------------------------------------------------------------------------------
 
-      internal static void getParamNameAndValue (XmlNode node , out string ParamName, out string ParamValue)
+      private static void GetParamNameAndValue (XmlNode node , out string paramName, out string paramValue)
       {
-         ParamName   = "" ;
-         ParamValue  = "" ;
+         paramName   = "" ;
+         paramValue  = "" ;
+         if (node.Attributes == null)
+            return ;
          foreach ( XmlAttribute attrib in node.Attributes)
          {
             string attribName = attrib.Name.ToLower() ;
+            // ReSharper disable StringCompareToIsCultureSpecific
             if (attribName.CompareTo ("name") == 0)
-               ParamName = attrib.Value.ToLower() ;
+               paramName = attrib.Value.ToLower() ;
             if (attribName.CompareTo ("value") == 0)
-               ParamValue = attrib.Value.ToLower() ;
+               paramValue = attrib.Value.ToLower() ;
+            // ReSharper restore StringCompareToIsCultureSpecific
          }
          //Debug.Send (ParamName,ParamValue) ;
       }
 
       //------------------------------------------------------------------------------
 
-      internal static void InitTraceNode(XmlNode XmlTraceNode, TraceToSend trace)
+      internal static void InitTraceNode(XmlNode xmlTraceNode, TraceToSend trace)
       {
-         foreach (XmlNode node in XmlTraceNode.ChildNodes)
+         foreach (XmlNode node in xmlTraceNode.ChildNodes)
          {
             // detect 'param' tag wihout case sensitive
             string tagName = node.Name.ToLower();
+             // ReSharper disable StringCompareToIsCultureSpecific
             if (tagName.CompareTo("param") == 0)
             {
                // get the name and value attributes
-               string ParamName = "";
-               string ParamValue = "";
-               getParamNameAndValue(node, out ParamName, out ParamValue);
+               string paramName;
+               string paramValue;
+               GetParamNameAndValue(node, out paramName, out paramValue);
 
-               if (ParamName.CompareTo("enabled") == 0)
+               if (paramName.CompareTo("enabled") == 0)
                {                // bool Enabled
-                  if (ParamValue.ToLower().CompareTo("true") == 0)
+                  if (paramValue.ToLower().CompareTo("true") == 0)
                      trace.Enabled = true;
-                  else if (ParamValue.ToLower().CompareTo("false") == 0)
+                  else if (paramValue.ToLower().CompareTo("false") == 0)
                      trace.Enabled = false;
                }
-               else if (ParamName.CompareTo("iconindex") == 0)
+               else if (paramName.CompareTo("iconindex") == 0)
                {       // int IconIndex
                   try
                   {
-                     trace.IconIndex = Int32.Parse(ParamValue);
+                     trace.IconIndex = Int32.Parse(paramValue);
                   }
                   catch
                   {
                      // no change
                   }
                }     // param name="xxx"
+               // ReSharper restore StringCompareToIsCultureSpecific
             }        // param tag
          }           // next param
       }
@@ -371,37 +376,38 @@ namespace TraceTool
 
       //------------------------------------------------------------------------------
 
-      internal static void InitOptions(string ParamName, string ParamValue)
+      internal static void InitOptions(string paramName, string paramValue)
       {
-         if (ParamName.CompareTo ("sendmode") == 0)
+         // ReSharper disable StringCompareToIsCultureSpecific
+         if (paramName.CompareTo ("sendmode") == 0)
          {                // SendMode
-            if (ParamValue.ToLower().CompareTo("winmsg") == 0)
+            if (paramValue.ToLower().CompareTo("winmsg") == 0)
                Options.SendMode = SendMode.WinMsg ;
-            else if (ParamValue.ToLower().CompareTo("socket") == 0)
+            else if (paramValue.ToLower().CompareTo("socket") == 0)
                Options.SendMode = SendMode.Socket ;
-            else if (ParamValue.ToLower().CompareTo("none") == 0)
+            else if (paramValue.ToLower().CompareTo("none") == 0)
                Options.SendMode = SendMode.None;
          }
-         else if (ParamName.CompareTo ("sockethost") == 0)
+         else if (paramName.CompareTo ("sockethost") == 0)
          {       // string SocketHost
-            Options.SocketHost = ParamValue ;
+            Options.SocketHost = paramValue ;
          }
-         else if (ParamName.CompareTo ("socketport") == 0)
+         else if (paramName.CompareTo ("socketport") == 0)
          {       // int SocketPort
             try
             {
-               Options.SocketPort = Int32.Parse (ParamValue) ;
+               Options.SocketPort = Int32.Parse (paramValue) ;
             }
             catch
             {
                Options.SocketPort = 8090 ;
             }
          }
-         else if (ParamName.CompareTo ("objecttreedepth") == 0)
+         else if (paramName.CompareTo ("objecttreedepth") == 0)
          {       // int ObjectTreeDepth
             try
             {
-               Options.ObjectTreeDepth = Int32.Parse (ParamValue) ;
+               Options.ObjectTreeDepth = Int32.Parse (paramValue) ;
             }
             catch
             {
@@ -409,97 +415,98 @@ namespace TraceTool
             }
          }
 
-         else if (ParamName.CompareTo("sendmodifiers") == 0)           // 1
+         else if (paramName.CompareTo("sendmodifiers") == 0)           // 1
          {    
-             if (ParamValue.ToLower().CompareTo("true") == 0)
+             if (paramValue.ToLower().CompareTo("true") == 0)
                  Options.SendModifiers = true;
-             else if (ParamValue.ToLower().CompareTo("false") == 0)
+             else if (paramValue.ToLower().CompareTo("false") == 0)
                  Options.SendModifiers = false;
          }
-         else if (ParamName.CompareTo("sendclassinfo") == 0)            // 2
+         else if (paramName.CompareTo("sendclassinfo") == 0)            // 2
          {    
-             if (ParamValue.ToLower().CompareTo("true") == 0)
+             if (paramValue.ToLower().CompareTo("true") == 0)
                  Options.SendClassInfo = true;
-             else if (ParamValue.ToLower().CompareTo("false") == 0)
+             else if (paramValue.ToLower().CompareTo("false") == 0)
                  Options.SendClassInfo = false;
          }
-         else if (ParamName.CompareTo("sendfields") == 0)               // 4
+         else if (paramName.CompareTo("sendfields") == 0)               // 4
          {    
-             if (ParamValue.ToLower().CompareTo("true") == 0)
+             if (paramValue.ToLower().CompareTo("true") == 0)
                  Options.SendFields = true;
-             else if (ParamValue.ToLower().CompareTo("false") == 0)
+             else if (paramValue.ToLower().CompareTo("false") == 0)
                  Options.SendFields = false;
          }
-         else if (ParamName.CompareTo("sendcustomattributes") == 0)     // 8
+         else if (paramName.CompareTo("sendcustomattributes") == 0)     // 8
          {    
-             if (ParamValue.ToLower().CompareTo("true") == 0)
+             if (paramValue.ToLower().CompareTo("true") == 0)
                  Options.SendCustomAttributes = true;
-             else if (ParamValue.ToLower().CompareTo("false") == 0)
+             else if (paramValue.ToLower().CompareTo("false") == 0)
                  Options.SendCustomAttributes = false;
          }
-         else if (ParamName.CompareTo("sendnonpublic") == 0)            // 16
+         else if (paramName.CompareTo("sendnonpublic") == 0)            // 16
          {   
-             if (ParamValue.ToLower().CompareTo("true") == 0)
+             if (paramValue.ToLower().CompareTo("true") == 0)
                  Options.SendNonPublic = true;
-             else if (ParamValue.ToLower().CompareTo("false") == 0)
+             else if (paramValue.ToLower().CompareTo("false") == 0)
                  Options.SendNonPublic = false;
          }
-         else if (ParamName.CompareTo("sendinherited") == 0)            // 32
+         else if (paramName.CompareTo("sendinherited") == 0)            // 32
          {    
-             if (ParamValue.ToLower().CompareTo("true") == 0)
+             if (paramValue.ToLower().CompareTo("true") == 0)
                  Options.SendInherited = true;
-             else if (ParamValue.ToLower().CompareTo("false") == 0)
+             else if (paramValue.ToLower().CompareTo("false") == 0)
                  Options.SendInherited = false;
          }
-         else if (ParamName.CompareTo("sendevents") == 0)               // 64
+         else if (paramName.CompareTo("sendevents") == 0)               // 64
          {     
-             if (ParamValue.ToLower().CompareTo("true") == 0)
+             if (paramValue.ToLower().CompareTo("true") == 0)
                  Options.SendEvents = true;
-             else if (ParamValue.ToLower().CompareTo("false") == 0)
+             else if (paramValue.ToLower().CompareTo("false") == 0)
                  Options.SendEvents = false;
          }
-         else if (ParamName.CompareTo ("sendfunctions") == 0)           // 128
+         else if (paramName.CompareTo ("sendfunctions") == 0)           // 128
          {   
-            if (ParamValue.ToLower().CompareTo("true") == 0)
+            if (paramValue.ToLower().CompareTo("true") == 0)
                Options.SendFunctions = true ;
-            else if (ParamValue.ToLower().CompareTo("false") == 0)
+            else if (paramValue.ToLower().CompareTo("false") == 0)
                Options.SendFunctions = false ;
          }
-         else if (ParamName.CompareTo("senddoc") == 0)                  // 256
+         else if (paramName.CompareTo("senddoc") == 0)                  // 256
          {
-             if (ParamValue.ToLower().CompareTo("true") == 0)
+             if (paramValue.ToLower().CompareTo("true") == 0)
                  Options.SendDoc = true;
-             else if (ParamValue.ToLower().CompareTo("false") == 0)
+             else if (paramValue.ToLower().CompareTo("false") == 0)
                  Options.SendDoc = false;
          }
-         else if (ParamName.CompareTo("sendprivate") == 0)             
+         else if (paramName.CompareTo("sendprivate") == 0)             
          {      // bool SendPrivate
-            if (ParamValue.ToLower().CompareTo("true") == 0)
+            if (paramValue.ToLower().CompareTo("true") == 0)
                Options.SendPrivate = true ;
-            else if (ParamValue.ToLower().CompareTo("false") == 0)
+            else if (paramValue.ToLower().CompareTo("false") == 0)
                Options.SendPrivate = false ;
          }
-         else if (ParamName.CompareTo ("sendprocessname") == 0)         
+         else if (paramName.CompareTo ("sendprocessname") == 0)         
          {    // bool SendProcessName
-            if (ParamValue.ToLower().CompareTo("true") == 0)
+            if (paramValue.ToLower().CompareTo("true") == 0)
                Options.SendProcessName = true ;
-            else if (ParamValue.ToLower().CompareTo("false") == 0)
+            else if (paramValue.ToLower().CompareTo("false") == 0)
                Options.SendProcessName = false ;
          }
-         else if (ParamName.CompareTo ("senddate") == 0)                
+         else if (paramName.CompareTo ("senddate") == 0)                
          {           // bool SendDate
-            if (ParamValue.ToLower().CompareTo("true") == 0)
+            if (paramValue.ToLower().CompareTo("true") == 0)
                Options.SendDate = true ;
-            else if (ParamValue.ToLower().CompareTo("false") == 0)
+            else if (paramValue.ToLower().CompareTo("false") == 0)
                Options.SendDate = false ;
          }
-         else if (ParamName.CompareTo("sendthreadid") == 0)             
+         else if (paramName.CompareTo("sendthreadid") == 0)             
          {           // bool SendThreadId
-            if (ParamValue.ToLower().CompareTo("true") == 0)
+            if (paramValue.ToLower().CompareTo("true") == 0)
                Options.SendThreadId = true;
-            else if (ParamValue.ToLower().CompareTo("false") == 0)
+            else if (paramValue.ToLower().CompareTo("false") == 0)
                Options.SendThreadId = false;
          }
+         // ReSharper restore StringCompareToIsCultureSpecific
       }
 
       //------------------------------------------------------------------------------
@@ -508,7 +515,7 @@ namespace TraceTool
       /// </summary>
       public static string InitError()
       {
-         return _LastError;
+         return _lastError;
       }          
 
       //------------------------------------------------------------------------------
@@ -517,47 +524,47 @@ namespace TraceTool
       /// </summary>
       public static void Stop ()
       {
-         TraceThread.Abort();
-         TraceThread = null;
+         _traceThread.Abort();
+         _traceThread = null;
       }                 
 
       //------------------------------------------------------------------------------
       /// <summary>
       /// Show or hide the trace program
       /// </summary>
-      /// <param name="IsVisible">When True : Show. When False : Hide</param>
-      public static void Show(bool IsVisible)
+      /// <param name="isVisible">When True : Show. When False : Hide</param>
+      public static void Show(bool isVisible)
       {
-         StringList CommandList = new StringList();
-         Helper.addCommand(CommandList,  TraceConst.CST_SHOW , IsVisible);
-         TTrace.SendToClient (CommandList);
+         StringList commandList = new StringList();
+         Helper.AddCommand(commandList,  TraceConst.CST_SHOW , isVisible);
+         SendToClient (commandList);
       }
 
       //------------------------------------------------------------------------------
       /// <summary>
       /// Set the global search criteria. You must call TTrace.Wintrace.FindNext to position to the next or previous matching node
       /// </summary>
-      /// <param name="Text">Text to search</param>
-      /// <param name="Sensitive">Search is case sensitive</param>
-      /// <param name="WholeWord">match only whole word</param>
-      /// <param name="Highlight">Highlight results</param>
-      /// <param name="SearchInAllPages">call to FindNext will search also in other traces windows if true</param>
-      public static void Find (string Text, bool Sensitive, bool WholeWord , bool Highlight, bool SearchInAllPages) 
+      /// <param name="text">Text to search</param>
+      /// <param name="sensitive">Search is case sensitive</param>
+      /// <param name="wholeWord">match only whole word</param>
+      /// <param name="highlight">Highlight results</param>
+      /// <param name="searchInAllPages">call to FindNext will search also in other traces windows if true</param>
+      public static void Find (string text, bool sensitive, bool wholeWord , bool highlight, bool searchInAllPages) 
       {
-         StringList CommandList = new StringList();
+         StringList commandList = new StringList();
          int flags = 0 ;
          // Sensitive<<3+WholeWord<<2+highlight<<1+SearchInAllPages
-         if (Sensitive)
+         if (sensitive)
             flags += 8;
-         if (WholeWord)
+         if (wholeWord)
             flags += 4;
-         if (Highlight)
+         if (highlight)
             flags += 2;
-         if (SearchInAllPages)
+         if (searchInAllPages)
             flags += 1;
 
-         Helper.addCommand(CommandList,TraceConst.CST_FIND_TEXT ,flags, Text);
-         TTrace.SendToClient(CommandList);     
+         Helper.AddCommand(commandList,TraceConst.CST_FIND_TEXT ,flags, text);
+         SendToClient(commandList);     
       }
 
 
@@ -576,10 +583,10 @@ namespace TraceTool
       /// </summary>
       public static void CloseViewer()
       {
-         StringList CommandList = new StringList();
+         StringList commandList = new StringList();
 
-         Helper.addCommand(CommandList,TraceConst.CST_CLOSE_VIEWER);
-         TTrace.SendToClient(CommandList);
+         Helper.AddCommand(commandList,TraceConst.CST_CLOSE_VIEWER);
+         SendToClient(commandList);
       }
 
       //------------------------------------------------------------------------------
@@ -665,90 +672,90 @@ namespace TraceTool
       {
          get
          {
-            if (_out == null)
-               _out = new TTraceWriter();
-            return _out;
+            if (_writterOut == null)
+               _writterOut = new TTraceWriter();
+            return _writterOut;
          }
       }
  
       //------------------------------------------------------------------------------
       // send the ArrayList to the viewer (using thread)
 
-      internal static void SendToWinTraceClient(StringList CommandList, string winTraceId)
+      internal static void SendToWinTraceClient(StringList commandList, string winTraceId)
       {
-         SendToWinTraceClient(CommandList, winTraceId, FormatDate(DateTime.Now), Helper.GetCurrentThreadId()); // DateTime.Now.ToString("HH:mm:ss:fff")
+         SendToWinTraceClient(commandList, winTraceId, FormatDate(DateTime.Now), Helper.GetCurrentThreadId()); // DateTime.Now.ToString("HH:mm:ss:fff")
       }
 
       //------------------------------------------------------------------------------
       // send the trace ArrayList to the viewer (using thread)
 
-      internal static void SendToWinTraceClient(StringList CommandList, string winTraceId, string dateTime, string threadName)
+      internal static void SendToWinTraceClient(StringList commandList, string winTraceId, string dateTime, string threadName)
       {
          // insert thread id
-         if (TTrace.Options.SendThreadId)
+         if (Options.SendThreadId)
          {
             if (threadName == null)
-               CommandList.Insert(0, String.Format("{0,5}{1}", TraceConst.CST_THREAD_NAME, Helper.GetCurrentThreadId()));
+               commandList.Insert(0, String.Format("{0,5}{1}", TraceConst.CST_THREAD_NAME, Helper.GetCurrentThreadId()));
             else
-               CommandList.Insert(0, String.Format("{0,5}{1}", TraceConst.CST_THREAD_NAME, threadName));
+               commandList.Insert(0, String.Format("{0,5}{1}", TraceConst.CST_THREAD_NAME, threadName));
          }
 
          // add current time. TTrace.FormatDate is faster than  DateTime.ToString("HH:mm:ss:fff")
          if (dateTime == null)
-            CommandList.Insert (0, String.Format("{0,5}{1}", TraceConst.CST_MESSAGE_TIME , FormatDate(DateTime.Now))) ; // DateTime.Now.ToString("HH:mm:ss:fff") ));
+            commandList.Insert (0, String.Format("{0,5}{1}", TraceConst.CST_MESSAGE_TIME , FormatDate(DateTime.Now))) ; // DateTime.Now.ToString("HH:mm:ss:fff") ));
          else
-            CommandList.Insert (0, String.Format("{0,5}{1}", TraceConst.CST_MESSAGE_TIME , dateTime ));
+            commandList.Insert (0, String.Format("{0,5}{1}", TraceConst.CST_MESSAGE_TIME , dateTime ));
 
          // add process name
-         if (TTrace.Options.SendProcessName == true)
+         if (Options.SendProcessName)
          {
-            CommandList.Insert (0, String.Format("{0,5}{1}",
+            commandList.Insert (0, String.Format("{0,5}{1}",
                TraceConst.CST_PROCESS_NAME ,
                Helper.GetCurrentProcessName() ));
          }
 
          // CST_USE_TREE MUST be inserted at the first position
-         if (winTraceId != null && winTraceId != "")
-            CommandList.Insert (0, String.Format("{0,5}{1}", TraceConst.CST_USE_TREE , winTraceId));
+         if (!string.IsNullOrEmpty(winTraceId))
+            commandList.Insert (0, String.Format("{0,5}{1}", TraceConst.CST_USE_TREE , winTraceId));
 
-         SendToClient (CommandList);
+         SendToClient (commandList);
       }
 
       //------------------------------------------------------------------------------
 
       // send the watch ArrayList to the viewer (using thread)
-      internal static void SendToWinWatchClient(StringList CommandList, string winWatchId)
+      internal static void SendToWinWatchClient(StringList commandList, string winWatchId)
       {
          // insert thread id
-         if (TTrace.Options.SendThreadId)
-            CommandList.Insert(0, String.Format("{0,5}{1}", TraceConst.CST_THREAD_NAME, Helper.GetCurrentThreadId()));
+         if (Options.SendThreadId)
+            commandList.Insert(0, String.Format("{0,5}{1}", TraceConst.CST_THREAD_NAME, Helper.GetCurrentThreadId()));
 
          // add current time. TTrace.FormatDate is faster than  DateTime.ToString("HH:mm:ss:fff")
-         CommandList.Insert (0, String.Format("{0,5}{1}", TraceConst.CST_MESSAGE_TIME , FormatDate(DateTime.Now))) ; // FormatDate will add date if necessary
+         commandList.Insert (0, String.Format("{0,5}{1}", TraceConst.CST_MESSAGE_TIME , FormatDate(DateTime.Now))) ; // FormatDate will add date if necessary
 
          // add process name
-         if (TTrace.Options.SendProcessName == true)
+         if (Options.SendProcessName)
          {
-            CommandList.Insert (0, String.Format("{0,5}{1}",
+            commandList.Insert (0, String.Format("{0,5}{1}",
                TraceConst.CST_PROCESS_NAME ,
                Helper.GetCurrentProcessName() ));
          }
 
          // CST_USE_TREE MUST be inserted at the first position
          //if (winWatch != null && winWatch.Id != null && winWatch.Id != "")
-         CommandList.Insert(0, String.Format("{0,5}{1}", TraceConst.CST_WINWATCH_ID, winWatchId));
+         commandList.Insert(0, String.Format("{0,5}{1}", TraceConst.CST_WINWATCH_ID, winWatchId));
 
-         SendToClient (CommandList);
+         SendToClient (commandList);
       }
 
       //------------------------------------------------------------------------------
 
       // send the ArrayList to the viewer (using thread)
-      internal static void SendToClient(StringList CommandList)
+      internal static void SendToClient(StringList commandList)
       {
          lock (DataReady)    // don't lock the MsgQue, because we can swap with workQueue
          {
-            MsgQueue.Add(CommandList);
+            _msgQueue.Add(commandList);
          }
          // signal that data are ready to be send
          DataReady.Set();
@@ -758,22 +765,22 @@ namespace TraceTool
       /// flush remaining traces to the viewer
       public static void Flush()
       {
-         StringList CommandList = new StringList();
+         StringList commandList = new StringList();
 
          AutoResetEvent flushEvent = new AutoResetEvent(false) ;
          string key = Helper.NewGuid().ToString() ;
-         flushList.Add(key, flushEvent);
+         FlushList.Add(key, flushEvent);
 
-         CommandList.Insert(0, String.Format("{0,5}{1}", TraceConst.CST_FLUSH, key));
+         commandList.Insert(0, String.Format("{0,5}{1}", TraceConst.CST_FLUSH, key));
 
          lock (DataReady)    // don't lock the MsgQue, because we can swap with workQueue
          {
-            MsgQueue.Add(CommandList);
+            _msgQueue.Add(commandList);
          }
          // signal that data are ready to be send
          DataReady.Set();
          flushEvent.WaitOne() ;
-         flushList.Remove(key);
+         FlushList.Remove(key);
       }
 
       //------------------------------------------------------------------------------
@@ -783,8 +790,8 @@ namespace TraceTool
       // the thread function that send messages to the server
       private static void SendThreadEntryPoint () // Object obj
       {
-         string MessageString ;
-         int tot ;
+         //string MessageString ;
+         //int tot ;
          MsgQueueList tempList; // used for swap queue
          MsgQueueList workQueue = new MsgQueueList();
 
@@ -808,8 +815,8 @@ namespace TraceTool
                //swap = swap + "Begin at " + DateTime.Now.ToString("HH:mm:ss:fff") + " : " + MsgQueue.Count ;
 
                tempList = workQueue ;          // workQueue is the empty list
-               workQueue = MsgQueue ;    // MsgQueue is the list of message to send
-               MsgQueue = tempList ;
+               workQueue = _msgQueue ;    // MsgQueue is the list of message to send
+               _msgQueue = tempList ;
             }
 
             if (_isSocketError && Options.SendMode == SendMode.Socket)
@@ -820,48 +827,52 @@ namespace TraceTool
             }
 
             // loop the outbound messages...
-            foreach (StringList CommandList in workQueue)
+            foreach (StringList commandList in workQueue)
             {
                // special case : the CST_FLUSH message is handled by the sender thread, not to be send
-               if (CommandList.Count > 0) // only one message
+               if (commandList.Count > 0) // only one message
                {
-                  string msg = (string) CommandList[0] ;
+                  string msg = commandList[0] ;
                   if (Int32.Parse( msg.Substring (0,5) ) == TraceConst.CST_FLUSH)
                   {
                      String key = msg.Substring (5,msg.Length-5) ;
                      AutoResetEvent flushEvent ;
-                     try {
-                        flushEvent = (AutoResetEvent) flushList[key];
+                     try 
+                     {
+                        flushEvent = (AutoResetEvent) FlushList[key];
                         flushEvent.Set() ;
-                     } catch { }
-                   continue ;
+                     }
+                     catch
+                     {
+                         // ignored
+                     }
+                     continue ;
                   }
                }
 
                // check if the message contains information for local log
-               ParseForInternal (CommandList);
+               ParseForInternal (commandList);
 
                // If socket mode and socket error : don't send messages.
                // When the queue is empty, reset the error mode.
                // The ParseForInternal will be called to save to file and responds to flush events.
                if (_isSocketError && Options.SendMode == SendMode.Socket)
                {
-                  nbDiscarded++;
+                  NbDiscarded++;
                   continue;
                }
 
                if (Options.SendMode != SendMode.None) 
                {
                   // normal command list
-                  tot = 0;
+                  //tot = 0;
                   StringBuilder sb = new StringBuilder();
-                  foreach (string msg in CommandList) {
-                     tot += msg.Length + 1;
+                  foreach (string msg in commandList) {
+                     //tot += msg.Length + 1;
                      sb.Append(msg).Append('\0');
                   }
                   sb.Append('\0');
-
-                  // For previous version of tracetool,it's important to understand that strings was send in ASCII (1 byte per char),
+// For previous version of tracetool,it's important to understand that strings was send in ASCII (1 byte per char),
                   // because it's the common denominator for all languages targetting tracetool.
                   // Since silverlight don't allow ASCII encoding, the tracetool dot net API is now unicode by default. 
                   // System.Text.Encoding in silverlight : BigEndianUnicode,Unicode (little endian),UTF8. 
@@ -869,8 +880,8 @@ namespace TraceTool
 
                   sb.Insert(0, char.ToString((char)0xFEFF)); // start with the UTF-16, little endian byte order mark
 
-                  MessageString = sb.ToString();
-                  tot++;
+                  //MessageString = sb.ToString();
+                  //tot++;
 
                   try
                   { 
@@ -886,12 +897,13 @@ namespace TraceTool
                   // else no transport
 #endif
                   } catch (Exception ex) {
-                     _LastError = ex.Message;         // for debug purpose
+                     _lastError = ex.Message;         // for debug purpose
                   }
                }   // sendMode <> none
             }      // loop workQueue
             workQueue.Clear();
          }         // infinite loop 
+      // ReSharper disable once FunctionNeverReturns
       }            // thread function
 
       //------------------------------------------------------------------------------
@@ -900,23 +912,23 @@ namespace TraceTool
 
       internal static IntPtr VarPtr(object e)
       {
-         GCHandle GC = GCHandle.Alloc(e, GCHandleType.Pinned);
-         IntPtr gc = GC.AddrOfPinnedObject();
-         GC.Free();
+         GCHandle gC = GCHandle.Alloc(e, GCHandleType.Pinned);
+         IntPtr gc = gC.AddrOfPinnedObject();
+         gC.Free();
          return gc;
       }
 
-      internal static void SendMessageToWindows (StringBuilder Message)
+      internal static void SendMessageToWindows (StringBuilder message)
       {
-         int DebugWin = StartTDebug () ;
-         if (DebugWin != 0)
+         int debugWin = StartTDebug () ;
+         if (debugWin != 0)
          {
-            COPYDATASTRUCT CDS = new COPYDATASTRUCT();  // StructLayout.CharSet is CharSet.Ansi
+            COPYDATASTRUCT cds = new COPYDATASTRUCT();  // StructLayout.CharSet is CharSet.Ansi
 
-            CDS.dwData = (IntPtr) TraceConst.WMD;            
-            CDS.cbData = Message.Length * 2 ;    // unicode are 2 bytes
-            CDS.lpData = VarPtr(Message.ToString());     // automatically convert string to unicode (see StructLayout attribute in COPYDATASTRUCT)
-            Helper.SendMessage(DebugWin, TraceConst.WM_COPYDATA, IntPtr.Zero, VarPtr(CDS));
+            cds.dwData = (IntPtr) TraceConst.WMD;            
+            cds.cbData = message.Length * 2 ;    // unicode are 2 bytes
+            cds.lpData = VarPtr(message.ToString());     // automatically convert string to unicode (see StructLayout attribute in COPYDATASTRUCT)
+            Helper.SendMessage(debugWin, TraceConst.WM_COPYDATA, IntPtr.Zero, VarPtr(cds));
          }
       }
 #endif
@@ -924,7 +936,7 @@ namespace TraceTool
       //------------------------------------------------------------------------------
       // Prepare the byte[] buffToSend
       // Called by SendMessageToSocket
-      internal static void Prepare_buffToSend(StringBuilder Message)
+      internal static void Prepare_buffToSend(StringBuilder message)
       {
 
          // For previous version of tracetool,it's important to understand that strings was send in ASCII (1 byte per char),
@@ -933,7 +945,7 @@ namespace TraceTool
          // System.Text.Encoding in silverlight : BigEndianUnicode,Unicode (little endian),UTF8. Other kind of encoding exist for other platforms.
 
 
-         int intMsgLen = Message.Length * 2; // number of bytes in the message : message len * 2 (unicode)
+         int intMsgLen = message.Length * 2; // number of bytes in the message : message len * 2 (unicode)
 
          int c = 0;
          if (c == 0)  // force new version
@@ -941,13 +953,13 @@ namespace TraceTool
             // new version : 
             // write the init byte (WMD = 123) then message lenght as a DWORD then the message
 
-            buffToSend = new byte[5 + intMsgLen]; // create the buffer : WMD byte + message len as a DWORD + message
+            _buffToSend = new byte[5 + intMsgLen]; // create the buffer : WMD byte + message len as a DWORD + message
             // write the WMD byte into the buffer
-            buffToSend[0] = TraceConst.WMD;       // the WMD byte ensure the message is valid.
+            _buffToSend[0] = TraceConst.WMD;       // the WMD byte ensure the message is valid.
             // Append the intMsgLen into the buffer
             byte[] byteArray = BitConverter.GetBytes(intMsgLen);
             for (c = 0; c <= 3; c++)
-               buffToSend[c + 1] = byteArray[c];  // start at 1
+               _buffToSend[c + 1] = byteArray[c];  // start at 1
             c = 5;  // jump over WMD byte and DWORD
 
          }
@@ -958,12 +970,12 @@ namespace TraceTool
             // for compatibility issue, the length is coded as a AnsiString (single byte)
 
             string strMsgLen = intMsgLen.ToString();
-            buffToSend = new byte[strMsgLen.Length + 1 + intMsgLen]; // create the buffer : message len as an ASCII string + '\0' + message
+            _buffToSend = new byte[strMsgLen.Length + 1 + intMsgLen]; // create the buffer : message len as an ASCII string + '\0' + message
 
             for (c = 0; c < strMsgLen.Length; c++)
             {
                char charNum = strMsgLen[c];
-               byte byteNum = 32; // space
+               byte byteNum; 
                switch (charNum)
                {
                   case '0': byteNum = 48; break;
@@ -976,21 +988,21 @@ namespace TraceTool
                   case '7': byteNum = 55; break;
                   case '8': byteNum = 56; break;
                   case '9': byteNum = 57; break;
-                  default: byteNum = 32; break;
+                  default: byteNum = 32; break;// space
                }
-               buffToSend[c] = byteNum;
+               _buffToSend[c] = byteNum;
             }
             c = strMsgLen.Length;
-            buffToSend[c] = 0;  // add null term
+            _buffToSend[c] = 0;  // add null term
             c++;
          }
 
-         char[] chars = Message.ToString().ToCharArray();
-         System.Text.Encoding.Unicode.GetBytes(
+         char[] chars = message.ToString().ToCharArray();
+         Encoding.Unicode.GetBytes(
             chars,          // source to encode
             0,              // The index of the first character to encode
             chars.Length,   // The number of characters to encode
-            buffToSend,     // The byte array to contain the resulting sequence of bytes
+            _buffToSend,     // The byte array to contain the resulting sequence of bytes
             c);             // The index at which to start writing the resulting sequence of bytes
 
          //buffToSend = System.Text.Encoding.Unicode.GetBytes(Message.ToString()); // older version : ASCII encoding
@@ -998,7 +1010,7 @@ namespace TraceTool
 
       //------------------------------------------------------------------------------
 
-      internal static void SendMessageToSocket(StringBuilder Message)
+      internal static void SendMessageToSocket(StringBuilder message)
       {
          if (_isSocketError)
          {
@@ -1011,7 +1023,7 @@ namespace TraceTool
          }
 
          // allocate and fill the buffToSend array
-         Prepare_buffToSend(Message) ;
+         Prepare_buffToSend(message) ;
          
          if (Options.SocketHost == null || Options.SocketHost == "")
             Options.SocketHost = "127.0.0.1" ;
@@ -1024,11 +1036,11 @@ namespace TraceTool
 
          if (Options.SocketUdp)
          {
-            if (_UdpSocket == null)
-               _UdpSocket = new UdpClient(Options.SocketHost, Options.SocketPort);
+            if (_udpSocket == null)
+               _udpSocket = new UdpClient(Options.SocketHost, Options.SocketPort);
             try
             {
-               _UdpSocket.Send(buffToSend, buffToSend.Length);
+               _udpSocket.Send(_buffToSend, _buffToSend.Length);
             }
             catch (Exception ex)
             {
@@ -1040,7 +1052,7 @@ namespace TraceTool
 
                //_isSocketError = true;
                //_errorTime = DateTime.Now.Ticks;
-               _LastError = ex.Message;         // for debug purpose
+               _lastError = ex.Message;         // for debug purpose
             }
             return;
          }
@@ -1055,9 +1067,6 @@ namespace TraceTool
 
 #if (NETF1 || NETCF1)
             IPHostEntry hostEntry = Dns.Resolve(Options.SocketHost);
-#else // NETF2 || NETCF2 or more
-            IPHostEntry hostEntry = Dns.GetHostEntry(Options.SocketHost);  // on ppc emulator : host entry = 192.168.55.100
-#endif
             if ( hostEntry == null )
             {
                _socket = null ; // force recreate socket
@@ -1065,7 +1074,9 @@ namespace TraceTool
                _errorTime = DateTime.Now.Ticks ;
                return ;
             }
-
+#else // NETF2 || NETCF2 or more
+            IPHostEntry hostEntry = Dns.GetHostEntry(Options.SocketHost);  // on ppc emulator : host entry = 192.168.55.100
+#endif
             // Don't get the first adress. It's perhaps a IPv6 adress.
             // Thanks BCheng for the IPV4 fix.
             IPEndPoint endPoint =  null ;
@@ -1090,7 +1101,7 @@ namespace TraceTool
                _socket = null ; // force recreate socket
                _isSocketError = true ;
                _errorTime = DateTime.Now.Ticks ;
-               _LastError = ex.Message;         // for debug purpose
+               _lastError = ex.Message;         // for debug purpose
                return ;
             }
 
@@ -1098,14 +1109,14 @@ namespace TraceTool
 
     try
          {
-            _socket.Send(buffToSend, 0, buffToSend.Length, 0);
+            _socket.Send(_buffToSend, 0, _buffToSend.Length, 0);
          }
          catch  (Exception ex)
          {
             _socket = null ; // force recreate socket
             _isSocketError = true ;
             _errorTime = DateTime.Now.Ticks ;
-            _LastError = ex.Message;         // for debug purpose
+            _lastError = ex.Message;         // for debug purpose
          }
 #else  // SILVERLIGHT
 
@@ -1204,14 +1215,14 @@ namespace TraceTool
 
      //------------------------------------------------------------------------------
 
-      internal static InternalWinTrace getInternalTraceForm(string TraceWinId, bool doCreate)
+      internal static InternalWinTrace GetInternalTraceForm(string traceWinId, bool doCreate)
       {
-         if (TraceWinId == null || TraceWinId == "" || TraceWinId == "_")
+         if (traceWinId == null || traceWinId == "" || traceWinId == "_")
             return DefaultWinTrace;
 
          foreach (InternalWinTrace internalForm in FormTraceList)
          {
-            if (internalForm.Id == TraceWinId)
+            if (internalForm.Id == traceWinId)
                return internalForm;
          }
 
@@ -1224,28 +1235,28 @@ namespace TraceTool
             result.LogFileType = 3;   // no log
             result.IsMultiColTree = false;
             FormTraceList.Add(result);
-            result.Id = TraceWinId;
+            result.Id = traceWinId;
          }
          return result ;
       }
 
       //------------------------------------------------------------------------------
 
-      internal static void ParseForInternal(StringList CommandList)
+      internal static void ParseForInternal(StringList commandList)
       {
          int command ;
          int c ;
          string commandParams ;
-         InternalWinTrace TraceForm = DefaultWinTrace ; // traces are send to the master trace form by default
+         InternalWinTrace traceForm = DefaultWinTrace ; // traces are send to the master trace form by default
          // to be valid, CST_USE_TREE or CST_USE_MULTICOL_TREE or CST_WINWATCH_ID must be the first command
-         if (CommandList.Count > 0) // only one message
+         if (commandList.Count > 0) // only one message
          {
-            string msg = (string)CommandList[0];
+            string msg = commandList[0];
             command = Int32.Parse(msg.Substring(0, 5));
             commandParams = msg.Substring(5, msg.Length-5);
 
             if (command == TraceConst.CST_USE_TREE)
-               TraceForm = getInternalTraceForm(commandParams, false);
+               traceForm = GetInternalTraceForm(commandParams, false);
             //else if (command == TraceConst.CST_USE_MULTICOL_TREE)
             //   TraceForm = getInternalTraceForm(commandParams, false);
             else if (command == TraceConst.CST_WINWATCH_ID)
@@ -1262,158 +1273,158 @@ namespace TraceTool
          // 3, Local log is disabled
          // 4, Local log enabled. No size limit.
          // 5, Local log enabled. A new file is create each day (CCYYMMDD is appended to the filename)
-         if (TraceForm == null || TraceForm.LogFileType == 3)
+         if (traceForm == null || traceForm.LogFileType == 3)
             return;
 
-         string LeftMsg      = "";   // Left col
-         string RightMsg     = "";   // right col
-         string TraceID      = "";   // the reference of the node : it's a guid
-         string ThreadID     = "";   // thread id of the sender
-         string ProcessName  = "" ;  // optional : the name of the process that send traces
-         int    TreeIcon     = -1;   // -1 by default, converted to 24
-         string ParentId     = "";
-         string MessageTime  = "";
+         string leftMsg      = "";   // Left col
+         string rightMsg     = "";   // right col
+         string traceId      = "";   // the reference of the node : it's a guid
+         string threadId     = "";   // thread id of the sender
+         string processName  = "" ;  // optional : the name of the process that send traces
+         int    treeIcon     = -1;   // -1 by default, converted to 24
+         string parentId     = "";
+         string messageTime  = "";
 
-         bool   IsNewNode = false;      // check if message is a new node
-         StringBuilder MemberXml = new StringBuilder();
+         bool   isNewNode = false;      // check if message is a new node
+         StringBuilder memberXml = new StringBuilder();
 
-         foreach (string msg in CommandList)
+         foreach (string msg in commandList)
          {
             command = Int32.Parse(msg.Substring(0, 5));
             commandParams = msg.Substring(5, msg.Length - 5);
             switch (command)
             {
                case TraceConst.CST_WATCH_NAME:     return;  // Bypass watches
-               case TraceConst.CST_MESSAGE_TIME:   MessageTime = commandParams;           break;
-               case TraceConst.CST_PROCESS_NAME:   ProcessName = commandParams;           break;
-               case TraceConst.CST_THREAD_ID:      ThreadID = "0x" + Int32.Parse(commandParams).ToString("X2");  break;
-               case TraceConst.CST_THREAD_NAME:    ThreadID = commandParams;              break;
-               case TraceConst.CST_ICO_INDEX:      TreeIcon = Int32.Parse(commandParams); break;
-               case TraceConst.CST_TRACE_ID:       TraceID = commandParams;               break;
-               case TraceConst.CST_LEFT_MSG:       LeftMsg = commandParams;               break; // param : msg
-               case TraceConst.CST_RIGHT_MSG:      RightMsg = commandParams;              break;   // param : msg
+               case TraceConst.CST_MESSAGE_TIME:   messageTime = commandParams;           break;
+               case TraceConst.CST_PROCESS_NAME:   processName = commandParams;           break;
+               case TraceConst.CST_THREAD_ID:      threadId = "0x" + Int32.Parse(commandParams).ToString("X2");  break;
+               case TraceConst.CST_THREAD_NAME:    threadId = commandParams;              break;
+               case TraceConst.CST_ICO_INDEX:      treeIcon = Int32.Parse(commandParams); break;
+               case TraceConst.CST_TRACE_ID:       traceId = commandParams;               break;
+               case TraceConst.CST_LEFT_MSG:       leftMsg = commandParams;               break; // param : msg
+               case TraceConst.CST_RIGHT_MSG:      rightMsg = commandParams;              break;   // param : msg
 
                case TraceConst.CST_NEW_NODE:
                   // param1 : Parent Node
-                  ParentId = commandParams;
-                  IsNewNode = true;
+                  parentId = commandParams;
+                  isNewNode = true;
                   break;
 
                case TraceConst.CST_CREATE_MEMBER:
-                  MemberXml.Append("<Member>");
-                  Helper.HtmlEncode(commandParams, MemberXml);
+                  memberXml.Append("<Member>");
+                  Helper.HtmlEncode(commandParams, memberXml);
                   break;
                case TraceConst.CST_MEMBER_COL2:
                   if (commandParams != "")
                   {
-                     MemberXml.Append("<ColB>");
-                     Helper.HtmlEncode(commandParams, MemberXml);
-                     MemberXml.Append("</ColB>");
+                     memberXml.Append("<ColB>");
+                     Helper.HtmlEncode(commandParams, memberXml);
+                     memberXml.Append("</ColB>");
                   }
                   break;
                case TraceConst.CST_MEMBER_COL3:
                   if (commandParams != "")
                   {
-                     MemberXml.Append("<ColC>");
-                     Helper.HtmlEncode(commandParams, MemberXml);
-                     MemberXml.Append("</ColC>");
+                     memberXml.Append("<ColC>");
+                     Helper.HtmlEncode(commandParams, memberXml);
+                     memberXml.Append("</ColC>");
                   }
                   break;
                case TraceConst.CST_MEMBER_VIEWER_KIND:
                   if (Int32.Parse(commandParams) != TraceConst.CST_VIEWER_NONE)
-                     MemberXml.Append("<ViewerKind>").Append(commandParams).Append("</ViewerKind>");
+                     memberXml.Append("<ViewerKind>").Append(commandParams).Append("</ViewerKind>");
                   break;
                case TraceConst.CST_ADD_MEMBER:
-                  MemberXml.Append("</Member>");
+                  memberXml.Append("</Member>");
                   break;
             }  // switch
          }     // for each
 
          // if new node then save to log file
-         if (IsNewNode == false)
+         if (isNewNode == false)
             return;
 
          StringBuilder xml = new StringBuilder();
          xml.Append("<Node");
-         if (ProcessName != "") {
+         if (processName != "") {
             xml.Append(" Process=\"") ;
-            Helper.HtmlEncode(ProcessName,xml) ;
+            Helper.HtmlEncode(processName,xml) ;
             xml.Append("\"");
          }
-         if (MessageTime != ""){
+         if (messageTime != ""){
             xml.Append(" Time=\"") ;
-            Helper.HtmlEncode(MessageTime,xml) ;
+            Helper.HtmlEncode(messageTime,xml) ;
             xml.Append("\"");
          }
-         if (ParentId != ""){  // add parent relation if not root
+         if (parentId != ""){  // add parent relation if not root
             xml.Append(" Parent=\"") ;
-            Helper.HtmlEncode(ParentId,xml) ;
+            Helper.HtmlEncode(parentId,xml) ;
             xml.Append("\"");
          }
-         if (TraceID != ""){
+         if (traceId != ""){
             xml.Append(" Id=\"") ;
-            Helper.HtmlEncode(TraceID,xml) ;
+            Helper.HtmlEncode(traceId,xml) ;
             xml.Append("\"");
          }
-         if (ThreadID != ""){
+         if (threadId != ""){
             xml.Append(" ThId=\"") ;
-            Helper.HtmlEncode(ThreadID,xml) ;
+            Helper.HtmlEncode(threadId,xml) ;
             xml.Append("\"");
          }
          // don't save default
-         if (TreeIcon != -1 && TreeIcon != 24)
-            xml.Append(" Icon=\"").Append(TreeIcon).Append("\"");
+         if (treeIcon != -1 && treeIcon != 24)
+            xml.Append(" Icon=\"").Append(treeIcon).Append("\"");
          xml.Append(">");   // <Node ...>
 
-         if (TraceForm.IsMultiColTree)
+         if (traceForm.IsMultiColTree)
          {
             //<ColValue Order="2">C3</ColValue>
-            string[] columns = LeftMsg.Split(new Char[] { '\t' });
+            string[] columns = leftMsg.Split(new Char[] { '\t' });
             c = 0 ;
-            foreach (string Column in columns) {
+            foreach (string column in columns) {
                xml.Append("<ColValue Order=\"").Append(c).Append("\">") ;
-               Helper.HtmlEncode(Column,xml) ;
+               Helper.HtmlEncode(column,xml) ;
                xml.Append("</ColValue>");
                c++ ;
             }
          } else {
             // save the tree col1
-            Helper.HtmlEncode(LeftMsg,xml);
+            Helper.HtmlEncode(leftMsg,xml);
             // save the tree col 2
-            if (RightMsg != "") {
+            if (rightMsg != "") {
                xml.Append("<Col2>") ;
-               Helper.HtmlEncode(RightMsg,xml) ;
+               Helper.HtmlEncode(rightMsg,xml) ;
                xml.Append("</Col2>");
             }
          }
 
          // append member to xml
-         xml.Append(MemberXml);
+         xml.Append(memberXml);
 
          xml.Append("</Node>");
 
-         if (TraceForm.LogFileName.Trim() == "")
-            TraceForm.LogFileName = "TraceLog.xml";
+         if (traceForm.LogFileName.Trim() == "")
+            traceForm.LogFileName = "TraceLog.xml";
 
          //string FileToWrite = "";
-         if (TraceForm.LogFileType == 3) {            // 3, Local log disaled.
+         if (traceForm.LogFileType == 3) {            // 3, Local log disaled.
             // should not happens. Detected before parsing
             return ;
-         } else if (TraceForm.LogFileType == 4) {     // 4, Local log enabled. No size limit.
-            TraceForm.LastLocalLogFileName = TraceForm.LogFileName;
-            if (TraceForm.CurrentFileNumber != 0)
+         } else if (traceForm.LogFileType == 4) {     // 4, Local log enabled. No size limit.
+            traceForm.LastLocalLogFileName = traceForm.LogFileName;
+            if (traceForm.CurrentFileNumber != 0)
             {
                // Append CurrentFileNumber Before extension            
-               int pos = TraceForm.LastLocalLogFileName.LastIndexOf('.');
+               int pos = traceForm.LastLocalLogFileName.LastIndexOf('.');
                if (pos == -1)// no extension
-                  TraceForm.LastLocalLogFileName = TraceForm.LastLocalLogFileName + '_' + TraceForm.CurrentFileNumber + ".xml"; //$NON-NLS-1$
+                  traceForm.LastLocalLogFileName = traceForm.LastLocalLogFileName + '_' + traceForm.CurrentFileNumber + ".xml"; //$NON-NLS-1$
                else
-                  TraceForm.LastLocalLogFileName = TraceForm.LastLocalLogFileName.Substring(0, pos - 1) + '_' + TraceForm.CurrentFileNumber + TraceForm.LastLocalLogFileName.Substring(pos);
+                  traceForm.LastLocalLogFileName = traceForm.LastLocalLogFileName.Substring(0, pos - 1) + '_' + traceForm.CurrentFileNumber + traceForm.LastLocalLogFileName.Substring(pos);
             }
          } else {                                     // 5, Local log enabled. A new file is create each day (CCYYMMDD is appended to the filename)
-            string FileExt = Path.GetExtension(TraceForm.LogFileName);  // include the dot
+            string fileExt = Path.GetExtension(traceForm.LogFileName);  // include the dot
             StringBuilder strbBuilder = new StringBuilder();
-            strbBuilder.Append(TraceForm.LogFileName.Substring(0, TraceForm.LogFileName.Length - FileExt.Length ));
+            strbBuilder.Append(traceForm.LogFileName.Substring(0, traceForm.LogFileName.Length - fileExt.Length ));
             // append YYYYMMDD
             DateTime now = DateTime.Now ;
             int temp;
@@ -1428,23 +1439,23 @@ namespace TraceTool
                strbBuilder.Append('0');
             strbBuilder.Append(temp);
             // add CurrentFileNumber if <> 0
-            if (TraceForm.CurrentFileNumber != 0)
-               strbBuilder.Append('_').Append(TraceForm.CurrentFileNumber);
+            if (traceForm.CurrentFileNumber != 0)
+               strbBuilder.Append('_').Append(traceForm.CurrentFileNumber);
             // append file extension (XML)
-            strbBuilder.Append(FileExt);
-            TraceForm.LastLocalLogFileName = strbBuilder.ToString();
+            strbBuilder.Append(fileExt);
+            traceForm.LastLocalLogFileName = strbBuilder.ToString();
          }
 
          FileStream f ;
-         if (File.Exists(TraceForm.LastLocalLogFileName) == false)
+         if (File.Exists(traceForm.LastLocalLogFileName) == false)
          {
-            f = new FileStream(TraceForm.LastLocalLogFileName, FileMode.Create);
+            f = new FileStream(traceForm.LastLocalLogFileName, FileMode.Create);
 
             // include header in file
-            if (TraceForm.IsMultiColTree) {
+            if (traceForm.IsMultiColTree) {
                StringBuilder strbBuilder = new StringBuilder();
-               strbBuilder.Append("<MainColumn>").Append(TraceForm.MainCol).Append("</MainColumn>") ;
-               string[] cols = TraceForm.TitleList.Split(new Char[] { '\t' });
+               strbBuilder.Append("<MainColumn>").Append(traceForm.MainCol).Append("</MainColumn>") ;
+               string[] cols = traceForm.TitleList.Split(new Char[] { '\t' });
                c = 0;
                foreach (string col in cols) {
                   if (col != "")
@@ -1455,24 +1466,24 @@ namespace TraceTool
             }
             xml.Insert(0,"<Data>");
          } else {  // append only the node
-            f = File.Open(TraceForm.LastLocalLogFileName, FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite);
+            f = File.Open(traceForm.LastLocalLogFileName, FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite);
             f.Seek(f.Length-7, SeekOrigin.Begin); // override the </data> tag
          }
          xml.Append("\n</Data>");
          Byte[] info = new UTF8Encoding(true).GetBytes(xml.ToString());
          f.Write(info, 0, info.Length);
          f.Close();
-         f = null ;
-         xml = null ;
+         //f = null ;
+         //xml = null ;
 
          // limit file size
-         if (TraceForm.MaxLines != -1)
+         if (traceForm.MaxLines != -1)
          {
-            TraceForm.LinesWritten++;
-            if (TraceForm.LinesWritten >= TraceForm.MaxLines)
+            traceForm.LinesWritten++;
+            if (traceForm.LinesWritten >= traceForm.MaxLines)
             {
-               TraceForm.CurrentFileNumber++;
-               TraceForm.LinesWritten = 0;  // reset counter
+               traceForm.CurrentFileNumber++;
+               traceForm.LinesWritten = 0;  // reset counter
             }
          }
       }
@@ -1491,38 +1502,36 @@ namespace TraceTool
 #if (!NETCF1  && !NETCF2  && !NETCF3 && !SILVERLIGHT)
       internal static int StartTDebug ()
       {
-
-         int WinHandle ;
-         WinHandle = Helper.FindWindow("TFormReceiver", "FormReceiver");
-         if (WinHandle != 0)
+         var winHandle = Helper.FindWindow("TFormReceiver", "FormReceiver");
+         if (winHandle != 0)
          {
             //MessageBox.Show("StartTDebug : FindWindow : " + WinHandle.ToString());
-            return WinHandle;
+            return winHandle;
          }
 
-         RegistryKey Reg = Registry.LocalMachine.OpenSubKey("Software\\TraceTool");
-         if (Reg == null)
+         RegistryKey reg = Registry.LocalMachine.OpenSubKey("Software\\TraceTool");
+         if (reg == null)
          {
             //MessageBox.Show("StartTDebug : reg == null");
             return 0;
          }
 
-         String DebugFilename = (string) Reg.GetValue("FilePath");
-         if (File.Exists(DebugFilename) == false)
+         String debugFilename = (string) reg.GetValue("FilePath");
+         if (File.Exists(debugFilename) == false)
          {
             //MessageBox.Show("StartTDebug : DebugFilename unknow");
             return 0;
          }
 
-         System.Diagnostics.Process myProcess = new Process();
-         myProcess.StartInfo.FileName = DebugFilename;
+         var myProcess = new Process();
+         myProcess.StartInfo.FileName = debugFilename;
          myProcess.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
          myProcess.Start();
 
-         System.Threading.Thread.Sleep(2000);
+         Thread.Sleep(2000);
 
-         WinHandle = Helper.FindWindow("TFormReceiver", "FormReceiver");
-         return WinHandle;
+         winHandle = Helper.FindWindow("TFormReceiver", "FormReceiver");
+         return winHandle;
       }
 #endif
       //----------------------------------------------------------------------
@@ -1531,10 +1540,10 @@ namespace TraceTool
       // FormatDateWithoutMillis and FormatDate code are taken from Log4Net source code.
 
       /// Last stored time with precision up to the second.
-      internal static long s_lastTimeToTheSecond = 0;
+      internal static long LastTimeToTheSecond;
 
       /// Last stored time with precision up to the second, formatted as a string.
-      private static StringBuilder s_lastTime = new StringBuilder();
+      private static readonly StringBuilder LastTime = new StringBuilder();
 
       /// <summary>
       /// Renders the date into a string. Format is "HH:mm:ss". if Options.SendDate is true , date is added in front
@@ -1548,7 +1557,7 @@ namespace TraceTool
       internal static void FormatDateWithoutMillis(DateTime dateToFormat, StringBuilder buffer)
       {
          int temp ;
-         if (Options.SendDate == true)
+         if (Options.SendDate)
          {
             temp = dateToFormat.Year ;
             buffer.Append(temp);
@@ -1603,21 +1612,21 @@ namespace TraceTool
          long currentTimeToTheSecond = (dateToFormat.Ticks - (dateToFormat.Ticks % TimeSpan.TicksPerSecond));
 
          // Compare this time with the stored last time
-         if (s_lastTimeToTheSecond == currentTimeToTheSecond)
+         if (LastTimeToTheSecond == currentTimeToTheSecond)
          {
             // If we are in the same second then append
             // the previously calculated time string
-            buffer.Append(s_lastTime);
+            buffer.Append(LastTime);
          }
          else
          {
             // We are in a new second.
-            s_lastTimeToTheSecond = currentTimeToTheSecond;
-            s_lastTime.Length = 0;
+            LastTimeToTheSecond = currentTimeToTheSecond;
+            LastTime.Length = 0;
 
             // Calculate the new string for this second
-            FormatDateWithoutMillis(dateToFormat, s_lastTime);
-            buffer.Append(s_lastTime);
+            FormatDateWithoutMillis(dateToFormat, LastTime);
+            buffer.Append(LastTime);
          }
 
          // Append the current milli info
@@ -1679,6 +1688,7 @@ namespace TraceTool
    /// <summary>
    /// Options for the traces.
    /// </summary>
+   // ReSharper disable once InconsistentNaming
    public class TTraceOptions
    {
       /// <summary>
@@ -1707,7 +1717,7 @@ namespace TraceTool
       /// <summary>
       /// indicate if the reflection should display class info (assembly,guid,...) and bases classes names
       /// </summary>
-      public bool SendClassInfo = false ;           // ShowClassInfo        = 2  ,
+      public bool SendClassInfo;                    // ShowClassInfo        = 2  ,
       /// <summary>
       /// indicate if the reflection should display fields values
       /// </summary>
@@ -1715,11 +1725,11 @@ namespace TraceTool
       /// <summary>
       /// indicate if the reflection should display custom attributes
       /// </summary>
-      public bool SendCustomAttributes = false ;    // ShowCustomAttributes = 8  ,
+      public bool SendCustomAttributes;            // ShowCustomAttributes = 8  ,
       /// <summary>
       /// indicate if the reflection should display non public (private and protected) members
       /// </summary>
-      public bool SendNonPublic = false ;           // ShowNonPublic        = 16 ,
+      public bool SendNonPublic;                   // ShowNonPublic        = 16 ,
        /// <summary>
       /// indicate if the reflections should display inherited members
       /// </summary>
@@ -1727,20 +1737,20 @@ namespace TraceTool
       /// <summary>
       /// indicate if the reflections should display the events
       /// </summary>
-      public bool SendEvents = false ;              // ShowEvents           = 64 ,
+      public bool SendEvents;                      // ShowEvents           = 64 ,
       /// <summary>
       /// indicate if the reflection should display functions
       /// </summary>
-      public bool SendFunctions = false ;           //  ShowMethods         = 128,
+      public bool SendFunctions;                   //  ShowMethods         = 128,
       /// <summary>
       /// indicate if the reflection should display documentation for type, fields, methods,..
       /// </summary>
-      public bool SendDoc = false ;                 // ShowDoc              = 256
+      public bool SendDoc;                         // ShowDoc              = 256
 
       /// <summary>
       /// indicate if the reflection should also display private members. Default is false
       /// </summary>
-      public bool SendPrivate = false ;
+      public bool SendPrivate;
       /// <summary>
       /// Max Object tree depth for SendValue and Watches
       /// </summary>
@@ -1753,19 +1763,19 @@ namespace TraceTool
       /// <summary>
       /// indicate if the process name must be send. Displayed on the status bar.
       /// </summary>
-      public bool SendProcessName = false ;
+      public bool SendProcessName;
 
-      private bool _SendDate ;
+      private bool _sendDate ;
       /// <summary>
       /// indicate if the date must be send with the time.
       /// </summary>
       public bool SendDate
       {
-         get {return _SendDate ;}
+         get {return _sendDate ;}
          set
          {
-            _SendDate = value ;
-            TTrace.s_lastTimeToTheSecond = 0 ;
+            _sendDate = value ;
+            TTrace.LastTimeToTheSecond = 0 ;
          }
       }
 
@@ -1826,7 +1836,7 @@ namespace TraceTool
       /// <param name="configContext"></param>
       /// <param name="section"></param>
       /// <returns>section</returns>
-      public Object Create (Object parent , Object configContext , System.Xml.XmlNode section )
+      public Object Create (Object parent , Object configContext , XmlNode section )
       {
          //TTrace.Debug.Send ("ConfigSectionHandler.Create") ;
          return section ;
@@ -1842,21 +1852,18 @@ namespace TraceTool
    /// <summary>
    /// TextWriter output. For Linq to SQL for example : NORTHWNDDataContext.Log = TTrace.Out 
    /// </summary>
+   // ReSharper disable once InconsistentNaming
    internal class TTraceWriter : TextWriter
    {
-      public TTraceWriter()
-      {
-      }
-
       public override void Close()
       {
-         this.Dispose(true);
+         Dispose(true);
       }
 
-      protected override void Dispose(bool disposing)
-      {
-         base.Dispose(disposing);
-      }
+      //protected override void Dispose(bool disposing)
+      //{
+      //   base.Dispose(disposing);
+      //}
 
       public override void WriteLine(string value)
       {
@@ -1887,17 +1894,15 @@ namespace TraceTool
       //{
       //    //this._sb.Append(buffer, index, count);
       //}
-      private static UnicodeEncoding m_encoding;
+      private static UnicodeEncoding _encoding;
 
       public override Encoding Encoding
       {
          get
          {
-            if (m_encoding == null)
-            {
-               m_encoding = new UnicodeEncoding(false, false);
-            }
-            return m_encoding;
+            if (_encoding == null)
+               _encoding = new UnicodeEncoding(false, false);
+            return _encoding;
          }
       }
    } // TTraceWriter

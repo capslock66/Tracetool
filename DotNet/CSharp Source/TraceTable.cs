@@ -12,14 +12,14 @@
 // NETF1  (dot net framework 1)          , NETF2 ((dot net framework 2) ,
 // NETCF1 (dot net compact framework 1)  , NETCF2 (dot net compact framework 2) , NETCF3 (dot net compact framework 3)
 
-using System;
-using System.Collections;  // ArrayList, queue
-using System.Diagnostics;  // Process
-using System.Reflection;
-using System.Text;
+//using System;
+//using System.Collections;  // ArrayList, queue
+//using System.Diagnostics;  // Process
+//using System.Reflection;
+//using System.Text;
 
 #if (!NETCF1 && !SILVERLIGHT)
-using System.Xml.XPath;
+//using System.Xml.XPath;
 #endif
 
 
@@ -39,8 +39,8 @@ namespace TraceTool
    /// </summary>
    public class TraceTable
    {
-      private TMemberNode fMembers;
-      private TMemberNode fCurrentRow;
+      private TMemberNode _members;
+      private TMemberNode _currentRow;
 
       //----------------------------------------------------------------------
 
@@ -49,9 +49,9 @@ namespace TraceTool
       /// </summary>
       public TraceTable()
       {
-         fMembers = new TMemberNode();
-         fMembers.ViewerKind = TraceConst.CST_VIEWER_TABLE;
-         fCurrentRow = null;
+         _members = new TMemberNode();
+         _members.ViewerKind = TraceConst.CST_VIEWER_TABLE;
+         _currentRow = null;
       }
 
       //----------------------------------------------------------------------
@@ -62,10 +62,10 @@ namespace TraceTool
       /// <param name="colTitle">one or more columns titles separated by tabs. Can also be called several times to add titles</param>
       public void AddColumnTitle(string colTitle)
       {
-         if (fMembers.Col1 == "")
-            fMembers.Col1 = colTitle;
+         if (_members.Col1 == "")
+            _members.Col1 = colTitle;
          else
-            fMembers.Col1 = fMembers.Col1 + "\t" + colTitle;
+            _members.Col1 = _members.Col1 + "\t" + colTitle;
       }
 
       //----------------------------------------------------------------------
@@ -75,7 +75,7 @@ namespace TraceTool
       /// </summary>
       public void AddRow()
       {
-         fCurrentRow = fMembers.Add("");
+         _currentRow = _members.Add("");
       }
 
       //----------------------------------------------------------------------
@@ -86,13 +86,13 @@ namespace TraceTool
       /// <param name="cell">one or more columns data separated by tabs. Can also be called several times to add cells</param>
       public void AddRowData(string cell)
       {
-         if (fCurrentRow == null)
+         if (_currentRow == null)
             AddRow();
 
-         if (fCurrentRow.Col1 == "")
-            fCurrentRow.Col1 = cell;
+         if (_currentRow.Col1 == "")
+            _currentRow.Col1 = cell;
          else
-            fCurrentRow.Col1 = fCurrentRow.Col1 + "\t" + cell;
+            _currentRow.Col1 = _currentRow.Col1 + "\t" + cell;
       }
 
       //----------------------------------------------------------------------
@@ -104,10 +104,10 @@ namespace TraceTool
       internal void CopyToNodeMembers(TMemberNode nodeMembers)
       {
          TMemberNode TableMembers;
-         TableMembers = nodeMembers.Add(fMembers.Col1);
+         TableMembers = nodeMembers.Add(_members.Col1);
          TableMembers.ViewerKind = TraceConst.CST_VIEWER_TABLE;
-         for (int c = 0; c < fMembers.Members.Count; c++)
-            TableMembers.Add(((TMemberNode)fMembers.Members[c]).Col1);
+         for (int c = 0; c < _members.Members.Count; c++)
+            TableMembers.Add(_members.Members[c].Col1);
       }
    }
 

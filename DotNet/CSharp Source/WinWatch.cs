@@ -13,7 +13,7 @@
 // NETCF1 (dot net compact framework 1)  , NETCF2 (dot net compact framework 2) , NETCF3 (dot net compact framework 3)
 
 using System;
-using System.Collections;                 // ArrayList, queue
+//using System.Collections;                 // ArrayList, queue
 
 namespace TraceTool
 {
@@ -60,22 +60,22 @@ namespace TraceTool
       /// <summary>
       /// WinWatch constructor. The Window Watch is create on the viewer (if not already done)
       /// </summary>
-      /// <param name="WinWatchID">Required window trace Id. If empty, a guid will be generated</param>
-      /// <param name="WinWatchText">The Window Title on the viewer.If empty, a default name will be used</param>
-      public WinWatch (string WinWatchID , string WinWatchText) : this ()
+      /// <param name="winWatchId">Required window trace Id. If empty, a guid will be generated</param>
+      /// <param name="winWatchText">The Window Title on the viewer.If empty, a default name will be used</param>
+      public WinWatch (string winWatchId , string winWatchText) : this ()
       {
-         if (WinWatchID == null || WinWatchID == "")
-            WinWatchID = Helper.NewGuid ().ToString() ;
+         if (winWatchId == null || winWatchId == "")
+            winWatchId = Helper.NewGuid ().ToString() ;
 
-         Id = WinWatchID ;
+         Id = winWatchId ;
 
-         if (WinWatchText == null || WinWatchText == "")
-            WinWatchText = "Watches " + Id ;
+         if (winWatchText == null || winWatchText == "")
+            winWatchText = "Watches " + Id ;
 
          // create the trace window
-         StringList CommandList = new StringList();
-         CommandList.Insert(0, String.Format("{0,5}{1}", TraceConst.CST_WINWATCH_NAME, WinWatchText));
-         TTrace.SendToWinWatchClient (CommandList,this.Id);
+         StringList commandList = new StringList();
+         commandList.Insert(0, String.Format("{0,5}{1}", TraceConst.CST_WINWATCH_NAME, winWatchText));
+         TTrace.SendToWinWatchClient (commandList,Id);
       }
 
       //------------------------------------------------------------------------------
@@ -85,9 +85,9 @@ namespace TraceTool
       /// </summary>
       public void DisplayWin ()
       {
-         StringList CommandList = new StringList();
-         CommandList.Insert(0, String.Format("{0,5}", TraceConst.CST_DISPLAY_TREE));
-         TTrace.SendToWinWatchClient(CommandList, this.Id);
+         StringList commandList = new StringList();
+         commandList.Insert(0, String.Format("{0,5}", TraceConst.CST_DISPLAY_TREE));
+         TTrace.SendToWinWatchClient(commandList, Id);
       }
 
       //------------------------------------------------------------------------------
@@ -97,9 +97,9 @@ namespace TraceTool
       /// </summary>
       public void ClearAll ()
       {
-         StringList CommandList = new StringList();
-         CommandList.Insert(0, String.Format("{0,5}", TraceConst.CST_CLEAR_ALL));
-         TTrace.SendToWinWatchClient(CommandList, this.Id);
+         StringList commandList = new StringList();
+         commandList.Insert(0, String.Format("{0,5}", TraceConst.CST_CLEAR_ALL));
+         TTrace.SendToWinWatchClient(commandList, Id);
       }
 
       //------------------------------------------------------------------------------
@@ -109,9 +109,9 @@ namespace TraceTool
       /// </summary>
       public void Close()
       {
-         StringList CommandList = new StringList();
-         CommandList.Insert(0, String.Format("{0,5}", TraceConst.CST_CLOSE_WIN));
-         TTrace.SendToWinWatchClient(CommandList, this.Id);
+         StringList commandList = new StringList();
+         commandList.Insert(0, String.Format("{0,5}", TraceConst.CST_CLOSE_WIN));
+         TTrace.SendToWinWatchClient(commandList, Id);
       }
 
       //------------------------------------------------------------------------------
@@ -119,23 +119,23 @@ namespace TraceTool
       /// <summary>
       /// Send a watch
       /// </summary>
-      /// <param name="WatchName">Watch name</param>
-      /// <param name="WatchValue">Watch value</param>
-      public void Send (string WatchName , object WatchValue)
+      /// <param name="watchName">Watch name</param>
+      /// <param name="watchValue">Watch value</param>
+      public void Send (string watchName , object watchValue)
       {
          if (Enabled == false)
             return ;
 
-         StringList CommandList = new StringList();
-         CommandList.Insert(0, String.Format("{0,5}{1}", TraceConst.CST_WATCH_NAME, WatchName));
+         StringList commandList = new StringList();
+         commandList.Insert(0, String.Format("{0,5}{1}", TraceConst.CST_WATCH_NAME, watchName));
 
          // create a node with same properties as "self" with new ID
          TraceNodeEx node = new TraceNodeEx (null, false) ;  // no parent, don't generate node id
 
-         node.AddValue (WatchValue  ,  TTrace.Options.SendPrivate , TTrace.Options.ObjectTreeDepth ,"");    // sendPrivate true , max 3 levels, no title
-         node.Members.AddToStringList (CommandList) ;   // convert all groups and nested items/group to strings
+         node.AddValue (watchValue  ,  TTrace.Options.SendPrivate , TTrace.Options.ObjectTreeDepth ,"");    // sendPrivate true , max 3 levels, no title
+         node.Members.AddToStringList (commandList) ;   // convert all groups and nested items/group to strings
 
-         TTrace.SendToWinWatchClient(CommandList, this.Id);
+         TTrace.SendToWinWatchClient(commandList, Id);
       }
 
    }
