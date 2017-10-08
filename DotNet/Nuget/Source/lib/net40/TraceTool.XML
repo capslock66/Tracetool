@@ -49,13 +49,6 @@
             List of parsed object.
             </summary>
         </member>
-        <member name="M:TraceTool.ParsedObjectList.#ctor">
-            <summary>
-            The parameterless constructor of the base class creates a 
-            KeyedCollection with an internal dictionary. For this code 
-            example, no other constructors are exposed.
-            </summary>
-        </member>
         <member name="M:TraceTool.ParsedObjectList.GetKeyForItem(System.Object)">
             <summary>
             This is the only method that absolutely must be overridden,
@@ -570,25 +563,25 @@
             Html encode. To reduce dependencies, the HttpUtility.HtmlEncode is reproduce here, with StringBuilder as target (faster)
             </summary>
         </member>
-        <member name="M:TraceTool.Helper.addCommand(TraceTool.StringList,System.Int32)">
+        <member name="M:TraceTool.Helper.AddCommand(TraceTool.StringList,System.Int32)">
             code only
         </member>
-        <member name="M:TraceTool.Helper.addCommand(TraceTool.StringList,System.Int32,System.Int32)">
+        <member name="M:TraceTool.Helper.AddCommand(TraceTool.StringList,System.Int32,System.Int32)">
             code + int
         </member>
-        <member name="M:TraceTool.Helper.addCommand(TraceTool.StringList,System.Int32,System.Boolean)">
+        <member name="M:TraceTool.Helper.AddCommand(TraceTool.StringList,System.Int32,System.Boolean)">
             code + bool
         </member>
-        <member name="M:TraceTool.Helper.addCommand(TraceTool.StringList,System.Int32,System.String)">
+        <member name="M:TraceTool.Helper.AddCommand(TraceTool.StringList,System.Int32,System.String)">
             code + string
         </member>
-        <member name="M:TraceTool.Helper.addCommand(TraceTool.StringList,System.Int32,System.Int32,System.String)">
+        <member name="M:TraceTool.Helper.AddCommand(TraceTool.StringList,System.Int32,System.Int32,System.String)">
             code + int + string
         </member>
-        <member name="M:TraceTool.Helper.addCommand(TraceTool.StringList,System.Int32,System.Int32,System.Int32,System.String)">
+        <member name="M:TraceTool.Helper.AddCommand(TraceTool.StringList,System.Int32,System.Int32,System.Int32,System.String)">
             code + int + int + string
         </member>
-        <member name="M:TraceTool.Helper.addCommand(TraceTool.StringList,System.Int32,System.Int32,System.Int32,System.Int32,System.String)">
+        <member name="M:TraceTool.Helper.AddCommand(TraceTool.StringList,System.Int32,System.Int32,System.Int32,System.Int32,System.String)">
             code + int + int + int + string
         </member>
         <member name="T:TraceTool.TMemberNode">
@@ -607,6 +600,11 @@
             </summary>
         </member>
         <member name="F:TraceTool.TMemberNode.Col3">
+            <summary>
+            The 3 columns to display
+            </summary>
+        </member>
+        <member name="F:TraceTool.TMemberNode.DefaultCol2">
             <summary>
             The 3 columns to display
             </summary>
@@ -687,57 +685,57 @@
             <summary>
             Change font detail for an item in the trace
             </summary>
-            <param name="ColId">Column index : All columns=-1, Col1=0, Col2=1, Col3=2</param>
-            <param name="Bold">Change font to bold</param>
+            <param name="colId">Column index : All columns=-1, Col1=0, Col2=1, Col3=2</param>
+            <param name="bold">Change font to bold</param>
             <returns>The TMember node</returns>
         </member>
         <member name="M:TraceTool.TMemberNode.SetFontDetail(System.Int32,System.Boolean,System.Boolean)">
             <summary>
             Change font detail for an item in the trace
             </summary>
-            <param name="ColId">Column index : All columns=-1, Col1=0, Col2=1, Col3=2</param>
-            <param name="Bold">Change font to bold</param>
-            <param name="Italic">Change font to Italic</param>
+            <param name="colId">Column index : All columns=-1, Col1=0, Col2=1, Col3=2</param>
+            <param name="bold">Change font to bold</param>
+            <param name="italic">Change font to Italic</param>
             <returns>The TMember node</returns>
         </member>
         <member name="M:TraceTool.TMemberNode.SetFontDetail(System.Int32,System.Boolean,System.Boolean,System.Int32)">
             <summary>
             Change font detail for an item in the trace
             </summary>
-            <param name="ColId">Column index : All columns=-1, Col1=0, Col2=1, Col3=2</param>
-            <param name="Bold">Change font to bold</param>
-            <param name="Italic">Change font to Italic</param>
-            <param name="Color">Change Color. To reduce the number assembly reference, the Color structure is not used. Use YourColor.ToArgb() instead. </param>
+            <param name="colId">Column index : All columns=-1, Col1=0, Col2=1, Col3=2</param>
+            <param name="bold">Change font to bold</param>
+            <param name="italic">Change font to Italic</param>
+            <param name="color">Change Color. To reduce the number assembly reference, the Color structure is not used. Use YourColor.ToArgb() instead. </param>
             <returns>The TMember node</returns>
         </member>
         <member name="M:TraceTool.TMemberNode.SetFontDetail(System.Int32,System.Boolean,System.Boolean,System.Int32,System.Int32)">
             <summary>
             Change font detail for an item in the trace
             </summary>
-            <param name="ColId">Column index : All columns=-1, Col1=0, Col2=1, Col3=2</param>
-            <param name="Bold">Change font to bold</param>
-            <param name="Italic">Change font to Italic</param>
-            <param name="Color">Change Color. To reduce the number assembly reference, the Color structure is not used. Use YourColor.ToArgb() instead. Use -1 to keep default color</param>
-            <param name="Size">Change font size</param>
+            <param name="colId">Column index : All columns=-1, Col1=0, Col2=1, Col3=2</param>
+            <param name="bold">Change font to bold</param>
+            <param name="italic">Change font to Italic</param>
+            <param name="color">Change Color. To reduce the number assembly reference, the Color structure is not used. Use YourColor.ToArgb() instead. Use -1 to keep default color</param>
+            <param name="size">Change font size</param>
             <returns>The TMember node</returns>
         </member>
         <member name="M:TraceTool.TMemberNode.SetFontDetail(System.Int32,System.Boolean,System.Boolean,System.Int32,System.Int32,System.String)">
             <summary>
             Change font detail for an item in the trace
             </summary>
-            <param name="ColId">Column index : All columns=-1, Col1=0, Col2=1, Col3=2</param>
-            <param name="Bold">Change font to bold</param>
-            <param name="Italic">Change font to Italic</param>
-            <param name="Color">Change Color. To reduce the number assembly reference, the Color structure is not used. Use YourColor.ToArgb() instead. Use -1 to keep default color</param>
-            <param name="Size">Change font size, use zero to keep normal size</param>
-            <param name="FontName">Change font name</param>
+            <param name="colId">Column index : All columns=-1, Col1=0, Col2=1, Col3=2</param>
+            <param name="bold">Change font to bold</param>
+            <param name="italic">Change font to Italic</param>
+            <param name="color">Change Color. To reduce the number assembly reference, the Color structure is not used. Use YourColor.ToArgb() instead. Use -1 to keep default color</param>
+            <param name="size">Change font size, use zero to keep normal size</param>
+            <param name="fontName">Change font name</param>
             <returns>The TMember node</returns>
         </member>
         <member name="M:TraceTool.TMemberNode.AddToStringList(TraceTool.StringList)">
             <summary>
             recursively add members to the node CommandList
             </summary>
-            <param name="CommandList">target command list</param>
+            <param name="commandList">target command list</param>
         </member>
         <member name="T:TraceTool.ITracePLugin">
             <summary>
@@ -757,9 +755,9 @@
             Called when the user click on a button, label or menu on a WinTrace.
             The plugin must call WinTrace.LinkToPlugin in order to receive this event
             </summary>
-            <param name="WinId">Wintrace Id</param>
-            <param name="ResourceId">Resource Id</param>
-            <param name="NodeId">Node id of the current selected trace (can be empty)</param>
+            <param name="winId">Wintrace Id</param>
+            <param name="resourceId">Resource Id</param>
+            <param name="nodeId">Node id of the current selected trace (can be empty)</param>
             <returns>
              when true  : tracetool perform the default action
              when false : tracetool don't perform any action
@@ -770,8 +768,8 @@
             Called when a node is to be deleted on a WinTrace
             The plugin must call WinTrace.LinkToPlugin in order to receive this event
             </summary>
-            <param name="WinId">Wintrace Id</param>
-            <param name="NodeId">Node Id</param>
+            <param name="winId">Wintrace Id</param>
+            <param name="nodeId">Node Id</param>
             <returns>
              when true  : tracetool delete the node
              when false : tracetool don't delete the node
@@ -818,7 +816,7 @@
             return the modifiers and the name of a constructor (similar to a method)
             </summary>
         </member>
-        <member name="M:TraceTool.ReflectionHelper.getFieldModifier(System.Reflection.FieldInfo)">
+        <member name="M:TraceTool.ReflectionHelper.GetFieldModifier(System.Reflection.FieldInfo)">
             <summary>
             return the modifiers of a field
             </summary>
@@ -833,7 +831,7 @@
             return the modifiers and the name of a property
             </summary>
         </member>
-        <member name="M:TraceTool.ReflectionHelper.event2String(System.Reflection.EventInfo,System.String@,System.String@)">
+        <member name="M:TraceTool.ReflectionHelper.Event2String(System.Reflection.EventInfo,System.String@,System.String@)">
             <summary>
             return the modifiers and the name of an event
             </summary>
@@ -893,7 +891,7 @@
             TTraceListener is the trace listener, if you want to use the classic Microsoft Trace class.
             </summary>
         </member>
-        <member name="F:TraceTool.TTraceListener.listener">
+        <member name="F:TraceTool.TTraceListener.Listener">
             <summary>
             Specify at any time what is top node that receive the traces
             </summary>
@@ -912,7 +910,7 @@
             <summary>
             Create a listener giving a TraceNode as the parent node.
             </summary>
-            <param name="TraceDoor">Specify Debug,Warning,Error or user TraceNode object</param>
+            <param name="traceDoor">Specify Debug,Warning,Error or user TraceNode object</param>
         </member>
         <member name="M:TraceTool.TTraceListener.Write(System.String)">
             <summary>
@@ -942,7 +940,7 @@
             Create a Node with an unique ID (true)
             You can also recreated an already send node if you still have the id
             </summary>
-            <param name="ParentNode">The parent node where to place that trace.
+            <param name="parentNode">The parent node where to place that trace.
             The IconIndex and the enabled properties are also recopied
             Can be null : the root tree become the parent node, enabled is true and the default icon is used
             </param>
@@ -953,41 +951,41 @@
             <summary>
             Copy constructor : create a TraceNode copy of a TraceToSend
             </summary>
-            <param name="Source">TraceNode to copy</param>
+            <param name="source">TraceNode to copy</param>
         </member>
         <member name="M:TraceTool.TraceNode.#ctor(TraceTool.TraceNodeEx)">
             <summary>
             Copy constructor : create a TraceNode copy of a TraceNodeEx
             </summary>
-            <param name="Source">TraceNodeEx to copy</param>
+            <param name="source">TraceNodeEx to copy</param>
         </member>
         <member name="M:TraceTool.TraceNode.Resend(System.String,System.String)">
             <summary>
             Resend the left and right trace message to the viewer
             </summary>
-            <param name="NewLeftMsg">new left message</param>
-            <param name="NewRightMsg">new right message</param>
+            <param name="newLeftMsg">new left message</param>
+            <param name="newRightMsg">new right message</param>
             <returns>The trace node</returns>
         </member>
         <member name="M:TraceTool.TraceNode.ResendLeft(System.String)">
             <summary>
             ReSend left trace to the server
             </summary>
-            <param name="NewLeftMsg">new left message</param>
+            <param name="newLeftMsg">new left message</param>
             <returns>The trace node</returns>
         </member>
         <member name="M:TraceTool.TraceNode.ResendRight(System.String)">
             <summary>
             ReSend right trace to the server
             </summary>
-            <param name="NewRightMsg">new right message</param>
+            <param name="newRightMsg">new right message</param>
             <returns>The trace node</returns>
         </member>
         <member name="M:TraceTool.TraceNode.ResendIconIndex(System.Int32)">
             <summary>
             Change the Icon index
             </summary>
-            <param name="Index">Index of the icon to use</param>
+            <param name="index">Index of the icon to use</param>
             <returns>The trace node</returns>
         </member>
         <member name="M:TraceTool.TraceNode.SetBackgroundColor(System.Int32)">
@@ -1059,22 +1057,22 @@
             <summary>
             append right and left texts to an existing node
             </summary>
-            <param name="LeftMsgtoAdd">left message</param>
-            <param name="RightMsgtoAdd">right message</param>
+            <param name="leftMsgtoAdd">left message</param>
+            <param name="rightMsgtoAdd">right message</param>
             <returns>The trace node</returns>
         </member>
         <member name="M:TraceTool.TraceNode.AppendLeft(System.String)">
             <summary>
             append left text to an existing node
             </summary>
-            <param name="LeftMsgtoAdd">left message</param>
+            <param name="leftMsgtoAdd">left message</param>
             <returns>The trace node</returns>
         </member>
         <member name="M:TraceTool.TraceNode.AppendRight(System.String)">
             <summary>
             append right text to an existing node
             </summary>
-            <param name="RightMsgtoAdd">right message</param>
+            <param name="rightMsgtoAdd">right message</param>
             <returns>The trace node</returns>
         </member>
         <member name="M:TraceTool.TraceNode.AppendStack">
@@ -1111,14 +1109,14 @@
             <summary>
             Set or reset the bookmark for the node
             </summary>
-            <param name="Bookmarked">true/false</param>
+            <param name="bookmarked">true/false</param>
             <returns>The trace node</returns>
         </member>
         <member name="M:TraceTool.TraceNode.SetVisible(System.Boolean)">
             <summary>
             set a node visible or invisible
             </summary>
-            <param name="Visible">true/false</param>
+            <param name="visible">true/false</param>
             <returns>The trace node</returns>
         </member>
         <member name="M:TraceTool.TraceNode.GotoNextSibling">
@@ -1286,7 +1284,7 @@
              </summary>
             
         </member>
-        <member name="M:TraceTool.TraceNodeEx.displayCustomAttrib(TraceTool.TMemberNode,System.Object[])">
+        <member name="M:TraceTool.TraceNodeEx.displayCustomAttrib(TraceTool.TMemberNode,System.Attribute[])">
             add the attributes stored in the given parameter to the submembers
         </member>
         <member name="M:TraceTool.TraceNodeEx.AddValue(System.Object)">
@@ -1323,7 +1321,7 @@
             Display all fields (with corresponding value) of the type
             Called by AddValue(), not by AddObject()
         </member>
-        <member name="M:TraceTool.TraceNodeEx.addProperties(System.Object,System.Type,TraceTool.TMemberNode,System.Boolean,System.Int32,TraceTool.ParsedObjectList)">
+        <member name="M:TraceTool.TraceNodeEx.addProperties(System.Object,System.Type,TraceTool.TMemberNode,System.Boolean,System.Int32,TraceTool.ParsedObjectList,System.Collections.Generic.Dictionary{System.String,TraceTool.TMemberNode})">
             Display all properties (with corresponding value, if any) of the type
             Called by AddValue(), not by AddObject()
         </member>
@@ -1537,7 +1535,7 @@
             Send a 'reflected' representation of the given object
             </summary>
             <param name="leftMsg">the message to display</param>
-            <param name="ObjToSend">The object to inspect</param>
+            <param name="objToSend">The object to inspect</param>
             <returns>the new node</returns>
         </member>
         <member name="M:TraceTool.TraceToSend.SendObject(System.String,System.Object,TraceTool.TraceDisplayFlags)">
@@ -1545,7 +1543,7 @@
             Send a 'reflected' representation of the given object
             </summary>
             <param name="leftMsg">the message to display</param>
-            <param name="ObjToSend">The object to inspect</param>
+            <param name="objToSend">The object to inspect</param>
             <param name="flags">what information to display</param>
             <returns>the new node</returns>
         </member>
@@ -1555,7 +1553,7 @@
             properties and array content are also inspected with a maximum
             </summary>
             <param name="leftMsg">the message to display</param>
-            <param name="ObjToSend">The object to show</param>
+            <param name="objToSend">The object to show</param>
             <returns>the new node</returns>
         </member>
         <member name="M:TraceTool.TraceToSend.SendValue(System.String,System.Object,System.Boolean)">
@@ -1563,7 +1561,7 @@
             Send the Value of the given object (useful for base type, variant and array)
             </summary>
             <param name="leftMsg">the message to display</param>
-            <param name="ObjToSend">The object to show</param>
+            <param name="objToSend">The object to show</param>
             <param name="sendPrivate">Send Private fields (default is false)</param>
             <returns>the new node</returns>
         </member>
@@ -1572,7 +1570,7 @@
             Send the Value of the given object (useful for base type, variant and array)
             </summary>
             <param name="leftMsg">the message to display</param>
-            <param name="ObjToSend">The object to show</param>
+            <param name="objToSend">The object to show</param>
             <param name="sendPrivate">Send Private fields (default is false)</param>
             <param name="maxLevel">Max level to inspect (default is 3)</param>
             <returns>the new node</returns>
@@ -1582,7 +1580,7 @@
             Send the Value of the given object (useful for base type, variant and array)
             </summary>
             <param name="leftMsg">the message to display</param>
-            <param name="ObjToSend">The object to show</param>
+            <param name="objToSend">The object to show</param>
             <param name="sendPrivate">Send Private fields (default is false)</param>
             <param name="maxLevel">Max level to inspect (default is 3)</param>
             <param name="objTitle">Title of the object</param>
@@ -1649,7 +1647,7 @@
             Send byte dump.
             </summary>
             <param name="leftMsg">Trace message</param>
-            <param name="ShortTitle">Tite to display in the first col</param>
+            <param name="shortTitle">Tite to display in the first col</param>
             <param name="adr">Pointer to the buffer to dump</param>
             <param name="count">Number of byte to dump</param>
             <returns>the new node</returns>
@@ -1695,7 +1693,7 @@
             <param name="table">Object table to send. Must be an Array or IEnumerable or IDictionary</param>
             <returns>the new node</returns>
         </member>
-        <member name="M:TraceTool.TraceToSend.prepareNewNode(System.String,System.String)">
+        <member name="M:TraceTool.TraceToSend.PrepareNewNode(System.String,System.String)">
             Prepare the commandList. Common to all SendXXX function
         </member>
         <member name="M:TraceTool.TraceToSend.GetLastContext">
@@ -1738,7 +1736,7 @@
             </summary>
             <param name="leftMsg">Left message to send</param>
             <param name="rightMsg">Right message to send</param>
-            <param name="BackGroundColor">RGB BackGround Color (see Color.ToArgb function)</param>
+            <param name="backGroundColor">RGB BackGround Color (see Color.ToArgb function)</param>
         </member>
         <member name="M:TraceTool.TraceToSend.Indent(System.String,System.String,System.Int32,System.Boolean)">
             <summary>
@@ -1746,8 +1744,8 @@
             </summary>
             <param name="leftMsg">Left message to send</param>
             <param name="rightMsg">Right message to send</param>
-            <param name="BackGroundColor">BackGround Color</param>
-            <param name="IsEnter">if true , a special "enter" icon is added on the node</param>
+            <param name="backGroundColor">BackGround Color</param>
+            <param name="isEnter">if true , a special "enter" icon is added on the node</param>
         </member>
         <member name="M:TraceTool.TraceToSend.UnIndent">
             <summary>
@@ -1773,7 +1771,7 @@
             </summary>
             <param name="leftMsg">Message to send to close indentation (optional)</param>
             <param name="rightMsg">Message to send to close indentation (optional)</param>
-            <param name="BackGroundColor">RGB background color (optional)(see Color.ToArgb function)</param>
+            <param name="backGroundColor">RGB background color (optional)(see Color.ToArgb function)</param>
         </member>
         <member name="M:TraceTool.TraceToSend.UnIndent(System.String,System.String,System.Int32,System.Boolean)">
             <summary>
@@ -1781,7 +1779,7 @@
             </summary>
             <param name="leftMsg">Message to send to close indentation (optional)</param>
             <param name="rightMsg">Message to send to close indentation (optional)</param>
-            <param name="BackGroundColor">RGB background color (optional)(see Color.ToArgb function)</param>
+            <param name="backGroundColor">RGB background color (optional)(see Color.ToArgb function)</param>
             <param name="isExit">if true, viewer type 'exit' is used</param>
         </member>
         <member name="M:TraceTool.TraceToSend.EnterMethod(System.String)">
@@ -1803,7 +1801,7 @@
             </summary>
             <param name="leftMsg">Left message to send</param>
             <param name="rightMsg">Right message to send</param>
-            <param name="BackGroundColor">RGB BackGround Color(see Color.ToArgb function)</param>
+            <param name="backGroundColor">RGB BackGround Color(see Color.ToArgb function)</param>
         </member>
         <member name="M:TraceTool.TraceToSend.ExitMethod">
             <summary>
@@ -1829,7 +1827,7 @@
             </summary>
             <param name="leftMsg">Left message to send</param>
             <param name="rightMsg">Right message to send</param>
-            <param name="BackGroundColor">RGB BackGround Color(see Color.ToArgb function)</param>
+            <param name="backGroundColor">RGB BackGround Color(see Color.ToArgb function)</param>
         </member>
         <member name="T:TraceTool.TraceTable">
             <summary>
@@ -1873,10 +1871,10 @@
             That class is fully static.
             </summary>
         </member>
-        <member name="F:TraceTool.TTrace.nbDiscarded">
+        <member name="F:TraceTool.TTrace.NbDiscarded">
             number of message discarded (socket error)
         </member>
-        <member name="F:TraceTool.TTrace.nbSend">
+        <member name="F:TraceTool.TTrace.NbSend">
             number of message send by silverlight (socket error)
         </member>
         <member name="F:TraceTool.TTrace.Options">
@@ -1896,17 +1894,17 @@
             <summary>
             Show or hide the trace program
             </summary>
-            <param name="IsVisible">When True : Show. When False : Hide</param>
+            <param name="isVisible">When True : Show. When False : Hide</param>
         </member>
         <member name="M:TraceTool.TTrace.Find(System.String,System.Boolean,System.Boolean,System.Boolean,System.Boolean)">
             <summary>
             Set the global search criteria. You must call TTrace.Wintrace.FindNext to position to the next or previous matching node
             </summary>
-            <param name="Text">Text to search</param>
-            <param name="Sensitive">Search is case sensitive</param>
-            <param name="WholeWord">match only whole word</param>
-            <param name="Highlight">Highlight results</param>
-            <param name="SearchInAllPages">call to FindNext will search also in other traces windows if true</param>
+            <param name="text">Text to search</param>
+            <param name="sensitive">Search is case sensitive</param>
+            <param name="wholeWord">match only whole word</param>
+            <param name="highlight">Highlight results</param>
+            <param name="searchInAllPages">call to FindNext will search also in other traces windows if true</param>
         </member>
         <member name="M:TraceTool.TTrace.ClearAll">
             <summary>
@@ -1957,10 +1955,10 @@
         <member name="M:TraceTool.TTrace.Flush">
             flush remaining traces to the viewer
         </member>
-        <member name="F:TraceTool.TTrace.s_lastTimeToTheSecond">
+        <member name="F:TraceTool.TTrace.LastTimeToTheSecond">
             Last stored time with precision up to the second.
         </member>
-        <member name="F:TraceTool.TTrace.s_lastTime">
+        <member name="F:TraceTool.TTrace.LastTime">
             Last stored time with precision up to the second, formatted as a string.
         </member>
         <member name="M:TraceTool.TTrace.FormatDateWithoutMillis(System.DateTime,System.Text.StringBuilder)">
@@ -2130,8 +2128,8 @@
             <summary>
             WinTrace constructor. The Window Trace is create on the viewer (if not already done)
             </summary>
-            <param name="WinTraceID">Required window trace Id. If empty, a guid will be generated</param>
-            <param name="WinTraceText">The Window Title on the viewer.If empty, a default name will be used</param>
+            <param name="winTraceId">Required window trace Id. If empty, a guid will be generated</param>
+            <param name="winTraceText">The Window Title on the viewer.If empty, a default name will be used</param>
         </member>
         <member name="P:TraceTool.WinTrace.Warning">
             <summary>
@@ -2173,26 +2171,26 @@
             <summary>
             Save the window tree traces to a text file
             </summary>
-            <param name="FileName">file to save</param>
+            <param name="fileName">file to save</param>
         </member>
         <member name="M:TraceTool.WinTrace.SaveToXml(System.String)">
             <summary>
             Save the window tree traces to an XML file
             </summary>
-            <param name="FileName">file to save</param>
+            <param name="fileName">file to save</param>
         </member>
         <member name="M:TraceTool.WinTrace.SaveToXml(System.String,System.String)">
             <summary>
             Save the window tree traces to an XML file
             </summary>
-            <param name="FileName">file to save</param>
-            <param name="StyleSheet">optional StyleSheet file name added in xml</param>
+            <param name="fileName">file to save</param>
+            <param name="styleSheet">optional StyleSheet file name added in xml</param>
         </member>
         <member name="M:TraceTool.WinTrace.LoadXml(System.String)">
             <summary>
             Load an XML file to the window tree traces
             </summary>
-            <param name="FileName">file to open</param>
+            <param name="fileName">file to open</param>
         </member>
         <member name="M:TraceTool.WinTrace.DisplayWin">
             <summary>
@@ -2210,7 +2208,7 @@
             change the tree to display user defined multiple columns
             must be called before setting column titles
             </summary>
-            <param name="MainColIndex">The Main column index (default is 0)</param>
+            <param name="mainColIndex">The Main column index (default is 0)</param>
         </member>
         <member name="M:TraceTool.WinTrace.SetLogFile(System.String,System.Int32)">
             <summary>
@@ -2228,8 +2226,8 @@
               5, Local log enabled. A new file is create each day (CCYYMMDD is appended to the filename). Ignored in silverlight 2
               </code>
               </summary>
-              <param name="FileName">\File to open</param>
-              <param name="Mode">Local and viewer site log mode. </param>                                 
+              <param name="fileName">\File to open</param>
+              <param name="mode">Local and viewer site log mode. </param>                                 
         </member>
         <member name="M:TraceTool.WinTrace.SetLogFile(System.String,System.Int32,System.Int32)">
             <summary>
@@ -2247,9 +2245,9 @@
               5, Local log enabled. A new file is create each day (CCYYMMDD is appended to the filename). Ignored in silverlight 2
               </code>
               </summary>
-              <param name="FileName">\File to open</param>
-              <param name="Mode">Local and viewer site log mode. </param>
-              <param name="MaxLines">Number of lines before starting a new
+              <param name="fileName">\File to open</param>
+              <param name="mode">Local and viewer site log mode. </param>
+              <param name="maxLines">Number of lines before starting a new
                                      \file (default \: \-1 = unlimited). </param>                         
         </member>
         <member name="M:TraceTool.WinTrace.GetLocalLogFile">
@@ -2261,7 +2259,7 @@
             <summary>
             set columns title
             </summary>
-            <param name="Titles">Tab separated columns titles
+            <param name="titles">Tab separated columns titles
             Example : Title1 \t title2
             </param>
         </member>
@@ -2269,7 +2267,7 @@
             <summary>
             set columns widths
             </summary>
-            <param name="Widths">Tab separated columns width.
+            <param name="widths">Tab separated columns width.
             The format for each column is width[:Min[:Max]] <p/>
             where Min and Max are optional minimum and maximum column width for resizing purpose.<p/>
             Example : 100:20:80 \t 200:50 \t 100
@@ -2289,13 +2287,13 @@
             <summary>
             Set the focus to the next matching node
             </summary>
-            <param name="SearForward">If true search down, else search up  </param>
+            <param name="searForward">If true search down, else search up  </param>
         </member>
         <member name="M:TraceTool.WinTrace.GotoBookmark(System.Int32)">
             <summary>
             Set the focus to a bookmarked node identified by his position. Bookmarks are cheched by the user or with the node.SetBookmark() function
             </summary>
-            <param name="Pos">Indice of the bookmark </param>
+            <param name="pos">Indice of the bookmark </param>
         </member>
         <member name="M:TraceTool.WinTrace.ClearBookmark">
             <summary>
@@ -2311,7 +2309,7 @@
              <summary>
              Add a filter to node. Multiple calls to this function can be done. Call ApplyFilter() to apply filtering
              </summary>
-             <param name="Column">Column to apply filter.<p/>
+             <param name="column">Column to apply filter.<p/>
                In multicolumn mode the first column start at 0 <p/>
                In normal mode : <p/>
                col icone   = 999    <p/>
@@ -2321,22 +2319,22 @@
                col Comment = 4      <p/>
                col members = 998
              </param>
-             <param name="Compare">There is 5 kinds of filters : <p/>
+             <param name="compare">There is 5 kinds of filters : <p/>
                 Equal           = 0  <p/>
                 Not equal       = 1  <p/>
                 contains       = 2  <p/>
                 Don't contains  = 3  <p/>
                 (Ignore this filter) = 4 or -1
             </param>
-             <param name="Text">The text to search (insensitive) </param>
+             <param name="text">The text to search (insensitive) </param>
         </member>
         <member name="M:TraceTool.WinTrace.ApplyFilter(System.Boolean,System.Boolean,System.Boolean)">
             <summary>
             Apply filters after calls to AddFilter().
             </summary>
-            <param name="ConditionAnd">If true, use an 'AND' condition for each filters, else use a "OR" </param>
-            <param name="ShowMatch">If true, show node that match filter and hide others. If false hide matching node and show others</param>
-            <param name="IncludeChildren">If true, search in subnodes</param>
+            <param name="conditionAnd">If true, use an 'AND' condition for each filters, else use a "OR" </param>
+            <param name="showMatch">If true, show node that match filter and hide others. If false hide matching node and show others</param>
+            <param name="includeChildren">If true, search in subnodes</param>
         </member>
         <member name="M:TraceTool.WinTrace.ClearAll">
             <summary>
@@ -2352,8 +2350,8 @@
              <summary>
              Plugin API : Create a resource.
              </summary>
-             <param name="ResId">The resource Id (must be >= 100)</param>
-             <param name="ResType">Resource type. See TraceConst
+             <param name="resId">The resource Id (must be >= 100)</param>
+             <param name="resType">Resource type. See TraceConst
              <code>
              CST_RES_BUT_RIGHT    : Button on right
              CST_RES_BUT_LEFT     : Button on left
@@ -2366,14 +2364,14 @@
                                     Call CreateResource on the main win trace to create this menu item
              </code>
             </param>
-             <param name="ResWidth">Width of the resource. Applicable only to button and labels</param>
-             <param name="ResText">Resource text</param>
+             <param name="resWidth">Width of the resource. Applicable only to button and labels</param>
+             <param name="resText">Resource text</param>
         </member>
         <member name="M:TraceTool.WinTrace.DisableResource(System.Int32)">
             <summary>
             Plugin API : Disable tracetool or user created resources
             </summary>
-            <param name="ResId">The resource Id
+            <param name="resId">The resource Id
             ResId: resource id to disable. Tracetool resources :
             <code>
             CST_ACTION_CUT            : Cut. Same as copy then delete
@@ -2401,8 +2399,8 @@
             <summary>
             Plugin API : Set the resource text (tracetool or user created resources), specified by his Id
             </summary>
-            <param name="ResId">The resource Id </param>
-            <param name="ResText">Resource text</param>
+            <param name="resId">The resource Id </param>
+            <param name="resText">Resource text</param>
         </member>
         <member name="M:TraceTool.WinTrace.LinkToPlugin(System.String,System.Int32)">
             <summary>
@@ -2411,7 +2409,7 @@
             The plugin is identified by his internal name (not dll name).
             When linked, the plugin can receive event (see ITracePLugin).
             </summary>
-            <param name="PluginName">name of the plugin</param>
+            <param name="pluginName">name of the plugin</param>
             <param name="flags">combinaison of CST_PLUG_ONACTION , CST_PLUG_ONBEFOREDELETE , CST_PLUG_ONTIMER</param>
         </member>
         <member name="T:TraceTool.WinWatch">
@@ -2445,8 +2443,8 @@
             <summary>
             WinWatch constructor. The Window Watch is create on the viewer (if not already done)
             </summary>
-            <param name="WinWatchID">Required window trace Id. If empty, a guid will be generated</param>
-            <param name="WinWatchText">The Window Title on the viewer.If empty, a default name will be used</param>
+            <param name="winWatchId">Required window trace Id. If empty, a guid will be generated</param>
+            <param name="winWatchText">The Window Title on the viewer.If empty, a default name will be used</param>
         </member>
         <member name="M:TraceTool.WinWatch.DisplayWin">
             <summary>
@@ -2467,8 +2465,8 @@
             <summary>
             Send a watch
             </summary>
-            <param name="WatchName">Watch name</param>
-            <param name="WatchValue">Watch value</param>
+            <param name="watchName">Watch name</param>
+            <param name="watchValue">Watch value</param>
         </member>
     </members>
 </doc>
