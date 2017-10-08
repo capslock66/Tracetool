@@ -1,45 +1,37 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
-using System.Collections.ObjectModel ;
+using System.Collections.ObjectModel;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
+using System.Reflection;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using System.Reflection;
-using System.Runtime.InteropServices;
-using System.Collections;
-using System.Diagnostics;
-using System.IO;
-
-
 using TraceTool;
 
-namespace vs13_WPF_F4_Demo
+namespace vs17_WPF_F4_Demo
 {
    /// <summary>
    /// Interaction logic for Window1.xaml
    /// </summary>
-   public partial class Window1 : Window
+   public partial class Window1 
    {
       [DllImport("kernel32.dll")]
       extern static void OutputDebugString(String str);
 
-      TestClass testClass = new TestClass();  
       public static object ShowViewerButton;
-      int test = 0;
-      WinTrace MultiColTrace;
-      private WinTrace myWinTrace;
-      TestClass test2 = new TestClass();
-      private WinWatch MyWinWatch;
-      TraceNode start1;
-      TraceNode start2;
+      private TestClass _testClass = new TestClass();  
+      private int _test ;
+      private WinTrace _multiColTrace;
+      private WinTrace _myWinTrace;
+      private TestClass test2 = new TestClass();
+      private WinWatch _myWinWatch;
+      private TraceNode _start1;
+      private TraceNode _start2;
 
       //------------------------------------------------------------------------------
 
@@ -55,13 +47,13 @@ namespace vs13_WPF_F4_Demo
       {
          //comboBox1.SelectedIndex  = 0 ;
          if (TTrace.Options.SendMode == SendMode.WinMsg)
-            comboMode.SelectedIndex = 0;
+            ComboMode.SelectedIndex = 0;
          else
-            comboMode.SelectedIndex = 1;
-         chkSendEvents.IsChecked = TTrace.Options.SendEvents;
-         chkSendInherited.IsChecked = TTrace.Options.SendInherited;
-         chkSendFunctions.IsChecked = TTrace.Options.SendFunctions;
-         chkSendProcessName.IsChecked = TTrace.Options.SendProcessName;
+            ComboMode.SelectedIndex = 1;
+         ChkSendEvents.IsChecked = TTrace.Options.SendEvents;
+         ChkSendInherited.IsChecked = TTrace.Options.SendInherited;
+         ChkSendFunctions.IsChecked = TTrace.Options.SendFunctions;
+         ChkSendProcessName.IsChecked = TTrace.Options.SendProcessName;
       }
 
       //------------------------------------------------------------------------------
@@ -89,14 +81,14 @@ namespace vs13_WPF_F4_Demo
 
       private void comboMode_SelectionChanged(object sender, SelectionChangedEventArgs e)
       {
-         if (comboMode.SelectedIndex == 0)
+         if (ComboMode.SelectedIndex == 0)
             TTrace.Options.SendMode = SendMode.WinMsg;
-         else if (comboMode.SelectedIndex == 1)
+         else if (ComboMode.SelectedIndex == 1)
          {
             TTrace.Options.SocketUdp = false;
             TTrace.Options.SendMode = SendMode.Socket;
          }
-         else if (comboMode.SelectedIndex == 2)
+         else if (ComboMode.SelectedIndex == 2)
          {
             TTrace.Options.SocketUdp = true;
             TTrace.Options.SendMode = SendMode.Socket;
@@ -109,49 +101,53 @@ namespace vs13_WPF_F4_Demo
 
       private void chkSendFunctions_Checked(object sender, RoutedEventArgs e)
       {
-         TTrace.Options.SendFunctions = (bool) chkSendFunctions.IsChecked;
+          if (ChkSendFunctions.IsChecked != null) 
+                TTrace.Options.SendFunctions = (bool) ChkSendFunctions.IsChecked;
       }
 
       //------------------------------------------------------------------------------
 
       private void chkSendInherited_Checked(object sender, RoutedEventArgs e)
       {
-         TTrace.Options.SendInherited = (bool) chkSendInherited.IsChecked;
+          if (ChkSendInherited.IsChecked != null) 
+                TTrace.Options.SendInherited = (bool) ChkSendInherited.IsChecked;
       }
 
       //------------------------------------------------------------------------------
 
       private void chkSendEvents_Checked(object sender, RoutedEventArgs e)
       {
-         TTrace.Options.SendEvents = (bool) chkSendEvents.IsChecked;
+          if (ChkSendEvents.IsChecked != null) 
+                TTrace.Options.SendEvents = (bool) ChkSendEvents.IsChecked;
       }
 
       //------------------------------------------------------------------------------
 
       private void chkSendProcessName_Checked(object sender, RoutedEventArgs e)
       {
-         TTrace.Options.SendProcessName = (bool)chkSendProcessName.IsChecked ;
+          if (ChkSendProcessName.IsChecked != null)
+              TTrace.Options.SendProcessName = (bool) ChkSendProcessName.IsChecked;
       }
 
       //------------------------------------------------------------------------------
 
 
-      struct structTest 
+      struct StructTest 
       { 
 
       }
 
-      public class templateTest<T1,T2> 
+      public class TemplateTest<T1,T2> 
          where T2: struct
          where T1 : Control, IFrameworkInputElement
       {
-         T1 item;
-         T2 aStruct;
-         public U fct1<U>(U param) where U : class { return param; } // generic method
-         public void setItem(T1 param)      { item = param; }        // normal method that use a generic parameter in a generic class
-         public T1 getItem(int param)       { return item; }
-         public T2 getStruct()              { return aStruct; }
-         public void setStruct(T2 param)    { aStruct = param; }
+         private T1 _item;
+         private T2 _aStruct;
+         public TU Fct1<TU>(TU param) where TU : class { return param; } // generic method
+         public void SetItem(T1 param)      { _item = param; }        // normal method that use a generic parameter in a generic class
+         public T1 GetItem(int param)       { return _item; }
+         public T2 GetStruct()              { return _aStruct; }
+         public void SetStruct(T2 param)    { _aStruct = param; }
 
       }
 
@@ -163,15 +159,16 @@ namespace vs13_WPF_F4_Demo
                                     TraceDisplayFlags.ShowNonPublic |
                                     TraceDisplayFlags.ShowFields;
 
-         if ((bool)chkSendFunctions.IsChecked)
+         if (ChkSendFunctions.IsChecked != null && (bool)ChkSendFunctions.IsChecked)
             flags |= TraceDisplayFlags.ShowMethods;
 
         
          //TTrace.Debug.SendObject("button1", button1);
          //button1.Width = button1.Width + 10;
          //button1.SetValue(Canvas.LeftProperty, (double)button1.GetValue(Canvas.LeftProperty) + 1); 
-         TTrace.Options.SendProcessName = (bool) chkSendProcessName.IsChecked;
-         string str = '\u2250' + "qwerty & @ € é ù è azerty" + '\u9999';
+          if (ChkSendProcessName.IsChecked != null)
+              TTrace.Options.SendProcessName = (bool) ChkSendProcessName.IsChecked;
+          string str = '\u2250' + "qwerty & @ € é ù è azerty" + '\u9999';
 
          // simple traces
          //--------------------------------------------
@@ -218,16 +215,16 @@ namespace vs13_WPF_F4_Demo
          // Use default display filter. (see TTrace.Options)
 
          TTrace.Debug.SendType("Object base type", typeof(Object));
-         TTrace.Debug.SendType("My interface", typeof(Myinterface));
+         TTrace.Debug.SendType("My interface", typeof(IMyinterface));
          TTrace.Debug.SendObject("My const", TraceConst.CST_CREATE_MEMBER);
-         TTrace.Debug.SendObject("My enum", testClass.fieldDay);
+         TTrace.Debug.SendObject("My enum", _testClass.FieldDay);
          TTrace.Debug.SendCaller("SendCaller test", 0);
          TTrace.Debug.SendStack("Stack test", 0);
          TTrace.Debug.SendDump("SendDump test", "Unicode", Encoding.Unicode.GetBytes(str), 50);
 
-         TTrace.Warning.SendType("SendType 'testClass'", testClass.GetType());
+         TTrace.Warning.SendType("SendType 'testClass'", _testClass.GetType());
 
-         TTrace.Error.SendObject("SendObject 'testClass'", testClass, flags);
+         TTrace.Error.SendObject("SendObject 'testClass'", _testClass, flags);
 
          // traces using TraceNodeEx
          //--------------------------------------------
@@ -256,34 +253,34 @@ namespace vs13_WPF_F4_Demo
          // Image sample using Send
          //--------------------------------------------
 
-         TTrace.Debug.SendBitmap("Bitmap", image1);
+         TTrace.Debug.SendBitmap("Bitmap", Image1);
 
          // Text, image and XML together
          //--------------------------------------------
          node = new TraceNodeEx(TTrace.Debug);
          node.LeftMsg = "Text, image and XML together";
          node.Members.Add("Text displayed in detail");
-         node.AddBitmap(image1);
+         node.AddBitmap(Image1);
          node.AddXML("<?xml version='1.0' ?><Data> Xml in traceNodeEx </Data>");
          node.Send();
 
          // group of traces enabled / disabled
          //------------------------------------
-         TraceNode GroupTrace = new TraceNode(null, false);  // dummy node not send to viewer
-         GroupTrace.IconIndex = 5;
-         GroupTrace.Enabled = true;
-         GroupTrace.Send("GroupTrace traces 1");    // send to viewer
-         GroupTrace.Enabled = false;
-         GroupTrace.Send("GroupTrace traces 2");    // not send : group not enabled
+         TraceNode groupTrace = new TraceNode(null, false);  // dummy node not send to viewer
+         groupTrace.IconIndex = 5;
+         groupTrace.Enabled = true;
+         groupTrace.Send("GroupTrace traces 1");    // send to viewer
+         groupTrace.Enabled = false;
+         groupTrace.Send("GroupTrace traces 2");    // not send : group not enabled
 
          // generics
          //------------------------------------
          TTrace.Debug.SendType("typeof(Dictionary<,>)", typeof(Dictionary<,>), flags);   // open generic
-         TTrace.Debug.SendType("typeof(Dictionary<Window, structTest>", typeof(Dictionary<Window, structTest>), flags);// closed generic
-         TTrace.Debug.SendObject("new Dictionary<Window, structTest>()", new Dictionary<Window, structTest>(), flags);
+         TTrace.Debug.SendType("typeof(Dictionary<Window, structTest>", typeof(Dictionary<Window, StructTest>), flags);// closed generic
+         TTrace.Debug.SendObject("new Dictionary<Window, structTest>()", new Dictionary<Window, StructTest>(), flags);
 
-         TTrace.Debug.SendType("typeof(templateTest<,>)", typeof(templateTest<,>), flags);
-         TTrace.Debug.SendObject("new templateTest<Window, structTest>()", new templateTest<Window, structTest>(), flags);
+         TTrace.Debug.SendType("typeof(templateTest<,>)", typeof(TemplateTest<,>), flags);
+         TTrace.Debug.SendObject("new templateTest<Window, structTest>()", new TemplateTest<Window, StructTest>(), flags);
          
 
          // Display tables : use an object that implement : Array or IEnumerable or IDictionary or create a special table
@@ -304,12 +301,12 @@ namespace vs13_WPF_F4_Demo
          TTrace.Debug.SendTable("Linq query on series", pairs);
 
          // 2) array of FileInfo[]
-         string strTempPath = System.IO.Path.GetTempPath();
-         DirectoryInfo TempPath = new DirectoryInfo(strTempPath);
-         TTrace.Debug.SendTable("Files in temp path", TempPath.GetFiles());
+         string strTempPath = Path.GetTempPath();
+         DirectoryInfo tempPath = new DirectoryInfo(strTempPath);
+         TTrace.Debug.SendTable("Files in temp path", tempPath.GetFiles());
 
          // Linq to array of FileInfo[]
-         var LinqToObjectQuery = from file in TempPath.GetFiles()
+         var linqToObjectQuery = from file in tempPath.GetFiles()
                                  where file.Length > 100
                                  orderby file.Length descending
                                  select new
@@ -319,7 +316,7 @@ namespace vs13_WPF_F4_Demo
                                     file.LastWriteTime,
                                     file
                                  };
-         TTrace.Debug.SendTable("Files having length>100 in temp path (Linq)", LinqToObjectQuery);
+         TTrace.Debug.SendTable("Files having length>100 in temp path (Linq)", linqToObjectQuery);
 
 
          // 3) IDictionary : Hashtable
@@ -461,17 +458,16 @@ namespace vs13_WPF_F4_Demo
 
       private void butVariant_Click(object sender, RoutedEventArgs e)
       {
-         TTrace.Options.SendProcessName = (bool) chkSendProcessName.IsChecked;
+          if (ChkSendProcessName.IsChecked != null)
+              TTrace.Options.SendProcessName = (bool) ChkSendProcessName.IsChecked;
 
-         // SendValue is quite different from SendObject 
+          // SendValue is quite different from SendObject 
          // SendValue is recursive and display arrays
-         TTrace.Debug.SendValue("SendValue 'testClass'", testClass);
-         return ;// TODO remove
-
+         TTrace.Debug.SendValue("SendValue 'testClass'", _testClass);
             
-         TTrace.Debug.SendValue("SendValue 'butVariant'", butVariant);
-         TTrace.Warning.SendValue("SendValue 'testClass', max 3 levels (default)", testClass, true, 3, "testClass");
-         TTrace.Error.SendValue("SendValue 'array', max 5 levels", testClass.fieldArray, true, 5, "fieldArray");
+         TTrace.Debug.SendValue("SendValue 'butVariant'", ButVariant);
+         TTrace.Warning.SendValue("SendValue 'testClass', max 3 levels (default)", _testClass, true, 3, "testClass");
+         TTrace.Error.SendValue("SendValue 'array', max 5 levels", _testClass.FieldArray, true, 5, "fieldArray");
       }
 
       //------------------------------------------------------------------------------
@@ -498,7 +494,7 @@ namespace vs13_WPF_F4_Demo
       private void butDoc_Click(object sender, RoutedEventArgs e)
       {
          // display a System.Windows.Forms.Button object with his documentation
-         TTrace.Debug.SendObject("butDoc object", butDoc,
+         TTrace.Debug.SendObject("butDoc object", ButDoc,
             TraceDisplayFlags.ShowModifiers |
             TraceDisplayFlags.ShowFields |
             TraceDisplayFlags.ShowClassInfo |
@@ -560,7 +556,7 @@ namespace vs13_WPF_F4_Demo
       private void butListenerInit_Click(object sender, RoutedEventArgs e)
       {
          Trace.WriteLine("Before setting listener : trace goes to ODS window");
-         int[] myArray = new int[3] { 3, 5, 5 };
+         int[] myArray = new int[] { 3, 5, 5 };
 
          Trace.Listeners.Clear();
          Trace.Listeners.Add(new TTraceListener());
@@ -589,16 +585,16 @@ namespace vs13_WPF_F4_Demo
 
       private void butDiagnostic_Click(object sender, RoutedEventArgs e)
       {
-         test++;
-         Trace.WriteLine("Diagnostics test" + test);
+         _test++;
+         Trace.WriteLine("Diagnostics test" + _test);
       }
 
       //------------------------------------------------------------------------------
 
       private void butOldTrace_Click(object sender, RoutedEventArgs e)
       {
-         test++;
-         OutputDebugString("OutputDebugString test" + test);
+         _test++;
+         OutputDebugString("OutputDebugString test" + _test);
       }
 
       //------------------------------------------------------------------------------
@@ -608,10 +604,10 @@ namespace vs13_WPF_F4_Demo
          EventLog myLog = new EventLog();
          myLog.Source = "Application";
 
-         test++;
+         _test++;
 
          // Write an informational entry to the event log.    
-         myLog.WriteEntry("Event log test " + test);
+         myLog.WriteEntry("Event log test " + _test);
       }
 
       //------------------------------------------------------------------------------
@@ -620,8 +616,8 @@ namespace vs13_WPF_F4_Demo
       {
          FileStream fsFileStream = new FileStream("c:\\log.txt", FileMode.Append);
          StreamWriter swWriter = new StreamWriter(fsFileStream);
-         test++;
-         swWriter.WriteLine("test " + test);
+         _test++;
+         swWriter.WriteLine("test " + _test);
          swWriter.Close();
          fsFileStream.Close();
       }
@@ -630,49 +626,49 @@ namespace vs13_WPF_F4_Demo
 
       private void butCreateWinTrace_Click(object sender, RoutedEventArgs e)
       {
-         myWinTrace = new WinTrace("MyWINID", "My trace window");
-         butDisplayWin.IsEnabled = true;
-         butHelloToWintrace.IsEnabled = true;
-         butSaveWinToTxt.IsEnabled = true;
-         butSaveWinToXml.IsEnabled = true;
-         butClearWin.IsEnabled = true;
-         butWinLoadXml.IsEnabled = true;
-         butCloseWin.IsEnabled = true;
-         butSetLocalLog.IsEnabled = true;
+         _myWinTrace = new WinTrace("MyWINID", "My trace window");
+         ButDisplayWin.IsEnabled = true;
+         ButHelloToWintrace.IsEnabled = true;
+         ButSaveWinToTxt.IsEnabled = true;
+         ButSaveWinToXml.IsEnabled = true;
+         ButClearWin.IsEnabled = true;
+         ButWinLoadXml.IsEnabled = true;
+         ButCloseWin.IsEnabled = true;
+         ButSetLocalLog.IsEnabled = true;
       }
 
       //------------------------------------------------------------------------------
 
       private void butDisplayWin_Click(object sender, RoutedEventArgs e)
       {
-         myWinTrace.DisplayWin();
+         _myWinTrace.DisplayWin();
       }
 
       //------------------------------------------------------------------------------
 
       private void butHelloToWintrace_Click(object sender, RoutedEventArgs e)
       {
-         myWinTrace.Debug.Send("Hello", "Can be used to store exceptions, for examples");
+         _myWinTrace.Debug.Send("Hello", "Can be used to store exceptions, for examples");
       }
 
       //------------------------------------------------------------------------------
 
       private void MulticolBut_Click(object sender, RoutedEventArgs e)
       {
-         if (MultiColTrace == null)
+         if (_multiColTrace == null)
          {
-            MultiColTrace = new WinTrace("MCOL", "MultiCol trace window");
-            MultiColTrace.SetMultiColumn(1);  // must be called before calling setColumnsTitle
-            MultiColTrace.SetColumnsTitle("col1 \t col2 \t col3");
-            MultiColTrace.SetColumnsWidth("100:20:80 \t 200:50 \t 100");
-            MultiColTrace.DisplayWin();
+            _multiColTrace = new WinTrace("MCOL", "MultiCol trace window");
+            _multiColTrace.SetMultiColumn(1);  // must be called before calling setColumnsTitle
+            _multiColTrace.SetColumnsTitle("col1 \t col2 \t col3");
+            _multiColTrace.SetColumnsWidth("100:20:80 \t 200:50 \t 100");
+            _multiColTrace.DisplayWin();
             // set local log
             // 3, Local log is disabled
             // 4, Local log enabled. No size limit.
             // 5, Local log enabled. A new file is create each day (CCYYMMDD is appended to the filename)
-            MultiColTrace.SetLogFile("c:\\MultiCol.xml", 4);
+            _multiColTrace.SetLogFile("c:\\MultiCol.xml", 4);
          }
-         MultiColTrace.Debug.Send("1 \t 2 \t 3");
+         _multiColTrace.Debug.Send("1 \t 2 \t 3");
       }
 
       //------------------------------------------------------------------------------
@@ -683,42 +679,42 @@ namespace vs13_WPF_F4_Demo
          // 3, Local log is disabled
          // 4, Local log enabled. No size limit.
          // 5, Local log enabled. A new file is create each day (CCYYMMDD is appended to the filename)
-         myWinTrace.SetLogFile("c:\\myWinTrace.xml", 4);
+         _myWinTrace.SetLogFile("c:\\myWinTrace.xml", 4);
       }
 
       //------------------------------------------------------------------------------
 
       private void butSaveWinToTxt_Click(object sender, RoutedEventArgs e)
       {
-         myWinTrace.SaveToTextfile("c:\\log2.txt");
+         _myWinTrace.SaveToTextfile("c:\\log2.txt");
       }
 
       //------------------------------------------------------------------------------
 
       private void butClearWin_Click(object sender, RoutedEventArgs e)
       {
-         myWinTrace.ClearAll();
+         _myWinTrace.ClearAll();
       }
 
       //------------------------------------------------------------------------------
 
       private void butSaveWinToXml_Click(object sender, RoutedEventArgs e)
       {
-         myWinTrace.SaveToXml("c:\\log2.xml");
+         _myWinTrace.SaveToXml("c:\\log2.xml");
       }
 
       //------------------------------------------------------------------------------
 
       private void butWinLoadXml_Click(object sender, RoutedEventArgs e)
       {
-         myWinTrace.LoadXml("c:\\log2.xml");
+         _myWinTrace.LoadXml("c:\\log2.xml");
       }
 
       //------------------------------------------------------------------------------
 
       private void butCloseWin_Click(object sender, RoutedEventArgs e)
       {
-         myWinTrace.Close();
+         _myWinTrace.Close();
       }
 
       //------------------------------------------------------------------------------
@@ -732,7 +728,7 @@ namespace vs13_WPF_F4_Demo
 
       private void butClearWatchWindow_Click(object sender, RoutedEventArgs e)
       {
-         MyWinWatch = new WinWatch("MyWinWatchID", "My watches");
+         _myWinWatch = new WinWatch("MyWinWatchID", "My watches");
       }
 
       //------------------------------------------------------------------------------
@@ -746,48 +742,48 @@ namespace vs13_WPF_F4_Demo
 
       private void butCreateWinWatch_Click(object sender, RoutedEventArgs e)
       {
-         MyWinWatch = new WinWatch("MyWinWatchID", "My watches");
+         _myWinWatch = new WinWatch("MyWinWatchID", "My watches");
       }
 
       //------------------------------------------------------------------------------
 
       private void butWinWatchSend_Click(object sender, RoutedEventArgs e)
       {
-         if (MyWinWatch != null)
-            MyWinWatch.Send("Now", DateTime.Now.ToString("HH:mm:ss:fff"));
+         if (_myWinWatch != null)
+            _myWinWatch.Send("Now", DateTime.Now.ToString("HH:mm:ss:fff"));
       }
 
       //------------------------------------------------------------------------------
 
       private void butWinWatchClear_Click(object sender, RoutedEventArgs e)
       {
-         if (MyWinWatch != null)
-            MyWinWatch.ClearAll();
+         if (_myWinWatch != null)
+            _myWinWatch.ClearAll();
       }
 
       //------------------------------------------------------------------------------
 
       private void butWinWatchDisplay_Click(object sender, RoutedEventArgs e)
       {
-         if (MyWinWatch != null)
-            MyWinWatch.DisplayWin();
+         if (_myWinWatch != null)
+            _myWinWatch.DisplayWin();
       }
 
       //------------------------------------------------------------------------------
 
       private void butWinWatchClose_Click(object sender, RoutedEventArgs e)
       {
-         if (MyWinWatch != null)
-            MyWinWatch.Close();
+         if (_myWinWatch != null)
+            _myWinWatch.Close();
       }
 
       //------------------------------------------------------------------------------
 
       private void butStart1_Click(object sender, RoutedEventArgs e)
       {
-         start1 = TTrace.Debug.Send("Start 1 ..");
-         butDone1.IsEnabled = true;
-         butSetSelected.IsEnabled = true;
+         _start1 = TTrace.Debug.Send("Start 1 ..");
+         ButDone1.IsEnabled = true;
+         ButSetSelected.IsEnabled = true;
       }
 
       //------------------------------------------------------------------------------
@@ -799,7 +795,7 @@ namespace vs13_WPF_F4_Demo
 
          // same creating a duplicate node with same id
          TraceNode newNode = new TraceNode(null,false);
-         newNode.Id = start1.Id;
+         newNode.Id = _start1.Id;
          newNode.ResendRight("Done 1");
          newNode.AppendStack();
 
@@ -809,50 +805,50 @@ namespace vs13_WPF_F4_Demo
 
       private void butSetSelected_Click(object sender, RoutedEventArgs e)
       {
-         start1.SetSelected();
+         _start1.SetSelected();
       }
 
       //------------------------------------------------------------------------------
 
       private void butstart2_Click(object sender, RoutedEventArgs e)
       {
-         start2 = TTrace.Debug.Send("Start 2 ..");
-         butEnd2.IsEnabled = true;
-         butShowNode.IsEnabled = true;
-         butToogleBookmark.IsEnabled = true;
-         butToogleVisible.IsEnabled = true;
+         _start2 = TTrace.Debug.Send("Start 2 ..");
+         ButEnd2.IsEnabled = true;
+         ButShowNode.IsEnabled = true;
+         ButToogleBookmark.IsEnabled = true;
+         ButToogleVisible.IsEnabled = true;
       }
 
       //------------------------------------------------------------------------------
 
       private void butEnd2_Click(object sender, RoutedEventArgs e)
       {
-         start2.AppendLeft("Done 2");
+         _start2.AppendLeft("Done 2");
       }
 
       //------------------------------------------------------------------------------
 
       private void butShowNode_Click(object sender, RoutedEventArgs e)
       {
-         start2.Show();
+         _start2.Show();
       }
 
       //------------------------------------------------------------------------------
 
-      bool lastToggleBookmark = true;
+      private bool _lastToggleBookmark = true;
       private void butToogleBookmark_Click(object sender, RoutedEventArgs e)
       {
-         start2.SetBookmark(lastToggleBookmark);
-         lastToggleBookmark = !lastToggleBookmark;
+         _start2.SetBookmark(_lastToggleBookmark);
+         _lastToggleBookmark = !_lastToggleBookmark;
       }
 
       //------------------------------------------------------------------------------
 
-      bool lastToggleVisible;
+      private bool _lastToggleVisible;
       private void butToogleVisible_Click(object sender, RoutedEventArgs e)
       {
-         start2.SetVisible(lastToggleVisible);
-         lastToggleVisible = !lastToggleVisible;
+         _start2.SetVisible(_lastToggleVisible);
+         _lastToggleVisible = !_lastToggleVisible;
       }
 
       //------------------------------------------------------------------------------
@@ -920,13 +916,14 @@ namespace vs13_WPF_F4_Demo
       public enum Days { Sat = 1, Sun, Mon, Tue, Wed, Thu, Fri };
 
       // sample Application variables.
-      public Days fieldDay;
-      public Array fieldArray;
-      public System.Collections.Hashtable fieldHash;
-      public System.Collections.ArrayList fieldArrayList;
-      private Child fieldClassInstance;
+      public readonly Days FieldDay;
+      public readonly Array FieldArray;
+      public readonly Hashtable FieldHash;
+      public readonly ArrayList FieldArrayList;
+       // ReSharper disable once PrivateFieldCanBeConvertedToLocalVariable
+      private readonly Child _fieldClassInstance;
       public object PropButton { get { return Window1.ShowViewerButton; } }
-      public Child myNullChild;
+      public Child MyNullChild;
 
       public bool EditMode { get; set; }
       public bool Edit2Mode { get; set; }
@@ -935,23 +932,23 @@ namespace vs13_WPF_F4_Demo
       {
          // initialize demo vars.
 
-         fieldDay = Days.Tue;
+         FieldDay = Days.Tue;
 
-         fieldClassInstance = new Child(5);
-         fieldClassInstance.fctChild1(new int[3] { 1, 2, 3 });   // accept only  arrays
-         fieldClassInstance.fctChild3(1, 2, 3);                // parameters are converted to array
-         fieldClassInstance.fctChild3(new int[3] { 1, 2, 3 });   // also accept array
+         _fieldClassInstance = new Child(5);
+         _fieldClassInstance.FctChild1(new[] { 1, 2, 3 });   // accept only  arrays
+         _fieldClassInstance.FctChild3(1, 2, 3);                // parameters are converted to array
+         _fieldClassInstance.FctChild3(new int[] { 1, 2, 3 });   // also accept array
 
-         fieldHash = new Hashtable();
-         fieldHash.Add("Tuesday", fieldDay);
+         FieldHash = new Hashtable();
+         FieldHash.Add("Tuesday", FieldDay);
 
-         fieldArrayList = new ArrayList();
-         fieldArrayList.Add(fieldDay);
+         FieldArrayList = new ArrayList();
+         FieldArrayList.Add(FieldDay);
 
          // init bound array 
-         int[] myLengthsArray = new int[3] { 1, 2, 5 };     // 1 by 2 by 5
-         int[] myBoundsArray = new int[3] { 2, 3, 8 };     // 2..4 , 3..4 , 8..12
-         fieldArray = Array.CreateInstance(typeof(Object), myLengthsArray, myBoundsArray);
+         int[] myLengthsArray = new int[] { 1, 2, 5 };     // 1 by 2 by 5
+         int[] myBoundsArray = new int[] { 2, 3, 8 };     // 2..4 , 3..4 , 8..12
+         FieldArray = Array.CreateInstance(typeof(Object), myLengthsArray, myBoundsArray);
 
          // sub array
          int[] myIndArray = new int[3];
@@ -959,11 +956,11 @@ namespace vs13_WPF_F4_Demo
          myIndArray[1] = 4;
          myIndArray[2] = 6;
 
-         fieldArray.SetValue(238, new int[3] { 2, 3, 8 });
-         fieldArray.SetValue("239", new int[3] { 2, 3, 9 });
-         fieldArray.SetValue(DateTime.Now, new int[3] { 2, 4, 8 });
-         fieldArray.SetValue(fieldClassInstance, new int[3] { 2, 4, 9 });
-         fieldArray.SetValue(myIndArray, new int[3] { 2, 4, 10 });
+         FieldArray.SetValue(238, new[] { 2, 3, 8 });
+         FieldArray.SetValue("239", new[] { 2, 3, 9 });
+         FieldArray.SetValue(DateTime.Now, new[] { 2, 4, 8 });
+         FieldArray.SetValue(_fieldClassInstance, new[] { 2, 4, 9 });
+         FieldArray.SetValue(myIndArray, new[] { 2, 4, 10 });
 
          TestClassHelper.SetEditMode(this,true) ;       // attached
          SetEdit2Mode(this,true) ;                      // not attached
@@ -978,7 +975,8 @@ namespace vs13_WPF_F4_Demo
        // getter
        public static bool GetEdit2Mode(DependencyObject obj)
        {
-           return (bool) obj.GetValue(Edit2ModeProperty);
+           var value = obj.GetValue(Edit2ModeProperty);
+           return value != null && (bool) value;
        }
 
        // setter 
@@ -989,11 +987,11 @@ namespace vs13_WPF_F4_Demo
 
        private static void OnEdit2ModeChanged(DependencyObject sender, DependencyPropertyChangedEventArgs e)
        {
-           var newValue = (bool)e.NewValue;
-           TestClass testClass = sender as TestClass ;
-           if (testClass != null) 
-               testClass.Edit2Mode = newValue;
-       }
+            var newValue = (bool)e.NewValue;
+            TestClass testClass = sender as TestClass;
+            if (testClass != null)
+                testClass.Edit2Mode = newValue;
+        }
 
    }
 
@@ -1001,9 +999,10 @@ namespace vs13_WPF_F4_Demo
 
    public struct MyStruct
    {
-      private double k;
-      public MyStruct(int i) { k = 200 * i; }
-      public long l { get { return 6; } }
+       // ReSharper disable once NotAccessedField.Local
+      private double _k;
+      public MyStruct(int i) { _k = 200 * i; }
+      public long L { get { return 6; } }
    }
 
    //---------------------------------------------------------------------------
@@ -1011,30 +1010,31 @@ namespace vs13_WPF_F4_Demo
    [AttributeUsage(AttributeTargets.All, AllowMultiple = true)]
    public class TestAttribute : Attribute
    {
-      string value;
+       // ReSharper disable once NotAccessedField.Local
+      string _value;
       public TestAttribute(string value)
       {
-         this.value = value;
+         _value = value;
       }
    }
 
    //---------------------------------------------------------------------------
 
-   public interface Myinterface : Myinterface3
+   public interface IMyinterface : IMyinterface3
    {
       void FctInterface();
    }
 
    //---------------------------------------------------------------------------
 
-   public interface Myinterface2
+   public interface IMyinterface2
    {
       void FctInterface2();
    }
 
    //---------------------------------------------------------------------------
 
-   public interface Myinterface3
+   public interface IMyinterface3
    {
       void FctInterface3();
    }
@@ -1043,31 +1043,35 @@ namespace vs13_WPF_F4_Demo
 
    public class Mere
    {
-      public virtual int fctMere() { return 1; }
+      public virtual int FctMere() { return 1; }
    }
 
    //---------------------------------------------------------------------------
 
    [DefaultMember("fctBase1")]
-   public abstract class Base : Mere, Myinterface2
+   public abstract class Base : Mere, IMyinterface2
    {
-      public int Fld_PublicFromBase50 = 50;
-      private int Fld_PrivateFromBase51 = 51;
-      protected int Fld_ProtectedFromBase52 = 52;
-      public virtual void Fct_FromBase() { Fld_PrivateFromBase51++; }
-      public static string Prop_PublicstaticStr { get { return "5"; } }
-      public virtual long Prop_PublicVirtualLong { get { return 5; } }
-      public virtual int Prop_PublicVirtualInt { get { return 5; } }
-      public abstract int Prop_abstract { get; }
+       // ReSharper disable NotAccessedField.Local
+       // ReSharper disable UnusedParameter.Local
+      public int FldPublicFromBase50 = 50;
+      private int _fldPrivateFromBase51 = 51;
+      protected int FldProtectedFromBase52 = 52;
+      public virtual void Fct_FromBase() { _fldPrivateFromBase51++; }
+      public static string PropPublicstaticStr { get { return "5"; } }
+      public virtual long PropPublicVirtualLong { get { return 5; } }
+      public virtual int PropPublicVirtualInt { get { return 5; } }
+      public abstract int PropAbstract { get; }
       protected Base(char c) { }
       protected Base(float f) { }
       protected Base() { }  // no argument, used by derived class
 
-      public override sealed int fctMere() { return 2; }
-      public abstract void fctBase1();    // redefined in class child
-      public virtual void fctBase2() { }
+      public override sealed int FctMere() { return 2; }
+      public abstract void FctBase1();    // redefined in class child
+      public virtual void FctBase2() { }
       public void FctInterface2() { }
-      public void baseFctnonOverridable() { }
+      public void BaseFctnonOverridable() { }
+       // ReSharper restore UnusedParameter.Local
+       // ReSharper restore NotAccessedField.Local
    }
 
 
@@ -1075,7 +1079,7 @@ namespace vs13_WPF_F4_Demo
 
    public class TestRecur
    {
-      public int field1
+      public int Field1
       {
          get
          {
@@ -1089,17 +1093,17 @@ namespace vs13_WPF_F4_Demo
 
    [Test("my class attrib")]      // custom attribute on the class
    [DefaultMember("Event1")]
-   public class Child : Base, Myinterface
+   public class Child : Base, IMyinterface
    {
       // inner class
       //-----------------
-      public class mysubclass
+      public class Mysubclass
       {
-         public int myfield;
+         public int Myfield;
       }
 
       // return an inner class
-      public mysubclass createsubclass() { return new mysubclass(); }
+      public Mysubclass Createsubclass() { return new Mysubclass(); }
 
 
       // FIELDS
@@ -1117,7 +1121,7 @@ namespace vs13_WPF_F4_Demo
       //      protected static int    Fld_ProtectedStatic9 = 9 ;
       //      const int               Fld_Const10 = 10 ;
       //      public const int        Fld_PublicConst11 = 11 ;
-      private System.Collections.Hashtable eventTable = new Hashtable();
+      private Hashtable eventTable = new Hashtable();
 
       // PROPERTIES
       //-----------------
@@ -1129,18 +1133,23 @@ namespace vs13_WPF_F4_Demo
       //      protected long          Prop_ProtectedLong4     {get { return 4; }}
       //      internal sealed override long  Prop_InternalSealedLong5 {get { return 5; }}
       //      public override long    Prop_PublicVirtualLong {get { return 5; }}
-      public long Prop_PublicLong6
+      public long PropPublicLong6
       {
          get { return 6; }
+          // ReSharper disable once ValueParameterNotUsed
          set { }
       }
-      public override int Prop_abstract { get { return 10; } }
+      public override int PropAbstract { get { return 10; } }
       //      public static long      Prop_PublicStaticLong7  {get { return 7; }}
       //      public string           this[int i, char c]     {get { return "8";}}    // indexer
 
       // METHODS
       //-----------------
 
+       // ReSharper disable UnusedMember.Local
+       // ReSharper disable RedundantAssignment
+       // ReSharper disable OptionalParameterRefOut
+       // ReSharper disable UnusedParameter.Local
       [Test("my method attrib")]      // custom attribute method
       public void Fct_PublicVoid(int c) { }
       public override sealed void Fct_FromBase() { }
@@ -1151,23 +1160,26 @@ namespace vs13_WPF_F4_Demo
       protected internal void Fct_ProtectedInternal() { }
 
       // note : it's not possible to declare method "sealed" and "virtual".
-      public new void baseFctnonOverridable() { }
+      public new void BaseFctnonOverridable() { }
       public void FctInterface() { }
       public void FctInterface3() { }
-      public override void fctBase1() { }
-      public virtual void fctChild1(int[] args) { }
-      public void fctChild2(ref string strModifier) { }
-      public virtual void fctChild3(params int[] args) { }
-      public void fctChild4([Out] out int args) { args = 5; }
-      public void fctChild5(ref int args) { args = 5; }
-
+      public override void FctBase1() { }
+      public virtual void FctChild1(int[] args) { }
+      public void FctChild2(ref string strModifier) { }
+      public virtual void FctChild3(params int[] args) { }
+      public void FctChild4([Out] out int args) { args = 5; }
+      public void FctChild5(ref int args) { args = 5; }
 
       [return: MarshalAs(UnmanagedType.Interface)]
-      object fctChild6() { return null; }
+      object FctChild6() { return null; }
 
       // special use of parameters or attributes
-      void fctChild7([In(), Out(), Optional()] ref Guid param1,
+      void FctChild7([In(), Out(), Optional()] ref Guid param1,
                 [MarshalAs(UnmanagedType.Interface)] out object param2) { param2 = null; }
+      // ReSharper restore UnusedParameter.Local
+      // ReSharper restore UnusedMember.Local
+      // ReSharper restore RedundantAssignment
+      // ReSharper restore OptionalParameterRefOut
 
 
       // EVENT
@@ -1177,12 +1189,14 @@ namespace vs13_WPF_F4_Demo
       public event MyDelegate Event1
       {
          add { eventTable["Event1"] = (MyDelegate)eventTable["Event1"] + value; }
+         // ReSharper disable once DelegateSubtraction
          remove { eventTable["Event1"] = (MyDelegate)eventTable["Event1"] - value; }
       }
 
       // CONSTRUCTORS
       //-----------------
 
+      // ReSharper disable once UnusedParameter.Local
       public Child(int a)
       {     // use private member to disable warnings
          // Fld_PrivateDouble1 = 0 ; 
