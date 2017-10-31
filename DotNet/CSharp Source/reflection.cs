@@ -15,11 +15,14 @@
 
 using System;
 using System.Reflection;
-//using System.Collections ;
+
+#if (!NETSTANDARD1_6)  
 using System.Runtime.InteropServices ;
 using System.IO ;
 using System.Text;
-// generic start in F2
+#endif
+
+    // generic start in F2
 #if (!NETCF1 && !NETF1)
 using System.Collections.Generic;
 #endif
@@ -132,10 +135,15 @@ namespace TraceTool
               if (pos != -1)
                   name = name.Substring(0, pos); // get the string before the first '[' char
 
-#if (NETF2)  // generics start from framework 2
+//#if (NETF2 && !NETSTANDARD1_6)  // generics start from framework 2 and standard 2
+#if (NETF2 )  // generics start from framework 2 and standard 2
 
               string strParam = "";
+#if NETSTANDARD1_6
+              if (type.GetTypeInfo().IsGenericType)
+#else
               if (type.IsGenericType)
+#endif
               {
                   name = name + "<";
                   // type.IsGenericTypeDefinition 
@@ -144,7 +152,11 @@ namespace TraceTool
                   //            you can call GetGenericTypeDefinition to get the open type
 
                   int genpos = 0;
+#if NETSTANDARD1_6
+                  foreach (Type t in type.GetTypeInfo().GetGenericArguments())
+#else
                   foreach (Type t in type.GetGenericArguments())
+#endif
                   {
                       if (genpos == 0)
                           name += t.Name;
@@ -232,6 +244,9 @@ namespace TraceTool
               if (type == null)
                   return ;
               strName += Type2ShortString(type) ;
+
+#if (!NETSTANDARD1_6)  
+
               if (type.IsPublic || type.IsNestedPublic)
               {
                   strModifier += "public ";
@@ -257,7 +272,7 @@ namespace TraceTool
                   strModifier += "protected internal ";
               }
 
-              if (IsDelegate(type))
+              if (type.IsSubclassOf(typeof(Delegate)) && type != typeof(MulticastDelegate))
               {
                   MethodInfo method = type.GetMethod("Invoke");
                   strModifier += "delegate " + Type2ShortString (method.ReturnType) ;
@@ -287,6 +302,8 @@ namespace TraceTool
               if (type.IsAbstract) strModifier += "abstract ";
               if (type.IsSealed)   strModifier += "sealed ";
               if (type.IsClass)    strModifier += "class " ;
+#endif
+
           }
           catch (Exception)
           {
@@ -365,7 +382,9 @@ namespace TraceTool
               strModifier = GetFieldModifier (field) ;
               strModifier += Type2ShortString (field.FieldType) ;
               // add the declaring type if not the actual type
+#if (!NETSTANDARD1_6)  
               if  (field.DeclaringType != field.ReflectedType)
+#endif
                  strName += Type2ShortString(field.DeclaringType) + "::"   ;
               strName += field.Name;
           }
@@ -409,7 +428,9 @@ namespace TraceTool
               strType = Type2ShortString (field.PropertyType) ;
 
               // add the declaring type if not the actual type
+#if (!NETSTANDARD1_6)  
               if  (field.DeclaringType != field.ReflectedType)
+#endif
                   strName += Type2ShortString(field.DeclaringType) + "::"   ;
 
               // get the name of the property or the parameters in case of indexed parameters
@@ -455,7 +476,9 @@ namespace TraceTool
               strModifier += Type2ShortString (field.EventHandlerType) ;
 
               // add the declaring type if not the actual type
+#if (!NETSTANDARD1_6)  
               if  (field.DeclaringType != field.ReflectedType)
+#endif
                   strName += Type2ShortString(field.DeclaringType) + "::"   ;
 
               strName += field.Name + " ";
@@ -482,7 +505,9 @@ namespace TraceTool
               // add the return type
               strModifier += Type2ShortString(method.ReturnType);
               // add the declaring type if not the actual type
+#if (!NETSTANDARD1_6)  
               if (method.DeclaringType != method.ReflectedType)
+#endif
                   strName = Type2ShortString(method.DeclaringType) + "::";
 
               // get the method name
@@ -517,7 +542,7 @@ namespace TraceTool
                       else
                           methodName += "," + t.Name;
                       genpos++;
-#if (!NETCF1 && !NETCF2 && !NETCF3 && !SILVERLIGHT)
+#if (!NETCF1 && !NETCF2 && !NETCF3 && !SILVERLIGHT && !NETSTANDARD1_6)
                       if (t.IsGenericParameter)
                       {
                           // t.DeclaringMethod : MethodBase
@@ -544,6 +569,7 @@ namespace TraceTool
                               strParamPos += ch + derivationConstraint.Name;
                               ch = ",";
                           }
+
                           if ((attributes & GenericParameterAttributes.DefaultConstructorConstraint) != 0)
                           {
                               strParamPos += ch + "new()";
@@ -643,14 +669,18 @@ namespace TraceTool
                    result += ", " ;
                 Type type = param.ParameterType;
                 // "params" modifier permit to convert a list of arguments to an array
+#if (!NETSTANDARD1_6)  
                 if (IsArray(type) && Attribute.IsDefined(param, typeof(ParamArrayAttribute), true))
                    result += "params ";
+#endif
 
                 #if (!NETCF1 && !NETCF2 && !NETCF3 && !SILVERLIGHT)
                 if (param.IsIn)         result += "[In()] ";
                 if (param.IsOut)        result += "[Out()] ";      // param.ParameterType will add "ref"
                 if (param.IsOptional)   result += "[Optional()] ";
+#if (!NETSTANDARD1_6)  
                 if (param.IsLcid)       result += "[Lcid()] ";
+#endif
                 if (param.IsRetval)     result += "[Retval()] ";
                 #endif
 
@@ -744,11 +774,13 @@ namespace TraceTool
       /// </summary>
       public static bool IsDefaultMember (Type oType, MemberInfo member)
       {
+#if (!NETSTANDARD1_6)  
          MemberInfo[] memberInfoArray = oType.GetDefaultMembers();
          if (memberInfoArray.Length > 0)
             foreach(MemberInfo memberInfoObj in memberInfoArray)
                if (memberInfoObj == member)
                   return true ;
+#endif
          return false ;
       }
 
@@ -764,16 +796,16 @@ namespace TraceTool
 
       //----------------------------------------------------------------------
 
-      /// <summary>
-      /// indicate if the type is a delegate.
-      /// </summary>
-      public static bool IsDelegate (Type type)
-      {
-         return type.IsSubclassOf(typeof(Delegate)) && type != typeof(MulticastDelegate);
-      }
+      ///// <summary>
+      ///// indicate if the type is a delegate.
+      ///// </summary>
+      //public static bool IsDelegate (Type type)
+      //{
+      //   return type.IsSubclassOf(typeof(Delegate)) && type != typeof(MulticastDelegate);
+      //}
 
       //----------------------------------------------------------------------
-      #if (!NETCF1 && !NETCF2  && !NETCF3 && !SILVERLIGHT)
+      #if (!NETCF1 && !NETCF2  && !NETCF3 && !SILVERLIGHT && !NETSTANDARD1_6)
       /// <summary>
       /// return the name of the XML assembly documentation file for a type.Empty string if not found
       /// </summary>

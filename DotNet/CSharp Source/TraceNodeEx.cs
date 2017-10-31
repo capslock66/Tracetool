@@ -17,7 +17,9 @@ using System.Text;
 using System.Reflection;
 using System.Diagnostics;  // Process
 using System.Collections;  // ArrayList, queue
+#if (!NETSTANDARD1_6)  
 using System.Drawing.Imaging;
+#endif
 //using System.Drawing;      // images
 using System.IO;           // streams
 
@@ -30,15 +32,15 @@ using System.Xml.XPath;
 using System.Collections.Generic;
 #endif
 
-#if (NETF3)
+#if (NETF3 && !NETSTANDARD1_6)
 using System.Windows.Markup.Primitives;   // dependency properties (don't work with Silverlight).  Assembly : PresentationFramework
 #endif
 
-#if (NETF3 || SILVERLIGHT)
+#if (NETF3 || SILVERLIGHT) && !NETSTANDARD1_6
 using System.Windows.Media.Imaging;
-// ReSharper disable InconsistentNaming
 #endif
 
+// ReSharper disable InconsistentNaming
 namespace TraceTool
 {
    /// <summary> Alternate way to send traces : prepare a TraceNode with all properties then send it.
@@ -284,7 +286,7 @@ namespace TraceTool
          //XPathNavigator DocumentationNav = null;
          Object DocumentationNav = null;
 
-#if (!NETCF1 && !NETCF2 && !NETCF3 && !SILVERLIGHT)
+#if (!NETCF1 && !NETCF2 && !NETCF3 && !SILVERLIGHT && !NETSTANDARD1_6)
          string XmlDocFileName = ReflectionHelper.AssemblyDocumentationFileName(oType);
 
          if ((flags & TraceDisplayFlags.ShowDoc) != 0)
@@ -340,6 +342,8 @@ namespace TraceTool
                // display boolean flags if true
                if (oType.IsByRef)
                   classGroup.Add("IsByRef");
+
+#if (!NETSTANDARD1_6)  
                if (oType.IsCOMObject)
                   classGroup.Add("IsCOMObject");
                if (oType.IsImport)
@@ -348,9 +352,9 @@ namespace TraceTool
                   classGroup.Add("IsNotPublic");
                if (oType.IsSpecialName)
                   classGroup.Add("IsSpecialName");
+#endif
 
-
-#if (!NETCF1 && !NETCF2 && !NETCF3 && !SILVERLIGHT)
+#if (!NETCF1 && !NETCF2 && !NETCF3 && !SILVERLIGHT && !NETSTANDARD1_6)
                if (oType.IsContextful)
                   classGroup.Add("IsContextful");
                if (oType.IsMarshalByRef)
@@ -363,13 +367,14 @@ namespace TraceTool
                   classGroup.Add("Class layout", "Sequential");
 #endif
 
+#if (!NETSTANDARD1_6)  
                if (oType.IsAutoLayout)// Class layout
                   classGroup.Add("Class layout", "Auto");
-
 
                // boolean and corresponding value
                if (oType.IsPrimitive)
                   classGroup.Add("IsPrimitive", oType.UnderlyingSystemType.ToString());
+#endif
 
                //if (oType.HasElementType)
                //   ClassGroup.Add("HasElementType" , oType.GetElementType().ToString());
@@ -395,15 +400,17 @@ namespace TraceTool
                }
 
                // String Format
+#if (!NETSTANDARD1_6)  
                if (oType.IsAnsiClass)
                   classGroup.Add("String Format", "Ansi");
                if (oType.IsAutoClass)
                   classGroup.Add("String Format", "Auto");
                if (oType.IsUnicodeClass)
                   classGroup.Add("String Format", "Unicode");
+#endif
 
                // show all other infos giving strings
-#if (!NETCF1 && !NETCF2 && !NETCF3 && !SILVERLIGHT)
+#if (!NETCF1 && !NETCF2 && !NETCF3 && !SILVERLIGHT && !NETSTANDARD1_6)
                classGroup.Add("GUID", oType.GUID.ToString());
                if (oType.TypeInitializer != null)
                   classGroup.Add("TypeInitializer", oType.TypeInitializer.ToString());
@@ -411,8 +418,10 @@ namespace TraceTool
                if (oType.Namespace != null)
                   classGroup.Add("Namespace", oType.Namespace);
                classGroup.Add("TypeHandle", oType.TypeHandle.ToString());
+#if (!NETSTANDARD1_6)  
                if (oType.ReflectedType != null)
                   classGroup.Add("ReflectedType", oType.ReflectedType.ToString());
+#endif
 
 
                if (ObjToSend != null)
@@ -422,25 +431,28 @@ namespace TraceTool
                TypeCode myTypeCode = Type.GetTypeCode(oType);
                classGroup.Add("TypeCode", myTypeCode.ToString());
 
+#if (!NETSTANDARD1_6)  
                // Module, Assembly name, location and XML documentation file name
                classGroup.Add("Module", oType.Module.ToString());
-                try
-                {
-                    classGroup.Add("Assembly", oType.Assembly.ToString());
-                }
-                catch (Exception e)
-                {
-                    classGroup.Add("Assembly", e.GetType().ToString());
-                }
-#if (!NETCF1 && !NETCF2 && !NETCF3 && !SILVERLIGHT)
-                try
-                {
-                    classGroup.Add("Assembly location", oType.Assembly.Location);
-                }
-                catch (Exception e)
-                {
-                    classGroup.Add("Assembly location", e.GetType().ToString());
-                }               // documentation
+               try
+               {
+                   classGroup.Add("Assembly", oType.Assembly.ToString());
+               }
+               catch (Exception e)
+               {
+                   classGroup.Add("Assembly", e.GetType().ToString());
+               }
+#endif
+
+#if (!NETCF1 && !NETCF2 && !NETCF3 && !SILVERLIGHT && !NETSTANDARD1_6)
+               try
+               {
+                   classGroup.Add("Assembly location", oType.Assembly.Location);
+               }
+               catch (Exception e)
+               {
+                   classGroup.Add("Assembly location", e.GetType().ToString());
+               }               // documentation
                if (XmlDocFileName != "")
                {
                   classGroup.Add("XML Documentation", XmlDocFileName);
@@ -448,15 +460,20 @@ namespace TraceTool
                      classGroup.Add("XML Documentation", "Unable to open file");
                }
 
-               AddDocumentation(DocumentationNav, classGroup, oType, null);      // null MemberInfo
+              AddDocumentation(DocumentationNav, classGroup, oType, null);      // null MemberInfo
 #endif
 
                // Custom attributes.
                if ((flags & TraceDisplayFlags.ShowCustomAttributes) != 0)
                {
                   // an other way to do it is to call : Object [] CustomAttribs = oType.GetCustomAttributes (true) ;
-                  Attribute[] CusAttib = Attribute.GetCustomAttributes(oType, true);  // true : inherit
-                  foreach (Attribute attr in CusAttib)
+                  //Attribute[] CusAttib = Attribute.GetCustomAttributes(oType, true);  // true : inherit
+#if (NETSTANDARD1_6)  
+                  IEnumerable<Attribute> CusAttibList = oType.GetTypeInfo().GetCustomAttributes(inherit:true) ;
+#else
+                  Attribute[] CusAttibList = Attribute.GetCustomAttributes(oType, true);  // true : inherit
+#endif
+                  foreach (Attribute attr in CusAttibList)
                      classGroup.Add("Custom attribute", attr.ToString());
                }
             }
@@ -773,7 +790,12 @@ namespace TraceTool
 
               // check primitive and well know type
               // TO DO : use a MAP to store class to ignore
-              if (oType.IsPrimitive || oType.IsEnum ||
+              if (
+#if (NETSTANDARD1_6)  
+                    oType.GetTypeInfo().IsPrimitive || oType.GetTypeInfo().IsEnum ||
+#else
+                    oType.IsPrimitive || oType.IsEnum ||
+#endif
                   objTosend is string || objTosend is StringBuilder || objTosend is DateTime || objTosend is Decimal)  // 2014/10/23 : added Decimal 
               {
                   upperNode.Col2 = objTosend.ToString() ;

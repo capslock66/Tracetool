@@ -876,11 +876,6 @@
             indicate if the type is an aray.
             </summary>
         </member>
-        <member name="M:TraceTool.ReflectionHelper.IsDelegate(System.Type)">
-            <summary>
-            indicate if the type is a delegate.
-            </summary>
-        </member>
         <member name="M:TraceTool.ReflectionHelper.AssemblyDocumentationFileName(System.Type)">
             <summary>
             return the name of the XML assembly documentation file for a type.Empty string if not found

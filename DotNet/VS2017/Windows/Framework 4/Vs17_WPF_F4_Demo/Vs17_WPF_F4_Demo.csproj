@@ -142,7 +142,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Vs17_Windows_F4_Lib\Vs17_Windows_F4_Lib.csproj">
       <Project>{7cf111be-3614-4514-966a-fdf779773e51}</Project>
-      <Name>vs17_Windows_F4_Lib</Name>
+      <Name>Vs17_Windows_F4_Lib</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
