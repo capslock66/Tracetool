@@ -14,17 +14,17 @@
 
 
 using System;
+using System.IO;
 using System.Reflection;
-
+using System.Text;
 #if (!NETSTANDARD1_6)  
 using System.Runtime.InteropServices ;
-using System.IO ;
-using System.Text;
 #endif
 
     // generic start in F2
 #if (!NETCF1 && !NETF1)
 using System.Collections.Generic;
+// ReSharper disable ConvertIfStatementToNullCoalescingExpression
 #endif
 
 namespace TraceTool
@@ -32,6 +32,7 @@ namespace TraceTool
    /// <summary>
    /// Helper for reflection. You can use it your project without TraceTool
    /// </summary>
+   // ReSharper disable once ClassNeverInstantiated.Global
    public class ReflectionHelper
    {
       #if (NETCF1 || NETF1)
@@ -99,11 +100,9 @@ namespace TraceTool
               if (type == null)
                   return "Null" ;
 
-              string result ;
-
               if (IsArray(type))
               {
-                  result = Type2ShortString (type.GetElementType());    // recursive
+                  string result = Type2ShortString (type.GetElementType());    // recursive
                   result += '[';
 #if ((!NETCF1) )  // GetArrayRank start from CF 2. Silverlight ?     || (NETCF2)|| (NETCF3)
                   for (int i = type.GetArrayRank(); i > 1; i--)
@@ -135,8 +134,7 @@ namespace TraceTool
               if (pos != -1)
                   name = name.Substring(0, pos); // get the string before the first '[' char
 
-//#if (NETF2 && !NETSTANDARD1_6)  // generics start from framework 2 and standard 2
-#if (NETF2 )  // generics start from framework 2 and standard 2
+#if (NETF2 )  // generics start from framework 2 
 
               string strParam = "";
 #if NETSTANDARD1_6
@@ -170,7 +168,11 @@ namespace TraceTool
                           string strParamPos = "" ;
                           string ch = "";
 
+#if NETSTANDARD1_6
+                          GenericParameterAttributes attributes = t.GetTypeInfo().GenericParameterAttributes;
+#else
                           GenericParameterAttributes attributes = t.GenericParameterAttributes;
+#endif
                           if ((attributes & GenericParameterAttributes.ReferenceTypeConstraint) != 0)
                           {
                               strParamPos += ch + "class";
@@ -182,7 +184,11 @@ namespace TraceTool
                               ch = ",";
                           }
                           // base types or interfaces that the parameter mut implement
+#if NETSTANDARD1_6
+                          Type[] derivationConstraints = t.GetTypeInfo().GetGenericParameterConstraints();
+#else
                           Type[] derivationConstraints = t.GetGenericParameterConstraints();
+#endif
                           foreach (Type derivationConstraint in derivationConstraints)
                           {
                               strParamPos += ch + derivationConstraint.Name;
@@ -216,6 +222,7 @@ namespace TraceTool
       /// <summary>
       /// return the list of bounds : 1..2, 0..3 , 1..1
       /// </summary>
+      // ReSharper disable once UnusedMember.Global
       public string ArrayBounds (Array array)
       {
          StringBuilder arrTitle = new StringBuilder() ;
@@ -245,62 +252,119 @@ namespace TraceTool
                   return ;
               strName += Type2ShortString(type) ;
 
-#if (!NETSTANDARD1_6)  
-
+#if NETSTANDARD1_6
+              if (type.GetTypeInfo().IsPublic || type.GetTypeInfo().IsNestedPublic)
+#else
               if (type.IsPublic || type.IsNestedPublic)
+#endif
               {
                   strModifier += "public ";
               }
+#if NETSTANDARD1_6
+              else if (type.GetTypeInfo().IsNestedPrivate)
+#else
               else if (type.IsNestedPrivate)
+#endif
               {
                   strModifier += "private ";
               }
+#if NETSTANDARD1_6
+              else if (type.GetTypeInfo().IsNestedAssembly)
+#else
               else if (type.IsNestedAssembly)
+#endif
               {
                   strModifier += "internal ";
               }
+#if NETSTANDARD1_6
+              else if (type.GetTypeInfo().IsNestedFamily)
+#else
               else if (type.IsNestedFamily)
+#endif
               {
                   strModifier += "protected ";
               }
+#if NETSTANDARD1_6
+              else if (type.GetTypeInfo().IsNestedFamORAssem)
+#else
               else if (type.IsNestedFamORAssem)
+#endif
               {
                   strModifier += "protected internal ";
               }
+#if NETSTANDARD1_6
+              else if (type.GetTypeInfo().IsNestedFamANDAssem)
+#else
               else if (type.IsNestedFamANDAssem)
+#endif
               {
                   strModifier += "protected internal ";
               }
 
+#if NETSTANDARD1_6
+              if (type.GetTypeInfo().IsSubclassOf(typeof(Delegate)) && type != typeof(MulticastDelegate))
+#else
               if (type.IsSubclassOf(typeof(Delegate)) && type != typeof(MulticastDelegate))
+#endif
               {
+#if NETSTANDARD1_6
+                  MethodInfo method = type.GetTypeInfo().GetMethod("Invoke");
+#else
                   MethodInfo method = type.GetMethod("Invoke");
-                  strModifier += "delegate " + Type2ShortString (method.ReturnType) ;
-                  strName += '(' + MethodParams2String(method) + ")" ;
+#endif
+                  if (method == null) 
+                        return;
+                  strModifier += "delegate " + Type2ShortString(method.ReturnType);
+                  strName += '(' + MethodParams2String(method) + ")";
                   return ;
               }
 
+#if NETSTANDARD1_6
+              if (type.GetTypeInfo().IsEnum)
+#else
               if (type.IsEnum)
+#endif
               {
                   strModifier += "enum ";
                   return ;
               }
 
               // don't add the "struct" keyword for primitive
+#if NETSTANDARD1_6
+              if (type.GetTypeInfo().IsValueType && type.GetTypeInfo().IsPrimitive == false)
+#else
               if (type.IsValueType && type.IsPrimitive == false)
+#endif
               {
                   strModifier += "struct ";
                   return ;
               }
 
+#if NETSTANDARD1_6
+              if (type.GetTypeInfo().IsInterface)
+#else
               if (type.IsInterface)
+#endif
               {
                   strModifier += "interface ";
                   return ;
               }
 
+#if NETSTANDARD1_6
+              if (type.GetTypeInfo().IsAbstract) strModifier += "abstract ";
+#else
               if (type.IsAbstract) strModifier += "abstract ";
+#endif
+
+#if NETSTANDARD1_6
+              if (type.GetTypeInfo().IsSealed)   strModifier += "sealed ";
+#else
               if (type.IsSealed)   strModifier += "sealed ";
+#endif
+
+#if NETSTANDARD1_6
+              if (type.GetTypeInfo().IsClass)    strModifier += "class " ;
+#else
               if (type.IsClass)    strModifier += "class " ;
 #endif
 
@@ -542,7 +606,7 @@ namespace TraceTool
                       else
                           methodName += "," + t.Name;
                       genpos++;
-#if (!NETCF1 && !NETCF2 && !NETCF3 && !SILVERLIGHT && !NETSTANDARD1_6)
+#if (!NETCF1 && !NETCF2 && !NETCF3 && !SILVERLIGHT )
                       if (t.IsGenericParameter)
                       {
                           // t.DeclaringMethod : MethodBase
@@ -551,7 +615,11 @@ namespace TraceTool
                           string strParamPos = "";
                           string ch = "";
 
+#if NETSTANDARD1_6
+                          GenericParameterAttributes attributes = t.GetTypeInfo(). GenericParameterAttributes;
+#else
                           GenericParameterAttributes attributes = t.GenericParameterAttributes;
+#endif
                           if ((attributes & GenericParameterAttributes.ReferenceTypeConstraint) != 0)
                           {
                               strParamPos += ch + "class";
@@ -563,7 +631,11 @@ namespace TraceTool
                               ch = ",";
                           }
                           // base types or interfaces that the parameter mut implement
+#if NETSTANDARD1_6
+                          Type[] derivationConstraints = t.GetTypeInfo().GetGenericParameterConstraints();
+#else
                           Type[] derivationConstraints = t.GetGenericParameterConstraints();
+#endif
                           foreach (Type derivationConstraint in derivationConstraints)
                           {
                               strParamPos += ch + derivationConstraint.Name;
@@ -599,6 +671,7 @@ namespace TraceTool
       /// return the modifier (private,...) of a method (without the method type and name)
       /// called by Property2String,Constructor2String and Method2String
       /// </summary>
+      // ReSharper disable once MemberCanBePrivate.Global
       public static string Method2StringModifier (MethodBase oneMethod)
       {
          string strModifier = "" ;
@@ -655,6 +728,7 @@ namespace TraceTool
       /// <summary>
       /// return the parameters name and type of a method
       /// </summary>
+      // ReSharper disable once MemberCanBePrivate.Global
       public static string MethodParams2String (MethodBase method) // (ParameterInfo[] parameters)
       {
          string result = "" ;
@@ -669,15 +743,19 @@ namespace TraceTool
                    result += ", " ;
                 Type type = param.ParameterType;
                 // "params" modifier permit to convert a list of arguments to an array
-#if (!NETSTANDARD1_6)  
+
+#if NETSTANDARD1_6
+                if (IsArray(type) && type.GetTypeInfo().IsDefined(typeof(ParamArrayAttribute), true))
+#else
                 if (IsArray(type) && Attribute.IsDefined(param, typeof(ParamArrayAttribute), true))
-                   result += "params ";
 #endif
+                   result += "params ";
 
                 #if (!NETCF1 && !NETCF2 && !NETCF3 && !SILVERLIGHT)
                 if (param.IsIn)         result += "[In()] ";
                 if (param.IsOut)        result += "[Out()] ";      // param.ParameterType will add "ref"
                 if (param.IsOptional)   result += "[Optional()] ";
+
 #if (!NETSTANDARD1_6)  
                 if (param.IsLcid)       result += "[Lcid()] ";
 #endif
@@ -746,8 +824,7 @@ namespace TraceTool
               if (parameters.Length == 0)
                   return "" ;
 
-              string result ;
-              result = "(" ;
+              var result = "(";
               for (int i = 0; i < parameters.Length; i++)
               {
                   ParameterInfo param = parameters[i];
@@ -774,13 +851,16 @@ namespace TraceTool
       /// </summary>
       public static bool IsDefaultMember (Type oType, MemberInfo member)
       {
-#if (!NETSTANDARD1_6)  
+#if NETSTANDARD1_6
+          MemberInfo[] memberInfoArray = oType.GetTypeInfo().GetDefaultMembers();
+#else
          MemberInfo[] memberInfoArray = oType.GetDefaultMembers();
+#endif
+
          if (memberInfoArray.Length > 0)
             foreach(MemberInfo memberInfoObj in memberInfoArray)
-               if (memberInfoObj == member)
+               if (ReferenceEquals(memberInfoObj, member))
                   return true ;
-#endif
          return false ;
       }
 
@@ -789,6 +869,7 @@ namespace TraceTool
       /// <summary>
       /// indicate if the type is an aray.
       /// </summary>
+      // ReSharper disable once MemberCanBePrivate.Global
       public static bool IsArray (Type type)
       {
          return type.IsArray && type != typeof(Array);
@@ -805,20 +886,27 @@ namespace TraceTool
       //}
 
       //----------------------------------------------------------------------
-      #if (!NETCF1 && !NETCF2  && !NETCF3 && !SILVERLIGHT && !NETSTANDARD1_6)
+      #if (!NETCF1 && !NETCF2  && !NETCF3 && !SILVERLIGHT )
       /// <summary>
       /// return the name of the XML assembly documentation file for a type.Empty string if not found
       /// </summary>
+      // ReSharper disable once UnusedMember.Global
       public static string AssemblyDocumentationFileName (Type oType)
       {
           try
           {
+#if NETSTANDARD1_6
+              string assemblyFileName = oType.GetTypeInfo().Assembly.Location ;
+#else
               string assemblyFileName = oType.Assembly.Location ;
+#endif
               string xmlDocFileName = Path.ChangeExtension (assemblyFileName, ".xml");
               if (! File.Exists(xmlDocFileName))
               {
+#if !NETSTANDARD1_6
                   xmlDocFileName = RuntimeEnvironment.GetRuntimeDirectory() + Path.GetFileName(xmlDocFileName);
                   if (! File.Exists(xmlDocFileName))
+#endif                  
                       xmlDocFileName = "" ;
               }
               return xmlDocFileName ;
