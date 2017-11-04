@@ -21,6 +21,22 @@ using System;
 //using System.Collections.Generic;
 #endif
 
+// ReSharper disable ClassNeverInstantiated.Global
+// ReSharper disable ConvertIfStatementToNullCoalescingExpression
+// ReSharper disable ConvertIfStatementToConditionalTernaryExpression
+// ReSharper disable MemberCanBePrivate.Global
+// ReSharper disable IntroduceOptionalParameters.Global
+// ReSharper disable FieldCanBeMadeReadOnly.Global
+// ReSharper disable UnusedMethodReturnValue.Global
+// ReSharper disable UnusedMember.Global
+// ReSharper disable InlineOutVariableDeclaration
+// ReSharper disable UseStringInterpolation
+// ReSharper disable UseObjectOrCollectionInitializer
+// ReSharper disable UseNullPropagation
+// ReSharper disable MergeCastWithTypeCheck
+// ReSharper disable UsePatternMatching
+// ReSharper disable ArrangeAccessorOwnerBody
+
 namespace TraceTool
 {
 
@@ -343,7 +359,7 @@ namespace TraceTool
 
       //------------------------------------------------------------------------------
 
-#if (!SILVERLIGHT)
+#if (!SILVERLIGHT && !NETSTANDARD1_6)
 
       /// <summary>
       /// Send a bitmap
@@ -372,7 +388,7 @@ namespace TraceTool
 // currently not possibe in silverlight 2 : 
 // - No way to read the Image content
 // - BmpBitmapEncoder is not supported
-#if (NETF3) 
+#if (NETF3 && !NETSTANDARD1_6) 
       /// <summary>
       /// Send a bitmap
       /// </summary>
@@ -777,7 +793,7 @@ namespace TraceTool
          Helper.AddCommand(commandList, TraceConst.CST_TRACE_ID, newContext.NodeId);   // param : Node Id
          Helper.AddCommand(commandList, TraceConst.CST_LEFT_MSG, leftMsg);              // param : left string
 
-         if (rightMsg != null && rightMsg != "")
+         if (!string.IsNullOrEmpty(rightMsg))
             Helper.AddCommand(commandList, TraceConst.CST_RIGHT_MSG, rightMsg);        // param : right string
 
          if (backGroundColor != -1)

@@ -20,6 +20,22 @@ using System;
 //using System.Collections.Generic;
 #endif
 
+// ReSharper disable ClassNeverInstantiated.Global
+// ReSharper disable ConvertIfStatementToNullCoalescingExpression
+// ReSharper disable ConvertIfStatementToConditionalTernaryExpression
+// ReSharper disable MemberCanBePrivate.Global
+// ReSharper disable IntroduceOptionalParameters.Global
+// ReSharper disable FieldCanBeMadeReadOnly.Global
+// ReSharper disable UnusedMethodReturnValue.Global
+// ReSharper disable UnusedMember.Global
+// ReSharper disable InlineOutVariableDeclaration
+// ReSharper disable UseStringInterpolation
+// ReSharper disable UseObjectOrCollectionInitializer
+// ReSharper disable UseNullPropagation
+// ReSharper disable MergeCastWithTypeCheck
+// ReSharper disable UsePatternMatching
+// ReSharper disable ArrangeAccessorOwnerBody
+
 namespace TraceTool
 {
    /// <summary>
@@ -50,7 +66,7 @@ namespace TraceTool
       /// <param name="winTraceText">The Window Title on the viewer.If empty, a default name will be used</param>
       public WinTrace (string winTraceId , string winTraceText)
       {
-         if (winTraceId == null || winTraceId == "")
+         if (string.IsNullOrEmpty(winTraceId))
             Id = Helper.NewGuid ().ToString() ;
          else
             Id = winTraceId ;
@@ -60,7 +76,7 @@ namespace TraceTool
          if (winTraceId != null && winTraceId == "_")
             return ;  // don't create new window on the viewer
 
-         if (winTraceText == null || winTraceText == "")
+         if (string.IsNullOrEmpty(winTraceText))
             winTraceText = Id ;
 
          // create the trace window

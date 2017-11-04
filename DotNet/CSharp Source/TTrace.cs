@@ -27,7 +27,7 @@
 // 12.8   : 2016 07 26 : Fix stack trace with Lambda
 // 12.8   : 2016 07 28 : Fix addDependencyPropertiesValues, DisplayDependencyProperties
 // 12.8.5 : 2016 10 05 : stack trace display the class of the method. Modifier is removed (public static,...)
-
+// 12.9   : 2017 11 03 : Add conditional compilation for Dot Net Standard (1.6)
 
 using System.Text;
 using System;
@@ -45,7 +45,6 @@ using System.Net.Sockets;
 using System.IO ;                         // file exist
 using System.Reflection ;
 using System.Xml;
-// ReSharper disable InlineOutVariableDeclaration
 
 // generic start in F2
 #if (!NETCF1 && !NETF1)
@@ -56,9 +55,24 @@ using System.Xml;
 using Microsoft.Win32 ;                   // registry
 #endif
 
+// ReSharper disable ClassNeverInstantiated.Global
+// ReSharper disable ConvertIfStatementToNullCoalescingExpression
+// ReSharper disable ConvertIfStatementToConditionalTernaryExpression
+// ReSharper disable MemberCanBePrivate.Global
+// ReSharper disable IntroduceOptionalParameters.Global
+// ReSharper disable FieldCanBeMadeReadOnly.Global
+// ReSharper disable UnusedMethodReturnValue.Global
+// ReSharper disable UnusedMember.Global
+// ReSharper disable InlineOutVariableDeclaration
+// ReSharper disable UseStringInterpolation
+// ReSharper disable UseObjectOrCollectionInitializer
+// ReSharper disable UseNullPropagation
+// ReSharper disable MergeCastWithTypeCheck
+// ReSharper disable UsePatternMatching
+// ReSharper disable ArrangeAccessorOwnerBody
+
 namespace TraceTool
 {
-
    /// <summary>
    /// TTrace is the entry point for all traces.
    /// TTrace give 3 'TraceNode' doors : Warning , Error and Debug.
@@ -92,13 +106,24 @@ namespace TraceTool
 #if (SILVERLIGHT)
       static internal DnsEndPoint _hostEntry;
       static internal SocketAsyncEventArgs _socketEventArg; 
-#elif !NETSTANDARD1_6
+#elif NETSTANDARD1_6
+       // no udp for NETSTANDARD1_6. Perhaps in NETSTANDARD2_0
+       //private static UdpClient _udpSocket;
+#else // compact framework
        private static UdpClient _udpSocket;
 #endif
+
+      // ReSharper disable NotAccessedField.Global
+      // ReSharper disable RedundantDefaultMemberInitializer
+
       /// number of message discarded (socket error)
-      public static long NbDiscarded;
+      public static long NbDiscarded = 0;
+
       /// number of message send by silverlight (socket error)
       public static long NbSend = 0;
+
+       // ReSharper restore RedundantDefaultMemberInitializer
+       // ReSharper restore NotAccessedField.Global
 
       /// TTrace Options (socket, show functions, ...)
       public static TTraceOptions Options ;
@@ -112,7 +137,7 @@ namespace TraceTool
          DefaultWinTrace = new InternalWinTrace() ;       // main InternalWinTrace. Id is empty
          FormTraceList.Add (DefaultWinTrace) ;
          _msgQueue      = new MsgQueueList();              // store all messages to send
-         Options       = new TTraceOptions () ;           // TTrace Options (socket, show functions, ...)
+         Options        = new TTraceOptions () ;           // TTrace Options (socket, show functions, ...)
 
          // create the lock system and the thread
          DataReady = new AutoResetEvent (false);  // initial state false
@@ -125,81 +150,90 @@ namespace TraceTool
          _traceThread.Start();
 
          try {   // since 12.5 : protect if configuration file is bad
-
-#if (SILVERLIGHT)
-         Options.SendMode = SendMode.Socket ;
-         Options.SocketPort = 4502;
-         Options.SocketHost = "127.0.0.1";
-#else   // !SILVERLIGHT
-
-
-#if (NETCF1 || NETCF2 || NETCF3 || NETSTANDARD1_6)
-         Options.SendMode = SendMode.Socket;
-         Options.SocketHost = "PPP_PEER";   // force PPP_PEER (active sync) for pocket pc
-#else
-            XmlNode _config;
-#endif
             _isSocketError = false;
             //_socket   : is initialized on first use
             //_winTrace : is initialized on first use
             //_winWatch : is initialized on first use
 
 
+             // ReSharper disable once JoinDeclarationAndInitializer
             string configFile;
-            // 1) check the existence of the App.Config file
 
-#if (!NETCF1 && !NETCF2 && !NETCF3 && !NETSTANDARD1_6)
-            // call the tracetool ConfigSectionHandler.Create
-#if (NETF2)
-            _config = (XmlNode)ConfigurationManager.GetSection("TraceTool");
-#else
-            _config = (XmlNode) System.Configuration.ConfigurationSettings.GetConfig("TraceTool") ;
-#endif
+#if (SILVERLIGHT)
+            Options.SendMode = SendMode.Socket ;
+            Options.SocketPort = 4502;
+            Options.SocketHost = "127.0.0.1";
+#elif (NETCF1 || NETCF2 || NETCF3 || NETSTANDARD1_6)
+            Options.SendMode = SendMode.Socket;
 
-            if (_config != null) {
+            #if NETSTANDARD1_6
+               Options.SocketHost = "127.0.0.1";  
+            #else
+               Options.SocketHost = "PPP_PEER";   // force PPP_PEER (active sync) for pocket pc
+            #endif
+
+            // 1) check the existence of the App.Config file using classic framework
+            //    not possible
+
+            // 2) check the existence of the MyProg.config file
+            configFile = Helper.GetCurrentProcessName() + ".config";
+            if (GetConfigFomFile(configFile))
+                return;
+
+            // 3) check the existence of the MyProg.TraceTool file
+            configFile = Helper.GetCurrentProcessName() + ".TraceTool";
+            if (GetConfigFomFile(configFile))
+                 return;
+
+             // 4) check the existence of tracetool.dll.TraceTool file
+             #if NETSTANDARD1_6
+                configFile = typeof(TTrace).GetTypeInfo().Assembly.ToString();
+             #else
+                configFile = typeof(TTrace).Module.ToString();
+             #endif
+             configFile = configFile + ".TraceTool";
+             if (GetConfigFomFile(configFile))
+                 return;
+
+             // 5) last chance : a "traceTool.xml" file in the current folder
+             configFile = "traceTool.xml";
+             GetConfigFomFile(configFile) ;
+
+#else  // Full framework
+             // ReSharper disable once JoinDeclarationAndInitializer
+            XmlNode config;
+
+            // 1) check the existence of the App.Config file using classic framework
+             #if (NETF2)
+                config = (XmlNode) ConfigurationManager.GetSection("TraceTool");
+            #else
+                config = (XmlNode) System.Configuration.ConfigurationSettings.GetConfig("TraceTool") ;
+            #endif
+
+             // ReSharper disable once ConditionIsAlwaysTrueOrFalse
+            if (config != null) {
                //Debug.Send ("App.Config file exist") ;
-               ReadConfig(_config);
+               ReadConfig(config);
                return;
             } else {
                //Debug.Send ("no App.Config file") ;
             }
-#else  // (!NETCF1 && !NETCF2 && !NETCF3 && !NETSTANDARD1_6)
-         configFile = Helper.GetCurrentProcessName() + ".config";
-         if (GetConfigFomFile(configFile))
-            return;
-#endif // (!NETCF1 && !NETCF2 && !NETCF3)
 
             // 2) check the existence of the Web.Config file
-
-#if (!NETCF1 && !NETCF2 && !NETCF3 && !NETSTANDARD1_6)
             configFile = AppDomain.CurrentDomain.SetupInformation.ConfigurationFile;
             if (GetConfigFomFile(configFile))
                return;
-#endif
 
             // 3) check the existence of the App.TraceTool file
-
-            // AppDomain.CurrentDomain.SetupInformation :  dot net framework 1.0
-#if (!NETCF1 && !NETCF2 && !NETCF3 && !NETSTANDARD1_6)
             configFile = AppDomain.CurrentDomain.SetupInformation.ConfigurationFile;
             configFile = configFile.Replace(".config", ".TraceTool");
-#else
-         configFile = Helper.GetCurrentProcessName() + ".TraceTool";
-#endif
             if (GetConfigFomFile(configFile))
                return;
 
             // 4) check the existence of tracetool.dll.TraceTool file
-#if NETSTANDARD1_6
-         configFile = typeof(TTrace).GetTypeInfo().Assembly.ToString();
-#elif (!NETCF1 && !NETCF2 && !NETCF3 )
             Assembly asm = typeof(TTrace).Assembly;
             configFile = asm.Location;
-#else
-         configFile = typeof(TTrace).Module.ToString();
-#endif
             configFile = configFile + ".TraceTool";
-
             if (GetConfigFomFile(configFile))
                return;
 
@@ -207,8 +241,8 @@ namespace TraceTool
             configFile = "traceTool.xml";
             GetConfigFomFile(configFile) ;
 
+#endif // full framework
 
-#endif  // !SILVERLIGHT
 
          }
          catch (Exception ex) {
@@ -235,10 +269,7 @@ namespace TraceTool
             FileStream fileStream = new FileStream(fileName,FileMode.Open);
             doc.Load(fileStream); 
 
-            // SelectSingleNode :  all dot net framework and since compact framework 2.0
-#if (!NETCF1 && !NETSTANDARD1_6)
-             XmlNode config = doc.SelectSingleNode("//TraceTool");
-#else
+#if (NETCF1 || NETSTANDARD1_6)
          XmlNode config = null;
          // Check if the TraceTool node is root or under configuration node
          foreach (XmlNode node in doc.ChildNodes)
@@ -263,7 +294,8 @@ namespace TraceTool
                break;
             }
          }
-
+#else        // SelectSingleNode :  all dot net framework and compact framework since 2.0
+             XmlNode config = doc.SelectSingleNode("//TraceTool");
 #endif
 
 
@@ -300,7 +332,6 @@ namespace TraceTool
                   string paramName;
                   string paramValue;
                   GetParamNameAndValue(node, out paramName, out paramValue);
-
                   InitOptions(paramName, paramValue);
                } else if (tagName.CompareTo("debug") == 0)
                   InitTraceNode(node, Debug);
@@ -387,9 +418,7 @@ namespace TraceTool
          // ReSharper disable StringCompareToIsCultureSpecific
          if (paramName.CompareTo ("sendmode") == 0)
          {                // SendMode
-            if (paramValue.ToLower().CompareTo("winmsg") == 0)
-               Options.SendMode = SendMode.WinMsg ;
-            else if (paramValue.ToLower().CompareTo("socket") == 0)
+            if (paramValue.ToLower().CompareTo("socket") == 0)
                Options.SendMode = SendMode.Socket ;
             else if (paramValue.ToLower().CompareTo("none") == 0)
                Options.SendMode = SendMode.None;
@@ -804,9 +833,6 @@ namespace TraceTool
       // the thread function that send messages to the server
       private static void SendThreadEntryPoint () // Object obj
       {
-         //string MessageString ;
-         //int tot ;
-         MsgQueueList tempList; // used for swap queue
          MsgQueueList workQueue = new MsgQueueList();
 
          while( true )
@@ -831,7 +857,7 @@ namespace TraceTool
             {
                //swap = swap + "Begin at " + DateTime.Now.ToString("HH:mm:ss:fff") + " : " + MsgQueue.Count ;
 
-               tempList = workQueue ;          // workQueue is the empty list
+               var tempList = workQueue; // used for swap queue
                workQueue = _msgQueue ;    // MsgQueue is the list of message to send
                _msgQueue = tempList ;
             }
@@ -856,11 +882,10 @@ namespace TraceTool
                   if (Int32.Parse( msg.Substring (0,5) ) == TraceConst.CST_FLUSH)
                   {
                      String key = msg.Substring (5,msg.Length-5) ;
-                     AutoResetEvent flushEvent ;
-                     try 
+                     try
                      {
-                        flushEvent = (AutoResetEvent) FlushList[key];
-                        flushEvent.Set() ;
+                         var flushEvent = (AutoResetEvent) FlushList[key];
+                         flushEvent.Set() ;
                      }
                      catch
                      {
@@ -1243,7 +1268,7 @@ namespace TraceTool
 
       internal static InternalWinTrace GetInternalTraceForm(string traceWinId, bool doCreate)
       {
-         if (traceWinId == null || traceWinId == "" || traceWinId == "_")
+         if (string.IsNullOrEmpty(traceWinId) || traceWinId == "_")
             return DefaultWinTrace;
 
          foreach (InternalWinTrace internalForm in FormTraceList)
@@ -1405,7 +1430,9 @@ namespace TraceTool
          if (traceForm.IsMultiColTree)
          {
             //<ColValue Order="2">C3</ColValue>
-            string[] columns = leftMsg.Split(new Char[] { '\t' });
+             // ReSharper disable once RedundantExplicitParamsArrayCreation
+             // ReSharper disable once RedundantExplicitArrayCreation
+            string[] columns = leftMsg.Split(new char[] { '\t' });
             c = 0 ;
             foreach (string column in columns) {
                xml.Append("<ColValue Order=\"").Append(c).Append("\">") ;
@@ -1441,7 +1468,7 @@ namespace TraceTool
             if (traceForm.CurrentFileNumber != 0)
             {
                // Append CurrentFileNumber Before extension            
-               int pos = traceForm.LastLocalLogFileName.LastIndexOf('.');
+               var pos = traceForm.LastLocalLogFileName.LastIndexOf('.');
                if (pos == -1)// no extension
                   traceForm.LastLocalLogFileName = traceForm.LastLocalLogFileName + '_' + traceForm.CurrentFileNumber + ".xml"; //$NON-NLS-1$
                else
@@ -1453,8 +1480,7 @@ namespace TraceTool
             strbBuilder.Append(traceForm.LogFileName.Substring(0, traceForm.LogFileName.Length - fileExt.Length ));
             // append YYYYMMDD
             DateTime now = DateTime.Now ;
-            int temp;
-            temp = now.Year;
+            var temp = now.Year;
             strbBuilder.Append(temp);
             temp = now.Month;
             if (temp < 10)
@@ -1481,7 +1507,9 @@ namespace TraceTool
             if (traceForm.IsMultiColTree) {
                StringBuilder strbBuilder = new StringBuilder();
                strbBuilder.Append("<MainColumn>").Append(traceForm.MainCol).Append("</MainColumn>") ;
-               string[] cols = traceForm.TitleList.Split(new Char[] { '\t' });
+                // ReSharper disable once RedundantExplicitParamsArrayCreation
+                // ReSharper disable once RedundantExplicitArrayCreation
+               string[] cols = traceForm.TitleList.Split(new char[] { '\t' });
                c = 0;
                foreach (string col in cols) {
                   if (col != "")
@@ -1722,7 +1750,12 @@ namespace TraceTool
       /// <summary>
       /// Change SendMode to Mode.Socket to use it under ASP
       /// </summary>
-      public SendMode SendMode = SendMode.WinMsg ;
+      public SendMode SendMode = 
+#if (!NETCF1 && !NETCF2 && !NETCF3 && !SILVERLIGHT  && !NETSTANDARD1_6)
+            SendMode.WinMsg ;   // windows framework : windows messages
+#else  
+            SendMode.Socket ;   // Compact, silverlight, Net standard : socket
+#endif
       /// <summary>
       /// The Socket Host adress
       /// </summary>
@@ -1735,7 +1768,7 @@ namespace TraceTool
       /// <summary>
       /// Indicate if the socket use the Udp protocol
       /// </summary>
-      public bool SocketUdp;
+      public bool SocketUdp = false;
 
 
       /// <summary>

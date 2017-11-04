@@ -24,8 +24,23 @@ using System.Runtime.InteropServices ;
     // generic start in F2
 #if (!NETCF1 && !NETF1)
 using System.Collections.Generic;
-// ReSharper disable ConvertIfStatementToNullCoalescingExpression
 #endif
+
+// ReSharper disable ClassNeverInstantiated.Global
+// ReSharper disable ConvertIfStatementToNullCoalescingExpression
+// ReSharper disable ConvertIfStatementToConditionalTernaryExpression
+// ReSharper disable MemberCanBePrivate.Global
+// ReSharper disable IntroduceOptionalParameters.Global
+// ReSharper disable FieldCanBeMadeReadOnly.Global
+// ReSharper disable UnusedMethodReturnValue.Global
+// ReSharper disable UnusedMember.Global
+// ReSharper disable InlineOutVariableDeclaration
+// ReSharper disable UseStringInterpolation
+// ReSharper disable UseObjectOrCollectionInitializer
+// ReSharper disable UseNullPropagation
+// ReSharper disable MergeCastWithTypeCheck
+// ReSharper disable UsePatternMatching
+// ReSharper disable ArrangeAccessorOwnerBody
 
 namespace TraceTool
 {

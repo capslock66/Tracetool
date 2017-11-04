@@ -4,6 +4,7 @@
     <TargetFramework>netstandard1.6</TargetFramework>
     <AssemblyName>TraceTool</AssemblyName>
     <RootNamespace>TraceTool</RootNamespace>
+    <Version>12.9.0</Version>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
@@ -30,7 +31,10 @@
 
   <ItemGroup>
     <PackageReference Include="System.Diagnostics.Process" Version="4.3.0" />
+    <PackageReference Include="System.Diagnostics.StackTrace" Version="4.3.0" />
+    <PackageReference Include="System.Net.NameResolution" Version="4.3.0" />
     <PackageReference Include="System.Threading.Thread" Version="4.3.0" />
+    <PackageReference Include="System.Xml.XmlDocument" Version="4.3.0" />
     <PackageReference Include="System.Xml.XPath" Version="4.3.0" />
   </ItemGroup>
 

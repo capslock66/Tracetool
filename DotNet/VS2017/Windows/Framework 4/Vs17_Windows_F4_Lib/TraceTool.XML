@@ -1219,7 +1219,7 @@
             <summary>
             create a Node with an unique ID (true)
             </summary>
-            <param name="ParentNode">The parent node where to place that trace.
+            <param name="parentNode">The parent node where to place that trace.
             The IconIndex and the enabled properties are also recopied
             Can be null : the root tree become the parent node, enabled is true and the default icon is used
             </param>
@@ -1228,7 +1228,7 @@
             <summary>
             Create a Node.
             </summary>
-            <param name="ParentNode">The parent node where to place that trace.
+            <param name="parentNode">The parent node where to place that trace.
             The IconIndex and the enabled properties are also recopied
             Can be null : the root tree become the parent node, enabled is true and the default icon is used
             </param>
@@ -1239,13 +1239,13 @@
             <summary>
             Call AddObject to fill the "member" tree with the object description
             </summary>
-            <param name="ObjToSend"></param>
+            <param name="objToSend"></param>
         </member>
         <member name="M:TraceTool.TraceNodeEx.AddObject(System.Object,TraceTool.TraceDisplayFlags)">
             <summary>
             Call AddObject to fill the "member" tree with the object description
             </summary>
-            <param name="ObjToSend">Object to send</param>
+            <param name="objToSend">Object to send</param>
             <param name="flags">determine what information to send</param>
         </member>
         <member name="M:TraceTool.TraceNodeEx.AddType(System.Type)">
@@ -1279,27 +1279,27 @@
              </summary>
             
         </member>
-        <member name="M:TraceTool.TraceNodeEx.displayCustomAttrib(TraceTool.TMemberNode,System.Attribute[])">
+        <member name="M:TraceTool.TraceNodeEx.DisplayCustomAttrib(TraceTool.TMemberNode,System.Attribute[])">
             add the attributes stored in the given parameter to the submembers
         </member>
         <member name="M:TraceTool.TraceNodeEx.AddValue(System.Object)">
             <summary>
             Call AddValue to fill the "member" tree with the object value.
             </summary>
-            <param name="ObjToSend">Object to display</param>
+            <param name="objToSend">Object to display</param>
         </member>
         <member name="M:TraceTool.TraceNodeEx.AddValue(System.Object,System.Boolean)">
             <summary>
             Call AddValue to fill the "member" tree with the object value.
             </summary>
-            <param name="ObjToSend">Object to display</param>
-            <param name="SendPrivate">Display private fields</param>
+            <param name="objToSend">Object to display</param>
+            <param name="sendPrivate">Display private fields</param>
         </member>
         <member name="M:TraceTool.TraceNodeEx.AddValue(System.Object,System.Boolean,System.Int32)">
             <summary>
             Call AddValue to fill the "member" tree with the object value.
             </summary>
-            <param name="ObjToSend">Object to display</param>
+            <param name="objToSend">Object to display</param>
             <param name="sendPrivate">Display private fields</param>
             <param name="maxLevel">Number of sub component to display in tree</param>
         </member>
@@ -1307,23 +1307,23 @@
             <summary>
             Call AddValue to fill the "member" tree with the object value.
             </summary>
-            <param name="ObjToSend">Object to display</param>
+            <param name="objToSend">Object to display</param>
             <param name="sendPrivate">Display private fields</param>
             <param name="maxLevel">Number of sub component to display in tree</param>
             <param name="objTitle">Title to display for the object</param>
         </member>
-        <member name="M:TraceTool.TraceNodeEx.addAllFieldsValue(System.Object,System.Type,TraceTool.TMemberNode,System.Boolean,System.Int32,TraceTool.ParsedObjectList)">
+        <member name="M:TraceTool.TraceNodeEx.AddAllFieldsValue(System.Object,System.Type,TraceTool.TMemberNode,System.Boolean,System.Int32,TraceTool.ParsedObjectList)">
             Display all fields (with corresponding value) of the type
             Called by AddValue(), not by AddObject()
         </member>
-        <member name="M:TraceTool.TraceNodeEx.addProperties(System.Object,System.Type,TraceTool.TMemberNode,System.Boolean,System.Int32,TraceTool.ParsedObjectList,System.Collections.Generic.Dictionary{System.String,TraceTool.TMemberNode})">
+        <member name="M:TraceTool.TraceNodeEx.AddProperties(System.Object,System.Type,TraceTool.TMemberNode,System.Boolean,System.Int32,TraceTool.ParsedObjectList,System.Collections.Generic.Dictionary{System.String,TraceTool.TMemberNode})">
             Display all properties (with corresponding value, if any) of the type
             Called by AddValue(), not by AddObject()
         </member>
-        <member name="M:TraceTool.TraceNodeEx.DisplayBases(System.Type,TraceTool.TraceDisplayFlags)">
+        <member name="M:TraceTool.TraceNodeEx.DisplayBases(System.Type)">
             show the type with its interfaces, and base classes.
         </member>
-        <member name="M:TraceTool.TraceNodeEx.DisplayNestedTypes(System.Type,System.Object,TraceTool.TraceDisplayFlags)">
+        <member name="M:TraceTool.TraceNodeEx.DisplayNestedTypes(System.Type)">
             show nested type names (not the content)
         </member>
         <member name="M:TraceTool.TraceNodeEx.DisplayFields(System.Object,System.Type,System.Object,TraceTool.TraceDisplayFlags)">
@@ -1337,14 +1337,14 @@
             Display all properties (with corresponding value, if any) of the type
             Called by AddObject(), not by AddValue()
         </member>
-        <member name="M:TraceTool.TraceNodeEx.DisplayConstructors(System.Object,System.Type,System.Object,TraceTool.TraceDisplayFlags)">
+        <member name="M:TraceTool.TraceNodeEx.DisplayConstructors(System.Type,System.Object,TraceTool.TraceDisplayFlags)">
             display all Constructors of a type
         </member>
-        <member name="M:TraceTool.TraceNodeEx.DisplayMethods(System.Object,System.Type,System.Object,TraceTool.TraceDisplayFlags)">
+        <member name="M:TraceTool.TraceNodeEx.DisplayMethods(System.Type,System.Object,TraceTool.TraceDisplayFlags)">
             display all Methods of a type
             Note that Operators are method but will be displayed in a separate group
         </member>
-        <member name="M:TraceTool.TraceNodeEx.DisplayEvents(System.Object,System.Type,System.Object,TraceTool.TraceDisplayFlags)">
+        <member name="M:TraceTool.TraceNodeEx.DisplayEvents(System.Type,System.Object,TraceTool.TraceDisplayFlags)">
             display all Events of a type
         </member>
         <member name="M:TraceTool.TraceNodeEx.AddStackTrace">

@@ -30,6 +30,21 @@
 //using System.Net;
 //using System.Net.Sockets;
 
+// ReSharper disable ClassNeverInstantiated.Global
+// ReSharper disable ConvertIfStatementToNullCoalescingExpression
+// ReSharper disable ConvertIfStatementToConditionalTernaryExpression
+// ReSharper disable MemberCanBePrivate.Global
+// ReSharper disable IntroduceOptionalParameters.Global
+// ReSharper disable FieldCanBeMadeReadOnly.Global
+// ReSharper disable UnusedMethodReturnValue.Global
+// ReSharper disable UnusedMember.Global
+// ReSharper disable InlineOutVariableDeclaration
+// ReSharper disable UseStringInterpolation
+// ReSharper disable UseObjectOrCollectionInitializer
+// ReSharper disable UseNullPropagation
+// ReSharper disable MergeCastWithTypeCheck
+// ReSharper disable UsePatternMatching
+// ReSharper disable ArrangeAccessorOwnerBody
 
 namespace TraceTool
 {
@@ -39,7 +54,7 @@ namespace TraceTool
    /// </summary>
    public class TraceTable
    {
-      private TMemberNode _members;
+      private readonly TMemberNode _members;
       private TMemberNode _currentRow;
 
       //----------------------------------------------------------------------
@@ -103,11 +118,10 @@ namespace TraceTool
       /// <param name="nodeMembers">target</param>
       internal void CopyToNodeMembers(TMemberNode nodeMembers)
       {
-         TMemberNode TableMembers;
-         TableMembers = nodeMembers.Add(_members.Col1);
-         TableMembers.ViewerKind = TraceConst.CST_VIEWER_TABLE;
-         for (int c = 0; c < _members.Members.Count; c++)
-            TableMembers.Add(_members.Members[c].Col1);
+          var tableMembers = nodeMembers.Add(_members.Col1);
+         tableMembers.ViewerKind = TraceConst.CST_VIEWER_TABLE;
+         foreach (TMemberNode memberNode in _members.Members)
+             tableMembers.Add(memberNode.Col1);
       }
    }
 

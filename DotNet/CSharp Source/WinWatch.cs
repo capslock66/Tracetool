@@ -15,6 +15,22 @@
 using System;
 //using System.Collections;                 // ArrayList, queue
 
+// ReSharper disable ClassNeverInstantiated.Global
+// ReSharper disable ConvertIfStatementToNullCoalescingExpression
+// ReSharper disable ConvertIfStatementToConditionalTernaryExpression
+// ReSharper disable MemberCanBePrivate.Global
+// ReSharper disable IntroduceOptionalParameters.Global
+// ReSharper disable FieldCanBeMadeReadOnly.Global
+// ReSharper disable UnusedMethodReturnValue.Global
+// ReSharper disable UnusedMember.Global
+// ReSharper disable InlineOutVariableDeclaration
+// ReSharper disable UseStringInterpolation
+// ReSharper disable UseObjectOrCollectionInitializer
+// ReSharper disable UseNullPropagation
+// ReSharper disable MergeCastWithTypeCheck
+// ReSharper disable UsePatternMatching
+// ReSharper disable ArrangeAccessorOwnerBody
+
 namespace TraceTool
 {
    /// <summary>
@@ -64,12 +80,12 @@ namespace TraceTool
       /// <param name="winWatchText">The Window Title on the viewer.If empty, a default name will be used</param>
       public WinWatch (string winWatchId , string winWatchText) : this ()
       {
-         if (winWatchId == null || winWatchId == "")
+         if (string.IsNullOrEmpty(winWatchId))
             winWatchId = Helper.NewGuid ().ToString() ;
 
          Id = winWatchId ;
 
-         if (winWatchText == null || winWatchText == "")
+         if (string.IsNullOrEmpty(winWatchText))
             winWatchText = "Watches " + Id ;
 
          // create the trace window
