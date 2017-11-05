@@ -17,8 +17,10 @@ using System.Text;
 using System.Reflection;
 using System.Diagnostics;  // Process
 using System.Collections;  // ArrayList, queue
-#if (!NETSTANDARD1_6)  
+#if (!NETSTANDARD1_6 && !NETSTANDARD2_0)
 using System.Drawing.Imaging;
+#endif
+#if (!NETSTANDARD1_6)  
 using System.IO;           // streams
 #endif
 
@@ -31,11 +33,11 @@ using System.Xml.XPath;
 using System.Collections.Generic;
 #endif
 
-#if (NETF3 && !NETSTANDARD1_6)
+#if (NETF3 && !NETSTANDARD1_6 && !NETSTANDARD2_0)
 using System.Windows.Markup.Primitives;   // dependency properties (don't work with Silverlight).  Assembly : PresentationFramework
 #endif
 
-#if (NETF3 || SILVERLIGHT) && !NETSTANDARD1_6
+#if (NETF3 || SILVERLIGHT) && !NETSTANDARD1_6  && !NETSTANDARD2_0
 using System.Windows.Media.Imaging;
 #endif
 
@@ -1172,7 +1174,7 @@ namespace TraceTool
       internal Dictionary<string, TMemberNode> GetDependencyPropertiesValues(Object objToSend)
       {
           Dictionary < string, TMemberNode> result = new Dictionary<string, TMemberNode>();
-#if (NETF3 && !NETSTANDARD1_6)   // silverlight don't support MarkupWriter to retreive Dependency Properties 
+#if (NETF3 && !NETSTANDARD1_6  && !NETSTANDARD2_0)   // silverlight don't support MarkupWriter to retreive Dependency Properties 
           try
           {
               MarkupObject markupObject = MarkupWriter.GetMarkupObjectFor(objToSend);
@@ -1537,7 +1539,7 @@ namespace TraceTool
       {
           try
           {
-#if (NETF3 && !NETSTANDARD1_6)
+#if (NETF3 && !NETSTANDARD1_6  && !NETSTANDARD2_0)
               if (objToSend == null)
                   return;
 
@@ -2137,7 +2139,7 @@ namespace TraceTool
 
       //------------------------------------------------------------------------------
 
-#if (!SILVERLIGHT && !NETSTANDARD1_6)
+#if (!SILVERLIGHT && !NETSTANDARD1_6  && !NETSTANDARD2_0)
       /// <summary>
       /// Add a bitmap
       /// </summary>
@@ -2183,7 +2185,7 @@ namespace TraceTool
 // currently not possibe in silverlight 2 : 
 // - No way to read the Image content
 // - BmpBitmapEncoder is not supported
-#if (NETF3  && !NETSTANDARD1_6)  
+#if (NETF3  && !NETSTANDARD1_6  && !NETSTANDARD2_0)  
       /// <summary>
       /// Add a bitmap
       /// </summary>
@@ -2466,7 +2468,7 @@ namespace TraceTool
          // add Dependency Properties
          //--------------------------
 
-#if (NETF3 && !NETSTANDARD1_6)
+#if (NETF3 && !NETSTANDARD1_6  && !NETSTANDARD2_0)
          bool hasDependencyproperties = false;
          MarkupObject markupObject = MarkupWriter.GetMarkupObjectFor(itemObject);
          
