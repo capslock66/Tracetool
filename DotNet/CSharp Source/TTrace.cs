@@ -32,18 +32,24 @@
 using System.Text;
 using System;
 #if (!NETSTANDARD1_6)  
+using System.Runtime.InteropServices;
+#endif
+
+#if (!NETSTANDARD1_6 && !NETSTANDARD2_0)  
 using System.Configuration;
 using System.Diagnostics ;                // Process
-using System.Runtime.InteropServices;
-#else
-using System.Threading.Tasks;
 #endif
+
+#if (!NETSTANDARD2_0)  
+using System.Threading.Tasks;
+using System.Reflection ;
+#endif
+
 //using System.Collections;                 // ArrayList, queue
 using System.Threading ;                  // thead pool, ResetEvent
 using System.Net;
 using System.Net.Sockets;
 using System.IO ;                         // file exist
-using System.Reflection ;
 using System.Xml;
 
 // generic start in F2
@@ -51,7 +57,7 @@ using System.Xml;
 //using System.Collections.Generic;
 #endif
 
-#if (!NETCF1 && !NETSTANDARD1_6)
+#if (!NETCF1 && !NETSTANDARD1_6 && !NETSTANDARD2_0)
 using Microsoft.Win32 ;                   // registry
 #endif
 
@@ -163,7 +169,7 @@ namespace TraceTool
             Options.SendMode = SendMode.Socket ;
             Options.SocketPort = 4502;
             Options.SocketHost = "127.0.0.1";
-#elif (NETCF1 || NETCF2 || NETCF3 || NETSTANDARD1_6)
+#elif (NETCF1 || NETCF2 || NETCF3 || NETSTANDARD1_6 || NETSTANDARD2_0)
             Options.SendMode = SendMode.Socket;
 
             #if NETSTANDARD1_6
@@ -1552,7 +1558,7 @@ namespace TraceTool
       //----------------------------------------------------------------------
       // Assembly private function
 
-#if (!NETCF1  && !NETCF2  && !NETCF3 && !SILVERLIGHT && !NETSTANDARD1_6)
+#if (!NETCF1  && !NETCF2  && !NETCF3 && !SILVERLIGHT && !NETSTANDARD1_6 )
       internal static int StartTDebug ()
       {
          var winHandle = Helper.FindWindow("TFormReceiver", "FormReceiver");
@@ -1562,6 +1568,7 @@ namespace TraceTool
             return winHandle;
          }
 
+         #if  !NETSTANDARD2_0
          RegistryKey reg = Registry.LocalMachine.OpenSubKey("Software\\TraceTool");
          if (reg == null)
          {
@@ -1584,6 +1591,7 @@ namespace TraceTool
          Thread.Sleep(2000);
 
          winHandle = Helper.FindWindow("TFormReceiver", "FormReceiver");
+         #endif
          return winHandle;
       }
 #endif
@@ -1879,7 +1887,7 @@ namespace TraceTool
    //------------------------------------------------------------------------------
    //------------------------------------------------------------------------------
 
-#if (!NETCF1 && !NETCF2 && !NETCF3 && !SILVERLIGHT && !NETSTANDARD1_6)
+#if (!NETCF1 && !NETCF2 && !NETCF3 && !SILVERLIGHT && !NETSTANDARD1_6  && !NETSTANDARD2_0)
 
    /// <summary>
    /// configure tracetool using app.config

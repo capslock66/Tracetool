@@ -359,7 +359,7 @@ namespace TraceTool
 
       //------------------------------------------------------------------------------
 
-#if (!SILVERLIGHT && !NETSTANDARD1_6)
+#if (!SILVERLIGHT && !NETSTANDARD1_6  && !NETSTANDARD2_0)
 
       /// <summary>
       /// Send a bitmap
@@ -388,7 +388,7 @@ namespace TraceTool
 // currently not possibe in silverlight 2 : 
 // - No way to read the Image content
 // - BmpBitmapEncoder is not supported
-#if (NETF3 && !NETSTANDARD1_6) 
+#if (NETF3 && !NETSTANDARD1_6  && !NETSTANDARD2_0) 
       /// <summary>
       /// Send a bitmap
       /// </summary>

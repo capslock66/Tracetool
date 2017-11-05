@@ -17,10 +17,9 @@ using System.Text;
 using System.Reflection;
 using System.Diagnostics;  // Process
 using System.Collections;  // ArrayList, queue
+
 #if (!NETSTANDARD1_6 && !NETSTANDARD2_0)
 using System.Drawing.Imaging;
-#endif
-#if (!NETSTANDARD1_6)  
 using System.IO;           // streams
 #endif
 
