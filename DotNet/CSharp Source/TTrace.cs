@@ -172,59 +172,56 @@ namespace TraceTool
                Options.SocketHost = "PPP_PEER";   // force PPP_PEER (active sync) for pocket pc
             #endif
 
-            // 1) check the existence of the App.Config file using classic framework
-            //    not possible
+            // 1) check the existence of the App.exe.Config file (with "exe" extension) using classic framework
+            //    no API for that in compact framework or dot Net Standard
 
-            // 2) check the existence of the MyProg.config file
+            // 2) check the existence of the MyProg.config file (without "exe" or similar extension !)
             configFile = Helper.GetCurrentProcessName() + ".config";
             if (GetConfigFomFile(configFile))
                 return;
 
-            // 3) check the existence of the MyProg.TraceTool file
+            // 3) check the existence of the MyProg.TraceTool file (without "exe" or similar extension !)
             configFile = Helper.GetCurrentProcessName() + ".TraceTool";
             if (GetConfigFomFile(configFile))
                  return;
 
-             // 4) check the existence of tracetool.dll.TraceTool file
-             #if NETSTANDARD1_6
-                configFile = typeof(TTrace).GetTypeInfo().Assembly.ToString();
-             #else
-                configFile = typeof(TTrace).Module.ToString();
-             #endif
-             configFile = configFile + ".TraceTool";
-             if (GetConfigFomFile(configFile))
-                 return;
+            // 4) check the existence of tracetool.dll.TraceTool file
+            #if NETSTANDARD1_6
+               configFile = typeof(TTrace).GetTypeInfo().Assembly.ToString();
+            #else
+               configFile = typeof(TTrace).Module.ToString();
+            #endif
+            configFile = configFile + ".TraceTool";
+            if (GetConfigFomFile(configFile))
+                return;
 
-             // 5) last chance : a "traceTool.xml" file in the current folder
-             configFile = "traceTool.xml";
-             GetConfigFomFile(configFile) ;
+            // 5) last chance : a "traceTool.xml" file in the current folder (compatible in compact, classic or standard, but not silverlight)
+            configFile = "traceTool.xml";
+            GetConfigFomFile(configFile) ;
 
 #else  // Full framework
              // ReSharper disable once JoinDeclarationAndInitializer
             XmlNode config;
 
-            // 1) check the existence of the App.Config file using classic framework
-             #if (NETF2)
+            // 1) check the existence of the App.exe.Config file (with "exe" extension) using classic framework API
+            #if (NETF2)
                 config = (XmlNode) ConfigurationManager.GetSection("TraceTool");
             #else
                 config = (XmlNode) System.Configuration.ConfigurationSettings.GetConfig("TraceTool") ;
             #endif
 
-             // ReSharper disable once ConditionIsAlwaysTrueOrFalse
             if (config != null) {
                //Debug.Send ("App.Config file exist") ;
                ReadConfig(config);
                return;
-            } else {
-               //Debug.Send ("no App.Config file") ;
             }
 
-            // 2) check the existence of the Web.Config file
+            // 2) check the existence of the Web.Config file or MyProg.exe.Config (with extension)
             configFile = AppDomain.CurrentDomain.SetupInformation.ConfigurationFile;
             if (GetConfigFomFile(configFile))
                return;
 
-            // 3) check the existence of the App.TraceTool file
+            // 3) check the existence of the MyProg.exe.TraceTool file (with extension)
             configFile = AppDomain.CurrentDomain.SetupInformation.ConfigurationFile;
             configFile = configFile.Replace(".config", ".TraceTool");
             if (GetConfigFomFile(configFile))
@@ -232,12 +229,12 @@ namespace TraceTool
 
             // 4) check the existence of tracetool.dll.TraceTool file
             Assembly asm = typeof(TTrace).Assembly;
-            configFile = asm.Location;
-            configFile = configFile + ".TraceTool";
+            configFile = asm.Location;                  // Bin/Debug/tracetool.dll
+            configFile = configFile + ".TraceTool";     // Bin/Debug/tracetool.dll.TraceTool
             if (GetConfigFomFile(configFile))
                return;
 
-            // 5) last chance : a "traceTool.xml" file in the current folder
+            // 5) last chance : a "traceTool.xml" file in the current folder (compatible in compact, classic or standard, but not silverlight)
             configFile = "traceTool.xml";
             GetConfigFomFile(configFile) ;
 

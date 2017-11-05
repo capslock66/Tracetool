@@ -540,7 +540,7 @@
         </member>
         <member name="M:TraceTool.Helper.GetCurrentProcessName">
             <summary>
-            Return the current process name with path (Win Ce / win 32)
+            Return the current process name with path (Win Ce / win 32) without extension
             </summary>
         </member>
         <member name="M:TraceTool.Helper.NewGuid">

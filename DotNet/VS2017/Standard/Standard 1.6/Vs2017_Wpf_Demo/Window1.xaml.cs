@@ -46,8 +46,11 @@ namespace Vs2017_Wpf_Demo
       private void Window_Loaded(object sender, RoutedEventArgs e)
       {
          ComboMode.SelectedIndex = 0;
-         TTrace.Options.SocketHost = "127.0.0.1" ;
-         TTrace.Options.SocketPort = 8090 ;
+         
+         // Not needed. Config is read from tracetool.xml in the running folder   
+         //TTrace.Options.SocketHost = "127.0.0.1" ;
+         //TTrace.Options.SocketPort = 8090 ;
+
          ChkSendEvents.IsChecked = TTrace.Options.SendEvents;
          ChkSendInherited.IsChecked = TTrace.Options.SendInherited;
          ChkSendFunctions.IsChecked = TTrace.Options.SendFunctions;
