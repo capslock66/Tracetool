@@ -4,10 +4,10 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{F313D3EF-A44B-456C-917E-CD523F31D644}</ProjectGuid>
+    <ProjectGuid>{626502AE-0AE0-43B2-9B8A-887DB933E285}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>ConsoleApp16</RootNamespace>
-    <AssemblyName>ConsoleApp16</AssemblyName>
+    <RootNamespace>ConsoleAppF461</RootNamespace>
+    <AssemblyName>ConsoleAppF461</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -49,9 +49,9 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Vs17_Standard_16_Lib\Vs17_Standard_16_lib.csproj">
-      <Project>{eeb12e39-0b78-4eac-b442-413aa76dc08d}</Project>
-      <Name>Vs17_Standard_16_lib</Name>
+    <ProjectReference Include="..\Vs2017_Standard_20_Lib\Vs2017_Standard_20_Lib.csproj">
+      <Project>{d122d3c3-4e38-49a7-abd2-c6bda4f4c7d5}</Project>
+      <Name>Vs2017_Standard_20_Lib</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

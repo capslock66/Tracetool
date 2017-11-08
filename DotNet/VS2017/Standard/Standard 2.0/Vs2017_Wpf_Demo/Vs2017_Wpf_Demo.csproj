@@ -100,9 +100,9 @@
     <Resource Include="App.ico" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Vs2017_Standard_16_Lib\Vs2017_Standard_16_lib.csproj">
-      <Project>{82844652-43f9-4fbf-a3ad-1265805fbe33}</Project>
-      <Name>Vs2017_Standard_16_lib</Name>
+    <ProjectReference Include="..\Vs2017_Standard_20_Lib\Vs2017_Standard_20_Lib.csproj">
+      <Project>{d122d3c3-4e38-49a7-abd2-c6bda4f4c7d5}</Project>
+      <Name>Vs2017_Standard_20_Lib</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

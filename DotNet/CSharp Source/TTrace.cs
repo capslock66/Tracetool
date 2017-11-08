@@ -28,6 +28,7 @@
 // 12.8   : 2016 07 28 : Fix addDependencyPropertiesValues, DisplayDependencyProperties
 // 12.8.5 : 2016 10 05 : stack trace display the class of the method. Modifier is removed (public static,...)
 // 12.9   : 2017 11 03 : Add conditional compilation for Dot Net Standard (1.6)
+// 12.9   : 2017 11 06 : Add conditional compilation for Dot Net Standard (2.0)
 
 using System.Text;
 using System;
@@ -40,8 +41,11 @@ using System.Configuration;
 using System.Diagnostics ;                // Process
 #endif
 
-#if (!NETSTANDARD2_0)  
+#if (NETSTANDARD1_6)  
 using System.Threading.Tasks;
+#endif
+
+#if (!NETSTANDARD2_0)  
 using System.Reflection ;
 #endif
 
@@ -564,7 +568,7 @@ namespace TraceTool
       {
          StopEvent.Set();
          DataReady.Set();
-#if (!NETSTANDARD1_6)  
+#if (!NETSTANDARD1_6 && !NETSTANDARD2_0)  // Dot net core don't support Thread.Abort
          _traceThread.Abort();
 #endif
 
@@ -1756,7 +1760,7 @@ namespace TraceTool
       /// Change SendMode to Mode.Socket to use it under ASP
       /// </summary>
       public SendMode SendMode = 
-#if (!NETCF1 && !NETCF2 && !NETCF3 && !SILVERLIGHT  && !NETSTANDARD1_6)
+#if (!NETCF1 && !NETCF2 && !NETCF3 && !SILVERLIGHT  && !NETSTANDARD1_6 && !NETSTANDARD2_0)
             SendMode.WinMsg ;   // windows framework : windows messages
 #else  
             SendMode.Socket ;   // Compact, silverlight, Net standard : socket
