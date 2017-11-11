@@ -1,6 +1,7 @@
-﻿using TraceTool;
+﻿using System;
+using TraceTool;
 
-namespace ConsoleAppCore20
+namespace ConsoleAppCore20UsingNugget
 {
     class Program
     {
@@ -13,7 +14,7 @@ namespace ConsoleAppCore20
             //TTrace.Options.SocketPort = 8090 ;
             //TTrace.Debug.Send("Console core socket") ;
             TTrace.Flush();
-            TTrace.Stop();        
+            TTrace.Stop();   
         }
     }
 }

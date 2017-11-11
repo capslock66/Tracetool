@@ -1,7 +1,7 @@
 ﻿
 using TraceTool;
 
-namespace ConsoleAppF461
+namespace ConsoleAppF461UsingNugget
 {
     class Program
     {
@@ -10,7 +10,7 @@ namespace ConsoleAppF461
             TTrace.Options.SendMode = SendMode.WinMsg ;
             TTrace.Debug.Send("console framework 4.6.1 win msg",TTrace.Debug.GetType().Assembly.Location) ;
             TTrace.Flush();
-            TTrace.Stop();
+            TTrace.Stop();        
         }
     }
 }

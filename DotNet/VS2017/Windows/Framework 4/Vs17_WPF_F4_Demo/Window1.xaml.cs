@@ -172,6 +172,7 @@ namespace vs17_WPF_F4_Demo
 
          // simple traces
          //--------------------------------------------
+         TTrace.Debug.Send("Tracetool location", TTrace.Debug.GetType().Assembly.Location) ;  // side by side
          TTrace.Debug.Send("Hello").Send("World");  // "World" is a sub trace of "Hello"
 
          // single separator

@@ -8,6 +8,7 @@
     <Product>TraceTool library</Product>
     <Authors>Thierry Parent</Authors>
     <Company />
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
