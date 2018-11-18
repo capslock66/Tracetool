@@ -1,0 +1,23 @@
+{
+  "name": "@tracetool/webpack",
+  "version": "1.0.1",
+  "description": "Webpack version ",
+  "main": "lib/tracetool",
+  "typings": "lib/tracetool.d.ts", 
+  "keywords": [
+    "tracetool"
+  ],
+  "directories": {
+    "lib": "lib"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Thierry Parent",
+  "license": "ISC",
+  "dependencies": { 
+     "stack-trace": "^0.0.9",
+     "uuid":"^3.0.0"
+   }
+  
+}
