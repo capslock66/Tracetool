@@ -5070,7 +5070,8 @@ begin
          //  tkClassRef, tkPointer, tkProcedure {, tkMRecord});
 
          case PropInfo^.PropType^.Kind of
-            tkInteger,tkString,tkWChar,tkLString,tkWString,tkInt64, tkUString :
+            tkInteger,tkString,tkWChar,tkLString,tkWString,tkInt64
+            {$ifdef DELPHI_16_UP}, tkUString {$endif}:
                begin
                   if AObject <> nil then begin
                      VariantPropValue := GetPropValue(AObject, String(PropInfo.Name),true) ;
@@ -5078,10 +5079,12 @@ begin
                   end ;
                   AddToFieldGroup() ;
                end ;
+            {$ifdef DELPHI_16_UP}
             tkClassRef, tkPointer, tkProcedure {, tkMRecord} :
                begin
                   Prop_Value := '???' ;
                end;
+            {$endif}
             tkClass :
                begin
                   intPropValue := GetOrdProp(AObject, PropInfo) ;
@@ -6353,7 +6356,7 @@ var
    DynArrayElementPointer : Pointer ;
    DynArrayElementValue1 : byte ;
    DynArrayElementValue2 : word ;
-   DynArrayElementValue4 : int32 ;     
+   DynArrayElementValue4 : {$ifdef DELPHI_16_UP}int32{$else}Integer{$endif} ;     
    ClassTypeFound : boolean ;
    
 type
@@ -6394,7 +6397,7 @@ begin
          Prop_Name := String(PropInfo.Name) ;
 
          case PropInfo^.PropType^.Kind of
-            tkInteger,tkString,tkChar,tkWChar,tkLString,tkWString,tkInt64,tkUString,tkFloat :
+            tkInteger,tkString,tkChar,tkWChar,tkLString,tkWString,tkInt64,{$ifdef DELPHI_16_UP}tkUString,{$endif}tkFloat :
                begin
                    VariantPropValue := GetPropValue(AObject, string(PropInfo.Name),true) ;
                    Prop_Value := VariantPropValue ;
@@ -6408,12 +6411,12 @@ begin
                   subObj := TObject (intPropValue);  
                   inner_addValue (subObj ,fieldNode , MaxLevel-1, AlreadyParsedObject);   // recursion.
                end ;
-               
+            {$ifdef DELPHI_16_UP}
             tkClassRef, tkPointer, tkProcedure, tkMethod {, tkMRecord} :
                begin
 
                end;
-              
+            {$endif}  
             tkDynArray :   // tkArray
                begin                                                                 
                   DynArrayPointer := GetDynArrayProp(AObject, PropInfo);  // from System.TypInfo => GetPropValue where kind = tkDynArray 
@@ -6443,7 +6446,7 @@ begin
                             ArrayNode.Add('[' + inttostr(j) + ']' , prop_value) ;
                         end ;
                         SizeOf(TObject) : begin
-                            DynArrayElementValue4 := int32(DynArrayElementPointer^) ;              // 0 .. FF FF FF FF
+                            DynArrayElementValue4 := {$ifdef DELPHI_16_UP}int32{$else}integer{$endif}(DynArrayElementPointer^) ;              // 0 .. FF FF FF FF
                             // is it an integer or a pointer or a 4 bytes value ?      
                             try                         
                                subObj := TObject (DynArrayElementValue4);
@@ -6469,7 +6472,9 @@ begin
                             for k := 0 to DynArrayObject.ElemSize -1 do begin
                                DynArrayElementValue1 := byte(DynArrayElementPointer^) ;               // 0 .. FF
                                Prop_Value := Prop_Value + ' $' + inttohex (DynArrayElementValue1,2) ;
+                               {$ifdef DELPHI_16_UP}
                                DynArrayElementPointer := pbyte(DynArrayElementPointer) + 1;
+                               {$endif}
                             end;
                             ArrayNode.Add('[' + inttostr(j) + ']' , prop_value) ;
                         end ;
@@ -6672,7 +6677,7 @@ var
    DynArrayElementPointer : Pointer ;
    DynArrayElementValue1 : byte ;
    DynArrayElementValue2 : word ;
-   DynArrayElementValue4 : int32 ;
+   DynArrayElementValue4 : {$ifdef DELPHI_16_UP}int32{$else}integer{$endif} ;
    ClassTypeFound : Boolean ;
 
    //------------------------------------------------------
@@ -6726,7 +6731,7 @@ begin
          Prop_Type := GetPropertyTypeString (PropInfo^.PropType^.Kind);
 
          case PropInfo^.PropType^.Kind of
-            tkInteger,tkString,tkWChar,tkLString,tkWString,tkInt64, tkUString :
+            tkInteger,tkString,tkWChar,tkLString,tkWString,tkInt64{$ifdef DELPHI_16_UP}, tkUString{$endif} :
                begin
 
                   VariantPropValue := GetPropValue(AObject, String(PropInfo.Name),true) ;
@@ -6746,12 +6751,12 @@ begin
                   end;
                   AddToFieldGroup() ;  // prop_name , prop_value, prop_type
                end ;
-
+            {$ifdef DELPHI_16_UP}
             tkClassRef, tkPointer, tkProcedure {, tkMRecord} :
                begin
 
                end;
-               
+            {$endif}
             tkMethod :   // events
                begin
                   prop_type := MethodSyntax (PropInfo) ;
@@ -6787,7 +6792,7 @@ begin
                             Prop_Value := Prop_Value + ' $' + inttohex (DynArrayElementValue2,4) ;
                         end ;
                         SizeOf(TObject) : begin
-                            DynArrayElementValue4 := int32(DynArrayElementPointer^) ;              // 0 .. FF FF FF FF
+                            DynArrayElementValue4 := {$ifdef DELPHI_16_UP}int32{$else}Integer{$endif}(DynArrayElementPointer^) ;              // 0 .. FF FF FF FF
                             // is it an integer or a pointer ?      
                             try                         
                                subObj := TObject (DynArrayElementValue4);
@@ -6805,7 +6810,9 @@ begin
                             for k := 0 to DynArrayObject.ElemSize -1 do begin
                                DynArrayElementValue1 := byte(DynArrayElementPointer^) ;               // 0 .. FF
                                Prop_Value := Prop_Value + ' $' + inttohex (DynArrayElementValue1,2) ;
+                               {$ifdef DELPHI_16_UP}
                                DynArrayElementPointer := pbyte(DynArrayElementPointer) + 1;
+                               {$endif}
                             end;
                         end ;
                      end;                        
@@ -6867,11 +6874,13 @@ begin
      tkInterface    : result := 'Interface' ;    // Interface types, new in Delphi 3
      tkInt64        : result := 'Int64' ;        // 64-bit integers, new in Delphi 4
      tkDynArray     : result := 'Array' ;        // Dynamic array types, new in Delphi 4
+     {$ifdef DELPHI_16_UP}
      tkUString      : result := 'UString' ;      //
      tkClassRef     : result := 'ClassRef' ;     //
      tkPointer      : result := 'Pointer' ;      //
      tkProcedure    : result := 'Procedure' ;    //
      //tkMRecord      : result := 'MRecord' ;
+     {$endif}
   end ;
 end ;
 
