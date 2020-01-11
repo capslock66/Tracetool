@@ -53,6 +53,7 @@ using System.Reflection ;
 using System.Threading ;                  // thead pool, ResetEvent
 using System.Net;
 using System.Net.Sockets;
+using System.Net.WebSockets;
 using System.IO ;                         // file exist
 using System.Xml;
 
@@ -98,18 +99,23 @@ namespace TraceTool
 
       private static readonly AutoResetEvent DataReady ;     // data is ready to send
       private static readonly ManualResetEvent StopEvent ;
+      private static readonly CancellationTokenSource cancellationTocket ;
+
       private static readonly StrKeyObjectList FlushList;    // AutoResetEvent flush list
       private static readonly InternalWinTrace DefaultWinTrace ;
       private static readonly InternalWinTraceList FormTraceList ;
       private static Thread _traceThread;
       private static MsgQueueList _msgQueue;         // store all messages to send
-      private static bool _isSocketError;
       private static long _errorTime;
       private static string _lastError = "";
       private static WinTrace _winTrace ;
       private static WinWatch _winWatch ;
       private static byte[] _buffToSend;  // buffer to send to viewer
-      private static Socket _socket;
+
+      private static Socket _socket;                       // Normal socket
+      private static ClientWebSocket webSocketClient ;     // Web socket
+      private static bool _isSocketError;
+
       private static TextWriter _writterOut;
       //private static  AutoResetEvent _sendDone;       // message is send. Next message can be send.
 
@@ -152,6 +158,7 @@ namespace TraceTool
          // create the lock system and the thread
          DataReady = new AutoResetEvent (false);  // initial state false
          StopEvent = new ManualResetEvent (false) ;   // ask the thread to quit
+         cancellationTocket = new CancellationTokenSource() ;
          //_sendDone = new AutoResetEvent(false);   // initial state false
          _traceThread = new Thread(SendThreadEntryPoint); //  new Thread(SendThreadEntryPoint);
          // force the thread to be killed when all foreground thread are terminated.
@@ -841,7 +848,6 @@ namespace TraceTool
       private static void SendThreadEntryPoint () // Object obj
       {
          MsgQueueList workQueue = new MsgQueueList();
-
          while( true )
          {
             //WaitHandle[] handles = new WaitHandle[2];
@@ -850,14 +856,13 @@ namespace TraceTool
             //if( WaitHandle.WaitAny(handles) == 0 )
             //   break;
 
-            
+            if (StopEvent.WaitOne(0))   // remaining messages are lost if 
+               break ;
 #if (NETF3 || SILVERLIGHT)
             DataReady.WaitOne(1000);       // silverlight don't support all overload of WaitOne
 #else
            DataReady.WaitOne(1000,false);  // Use this overload to be compatible with dotnet 1 and dotnet 2 prior to SP2 (thanks Robert)
 #endif
-            if (StopEvent.WaitOne(0))
-               return ;
 
             // lock the message queue and swap with the empty local queue (workQueue)
             lock (DataReady)
@@ -880,7 +885,7 @@ namespace TraceTool
             foreach (StringList commandList in workQueue)
             {
                if (StopEvent.WaitOne(0))
-                   return ;
+                  break;
 
                // special case : the CST_FLUSH message is handled by the sender thread, not to be send
                if (commandList.Count > 0) // only one message
@@ -942,23 +947,41 @@ namespace TraceTool
                         SendMessageToWindows(sb);
                      else if (Options.SendMode == SendMode.Socket)
                         SendMessageToSocket(sb);
-                     // else no transport
+                     else if (Options.SendMode == SendMode.WebSocket)
+                        SendMessageToWebSocket(sb);
+                            // else no transport
 #else // compact framework or silverlight : only socket
                      if (Options.SendMode == SendMode.Socket)
                         SendMessageToSocket (sb) ;
                   // else no transport
 #endif
-                  } catch (Exception ex) {
+                        } catch (Exception ex) {
                      _lastError = ex.Message;         // for debug purpose
                   }
                }   // sendMode <> none
             }      // loop workQueue
             workQueue.Clear();
          }         // infinite loop 
-      // ReSharper disable once FunctionNeverReturns
-      }            // thread function
+         if (Options.SendMode == SendMode.Socket)
+             _socket = null; // auto close connection
+         if (Options.SendMode == SendMode.WebSocket && webSocketClient != null)
+         {
+             var timeout = new CancellationTokenSource(10000); // MS, 10 sec
+             // Bad ?
+             webSocketClient.CloseAsync(WebSocketCloseStatus.NormalClosure, "", timeout.Token).Wait();
+                 
+             // Good ? 
+             //socket.CloseOutputAsync(WebSocketCloseStatus.NormalClosure, "", timeout.Token).Wait();
+              
+             webSocketClient = null; // auto close connection
+             //cancellationTocket ?
 
-      //------------------------------------------------------------------------------
+         }
+
+         // ReSharper disable once FunctionNeverReturns
+      }  // thread function
+
+        //------------------------------------------------------------------------------
 
 #if (!NETCF1 && !NETCF2 && !NETCF3 && !SILVERLIGHT && !NETSTANDARD1_6)
 
@@ -985,11 +1008,11 @@ namespace TraceTool
       }
 #endif
 
-      //------------------------------------------------------------------------------
-      // Prepare the byte[] buffToSend
-      // Called by SendMessageToSocket
-      internal static void Prepare_buffToSend(StringBuilder message)
-      {
+        //------------------------------------------------------------------------------
+        // Prepare the byte[] _buffToSend
+        // Called by SendMessageToSocket
+        internal static void Prepare_buffToSend(StringBuilder message)
+        {
 
          // For previous version of tracetool,it's important to understand that strings was send in ASCII (1 byte per char),
          // because it's the common denominator for all languages targetting tracetool.
@@ -1003,7 +1026,7 @@ namespace TraceTool
          if (c == 0)  // force new version
          {
             // new version : 
-            // write the init byte (WMD = 123) then message lenght as a DWORD then the message
+            // write the init byte (WMD = 123d) then message lenght (4 bytes) as a DWORD then the message
 
             _buffToSend = new byte[5 + intMsgLen]; // create the buffer : WMD byte + message len as a DWORD + message
             // write the WMD byte into the buffer
@@ -1060,7 +1083,62 @@ namespace TraceTool
          //buffToSend = System.Text.Encoding.Unicode.GetBytes(Message.ToString()); // older version : ASCII encoding
       }
 
-      //------------------------------------------------------------------------------
+        //------------------------------------------------------------------------------
+
+      internal static void SendMessageToWebSocket(StringBuilder message)
+      {
+         if (_isSocketError)
+         {
+            long actTime = DateTime.Now.Ticks ;
+
+            if (actTime - _errorTime > 50000000) // 5 secs = 50 millions of ticks (100 nanos sec).
+               _isSocketError = false ;
+            else
+               return ;  // lose message
+         }
+
+         // allocate and fill the buffToSend array
+         Prepare_buffToSend(message) ;
+                    
+         if (string.IsNullOrEmpty(Options.SocketHost))
+            Options.SocketHost = "127.0.0.1" ;
+
+         if (Options.SocketPort == 0)
+            Options.SocketPort = 8091 ;
+
+         if (webSocketClient == null)
+                webSocketClient = new ClientWebSocket() ;
+
+         try
+         {
+            if (webSocketClient.State != WebSocketState.Open)
+               webSocketClient
+                  .ConnectAsync(new Uri("ws://localhost:8091"), cancellationTocket.Token)  // TODO : use Options.SocketHost and Options.SocketPort
+                  .Wait(); 
+         }
+         catch (Exception ex)
+         {
+             webSocketClient = null; // force recreate socket
+             _isSocketError = true;
+             _errorTime = DateTime.Now.Ticks;
+             _lastError = ex.Message;         // for debug purpose
+             return;
+         }
+
+         try
+         {
+             var sendBuffer = new ArraySegment<byte>(_buffToSend);
+             var task = webSocketClient.SendAsync(sendBuffer, WebSocketMessageType.Binary, endOfMessage: true, cancellationToken: cancellationTocket.Token);
+             task.Wait() ;
+         }
+         catch (Exception ex)
+         {
+             webSocketClient = null; // force recreate socket
+             _isSocketError = true;
+             _errorTime = DateTime.Now.Ticks;
+             _lastError = ex.Message;         // for debug purpose
+         }
+      }
 
       internal static void SendMessageToSocket(StringBuilder message)
       {
@@ -1074,7 +1152,7 @@ namespace TraceTool
                return ;  // lose message
          }
 
-         // allocate and fill the buffToSend array
+         // allocate and fill the Prepare the byte[] _buffToSend array
          Prepare_buffToSend(message) ;
          
          if (string.IsNullOrEmpty(Options.SocketHost))
@@ -1165,7 +1243,7 @@ namespace TraceTool
 
          } // _socket.Connected == false
 
-    try
+         try
          {
             _socket.Send(_buffToSend, 0, _buffToSend.Length, 0);
          }

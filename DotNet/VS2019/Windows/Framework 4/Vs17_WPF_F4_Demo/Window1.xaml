@@ -1,0 +1,106 @@
+﻿<Window x:Class="vs17_WPF_F4_Demo.Window1"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    Title="TraceTool for Dot Net framework 4 (WPF)" Height="657.34" Width="751.654" VerticalAlignment="Top" HorizontalAlignment="Left" Loaded="Window_Loaded" Closed="Window_Closed" IsEnabled="True" Icon="App.ico">
+   <DockPanel Name="DockPanelLeft" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+      <StackPanel Height="23" Name="StackPanelTop" DockPanel.Dock="Bottom" Orientation="Horizontal" VerticalAlignment="Stretch">
+         <Button Height="23" Name="ButShowtrace" TabIndex="29" Width="128" Click="butShowtrace_Click">Show Viewer</Button>
+          <Button Height="23" Name="ButCloseViewer" TabIndex="30" Width="94" Click="butCloseViewer_Click">Close Viewer</Button>
+         <Button Height="23" Name="ButClear" TabIndex="40" Click="butClear_Click" Width="124">Clear main traces</Button>
+      </StackPanel>
+      <TabControl Name="TabControl1"  DockPanel.Dock="Bottom">
+         <TabItem Header="Basic" Name="TabBasic">
+            <Grid>
+               <Button HorizontalAlignment="Left" Margin="12.833,236.643,0,0" Name="ButFullInfo" TabIndex="36" Width="208" VerticalAlignment="Top" Height="21.277" Click="butFullInfo_Click">Display full form information</Button>
+               <Button Height="23" HorizontalAlignment="Left" Margin="12.833,188.87,0,0" Name="ButVariant" TabIndex="35" VerticalAlignment="Top" Width="208" Click="butVariant_Click">SendValue (obects and arrays)</Button>
+               <Button Height="23" HorizontalAlignment="Left" Margin="12.833,453,0,0" Name="ButLogFile" TabIndex="46" VerticalAlignment="Top" Width="208" Click="butLogFile_Click">setLogFile on client and on viewer</Button>
+               <Button Height="24" Margin="12.833,407.063,0,0" Name="ButLoadXml" TabIndex="44" VerticalAlignment="Top" Click="butLoadXml_Click" HorizontalAlignment="Left" Width="208">LoadXml (\"c:\\log.xml\")</Button>
+               <Button Height="23" HorizontalAlignment="Left" Margin="12.833,363.063,0,0" Name="ButSaveToXml" TabIndex="39" VerticalAlignment="Top" Width="208" Click="butSaveToXml_Click">Save To Xml file (\"c:\\log.xml\")</Button>
+               <Button Height="23" HorizontalAlignment="Left" Margin="12.833,320.266,0,0" Name="ButSaveToTxt" TabIndex="38" VerticalAlignment="Top" Width="208" Click="butSaveToTXT_Click">Save to text file (\"c:\\log.txt\")</Button>
+               <Button Height="23" HorizontalAlignment="Left" Margin="12.833,282.781,0,0" Name="ButDoc" TabIndex="37" VerticalAlignment="Top" Width="208" Click="butDoc_Click">Display object (button) documentation</Button>
+               <GroupBox Header="Samples traces" Margin="0.833,6.664,6,0" Name="GroupBox3" Height="161.25" VerticalAlignment="Top">
+                  <Grid>
+                     <Button Height="23" HorizontalAlignment="Left" Margin="10,102,0,0" Name="IndentButton" TabIndex="47" VerticalAlignment="Top" Width="152" Click="IndentButton_Click">Indent/UnIndent</Button>
+                     <CheckBox Height="24" HorizontalAlignment="Left" Margin="364.682,75,0,0" Name="ChkSendProcessName" TabIndex="36" VerticalAlignment="Top" Width="128" Checked="chkSendProcessName_Checked" IsChecked="False">Send Process name</CheckBox>
+                     <Label FontFamily="Microsoft Sans Serif" FontSize="11" Height="26" Margin="235.101,105,0,0" Name="Label6" TabIndex="34" VerticalAlignment="Top" HorizontalAlignment="Left" Width="80">Send mode</Label>
+                     <CheckBox Height="24" HorizontalAlignment="Left" Margin="236.682,75,0,0" Name="ChkSendEvents" TabIndex="33" VerticalAlignment="Top" Width="104" Checked="chkSendEvents_Checked" IsChecked="False">Send Events</CheckBox>
+                     <CheckBox Height="24" HorizontalAlignment="Left" Margin="364.682,42.5,0,0" Name="ChkSendInherited" TabIndex="32" VerticalAlignment="Top" Width="104" Checked="chkSendInherited_Checked" IsChecked="False">Send Inherited</CheckBox>
+                     <CheckBox Height="24" HorizontalAlignment="Left" Margin="236.682,42.483,0,0" Name="ChkSendFunctions" TabIndex="31" VerticalAlignment="Top" Width="104" Checked="chkSendFunctions_Checked" IsChecked="False">Send Functions</CheckBox>
+                     <ComboBox Height="21" Margin="340.682,0,178,16" Name="ComboMode" TabIndex="30" VerticalAlignment="Bottom" SelectionChanged="comboMode_SelectionChanged">
+                        <ComboBoxItem>Windows messages</ComboBoxItem>
+                        <ComboBoxItem>Socket messages</ComboBoxItem>
+                        <ComboBoxItem>Socket messages UDP</ComboBoxItem>
+                        <ComboBoxItem>None</ComboBoxItem>
+                     </ComboBox>
+                     <Button Height="23" HorizontalAlignment="Left" Margin="10,22,0,0" Name="ButTrace" TabIndex="28" VerticalAlignment="Top" Width="152" Click="butTrace_Click">Samples traces</Button>
+                     <Label FontFamily="Microsoft Sans Serif" FontSize="11" Height="26.25" Margin="231,10,0,0" Name="Label7" TabIndex="39" VerticalAlignment="Top" HorizontalAlignment="Left" Width="298.821">Samples traces options :</Label>
+                  </Grid>
+               </GroupBox>
+               <Image Margin="0,0,190,134" Name="Image1" Stretch="None" Source="/Vs9_WPF_F3_Demo;component/Logo2.bmp" HorizontalAlignment="Right" Width="131.922" Height="118.876" VerticalAlignment="Bottom" />
+               <Button Height="23" Margin="347.515,188.87,296.485,0" Name="ButSearch" VerticalAlignment="Top" Click="butSearch_Click">Search</Button>
+               <Button Height="23" Margin="454,188.87,0,0" Name="ButFilter" VerticalAlignment="Top" HorizontalAlignment="Left" Width="74.654" Click="butFilter_Click">Filter</Button>
+               <Button Height="23" Margin="0,188.87,85,0" Name="ButClearFilter" VerticalAlignment="Top" HorizontalAlignment="Right" Width="74.654" Click="butClearFilter_Click">Clear Filter</Button>
+            </Grid>
+         </TabItem>
+         <TabItem Header="Other Traces" x:Name="TabOthers">
+            <Grid>
+               <Button Height="27.719" HorizontalAlignment="Left" Margin="22.102,349.199,0,0" Name="ButTail" TabIndex="19" VerticalAlignment="Top" Width="204.335" Click="butTail_Click">Tail demo : Add lines to c:\\log.txt</Button>
+               <Button Height="23" HorizontalAlignment="Left" Margin="22.102,259.214,0,0" Name="ButOldTrace" TabIndex="18" VerticalAlignment="Top" Width="201.898" Click="butOldTrace_Click">OutputDebugString demo</Button>
+               <Button Height="23" Margin="22.102,305.464,0,0" Name="ButEventLog" TabIndex="38" VerticalAlignment="Top" HorizontalAlignment="Left" Width="201.898" Click="butEventLog_Click">Event Log demo</Button>
+               <GroupBox Header="Trace Listener Demo" Height="73.75" Margin="22.102,17.5,0,0" Name="GroupBox1" VerticalAlignment="Top" HorizontalAlignment="Left" Width="606.154">
+                  <Grid>
+                     <Button HorizontalAlignment="Left" Margin="10,10,0,0" Name="ButListenerInit" TabIndex="32" Width="64" Height="23" VerticalAlignment="Top" Click="butListenerInit_Click">Initialize</Button>
+                     <Button Margin="97.674,10,0,0" Name="ButListenerWrite" TabIndex="31" Height="23" VerticalAlignment="Top" HorizontalAlignment="Left" Width="120" Click="butListenerWrite_Click">Trace.Write(\"Hello.\")</Button>
+                     <Button HorizontalAlignment="Left" Margin="241.237,10,0,0" Name="ButListenerWriteLine" TabIndex="33" Width="144" Height="23" VerticalAlignment="Top" Click="butListenerWriteLine_Click">Trace.WriteLine(\"World.\")</Button>
+                  </Grid>
+               </GroupBox>
+               <GroupBox Header="System.Diagnostics" Margin="28.102,113.75,0,0" Name="GroupBox2" Height="113.75" VerticalAlignment="Top" HorizontalAlignment="Left" Width="600.154">
+                  <Grid>
+                     <Label FontFamily="Microsoft Sans Serif" FontSize="11" Height="32" Margin="10,10,32.335,0" Name="Label5" TabIndex="27" VerticalAlignment="Top">TraceTool receive messages on the ODS window when the debugger is not running</Label>
+                     <Button Height="23" Margin="16.335,48.473,0,0" Name="ButDiagnostic" TabIndex="26" VerticalAlignment="Top" Click="butDiagnostic_Click" HorizontalAlignment="Left" Width="166.563">System.Diagnostics.Debug</Button>
+                  </Grid>
+               </GroupBox>
+            </Grid>
+         </TabItem>
+         <TabItem Header="Multi Pages" x:Name="TabPages">
+            <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+               <Button Click="butCloseWin_Click" Height="23" HorizontalAlignment="Left" IsEnabled="False" Margin="10,342,0,0" Name="ButCloseWin" TabIndex="44" VerticalAlignment="Top" Width="168">Close win</Button>
+               <Button Click="butWinLoadXml_Click" Height="24" IsEnabled="False" Margin="218,281,0,0" Name="ButWinLoadXml" TabIndex="43" VerticalAlignment="Top" HorizontalAlignment="Left" Width="160">LoadXml (\"c:\\log2.xml\")</Button>
+               <Button Click="butSaveWinToXml_Click" Height="23" HorizontalAlignment="Left" IsEnabled="False" Margin="10,281,0,0" Name="ButSaveWinToXml" TabIndex="4" VerticalAlignment="Top" Width="168">Save To Xml file (\"c:\\log2.xml\")</Button>
+               <Button Click="butSaveWinToTxt_Click" Height="23" HorizontalAlignment="Left" IsEnabled="False" Margin="10,241,0,0" Name="ButSaveWinToTxt" TabIndex="3" VerticalAlignment="Top" Width="168">Save to text file (\"c:\\log2.txt\")</Button>
+               <Button Click="butClearWin_Click" Height="23" IsEnabled="False" Margin="218,241,0,0" Name="ButClearWin" TabIndex="5" VerticalAlignment="Top" HorizontalAlignment="Left" Width="160">Clear win traces</Button>
+               <Button Click="butDisplayWin_Click" Height="23" HorizontalAlignment="Left" IsEnabled="False" Margin="10,63,0,0" Name="ButDisplayWin" TabIndex="1" VerticalAlignment="Top" Width="184">Display that window on the viewer</Button>
+               <Button Click="butHelloToWintrace_Click" Height="23" HorizontalAlignment="Left" IsEnabled="False" Margin="10,135,0,0" Name="ButHelloToWintrace" TabIndex="2" VerticalAlignment="Top" Width="96">Say Hello</Button>
+               <Button Click="butCreateWinTrace_Click" Height="23" HorizontalAlignment="Left" Margin="10,10,0,0" Name="ButCreateWinTrace" TabIndex="0" VerticalAlignment="Top" Width="184">Create a new window trace</Button>
+               <Button Height="23" Margin="238.101,10,0,0" Name="MulticolBut" TabIndex="47" VerticalAlignment="Top" HorizontalAlignment="Left" Width="152" Click="MulticolBut_Click">MultiColumn test</Button>
+               <Button Height="23" HorizontalAlignment="Left" IsEnabled="False" Margin="10,201.25,0,0" Name="ButSetLocalLog" TabIndex="45" VerticalAlignment="Top" Width="168" Click="butSetLocalLog_Click">set local log file</Button>
+            </Grid>
+         </TabItem>
+         <TabItem Header="Watches" x:Name="TabWatches">
+            <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+               <Button Click="butWinWatchClose_Click" Height="23" HorizontalAlignment="Left" Margin="264.791,194.089,0,0" Name="ButWinWatchClose" TabIndex="8" VerticalAlignment="Top" Width="144">Close Watch window</Button>
+               <Label FontFamily="Microsoft Sans Serif" FontSize="11" Height="26.915" HorizontalAlignment="Left" Margin="9,39.984,0,0" Name="Label3" TabIndex="7" VerticalAlignment="Top" Width="144">Main window watches</Label>
+               <Button Click="butWinWatchDisplay_Click" Height="23" HorizontalAlignment="Left" Margin="265,153.272,0,0" Name="ButWinWatchDisplay" TabIndex="6" VerticalAlignment="Top" Width="144">Display Watch Window</Button>
+               <Button Click="butWinWatchClear_Click" Height="23" HorizontalAlignment="Left" Margin="265,113.288,0,0" Name="ButWinWatchClear" TabIndex="5" VerticalAlignment="Top" Width="144">Clear Watch Window</Button>
+               <Button Click="butWinWatchSend_Click" Height="23" HorizontalAlignment="Left" Margin="265,73.304,0,0" Name="ButWinWatchSend" TabIndex="4" VerticalAlignment="Top" Width="144">Send Watches</Button>
+               <Button Click="butCreateWinWatch_Click" Height="23" HorizontalAlignment="Left" Margin="265,33.32,0,0" Name="ButCreateWinWatch" TabIndex="3" VerticalAlignment="Top" Width="144">Create new WinWatch</Button>
+               <Button Click="butDisplayWatchWindow_Click" Height="23" HorizontalAlignment="Left" Margin="9,153.272,0,0" Name="ButDisplayWatchWindow" TabIndex="2" VerticalAlignment="Top" Width="136">Display Watch Window</Button>
+               <Button Click="butClearWatchWindow_Click" Height="23" HorizontalAlignment="Left" Margin="9,113.288,0,0" Name="ButClearWatchWindow" TabIndex="1" VerticalAlignment="Top" Width="136">Clear Watch Window</Button>
+               <Button Click="butWatch_Click" Height="23" HorizontalAlignment="Left" Margin="9,73.304,0,0" Name="ButWatch" TabIndex="0" VerticalAlignment="Top" Width="136">Send Watches</Button>
+            </Grid>
+         </TabItem>
+         <TabItem Header="Node Operations" x:Name="TabNodesOps">
+            <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+               <Button Click="butShowNode_Click" Height="23" HorizontalAlignment="Left" IsEnabled="False" Margin="105,111,0,0" Name="ButShowNode" TabIndex="5" VerticalAlignment="Top" Width="136">Show()</Button>
+               <Button Click="butSetSelected_Click" Height="23" HorizontalAlignment="Left" IsEnabled="False" Margin="105,39,0,0" Name="ButSetSelected" TabIndex="4" VerticalAlignment="Top" Width="88">SetSelected()</Button>
+               <Button Click="butEnd2_Click" Height="23" HorizontalAlignment="Left" IsEnabled="False" Margin="105,82,0,0" Name="ButEnd2" TabIndex="3" VerticalAlignment="Top" Width="136">AppendLeft ("Done 2")</Button>
+               <Button Click="butstart2_Click" Height="23" HorizontalAlignment="Left" Margin="10,82,0,0" Name="Butstart2" TabIndex="2" VerticalAlignment="Top" Width="75">Start 2...</Button>
+                    <Button Click="butDone1_Click" Height="23" HorizontalAlignment="Left" IsEnabled="False" Margin="105,10,0,0" Name="ButDone1" TabIndex="1" VerticalAlignment="Top" Width="229">ResendRight ("Done 1") + AppendStack() </Button>
+               <Button Click="butStart1_Click" Height="23" HorizontalAlignment="Left" Margin="10,10,0,0" Name="ButStart1" TabIndex="0" VerticalAlignment="Top" Width="75">Start 1...</Button>
+               <Button Height="23" HorizontalAlignment="Left" Margin="105,140,0,0" Name="ButToogleBookmark" VerticalAlignment="Top" Width="136" IsEnabled="False" Click="butToogleBookmark_Click">Toogle Bookmark</Button>
+               <Button Height="23" HorizontalAlignment="Left" Margin="105,169,0,0" Name="ButToogleVisible" VerticalAlignment="Top" Width="136" IsEnabled="False" Click="butToogleVisible_Click">Toogle Visible</Button>
+            </Grid>
+         </TabItem>
+      </TabControl>
+   </DockPanel>
+</Window>

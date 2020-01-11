@@ -1,0 +1,27 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29613.14
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cake.Tracetool", "src\Cake.Tracetool\Cake.Tracetool.csproj", "{0F463BE9-18B3-40F8-B4A6-B737B833F43E}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{C0F9C74C-99E9-437F-9015-ED7A4E90ED75}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{0F463BE9-18B3-40F8-B4A6-B737B833F43E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0F463BE9-18B3-40F8-B4A6-B737B833F43E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0F463BE9-18B3-40F8-B4A6-B737B833F43E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0F463BE9-18B3-40F8-B4A6-B737B833F43E}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {A5F30ABE-9C3F-4932-BCCC-76F8E238A494}
+	EndGlobalSection
+EndGlobal
