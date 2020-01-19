@@ -7,15 +7,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleAppF461", "ConsoleAp
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConsoleAppCore20", "ConsoleAppCore20\ConsoleAppCore20.csproj", "{71765D4F-EA02-4379-B5A3-944DF66D60EC}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Vs2019_Standard_20_Lib", "Vs2017_Standard_20_Lib\Vs2019_Standard_20_Lib.csproj", "{D122D3C3-4E38-49A7-ABD2-C6BDA4F4C7D5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Vs2019_Standard_20_Lib", "Vs2019_Standard_20_Lib\Vs2019_Standard_20_Lib.csproj", "{D122D3C3-4E38-49A7-ABD2-C6BDA4F4C7D5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vs2019_Wpf_Demo", "Vs2017_Wpf_Demo\Vs2019_Wpf_Demo.csproj", "{3FE51DDE-964A-4A9D-AD93-089299B0AAA4}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vs2019_Wpf_Demo", "Vs2019_Wpf_Demo\Vs2019_Wpf_Demo.csproj", "{3FE51DDE-964A-4A9D-AD93-089299B0AAA4}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConsoleAppCore20UsingNugget", "ConsoleAppCore20UsingNugget\ConsoleAppCore20UsingNugget.csproj", "{5367B425-3B41-43E6-B8A7-9048D4D1E834}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleAppF461UsingNugget", "ConsoleAppF461UsingNugget\ConsoleAppF461UsingNugget.csproj", "{EE399446-2C10-4A7C-BF10-2B33AFDDDC1B}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSharpPlugin", "CSharp Plugin\CSharpPlugin.csproj", "{C7ADEA17-8F42-4FA3-9F75-011AAD6D52EA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -829,8 +829,8 @@ begin
 
    if FileExists(strRunPath + 'DotNetWrapper.dll') then
       WrapperFileName := strRunPath + 'DotNetWrapper.dll'
-   else if FileExists(strRunPath + 'plugin\DotNetWrapper.dll') then
-      WrapperFileName := strRunPath + 'plugin\DotNetWrapper.dll'
+   else if FileExists('d:\GitHub\Tracetool\Plugins\DotNetWrapper\Debug\DotNetWrapper.dll') then
+      WrapperFileName := 'd:\GitHub\Tracetool\Plugins\DotNetWrapper\Debug\DotNetWrapper.dll'
    else
       WrapperFileName := 'DotNetWrapper.dll' ;   // try to find it in the current path
 

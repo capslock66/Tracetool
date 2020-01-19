@@ -3,8 +3,8 @@
 	<AppDisplay>
 		<SmallBut Value="true"/>
 		<ApplicationTitle Value="socket: 8090 / 4502,  Http : 85"/>
-		<Left Value="409"/>
-		<Top Value="44"/>
+		<Left Value="72"/>
+		<Top Value="35"/>
 		<Width Value="1374"/><Height Value="946"/>
 		<StayOnTop Value="false"/>
 		<ShowOnstartup Value="true"/><ShowOnMessageReceived Value="false"/>
@@ -15,7 +15,7 @@
 		<ToolbarBookmark Value="true"/>
 		<ToolbarFilter Value="true"/>
 		<HideViewer Value="false"/>
-		<DisableInternalLog Value="true"/>
+		<DisableInternalLog Value="false"/>
 	</AppDisplay>
 	<Framework>
 		<ShowMembers Value="true"/><AutoClear Value="false"/><MaxNode Value="20"/><MinNode Value="10"/>
@@ -26,18 +26,7 @@
 	<Tail><LastPath Value="\\192.168.1.15\pi\Log\"/><AutoClear Value="false"/><MaxNode Value="25000"/><MinNode Value="20000"/><SizeToLoad Value="800"/><ColumnStyle Value="Lines"/><AutoCreateColStyle Value="First"/><TextQualifier Value="None"/><Separator Value="9"/><FirstcolIsTitle Value="false"/><FixedColCount Value="1"/><OpenFromFavorites Value="true"/><VisibleMenu Value="true"/><Favorites><FileName>C:\log.txt</FileName><FileName>C:\Temp\WCESCOMM.LOG</FileName><FileName>D:\TraceTool\TempTraces\CacheODBC_cand.log</FileName><FileName>C:\INSTALL.LOG</FileName><FileName>D:\TraceTool\TempTraces\TracetoolInternalLog.txt</FileName><FileName>D:\TraceTool\TempTraces\test.txt</FileName><FileName>C:\TracetoolInternalLog.txt</FileName><FileName>C:\Windows\System32\LogFiles\Firewall\pfirewall.log</FileName><FileName>\\192.168.1.15\pi\Log\Error.log</FileName><FileName>\\192.168.1.15\pi\Log\Info.log</FileName></Favorites><Trace><FontName Value="MS Sans Serif"/><FontSize Value="8"/><NodeHeight Value="15"/></Trace><Info><FontName Value="MS Sans Serif"/><FontSize Value="8"/></Info></Tail>
 	<TextExport><ProcessName Value="false"/><ThreadId Value="true"/><Time Value="true"/><Col1 Value="true"/><Col2 Value="true"/><Separator Value="9"/><GenerateColumnHeader Value="false"/><TextQualifier Value="None"/><TreeIndentation Value="3"/></TextExport>
 	<Plugins>
-		<!--
 		<JVMEngine Value="C:\Program Files\j2sdk1.4.2_06,JRE\bin\client\jvm.dll"/><JavaPLuginClassPath Value=""/>
-		-->
-		<JVMEngine Value=""/><JavaPLuginClassPath Value=""/>
-		<!--
-		<Plugin>
-			<FileName Value="c:\GitHub\Tracetool\DotNet\VS2019\Standard\Standard 2.0\CSharp Plugin\bin\Debug\CSharpPlugin.dll"></FileName>
-			<ClassName Value=""/>
-			<Kind Value="DotNet">Win32</Kind>
-			<Enabled Value="true"/>
-		</Plugin>
-		-->
-	</Plugins>
+		<Plugin><Enabled Value="true"/><Kind>DotNet</Kind><FileName>D:\GitHub\Tracetool\Plugins\WebsockPlugin\bin\Debug\WebsockPlugin.dll</FileName></Plugin></Plugins>
 	<Watches><Enabled Value="true"/><VisibleMenu Value="true"/><MainWatchesTitle Value="Watches"/><Trace><FontName Value="MS Sans Serif"/><FontSize Value="8"/><NodeHeight Value="18"/></Trace><Info><FontName Value="Tahoma"/><FontSize Value="8"/></Info></Watches>
 </Config>

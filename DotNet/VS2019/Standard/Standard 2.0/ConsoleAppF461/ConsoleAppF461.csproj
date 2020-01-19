@@ -49,7 +49,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Vs2017_Standard_20_Lib\Vs2019_Standard_20_Lib.csproj">
+    <ProjectReference Include="..\Vs2019_Standard_20_Lib\Vs2019_Standard_20_Lib.csproj">
       <Project>{d122d3c3-4e38-49a7-abd2-c6bda4f4c7d5}</Project>
       <Name>Vs2019_Standard_20_Lib</Name>
     </ProjectReference>
