@@ -53,6 +53,20 @@ extern "C"
         //strcat (strException ,  "Inside CppTest") ;
     }
 
+    static Assembly^ MyResolveEventHandler(Object^ sender, ResolveEventArgs^ args)
+    {
+        //Console::WriteLine("Resolving...");
+        //return MyType::typeid->Assembly;
+
+
+        try
+        {
+            Assembly assembly = System.Reflection.Assembly.Load(args.Name);
+            if (assembly != null)
+                return assembly;
+        }
+        catch { // ignore load error }
+    }
     //---------------------------------------------------------------------------------------------------------------
 
     __declspec(dllexport) void __cdecl CheckPlugInFile(unsigned PlugId, char* FileName, char* PlugName, char* strException)
@@ -110,20 +124,13 @@ extern "C"
 
 
 
-
-
-            this.LocalAppDomain = AppDomain.CreateDomain(appDomain, null, domainSetup);
-
             // *** Need a custom resolver so we can load assembly from non current path
-            AppDomain.CurrentDomain.AssemblyResolve += new ResolveEventHandler(CurrentDomain_AssemblyResolve);
+            // https://docs.microsoft.com/en-us/dotnet/api/system.appdomain.assemblyresolve?view=netframework-4.8
 
+            AppDomain::CurrentDomain->AssemblyResolve += gcnew ResolveEventHandler(CurrentDomain_AssemblyResolve);
 
-
-
-
-
-
-            domain = AppDomain::CreateDomain("PlugDomain");
+            //this.LocalAppDomain = AppDomain.CreateDomain(appDomain, null, domainSetup);
+            domain = AppDomain::CreateDomain("PlugDomain",nullptr, domainSetup);
             Singleton::trace("Cpp wrapper : CheckPlugInFile() : domain created " + "\n");
         }
         catch (Exception ^ ex) {
