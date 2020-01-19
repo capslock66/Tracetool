@@ -12,6 +12,7 @@
 #include <string.h>
 #include <fstream>
 #include "DotNetWrapper.h" 
+#include <windows.h>
 
 //------------------------------------------------------------------------------
 
@@ -42,6 +43,10 @@ void strcat(char* dest, String^ source)
 
 extern "C"
 {
+    AppDomain^ LocalAppDomain;
+
+
+
     __declspec(dllexport) void __cdecl test(unsigned PlugId, char* strException)
     {
         Singleton::trace("CppTest()\n");
@@ -81,17 +86,41 @@ extern "C"
 
         try {
             StringBuilder^ sb = gcnew StringBuilder();
-            Guid  guid;
+            GUID  guid;
             CoCreateGuid(&guid);
 
-            sb->Append("PlugDomain")->Append(Guid::NewGuid().ToString().GetHashCode().ToString("x"));
+            sb->Append("PlugDomain");
+            
+            char guidStr[37];
+            sprintf_s(
+                guidStr,
+                "%08lX-%04hX-%04hX-%02hhX%02hhX-%02hhX%02hhX%02hhX%02hhX%02hhX%02hhX",
+                guid.Data1, guid.Data2, guid.Data3,
+                guid.Data4[0], guid.Data4[1], guid.Data4[2], guid.Data4[3],
+                guid.Data4[4], guid.Data4[5], guid.Data4[6], guid.Data4[7]);
+
+            sb->Append(guidStr);
             String^ appDomain = sb->ToString();
 
-            AppDomainSetup ^domainSetup = new AppDomainSetup();
-            domainSetup.ApplicationName = appDomain;
+            AppDomainSetup ^domainSetup = gcnew AppDomainSetup();
+            domainSetup->ApplicationName = appDomain;
 
             // *** Point at current directory
-            domainSetup.ApplicationBase = Environment.CurrentDirectory;   // AppDomain.CurrentDomain.BaseDirectory;                 
+            domainSetup->ApplicationBase = Environment::CurrentDirectory;   // AppDomain.CurrentDomain.BaseDirectory;                 
+
+
+
+
+
+            this.LocalAppDomain = AppDomain.CreateDomain(appDomain, null, domainSetup);
+
+            // *** Need a custom resolver so we can load assembly from non current path
+            AppDomain.CurrentDomain.AssemblyResolve += new ResolveEventHandler(CurrentDomain_AssemblyResolve);
+
+
+
+
+
 
 
             domain = AppDomain::CreateDomain("PlugDomain");
