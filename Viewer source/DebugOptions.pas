@@ -465,6 +465,7 @@ begin
 
    if XMLConfig.General.LastStyleSheet.Attributes           ['Value'] = Null then XMLConfig.General.LastStyleSheet.Value := '' ;
    if XMLConfig.General.LastSavedPath.Attributes            ['Value'] = Null then XMLConfig.General.LastSavedPath.Value := '' ;
+   if XMLConfig.General.InternalLog.Attributes              ['Value'] = Null then XMLConfig.General.InternalLog.Value := 'c:\temp\TracetoolInternalLog.txt' ;
    if XMLConfig.General.SocketPort.Attributes               ['Value'] = Null then XMLConfig.General.SocketPort.Value := 8090 ;
    if XMLConfig.General.SocketPort2.Attributes              ['Value'] = Null then XMLConfig.General.SocketPort2.Value := 4502 ;
    if XMLConfig.General.Udp1.Attributes                     ['Value'] = Null then XMLConfig.General.Udp1.Value := false ;
@@ -636,6 +637,7 @@ end;
 
 procedure TfrmDebugOptions.XmlConfToLocal ;
 begin
+   LowTraceName := XMLConfig.General.InternalLog.Value ;
    TraceConfig.General_ShowSocketWarning         := XMLConfig.General.ShowSocketWarning         .Value ;
    TraceConfig.AppDisplay_ShowOnMessageReceived  := XMLConfig.AppDisplay.ShowOnMessageReceived  .Value ;
    TraceConfig.AppDisplay_FocusToReceivedMessage := XMLConfig.AppDisplay.FocusToReceivedMessage .Value ;

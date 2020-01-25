@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<Config><General><LastSavedPath Value="C:\"/><SocketPort Value="8090"/><ShowSocketWarning Value="false"/><LastStyleSheet Value=""/><HTTPPort Value="85"/><SocketPort2 Value="4502"/><SocketPolicyServer Value="true"/><HttpPolicyServer Value="true"/><Udp1 Value="false"/><Udp2 Value="false"/></General>
+<Config><General><LastSavedPath Value="C:\"/><SocketPort Value="8090"/><ShowSocketWarning Value="false"/><LastStyleSheet Value=""/><HTTPPort Value="85"/><SocketPort2 Value="4502"/><SocketPolicyServer Value="true"/><HttpPolicyServer Value="true"/><Udp1 Value="false"/><Udp2 Value="false"/><InternalLog Value="c:\temp\TracetoolInternalLog.txt"/></General>
 	<AppDisplay>
 		<SmallBut Value="true"/>
 		<ApplicationTitle Value="socket: 8090 / 4502,  Http : 85"/>
