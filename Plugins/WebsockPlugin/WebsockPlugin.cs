@@ -9,8 +9,13 @@
 //
 
 using System;
+using System.Runtime.Serialization;
 using System.Collections.Generic;
 using System.Linq;
+
+using System.Threading;
+using System.Threading.Tasks;
+
 using System.Net;
 using System.Net.Sockets;
 using Fleck;
@@ -19,10 +24,12 @@ using TraceTool;
 namespace CSharpPlugin
 {
     // Websock plugin
-    public class WebsockPlugin : ITracePLugin
+    //[Serializable]
+    public class WebsockPlugin : ITracePLugin //, ISerializable MarshalByRefObject
     {
         WinTrace PlugTraces;
-        TraceNode ActionNodes, BeforeDeleteNodes, Timer;
+        //TraceNode ActionNodes, BeforeDeleteNodes, Timer;
+        
         const string PlugName = "WebsockPlugin";
         private static byte[] _buffToSend;  // buffer to send to viewer
         private static bool _isSocketError;
@@ -33,10 +40,19 @@ namespace CSharpPlugin
         private static int SocketPort;
         private static string _lastError = "";
 
+        //public WebsockPlugin()
+        //{
+        //}
+
+        //protected WebsockPlugin(SerializationInfo serializationInfo, StreamingContext streamingContext)
+        //{
+        //    throw new NotImplementedException();
+        //}
+
         //------------------------------------------------------------------------------
 
         /// <summary>
-        /// Get the plugin name
+        /// ITracePLugin.GetPlugName : Get the plugin name
         /// </summary>
         public string GetPlugName()
         {
@@ -50,6 +66,18 @@ namespace CSharpPlugin
         /// </summary>
         public void Start()
         {
+            //TTrace.Debug.Send("start") ;
+            //TTrace.Flush() ;
+
+            Task.Run(() => { 
+                Thread.Sleep(3000);
+                TTrace.Options.SendMode = SendMode.Socket ;
+                TTrace.Options.SocketHost = "127.0.0.1" ;
+                TTrace.Options.SocketPort = 8090 ;
+                TTrace.Debug.Send("start") ;
+            })  ;
+
+            /*
             // create a window and ask to receive timer, action and onBeforeDelete events
             PlugTraces = new WinTrace("CSHARP", "Websock Plugin");
             PlugTraces.DisplayWin();
@@ -91,8 +119,9 @@ namespace CSharpPlugin
             Timer = node.Send();
 
             PlugTraces.Debug.Send("Websock plugin started");
+            */
 
-
+            /*
             FleckLog.Level = LogLevel.Debug;
             var allSockets = new List<IWebSocketConnection>();
             var server = new WebSocketServer("ws://0.0.0.0:8091");
@@ -122,6 +151,7 @@ namespace CSharpPlugin
                     allSockets.ToList().ForEach(s => s.Send("Echo: " + message));
                 };
             });
+            */
         }
 
         internal static void SendMessageToSocket()
@@ -202,7 +232,8 @@ namespace CSharpPlugin
         /// </summary>
         public void Stop()
         {
-            PlugTraces.Debug.Send("Websock Plugin stopped");
+            TTrace.Debug.Send("Stop");
+            //PlugTraces.Debug.Send("Websock Plugin stopped");
             TTrace.Flush();
         }
 
@@ -221,10 +252,13 @@ namespace CSharpPlugin
         /// </returns>
         public bool OnAction(string WinId, int ResourceId, string NodeId)
         {
-            ActionNodes.Send("OnAction. WinId : " + WinId + ", ResourceId : " + ResourceId + ", current NodeId : " + NodeId);
+
+            //ActionNodes.Send("OnAction. WinId : " + WinId + ", ResourceId : " + ResourceId + ", current NodeId : " + NodeId);
+            TTrace.Debug.Send("OnAction. WinId : " + WinId + ", ResourceId : " + ResourceId + ", current NodeId : " + NodeId);
+            
             // demo : disable close button
-            if (ResourceId == TraceConst.CST_ACTION_CLOSE_WIN)
-                return false;
+            //if (ResourceId == TraceConst.CST_ACTION_CLOSE_WIN)
+            //    return false;
             return true;
         }
 
@@ -242,9 +276,14 @@ namespace CSharpPlugin
         /// </returns>
         public bool OnBeforeDelete(string WinId, string NodeId)
         {
-            BeforeDeleteNodes.ResendRight("last = " + NodeId);
-            if (NodeId == "BeforeDeletes" || NodeId == "ActionsNode" || NodeId == "Timer")
-                return false;
+     
+            TTrace.Debug.Send("onBeforeDelete") ;
+
+
+            //BeforeDeleteNodes.ResendRight("last = " + NodeId);
+            //if (NodeId == "BeforeDeletes" || NodeId == "ActionsNode" || NodeId == "Timer")
+            //    return false;
+
             return true;
         }
 
@@ -256,8 +295,20 @@ namespace CSharpPlugin
         /// </summary>
         public void OnTimer()
         {
-            PlugTraces.SetTextResource(102, "My status " + System.DateTime.Now.ToString());
-            Timer.ResendLeft("Timer " + System.DateTime.Now.ToString());
+
+            TTrace.Debug.Send("OnTimer");
+
+
+
+            //PlugTraces.SetTextResource(102, "My status " + System.DateTime.Now.ToString());
+            //Timer.ResendLeft("Timer " + System.DateTime.Now.ToString());
         }
+
+        //public void GetObjectData(SerializationInfo info, StreamingContext context)
+        //{
+        //    throw new NotImplementedException();
+        //}
+
+
     }
 }

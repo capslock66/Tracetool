@@ -44,7 +44,7 @@ public:
     static void trace(String^ source)
     {
         FileStream^ f;
-        String^ FileToWrite = gcnew String("c:\\TracetoolInternalLog.txt");
+        String^ FileToWrite = gcnew String("c:\\temp\\DotNetWrapperLog.txt");
 
         // check if exist
 
@@ -79,26 +79,26 @@ public delegate bool Delegate_OnAction(String^ WinId, int ResourceId, String^ No
 [Serializable]
 public ref class CppPluginLoader : MarshalByRefObject
 {
-public:
+private :
     /// <summary>
     /// Point to the plugin (type ITracePLugin)
     /// </summary>
-    Object^ Plugin;
+    Object^ _plugin;
 
     /// <summary>
     /// delegate to the differents ITracePLugin functions
     /// </summary>
-    Delegate_GetPlugName^ delegate_GetPlugName;
-    Delegate_Start^ delegate_Start;
-    Delegate_Stop^ delegate_Stop;
-    Delegate_OnAction^ delegate_OnAction;
-    Delegate_OnBeforeDelete^ delegate_OnBeforeDelete;
-    Delegate_OnTimer^ delegate_OnTimer;
+    Delegate_GetPlugName^ _delegate_GetPlugName;
+    Delegate_Start^ _delegate_Start;
+    Delegate_Stop^ _delegate_Stop;
+    Delegate_OnAction^ _delegate_OnAction;
+    Delegate_OnBeforeDelete^ _delegate_OnBeforeDelete;
+    Delegate_OnTimer^ _delegate_OnTimer;
 
     /// <summary>
-    /// Domain that host the plugin
+    /// Domain that host the plugin. Needed to unloaded the domain
     /// </summary>
-    AppDomain^ domain;
+    AppDomain^ _domain;  
 
     /// <summary>
     /// Plugin name
@@ -108,7 +108,65 @@ public:
     /// <summary>
     /// Status of the plugin
     /// </summary>
-    PluginStatus status;
+    PluginStatus _status;
+
+public:
+
+
+    AppDomain^ GetDomain()
+    {
+        return _domain;
+    }
+
+    void SetDomain(AppDomain^ domain)
+    {
+        _domain = domain; 
+    }
+
+    PluginStatus GetStatus()
+    {
+        return _status;
+    }
+
+    void SetStatus(PluginStatus status)
+    {
+        _status = status;
+    }
+    
+    String^ GetPlugName()
+    {
+        return _delegate_GetPlugName();
+    }
+
+    void UnloadPlugin()
+    {
+        _plugin = nullptr;  // Garbage collected
+    }
+
+    void StartPlugin()
+    {
+        _delegate_Start();
+    }
+    
+    void StopPlugin() 
+    { 
+        _delegate_Stop(); 
+    }
+
+    bool OnAction(String^ strWinId, int ResourceId, String^ strNodeId)
+    {
+        return _delegate_OnAction(strWinId, ResourceId, strNodeId);
+    }
+
+    bool OnBeforeDelete(String ^ strWinId, String ^ strNodeId)
+    {
+        return _delegate_OnBeforeDelete(strWinId, strNodeId);
+    }
+
+    void OnTimer()
+    {
+        _delegate_OnTimer;
+    }
 
     //---------------------------------------------------------------------------------------------------------------
 
@@ -118,7 +176,7 @@ public:
     {
         Singleton::trace("CppPluginLoader : CheckPlugInFile : " + FileName + "\n");
         name = gcnew String("");
-        Plugin = nullptr;
+        _plugin = nullptr;
 
         // Load the assembly in the current domain (the one created with AppDomain.CreateDomain() )
         //------------------------------------------------------------------------------------------
@@ -185,17 +243,17 @@ public:
                 {
                     // create an instance of the type and save it in the PluginLoader
                     // Error can occur if the type require parameters.
-                    Plugin = Activator::CreateInstance(OneType);
+                    _plugin = Activator::CreateInstance(OneType);
 
                     // create delegates
                     //--------------------
                     try {
-                        delegate_GetPlugName = (Delegate_GetPlugName^)Delegate::CreateDelegate(Delegate_GetPlugName   ::typeid, Plugin, "GetPlugName");
-                        delegate_Start = (Delegate_Start^)Delegate::CreateDelegate(Delegate_Start         ::typeid, Plugin, "Start");
-                        delegate_Stop = (Delegate_Stop^)Delegate::CreateDelegate(Delegate_Stop          ::typeid, Plugin, "Stop");
-                        delegate_OnTimer = (Delegate_OnTimer^)Delegate::CreateDelegate(Delegate_OnTimer       ::typeid, Plugin, "OnTimer");
-                        delegate_OnBeforeDelete = (Delegate_OnBeforeDelete^)Delegate::CreateDelegate(Delegate_OnBeforeDelete::typeid, Plugin, "OnBeforeDelete");
-                        delegate_OnAction = (Delegate_OnAction^)Delegate::CreateDelegate(Delegate_OnAction      ::typeid, Plugin, "OnAction");
+                        _delegate_GetPlugName = (Delegate_GetPlugName^)Delegate::CreateDelegate(Delegate_GetPlugName   ::typeid, _plugin, "GetPlugName");
+                        _delegate_Start = (Delegate_Start^)Delegate::CreateDelegate(Delegate_Start         ::typeid, _plugin, "Start");
+                        _delegate_Stop = (Delegate_Stop^)Delegate::CreateDelegate(Delegate_Stop          ::typeid, _plugin, "Stop");
+                        _delegate_OnTimer = (Delegate_OnTimer^)Delegate::CreateDelegate(Delegate_OnTimer       ::typeid, _plugin, "OnTimer");
+                        _delegate_OnBeforeDelete = (Delegate_OnBeforeDelete^)Delegate::CreateDelegate(Delegate_OnBeforeDelete::typeid, _plugin, "OnBeforeDelete");
+                        _delegate_OnAction = (Delegate_OnAction^)Delegate::CreateDelegate(Delegate_OnAction      ::typeid, _plugin, "OnAction");
                     }
                     catch (Exception ^ ex) {
                         Singleton::trace("CppPluginLoader : CheckPlugInFile : " + FileName + "\n");
@@ -206,7 +264,7 @@ public:
                     // Get the plugin name
                     // -------------------
                     try {
-                        name = delegate_GetPlugName();
+                        name = _delegate_GetPlugName();
                     }
                     catch (Exception ^ ex) {
                         Singleton::trace("CppPluginLoader : CheckPlugInFile : " + FileName + "\n");
@@ -229,9 +287,10 @@ public:
         Singleton::trace("CppPluginLoader : CheckPlugInFile : " + FileName + "\n" + sb->ToString() + "\n");
         throw gcnew Exception(sb->ToString());
     }  // CheckPlugInFile
+
 };    // CppPluginLoader class
 
-//}        // namespace TraceTool
+//}   // namespace TraceTool
 
 //namespace DotNetWrapper2020 {
 //}

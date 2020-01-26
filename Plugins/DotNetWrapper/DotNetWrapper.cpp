@@ -12,7 +12,7 @@
 #include <string.h>
 #include <fstream>
 #include "DotNetWrapper.h" 
-#include <windows.h>
+//#include <windows.h>
 
 //------------------------------------------------------------------------------
 
@@ -43,7 +43,7 @@ void strcat(char* dest, String^ source)
 
 extern "C"
 {
-    AppDomain^ LocalAppDomain;
+    //AppDomain^ LocalAppDomain;
 
 
 
@@ -53,27 +53,27 @@ extern "C"
         //strcat (strException ,  "Inside CppTest") ;
     }
 
-    static Assembly^ MyResolveEventHandler(Object^ sender, ResolveEventArgs^ args)
-    {
-        //Console::WriteLine("Resolving...");
-        //return MyType::typeid->Assembly;
+    //static Assembly^ MyResolveEventHandler(Object^ sender, ResolveEventArgs^ args)
+    //{
+    //    //Console::WriteLine("Resolving...");
+    //    //return MyType::typeid->Assembly;
 
 
-        try
-        {
-            Assembly assembly = System.Reflection.Assembly.Load(args.Name);
-            if (assembly != null)
-                return assembly;
-        }
-        catch { // ignore load error }
-    }
+    //    try
+    //    {
+    //        Assembly assembly = System.Reflection.Assembly.Load(args.Name);
+    //        if (assembly != null)
+    //            return assembly;
+    //    }
+    //    catch { // ignore load error }
+    //}
     //---------------------------------------------------------------------------------------------------------------
 
     __declspec(dllexport) void __cdecl CheckPlugInFile(unsigned PlugId, char* FileName, char* PlugName, char* strException)
     {
         System::Object^ key = PlugId;
         String^ strFileName = gcnew String(FileName);
-        AppDomainSetup^ domainSetup;
+        //AppDomainSetup^ domainSetup;
         AppDomain^ domain;
 
         CppPluginLoader^ Loader;
@@ -99,38 +99,38 @@ extern "C"
         //-------------------------------
 
         try {
-            StringBuilder^ sb = gcnew StringBuilder();
-            GUID  guid;
-            CoCreateGuid(&guid);
+            //StringBuilder^ sb = gcnew StringBuilder();
+            //GUID  guid;
+            //CoCreateGuid(&guid);
 
-            sb->Append("PlugDomain");
-            
-            char guidStr[37];
-            sprintf_s(
-                guidStr,
-                "%08lX-%04hX-%04hX-%02hhX%02hhX-%02hhX%02hhX%02hhX%02hhX%02hhX%02hhX",
-                guid.Data1, guid.Data2, guid.Data3,
-                guid.Data4[0], guid.Data4[1], guid.Data4[2], guid.Data4[3],
-                guid.Data4[4], guid.Data4[5], guid.Data4[6], guid.Data4[7]);
+            //sb->Append("PlugDomain");
+            //
+            //char guidStr[37];
+            //sprintf_s(
+            //    guidStr,
+            //    "%08lX-%04hX-%04hX-%02hhX%02hhX-%02hhX%02hhX%02hhX%02hhX%02hhX%02hhX",
+            //    guid.Data1, guid.Data2, guid.Data3,
+            //    guid.Data4[0], guid.Data4[1], guid.Data4[2], guid.Data4[3],
+            //    guid.Data4[4], guid.Data4[5], guid.Data4[6], guid.Data4[7]);
 
-            sb->Append(guidStr);
-            String^ appDomain = sb->ToString();
+            //sb->Append(guidStr);
+            //String^ appDomain = sb->ToString();
 
-            AppDomainSetup ^domainSetup = gcnew AppDomainSetup();
-            domainSetup->ApplicationName = appDomain;
+            //AppDomainSetup ^domainSetup = gcnew AppDomainSetup();
+            //domainSetup->ApplicationName = appDomain;
 
-            // *** Point at current directory
-            domainSetup->ApplicationBase = Environment::CurrentDirectory;   // AppDomain.CurrentDomain.BaseDirectory;                 
+            //// *** Point at current directory
+            //domainSetup->ApplicationBase = Environment::CurrentDirectory;   // AppDomain.CurrentDomain.BaseDirectory;                 
 
 
 
             // *** Need a custom resolver so we can load assembly from non current path
             // https://docs.microsoft.com/en-us/dotnet/api/system.appdomain.assemblyresolve?view=netframework-4.8
 
-            AppDomain::CurrentDomain->AssemblyResolve += gcnew ResolveEventHandler(CurrentDomain_AssemblyResolve);
+            //AppDomain::CurrentDomain->AssemblyResolve += gcnew ResolveEventHandler(CurrentDomain_AssemblyResolve);
 
             //this.LocalAppDomain = AppDomain.CreateDomain(appDomain, null, domainSetup);
-            domain = AppDomain::CreateDomain("PlugDomain",nullptr, domainSetup);
+            domain = AppDomain::CreateDomain("PlugDomain"); // , nullptr, domainSetup);
             Singleton::trace("Cpp wrapper : CheckPlugInFile() : domain created " + "\n");
         }
         catch (Exception ^ ex) {
@@ -162,7 +162,7 @@ extern "C"
         }
 
         //Singleton::trace ("Cpp wrapper : CheckPlugInFile : domain->CreateInstanceFromAndUnwrap ok\n") ;
-        Loader->domain = domain;
+        Loader->SetDomain(domain);
 
         // call Loader.CheckPlugInFile
         //----------------------------
@@ -178,7 +178,24 @@ extern "C"
             return;
         }
 
-        if (Loader->Plugin == nullptr) {
+        try {
+            strcat(PlugName, Loader->GetPlugName());
+        }
+        catch (Exception ^ ex) {
+            Singleton::trace("Cpp wrapper : get loader name exception : " + ex->Message + "\n");
+        }
+        
+        /*
+        Object^ Plugin = nullptr;
+        try {
+            Object^ Plugin = Loader->Plugin;
+        }
+        catch (Exception ^ ex) {
+            Singleton::trace("Cpp wrapper : get plugin exception : " + ex->Message + "\n");
+        }
+
+
+        if (Plugin == nullptr) {
             Singleton::trace("Cpp wrapper : CheckPlugInFile() : FileName : " + strFileName);
             Singleton::trace(" don't contain class implementing TraceTool.ITracePLugin interface\n");
             strcat(strException, "Cpp wrapper : CheckPlugInFile : ");
@@ -189,8 +206,21 @@ extern "C"
             return;
         }
 
-        Loader->status = Loaded; //PluginStatus::Loaded ;
-        strcat(PlugName, Loader->name);
+        */
+        
+        Loader->SetStatus(Loaded); //PluginStatus::Loaded ;
+
+        try
+        {
+            strcat(PlugName, Loader->GetPlugName());
+        }
+        catch (Exception ^ ex) 
+        {
+            Singleton::trace("Cpp wrapper : CheckPlugInFile() : call to loader GetPlugName exception : " + ex->Message + "\n");
+        }
+
+
+        //strcat(PlugName, Loader->name);
 
         // add to list
         // --------------
@@ -223,7 +253,7 @@ extern "C"
         // get plugin 
         CppPluginLoader^ Loader = safe_cast<CppPluginLoader^> (Singleton::PlugList->default[key]); //  get_Item(key)) ;
 
-        if (Loader->status == Started) {
+        if (Loader->GetStatus() == Started) {
             StringBuilder^ sb = gcnew StringBuilder();
             sb->Append("Cpp wrapper : Start() : PLugin ")->Append(key)->Append(" is already started.");
             strcat(strException, sb->ToString());
@@ -231,7 +261,7 @@ extern "C"
             return;
         }
 
-        if (Loader->status != Loaded) {
+        if (Loader->GetStatus() != Loaded) {
             StringBuilder^ sb = gcnew StringBuilder();
             sb->Append("Cpp wrapper.Start() : PLugin ")->Append(key)->Append(" is not loaded.");
             strcat(strException, sb->ToString());
@@ -240,15 +270,20 @@ extern "C"
         }
 
         try {
-            Loader->delegate_Start();
+            // don't call directly delegate_Start() on 
+            //Loader->delegate_Start();  
+            
+            Singleton::trace("Cpp wrapper : Start() : before start plugin\n");
+            Loader->StartPlugin(); // delegate_Start();
+            Singleton::trace("Cpp wrapper : Start() : after start plugin\n");
         }
         catch (Exception ^ ex) {
-            strcat(strException, ex->Message);
             Singleton::trace("Cpp wrapper : Start() : Loader->delegate_Start() exception : " + ex->Message + "\n");
+            strcat(strException, ex->Message);
             return;
         }
 
-        Loader->status = Started;
+        Loader->SetStatus(Started);
         strcat(strException, "OK");
         //Singleton::trace ("Cpp wrapper : Start() ended with no error\n") ;
     }
@@ -276,7 +311,7 @@ extern "C"
         // get plugin 
         CppPluginLoader^ Loader = safe_cast<CppPluginLoader^> (Singleton::PlugList->default[key]); //  get_Item(key)) ;
 
-        if (Loader->status != Started) {
+        if (Loader->GetStatus() != Started) {
             StringBuilder^ sb = gcnew StringBuilder();
             sb->Append("Cpp wrapper : Stop() : PLugin ")->Append(key)->Append(" is not started.");
             strcat(strException, sb->ToString());
@@ -285,15 +320,17 @@ extern "C"
         }
 
         try {
-            Loader->delegate_Stop();
+            Singleton::trace("Cpp wrapper : Stop() : before stop plugin\n");
+            Loader->StopPlugin();
+            Singleton::trace("Cpp wrapper : Stop() : after stop plugin\n");
         }
         catch (Exception ^ ex) {
-            strcat(strException, ex->Message);
             Singleton::trace("Cpp wrapper : Stop() : delegate_Stop exception : " + ex->Message + "\n");
+            strcat(strException, ex->Message);
             return;
         }
 
-        Loader->status = Loaded;
+        Loader->SetStatus(Loaded);
         strcat(strException, "OK");
     }
 
@@ -304,7 +341,11 @@ extern "C"
         System::Object^ key = PlugId;
         String^ strWinId = gcnew String(WinId);
         String^ strNodeId = gcnew String(NodeId);
-        System::Object^ ResId = ResourceId;
+        
+        
+        //System::Object^ ResId = ResourceId;
+
+
 
         //Singleton::trace ("Cpp wrapper : OnAction()\n") ;
         //Singleton::trace (" ->PlugId : " + key->ToString() + "\n") ;
@@ -326,7 +367,7 @@ extern "C"
         // get plugin 
         CppPluginLoader^ Loader = safe_cast<CppPluginLoader^> (Singleton::PlugList->default[key]); //  get_Item(key)) ;
 
-        if (Loader->status != Started) {
+        if (Loader->GetStatus() != Started) {
             StringBuilder^ sb = gcnew StringBuilder();
             sb->Append("Dot net wrapper.OnAction() : PLugin ")->Append(key)->Append(" is not started.");
             strcat(strException, sb->ToString());
@@ -336,7 +377,9 @@ extern "C"
 
         int result = true;
         try {
-            result = Loader->delegate_OnAction(strWinId, ResourceId, strNodeId);
+            Singleton::trace("Cpp wrapper : OnAction() : before call action\n");
+            result = Loader->OnAction(strWinId, ResourceId, strNodeId);
+            Singleton::trace("Cpp wrapper : OnAction() : after call action\n");
         }
         catch (Exception ^ ex) {
             strcat(strException, ex->Message);
@@ -373,7 +416,7 @@ extern "C"
         // get plugin 
         CppPluginLoader^ Loader = safe_cast<CppPluginLoader^> (Singleton::PlugList->default[key]); //  get_Item(key)) ;
 
-        if (Loader->status != Started) {
+        if (Loader->GetStatus() != Started) {
             StringBuilder^ sb = gcnew StringBuilder();
             sb->Append("Cpp wrapper.OnBeforeDelete() : PLugin ")->Append(key)->Append(" is not started.");
             strcat(strException, sb->ToString());
@@ -382,11 +425,13 @@ extern "C"
         }
 
         try {
-            return Loader->delegate_OnBeforeDelete(strWinId, strNodeId);
+            Singleton::trace("Cpp wrapper : OnBeforeDelete() : before call delete\n");
+            return Loader->OnBeforeDelete(strWinId, strNodeId);
+            Singleton::trace("Cpp wrapper : OnBeforeDelete() : after call delete\n");
         }
         catch (Exception ^ ex) {
-            strcat(strException, ex->Message);
             Singleton::trace("Cpp wrapper : OnBeforeDelete() : delegate_OnBeforeDelete exception : " + ex->Message + "\n");
+            strcat(strException, ex->Message);
             return true;
         }
         strcat(strException, "OK");
@@ -414,7 +459,7 @@ extern "C"
         // get plugin 
         CppPluginLoader^ Loader = safe_cast<CppPluginLoader^> (Singleton::PlugList->default[key]); //  get_Item(key)) ;
 
-        if (Loader->status != Started) {
+        if (Loader->GetStatus() != Started) {
             StringBuilder^ sb = gcnew StringBuilder();
             sb->Append("Cpp wrapper : OnTimer() : PLugin ")->Append(key)->Append(" is not started.");
             strcat(strException, sb->ToString());
@@ -423,7 +468,9 @@ extern "C"
         }
 
         try {
-            Loader->delegate_OnTimer();
+            Singleton::trace("Cpp wrapper : OnTimer() : before call OnTimer\n");
+            Loader->OnTimer();
+            Singleton::trace("Cpp wrapper : OnTimer() : after call OnTimer\n");
         }
         catch (Exception ^ ex) {
             strcat(strException, ex->Message);
@@ -456,9 +503,11 @@ extern "C"
         CppPluginLoader^ Loader = safe_cast<CppPluginLoader^> (Singleton::PlugList->default[key]); //  get_Item(key)) ;
 
         // stop before unload
-        if (Loader->status == Started) {
+        if (Loader->GetStatus() == Started) {
             try {
-                Loader->delegate_Stop();
+                Singleton::trace("Cpp wrapper : Unload() : before call Unload\n");
+                Loader->StopPlugin();
+                Singleton::trace("Cpp wrapper : Unload() : after call OnTimer\n");
             }
             catch (Exception ^ ex) {
                 strcat(strException, ex->Message);
@@ -467,7 +516,7 @@ extern "C"
             }
         }
 
-        if (Loader->status != Loaded) {
+        if (Loader->GetStatus() != Loaded) {
             StringBuilder^ sb = gcnew StringBuilder();
             sb->Append("Cpp wrapper : Unload() : PLugin ")->Append(key)->Append(" is not loaded'.");
             strcat(strException, sb->ToString());
@@ -477,7 +526,8 @@ extern "C"
 
         // unload domain
         try {
-            AppDomain::Unload(Loader->domain);
+            AppDomain^ domain = Loader->GetDomain();
+            AppDomain::Unload(domain);
         }
         catch (Exception ^ ex) {
             strcat(strException, ex->Message);
@@ -485,9 +535,9 @@ extern "C"
             Singleton::trace("Cpp wrapper : Unload() : Unload domain exception : " + ex->Message + "\n");
             return;
         }
-        Loader->Plugin = nullptr;
-        Loader->domain = nullptr;
-        Loader->status = Unloaded;
+        Loader->UnloadPlugin();
+        Loader->SetDomain(nullptr);
+        Loader->SetStatus (Unloaded);
         Singleton::PlugList->Remove(key);
 
         Loader = nullptr;
