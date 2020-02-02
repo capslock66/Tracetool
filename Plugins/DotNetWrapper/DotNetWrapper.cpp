@@ -79,7 +79,7 @@ extern "C"
         CppPluginLoader^ Loader;
         String^ Path;
 
-        Singleton::trace ("Cpp wrapper : CheckPlugInFile(PLugin:<" + key + ">,FileName:<" + strFileName + ">\n");
+        Singleton::trace ("wrapper : CheckPlugInFile(PLugin:<" + key + ">,FileName:<" + strFileName + ">\n");
         Singleton::trace (" ->PlugId : " + key->ToString() + "\n") ;
         Singleton::trace (" ->FileName : " + strFileName + "\n") ;
         Singleton::trace (" ->PlugName ...\n") ;
@@ -87,10 +87,10 @@ extern "C"
 
         if (Singleton::PlugList->ContainsKey(key) == true)
         {
-            Singleton::trace("Cpp wrapper : CheckPlugInFile() : FileName : " + strFileName + "\n");
-            Singleton::trace("Cpp wrapper : CheckPlugInFile() : PLugin " + key + " is already loaded.\n");
+            Singleton::trace("wrapper : CheckPlugInFile : FileName : " + strFileName + "\n");
+            Singleton::trace("wrapper : CheckPlugInFile : PLugin " + key + " is already loaded.\n");
             StringBuilder^ sb = gcnew StringBuilder();
-            sb->Append("Cpp wrapper : CheckPlugInFile() : PLugin ")->Append(key)->Append(" is already loaded.");
+            sb->Append("wrapper : CheckPlugInFile : PLugin ")->Append(key)->Append(" is already loaded.");
             strcat(strException, sb->ToString());
             return;
         }
@@ -131,11 +131,11 @@ extern "C"
 
             //this.LocalAppDomain = AppDomain.CreateDomain(appDomain, null, domainSetup);
             domain = AppDomain::CreateDomain("PlugDomain"); // , nullptr, domainSetup);
-            Singleton::trace("Cpp wrapper : CheckPlugInFile() : domain created " + "\n");
+            Singleton::trace("wrapper : CheckPlugInFile : domain created " + "\n");
         }
         catch (Exception ^ ex) {
-            Singleton::trace("Cpp wrapper : CheckPlugInFile() : FileName : " + strFileName + "\n");
-            Singleton::trace("Cpp wrapper : CheckPlugInFile() : CreateDomain exception : " + ex->Message + "\n");
+            Singleton::trace("wrapper : CheckPlugInFile : FileName : " + strFileName + "\n");
+            Singleton::trace("wrapper : CheckPlugInFile : CreateDomain exception : " + ex->Message + "\n");
             strcat(strException, ex->Message);
             return;
         }
@@ -147,21 +147,21 @@ extern "C"
 
         try {
             Path = Assembly::GetAssembly(CppPluginLoader::typeid)->Location;
-            Singleton::trace("Cpp wrapper : CheckPlugInFile() : Path : " + Path + "\n");
+            Singleton::trace("wrapper : CheckPlugInFile : Path : " + Path + "\n");
 
             //Loader = safe_cast<CppPluginLoader^>(domain->CreateInstanceFromAndUnwrap(Path, CppPluginLoader::typeid->FullName));  // "CppPluginLoader"
             
             Loader = (CppPluginLoader^)(domain->CreateInstanceFromAndUnwrap(Path, CppPluginLoader::typeid->FullName));  // "CppPluginLoader"
-            Singleton::trace("Cpp wrapper : CheckPlugInFile() : Loader created " + "\n");
+            Singleton::trace("wrapper : CheckPlugInFile : Loader created " + "\n");
         }
         catch (Exception ^ ex) {
-            Singleton::trace("Cpp wrapper : CheckPlugInFile() : FileName : " + strFileName + "\n");
-            Singleton::trace("Cpp wrapper : CheckPlugInFile() : CreateInstanceFromAndUnwrap exception : " + ex->Message + "\n");
+            Singleton::trace("wrapper : CheckPlugInFile : FileName : " + strFileName + "\n");
+            Singleton::trace("wrapper : CheckPlugInFile : CreateInstanceFromAndUnwrap exception : " + ex->Message + "\n");
             strcat(strException, ex->Message);
             return;
         }
 
-        //Singleton::trace ("Cpp wrapper : CheckPlugInFile : domain->CreateInstanceFromAndUnwrap ok\n") ;
+        //Singleton::trace ("wrapper : CheckPlugInFile : domain->CreateInstanceFromAndUnwrap ok\n") ;
         Loader->SetDomain(domain);
 
         // call Loader.CheckPlugInFile
@@ -170,8 +170,8 @@ extern "C"
             Loader->CheckPlugInFile(strFileName);
         }
         catch (Exception ^ ex) {
-            Singleton::trace("Cpp wrapper : CheckPlugInFile() : FileName : " + strFileName + "\n");
-            Singleton::trace("Cpp wrapper : Loader->CheckPlugInFile exception : " + ex->Message + "\n");
+            Singleton::trace("wrapper : CheckPlugInFile : FileName : " + strFileName + "\n");
+            Singleton::trace("wrapper : Loader->CheckPlugInFile exception : " + ex->Message + "\n");
             strcat(strException, ex->Message);
             Loader = nullptr;
             AppDomain::Unload(domain);
@@ -182,7 +182,7 @@ extern "C"
             strcat(PlugName, Loader->GetPlugName());
         }
         catch (Exception ^ ex) {
-            Singleton::trace("Cpp wrapper : get loader name exception : " + ex->Message + "\n");
+            Singleton::trace("wrapper : get loader name exception : " + ex->Message + "\n");
         }
         
 
@@ -193,14 +193,14 @@ extern "C"
             Object^ Plugin = Loader->Plugin;
         }
         catch (Exception ^ ex) {
-            Singleton::trace("Cpp wrapper : get plugin exception : " + ex->Message + "\n");
+            Singleton::trace("wrapper : get plugin exception : " + ex->Message + "\n");
         }
 
 
         if (Plugin == nullptr) {
-            Singleton::trace("Cpp wrapper : CheckPlugInFile() : FileName : " + strFileName);
+            Singleton::trace("wrapper : CheckPlugInFile : FileName : " + strFileName);
             Singleton::trace(" don't contain class implementing TraceTool.ITracePLugin interface\n");
-            strcat(strException, "Cpp wrapper : CheckPlugInFile : ");
+            strcat(strException, "wrapper : CheckPlugInFile : ");
             strcat(strException, strFileName);
             strcat(strException, " don't contain class implementing TraceTool.ITracePLugin interface");
             Loader = nullptr;
@@ -219,7 +219,7 @@ extern "C"
         // --------------
         Singleton::PlugList->Add(key, Loader);
 
-        //Singleton::trace ("Cpp wrapper : CheckPlugInFile : done\n" ) ;
+        //Singleton::trace ("wrapper : CheckPlugInFile : done\n" ) ;
         strcat(strException, "OK");
     }
 
@@ -229,7 +229,7 @@ extern "C"
     {
         System::Object^ key = PlugId;
 
-        //Singleton::trace ("Cpp wrapper : Start()\n") ;
+        //Singleton::trace ("wrapper : Start\n") ;
         //Singleton::trace (" ->PlugId " + key->ToString() + "\n") ;
         //Singleton::trace (" ->strException\n") ;
 
@@ -237,7 +237,7 @@ extern "C"
         if (Singleton::PlugList->ContainsKey(key) == false)
         {
             StringBuilder^ sb = gcnew StringBuilder();
-            sb->Append("Cpp wrapper : Start() : PLugin ")->Append(key)->Append(" is unknow.");
+            sb->Append("wrapper : Start : PLugin ")->Append(key)->Append(" is unknow.");
             strcat(strException, sb->ToString());
             Singleton::trace(sb->ToString() + "\n");
             return;
@@ -248,7 +248,7 @@ extern "C"
 
         if (Loader->GetStatus() == Started) {
             StringBuilder^ sb = gcnew StringBuilder();
-            sb->Append("Cpp wrapper : Start() : PLugin ")->Append(key)->Append(" is already started.");
+            sb->Append("wrapper : Start : PLugin ")->Append(key)->Append(" is already started.");
             strcat(strException, sb->ToString());
             Singleton::trace(sb->ToString() + "\n");
             return;
@@ -256,29 +256,28 @@ extern "C"
 
         if (Loader->GetStatus() != Loaded) {
             StringBuilder^ sb = gcnew StringBuilder();
-            sb->Append("Cpp wrapper.Start() : PLugin ")->Append(key)->Append(" is not loaded.");
+            sb->Append("Cpp wrapper.Start : PLugin ")->Append(key)->Append(" is not loaded.");
             strcat(strException, sb->ToString());
             Singleton::trace(sb->ToString() + "\n");
             return;
         }
 
         try {
-            // don't call directly delegate_Start() on 
+            // don't call directly delegate_Start() 
             //Loader->delegate_Start();  
             
-            Singleton::trace("Cpp wrapper : Start() : before start plugin\n");
-            Loader->StartPlugin(); // delegate_Start();
-            Singleton::trace("Cpp wrapper : Start() : after start plugin\n");
+            Singleton::trace("wrapper : Start : begin\n");
+            Loader->StartPlugin(); 
+            Singleton::trace("wrapper : Start : end\n");
         }
         catch (Exception ^ ex) {
-            Singleton::trace("Cpp wrapper : Start() : Loader->delegate_Start() exception : " + ex->Message + "\n");
+            Singleton::trace("wrapper : Start : Loader->StartPlugin() exception : " + ex->Message + "\n");
             strcat(strException, ex->Message);
             return;
         }
 
         Loader->SetStatus(Started);
         strcat(strException, "OK");
-        //Singleton::trace ("Cpp wrapper : Start() ended with no error\n") ;
     }
 
     //------------------------------------------------------------------------------
@@ -287,7 +286,7 @@ extern "C"
     {
         System::Object^ key = PlugId;
 
-        //Singleton::trace ("Cpp wrapper : Stop()\n") ;
+        //Singleton::trace ("wrapper : Stop\n") ;
         //Singleton::trace (" ->PlugId " + key->ToString() + "\n") ;
         //Singleton::trace (" ->strException\n") ;
 
@@ -295,7 +294,7 @@ extern "C"
         if (Singleton::PlugList->ContainsKey(key) == false)
         {
             StringBuilder^ sb = gcnew StringBuilder();
-            sb->Append("Cpp wrapper : Stop() : PLugin ")->Append(key)->Append(" is unknow.");
+            sb->Append("wrapper : Stop : PLugin ")->Append(key)->Append(" is unknow.");
             strcat(strException, sb->ToString());
             Singleton::trace(sb->ToString() + "\n");
             return;
@@ -306,19 +305,19 @@ extern "C"
 
         if (Loader->GetStatus() != Started) {
             StringBuilder^ sb = gcnew StringBuilder();
-            sb->Append("Cpp wrapper : Stop() : PLugin ")->Append(key)->Append(" is not started.");
+            sb->Append("wrapper : Stop : PLugin ")->Append(key)->Append(" is not started.");
             strcat(strException, sb->ToString());
             Singleton::trace(sb->ToString() + "\n");
             return;
         }
 
         try {
-            Singleton::trace("Cpp wrapper : Stop() : before stop plugin\n");
+            Singleton::trace("wrapper : Stop : before stop plugin\n");
             Loader->StopPlugin();
-            Singleton::trace("Cpp wrapper : Stop() : after stop plugin\n");
+            Singleton::trace("wrapper : Stop : after stop plugin, update status\n");
         }
         catch (Exception ^ ex) {
-            Singleton::trace("Cpp wrapper : Stop() : delegate_Stop exception : " + ex->Message + "\n");
+            Singleton::trace("wrapper : Stop() : delegate_Stop exception : " + ex->Message + "\n");
             strcat(strException, ex->Message);
             return;
         }
@@ -340,7 +339,7 @@ extern "C"
 
 
 
-        //Singleton::trace ("Cpp wrapper : OnAction()\n") ;
+        //Singleton::trace ("wrapper : OnAction()\n") ;
         //Singleton::trace (" ->PlugId : " + key->ToString() + "\n") ;
         //Singleton::trace (" ->WinId : " + strWinId + "\n") ;
         //Singleton::trace (" ->ResourceId : " + ResId->ToString() + "\n") ;
@@ -351,7 +350,7 @@ extern "C"
         if (Singleton::PlugList->ContainsKey(key) == false)
         {
             StringBuilder^ sb = gcnew StringBuilder();
-            sb->Append("Cpp wrapper : OnAction : PLugin ")->Append(key)->Append(" is unknow.");
+            sb->Append("wrapper : OnAction : PLugin ")->Append(key)->Append(" is unknow.");
             strcat(strException, sb->ToString());
             Singleton::trace(sb->ToString() + "\n");
             return true;
@@ -362,7 +361,7 @@ extern "C"
 
         if (Loader->GetStatus() != Started) {
             StringBuilder^ sb = gcnew StringBuilder();
-            sb->Append("Dot net wrapper.OnAction() : PLugin ")->Append(key)->Append(" is not started.");
+            sb->Append("Dot net wrapper.OnAction : PLugin ")->Append(key)->Append(" is not started.");
             strcat(strException, sb->ToString());
             Singleton::trace(sb->ToString() + "\n");
             return true;
@@ -370,13 +369,13 @@ extern "C"
 
         int result = true;
         try {
-            Singleton::trace("Cpp wrapper : OnAction() : before call action\n");
+            Singleton::trace("wrapper : OnAction : before call action\n");
             result = Loader->OnAction(strWinId, ResourceId, strNodeId);
-            Singleton::trace("Cpp wrapper : OnAction() : after call action\n");
+            Singleton::trace("wrapper : OnAction : after call action\n");
         }
         catch (Exception ^ ex) {
             strcat(strException, ex->Message);
-            Singleton::trace("Cpp wrapper : OnAction() : delegate_OnAction exception : " + ex->Message + "\n");
+            Singleton::trace("wrapper : OnAction : delegate_OnAction exception : " + ex->Message + "\n");
             return true;
         }
         strcat(strException, "OK");
@@ -390,7 +389,7 @@ extern "C"
         String^ strWinId = gcnew String(WinId);
         String^ strNodeId = gcnew String(NodeId);
 
-        //Singleton::trace ("Cpp wrapper : OnBeforeDelete()\n") ;
+        //Singleton::trace ("wrapper : OnBeforeDelete\n") ;
         //Singleton::trace (" ->PlugId : " + key->ToString() + "\n") ;
         //Singleton::trace (" ->WinId : "  + strWinId + "\n") ;
         //Singleton::trace (" ->NodeId : " + strNodeId + "\n") ;
@@ -400,7 +399,7 @@ extern "C"
         if (Singleton::PlugList->ContainsKey(key) == false)
         {
             StringBuilder^ sb = gcnew StringBuilder();
-            sb->Append("Cpp wrapper : OnBeforeDelete () : PLugin ")->Append(key)->Append(" is unknow.");
+            sb->Append("wrapper : OnBeforeDelete : PLugin ")->Append(key)->Append(" is unknow.");
             strcat(strException, sb->ToString());
             Singleton::trace(sb->ToString() + "\n");
             return true;
@@ -411,19 +410,19 @@ extern "C"
 
         if (Loader->GetStatus() != Started) {
             StringBuilder^ sb = gcnew StringBuilder();
-            sb->Append("Cpp wrapper.OnBeforeDelete() : PLugin ")->Append(key)->Append(" is not started.");
+            sb->Append("Cpp wrapper.OnBeforeDelete : PLugin ")->Append(key)->Append(" is not started.");
             strcat(strException, sb->ToString());
             Singleton::trace(sb->ToString() + "\n");
             return true;
         }
 
         try {
-            Singleton::trace("Cpp wrapper : OnBeforeDelete() : before call delete\n");
+            Singleton::trace("wrapper : OnBeforeDelete : before call delete\n");
             return Loader->OnBeforeDelete(strWinId, strNodeId);
-            Singleton::trace("Cpp wrapper : OnBeforeDelete() : after call delete\n");
+            Singleton::trace("wrapper : OnBeforeDelete : after call delete\n");
         }
         catch (Exception ^ ex) {
-            Singleton::trace("Cpp wrapper : OnBeforeDelete() : delegate_OnBeforeDelete exception : " + ex->Message + "\n");
+            Singleton::trace("wrapper : OnBeforeDelete : delegate_OnBeforeDelete exception : " + ex->Message + "\n");
             strcat(strException, ex->Message);
             return true;
         }
@@ -435,7 +434,7 @@ extern "C"
     {
         System::Object^ key = PlugId;
 
-        //Singleton::trace ("Cpp wrapper : OnTimer\n") ;
+        //Singleton::trace ("wrapper : OnTimer\n") ;
         //Singleton::trace (" ->PlugId : " + key->ToString() + "\n") ;
         //Singleton::trace (" ->strException\n") ;
 
@@ -443,7 +442,7 @@ extern "C"
         if (Singleton::PlugList->ContainsKey(key) == false)
         {
             StringBuilder^ sb = gcnew StringBuilder();
-            sb->Append("Cpp wrapper : OnTimer () : PLugin ")->Append(key)->Append(" is unknow.");
+            sb->Append("wrapper : OnTimer : PLugin ")->Append(key)->Append(" is unknow.");
             strcat(strException, sb->ToString());
             Singleton::trace(sb->ToString() + "\n");
             return;
@@ -454,20 +453,20 @@ extern "C"
 
         if (Loader->GetStatus() != Started) {
             StringBuilder^ sb = gcnew StringBuilder();
-            sb->Append("Cpp wrapper : OnTimer() : PLugin ")->Append(key)->Append(" is not started.");
+            sb->Append("wrapper : OnTimer : PLugin ")->Append(key)->Append(" is not started.");
             strcat(strException, sb->ToString());
             Singleton::trace(sb->ToString() + "\n");
             return;
         }
 
         try {
-            Singleton::trace("Cpp wrapper : OnTimer() : before call OnTimer\n");
+            Singleton::trace("wrapper : OnTimer : before call OnTimer\n");
             Loader->OnTimer();
-            Singleton::trace("Cpp wrapper : OnTimer() : after call OnTimer\n");
+            Singleton::trace("wrapper : OnTimer : after call OnTimer\n");
         }
         catch (Exception ^ ex) {
             strcat(strException, ex->Message);
-            Singleton::trace("Cpp wrapper : OnTimer() : delegate_OnTimer exception : " + ex->Message + "\n");
+            Singleton::trace("wrapper : OnTimer : delegate_OnTimer exception : " + ex->Message + "\n");
             return;
         }
         strcat(strException, "OK");
@@ -478,7 +477,7 @@ extern "C"
     {
         System::Object^ key = PlugId;
 
-        //Singleton::trace ("Cpp wrapper : Unload\n") ;
+        //Singleton::trace ("wrapper : Unload\n") ;
         //Singleton::trace (" ->PlugId : " + key->ToString() + "\n") ;
         //Singleton::trace (" ->strException\n") ;
 
@@ -486,7 +485,7 @@ extern "C"
         if (Singleton::PlugList->ContainsKey(key) == false)
         {
             StringBuilder^ sb = gcnew StringBuilder();
-            sb->Append("Cpp wrapper : Unload () : PLugin ")->Append(key)->Append(" is unknow.");
+            sb->Append("wrapper : Unload : PLugin ")->Append(key)->Append(" is unknow.");
             strcat(strException, sb->ToString());
             Singleton::trace(sb->ToString() + "\n");
             return;
@@ -498,20 +497,20 @@ extern "C"
         // stop before unload
         if (Loader->GetStatus() == Started) {
             try {
-                Singleton::trace("Cpp wrapper : Unload() : before call Unload\n");
+                Singleton::trace("wrapper : Unload : before call Unload\n");
                 Loader->StopPlugin();
-                Singleton::trace("Cpp wrapper : Unload() : after call OnTimer\n");
+                Singleton::trace("wrapper : Unload : after call OnTimer\n");
             }
             catch (Exception ^ ex) {
                 strcat(strException, ex->Message);
-                Singleton::trace("Cpp wrapper : Unload() : delegate_Stop exception : " + ex->Message + "\n");
+                Singleton::trace("wrapper : Unload : delegate_Stop exception : " + ex->Message + "\n");
                 return;
             }
         }
 
         if (Loader->GetStatus() != Loaded) {
             StringBuilder^ sb = gcnew StringBuilder();
-            sb->Append("Cpp wrapper : Unload() : PLugin ")->Append(key)->Append(" is not loaded'.");
+            sb->Append("wrapper : Unload : PLugin ")->Append(key)->Append(" is not loaded'.");
             strcat(strException, sb->ToString());
             Singleton::trace(sb->ToString() + "\n");
             return;
@@ -525,7 +524,7 @@ extern "C"
         catch (Exception ^ ex) {
             strcat(strException, ex->Message);
 
-            Singleton::trace("Cpp wrapper : Unload() : Unload domain exception : " + ex->Message + "\n");
+            Singleton::trace("wrapper : Unload : Unload domain exception : " + ex->Message + "\n");
             return;
         }
         Loader->UnloadPlugin();

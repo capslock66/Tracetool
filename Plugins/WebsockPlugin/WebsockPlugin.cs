@@ -9,6 +9,8 @@
 //
 
 using System;
+using System.IO;
+using System.Text;
 using System.Runtime.Serialization;
 using System.Collections.Generic;
 using System.Linq;
@@ -50,12 +52,34 @@ namespace CSharpPlugin
         //}
 
         //------------------------------------------------------------------------------
+        private void trace(String source)
+        {
+            FileStream f;
+            var FileToWrite = "c:\\temp\\DotNetWrapperLog.txt";
+
+            // check if exist
+
+            if (File.Exists(FileToWrite) == false)
+            {
+                f = new FileStream(FileToWrite, FileMode.Create);
+            }
+            else
+            {  // append only the node
+                f = File.Open(FileToWrite, FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite);
+                f.Seek(0, SeekOrigin.End);
+            }
+            var info = new UTF8Encoding(true).GetBytes(DateTime.Now.ToString("yyyyMMdd HH:mm:ss:fff ") + source);
+            f.Write(info, 0, info.Length);
+            f.Close();
+        }
+
 
         /// <summary>
         /// ITracePLugin.GetPlugName : Get the plugin name
         /// </summary>
         public string GetPlugName()
         {
+            trace("        WebSockPlugin GetPlugName\n") ;
             return PlugName;
         }
 
@@ -66,16 +90,15 @@ namespace CSharpPlugin
         /// </summary>
         public void Start()
         {
-            //TTrace.Debug.Send("start") ;
-            //TTrace.Flush() ;
+            trace("        WebSockPlugin Start\n") ;
 
-            Task.Run(() => { 
-                Thread.Sleep(3000);
+            //Task.Run(() => { 
+            //    Thread.Sleep(3000);
                 TTrace.Options.SendMode = SendMode.Socket ;
                 TTrace.Options.SocketHost = "127.0.0.1" ;
                 TTrace.Options.SocketPort = 8090 ;
-                //TTrace.Debug.Send("start") ;
-            })  ;
+                TTrace.Debug.Send("WebSockPlugin start") ;
+            //})  ;
 
             /*
             // create a window and ask to receive timer, action and onBeforeDelete events
@@ -232,7 +255,8 @@ namespace CSharpPlugin
         /// </summary>
         public void Stop()
         {
-            TTrace.Debug.Send("Stop");
+            trace("        WebSockPlugin Stop\n") ;
+            TTrace.Debug.Send("WebSockPlugin Stop");
             //PlugTraces.Debug.Send("Websock Plugin stopped");
             TTrace.Flush();
         }
