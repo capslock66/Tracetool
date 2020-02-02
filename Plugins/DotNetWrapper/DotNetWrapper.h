@@ -103,7 +103,7 @@ private :
     /// <summary>
     /// Plugin name
     /// </summary>
-    String^ name;
+    //String^ name;
 
     /// <summary>
     /// Status of the plugin
@@ -115,13 +115,13 @@ public:
 
     AppDomain^ GetDomain()
     {
-        Singleton::trace("    Loader : GetDomain\n");
+        //Singleton::trace("    Loader : GetDomain\n");
         return _domain;
     }
 
     void SetDomain(AppDomain^ domain)
     {
-        Singleton::trace("    Loader : SetDomain\n");
+        //Singleton::trace("    Loader : SetDomain\n");
         _domain = domain; 
     }
 
@@ -139,66 +139,67 @@ public:
 
     PluginStatus GetStatus()
     {
-        Singleton::trace("    Loader : GetStatus : " + SatusToString(_status) + "\n");
+        //Singleton::trace("    Loader : GetStatus : " + SatusToString(_status) + "\n");
         return _status;
     }
 
     void SetStatus(PluginStatus status)
     {
-        Singleton::trace("    Loader : SetStatus : " + SatusToString(status) + "\n");
+        //Singleton::trace("    Loader : SetStatus : " + SatusToString(status) + "\n");
         _status = status;
     }
     
     String^ GetPlugName()
     {
-        Singleton::trace("    Loader : GetPlugName\n");
+        //Singleton::trace("    Loader : GetPlugName\n");
+        String^ name;
         name = gcnew String(_delegate_GetPlugName());
-        Singleton::trace("    Loader : GetPlugName : " + name + "\n");
+        //Singleton::trace("    Loader : GetPlugName : " + name + "\n");
 
         return name; //  gcnew String("my plugin"); // _delegate_GetPlugName();
     }
 
     void UnloadPlugin()
     {
-        Singleton::trace("    Loader : UnloadPlugin\n");
+        //Singleton::trace("    Loader : UnloadPlugin\n");
         _plugin = nullptr;  // Garbage collected
     }
 
     void StartPlugin()
     {
-        Singleton::trace("    Loader : StartPlugin begin\n");
+        //Singleton::trace("    Loader : StartPlugin begin\n");
         _delegate_Start();
-        Singleton::trace("    Loader : StartPlugin end\n");
+        //Singleton::trace("    Loader : StartPlugin end\n");
     }
     
     void StopPlugin() 
     { 
-        Singleton::trace("    Loader : StopPlugin begin\n");
+        //Singleton::trace("    Loader : StopPlugin begin\n");
         _delegate_Stop();
-        Singleton::trace("    Loader : StopPlugin end\n");
+        //Singleton::trace("    Loader : StopPlugin end\n");
     }
 
     bool OnAction(String^ strWinId, int ResourceId, String^ strNodeId)
     {
-        Singleton::trace("    Loader : OnAction start\n");
+        //Singleton::trace("    Loader : OnAction start\n");
         bool result = _delegate_OnAction(strWinId, ResourceId, strNodeId);
-        Singleton::trace("    Loader : OnAction end \n");
+        //Singleton::trace("    Loader : OnAction end \n");
         return result;
     }
 
     bool OnBeforeDelete(String ^ strWinId, String ^ strNodeId)
     {
-        Singleton::trace("    Loader : OnBeforeDelete start\n");
+        //Singleton::trace("    Loader : OnBeforeDelete start\n");
         bool result = _delegate_OnBeforeDelete(strWinId, strNodeId);
-        Singleton::trace("    Loader : OnBeforeDelete end \n");
+        //Singleton::trace("    Loader : OnBeforeDelete end \n");
         return result;
     }
 
     void OnTimer()
     {
-        Singleton::trace("    Loader : OnTimer start\n");
-        _delegate_OnTimer;
-        Singleton::trace("    Loader : OnTimer end\n");
+        //Singleton::trace("    Loader : OnTimer start\n");
+        _delegate_OnTimer();
+        //Singleton::trace("    Loader : OnTimer end\n");
     }
 
     //---------------------------------------------------------------------------------------------------------------
@@ -207,9 +208,8 @@ public:
     // throw exception on error
     void CheckPlugInFile(String^ FileName)
     {
-        Singleton::trace("    Loader : CheckPlugInFile : " + FileName + "\n");
-        name = nullptr; // gcnew String("");
-
+        //Singleton::trace("    Loader : CheckPlugInFile : " + FileName + "\n");
+        //name = nullptr;
         _plugin = nullptr;
 
         // Load the assembly in the current domain (the one created with AppDomain.CreateDomain() )
@@ -261,7 +261,7 @@ public:
             throw gcnew Exception("The Assembly don't contain any classes. Try to load it as a Win32 plugin");
         }
         
-        Singleton::trace ("    Loader : CheckPlugInFile : Assembly contains " + types->Length.ToString() + " classes or interfaces\n") ;
+        //Singleton::trace ("    Loader : CheckPlugInFile : Assembly contains " + types->Length.ToString() + " classes or interfaces\n") ;
         for (int c = 0; c < types->Length; c++)
         {
             Type^ OneType = types[c];
@@ -276,13 +276,14 @@ public:
                 {
                     // create an instance of the type and save it in the PluginLoader
                     // Error can occur if the type require parameters.
-                    Singleton::trace("    Loader : CheckPlugInFile : TraceTool.ITracePLugin found. Create instance\n");
+
+                    //Singleton::trace("    Loader : CheckPlugInFile : TraceTool.ITracePLugin found. Create instance\n");
                     _plugin = Activator::CreateInstance(OneType);
 
                     // create delegates
                     //--------------------
                     try {
-                        Singleton::trace("    Loader : CheckPlugInFile : getting delegates\n");
+                        //Singleton::trace("    Loader : CheckPlugInFile : getting delegates\n");
                         _delegate_GetPlugName    = (Delegate_GetPlugName^)    Delegate::CreateDelegate(Delegate_GetPlugName   ::typeid, _plugin, "GetPlugName");
                         _delegate_Start          = (Delegate_Start^)          Delegate::CreateDelegate(Delegate_Start         ::typeid, _plugin, "Start");
                         _delegate_Stop           = (Delegate_Stop^)           Delegate::CreateDelegate(Delegate_Stop          ::typeid, _plugin, "Stop");
@@ -298,20 +299,19 @@ public:
 
                     // Get the plugin name
                     // -------------------
-                    try {
-                        name = gcnew String(_delegate_GetPlugName());
-                        Singleton::trace("    Loader : CheckPlugInFile : plugin name = " + name + "\n");
-                    }
-                    catch (Exception ^ ex) {
-                        Singleton::trace("    Loader : CheckPlugInFile : " + FileName + "\n");
-                        Singleton::trace("    Loader : CheckPlugInFile : delegate_GetPlugName exception : " + ex->Message + "\n");
-                        throw gcnew Exception(ex->Message);
-                    }
-                    //if (name->Trim()->Length == 0)
-                    //    name = FileName;
+                    //try {
+                    //    name = gcnew String(_delegate_GetPlugName());  // MAKE A COPY !!!
+                    //    //Singleton::trace("    Loader : CheckPlugInFile : plugin name = " + name + "\n");
+                    //}
+                    //catch (Exception ^ ex) {
+                    //    Singleton::trace("    Loader : CheckPlugInFile : " + FileName + "\n");
+                    //    Singleton::trace("    Loader : CheckPlugInFile : delegate_GetPlugName exception : " + ex->Message + "\n");
+                    //    throw gcnew Exception(ex->Message);
+                    //}
 
                     // this plugin will be added to Singleton::PlugList
-                    Singleton::trace("    Loader : CheckPlugInFile : DONE\n");
+                    
+                    //Singleton::trace("    Loader : CheckPlugInFile : DONE\n");
                     return;
                 }
             }  // next interface
@@ -332,5 +332,4 @@ public:
 
 //}   // namespace TraceTool
 
-//namespace DotNetWrapper2020 {
-//}
+

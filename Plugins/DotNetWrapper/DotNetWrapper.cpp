@@ -53,37 +53,18 @@ extern "C"
         //strcat (strException ,  "Inside CppTest") ;
     }
 
-    //static Assembly^ MyResolveEventHandler(Object^ sender, ResolveEventArgs^ args)
-    //{
-    //    //Console::WriteLine("Resolving...");
-    //    //return MyType::typeid->Assembly;
-
-
-    //    try
-    //    {
-    //        Assembly assembly = System.Reflection.Assembly.Load(args.Name);
-    //        if (assembly != null)
-    //            return assembly;
-    //    }
-    //    catch { // ignore load error }
-    //}
     //---------------------------------------------------------------------------------------------------------------
 
     __declspec(dllexport) void __cdecl CheckPlugInFile(unsigned PlugId, char* FileName, char* PlugName, char* strException)
     {
         System::Object^ key = PlugId;
         String^ strFileName = gcnew String(FileName);
-        //AppDomainSetup^ domainSetup;
         AppDomain^ domain;
 
         CppPluginLoader^ Loader;
         String^ Path;
 
-        Singleton::trace ("wrapper : CheckPlugInFile(PLugin:<" + key + ">,FileName:<" + strFileName + ">\n");
-        Singleton::trace (" ->PlugId : " + key->ToString() + "\n") ;
-        Singleton::trace (" ->FileName : " + strFileName + "\n") ;
-        Singleton::trace (" ->PlugName ...\n") ;
-        Singleton::trace (" ->strException ...\n") ;
+        //Singleton::trace ("wrapper : CheckPlugInFile(PLugin:<" + key + ">,FileName:<" + strFileName + ">\n");
 
         if (Singleton::PlugList->ContainsKey(key) == true)
         {
@@ -99,39 +80,8 @@ extern "C"
         //-------------------------------
 
         try {
-            //StringBuilder^ sb = gcnew StringBuilder();
-            //GUID  guid;
-            //CoCreateGuid(&guid);
-
-            //sb->Append("PlugDomain");
-            //
-            //char guidStr[37];
-            //sprintf_s(
-            //    guidStr,
-            //    "%08lX-%04hX-%04hX-%02hhX%02hhX-%02hhX%02hhX%02hhX%02hhX%02hhX%02hhX",
-            //    guid.Data1, guid.Data2, guid.Data3,
-            //    guid.Data4[0], guid.Data4[1], guid.Data4[2], guid.Data4[3],
-            //    guid.Data4[4], guid.Data4[5], guid.Data4[6], guid.Data4[7]);
-
-            //sb->Append(guidStr);
-            //String^ appDomain = sb->ToString();
-
-            //AppDomainSetup ^domainSetup = gcnew AppDomainSetup();
-            //domainSetup->ApplicationName = appDomain;
-
-            //// *** Point at current directory
-            //domainSetup->ApplicationBase = Environment::CurrentDirectory;   // AppDomain.CurrentDomain.BaseDirectory;                 
-
-
-
-            // *** Need a custom resolver so we can load assembly from non current path
-            // https://docs.microsoft.com/en-us/dotnet/api/system.appdomain.assemblyresolve?view=netframework-4.8
-
-            //AppDomain::CurrentDomain->AssemblyResolve += gcnew ResolveEventHandler(CurrentDomain_AssemblyResolve);
-
-            //this.LocalAppDomain = AppDomain.CreateDomain(appDomain, null, domainSetup);
             domain = AppDomain::CreateDomain("PlugDomain"); // , nullptr, domainSetup);
-            Singleton::trace("wrapper : CheckPlugInFile : domain created " + "\n");
+            //Singleton::trace("wrapper : CheckPlugInFile : domain created " + "\n");
         }
         catch (Exception ^ ex) {
             Singleton::trace("wrapper : CheckPlugInFile : FileName : " + strFileName + "\n");
@@ -147,12 +97,10 @@ extern "C"
 
         try {
             Path = Assembly::GetAssembly(CppPluginLoader::typeid)->Location;
-            Singleton::trace("wrapper : CheckPlugInFile : Path : " + Path + "\n");
+            //Singleton::trace("wrapper : CheckPlugInFile : Path : " + Path + "\n");
 
-            //Loader = safe_cast<CppPluginLoader^>(domain->CreateInstanceFromAndUnwrap(Path, CppPluginLoader::typeid->FullName));  // "CppPluginLoader"
-            
             Loader = (CppPluginLoader^)(domain->CreateInstanceFromAndUnwrap(Path, CppPluginLoader::typeid->FullName));  // "CppPluginLoader"
-            Singleton::trace("wrapper : CheckPlugInFile : Loader created " + "\n");
+            //Singleton::trace("wrapper : CheckPlugInFile : Loader created " + "\n");
         }
         catch (Exception ^ ex) {
             Singleton::trace("wrapper : CheckPlugInFile : FileName : " + strFileName + "\n");
@@ -161,7 +109,6 @@ extern "C"
             return;
         }
 
-        //Singleton::trace ("wrapper : CheckPlugInFile : domain->CreateInstanceFromAndUnwrap ok\n") ;
         Loader->SetDomain(domain);
 
         // call Loader.CheckPlugInFile
@@ -183,40 +130,15 @@ extern "C"
         }
         catch (Exception ^ ex) {
             Singleton::trace("wrapper : get loader name exception : " + ex->Message + "\n");
-        }
-        
-
-
-        /*
-        Object^ Plugin = nullptr;
-        try {
-            Object^ Plugin = Loader->Plugin;
-        }
-        catch (Exception ^ ex) {
-            Singleton::trace("wrapper : get plugin exception : " + ex->Message + "\n");
-        }
-
-
-        if (Plugin == nullptr) {
-            Singleton::trace("wrapper : CheckPlugInFile : FileName : " + strFileName);
-            Singleton::trace(" don't contain class implementing TraceTool.ITracePLugin interface\n");
             strcat(strException, "wrapper : CheckPlugInFile : ");
             strcat(strException, strFileName);
-            strcat(strException, " don't contain class implementing TraceTool.ITracePLugin interface");
-            Loader = nullptr;
-            AppDomain::Unload(domain);
+            strcat(strException, ex->Message);
             return;
         }
-
-        */
-        
+              
         Loader->SetStatus(Loaded); //PluginStatus::Loaded ;
 
-
-        //strcat(PlugName, Loader->name);
-
-        // add to list
-        // --------------
+        // add to plugin list
         Singleton::PlugList->Add(key, Loader);
 
         //Singleton::trace ("wrapper : CheckPlugInFile : done\n" ) ;
@@ -228,10 +150,6 @@ extern "C"
     __declspec(dllexport) void __cdecl Start(unsigned PlugId, char* strException)
     {
         System::Object^ key = PlugId;
-
-        //Singleton::trace ("wrapper : Start\n") ;
-        //Singleton::trace (" ->PlugId " + key->ToString() + "\n") ;
-        //Singleton::trace (" ->strException\n") ;
 
         // check if plugin is know
         if (Singleton::PlugList->ContainsKey(key) == false)
@@ -263,12 +181,9 @@ extern "C"
         }
 
         try {
-            // don't call directly delegate_Start() 
-            //Loader->delegate_Start();  
-            
-            Singleton::trace("wrapper : Start : begin\n");
+            //Singleton::trace("wrapper : Start : begin\n");
             Loader->StartPlugin(); 
-            Singleton::trace("wrapper : Start : end\n");
+            //Singleton::trace("wrapper : Start : end\n");
         }
         catch (Exception ^ ex) {
             Singleton::trace("wrapper : Start : Loader->StartPlugin() exception : " + ex->Message + "\n");
@@ -285,10 +200,6 @@ extern "C"
     __declspec(dllexport) void __cdecl Stop(unsigned PlugId, char* strException)
     {
         System::Object^ key = PlugId;
-
-        //Singleton::trace ("wrapper : Stop\n") ;
-        //Singleton::trace (" ->PlugId " + key->ToString() + "\n") ;
-        //Singleton::trace (" ->strException\n") ;
 
         // check if plugin is know
         if (Singleton::PlugList->ContainsKey(key) == false)
@@ -312,9 +223,9 @@ extern "C"
         }
 
         try {
-            Singleton::trace("wrapper : Stop : before stop plugin\n");
+            //Singleton::trace("wrapper : Stop : before stop plugin\n");
             Loader->StopPlugin();
-            Singleton::trace("wrapper : Stop : after stop plugin, update status\n");
+            //Singleton::trace("wrapper : Stop : after stop plugin, update status\n");
         }
         catch (Exception ^ ex) {
             Singleton::trace("wrapper : Stop() : delegate_Stop exception : " + ex->Message + "\n");
@@ -334,18 +245,6 @@ extern "C"
         String^ strWinId = gcnew String(WinId);
         String^ strNodeId = gcnew String(NodeId);
         
-        
-        //System::Object^ ResId = ResourceId;
-
-
-
-        //Singleton::trace ("wrapper : OnAction()\n") ;
-        //Singleton::trace (" ->PlugId : " + key->ToString() + "\n") ;
-        //Singleton::trace (" ->WinId : " + strWinId + "\n") ;
-        //Singleton::trace (" ->ResourceId : " + ResId->ToString() + "\n") ;
-        //Singleton::trace (" ->NodeId : " + strNodeId + "\n") ;
-        //Singleton::trace (" ->strException\n") ;
-
         // check if plugin is know
         if (Singleton::PlugList->ContainsKey(key) == false)
         {
@@ -369,9 +268,9 @@ extern "C"
 
         int result = true;
         try {
-            Singleton::trace("wrapper : OnAction : before call action\n");
+            //Singleton::trace("wrapper : OnAction : before call action\n");
             result = Loader->OnAction(strWinId, ResourceId, strNodeId);
-            Singleton::trace("wrapper : OnAction : after call action\n");
+            //Singleton::trace("wrapper : OnAction : after call action\n");
         }
         catch (Exception ^ ex) {
             strcat(strException, ex->Message);
@@ -388,12 +287,6 @@ extern "C"
         System::Object^ key = PlugId;
         String^ strWinId = gcnew String(WinId);
         String^ strNodeId = gcnew String(NodeId);
-
-        //Singleton::trace ("wrapper : OnBeforeDelete\n") ;
-        //Singleton::trace (" ->PlugId : " + key->ToString() + "\n") ;
-        //Singleton::trace (" ->WinId : "  + strWinId + "\n") ;
-        //Singleton::trace (" ->NodeId : " + strNodeId + "\n") ;
-        //Singleton::trace (" ->strException\n") //;
 
         // check if plugin is know
         if (Singleton::PlugList->ContainsKey(key) == false)
@@ -417,9 +310,9 @@ extern "C"
         }
 
         try {
-            Singleton::trace("wrapper : OnBeforeDelete : before call delete\n");
+            //Singleton::trace("wrapper : OnBeforeDelete : before call delete\n");
             return Loader->OnBeforeDelete(strWinId, strNodeId);
-            Singleton::trace("wrapper : OnBeforeDelete : after call delete\n");
+            //Singleton::trace("wrapper : OnBeforeDelete : after call delete\n");
         }
         catch (Exception ^ ex) {
             Singleton::trace("wrapper : OnBeforeDelete : delegate_OnBeforeDelete exception : " + ex->Message + "\n");
@@ -433,10 +326,6 @@ extern "C"
     __declspec(dllexport) void __cdecl OnTimer(unsigned PlugId, char* strException)
     {
         System::Object^ key = PlugId;
-
-        //Singleton::trace ("wrapper : OnTimer\n") ;
-        //Singleton::trace (" ->PlugId : " + key->ToString() + "\n") ;
-        //Singleton::trace (" ->strException\n") ;
 
         // check if plugin is know
         if (Singleton::PlugList->ContainsKey(key) == false)
@@ -460,9 +349,9 @@ extern "C"
         }
 
         try {
-            Singleton::trace("wrapper : OnTimer : before call OnTimer\n");
+            //Singleton::trace("wrapper : OnTimer : before call OnTimer\n");
             Loader->OnTimer();
-            Singleton::trace("wrapper : OnTimer : after call OnTimer\n");
+            //Singleton::trace("wrapper : OnTimer : after call OnTimer\n");
         }
         catch (Exception ^ ex) {
             strcat(strException, ex->Message);
@@ -476,10 +365,6 @@ extern "C"
     __declspec(dllexport) void __cdecl Unload(unsigned PlugId, char* strException)
     {
         System::Object^ key = PlugId;
-
-        //Singleton::trace ("wrapper : Unload\n") ;
-        //Singleton::trace (" ->PlugId : " + key->ToString() + "\n") ;
-        //Singleton::trace (" ->strException\n") ;
 
         // check if plugin is know
         if (Singleton::PlugList->ContainsKey(key) == false)
@@ -497,9 +382,9 @@ extern "C"
         // stop before unload
         if (Loader->GetStatus() == Started) {
             try {
-                Singleton::trace("wrapper : Unload : before call Unload\n");
+                //Singleton::trace("wrapper : Unload : before call StopPlugin\n");
                 Loader->StopPlugin();
-                Singleton::trace("wrapper : Unload : after call OnTimer\n");
+                //Singleton::trace("wrapper : Unload : after call StopPlugin\n");
             }
             catch (Exception ^ ex) {
                 strcat(strException, ex->Message);
@@ -527,7 +412,9 @@ extern "C"
             Singleton::trace("wrapper : Unload : Unload domain exception : " + ex->Message + "\n");
             return;
         }
+        //Singleton::trace("wrapper : Unload : before call Unload\n");
         Loader->UnloadPlugin();
+        //Singleton::trace("wrapper : Unload : after call Unload\n");
         Loader->SetDomain(nullptr);
         Loader->SetStatus (Unloaded);
         Singleton::PlugList->Remove(key);

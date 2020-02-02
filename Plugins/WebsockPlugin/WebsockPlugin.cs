@@ -30,7 +30,6 @@ namespace CSharpPlugin
     public class WebsockPlugin : ITracePLugin //, ISerializable MarshalByRefObject
     {
         WinTrace PlugTraces;
-        //TraceNode ActionNodes, BeforeDeleteNodes, Timer;
         
         const string PlugName = "WebsockPlugin";
         private static byte[] _buffToSend;  // buffer to send to viewer
@@ -79,7 +78,7 @@ namespace CSharpPlugin
         /// </summary>
         public string GetPlugName()
         {
-            trace("        WebSockPlugin GetPlugName\n") ;
+            //trace("        WebSockPlugin GetPlugName\n") ;
             return PlugName;
         }
 
@@ -90,59 +89,19 @@ namespace CSharpPlugin
         /// </summary>
         public void Start()
         {
-            trace("        WebSockPlugin Start\n") ;
+            //trace("        WebSockPlugin Start\n") ;
 
-            //Task.Run(() => { 
-            //    Thread.Sleep(3000);
-                TTrace.Options.SendMode = SendMode.Socket ;
-                TTrace.Options.SocketHost = "127.0.0.1" ;
-                TTrace.Options.SocketPort = 8090 ;
-                TTrace.Debug.Send("WebSockPlugin start") ;
-            //})  ;
-
-            /*
-            // create a window and ask to receive timer, action and onBeforeDelete events
-            PlugTraces = new WinTrace("CSHARP", "Websock Plugin");
+            TTrace.Options.SendMode = SendMode.Socket ;
+            TTrace.Options.SocketHost = "127.0.0.1" ;
+            TTrace.Options.SocketPort = 8090 ;
+            
+            // create a window and ask to receive timer (ignore action and onBeforeDelete events)
+            PlugTraces = new WinTrace("Websock", "Websock Plugin");
             PlugTraces.DisplayWin();
-            PlugTraces.LinkToPlugin(PlugName, TraceConst.CST_PLUG_ONACTION + TraceConst.CST_PLUG_ONBEFOREDELETE + TraceConst.CST_PLUG_ONTIMER);
-
-            // disable the  LogFile label
-            PlugTraces.DisableResource(TraceConst.CST_ACTION_LABEL_LOGFILE);
-
-            // add a menu to the 'window' menu
-            PlugTraces.CreateResource(100, TraceConst.CST_RES_MENU_WINDOW, 0, "My CSharp Plug");
-
-            // add a menu to the 'action' menu
-            PlugTraces.CreateResource(101, TraceConst.CST_RES_MENU_ACTION, 0, "My CSharp action Plug");
-
-            // add a label on right, autosize (0)
-            PlugTraces.CreateResource(102, TraceConst.CST_RES_LABEL_RIGHT, 0, "My label");
-
-            // add a button on right (100 pixels)
-            PlugTraces.CreateResource(103, TraceConst.CST_RES_BUT_RIGHT, 100, "STOP");
-
-            // add a label on left, 100 pixels
-            PlugTraces.CreateResource(104, TraceConst.CST_RES_LABEL_LEFT, 100, "My status");
-
-            PlugTraces.Debug.Send("test");
-            TraceNodeEx node;
-            node = new TraceNodeEx(PlugTraces.Debug);
-            node.LeftMsg = "Actions";
-            node.Id = "ActionsNode";
-            ActionNodes = node.Send();
-
-            node = new TraceNodeEx(PlugTraces.Debug);
-            node.LeftMsg = "Deleted Nodes";
-            node.Id = "BeforeDeletes";
-            BeforeDeleteNodes = node.Send();
-
-            node = new TraceNodeEx(PlugTraces.Debug);
-            node.LeftMsg = "Timer";
-            node.Id = "Timer";
-            Timer = node.Send();
+            PlugTraces.LinkToPlugin(PlugName, TraceConst.CST_PLUG_ONTIMER);
 
             PlugTraces.Debug.Send("Websock plugin started");
-            */
+            
 
             /*
             FleckLog.Level = LogLevel.Debug;
@@ -255,9 +214,8 @@ namespace CSharpPlugin
         /// </summary>
         public void Stop()
         {
-            trace("        WebSockPlugin Stop\n") ;
-            TTrace.Debug.Send("WebSockPlugin Stop");
-            //PlugTraces.Debug.Send("Websock Plugin stopped");
+            //trace("        WebSockPlugin Stop\n") ;
+            PlugTraces.Debug.Send("Websock Plugin stopped");
             TTrace.Flush();
         }
 
@@ -276,13 +234,8 @@ namespace CSharpPlugin
         /// </returns>
         public bool OnAction(string WinId, int ResourceId, string NodeId)
         {
-
-            //ActionNodes.Send("OnAction. WinId : " + WinId + ", ResourceId : " + ResourceId + ", current NodeId : " + NodeId);
-            TTrace.Debug.Send("OnAction. WinId : " + WinId + ", ResourceId : " + ResourceId + ", current NodeId : " + NodeId);
-            
-            // demo : disable close button
-            //if (ResourceId == TraceConst.CST_ACTION_CLOSE_WIN)
-            //    return false;
+            //trace("        WebSockPlugin OnAction\n");
+            PlugTraces.Debug.Send("OnAction. WinId : " + WinId + ", ResourceId : " + ResourceId + ", current NodeId : " + NodeId);            
             return true;
         }
 
@@ -301,13 +254,8 @@ namespace CSharpPlugin
         public bool OnBeforeDelete(string WinId, string NodeId)
         {
      
-            TTrace.Debug.Send("onBeforeDelete") ;
-
-
-            //BeforeDeleteNodes.ResendRight("last = " + NodeId);
-            //if (NodeId == "BeforeDeletes" || NodeId == "ActionsNode" || NodeId == "Timer")
-            //    return false;
-
+            //trace("        WebSockPlugin onBeforeDelete\n") ;
+            //TTrace.Debug.Send("onBeforeDelete") ;
             return true;
         }
 
@@ -320,19 +268,10 @@ namespace CSharpPlugin
         public void OnTimer()
         {
 
-            TTrace.Debug.Send("OnTimer");
+            //trace("        WebSockPlugin OnTimer\n") ;
+            //TTrace.Debug.Send("OnTimer");
 
-
-
-            //PlugTraces.SetTextResource(102, "My status " + System.DateTime.Now.ToString());
-            //Timer.ResendLeft("Timer " + System.DateTime.Now.ToString());
         }
-
-        //public void GetObjectData(SerializationInfo info, StreamingContext context)
-        //{
-        //    throw new NotImplementedException();
-        //}
-
 
     }
 }
