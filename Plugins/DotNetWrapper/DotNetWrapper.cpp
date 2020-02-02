@@ -79,7 +79,7 @@ extern "C"
         CppPluginLoader^ Loader;
         String^ Path;
 
-        Singleton::trace ("Cpp wrapper : CheckPlugInFile()\n") ;
+        Singleton::trace ("Cpp wrapper : CheckPlugInFile(PLugin:<" + key + ">,FileName:<" + strFileName + ">\n");
         Singleton::trace (" ->PlugId : " + key->ToString() + "\n") ;
         Singleton::trace (" ->FileName : " + strFileName + "\n") ;
         Singleton::trace (" ->PlugName ...\n") ;
@@ -185,6 +185,8 @@ extern "C"
             Singleton::trace("Cpp wrapper : get loader name exception : " + ex->Message + "\n");
         }
         
+
+
         /*
         Object^ Plugin = nullptr;
         try {
@@ -209,15 +211,6 @@ extern "C"
         */
         
         Loader->SetStatus(Loaded); //PluginStatus::Loaded ;
-
-        try
-        {
-            strcat(PlugName, Loader->GetPlugName());
-        }
-        catch (Exception ^ ex) 
-        {
-            Singleton::trace("Cpp wrapper : CheckPlugInFile() : call to loader GetPlugName exception : " + ex->Message + "\n");
-        }
 
 
         //strcat(PlugName, Loader->name);

@@ -63,6 +63,7 @@ Class CppPluginLoader: AutoLayout, AnsiClass, Class, Public, Serializable, Befor
   Methods:
     GetDomain(): PrivateScope, Public, HideBySig
     SetDomain(AppDomain): PrivateScope, Public, HideBySig
+    SatusToString(PluginStatus): PrivateScope, Public, HideBySig
     GetStatus(): PrivateScope, Public, HideBySig
     SetStatus(PluginStatus): PrivateScope, Public, HideBySig
     GetPlugName(): PrivateScope, Public, HideBySig

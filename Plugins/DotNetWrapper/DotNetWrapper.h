@@ -115,57 +115,80 @@ public:
 
     AppDomain^ GetDomain()
     {
+        Singleton::trace("CppPluginLoader : GetDomain\n");
         return _domain;
     }
 
     void SetDomain(AppDomain^ domain)
     {
-        _domain = domain; 
+        Singleton::trace("CppPluginLoader : SetDomain\n");
+        ////_domain = domain; 
+    }
+
+    String^ SatusToString(PluginStatus status)
+    {
+        String^ result;
+        switch (status)
+        {
+        case Unloaded: result = gcnew String("Unloaded"); break;
+        case Loaded:   result = gcnew String("Loaded");   break;
+        case Started:  result = gcnew String("Started");  break;
+        }
+        return result;    
     }
 
     PluginStatus GetStatus()
     {
+        Singleton::trace("CppPluginLoader : GetStatus : " + SatusToString(_status) + "\n");
         return _status;
     }
 
     void SetStatus(PluginStatus status)
     {
+        Singleton::trace("CppPluginLoader : SetStatus : " + SatusToString(status) + "\n");
         _status = status;
     }
     
     String^ GetPlugName()
     {
-        return _delegate_GetPlugName();
+        Singleton::trace("CppPluginLoader : GetPlugName\n");
+        return gcnew String("my plugin"); // _delegate_GetPlugName();
     }
 
     void UnloadPlugin()
     {
+        Singleton::trace("CppPluginLoader : UnloadPlugin\n");
         _plugin = nullptr;  // Garbage collected
     }
 
     void StartPlugin()
     {
-        _delegate_Start();
+        Singleton::trace("CppPluginLoader : StartPlugin\n");
+        //_delegate_Start();
     }
     
     void StopPlugin() 
     { 
-        _delegate_Stop(); 
+        Singleton::trace("CppPluginLoader : StopPlugin\n");
+        //_delegate_Stop();
     }
 
     bool OnAction(String^ strWinId, int ResourceId, String^ strNodeId)
     {
-        return _delegate_OnAction(strWinId, ResourceId, strNodeId);
+        Singleton::trace("CppPluginLoader : OnAction\n");
+        return true; // _delegate_OnAction(strWinId, ResourceId, strNodeId);
     }
 
     bool OnBeforeDelete(String ^ strWinId, String ^ strNodeId)
     {
-        return _delegate_OnBeforeDelete(strWinId, strNodeId);
+        Singleton::trace("CppPluginLoader : OnBeforeDelete \n");
+        return true ; // _delegate_OnBeforeDelete(strWinId, strNodeId);
     }
 
     void OnTimer()
     {
-        _delegate_OnTimer;
+        Singleton::trace("CppPluginLoader : OnTimer \n");
+        //_delegate_OnTimer;
     }
 
     //---------------------------------------------------------------------------------------------------------------
@@ -175,7 +198,8 @@ public:
     void CheckPlugInFile(String^ FileName)
     {
         Singleton::trace("CppPluginLoader : CheckPlugInFile : " + FileName + "\n");
-        name = gcnew String("");
+        name = nullptr; // gcnew String("");
+
         _plugin = nullptr;
 
         // Load the assembly in the current domain (the one created with AppDomain.CreateDomain() )
@@ -226,12 +250,11 @@ public:
             Singleton::trace("CppPluginLoader : CheckPlugInFile : The Assembly don't contain any classes. Try to load it as a Win32 plugin\n");
             throw gcnew Exception("The Assembly don't contain any classes. Try to load it as a Win32 plugin");
         }
-        //Singleton::trace ("CppPluginLoader : CheckPlugInFile : Assembly contains " + types->Length.ToString() + " classes or interfaces ") ;
+        
+        Singleton::trace ("CppPluginLoader : CheckPlugInFile : Assembly contains " + types->Length.ToString() + " classes or interfaces\n") ;
         for (int c = 0; c < types->Length; c++)
         {
             Type^ OneType = types[c];
-
-            //Singleton::trace ("   ->" + OneType->Name) ;
 
             // check if the type implement the Tracetool.ITracePLugin interface
             array<Type^>^ interfaces = OneType->GetInterfaces();
@@ -243,11 +266,13 @@ public:
                 {
                     // create an instance of the type and save it in the PluginLoader
                     // Error can occur if the type require parameters.
+                    Singleton::trace("CppPluginLoader : CheckPlugInFile : TraceTool.ITracePLugin found. Create instance\n");
                     _plugin = Activator::CreateInstance(OneType);
 
                     // create delegates
                     //--------------------
                     try {
+                        Singleton::trace("CppPluginLoader : CheckPlugInFile : getting delegates\n");
                         _delegate_GetPlugName = (Delegate_GetPlugName^)Delegate::CreateDelegate(Delegate_GetPlugName   ::typeid, _plugin, "GetPlugName");
                         _delegate_Start = (Delegate_Start^)Delegate::CreateDelegate(Delegate_Start         ::typeid, _plugin, "Start");
                         _delegate_Stop = (Delegate_Stop^)Delegate::CreateDelegate(Delegate_Stop          ::typeid, _plugin, "Stop");
@@ -264,21 +289,26 @@ public:
                     // Get the plugin name
                     // -------------------
                     try {
-                        name = _delegate_GetPlugName();
+                        name = gcnew String(_delegate_GetPlugName());
+                        Singleton::trace("CppPluginLoader : CheckPlugInFile : plugin name = " + name + "\n");
                     }
                     catch (Exception ^ ex) {
                         Singleton::trace("CppPluginLoader : CheckPlugInFile : " + FileName + "\n");
                         Singleton::trace("CppPluginLoader : CheckPlugInFile : delegate_GetPlugName exception : " + ex->Message + "\n");
                         throw gcnew Exception(ex->Message);
                     }
-                    if (name->Trim()->Length == 0)
-                        name = FileName;
+                    //if (name->Trim()->Length == 0)
+                    //    name = FileName;
 
                     // this plugin will be added to Singleton::PlugList
+                    Singleton::trace("CppPluginLoader : CheckPlugInFile : DONE\n");
                     return;
                 }
             }  // next interface
         }     // next type
+
+        // no TraceTool.ITracePLugin found.
+        // generate exception
 
         StringBuilder^ sb = gcnew StringBuilder("PluginLoader : Assembly <");
         sb->Append(FileName)->Append("> contains ")->Append(types->Length)

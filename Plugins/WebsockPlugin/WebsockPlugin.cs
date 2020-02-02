@@ -74,7 +74,7 @@ namespace CSharpPlugin
                 TTrace.Options.SendMode = SendMode.Socket ;
                 TTrace.Options.SocketHost = "127.0.0.1" ;
                 TTrace.Options.SocketPort = 8090 ;
-                TTrace.Debug.Send("start") ;
+                //TTrace.Debug.Send("start") ;
             })  ;
 
             /*
