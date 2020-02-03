@@ -80,14 +80,8 @@ public delegate bool Delegate_OnAction(String^ WinId, int ResourceId, String^ No
 public ref class CppPluginLoader : MarshalByRefObject
 {
 private :
-    /// <summary>
-    /// Point to the plugin (type ITracePLugin)
-    /// </summary>
-    Object^ _plugin;
 
-    /// <summary>
-    /// delegate to the differents ITracePLugin functions
-    /// </summary>
+    // delegate to the differents ITracePLugin functions
     Delegate_GetPlugName^ _delegate_GetPlugName;
     Delegate_Start^ _delegate_Start;
     Delegate_Stop^ _delegate_Stop;
@@ -95,23 +89,16 @@ private :
     Delegate_OnBeforeDelete^ _delegate_OnBeforeDelete;
     Delegate_OnTimer^ _delegate_OnTimer;
 
-    /// <summary>
-    /// Domain that host the plugin. Needed to unloaded the domain
-    /// </summary>
+    // Point to the plugin (type ITracePLugin). Needed to unloaded the plugin
+    Object^ _plugin;
+
+    // Domain that host the plugin. Needed to unloaded the domain
     AppDomain^ _domain;  
 
-    /// <summary>
-    /// Plugin name
-    /// </summary>
-    //String^ name;
-
-    /// <summary>
-    /// Status of the plugin
-    /// </summary>
+    // Status of the plugin
     PluginStatus _status;
 
 public:
-
 
     AppDomain^ GetDomain()
     {
