@@ -29,6 +29,7 @@
 // 12.8.5 : 2016 10 05 : stack trace display the class of the method. Modifier is removed (public static,...)
 // 12.9   : 2017 11 03 : Add conditional compilation for Dot Net Standard (1.6)
 // 12.9   : 2017 11 06 : Add conditional compilation for Dot Net Standard (2.0)
+// 12.10  : 2020 02 05 : Add WebSocket mode
 
 using System.Text;
 using System;
@@ -183,8 +184,8 @@ namespace TraceTool
 #elif (NETCF1 || NETCF2 || NETCF3 || NETSTANDARD1_6 || NETSTANDARD2_0)
             Options.SendMode = SendMode.Socket;
 
-            #if NETSTANDARD1_6
-               Options.SocketHost = "127.0.0.1";  
+            #if NETSTANDARD1_6 || NETSTANDARD2_0
+                Options.SocketHost = "127.0.0.1";  
             #else
                Options.SocketHost = "PPP_PEER";   // force PPP_PEER (active sync) for pocket pc
             #endif
@@ -1113,7 +1114,7 @@ namespace TraceTool
          {
             if (webSocketClient.State != WebSocketState.Open)
                webSocketClient
-                  .ConnectAsync(new Uri("ws://localhost:8091"), cancellationTocket.Token)  // TODO : use Options.SocketHost and Options.SocketPort
+                  .ConnectAsync(new Uri("ws://" + Options.SocketHost + ":" + Options.SocketPort.ToString()), cancellationTocket.Token)  // "ws://localhost:8091
                   .Wait(); 
          }
          catch (Exception ex)

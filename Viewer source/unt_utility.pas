@@ -23,8 +23,6 @@ uses
 {$Include TraceConst.Inc}
 
 
-const
-   LowTraceName : string =  'c:\TracetoolInternalLog.txt' ;
 
   // some helper functions to retreive Process name from its ID
   Function GetExenameForProcessUsingToolhelp32( pid: DWORD ): String;
@@ -69,6 +67,7 @@ const
 
 var
    AnsiCharTypes: array [AnsiChar] of Word;
+   LowTraceName : string =  'c:\TracetoolInternalLog.txt' ;
 
 implementation
 

@@ -78,6 +78,7 @@ type
     { Property Accessors }
     function Get_ShowSocketWarning: IXMLBooleanTagValue;
     function Get_LastSavedPath: IXMLStringTagValue;
+    function Get_InternalLog: IXMLStringTagValue;
     function Get_SocketPort: IXMLIntegerTagValue;
     function Get_SocketPort2: IXMLIntegerTagValue;
     function Get_HTTPPort: IXMLIntegerTagValue;
@@ -89,6 +90,7 @@ type
     { Methods & Properties }
     property ShowSocketWarning: IXMLBooleanTagValue read Get_ShowSocketWarning;
     property LastSavedPath: IXMLStringTagValue read Get_LastSavedPath;
+    property InternalLog: IXMLStringTagValue read Get_InternalLog;
     property SocketPort: IXMLIntegerTagValue read Get_SocketPort;
     property SocketPort2: IXMLIntegerTagValue read Get_SocketPort2;
     property HTTPPort: IXMLIntegerTagValue read Get_HTTPPort;
@@ -551,6 +553,7 @@ type
     { IXMLGeneral }
     function Get_ShowSocketWarning: IXMLBooleanTagValue;
     function Get_LastSavedPath: IXMLStringTagValue;
+    function Get_InternalLog: IXMLStringTagValue;
     function Get_SocketPort: IXMLIntegerTagValue;
     function Get_SocketPort2: IXMLIntegerTagValue;
     function Get_HTTPPort: IXMLIntegerTagValue;
@@ -962,6 +965,7 @@ procedure TXMLGeneral.AfterConstruction;
 begin
   RegisterChildNode('ShowSocketWarning', TXMLBooleanTagValue);
   RegisterChildNode('LastSavedPath', TXMLStringTagValue);
+  RegisterChildNode('InternalLog', TXMLStringTagValue);
   RegisterChildNode('SocketPort', TXMLIntegerTagValue);
   RegisterChildNode('SocketPort2', TXMLIntegerTagValue);
   RegisterChildNode('HTTPPort', TXMLIntegerTagValue);
@@ -981,6 +985,11 @@ end;
 function TXMLGeneral.Get_LastSavedPath: IXMLStringTagValue;
 begin
   Result := ChildNodes['LastSavedPath'] as IXMLStringTagValue;
+end;
+
+function TXMLGeneral.Get_InternalLog: IXMLStringTagValue;
+begin
+  Result := ChildNodes['InternalLog'] as IXMLStringTagValue;
 end;
 
 function TXMLGeneral.Get_SocketPort: IXMLIntegerTagValue;
