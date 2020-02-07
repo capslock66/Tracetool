@@ -1,7 +1,6 @@
-// Sample plugin for tracetool viewer
+// Web socket plugin for tracetool viewer
 //
 // Author : Thierry Parent
-// Version : 12.9
 //
 // HomePage :  http://www.codeproject.com/csharp/TraceTool.asp
 // Download :  http://sourceforge.net/projects/tracetool/
@@ -9,15 +8,6 @@
 //
 
 using System;
-using System.IO;
-using System.Text;
-using System.Runtime.Serialization;
-using System.Collections.Generic;
-using System.Linq;
-
-using System.Threading;
-using System.Threading.Tasks;
-
 using System.Net;
 using System.Net.Sockets;
 using Fleck;
@@ -26,10 +16,9 @@ using TraceTool;
 namespace CSharpPlugin
 {
     // Websock plugin
-    //[Serializable]
-    public class WebsockPlugin : ITracePLugin //, ISerializable MarshalByRefObject
+    public class WebsockPlugin : ITracePLugin 
     {
-        WinTrace PlugTraces;
+        //WinTrace PlugTraces;
         
         const string PlugName = "WebsockPlugin";
         private static byte[] _buffToSend;  // buffer to send to viewer
@@ -39,38 +28,26 @@ namespace CSharpPlugin
 
         private static string SocketHost = "127.0.0.1";
         private static int SocketPort;
-        private static string _lastError = "";
-
-        //public WebsockPlugin()
-        //{
-        //}
-
-        //protected WebsockPlugin(SerializationInfo serializationInfo, StreamingContext streamingContext)
-        //{
-        //    throw new NotImplementedException();
-        //}
+        //private static string _lastError = "";
 
         //------------------------------------------------------------------------------
-        private void trace(String source)
-        {
-            FileStream f;
-            var FileToWrite = "c:\\temp\\DotNetWrapperLog.txt";
-
-            // check if exist
-
-            if (File.Exists(FileToWrite) == false)
-            {
-                f = new FileStream(FileToWrite, FileMode.Create);
-            }
-            else
-            {  // append only the node
-                f = File.Open(FileToWrite, FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite);
-                f.Seek(0, SeekOrigin.End);
-            }
-            var info = new UTF8Encoding(true).GetBytes(DateTime.Now.ToString("yyyyMMdd HH:mm:ss:fff ") + source);
-            f.Write(info, 0, info.Length);
-            f.Close();
-        }
+        //private void trace(String source)
+        //{
+        //    FileStream f;
+        //    var FileToWrite = "c:\\temp\\DotNetWrapperLog.txt";
+        //    if (File.Exists(FileToWrite) == false)
+        //    {
+        //        f = new FileStream(FileToWrite, FileMode.Create);
+        //    }
+        //    else
+        //    {  // append only the node
+        //        f = File.Open(FileToWrite, FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite);
+        //        f.Seek(0, SeekOrigin.End);
+        //    }
+        //    var info = new UTF8Encoding(true).GetBytes(DateTime.Now.ToString("yyyyMMdd HH:mm:ss:fff ") + source);
+        //    f.Write(info, 0, info.Length);
+        //    f.Close();
+        //}
 
 
         /// <summary>
@@ -94,46 +71,43 @@ namespace CSharpPlugin
             TTrace.Options.SendMode = SendMode.Socket ;
             TTrace.Options.SocketHost = "127.0.0.1" ;
             TTrace.Options.SocketPort = 8090 ;
-            
+
             // create a window and ask to receive timer (ignore action and onBeforeDelete events)
-            PlugTraces = new WinTrace("Websock", "Websock Plugin");
-            PlugTraces.DisplayWin();
-            PlugTraces.LinkToPlugin(PlugName, TraceConst.CST_PLUG_ONTIMER);
+            //PlugTraces = new WinTrace("Websock", "Websock Plugin");
+            //PlugTraces.DisplayWin();
+            //PlugTraces.LinkToPlugin(PlugName, TraceConst.CST_PLUG_ONTIMER);
+            //PlugTraces.Debug.Send("Websock plugin started");
+            //var allSockets = new List<IWebSocketConnection>();
 
-            PlugTraces.Debug.Send("Websock plugin started");
-            
+            FleckLog.Level = LogLevel.Error ;
 
-            /*
-            FleckLog.Level = LogLevel.Debug;
-            var allSockets = new List<IWebSocketConnection>();
-            var server = new WebSocketServer("ws://0.0.0.0:8091");
+            // FlecK WebSocketServer
+            var server = new WebSocketServer("ws://0.0.0.0:8091");   // todo : save port to config file
             server.Start(socket =>
             {
-                socket.OnOpen = () =>
-                {
-                    PlugTraces.Debug.Send("Websock Opened");
-                    allSockets.Add(socket);
-                };
-                socket.OnClose = () =>
-                {
-                    PlugTraces.Debug.Send("Websock Closed");
-                    allSockets.Remove(socket);
-                };
+                //socket.OnOpen = () =>
+                //{
+                //    PlugTraces.Debug.Send("Websock Opened");
+                //    allSockets.Add(socket);
+                //};
+                //socket.OnClose = () =>
+                //{
+                //    PlugTraces.Debug.Send("Websock Closed");
+                //    allSockets.Remove(socket);
+                //};
+                //socket.OnMessage = message =>
+                //{
+                //    PlugTraces.Debug.Send($"OnMessage", message);
+                //    allSockets.ToList().ForEach(s => s.Send("Echo: " + message));
+                //};
                 socket.OnBinary = buffer =>
                 {
-                    PlugTraces.Debug.Send($"Message, Len = {buffer.Length}");
+                    //PlugTraces.Debug.Send($"Message, Len = {buffer.Length}");
                     _buffToSend = buffer;
-                    //buffer.CopyTo(_buffToSend, 0);
                     SendMessageToSocket();
                 };
-
-                socket.OnMessage = message =>
-                {
-                    Console.WriteLine(message);
-                    allSockets.ToList().ForEach(s => s.Send("Echo: " + message));
-                };
             });
-            */
+            
         }
 
         internal static void SendMessageToSocket()
@@ -188,7 +162,7 @@ namespace CSharpPlugin
                     _socket = null; // force recreate socket
                     _isSocketError = true;
                     _errorTime = DateTime.Now.Ticks;
-                    _lastError = ex.Message;         // for debug purpose
+                    //_lastError = ex.Message;         // for debug purpose
                     return;
                 }
 
@@ -203,7 +177,7 @@ namespace CSharpPlugin
                 _socket = null; // force recreate socket
                 _isSocketError = true;
                 _errorTime = DateTime.Now.Ticks;
-                _lastError = ex.Message;         // for debug purpose
+                //_lastError = ex.Message;         // for debug purpose
             }
         } // SendMessageToSocket function
 
@@ -215,7 +189,7 @@ namespace CSharpPlugin
         public void Stop()
         {
             //trace("        WebSockPlugin Stop\n") ;
-            PlugTraces.Debug.Send("Websock Plugin stopped");
+            //PlugTraces.Debug.Send("Websock Plugin stopped");
             TTrace.Flush();
         }
 
@@ -235,7 +209,7 @@ namespace CSharpPlugin
         public bool OnAction(string WinId, int ResourceId, string NodeId)
         {
             //trace("        WebSockPlugin OnAction\n");
-            PlugTraces.Debug.Send("OnAction. WinId : " + WinId + ", ResourceId : " + ResourceId + ", current NodeId : " + NodeId);            
+            //PlugTraces.Debug.Send("OnAction. WinId : " + WinId + ", ResourceId : " + ResourceId + ", current NodeId : " + NodeId);            
             return true;
         }
 
@@ -253,7 +227,6 @@ namespace CSharpPlugin
         /// </returns>
         public bool OnBeforeDelete(string WinId, string NodeId)
         {
-     
             //trace("        WebSockPlugin onBeforeDelete\n") ;
             //TTrace.Debug.Send("onBeforeDelete") ;
             return true;
@@ -267,10 +240,8 @@ namespace CSharpPlugin
         /// </summary>
         public void OnTimer()
         {
-
             //trace("        WebSockPlugin OnTimer\n") ;
             //TTrace.Debug.Send("OnTimer");
-
         }
 
     }
