@@ -31,6 +31,8 @@ type
     butStop: TButton;
     butStopAndUnload: TButton;
     butRemove: TButton;
+    Label1: TLabel;
+    EditParam: TEdit;
     procedure butLoadAndStartClick(Sender: TObject);
     procedure butUnloadClick(Sender: TObject);
     procedure butStopAndUnloadClick(Sender: TObject);
@@ -58,7 +60,7 @@ uses DebugOptions;
 procedure TfrmPlugin.butLoadAndStartClick(Sender: TObject);
 begin
    plugin.DoLoad() ;
-   plugin.DoStart() ;
+   plugin.DoStart(PAnsiString(plugin.param));
    Display() ;
 end;
 
@@ -83,7 +85,7 @@ end;
 
 procedure TfrmPlugin.butStartClick(Sender: TObject);
 begin
-   plugin.DoStart ;
+   plugin.DoStart (PAnsiString(plugin.param));
    Display() ;
 end;
 
@@ -114,6 +116,8 @@ begin
       LabelTitleFileName.Visible := true ;
       LabelFileName.Caption := String(plugin.FileName) ;
    end ;
+
+   EditParam.Text := string(plugin.param);
 
    LabelClassName.Caption := plugin.className ;
    chkLoadAtStartup.Checked := plugin.startup ;

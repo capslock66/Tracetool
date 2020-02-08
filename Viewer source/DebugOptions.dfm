@@ -43,10 +43,6 @@ object frmDebugOptions: TfrmDebugOptions
       object TabSheetGeneral: TTabSheet
         Caption = 'General'
         ImageIndex = 2
-        ExplicitLeft = 0
-        ExplicitTop = 0
-        ExplicitWidth = 0
-        ExplicitHeight = 0
         object PnlGeneral: TPanel
           Left = 0
           Top = 0
@@ -230,10 +226,6 @@ object frmDebugOptions: TfrmDebugOptions
       object TabSheetFramework: TTabSheet
         Caption = 'Framework'
         ImageIndex = 4
-        ExplicitLeft = 0
-        ExplicitTop = 0
-        ExplicitWidth = 0
-        ExplicitHeight = 0
         object PnlFramework: TPanel
           Left = 0
           Top = 0
@@ -554,10 +546,6 @@ object frmDebugOptions: TfrmDebugOptions
       object TabSheet2: TTabSheet
         Caption = 'Delete'
         ImageIndex = 8
-        ExplicitLeft = 0
-        ExplicitTop = 0
-        ExplicitWidth = 0
-        ExplicitHeight = 0
         object PnlFrameworkDelete: TPanel
           Left = 0
           Top = 0
@@ -736,10 +724,6 @@ object frmDebugOptions: TfrmDebugOptions
       object TabSheet1: TTabSheet
         Caption = 'Watches'
         ImageIndex = 7
-        ExplicitLeft = 0
-        ExplicitTop = 0
-        ExplicitWidth = 0
-        ExplicitHeight = 0
         object pnlWatches: TPanel
           Left = 0
           Top = 0
@@ -902,10 +886,6 @@ object frmDebugOptions: TfrmDebugOptions
       object TabSheetODS: TTabSheet
         Caption = 'OutputDebugString'
         ImageIndex = 5
-        ExplicitLeft = 0
-        ExplicitTop = 0
-        ExplicitWidth = 0
-        ExplicitHeight = 0
         object PnlODS: TPanel
           Left = 0
           Top = 0
@@ -1104,10 +1084,6 @@ object frmDebugOptions: TfrmDebugOptions
       object TabSheetTail: TTabSheet
         Caption = 'Tail windows'
         ImageIndex = 6
-        ExplicitLeft = 0
-        ExplicitTop = 0
-        ExplicitWidth = 0
-        ExplicitHeight = 0
         object PnlTail: TPanel
           Left = 0
           Top = 0
@@ -1311,10 +1287,6 @@ object frmDebugOptions: TfrmDebugOptions
       object TabSheetEventLog: TTabSheet
         Caption = 'Event Log'
         ImageIndex = 7
-        ExplicitLeft = 0
-        ExplicitTop = 0
-        ExplicitWidth = 0
-        ExplicitHeight = 0
         object PnlEventLog: TPanel
           Left = 0
           Top = 0
@@ -1463,10 +1435,6 @@ object frmDebugOptions: TfrmDebugOptions
       object TabSheetClipboard: TTabSheet
         Caption = 'Clipboard export'
         ImageIndex = 1
-        ExplicitLeft = 0
-        ExplicitTop = 0
-        ExplicitWidth = 0
-        ExplicitHeight = 0
         object PnlClipboard: TPanel
           Left = 0
           Top = 0
@@ -1601,10 +1569,6 @@ object frmDebugOptions: TfrmDebugOptions
       object TabSheetPlugins: TTabSheet
         Caption = 'Plugins'
         ImageIndex = 3
-        ExplicitLeft = 0
-        ExplicitTop = 0
-        ExplicitWidth = 0
-        ExplicitHeight = 0
         object PnlPlugins: TPanel
           Left = 0
           Top = 0

@@ -4116,8 +4116,7 @@ implementation
                break;
             LinkedPlugin := TLinkedPlugin(LinkedPlugins.Items[c]);
             if LinkedPlugin.NeedOnAction then begin // and (LinkedPlugin.Plugin.status = psStarted) and (assigned(LinkedPlugin.Plugin.OnAction))
-               ActionResult := LinkedPlugin.plugin.DoAction
-                  (pAnsiString(self.ID), ResId, pAnsiString(NodeId));
+               ActionResult := LinkedPlugin.plugin.DoAction (pAnsiString(self.ID), ResId, pAnsiString(NodeId));
                if ActionResult = false then
                   Result := false;
             end;
