@@ -134,7 +134,7 @@ Type
      cpptest : TCPPTEST ;
   public
      constructor create () ;
-     procedure LoadDotNetManager() ;
+     procedure LoadDotNetWrapper() ;
 
      procedure DoCheckPlugInfile (Plug : TDotNetPlugin) ;
      procedure DoStart           (Plug : TDotNetPlugin;Parameter : PAnsiString) ;
@@ -326,11 +326,11 @@ begin
 
       if stricomp (pchar(plugKind) , 'Win32') = 0 then begin
          Win32plugin := TWin32Plugin.create ;
+         Win32plugin.plugKind  := 'Win32' ;
          Win32plugin.FileName  := AnsiString(xmlPlugin.FileName) ;
-         Win32plugin.param  := AnsiString(xmlPlugin.param) ;
+         Win32plugin.param     := AnsiString(xmlPlugin.param) ;
          Win32plugin.startup   := xmlPlugin.Enabled.Value ;
          //Win32plugin.PlugName  := xmlPlugin.PlugName ;
-         Win32plugin.plugKind  := 'Win32' ;
          Win32plugin.xmlPlugin := xmlPlugin ;
 
          PluginList.add (Win32plugin) ;
@@ -351,11 +351,11 @@ begin
             continue ;
 
          DotNetPlugin := TDotNetPlugin.create ;
-         DotNetPlugin.plugKind := 'DotNet' ;
+         DotNetPlugin.plugKind  := 'DotNet' ;
+         DotNetPlugin.FileName  := AnsiString(xmlPlugin.FileName) ;
+         DotNetPlugin.param     := AnsiString(xmlPlugin.param) ;
+         DotNetPlugin.startup   := xmlPlugin.Enabled.Value ;
          DotNetPlugin.xmlPlugin := xmlPlugin ;
-         DotNetPlugin.FileName := AnsiString(xmlPlugin.FileName) ;
-         DotNetPlugin.param  := AnsiString(xmlPlugin.param) ;
-         DotNetPlugin.startup  := xmlPlugin.Enabled.Value ;
          try
             // add the plugin to the dot net wrapper list
             if DotNetManager <> nil then  // check is not necessary, but resolve unassigned variable warning
@@ -761,12 +761,12 @@ end;
 // called by ButNewDotNetPlugin onclick event
 constructor TDotNetManager.create();
 begin
-   LoadDotNetManager() ;
+   LoadDotNetWrapper() ;
 end;
 
 //------------------------------------------------------------------------------
 
-procedure TDotNetManager.LoadDotNetManager;
+procedure TDotNetManager.LoadDotNetWrapper;
 begin
    OnAction        := nil ;
    OnBeforeDelete  := nil ;
@@ -779,8 +779,8 @@ begin
 
    if FileExists(strRunPath + 'DotNetWrapper.dll') then
       WrapperFileName := strRunPath + 'DotNetWrapper.dll'
-   else if FileExists('d:\GitHub\Tracetool\Plugins\DotNetWrapper\Debug\DotNetWrapper.dll') then
-      WrapperFileName := 'd:\GitHub\Tracetool\Plugins\DotNetWrapper\Debug\DotNetWrapper.dll'
+   //else if FileExists('c:\GitHub\Tracetool\Plugins\DotNetWrapper\Debug\DotNetWrapper.dll') then
+   //   WrapperFileName := 'c:\GitHub\Tracetool\Plugins\DotNetWrapper\Debug\DotNetWrapper.dll'
    else
       WrapperFileName := 'DotNetWrapper.dll' ;   // try to find it in the current path
 

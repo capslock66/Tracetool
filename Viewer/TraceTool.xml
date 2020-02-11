@@ -27,10 +27,12 @@
 	<TextExport><ProcessName Value="false"/><ThreadId Value="true"/><Time Value="true"/><Col1 Value="true"/><Col2 Value="true"/><Separator Value="9"/><GenerateColumnHeader Value="false"/><TextQualifier Value="None"/><TreeIndentation Value="3"/></TextExport>
 	<Plugins>
 		<JVMEngine Value="C:\Program Files\j2sdk1.4.2_06,JRE\bin\client\jvm.dll"/><JavaPLuginClassPath Value=""/>
-		<Plugin><Enabled Value="true"/><Kind>DotNet</Kind><FileName>c:\GitHub\Tracetool\Plugins\WebsockPlugin\bin\Debug\WebsockPlugin.dll</FileName><Param>aa</Param></Plugin>
-		<Plugin><Enabled Value="true"/><Kind>DotNet</Kind><FileName>c:\GitHub\Tracetool\Plugins\WebsockPlugin\bin\Debug\WebsockPlugin.dll</FileName><Param>bb</Param></Plugin>
-		<Plugin><Enabled Value="true"/><Kind>DotNet</Kind><FileName>c:\GitHub\Tracetool\Plugins\WebsockPlugin\bin\Debug\WebsockPlugin.dll</FileName><Param>cc</Param></Plugin>
-		<!--<Plugin><Enabled Value="true"/><Kind>DotNet</Kind><FileName>D:\GitHub\Tracetool\Plugins\WebsockPlugin\bin\Debug\WebsockPlugin.dll</FileName><Param>dd</Param></Plugin> -->
+		<Plugin>
+			<Enabled Value="true"/>
+			<Kind>DotNet</Kind>
+			<FileName>c:\GitHub\Tracetool\Plugins\WebsockPlugin\bin\Debug\WebsockPlugin.dll</FileName>
+			<Param>WebSocketHost = 0.0.0.0, WebSocketPort = 8091, ViewerSocketHost = 127.0.0.1, ViewerSocketPort = 8090</Param>
+		</Plugin>
 	</Plugins>
 	<Watches><Enabled Value="true"/><VisibleMenu Value="true"/><MainWatchesTitle Value="Watches"/><Trace><FontName Value="MS Sans Serif"/><FontSize Value="8"/><NodeHeight Value="18"/></Trace><Info><FontName Value="Tahoma"/><FontSize Value="8"/></Info></Watches>
 </Config>

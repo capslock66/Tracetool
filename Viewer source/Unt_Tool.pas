@@ -27,7 +27,7 @@ uses
   IdThread, idGlobal, IdException, idstack, IdTCPConnection ,  idContext , unt_PageContainer,
   JavaRuntime,fastmm4,pscMenu, madExceptVcl,
   IdHTTPServer,
-  FileViewer,          // d:\dev\Tracetool\Viewer 2010\dependencyviewer\
+  FileViewer,
   IdCustomTCPServer, IdRawBase, IdRawClient, IdURI,
   IdUDPBase, IdUDPServer; //, IdCustomTCPServer;
 

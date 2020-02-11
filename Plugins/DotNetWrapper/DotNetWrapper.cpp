@@ -147,9 +147,10 @@ extern "C"
 
     //---------------------------------------------------------------------------------------------------------------
 
-    __declspec(dllexport) void __cdecl Start(unsigned PlugId, char* strException)
+    __declspec(dllexport) void __cdecl Start(unsigned PlugId, char * Parameter, char* strException)
     {
         System::Object^ key = PlugId;
+        String^ strParameter = gcnew String(Parameter);
 
         // check if plugin is know
         if (Singleton::PlugList->ContainsKey(key) == false)
@@ -182,7 +183,7 @@ extern "C"
 
         try {
             //Singleton::trace("wrapper : Start : begin\n");
-            Loader->StartPlugin(); 
+            Loader->StartPlugin(strParameter);
             //Singleton::trace("wrapper : Start : end\n");
         }
         catch (Exception ^ ex) {

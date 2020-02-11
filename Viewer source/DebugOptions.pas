@@ -1342,7 +1342,7 @@ begin
    end ;
 
    if DotNetManager.DllHandle = 0 then begin
-      DotNetManager.LoadDotNetManager() ;
+      DotNetManager.LoadDotNetWrapper() ;
       if DotNetManager.DllHandle = 0 then
          exit ;
    end ;
