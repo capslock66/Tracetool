@@ -36,7 +36,7 @@ namespace TraceTool
    /// <summary>
    /// Plugin interface. Inherit from this interface to create a TraceTool plugin
    /// </summary>
-   /*   
+      
    public interface ITracePLugin
    {
       /// <summary>
@@ -77,11 +77,11 @@ namespace TraceTool
       /// <summary>
       /// Initialise the plugin
       /// </summary>
-      void Start () ;
+      void Start (string strParameter) ;
       /// <summary>
       /// Stop the plugin
       /// </summary>
       void Stop () ;
    }   // ITracePLugin
-   */
+   
 }      // namespace TraceTool

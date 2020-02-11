@@ -394,14 +394,17 @@ type
     function Get_FileName: WideString;
     function Get_ClassName: WideString;
     function Get_Kind: WideString;
+    function Get_Param: WideString;
     function Get_Enabled: IXMLBooleanTagValue;
     procedure Set_FileName(Value: WideString);
     procedure Set_ClassName(Value: WideString);
     procedure Set_Kind(Value: WideString);
+    procedure Set_Param(Value: WideString);
     { Methods & Properties }
     property FileName: WideString read Get_FileName write Set_FileName;
     property ClassName: WideString read Get_ClassName write Set_ClassName;
     property Kind: WideString read Get_Kind write Set_Kind;
+    property Param: WideString read Get_Param write Set_Param;
     property Enabled: IXMLBooleanTagValue read Get_Enabled;
   end;
 
@@ -784,10 +787,12 @@ type
     function Get_FileName: WideString;
     function Get_ClassName: WideString;
     function Get_Kind: WideString;
+    function Get_Param: WideString;
     function Get_Enabled: IXMLBooleanTagValue;
     procedure Set_FileName(Value: WideString);
     procedure Set_ClassName(Value: WideString);
     procedure Set_Kind(Value: WideString);
+    procedure Set_Param(Value: WideString);
   public
     procedure AfterConstruction; override;
   end;
@@ -1678,6 +1683,16 @@ end;
 procedure TXMLPlugin.Set_Kind(Value: WideString);
 begin
   ChildNodes['Kind'].NodeValue := Value;
+end;
+
+function TXMLPlugin.Get_Param: WideString;
+begin
+  Result := ChildNodes['Param'].Text;
+end;
+
+procedure TXMLPlugin.Set_Param(Value: WideString);
+begin
+  ChildNodes['Param'].NodeValue := Value;
 end;
 
 function TXMLPlugin.Get_Enabled: IXMLBooleanTagValue;

@@ -929,11 +929,6 @@ begin
    ComboJVM.Text            := XMLConfig.Plugins.JVMEngine.Value ;
    EditPluginClassPath.Text := XMLConfig.Plugins.JavaPLuginClassPath.value ;
    ButNewJavaPlugin.Enabled := true ;
-   
-//   if JRuntime = nil then
-//      MemoVMClassPath.Text := ''
-//   else
-//      MemoVMClassPath.Text := TClassPath.getDefault.FullPath ;
 
    for c := 0 to PluginList.Count-1 do begin
       Plugin := TPlugin (PluginList.Items[c]) ;
@@ -941,6 +936,8 @@ begin
          continue ;
       plugin.startup := Plugin.xmlPlugin.Enabled.Value ;
       TfrmPlugin(Plugin.frmPlugin).chkLoadAtStartup.checked  := Plugin.xmlPlugin.Enabled.Value ;
+      TfrmPlugin(Plugin.frmPlugin).EditParam.Text := Plugin.xmlPlugin.Param ;
+
    end ;
 
 end ;
@@ -1070,8 +1067,10 @@ begin
 //      TJavaPlugin.SetClassPath(TClassPath.getDefault.FullPath , XMLConfig.Plugins.JavaPLuginClassPath.value);
    for c := 0 to PluginList.Count-1 do begin
       Plugin := TPlugin (PluginList.Items[c]) ;
-      if Plugin.xmlPlugin <> nil then
+      if Plugin.xmlPlugin <> nil then begin
          Plugin.xmlPlugin.Enabled.Value := TfrmPlugin(Plugin.frmPlugin).chkLoadAtStartup.checked ;
+         Plugin.xmlPlugin.Param := TfrmPlugin(Plugin.frmPlugin).EditParam.Text ;
+      end;
    end ;
 
    // fonts : name, size and height
@@ -1302,6 +1301,7 @@ begin
    Win32plugin.xmlPlugin.Kind     := 'Win32' ;
    Win32plugin.xmlPlugin.FileName := string(Win32plugin.FileName) ;
    Win32plugin.xmlPlugin.Enabled.Value := Win32plugin.startup ;
+   Win32plugin.xmlPlugin.Param := string(Win32plugin.param) ;
 
    // save to xml
    XMLConfig.OwnerDocument.SaveToFile(strConfigFile);
@@ -1316,7 +1316,7 @@ begin
    VSTOptionsChange(VSTOptions,  node);
 
    // run the plugin
-   Win32plugin.doStart ;
+   Win32plugin.doStart(PAnsiString(Win32plugin.param)) ;
    VSTOptionsChange(VSTOptions,  node);
 end;
 
@@ -1342,7 +1342,7 @@ begin
    end ;
 
    if DotNetManager.DllHandle = 0 then begin
-      DotNetManager.LoadDotNetManager() ;
+      DotNetManager.LoadDotNetWrapper() ;
       if DotNetManager.DllHandle = 0 then
          exit ;
    end ;
@@ -1356,6 +1356,7 @@ begin
    DotNetPlugin.plugKind  := 'DotNet' ;
    DotNetPlugin.xmlPlugin := nil ;        // not yet saved in xml
    DotNetPlugin.FileName  := AnsiString(Frm_Tool.OpenDialog1.FileName) ;
+   DotNetPlugin.Param     := '' ;
 
    DotNetManager.DoCheckPlugInfile (DotNetPlugin) ;
 
@@ -1364,7 +1365,7 @@ begin
 
    // add to xml
    DotNetPlugin.xmlPlugin := XMLConfig.Plugins.plugin.Add ;
-   DotNetPlugin.xmlPlugin.Enabled.Value := true ;
+   DotNetPlugin.xmlPlugin.Param         := '' ;
    DotNetPlugin.xmlPlugin.Kind          := 'DotNet' ;
    DotNetPlugin.xmlPlugin.FileName      := string(DotNetPlugin.FileName) ;
    DotNetPlugin.xmlPlugin.Enabled.Value := DotNetPlugin.startup ;
@@ -1387,7 +1388,7 @@ begin
    VSTOptionsChange(VSTOptions,  node);
 
    // run the plugin
-   DotNetPlugin.doStart ;
+   DotNetPlugin.doStart (PAnsiString(DotNetPlugin.param));
    VSTOptionsChange(VSTOptions,  node);
 end;
 

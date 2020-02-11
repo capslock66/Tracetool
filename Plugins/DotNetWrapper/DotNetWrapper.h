@@ -67,7 +67,7 @@ public:
 
 
 public delegate String^ Delegate_GetPlugName();
-public delegate void Delegate_Start();
+public delegate void Delegate_Start(String^ strParameter);
 public delegate void Delegate_Stop();
 public delegate void Delegate_OnTimer();
 public delegate bool Delegate_OnBeforeDelete(String^ WinId, String^ NodeId);
@@ -152,10 +152,10 @@ public:
         _plugin = nullptr;  // Garbage collected
     }
 
-    void StartPlugin()
+    void StartPlugin(String^ strParameter)
     {
         //Singleton::trace("    Loader : StartPlugin begin\n");
-        _delegate_Start();
+        _delegate_Start(strParameter);
         //Singleton::trace("    Loader : StartPlugin end\n");
     }
     

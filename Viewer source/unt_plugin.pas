@@ -27,7 +27,7 @@ Type
   TOnAction               = function  (WinId : PAnsiString ; ButtonId : integer; NodeId : PAnsiString ) : windows.BOOL stdcall ;
   TOnBeforeDelete         = function  (WinId : PAnsiString ; NodeId : PAnsiString) : windows.BOOL stdcall ;
   TOnTimer                = procedure () stdcall ;
-  TStart                  = procedure () stdcall ;
+  TStart                  = procedure (Parameter : PAnsiString) stdcall ;
   TStop                   = procedure () stdcall ;
 
   // Managed plugins functions
@@ -37,7 +37,7 @@ Type
   TWrapperOnAction        = function  (PlugId : integer ; WinId : PAnsiString ; ButtonId : integer; NodeId, StrException : PAnsiString) : windows.BOOL stdcall ;
   TWrapperOnBeforeDelete  = function  (PlugId : integer ; WinId : PAnsiString ; NodeId,StrException : PAnsiString) : windows.BOOL stdcall ;
   TWrapperOnTimer         = procedure (PlugId : integer ; StrException : PAnsiString) stdcall ;
-  TWrapperStart           = procedure (PlugId : integer ; StrException : PAnsiString) stdcall ;
+  TWrapperStart           = procedure (PlugId : integer ; Parameter : PAnsiString; StrException : PAnsiString) stdcall ;
   TWrapperStop            = procedure (PlugId : integer ; StrException : PAnsiString) stdcall ;
   TWrapperUnload          = procedure (PlugId : integer ; StrException : PAnsiString) stdcall ;
   TWrapperCheckPlugInFile = procedure (PlugId : integer ; FileName,PlugName,StrException : PAnsiString) stdcall ;  // PlugName and StrException are OUT
@@ -54,6 +54,7 @@ Type
      Status        : TPlugStatus ;
      FileName      : AnsiString ;
      PlugClassName : AnsiString ;
+     param         : AnsiString ;
      startup       : boolean ;
      plugKind      : string ;
      frmPlugin     : TFrame ; // TfrmPlugin
@@ -66,7 +67,7 @@ Type
      function  DoAction        (WinId : PAnsiString ; ButtonId : integer; NodeId : PAnsiString) : windows.BOOL ; virtual ; abstract ;
      function  DoBeforeDelete  (WinId : PAnsiString ; NodeId : PAnsiString) : windows.BOOL ; virtual ; abstract ;
      procedure DoTimer         () ; virtual ; abstract ;
-     procedure DoStart         () ; virtual ; abstract ;
+     procedure DoStart         (Parameter : PAnsiString) ; virtual ; abstract ;
      procedure DoStop          () ; virtual ; abstract ;
      procedure DoLoad          () ; virtual ; abstract ;
      procedure DoUnload        () ; virtual ; abstract ;
@@ -92,7 +93,7 @@ Type
      function  DoAction        (WinId : PAnsiString ; ButtonId : integer; NodeId : PAnsiString) : windows.BOOL ; override ;
      function  DoBeforeDelete  (WinId : PAnsiString ; NodeId : PAnsiString) : windows.BOOL ; override ;
      procedure DoTimer         () ; override ;
-     procedure DoStart         () ; override ;
+     procedure DoStart         (Parameter : PAnsiString) ; override ;
      procedure DoStop          () ; override ;
      procedure DoLoad          () ; override ;
      procedure DoUnload        () ; override ;
@@ -102,15 +103,13 @@ Type
 
   // a wrapper plugin is linked to a TPlugManager
   TDotNetPlugin = class (TPlugin)
-     //Manager : TPlugManager ;
-
      constructor create () ;
 
      // TPlugin
      function  DoAction        (WinId : PAnsiString ; ButtonId : integer; NodeId : PAnsiString) : windows.BOOL ; override ;
      function  DoBeforeDelete  (WinId , NodeId : PAnsiString) : windows.BOOL ; override ;
      procedure DoTimer         () ; override ;
-     procedure DoStart         () ; override ;
+     procedure DoStart         (Parameter : PAnsiString) ; override ;
      procedure DoStop          () ; override ;
      procedure DoLoad          () ; override ;  // not called
      procedure DoUnload        () ; override ;
@@ -135,41 +134,16 @@ Type
      cpptest : TCPPTEST ;
   public
      constructor create () ;
-     procedure LoadDotNetManager() ;
+     procedure LoadDotNetWrapper() ;
 
      procedure DoCheckPlugInfile (Plug : TDotNetPlugin) ;
-     procedure DoStart           (Plug : TDotNetPlugin) ;
+     procedure DoStart           (Plug : TDotNetPlugin;Parameter : PAnsiString) ;
      procedure DoStop            (Plug : TDotNetPlugin) ;
      function  DoAction          (Plug : TDotNetPlugin; WinId : PAnsiString ; ButtonId : integer; NodeId : PAnsiString) : windows.BOOL ;
      function  DoBeforeDelete    (Plug : TDotNetPlugin; WinId : PAnsiString ; NodeId : PAnsiString) : windows.BOOL ;
      procedure DoTimer           (Plug : TDotNetPlugin) ;
      procedure DoUnload          (Plug : TDotNetPlugin) ;
   end ;
-
-  //----------------------------------------------------------------------------
-
-//  TJavaPlugin = class (TPlugin)
-//  private
-//     JavaPlugin : jobject ;
-//     JavaPlugin_Class : JClass ;
-//  public
-//     constructor create () ;
-//     class function checkClass (name : String ) : string ;
-//     class function GetJVMs : TStringList;
-//     class procedure Init ;
-//     class procedure SetClassPath (JVMClassPath,PLugClassPath : string);
-//
-//     // TPlugin
-//     function  DoAction        (WinId : PAnsiString ; ButtonId : integer; NodeId : PAnsiString) : windows.BOOL ; override ;
-//     function  DoBeforeDelete  (WinId ,NodeId : PAnsiString) : windows.BOOL ; override ;
-//     procedure DoTimer         () ; override ;
-//     procedure DoStart         () ; override ;
-//     procedure DoStop          () ; override ;
-//     procedure getName () ;
-//     procedure DoLoad          () ; override ;
-//     procedure DoUnload        () ; override ;
-//     //procedure Add() ;
-//  end ;
 
   //----------------------------------------------------------------------------
 
@@ -352,17 +326,18 @@ begin
 
       if stricomp (pchar(plugKind) , 'Win32') = 0 then begin
          Win32plugin := TWin32Plugin.create ;
+         Win32plugin.plugKind  := 'Win32' ;
          Win32plugin.FileName  := AnsiString(xmlPlugin.FileName) ;
+         Win32plugin.param     := AnsiString(xmlPlugin.param) ;
          Win32plugin.startup   := xmlPlugin.Enabled.Value ;
          //Win32plugin.PlugName  := xmlPlugin.PlugName ;
-         Win32plugin.plugKind  := 'Win32' ;
          Win32plugin.xmlPlugin := xmlPlugin ;
 
          PluginList.add (Win32plugin) ;
          if Win32plugin.startup = false then
             continue ;
          Win32plugin.DoLoad ;   // load , get name
-         Win32plugin.Dostart ;  //  and start
+         Win32plugin.Dostart(pAnsiString(Win32plugin.param)) ;  //  and start
          //if (Win32plugin.PlugName <> '') and (Win32plugin.PlugName <> xmlPlugin.PlugName) then begin
          //   xmlPlugin.PlugName := Win32plugin.PlugName ;
          //   XMLConfig.OwnerDocument.SaveToFile(strConfigFile);
@@ -376,10 +351,11 @@ begin
             continue ;
 
          DotNetPlugin := TDotNetPlugin.create ;
-         DotNetPlugin.plugKind := 'DotNet' ;
+         DotNetPlugin.plugKind  := 'DotNet' ;
+         DotNetPlugin.FileName  := AnsiString(xmlPlugin.FileName) ;
+         DotNetPlugin.param     := AnsiString(xmlPlugin.param) ;
+         DotNetPlugin.startup   := xmlPlugin.Enabled.Value ;
          DotNetPlugin.xmlPlugin := xmlPlugin ;
-         DotNetPlugin.FileName := AnsiString(xmlPlugin.FileName) ;
-         DotNetPlugin.startup  := xmlPlugin.Enabled.Value ;
          try
             // add the plugin to the dot net wrapper list
             if DotNetManager <> nil then  // check is not necessary, but resolve unassigned variable warning
@@ -400,38 +376,12 @@ begin
 
          if DotNetPlugin.status <> psLoaded then
             continue ;
-         DotNetPlugin.DoStart ;
+         DotNetPlugin.DoStart(pAnsiString(DotNetPlugin.param)) ;
          //if DotNetPlugin.status <> psStarted then
          //   continue ;
 
          //TFrm_Trace.InternalTraceFromThread ('Dot net plugin ' + DotNetPlugin.Name + ' Loaded and started');
 
-//      end else if stricomp (pchar(plugKind) , 'Java') = 0 then begin
-//         TJavaPlugin.Init ;
-//
-//
-//         JavaPlugin := TJavaPlugin.create ;
-//         JavaPlugin.plugKind      := 'Java' ;
-//         JavaPlugin.startup       := xmlPlugin.Enabled.Value ;
-//         JavaPlugin.xmlPlugin     := xmlPlugin ;
-//         JavaPlugin.PlugName      := '' ; // xmlPlugin.PlugName ;
-//         JavaPlugin.PlugClassName := AnsiString(xmlPlugin.ClassName) ; // 'pluginTest.JavaTestPlug' ;
-//         // JavaPlugin.FileName is not used for java plugin
-//
-//         PluginList.add (JavaPlugin) ;   // add the plugin to the general plugin list
-//
-//         if JavaPlugin.startup = false then
-//            continue ;
-//
-//         JavaPlugin.DoLoad ;               // add the plugin to the java wrapper, load the class and create instance
-//         JavaPlugin.getName() ;
-//
-//         if JavaPlugin.status <> psLoaded then
-//            continue ;
-//         JavaPlugin.DoStart ;
-//         if JavaPlugin.status <> psStarted then
-//            continue ;
-//         //TFrm_Trace.InternalTrace ('Java plugin ' + JavaPlugin.PlugName + ' Loaded and started');
       end ;
    end ;
 
@@ -630,13 +580,13 @@ end;
 
 //------------------------------------------------------------------------------
 
-procedure TWin32Plugin.DoStart;
+procedure TWin32Plugin.DoStart(Parameter : PAnsiString);
 begin
    if status <> psLoaded then
       exit ;
    try
       if assigned (Start) then
-         Start () ;
+         Start (pAnsiString(Parameter)) ;
       status := psStarted ;
    except
       on e : exception do begin
@@ -733,13 +683,13 @@ end;
 
 //------------------------------------------------------------------------------
 
-procedure TDotNetPlugin.DoStart;
+procedure TDotNetPlugin.DoStart(Parameter : PAnsiString);
 begin
    if status <> psLoaded then
       exit ;
    try
       if assigned (DotNetManager.Start) then
-         DotNetManager.doStart (self) ;
+         DotNetManager.doStart (self,Parameter) ;
    except
       on e : exception do begin
          TFrm_Trace.InternalTrace (String (PlugName) + ' : DoStart ' , e.Message) ;
@@ -811,12 +761,12 @@ end;
 // called by ButNewDotNetPlugin onclick event
 constructor TDotNetManager.create();
 begin
-   LoadDotNetManager() ;
+   LoadDotNetWrapper() ;
 end;
 
 //------------------------------------------------------------------------------
 
-procedure TDotNetManager.LoadDotNetManager;
+procedure TDotNetManager.LoadDotNetWrapper;
 begin
    OnAction        := nil ;
    OnBeforeDelete  := nil ;
@@ -829,8 +779,8 @@ begin
 
    if FileExists(strRunPath + 'DotNetWrapper.dll') then
       WrapperFileName := strRunPath + 'DotNetWrapper.dll'
-   else if FileExists('d:\GitHub\Tracetool\Plugins\DotNetWrapper\Debug\DotNetWrapper.dll') then
-      WrapperFileName := 'd:\GitHub\Tracetool\Plugins\DotNetWrapper\Debug\DotNetWrapper.dll'
+   //else if FileExists('c:\GitHub\Tracetool\Plugins\DotNetWrapper\Debug\DotNetWrapper.dll') then
+   //   WrapperFileName := 'c:\GitHub\Tracetool\Plugins\DotNetWrapper\Debug\DotNetWrapper.dll'
    else
       WrapperFileName := 'DotNetWrapper.dll' ;   // try to find it in the current path
 
@@ -907,7 +857,7 @@ end;
 
 //------------------------------------------------------------------------------
 
-procedure TDotNetManager.DoStart (Plug : TDotNetPlugin);
+procedure TDotNetManager.DoStart (Plug : TDotNetPlugin;Parameter : PAnsiString);
 var
    szException  : AnsiString;
    TargetException : AnsiString;
@@ -919,7 +869,8 @@ begin
    strcopy (pAnsiChar(szException) , '') ;
 
    try
-      Start (Plug.PlugID , pAnsiString(szException)) ;
+      //TWrapperStart = procedure (PlugId : integer ; Parameter : PAnsiString; StrException : PAnsiString) stdcall ;
+      Start (Plug.PlugID ,Parameter, pAnsiString(szException)) ;
    except
       on e:exception do begin
          TFrm_Trace.InternalTraceFromThread('call cpp Start() exception : ' + e.Message);
@@ -1068,827 +1019,7 @@ end;
 
 //------------------------------------------------------------------------------
 
-{ TJavaPlugin }
 
-//constructor TJavaPlugin.create;
-//begin
-//   inherited ;
-//end;
-//
-////------------------------------------------------------------------------------
-//
-//class function TJavaPlugin.GetJVMs () : TStringList ;
-//var
-//   reg : TRegistry;
-//   subKeys,subKeys2 : TStringList ;
-//   JavaHome : string ;
-//
-//   procedure CheckRegistry (MasterKey : string) ;
-//   var
-//      c,d : integer ;
-//   begin
-//      if reg.OpenKey(MasterKey, false) = false then
-//         exit ;
-//
-//      subKeys := TStringList.Create ;
-//      reg.GetKeyNames(subKeys);
-//      reg.CloseKey ;
-//      for c := 0 to subKeys.Count-1 do begin
-//         reg.OpenKey(MasterKey + '\'  + subKeys.Strings[c],false) ;
-//         subKeys2 := TStringList.Create ;
-//         reg.GetKeyNames(subKeys2);
-//         reg.CloseKey ;
-//         for d := 0 to subKeys2.Count-1 do begin    // versions
-//            reg.OpenKey(MasterKey + '\' + subKeys.Strings[c] + '\' + subKeys2.Strings[d] ,false) ;
-//
-//            // get the javaHome
-//            if reg.ValueExists('JavaHome') then
-//               JavaHome := reg.ReadString('JavaHome')
-//            else if reg.valueExists('Home') then
-//               JavaHome := reg.ReadString('Home')
-//            else if reg.valueExists('java_home') then
-//               JavaHome := reg.ReadString('java_home')
-//            else
-//               continue ;
-//
-//            // get the run time lib
-//            if FileExists(JavaHome + '\JRE\bin\client\jvm.dll' ) then result.Add(JavaHome + ',JRE\bin\client\jvm.dll' ) ;
-//            if FileExists(JavaHome + '\JRE\bin\classic\jvm.dll') then result.Add(JavaHome + ',JRE\bin\classic\jvm.dll') ;
-//            if FileExists(JavaHome + '\JRE\bin\hotspot\jvm.dll') then result.Add(JavaHome + ',JRE\bin\hotspot\jvm.dll') ;
-//            if FileExists(JavaHome + '\JRE\bin\server\jvm.dll' ) then result.Add(JavaHome + ',JRE\bin\server\jvm.dll' ) ;
-//            if FileExists(JavaHome + '\bin\client\jvm.dll'     ) then result.Add(JavaHome + ',bin\client\jvm.dll'     ) ;
-//            if FileExists(JavaHome + '\bin\classic\jvm.dll'    ) then result.Add(JavaHome + ',bin\classic\jvm.dll'    ) ;
-//            if FileExists(JavaHome + '\bin\hotspot\jvm.dll'    ) then result.Add(JavaHome + ',bin\hotspot\jvm.dll'    ) ;
-//            if FileExists(JavaHome + '\bin\server\jvm.dll'     ) then result.Add(JavaHome + ',bin\server\jvm.dll'     ) ;
-//
-//         end ;   // next version
-//         subKeys2.free ;
-//      end ;      // next path in masterkey
-//      subKeys.Free ;
-//   end ;
-//begin
-//   result := tStringList.Create ;
-//   result.Duplicates := dupIgnore ; // no duplicate strings
-//   reg := TRegistry.Create;
-//   try
-//      reg.RootKey := HKEY_LOCAL_MACHINE;
-//      CheckRegistry ('\SOFTWARE\JavaSoft') ;
-//      CheckRegistry ('\SOFTWARE\IBM') ;
-//   finally
-//      Reg.Free;
-//   end;
-//end ;
-//
-////------------------------------------------------------------------------------
-//
-//class procedure TJavaPlugin.SetClassPath(JVMClassPath,PLugClassPath: string);
-//var
-//   penv: PJNIEnv;
-//
-//   Path : string ;
-//   Params : TJavaParams;
-//   Method : TJavaMethod;
-//
-//   MethodID : JMethodID;
-//   Exc : jthrowable ;
-//   ExceptionClass : jclass ;
-//   ExceptionClassGetClass : jclass ;
-//   ExceptionClass3 : jclass ;
-//   ExceptionName : jClass ;
-//   ExceptionMessage : JClass ;
-//   ErrMsg: string;
-//begin
-//
-//   path := JVMClassPath ;
-//   if PLugClassPath <> '' then
-//      if RightStr(path,1) = ';' then
-//         path := path + PLugClassPath
-//      else
-//         path := path + ';' + PLugClassPath ;
-//
-//
-//   Penv := TJavaVM.getPenv;
-//
-//   // public static void setClassPath (String cPath)
-//   // ---------------------------
-//   Params := TJavaParams.Create;
-//   Params.addString(Path);       // class path
-//   Method := TJavaMethod.Create(
-//      WrapperClass,        // class : TJavaClass
-//      'setClassPath',      // function name : String
-//      static,              // methodType : TMethodAttribute
-//      Void,                // returntype : TJavaType
-//      Params,              // params : TJavaParams
-//      nil);                // no retclass
-//
-//   Method.Call(Params, Nil{Class method});
-//
-//   // Check for exception
-//
-//   Exc := Penv^.ExceptionOccurred (Penv) ;
-//   if Exc <> nil then begin
-//      // Clear the exception so we can call other methods
-//      Penv^.ExceptionClear (Penv) ;
-//
-//      // Find out about the exception - its class and message
-//      ExceptionClass := Penv^.GetObjectClass(penv,Exc) ;
-//      MethodID := Penv^.GetMethodID(penv, ExceptionClass , 'getClass', '()Ljava/lang/Class;');
-//      ExceptionClassGetClass := Penv^.CallObjectMethod(penv, Exc, MethodID);  // call getClass()
-//      ExceptionClass3 := Penv^.GetObjectClass(penv,ExceptionClassGetClass) ;  // get object class
-//
-//      MethodID := Penv^.GetMethodID(penv, ExceptionClass3 , 'getName', '()Ljava/lang/String;');
-//      ExceptionName := Penv^.CallObjectMethod(penv, ExceptionClassGetClass, MethodID);  // getName
-//
-//      ErrMsg := JStringToString(penv, ExceptionName);
-//
-//      MethodID := Penv^.GetMethodID(Penv, ExceptionClass, 'getMessage', '()Ljava/lang/String;');
-//      if MethodID = nil then
-//         raise Exception.Create('Can''t find method: getMessage');
-//
-//      ExceptionMessage := Penv^.CallObjectMethod(Penv, Exc, MethodID) ;
-//      ErrMsg := ErrMsg + ' :' + #13 + JStringToString(Penv,ExceptionMessage);
-//      TFrm_Trace.InternalTrace  ('SetClassPath Exception',ErrMsg) ;
-//      exit ;
-//   end ;
-//   Params.free ;
-//   Method.Free ;
-//end;
-//
-////------------------------------------------------------------------------------
-//
-//class function TJavaPlugin.checkClass(name: String): string ;
-//var
-//   penv: PJNIEnv;
-//   retCall : jvalue ;
-//   //JgetName : jClass ;
-//
-//   CheckParams : TJavaParams;
-//   CheckMethod : TJavaMethod;
-//
-//   MethodID : JMethodID;
-//   Exc : jthrowable ;
-//   ExceptionClass : jclass ;
-//   ExceptionClassGetClass : jclass ;
-//   ExceptionClass3 : jclass ;
-//   ExceptionName : jClass ;
-//   ExceptionMessage : JClass ;
-//   ErrMsg: string;
-//begin
-//   //
-//   Penv := TJavaVM.getPenv;
-//
-//   // public static String findClass(String name , String CPath)
-//   // ---------------------------
-//   CheckParams := TJavaParams.Create;
-//   CheckParams.addString(name);        // class name
-//   CheckMethod := TJavaMethod.Create(
-//      WrapperClass,        // class : TJavaClass
-//      'findClass',         // function name : String
-//      static,              // methodType : TMethodAttribute
-//      Aobject,             // returntype : TJavaType
-//      CheckParams,         // params : TJavaParams
-//      StringClass);        // return String
-//
-//   retCall := CheckMethod.Call(CheckParams, Nil{Class method});
-//
-//   // Check for exception
-//
-//   Exc := Penv^.ExceptionOccurred (Penv) ;
-//   if Exc <> nil then begin
-//      // Clear the exception so we can call other methods
-//      Penv^.ExceptionClear (Penv) ;
-//
-//      // Find out about the exception - its class and message
-//      ExceptionClass := Penv^.GetObjectClass(penv,Exc) ;
-//      MethodID := Penv^.GetMethodID(penv, ExceptionClass , 'getClass', '()Ljava/lang/Class;');
-//      ExceptionClassGetClass := Penv^.CallObjectMethod(penv, Exc, MethodID);  // call getClass()
-//      ExceptionClass3 := Penv^.GetObjectClass(penv,ExceptionClassGetClass) ;  // get object class
-//
-//      MethodID := Penv^.GetMethodID(penv, ExceptionClass3 , 'getName', '()Ljava/lang/String;');
-//      ExceptionName := Penv^.CallObjectMethod(penv, ExceptionClassGetClass, MethodID);  // getName
-//
-//      ErrMsg := JStringToString(penv, ExceptionName);
-//
-//      MethodID := Penv^.GetMethodID(Penv, ExceptionClass, 'getMessage', '()Ljava/lang/String;');
-//      if MethodID = nil then
-//         raise Exception.Create('Can''t find method: getMessage');
-//
-//      ExceptionMessage := Penv^.CallObjectMethod(Penv, Exc, MethodID) ;
-//      ErrMsg := ErrMsg + ' :' + #13 + JStringToString(Penv,ExceptionMessage);
-//      TFrm_Trace.InternalTrace  ('checkClass Exception',ErrMsg) ;
-//      result := '' ;
-//      exit ;
-//   end ;
-//   CheckParams.free ;
-//   CheckMethod.Free ;
-//
-//   //JgetName := retCall.l ;
-//
-//   result := JStringToString(penv, retCall.l);
-//end;
-//
-////------------------------------------------------------------------------------
-//
-//procedure TJavaPlugin.DoLoad;
-//var
-//   penv: PJNIEnv;
-//   retCall : jvalue ;
-//
-//   LoadParams : TJavaParams;
-//   LoadMethod : TJavaMethod;
-//
-//   MethodID : JMethodID;
-//   Exc : jthrowable ;
-//   ExceptionClass : jclass ;
-//   ExceptionClassGetClass : jclass ;
-//   ExceptionClass3 : jclass ;
-//   ExceptionName : jClass ;
-//   ExceptionMessage : JClass ;
-//   ErrMsg: string;
-//
-//   //Result_getClass : JClass ;
-//   //Result_getClass_class : JClass ;
-//   //Result_getClass_name : jClass ;
-//begin
-//
-//   if Status <> psUnLoaded then begin
-//      TFrm_Trace.InternalTrace ('TJavaPlugin.DoLoad(' + PlugName + ') : plugin already loaded') ;
-//      exit ;
-//   end ;
-//
-//   //TFrm_Trace.InternalTrace ('Call doLoad(' + PlugName + ')') ;
-//
-//   Penv := TJavaVM.getPenv;
-//
-//   // public static Object load (String plugClassName, int plugId) throws Exception
-//   // ---------------------------
-//   LoadParams := TJavaParams.Create;
-//   LoadParams.addString(PlugClassName);
-//   LoadParams.addInt(PlugID);        // Plug name
-//   LoadMethod := TJavaMethod.Create(
-//      WrapperClass,       // class : TJavaClass
-//      'load',             // function name : String
-//      static,             // methodType : TMethodAttribute
-//      Aobject,            // returntype : TJavaType
-//      LoadParams,         // params : TJavaParams
-//      ObjectClass);       // retclass : TJavaClass
-//
-//   retCall := LoadMethod.Call(LoadParams, Nil{Class method});
-//
-//   // Check for exception
-//
-//   Exc := Penv^.ExceptionOccurred (Penv) ;
-//   if Exc <> nil then begin
-//      // Clear the exception so we can call other methods
-//      Penv^.ExceptionClear (Penv) ;
-//
-//      // Find out about the exception - its class and message
-//      ExceptionClass := Penv^.GetObjectClass(penv,Exc) ;
-//      MethodID := Penv^.GetMethodID(penv, ExceptionClass , 'getClass', '()Ljava/lang/Class;');
-//      ExceptionClassGetClass := Penv^.CallObjectMethod(penv, Exc, MethodID);  // call getClass()
-//      ExceptionClass3 := Penv^.GetObjectClass(penv,ExceptionClassGetClass) ;  // get object class
-//
-//      MethodID := Penv^.GetMethodID(penv, ExceptionClass3 , 'getName', '()Ljava/lang/String;');
-//      ExceptionName := Penv^.CallObjectMethod(penv, ExceptionClassGetClass, MethodID);  // getName
-//
-//      ErrMsg := JStringToString(penv, ExceptionName);
-//
-//      MethodID := Penv^.GetMethodID(Penv, ExceptionClass, 'getMessage', '()Ljava/lang/String;');
-//      if MethodID = nil then
-//         raise Exception.Create('Can''t find method: getMessage');
-//
-//      ExceptionMessage := Penv^.CallObjectMethod(Penv, Exc, MethodID) ;
-//      ErrMsg := ErrMsg + ' :' + #13 + JStringToString(Penv,ExceptionMessage);
-//      TFrm_Trace.InternalTrace ('load Exception',ErrMsg) ;
-//      exit ;
-//   end ;
-//   LoadParams.free ;
-//   LoadMethod.Free ;
-//
-//   JavaPlugin := retCall.l ;
-//
-//   // get result class name
-//   //--------------------------
-//
-//   JavaPlugin_Class := Penv^.GetObjectClass(penv,JavaPlugin) ;
-//
-//   // MethodID := Penv^.GetMethodID(penv, JavaPlugin_Class , 'getClass', '()Ljava/lang/Class;');
-//   //Result_getClass := Penv^.CallObjectMethod(penv, JavaPlugin, MethodID);  // call getClass()
-//   //Result_getClass_class := Penv^.GetObjectClass(penv,Result_getClass) ;   // get object class
-//   //
-//   //MethodID := Penv^.GetMethodID(penv, Result_getClass_class , 'getName', '()Ljava/lang/String;');
-//   //Result_getClass_name := Penv^.CallObjectMethod(penv, Result_getClass, MethodID);  // getName
-//
-//   //TFrm_Trace.InternalTrace ('result class name ' + JStringToString(penv, Result_getClass_name)) ;
-//   //TFrm_Trace.InternalTrace ('doLoad(' + PlugName + ') done') ;
-//   status := psLoaded ;
-//end;
-//
-////------------------------------------------------------------------------------
-//
-//procedure TJavaPlugin.DoUnload;
-//var
-//   penv: PJNIEnv;
-//   Exc : jthrowable ;
-//
-//   // public static void unLoad (String plugName) throws Exception
-//   unLoadParams : TJavaParams;
-//   unLoadMethod : TJavaMethod;
-//
-//   MethodID : JMethodID;
-//   ExceptionClass : jclass ;
-//   ExceptionClassGetClass : jclass ;
-//   ExceptionClass3 : jclass ;
-//   ExceptionName : jClass ;
-//   ExceptionMessage : JClass ;
-//   ErrMsg: string;
-//begin
-//   if Status = psStarted then begin
-//      TFrm_Trace.InternalTrace ('TJavaPlugin.DoUnload(' + PlugName + ') : plugin not stoped') ;
-//      exit ;
-//   end ;
-//   if Status <> psLoaded then begin
-//      TFrm_Trace.InternalTrace ('TJavaPlugin.DoUnload(' + PlugName + ') : plugin not loaded') ;
-//      exit ;
-//   end ;
-//
-//   //TFrm_Trace.InternalTrace ('Call unLoad (' + PlugName + ')') ;
-//
-//   // public static void unLoad (int plugId) throws Exception
-//   // ------------------------------------------------------------
-//   unLoadParams := TJavaParams.Create;
-//   unLoadParams.addInt(PlugID);
-//
-//   unLoadMethod := TJavaMethod.Create(
-//      WrapperClass,       // class : TJavaClass
-//      'unLoad',           // function name : String
-//      static,             // methodType : TMethodAttribute
-//      Void,               // returntype : TJavaType
-//      unLoadParams,       // params : TJavaParams
-//      Nil);               // retclass : TJavaClass
-//
-//   unLoadMethod.Call(unLoadParams, Nil);     // static method
-//
-//
-//   // Check for exception
-//   Penv := TJavaVM.getPenv;
-//   Exc := Penv^.ExceptionOccurred (Penv) ;
-//   if Exc <> nil then begin
-//      // Clear the exception so we can call other methods
-//      Penv^.ExceptionClear (Penv) ;
-//
-//      // Find out about the exception - its class and message
-//      ExceptionClass := Penv^.GetObjectClass(penv,Exc) ;
-//      MethodID := Penv^.GetMethodID(penv, ExceptionClass , 'getClass', '()Ljava/lang/Class;');
-//      ExceptionClassGetClass := Penv^.CallObjectMethod(penv, Exc, MethodID);  // call getClass()
-//      ExceptionClass3 := Penv^.GetObjectClass(penv,ExceptionClassGetClass) ;  // get object class
-//
-//      MethodID := Penv^.GetMethodID(penv, ExceptionClass3 , 'getName', '()Ljava/lang/String;');
-//      ExceptionName := Penv^.CallObjectMethod(penv, ExceptionClassGetClass, MethodID);  // getName
-//
-//      ErrMsg := JStringToString(penv, ExceptionName);
-//
-//      MethodID := Penv^.GetMethodID(Penv, ExceptionClass, 'getMessage', '()Ljava/lang/String;');
-//      if MethodID = nil then
-//         raise Exception.Create('Can''t find method: getMessage');
-//
-//      ExceptionMessage := Penv^.CallObjectMethod(Penv, Exc, MethodID) ;
-//      ErrMsg := ErrMsg + ' :' + #13 + JStringToString(Penv,ExceptionMessage);
-//      TFrm_Trace.InternalTrace ('unLoad Exception',ErrMsg) ;
-//   end ;
-//   unLoadParams.Free ;
-//   unLoadMethod.Free ;
-//   PlugName := '_';
-//   status := psUnLoaded ;
-//end;
-//
-////------------------------------------------------------------------------------
-//
-//procedure TJavaPlugin.DoStart;
-//var
-//   penv: PJNIEnv;
-//   MethodID : JMethodID;
-//
-//   Exc : jthrowable ;
-//   ExceptionClass : jclass ;
-//   ExceptionClassGetClass : jclass ;
-//   ExceptionClass3 : jclass ;
-//   ExceptionName : jClass ;
-//   ExceptionMessage : JClass ;
-//   ErrMsg: string;
-//begin
-//   if Status <> psLoaded then begin
-//      TFrm_Trace.InternalTrace ('TJavaPlugin.DoStart(' + PlugName + ') : plugin not loaded') ;
-//      exit ;
-//   end ;
-//
-//   //TFrm_Trace.InternalTrace ('Call start(' + PlugName + ')') ;
-//   Penv := TJavaVM.getPenv;
-//
-//   //public void start()
-//   MethodID := Penv^.GetMethodID(penv, JavaPlugin_Class , 'start', '()V');    // GetMethodID(env: PJNIEnv; clazz : Jclass; const name, sig : PChar) : jmethodID
-//
-//   if MethodID = nil then begin
-//      TFrm_Trace.InternalTrace ('Javawrapper.start method not found') ;
-//      exit ;
-//   end else
-//      Penv^.CallObjectMethod(penv, JavaPlugin, MethodID);  // call start()
-//
-//   Exc := Penv^.ExceptionOccurred (Penv) ;
-//   if Exc <> nil then begin
-//      // Clear the exception so we can call other methods
-//      Penv^.ExceptionClear (Penv) ;
-//
-//      // Find out about the exception - its class and message
-//      ExceptionClass := Penv^.GetObjectClass(penv,Exc) ;
-//      MethodID := Penv^.GetMethodID(penv, ExceptionClass , 'getClass', '()Ljava/lang/Class;');
-//      ExceptionClassGetClass := Penv^.CallObjectMethod(penv, Exc, MethodID);  // call getClass()
-//      ExceptionClass3 := Penv^.GetObjectClass(penv,ExceptionClassGetClass) ;  // get object class
-//
-//      MethodID := Penv^.GetMethodID(penv, ExceptionClass3 , 'getName', '()Ljava/lang/String;');
-//      ExceptionName := Penv^.CallObjectMethod(penv, ExceptionClassGetClass, MethodID);  // getName
-//
-//      ErrMsg := JStringToString(penv, ExceptionName);
-//
-//      MethodID := Penv^.GetMethodID(Penv, ExceptionClass, 'getMessage', '()Ljava/lang/String;');
-//      if MethodID = nil then
-//         raise Exception.Create('Can''t find method: getMessage');
-//
-//      ExceptionMessage := Penv^.CallObjectMethod(Penv, Exc, MethodID) ;
-//      ErrMsg := ErrMsg + ' :' + #13 + JStringToString(Penv,ExceptionMessage);
-//      TFrm_Trace.InternalTrace ('start Exception',ErrMsg) ;
-//      exit ;
-//   end ;
-//
-//   status := psStarted ;
-//end;
-//
-////------------------------------------------------------------------------------
-//
-//procedure TJavaPlugin.DoStop;
-//var
-//   penv: PJNIEnv;
-//   MethodID : JMethodID;
-//
-//   Exc : jthrowable ;
-//   ExceptionClass : jclass ;
-//   ExceptionClassGetClass : jclass ;
-//   ExceptionClass3 : jclass ;
-//   ExceptionName : jClass ;
-//   ExceptionMessage : JClass ;
-//   ErrMsg: string;
-//begin
-//   if Status <> psStarted then begin
-//      TFrm_Trace.InternalTrace ('TJavaPlugin.DoStop(' + PlugName + ') : plugin not started') ;
-//      exit ;
-//   end ;
-//
-//   //TFrm_Trace.InternalTrace ('Call DoStop(' + PlugName + ') ') ;
-//
-//   Penv := TJavaVM.getPenv;
-//
-//   //public void start()
-//   MethodID := Penv^.GetMethodID(penv, JavaPlugin_Class , 'stop', '()V');    // GetMethodID(env: PJNIEnv; clazz : Jclass; const name, sig : PChar) : jmethodID
-//
-//   if MethodID = nil then
-//      TFrm_Trace.InternalTrace ('stop method not found')
-//   else
-//      Penv^.CallObjectMethod(penv, JavaPlugin, MethodID);  // call start()
-//
-//   Exc := Penv^.ExceptionOccurred (Penv) ;
-//   if Exc <> nil then begin
-//      // Clear the exception so we can call other methods
-//      Penv^.ExceptionClear (Penv) ;
-//
-//      // Find out about the exception - its class and message
-//      ExceptionClass := Penv^.GetObjectClass(penv,Exc) ;
-//      MethodID := Penv^.GetMethodID(penv, ExceptionClass , 'getClass', '()Ljava/lang/Class;');
-//      ExceptionClassGetClass := Penv^.CallObjectMethod(penv, Exc, MethodID);  // call getClass()
-//      ExceptionClass3 := Penv^.GetObjectClass(penv,ExceptionClassGetClass) ;  // get object class
-//
-//      MethodID := Penv^.GetMethodID(penv, ExceptionClass3 , 'getName', '()Ljava/lang/String;');
-//      ExceptionName := Penv^.CallObjectMethod(penv, ExceptionClassGetClass, MethodID);  // getName
-//
-//      ErrMsg := JStringToString(penv, ExceptionName);
-//
-//      MethodID := Penv^.GetMethodID(Penv, ExceptionClass, 'getMessage', '()Ljava/lang/String;');
-//      if MethodID = nil then
-//         raise Exception.Create('Can''t find method: getMessage');
-//
-//      ExceptionMessage := Penv^.CallObjectMethod(Penv, Exc, MethodID) ;
-//      ErrMsg := ErrMsg + ' :' + #13 + JStringToString(Penv,ExceptionMessage);
-//      TFrm_Trace.InternalTrace ('stop Exception',ErrMsg) ;
-//      exit ;
-//   end ;
-//   status := psLoaded ;
-//end;
-//
-////------------------------------------------------------------------------------
-//
-//procedure TJavaPlugin.getName;
-//var
-//   penv: PJNIEnv;
-//   JgetName : jClass ;
-//
-//   MethodID : JMethodID;
-//   Exc : jthrowable ;
-//   ExceptionClass : jclass ;
-//   ExceptionClassGetClass : jclass ;
-//   ExceptionClass3 : jclass ;
-//   ExceptionName : jClass ;
-//   ExceptionMessage : JClass ;
-//   ErrMsg: string;
-//   name : string ;
-//begin
-//   if Status <> psLoaded then begin
-//      TFrm_Trace.InternalTrace ('TJavaPlugin.getName (' + PlugName + ') : plugin not loaded') ;
-//      exit ;
-//   end ;
-//
-//   //TFrm_Trace.InternalTrace ('Call getPlugName(' + PlugName + ') ') ;
-//
-//   Penv := TJavaVM.getPenv;
-//
-//   MethodID := Penv^.GetMethodID(penv, JavaPlugin_Class , 'getPlugName', '()Ljava/lang/String;');
-//   JgetName := Penv^.CallObjectMethod(penv, JavaPlugin, MethodID);  // getName
-//
-//   Exc := Penv^.ExceptionOccurred (Penv) ;
-//   if Exc <> nil then begin
-//      // Clear the exception so we can call other methods
-//      Penv^.ExceptionClear (Penv) ;
-//
-//      // Find out about the exception - its class and message
-//      ExceptionClass := Penv^.GetObjectClass(penv,Exc) ;
-//      MethodID := Penv^.GetMethodID(penv, ExceptionClass , 'getClass', '()Ljava/lang/Class;');
-//      ExceptionClassGetClass := Penv^.CallObjectMethod(penv, Exc, MethodID);  // call getClass()
-//      ExceptionClass3 := Penv^.GetObjectClass(penv,ExceptionClassGetClass) ;  // get object class
-//
-//      MethodID := Penv^.GetMethodID(penv, ExceptionClass3 , 'getName', '()Ljava/lang/String;');
-//      ExceptionName := Penv^.CallObjectMethod(penv, ExceptionClassGetClass, MethodID);  // getName
-//
-//      ErrMsg := JStringToString(penv, ExceptionName);
-//
-//      MethodID := Penv^.GetMethodID(Penv, ExceptionClass, 'getMessage', '()Ljava/lang/String;');
-//      if MethodID = nil then
-//         raise Exception.Create('Can''t find method: getMessage');
-//
-//      ExceptionMessage := Penv^.CallObjectMethod(Penv, Exc, MethodID) ;
-//      ErrMsg := ErrMsg + ' :' + #13 + JStringToString(Penv,ExceptionMessage);
-//      TFrm_Trace.InternalTrace ('getPlugName Exception',ErrMsg) ;
-//      exit ;
-//   end ;
-//   name := JStringToString(penv, JgetName);
-//   //self.PlugName := name ;
-//   //TFrm_Trace.InternalTrace ('getPlugName done. Name : ' + self.PlugName) ;
-//end;
-//
-////------------------------------------------------------------------------------
-//function TJavaPlugin.DoAction(WinId: PAnsiString; ButtonId: integer; NodeId: PAnsiString): windows.BOOL;
-//var
-//   penv: PJNIEnv;
-//   MethodID : JMethodID;
-//
-//   onActionParams : TJavaParams;
-//
-//   Exc : jthrowable ;
-//   ExceptionClass : jclass ;
-//   ExceptionClassGetClass : jclass ;
-//   ExceptionClass3 : jclass ;
-//   ExceptionName : jClass ;
-//   ExceptionMessage : JClass ;
-//   ErrMsg: string;
-//begin
-//   result := true ;
-//   if Status <> psStarted then begin
-//      TFrm_Trace.InternalTrace ('TJavaPlugin.DoAction(' + PlugName + ') : plugin not started') ;
-//      exit ;
-//   end ;
-//
-//   //TFrm_Trace.InternalTrace ('Call DoAction(' + PlugName + ') ') ;
-//
-//   Penv := TJavaVM.getPenv;
-//
-//   // public static boolean onAction (String winId , int resourceId , String nodeId) throws Exception
-//   // ---------------------------
-//   onActionParams := TJavaParams.Create;
-//   onActionParams.addString(String(WinId));            // winId
-//   onActionParams.addInt   (ButtonId);         // resourceId
-//   onActionParams.addString(String(NodeId));           // nodeId
-//
-//   MethodID := penv^.getMethodID(penv, JavaPlugin_Class, 'onAction', Pchar('(' + onActionParams.signature + ')Z'));
-//
-//   if MethodID = nil then
-//      TFrm_Trace.InternalTrace ('boolean onAction (String,int,String) method not found')
-//   else begin
-//      result := penv^.CallBooleanMethodV(penv, JavaPlugin, MethodID, onActionParams.argpointer);
-//      //TFrm_Trace.InternalTrace ('DoAction result' , result) ;
-//   end ;
-//
-//   // Check for exception
-//
-//   Exc := Penv^.ExceptionOccurred (Penv) ;
-//   if Exc <> nil then begin
-//      // Clear the exception so we can call other methods
-//      Penv^.ExceptionClear (Penv) ;
-//
-//      // Find out about the exception - its class and message
-//      ExceptionClass := Penv^.GetObjectClass(penv,Exc) ;
-//      MethodID := Penv^.GetMethodID(penv, ExceptionClass , 'getClass', '()Ljava/lang/Class;');
-//      ExceptionClassGetClass := Penv^.CallObjectMethod(penv, Exc, MethodID);  // call getClass()
-//      ExceptionClass3 := Penv^.GetObjectClass(penv,ExceptionClassGetClass) ;  // get object class
-//
-//      MethodID := Penv^.GetMethodID(penv, ExceptionClass3 , 'getName', '()Ljava/lang/String;');
-//      ExceptionName := Penv^.CallObjectMethod(penv, ExceptionClassGetClass, MethodID);  // getName
-//
-//      ErrMsg := JStringToString(penv, ExceptionName);
-//
-//      MethodID := Penv^.GetMethodID(Penv, ExceptionClass, 'getMessage', '()Ljava/lang/String;');
-//      if MethodID = nil then
-//         raise Exception.Create('Can''t find method: getMessage');
-//
-//      ExceptionMessage := Penv^.CallObjectMethod(Penv, Exc, MethodID) ;
-//      ErrMsg := ErrMsg + ' :' + #13 + JStringToString(Penv,ExceptionMessage);
-//      TFrm_Trace.InternalTrace ('onAction Exception',ErrMsg) ;
-//      exit ;
-//   end ;
-//   onActionParams.free ;
-//end;
-//
-////------------------------------------------------------------------------------
-//function TJavaPlugin.DoBeforeDelete(WinId, NodeId: PAnsiString): windows.BOOL;
-//var
-//   penv: PJNIEnv;
-//   MethodID : JMethodID;
-//
-//   onBeforeDeleteParams : TJavaParams;
-//
-//   Exc : jthrowable ;
-//   ExceptionClass : jclass ;
-//   ExceptionClassGetClass : jclass ;
-//   ExceptionClass3 : jclass ;
-//   ExceptionName : jClass ;
-//   ExceptionMessage : JClass ;
-//   ErrMsg: string;
-//begin
-//   result := true ;
-//   if Status <> psStarted then begin
-//      TFrm_Trace.InternalTrace ('TJavaPlugin.DoBeforeDelete(' + PlugName + ') : plugin not started') ;
-//      exit ;
-//   end ;
-//   //TFrm_Trace.InternalTrace ('Call DoBeforeDelete(' + PlugName + ') ') ;
-//
-//   Penv := TJavaVM.getPenv;
-//
-//   // public static boolean onBeforeDelete (String winId , String nodeId) throws Exception
-//   // ---------------------------
-//   onBeforeDeleteParams := TJavaParams.Create;
-//   onBeforeDeleteParams.addString(WinId);          // winId
-//   onBeforeDeleteParams.addString(NodeId);         // nodeId
-//
-//   MethodID := penv^.getMethodID(penv, JavaPlugin_Class, 'onBeforeDelete', Pchar('(' + onBeforeDeleteParams.signature + ')Z'));
-//
-//   if MethodID = nil then
-//      TFrm_Trace.InternalTrace ('boolean onBeforeDelete (int,String) method not found')
-//   else begin
-//      result := penv^.CallBooleanMethodV(penv, JavaPlugin, MethodID, onBeforeDeleteParams.argpointer);
-//      //TFrm_Trace.InternalTrace ('DoAction result' , result) ;
-//   end ;
-//
-//   // Check for exception
-//
-//   Exc := Penv^.ExceptionOccurred (Penv) ;
-//   if Exc <> nil then begin
-//      // Clear the exception so we can call other methods
-//      Penv^.ExceptionClear (Penv) ;
-//
-//      // Find out about the exception - its class and message
-//      ExceptionClass := Penv^.GetObjectClass(penv,Exc) ;
-//      MethodID := Penv^.GetMethodID(penv, ExceptionClass , 'getClass', '()Ljava/lang/Class;');
-//      ExceptionClassGetClass := Penv^.CallObjectMethod(penv, Exc, MethodID);  // call getClass()
-//      ExceptionClass3 := Penv^.GetObjectClass(penv,ExceptionClassGetClass) ;  // get object class
-//
-//      MethodID := Penv^.GetMethodID(penv, ExceptionClass3 , 'getName', '()Ljava/lang/String;');
-//      ExceptionName := Penv^.CallObjectMethod(penv, ExceptionClassGetClass, MethodID);  // getName
-//
-//      ErrMsg := JStringToString(penv, ExceptionName);
-//
-//      MethodID := Penv^.GetMethodID(Penv, ExceptionClass, 'getMessage', '()Ljava/lang/String;');
-//      if MethodID = nil then
-//         raise Exception.Create('Can''t find method: getMessage');
-//
-//      ExceptionMessage := Penv^.CallObjectMethod(Penv, Exc, MethodID) ;
-//      ErrMsg := ErrMsg + ' :' + #13 + JStringToString(Penv,ExceptionMessage);
-//      TFrm_Trace.InternalTrace ('onBeforeDelete Exception',ErrMsg) ;
-//      exit ;
-//   end ;
-//   onBeforeDeleteParams.free ;
-//end;
-//
-////------------------------------------------------------------------------------
-//
-//procedure TJavaPlugin.DoTimer;
-//var
-//   penv: PJNIEnv;
-//   MethodID : JMethodID;
-//
-//   Exc : jthrowable ;
-//   ExceptionClass : jclass ;
-//   ExceptionClassGetClass : jclass ;
-//   ExceptionClass3 : jclass ;
-//   ExceptionName : jClass ;
-//   ExceptionMessage : JClass ;
-//   ErrMsg: string;
-//begin
-//   if Status <> psStarted then begin
-//      TFrm_Trace.InternalTrace ('TJavaPlugin.DoTimer(' + PlugName + ') : plugin not started') ;
-//      exit ;
-//   end ;
-//
-//   //TFrm_Trace.InternalTrace ('Call onTimer(' + PlugName + ') ') ;
-//
-//   Penv := TJavaVM.getPenv;
-//   //public void onTimer()
-//   MethodID := Penv^.GetMethodID(penv, JavaPlugin_Class , 'onTimer', '()V');    // GetMethodID(env: PJNIEnv; clazz : Jclass; const name, sig : PChar) : jmethodID
-//
-//   if MethodID = nil then
-//      TFrm_Trace.InternalTrace ('stop method not found')
-//   else
-//      Penv^.CallObjectMethod(penv, JavaPlugin, MethodID);  // call start()
-//
-//   Exc := Penv^.ExceptionOccurred (Penv) ;
-//   if Exc <> nil then begin
-//      // Clear the exception so we can call other methods
-//      Penv^.ExceptionClear (Penv) ;
-//
-//      // Find out about the exception - its class and message
-//      ExceptionClass := Penv^.GetObjectClass(penv,Exc) ;
-//      MethodID := Penv^.GetMethodID(penv, ExceptionClass , 'getClass', '()Ljava/lang/Class;');
-//      ExceptionClassGetClass := Penv^.CallObjectMethod(penv, Exc, MethodID);  // call getClass()
-//      ExceptionClass3 := Penv^.GetObjectClass(penv,ExceptionClassGetClass) ;  // get object class
-//
-//      MethodID := Penv^.GetMethodID(penv, ExceptionClass3 , 'getName', '()Ljava/lang/String;');
-//      ExceptionName := Penv^.CallObjectMethod(penv, ExceptionClassGetClass, MethodID);  // getName
-//
-//      ErrMsg := JStringToString(penv, ExceptionName);
-//
-//      MethodID := Penv^.GetMethodID(Penv, ExceptionClass, 'getMessage', '()Ljava/lang/String;');
-//      if MethodID = nil then
-//         raise Exception.Create('Can''t find method: getMessage');
-//
-//      ExceptionMessage := Penv^.CallObjectMethod(Penv, Exc, MethodID) ;
-//      ErrMsg := ErrMsg + ' :' + #13 + JStringToString(Penv,ExceptionMessage);
-//      TFrm_Trace.InternalTrace ('onTimer Exception',ErrMsg) ;
-//      exit ;
-//   end ;
-//end;
-//
-////------------------------------------------------------------------------------
-//
-//class procedure TJavaPlugin.Init;
-//var
-//   newclassPath : string ;
-//   Home, relative , JavaWrapper , traceJar : string ;
-//   p : integer ;
-//begin
-//   if JRuntime <> nil then
-//      exit ;
-//
-//   p := pos (',' , XMLConfig.Plugins.JVMEngine.Value) ;
-//   if p <= 0 then
-//      exit ;
-//
-//   Home := copy (XMLConfig.Plugins.JVMEngine.Value, 1 , p-1) ;
-//   relative := copy (XMLConfig.Plugins.JVMEngine.Value, p+1 , 1000) ;
-//   JRuntime := TJavaRuntime.Create(Home , Home + '\' + relative, false);
-//
-//   if FileExists(strRunPath + 'JavaWrapper.jar') then
-//      JavaWrapper := strRunPath + 'JavaWrapper.jar;'
-//   else if FileExists(strRunPath + 'plugin\JavaWrapper.jar') then
-//      JavaWrapper := strRunPath + 'plugin\JavaWrapper.jar;'
-//   else
-//      JavaWrapper := 'JavaWrapper.jar;' ;   // try to find it in the current path
-//
-//
-//   if FileExists(strRunPath + 'tracetool.jar') then
-//      traceJar := strRunPath + 'tracetool.jar'
-//   else if FileExists(strRunPath + 'plugin\tracetool.jar') then
-//      traceJar := strRunPath + 'plugin\tracetool.jar'
-//   else
-//      traceJar := 'tracetool.jar' ;   // try to find it in the current path
-//
-//   JRuntime.Classpath := JavaWrapper + traceJar  ;
-//
-//   newclassPath := TClassPath.getDefault.FullPath ;
-//   //TFrm_Trace.InternalTrace ('new ClassPath' , newclassPath) ;
-//
-//
-//   WrapperClass := TJavaClass.Create('tracetool.JavaWrapper') ;   // load class and initialize class
-//   StringClass  := TJavaClass.Create('java.lang.String') ;        // create the String class
-//   ObjectClass  := TJavaClass.Create('java.lang.Object') ;        // return an object
-//
-//   TJavaPlugin.SetClassPath(TClassPath.getDefault.FullPath , XMLConfig.Plugins.JavaPLuginClassPath.value);
-//
-//end;
 
 
 initialization

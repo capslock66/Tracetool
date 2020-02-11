@@ -1,8 +1,8 @@
 object frmPlugin: TfrmPlugin
   Left = 0
   Top = 0
-  Width = 457
-  Height = 299
+  Width = 461
+  Height = 339
   TabOrder = 0
   object LabelPlugName: TLabel
     Left = 16
@@ -18,8 +18,8 @@ object frmPlugin: TfrmPlugin
     ParentFont = False
   end
   object LabelStatus: TLabel
-    Left = 16
-    Top = 131
+    Left = 149
+    Top = 137
     Width = 56
     Height = 13
     Caption = 'LabelStatus'
@@ -52,68 +52,82 @@ object frmPlugin: TfrmPlugin
     Height = 13
     Caption = 'LabelClassName'
   end
+  object Label1: TLabel
+    Left = 13
+    Top = 104
+    Width = 30
+    Height = 13
+    Caption = 'Param'
+  end
   object chkLoadAtStartup: TCheckBox
-    Left = 14
-    Top = 96
+    Left = 13
+    Top = 136
     Width = 105
     Height = 17
     Alignment = taLeftJustify
     Caption = 'Load at startup'
-    TabOrder = 0
+    TabOrder = 1
     OnClick = chkLoadAtStartupClick
   end
   object butLoadAndStart: TButton
-    Left = 16
-    Top = 160
+    Left = 13
+    Top = 200
     Width = 89
     Height = 25
     Caption = 'Load and start'
-    TabOrder = 1
+    TabOrder = 2
     OnClick = butLoadAndStartClick
   end
   object butUnload: TButton
-    Left = 112
-    Top = 160
+    Left = 109
+    Top = 200
     Width = 75
     Height = 25
     Caption = 'Unload'
-    TabOrder = 2
+    TabOrder = 3
     OnClick = butUnloadClick
   end
   object butStart: TButton
-    Left = 16
-    Top = 192
+    Left = 13
+    Top = 232
     Width = 60
     Height = 25
     Caption = 'Start'
-    TabOrder = 3
+    TabOrder = 4
     OnClick = butStartClick
   end
   object butStop: TButton
-    Left = 88
-    Top = 192
+    Left = 85
+    Top = 232
     Width = 60
     Height = 25
     Caption = 'Stop'
-    TabOrder = 4
+    TabOrder = 5
     OnClick = butStopClick
   end
   object butStopAndUnload: TButton
-    Left = 200
-    Top = 160
+    Left = 197
+    Top = 200
     Width = 97
     Height = 25
     Caption = 'Stop and unload'
-    TabOrder = 5
+    TabOrder = 6
     OnClick = butStopAndUnloadClick
   end
   object butRemove: TButton
-    Left = 16
-    Top = 240
+    Left = 13
+    Top = 280
     Width = 145
     Height = 25
     Caption = 'Remove from configuration'
-    TabOrder = 6
+    TabOrder = 7
     OnClick = butRemoveClick
+  end
+  object EditParam: TEdit
+    Left = 104
+    Top = 104
+    Width = 121
+    Height = 21
+    TabOrder = 0
   end
 end

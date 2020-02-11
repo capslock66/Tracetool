@@ -27,7 +27,6 @@ type
     Label12: TLabel;
     Panel3: TPanel;
     Label14: TLabel;
-    Label15: TLabel;
     Label16: TLabel;
     Label17: TLabel;
     Label18: TLabel;

@@ -26,8 +26,8 @@ Class Delegate_Start: AutoLayout, AnsiClass, Class, Public, Sealed, BeforeFieldI
   :System.MulticastDelegate
     Void .ctor(System.Object, IntPtr): PrivateScope, Public, SpecialName, RTSpecialName
   Methods:
-    Invoke(): PrivateScope, Public, Final, Virtual, VtableLayoutMask
-    BeginInvoke(AsyncCallback, Object): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+    Invoke(String): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+    BeginInvoke(String, AsyncCallback, Object): PrivateScope, Public, Final, Virtual, VtableLayoutMask
     EndInvoke(IAsyncResult): PrivateScope, Public, Final, Virtual, VtableLayoutMask
 Class Delegate_Stop: AutoLayout, AnsiClass, Class, Public, Sealed, BeforeFieldInit
   :System.MulticastDelegate
@@ -68,7 +68,7 @@ Class CppPluginLoader: AutoLayout, AnsiClass, Class, Public, Serializable, Befor
     SetStatus(PluginStatus): PrivateScope, Public, HideBySig
     GetPlugName(): PrivateScope, Public, HideBySig
     UnloadPlugin(): PrivateScope, Public, HideBySig
-    StartPlugin(): PrivateScope, Public, HideBySig
+    StartPlugin(String): PrivateScope, Public, HideBySig
     StopPlugin(): PrivateScope, Public, HideBySig
     OnAction(String, Int32, String): PrivateScope, Public, HideBySig
     OnBeforeDelete(String, String): PrivateScope, Public, HideBySig

@@ -16,11 +16,11 @@ using TraceTool;
 namespace CSharpPlugin
 {
     // Websock plugin
-    public class WebsockPlugin : ITracePLugin 
+    public class WebsockPlugin : ITracePLugin
     {
         //WinTrace PlugTraces;
         
-        const string PlugName = "WebsockPlugin";
+        const string PlugName = "Web sock";
         private static byte[] _buffToSend;  // buffer to send to viewer
         private static bool _isSocketError;
         private static Socket _socket;
@@ -64,13 +64,49 @@ namespace CSharpPlugin
         /// <summary>
         /// Initialise the plugin
         /// </summary>
-        public void Start()
+        public void Start(string strParameter)
         {
             //trace("        WebSockPlugin Start\n") ;
 
+            // incoming websocket 
+            var webSocketHost = "0.0.0.0" ;
+            var webSocketPort = 8091 ;
+
+            // outcoming tracetool socket
+            var viewerSocketHost = "127.0.0.1";
+            var viewerSocketPort = 8090;
+
+            if (string.IsNullOrEmpty(strParameter))
+                strParameter = "" ;
+            
+            try
+            {
+                var paramList = strParameter.Split(',') ;
+                foreach (var keyValue in paramList)
+                {
+                    var keyValueList = keyValue.Split('=') ;
+                    var key = keyValueList[0].Trim() ;
+                    var value = keyValueList[1].Trim();
+                    if (string.Compare(key,"WebSocketHost", StringComparison.OrdinalIgnoreCase) == 0)
+                        webSocketHost = value ;
+                    else if (string.Compare(key, "WebSocketPort", StringComparison.OrdinalIgnoreCase) == 0)
+                        webSocketPort = int.Parse(value);
+                    else if (string.Compare(key, "ViewerSocketHost", StringComparison.OrdinalIgnoreCase) == 0)
+                        viewerSocketHost = value ;
+                    else if (string.Compare(key, "ViewerSocketPort", StringComparison.OrdinalIgnoreCase) == 0)
+                        viewerSocketPort = int.Parse(value);
+                }
+            }
+            catch (Exception)
+            {
+                TTrace.Error.Send($"{PlugName} : Wrong parameters : {strParameter}");
+                TTrace.Error.Send("parameters format : WebSocketHost = 0.0.0.0, WebSocketPort = 8091, ViewerSocketHost = 127.0.0.1, ViewerSocketPort = 8090");
+                throw;
+            }
+
             TTrace.Options.SendMode = SendMode.Socket ;
-            TTrace.Options.SocketHost = "127.0.0.1" ;
-            TTrace.Options.SocketPort = 8090 ;
+            TTrace.Options.SocketHost = viewerSocketHost ;
+            TTrace.Options.SocketPort = viewerSocketPort ;
 
             // create a window and ask to receive timer (ignore action and onBeforeDelete events)
             //PlugTraces = new WinTrace("Websock", "Websock Plugin");
@@ -79,10 +115,12 @@ namespace CSharpPlugin
             //PlugTraces.Debug.Send("Websock plugin started");
             //var allSockets = new List<IWebSocketConnection>();
 
+            //TTrace.Debug.Send($"WebsockPlugin started with param {strParameter}") ;
+
             FleckLog.Level = LogLevel.Error ;
 
             // FlecK WebSocketServer
-            var server = new WebSocketServer("ws://0.0.0.0:8091");   // todo : save port to config file
+            var server = new WebSocketServer($"ws://{webSocketHost}:{webSocketPort}");  
             server.Start(socket =>
             {
                 //socket.OnOpen = () =>
@@ -110,6 +148,7 @@ namespace CSharpPlugin
             
         }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1031:Do not catch general exception types", Justification = "<Pending>")]
         internal static void SendMessageToSocket()
         {
             if (_isSocketError)
@@ -157,7 +196,7 @@ namespace CSharpPlugin
                 {
                     _socket.Connect(endPoint);
                 }
-                catch (Exception ex)
+                catch (Exception) //ex
                 {
                     _socket = null; // force recreate socket
                     _isSocketError = true;
@@ -172,7 +211,7 @@ namespace CSharpPlugin
             {
                 _socket.Send(_buffToSend, 0, _buffToSend.Length, 0);
             }
-            catch (Exception ex)
+            catch (Exception) // ex
             {
                 _socket = null; // force recreate socket
                 _isSocketError = true;
