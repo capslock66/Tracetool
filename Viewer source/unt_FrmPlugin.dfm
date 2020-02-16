@@ -4,6 +4,9 @@ object frmPlugin: TfrmPlugin
   Width = 461
   Height = 339
   TabOrder = 0
+  DesignSize = (
+    461
+    339)
   object LabelPlugName: TLabel
     Left = 16
     Top = 16
@@ -19,49 +22,35 @@ object frmPlugin: TfrmPlugin
   end
   object LabelStatus: TLabel
     Left = 149
-    Top = 137
+    Top = 202
     Width = 56
     Height = 13
     Caption = 'LabelStatus'
   end
-  object LabelTitleFileName: TLabel
-    Left = 16
-    Top = 70
-    Width = 43
-    Height = 13
-    Caption = 'FileName'
-  end
   object Label2: TLabel
-    Left = 16
-    Top = 43
+    Left = 13
+    Top = 65
     Width = 52
     Height = 13
     Caption = 'ClassName'
   end
-  object LabelFileName: TLabel
-    Left = 107
-    Top = 70
-    Width = 68
-    Height = 13
-    Caption = 'LabelFileName'
-  end
   object LabelClassName: TLabel
-    Left = 107
-    Top = 43
+    Left = 85
+    Top = 65
     Width = 77
     Height = 13
     Caption = 'LabelClassName'
   end
   object Label1: TLabel
     Left = 13
-    Top = 104
+    Top = 88
     Width = 30
     Height = 13
     Caption = 'Param'
   end
   object chkLoadAtStartup: TCheckBox
     Left = 13
-    Top = 136
+    Top = 201
     Width = 105
     Height = 17
     Alignment = taLeftJustify
@@ -71,7 +60,7 @@ object frmPlugin: TfrmPlugin
   end
   object butLoadAndStart: TButton
     Left = 13
-    Top = 200
+    Top = 224
     Width = 89
     Height = 25
     Caption = 'Load and start'
@@ -80,7 +69,7 @@ object frmPlugin: TfrmPlugin
   end
   object butUnload: TButton
     Left = 109
-    Top = 200
+    Top = 224
     Width = 75
     Height = 25
     Caption = 'Unload'
@@ -89,7 +78,7 @@ object frmPlugin: TfrmPlugin
   end
   object butStart: TButton
     Left = 13
-    Top = 232
+    Top = 256
     Width = 60
     Height = 25
     Caption = 'Start'
@@ -98,7 +87,7 @@ object frmPlugin: TfrmPlugin
   end
   object butStop: TButton
     Left = 85
-    Top = 232
+    Top = 256
     Width = 60
     Height = 25
     Caption = 'Stop'
@@ -107,7 +96,7 @@ object frmPlugin: TfrmPlugin
   end
   object butStopAndUnload: TButton
     Left = 197
-    Top = 200
+    Top = 224
     Width = 97
     Height = 25
     Caption = 'Stop and unload'
@@ -116,18 +105,30 @@ object frmPlugin: TfrmPlugin
   end
   object butRemove: TButton
     Left = 13
-    Top = 280
+    Top = 304
     Width = 145
     Height = 25
     Caption = 'Remove from configuration'
     TabOrder = 7
     OnClick = butRemoveClick
   end
-  object EditParam: TEdit
-    Left = 104
-    Top = 104
-    Width = 121
-    Height = 21
+  object MemoParam: TMemo
+    Left = 13
+    Top = 107
+    Width = 425
+    Height = 80
+    Anchors = [akLeft, akTop, akRight]
+    ScrollBars = ssBoth
     TabOrder = 0
+  end
+  object EditFileName: TEdit
+    Left = 13
+    Top = 38
+    Width = 425
+    Height = 21
+    Anchors = [akLeft, akTop, akRight]
+    TabOrder = 8
+    Text = 'EditFileName'
+    OnKeyPress = EditFileNameKeyPress
   end
 end

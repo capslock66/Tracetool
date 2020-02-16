@@ -936,7 +936,7 @@ begin
          continue ;
       plugin.startup := Plugin.xmlPlugin.Enabled.Value ;
       TfrmPlugin(Plugin.frmPlugin).chkLoadAtStartup.checked  := Plugin.xmlPlugin.Enabled.Value ;
-      TfrmPlugin(Plugin.frmPlugin).EditParam.Text := Plugin.xmlPlugin.Param ;
+      TfrmPlugin(Plugin.frmPlugin).MemoParam.Text := Plugin.xmlPlugin.Param ;
 
    end ;
 
@@ -1069,7 +1069,7 @@ begin
       Plugin := TPlugin (PluginList.Items[c]) ;
       if Plugin.xmlPlugin <> nil then begin
          Plugin.xmlPlugin.Enabled.Value := TfrmPlugin(Plugin.frmPlugin).chkLoadAtStartup.checked ;
-         Plugin.xmlPlugin.Param := TfrmPlugin(Plugin.frmPlugin).EditParam.Text ;
+         Plugin.xmlPlugin.Param := TfrmPlugin(Plugin.frmPlugin).MemoParam.Text ;
       end;
    end ;
 
