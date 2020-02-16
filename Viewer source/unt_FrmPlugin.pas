@@ -20,9 +20,7 @@ type
   TfrmPlugin = class(TFrame)
     LabelPlugName: TLabel;
     LabelStatus: TLabel;
-    LabelTitleFileName: TLabel;
     Label2: TLabel;
-    LabelFileName: TLabel;
     LabelClassName: TLabel;
     chkLoadAtStartup: TCheckBox;
     butLoadAndStart: TButton;
@@ -32,7 +30,8 @@ type
     butStopAndUnload: TButton;
     butRemove: TButton;
     Label1: TLabel;
-    EditParam: TEdit;
+    MemoParam: TMemo;
+    EditFileName: TEdit;
     procedure butLoadAndStartClick(Sender: TObject);
     procedure butUnloadClick(Sender: TObject);
     procedure butStopAndUnloadClick(Sender: TObject);
@@ -40,6 +39,7 @@ type
     procedure butStopClick(Sender: TObject);
     procedure chkLoadAtStartupClick(Sender: TObject);
     procedure butRemoveClick(Sender: TObject);
+    procedure EditFileNameKeyPress(Sender: TObject; var Key: Char);
   private
     { Private declarations }
   public
@@ -109,15 +109,13 @@ begin
    LabelPlugName.Caption := LabelPlugName.Caption + ' (' + plugin.plugKind + ')'  ;
 
    if plugin.plugKind = 'Java' then begin
-      LabelFileName.Visible := false ;
-      LabelTitleFileName.Visible := false ;
+      EditFileName.Visible := false ;
    end else begin
-      LabelFileName.Visible := true ;
-      LabelTitleFileName.Visible := true ;
-      LabelFileName.Caption := String(plugin.FileName) ;
+      EditFileName.Visible := true ;
+      EditFileName.text := String(plugin.FileName) ;
    end ;
 
-   EditParam.Text := string(plugin.param);
+   MemoParam.Text := string(plugin.param);
 
    LabelClassName.Caption := plugin.className ;
    chkLoadAtStartup.Checked := plugin.startup ;
@@ -127,7 +125,7 @@ begin
          begin
             LabelStatus.caption := 'Unloaded' ;
             butLoadAndStart .Visible := true ;
-            butLoadAndStart .top  := 160 ;
+            butLoadAndStart .top  := 200 ;
             butLoadAndStart .left := 16 ;
             butUnload       .Visible := false ;
             butStopAndUnload.Visible := false ;
@@ -141,12 +139,12 @@ begin
             LabelStatus.caption := 'Loaded' ;
             butLoadAndStart .Visible := false ;
             butUnload       .Visible := true ;
-            butUnload       .top  := 160 ;
+            butUnload       .top  := 224 ;
             butUnload       .left := 16 ;
             butStopAndUnload.Visible := false ;
             butStop         .Visible := false ;
             butStart        .Visible := true ;
-            butStart        .top  := 160 ;
+            butStart        .top  := 224 ;
             butStart        .left := 112 ;
             butRemove       .Visible := false ;
          end ;
@@ -156,16 +154,25 @@ begin
             butLoadAndStart .Visible := false ;
             butUnload       .Visible := false ;
             butStop         .Visible := true ;
-            butStop         .top  := 160 ;
+            butStop         .top  := 224 ;
             butStop         .left := 16 ;
             butStart        .Visible := false ;
             butStopAndUnload.Visible := false ; // true ;
-            butStopAndUnload.top  := 160 ;
+            butStopAndUnload.top  := 224 ;
             butStopAndUnload.left := 112 ;
             butRemove       .Visible := false ;
         end ;
    end ;
    frmDebugOptions.VSTOptions.Refresh ;
+end;
+
+//------------------------------------------------------------------------------
+
+procedure TfrmPlugin.EditFileNameKeyPress(Sender: TObject; var Key: Char);
+begin
+    if (key = #1) or (key = #3)  then   // ctrl-A or CTRL-C : do nothing
+       exit ;
+    Key := Char(0) ;
 end;
 
 //------------------------------------------------------------------------------
