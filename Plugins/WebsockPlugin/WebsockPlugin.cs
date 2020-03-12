@@ -26,8 +26,21 @@ namespace CSharpPlugin
         private static Socket _socket;
         private static long _errorTime;
 
-        private static string SocketHost = "127.0.0.1";
-        private static int SocketPort;
+        private static WinTrace PlugTraces;
+        const int labelWinsockResourceId = 102 ;
+
+        // incoming websocket 
+        private static string webSocketHost = "0.0.0.0";
+        private static int webSocketPort = 8091;
+
+        // outcoming tracetool socket
+        private static string viewerSocketHost = "127.0.0.1";
+        private static int viewerSocketPort = 8090;
+
+        // received message count
+        private static int messageCount = 0;
+
+
         //private static string _lastError = "";
 
         //------------------------------------------------------------------------------
@@ -68,14 +81,6 @@ namespace CSharpPlugin
         {
             //trace("        WebSockPlugin Start\n") ;
 
-            // incoming websocket 
-            var webSocketHost = "0.0.0.0" ;
-            var webSocketPort = 8091 ;
-
-            // outcoming tracetool socket
-            var viewerSocketHost = "127.0.0.1";
-            var viewerSocketPort = 8090;
-
             if (string.IsNullOrEmpty(strParameter))
                 strParameter = "" ;
             
@@ -109,10 +114,18 @@ namespace CSharpPlugin
             TTrace.Options.SocketPort = viewerSocketPort ;
 
             // create a window and ask to receive timer (ignore action and onBeforeDelete events)
-            //PlugTraces = new WinTrace("Websock", "Websock Plugin");
-            //PlugTraces.DisplayWin();
-            //PlugTraces.LinkToPlugin(PlugName, TraceConst.CST_PLUG_ONTIMER);
-            //PlugTraces.Debug.Send("Websock plugin started");
+            PlugTraces = new WinTrace("_", "");  // match the default Wintrace. No new windows is created
+
+            // add a hyperlink label on left, 100 pixels
+            PlugTraces.CreateResource(labelWinsockResourceId, TraceConst.CST_RES_LABELH_LEFT, 100, "Web Socket");
+
+            PlugTraces.LinkToPlugin(PlugName,
+                TraceConst.CST_PLUG_ONACTION 
+                //+TraceConst.CST_PLUG_ONBEFOREDELETE 
+                //+TraceConst.CST_PLUG_ONTIMER
+                );
+
+
             //var allSockets = new List<IWebSocketConnection>();
 
             //TTrace.Debug.Send($"WebsockPlugin started with param {strParameter}") ;
@@ -140,7 +153,9 @@ namespace CSharpPlugin
                 //};
                 socket.OnBinary = buffer =>
                 {
+                    messageCount++ ;
                     //PlugTraces.Debug.Send($"Message, Len = {buffer.Length}");
+                    //PlugTraces.SetTextResource(102, $"WebSock {buffer.Length}");
                     _buffToSend = buffer;
                     SendMessageToSocket();
                 };
@@ -161,12 +176,6 @@ namespace CSharpPlugin
                     return;  // lose message
             }
 
-            if (string.IsNullOrEmpty(SocketHost))   // TODO : use config file
-                SocketHost = "127.0.0.1";
-
-            if (SocketPort == 0)
-                SocketPort = 8090;
-
             if (_socket == null)
                 _socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
 
@@ -175,7 +184,7 @@ namespace CSharpPlugin
             {
                 // resolve adress
 
-                IPHostEntry hostEntry = Dns.GetHostEntry(SocketHost);
+                IPHostEntry hostEntry = Dns.GetHostEntry(viewerSocketHost);
 
                 // Don't get the first adress. It's perhaps a IPv6 adress.
                 // Thanks BCheng for the IPV4 fix.
@@ -184,7 +193,7 @@ namespace CSharpPlugin
                 {
                     if (ip.AddressFamily == AddressFamily.InterNetwork)
                     {
-                        endPoint = new IPEndPoint(ip, SocketPort);
+                        endPoint = new IPEndPoint(ip, viewerSocketPort);
                         break;
                     }
                 }
@@ -247,8 +256,12 @@ namespace CSharpPlugin
         /// </returns>
         public bool OnAction(string WinId, int ResourceId, string NodeId)
         {
-            //trace("        WebSockPlugin OnAction\n");
-            //PlugTraces.Debug.Send("OnAction. WinId : " + WinId + ", ResourceId : " + ResourceId + ", current NodeId : " + NodeId);            
+            if (ResourceId != labelWinsockResourceId)
+                return true;
+
+            PlugTraces.Debug.Send("Incoming websocket",$"{webSocketHost}:{webSocketPort}");
+            PlugTraces.Debug.Send("Tracetool viewer",$"{viewerSocketHost}:{viewerSocketPort}");
+            PlugTraces.Debug.Send("Received message count",$"{messageCount}");
             return true;
         }
 
