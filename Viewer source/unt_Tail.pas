@@ -214,8 +214,14 @@ var
   
 implementation
 
-uses debugOptions , Config , unt_utility, Unt_TailProgress ,
-  unt_search, unt_selectTail;
+uses
+  debugOptions
+  , unt_TraceConfig
+  , unt_utility
+  , Unt_TailProgress
+  , unt_search
+  , unt_selectTail;
+
 
 {$R *.dfm}
 

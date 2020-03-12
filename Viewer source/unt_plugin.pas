@@ -13,8 +13,7 @@ unit unt_plugin;
 
 interface
 
-uses Classes , windows, SysUtils, controls, Contnrs , forms, Registry, Config;
-//, JNIWrapper, jni, javaruntime , JUtils  ;
+uses Classes , windows, SysUtils, controls, Contnrs , forms, Registry ;
 
 Type
   TPlugin = class ;
@@ -58,7 +57,6 @@ Type
      startup       : boolean ;
      plugKind      : string ;
      frmPlugin     : TFrame ; // TfrmPlugin
-     xmlPlugin     : IXmlPlugin ;
      PlugID        : integer ;    // identify the plugin
 
      constructor Create () ;
@@ -147,7 +145,7 @@ Type
 
   //----------------------------------------------------------------------------
 
-  // plugin (delphi,C#,java) linked to a wintrace
+  // plugin (delphi,C#) linked to a wintrace
   TLinkedPlugin = class
      Plugin : TPlugin ;
      NeedOnAction : boolean ;
@@ -173,22 +171,16 @@ Type
    procedure UnloadAllplugins() ;
    function getPlugFromFileName (FileName : AnsiString) : TPlugin ;
    function getPlugFromName (Name: AnsiString): TPlugin;
-   procedure InitPlugins ;
 
 var
-  PluginList    : TObjectList ;
-  DotNetManager : TDotNetManager ;
-//  // java vars
-//  JRuntime : TJavaRuntime ;
-//  WrapperClass : TJavaClass ;
-//  StringClass  : TJavaClass ;
-//  ObjectClass  : TJavaClass ;
-  InstanceCount : integer ;
-  PluginsInitialized : boolean ;
+  PluginInstanceCount : integer ;
+
 
 implementation
 
-uses Unt_Tool, unt_TraceWin , unt_FrmPlugin , DebugOptions , StrUtils, unt_utility;
+uses Unt_Tool, unt_TraceWin , unt_FrmPlugin , DebugOptions , StrUtils, unt_utility
+,unt_TraceConfig
+;
 
 //------------------------------------------------------------------------------
 
@@ -225,8 +217,8 @@ begin
       FoundPluginStarted := true ;
       while FoundPluginStarted do begin
          FoundPluginStarted := false ;
-         for c := 0 to PluginList.count-1 do begin
-            Plugin := TPlugin (PluginList.Items[c]) ;
+         for c := 0 to TraceConfig.PluginList.count-1 do begin
+            Plugin := TPlugin (TraceConfig.PluginList.Items[c]) ;
             if Plugin.status = psStarted then begin
                Plugin.DoStop ;
                FoundPluginStarted := true ;  // one plugin is FoundPluginStarted. restart loop main loop
@@ -252,8 +244,8 @@ begin
       loaded := true ;
       while loaded do begin
          loaded := false ;
-         for c := 0 to PluginList.count-1 do begin
-            Plugin := TPlugin (PluginList.Items[c]) ;
+         for c := 0 to TraceConfig.PluginList.count-1 do begin
+            Plugin := TPlugin (TraceConfig.PluginList.Items[c]) ;
             if Plugin.status = psLoaded then begin
                Plugin.DoUnload ;
                loaded := true ;  // one plugin is loaded. restart loop main loop
@@ -273,8 +265,8 @@ function getPlugFromFileName(filename: AnsiString): TPlugin;
 var
    c : integer ;
 begin
-   for c := 0 to PluginList.count-1 do begin
-      result := TPlugin (PluginList.Items[c]) ;
+   for c := 0 to TraceConfig.PluginList.count-1 do begin
+      result := TPlugin (TraceConfig.PluginList.Items[c]) ;
       if stricomp (pAnsiChar(result.FileName), pAnsiChar(filename)) = 0 then
          exit ;
    end ;
@@ -290,8 +282,8 @@ var
 begin
    result := nil ;
    exit ;
-   for c := 0 to PluginList.count-1 do begin
-      result := TPlugin (PluginList.Items[c]) ;
+   for c := 0 to TraceConfig.PluginList.count-1 do begin
+      result := TPlugin (TraceConfig.PluginList.Items[c]) ;
       if stricomp (pAnsiChar(result.PlugName), pAnsiChar(name)) = 0 then
          exit ;
    end ;
@@ -300,93 +292,6 @@ end;
 
 //------------------------------------------------------------------------------
 
-procedure InitPlugins ;
-var
-   Win32plugin : TPlugin ;
-   DotNetPlugin : TDotNetPlugin ;
-//   JavaPlugin : TJavaPlugin;
-   plugKind : string ;
-   c : integer ;
-   xmlPlugin : IXMLPlugin ;
-begin
-   DotNetManager := nil ;
-   //JavaManager   := nil ;
-
-   for c := 0 to XMLConfig.Plugins.Plugin.Count-1 do begin
-      xmlPlugin := XMLConfig.Plugins.Plugin[c] ;
-      plugKind := xmlPlugin.Kind ;
-      // Name          : string ;
-      // Status        : TPlugStatus ;
-      // FileName      : string ;
-      // PlugClassName : string ;
-      // startup       : boolean ;
-      // plugKind      : string ;
-      // frmPlugin     : TFrame ; // TfrmPlugin
-      // xmlPlugin     : IXmlPlugin ;
-
-      if stricomp (pchar(plugKind) , 'Win32') = 0 then begin
-         Win32plugin := TWin32Plugin.create ;
-         Win32plugin.plugKind  := 'Win32' ;
-         Win32plugin.FileName  := AnsiString(xmlPlugin.FileName) ;
-         Win32plugin.param     := AnsiString(xmlPlugin.param) ;
-         Win32plugin.startup   := xmlPlugin.Enabled.Value ;
-         //Win32plugin.PlugName  := xmlPlugin.PlugName ;
-         Win32plugin.xmlPlugin := xmlPlugin ;
-
-         PluginList.add (Win32plugin) ;
-         if Win32plugin.startup = false then
-            continue ;
-         Win32plugin.DoLoad ;   // load , get name
-         Win32plugin.Dostart(pAnsiString(Win32plugin.param)) ;  //  and start
-         //if (Win32plugin.PlugName <> '') and (Win32plugin.PlugName <> xmlPlugin.PlugName) then begin
-         //   xmlPlugin.PlugName := Win32plugin.PlugName ;
-         //   XMLConfig.OwnerDocument.SaveToFile(strConfigFile);
-         //end ;
-      end else if stricomp (pchar(plugKind) , 'DotNet') = 0 then begin
-
-         if DotNetManager = nil then
-            DotNetManager := TDotNetManager.create();
-
-         if DotNetManager.DllHandle = 0 then
-            continue ;
-
-         DotNetPlugin := TDotNetPlugin.create ;
-         DotNetPlugin.plugKind  := 'DotNet' ;
-         DotNetPlugin.FileName  := AnsiString(xmlPlugin.FileName) ;
-         DotNetPlugin.param     := AnsiString(xmlPlugin.param) ;
-         DotNetPlugin.startup   := xmlPlugin.Enabled.Value ;
-         DotNetPlugin.xmlPlugin := xmlPlugin ;
-         try
-            // add the plugin to the dot net wrapper list
-            if DotNetManager <> nil then  // check is not necessary, but resolve unassigned variable warning
-               DotNetManager.DoCheckPlugInfile(DotNetPlugin);
-         except
-            on e : exception do begin
-               TFrm_Trace.InternalTraceFromThread ('InitPlugins : call DotNetManager.DoCheckPlugInfile() : ' + e.Message) ;
-               //continue ;
-            end ;
-         end ;
-
-         PluginList.add (DotNetPlugin) ;     // add the plugin to the general plugin list
-
-         if DotNetPlugin.startup = false then
-            continue ;
-
-         //DotNetPlugin.DoLoad ;
-
-         if DotNetPlugin.status <> psLoaded then
-            continue ;
-         DotNetPlugin.DoStart(pAnsiString(DotNetPlugin.param)) ;
-         //if DotNetPlugin.status <> psStarted then
-         //   continue ;
-
-         //TFrm_Trace.InternalTraceFromThread ('Dot net plugin ' + DotNetPlugin.Name + ' Loaded and started');
-
-      end ;
-   end ;
-
-end ;
-
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
 
@@ -394,14 +299,14 @@ end ;
 
 constructor TPlugin.create;
 begin
-   inc (InstanceCount) ;
-   PlugID    := InstanceCount ;
+   inc (PluginInstanceCount) ;
+   PlugID    := PluginInstanceCount ;
    status    := psUnloaded ;
    FileName  := '' ;
    PlugName  := '' ;
    frmPlugin := TfrmPlugin.create(frmDebugOptions) ;  //    nil
    frmPlugin.Align := alClient ;
-   frmPlugin.name := 'FrmPlugin' + intToStr(InstanceCount) ;
+   frmPlugin.name := 'FrmPlugin' + intToStr(PluginInstanceCount) ;
    TfrmPlugin(frmPlugin).plugin := self ;
 end;
 
@@ -643,8 +548,8 @@ function TDotNetPlugin.DoAction(WinId: PAnsiString; ButtonId: integer;NodeId : P
 begin
    result := true ;
    try
-      if (status = psStarted) and (assigned (DotNetManager.OnAction )) then
-         result := DotNetManager.DoAction(self , WinId , ButtonId , NodeId) ;
+      if (status = psStarted) and (assigned (TraceConfig.DotNetManager.OnAction )) then
+         result := TraceConfig.DotNetManager.DoAction(self , WinId , ButtonId , NodeId) ;
    except
       on e : exception do begin
          TFrm_Trace.InternalTrace (String (PlugName) + ' : DoAction ' , e.Message) ;
@@ -658,8 +563,8 @@ function TDotNetPlugin.DoBeforeDelete(WinId, NodeId: PAnsiString): windows.BOOL;
 begin
    result := true ;
    try
-      if (status = psStarted) and (assigned (DotNetManager.OnBeforeDelete)) then
-         result := DotNetManager.DoBeforeDelete (self, WinId , NodeId) ;
+      if (status = psStarted) and (assigned (TraceConfig.DotNetManager.OnBeforeDelete)) then
+         result := TraceConfig.DotNetManager.DoBeforeDelete (self, WinId , NodeId) ;
    except
       on e : exception do begin
          TFrm_Trace.InternalTrace (String (PlugName) + ' : DoBeforeDelete ' , e.Message) ;
@@ -672,8 +577,8 @@ end;
 procedure TDotNetPlugin.DoTimer;
 begin
    try
-      if (status = psStarted) and (assigned (DotNetManager.OnTimer)) then
-         DotNetManager.doTimer (self) ;
+      if (status = psStarted) and (assigned (TraceConfig.DotNetManager.OnTimer)) then
+         TraceConfig.DotNetManager.doTimer (self) ;
    except
       on e : exception do begin
          TFrm_Trace.InternalTrace (String (PlugName) + ' : DoTimer ' , e.Message) ;
@@ -688,8 +593,8 @@ begin
    if status <> psLoaded then
       exit ;
    try
-      if assigned (DotNetManager.Start) then
-         DotNetManager.doStart (self,Parameter) ;
+      if assigned (TraceConfig.DotNetManager.Start) then
+         TraceConfig.DotNetManager.doStart (self,Parameter) ;
    except
       on e : exception do begin
          TFrm_Trace.InternalTrace (String (PlugName) + ' : DoStart ' , e.Message) ;
@@ -706,8 +611,8 @@ begin
    if status <> psStarted then
       exit ;
    try
-      if assigned (DotNetManager.Stop) then
-         DotNetManager.doStop (self) ;
+      if assigned (TraceConfig.DotNetManager.Stop) then
+         TraceConfig.DotNetManager.doStop (self) ;
    except
       on e : exception do begin
          TFrm_Trace.InternalTrace (String (PlugName) + ' : DoStop ' , e.Message) ;
@@ -724,7 +629,12 @@ begin
    if status <> psUnloaded then
       exit ;
    try
-      DotNetManager.DoCheckPlugInfile(self) ;
+      if TraceConfig.DotNetManager = nil then begin
+         TraceConfig.DotNetManager := TDotNetManager.create();
+         if TraceConfig.DotNetManager.DllHandle = 0 then
+            exit ;
+      end ;
+      TraceConfig.DotNetManager.DoCheckPlugInfile(self) ;
    except
       on e : exception do begin
          TFrm_Trace.InternalTrace (String (PlugName) + ' : DoLoad ' , e.Message) ;
@@ -741,8 +651,8 @@ begin
    if status <> psLoaded then
       exit ;
    try
-      if assigned (DotNetManager.Unload) then
-         DotNetManager.doUnload (self) ;
+      if assigned (TraceConfig.DotNetManager.Unload) then
+         TraceConfig.DotNetManager.doUnload (self) ;
    except
       on e : exception do begin
          TFrm_Trace.InternalTrace (String (PlugName) + ' : DoUnload ' , e.Message) ;
@@ -777,8 +687,8 @@ begin
    CheckPlugInFile := nil ;
    //AddPlugin       := nil ;
 
-   if FileExists(strRunPath + 'DotNetWrapper.dll') then
-      WrapperFileName := strRunPath + 'DotNetWrapper.dll'
+   if FileExists(Frm_Tool.strRunPath + 'DotNetWrapper.dll') then
+      WrapperFileName := Frm_Tool.strRunPath + 'DotNetWrapper.dll'
    //else if FileExists('c:\GitHub\Tracetool\Plugins\DotNetWrapper\Debug\DotNetWrapper.dll') then
    //   WrapperFileName := 'c:\GitHub\Tracetool\Plugins\DotNetWrapper\Debug\DotNetWrapper.dll'
    else
@@ -1017,17 +927,5 @@ begin
    Plug.PlugName  := '_' ;
 end;
 
-//------------------------------------------------------------------------------
-
-
-
-
-initialization
-   PluginsInitialized := false ;
-
-
-//------------------------------------------------------------------------------
-//------------------------------------------------------------------------------
-//------------------------------------------------------------------------------
 
 end.

@@ -21,15 +21,17 @@ uses
   Dialogs, StdCtrls, ExtCtrls, VirtualTrees, Menus, XMLDoc, XMLIntf, Buttons,
   application6,  // the generated delphi code for the XML schema (Application6.xsd)
   ComCtrls, ToolWin, ImgList, TrayIcon, ActnList , clipbrd, SyncObjs, Contnrs,
-  DebugOptions , PSAPI, Tlhelp32 , config , unt_plugin , unt_editor ,
+  DebugOptions , PSAPI, Tlhelp32 , unt_plugin , unt_editor ,
   IdBaseComponent, IdComponent, IdSocketHandle, IdTCPServer, IdExceptionCore,
   MSXML2_TLB, IdCustomHTTPServer, IdCookie,
   IdThread, idGlobal, IdException, idstack, IdTCPConnection ,  idContext , unt_PageContainer,
-  JavaRuntime,fastmm4,pscMenu, madExceptVcl,
+  fastmm4,pscMenu, madExceptVcl,
   IdHTTPServer,
   FileViewer,
   IdCustomTCPServer, IdRawBase, IdRawClient, IdURI,
-  IdUDPBase, IdUDPServer; //, IdCustomTCPServer;
+  IdUDPBase
+  , IdUDPServer //, IdCustomTCPServer;
+  , Config ;
 
 {$Include TraceTool.Inc}
 
@@ -134,6 +136,7 @@ type
     procedure SocketPolicyServerException(AContext: TIdContext;
       AException: Exception);
     procedure SocketPolicyServerAfterBind(Sender: TObject);
+    procedure FormShow(Sender: TObject);
 
   private
 
@@ -163,7 +166,15 @@ type
     function getCommandName (SingleMsg : string;LastParsedTreeRec : pointer = nil) : string ;
     procedure ShowParsedMessage;
     procedure ShowParsedForm(TraceForm: TForm);
+    function LoadTracetoolConfig(): IXMLConfig;
+    procedure SaveTracetoolConfig(XMLConfig: IXMLConfig);
+    procedure LoadConfiguration();
+    procedure CheckXml(XMLConfig : IXMLConfig);
+    procedure XmlToLocal(XMLConfig : IXMLConfig);
+    procedure SaveSettings();
   public
+    strConfigFile : string ;
+    strRunPath : string ;       // c:\prog file\...
     InitError : string ;
     TailFileName : string ;
     XmlTraceFile : boolean ;
@@ -212,12 +223,6 @@ var
   Frm_Tool : TFrm_Tool ;
   MainPageContainer : TFrmPageContainer ;  // main page control
 
-  XMLConfig : IXMLConfig ;
-  TraceConfig : TTraceConfig ;
-
-  strConfigFile : string ;
-  strRunPath : string ;       // c:\prog file\...
-
   // to accelerate the process, the viewer use 2 stacks
   // the thread fill the MessageStack while the timer use the second stack
 
@@ -230,7 +235,7 @@ var
   ContainerList   : TObjectList ;
   ConnectionList  : TObjectList ;
   ScriptMessages  : TStringList ;
-  criticalsection : TCriticalSection ;   // protect the MessageStack and the number of socket connection
+  CriticalSection : TCriticalSection ;   // protect the MessageStack and the number of socket connection
   FileCriticalSection : TCriticalSection ; // protect low trace
   Received : integer ;                   // number of messages received
   //ExceptionStep : integer ;
@@ -238,7 +243,6 @@ var
   // used to add messages to the internal message tree
   InternalTraceMessageStack : TStringList ;
   InternalTraceMessageStack2 : TStringList ;
-  //InternalTraceCriticalsection : TCriticalSection ;   // protect the InternalTraceMessageStack
 
   OdsMessageStack : TObjectList ;
 
@@ -248,11 +252,13 @@ var
   IVstEditor : IVTEditLink ;
 
   BoldDetail : TFontDetail ;
+  PluginsInitialized : boolean ;
 
 implementation
 
 uses unt_receiver, unt_about, unt_tail,Unt_linkedList , unt_TraceWin, unt_parse, unt_base ,
-     unt_ODS, unt_utility, unt_selectEvent , unt_eventLog, unt_SelectTail, unt_search;
+     unt_ODS, unt_utility, unt_selectEvent , unt_eventLog, unt_SelectTail, unt_search, unt_TraceConfig,
+  unt_FrmPlugin;
 
 
 var
@@ -332,6 +338,7 @@ end;
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
 
+// constructor
 constructor TFrm_Tool.Create(AOwner: TComponent);
 var
    DebugWin: hWnd ;
@@ -350,21 +357,20 @@ begin
 
    TailFileName := '' ;
    resetDebugMode := false ;
-   FileCriticalSection := TCriticalSection.create ;
    parseParameters(EnterDebugMode,LeaveDebugMode,XmlTraceFile,TailFileName) ;
 
    if EnterDebugMode then begin
       TraceConfig.DebugMode := true ;
-      ResetLowTrace() ;  // delete internal lowtrace file
    end else if LeaveDebugMode then begin
       TraceConfig.DebugMode := false ;
       resetDebugMode := true ;
    end ;
 
+   LowTrace('constructor TFrm_Tool.Create begin ') ;
+
    DebugWin := FindWindow('TFormReceiver', 'FormReceiver');
    if DebugWin <> 0 then begin
-      if TraceConfig.DebugMode then
-         LowTrace('Many instances') ;
+      LowTrace('Many instances') ;
       InitError := 'Many instances' ;
 
       if TraceConfig.DebugMode then begin
@@ -401,72 +407,43 @@ begin
       halt ;
    end ;
 
-   if TraceConfig.DebugMode then
-      LowTrace('start init part1') ;
-   criticalsection := TCriticalSection.create ;
+   LowTrace('Load config') ;
 
-   strConfigFile := ParamStr(0) ;                   // c:\pf\Tracetool.exe
-   strRunPath := ExtractFilePath(strConfigFile) ;   // c:\pf\
+   LoadConfiguration() ;
 
-   strConfigFile := copy (strConfigFile,1, length (strConfigFile)-3) + 'xml' ;
-
-   if FileExists (strConfigFile) then begin
-      if TraceConfig.DebugMode then
-         LowTrace('LoadConfig') ;
-
-      XMLConfig := LoadConfig('TraceTool.xml')  ;
-   end else begin
-      if TraceConfig.DebugMode then
-         LowTrace('create config file') ;
-      XMLConfig := NewConfig() ;
-   end ;
-
-   // check if all options are valid
-   frmDebugOptions.CheckSettings ;
-   frmDebugOptions.XmlConfToLocal ;
-   
-   try
-      XMLConfig.OwnerDocument.SaveToFile(strConfigFile);
-   except
-      on e: exception do begin
-         //LowTrace('TFrm_Tool.Create : ' + e.Message );
-      end ;
-   end;
-
-   if TraceConfig.DebugMode then
-      LowTrace('Read config') ;
+   LowTrace('Apply config') ;
 
    UDPServer1.OnUDPRead :=  UDPServer1UDPRead ;
    UDPServer2.OnUDPRead :=  UDPServer1UDPRead ;
 
-   TCPServer.DefaultPort     := XMLConfig.General.SocketPort.Value ;
-   TCPServer2.DefaultPort    := XMLConfig.General.SocketPort2.Value ;
-   UdpServer1.DefaultPort    := XMLConfig.General.SocketPort.Value ;
-   UdpServer2.DefaultPort    := XMLConfig.General.SocketPort2.Value ;
+   TCPServer.DefaultPort     := TraceConfig.General_SocketPort ;
+   TCPServer2.DefaultPort    := TraceConfig.General_SocketPort2 ;
+   UdpServer1.DefaultPort    := TraceConfig.General_SocketPort ;
+   UdpServer2.DefaultPort    := TraceConfig.General_SocketPort2 ;
 
-   IdHTTPServer.DefaultPort  := XMLConfig.General.HTTPPort.Value ;
-   Caption                   := XMLConfig.AppDisplay.ApplicationTitle.Value ;
-   top                       := XMLConfig.AppDisplay.top.Value ;
-   left                      := XMLConfig.AppDisplay.left.Value ;
-   Height                    := XMLConfig.AppDisplay.height.Value ;
-   Width                     := XMLConfig.AppDisplay.width.Value ;
-   if XMLConfig.AppDisplay.Maximized.Value then
+   IdHTTPServer.DefaultPort  := TraceConfig.General_HTTPPort ;
+   Caption                   := TraceConfig.AppDisplay_ApplicationTitle ;
+   top                       := TraceConfig.AppDisplay_top ;
+   left                      := TraceConfig.AppDisplay_left ;
+   Height                    := TraceConfig.AppDisplay_height ;
+   Width                     := TraceConfig.AppDisplay_width ;
+   if TraceConfig.AppDisplay_Maximized then
       WindowState := wsMaximized ;
 
-   mnuViewMainTraces.Visible := XMLConfig.Framework.VisibleMenu.value ;    // windows menu
-   mnuLoadXMLfile.Visible    := XMLConfig.Framework.VisibleMenu.value ;    // windows menu
-   mnuEventlog.Visible       := XMLConfig.EventLog.VisibleMenu.value ;     // windows menu
-   mnuTail.Visible           := XMLConfig.tail.VisibleMenu.value ;         // windows menu
-   mnuODS.Visible            := XMLConfig.ods.VisibleMenu.value ;          // windows menu
+   mnuViewMainTraces.Visible := TraceConfig.Framework_VisibleMenu ;    // windows menu
+   mnuLoadXMLfile.Visible    := TraceConfig.Framework_VisibleMenu ;    // windows menu
+   mnuEventlog.Visible       := TraceConfig.EventLog_VisibleMenu ;     // windows menu
+   mnuTail.Visible           := TraceConfig.tail_VisibleMenu ;         // windows menu
+   mnuODS.Visible            := TraceConfig.ods_VisibleMenu ;          // windows menu
 
-   if (XMLConfig.AppDisplay.IconFile.Value <> '') and (FileExists(XMLConfig.AppDisplay.IconFile.Value)) then begin
+   if (TraceConfig.AppDisplay_IconFile <> '') and (FileExists(TraceConfig.AppDisplay_IconFile)) then begin
      imagelist1.Clear ;
-     imagelist1.FileLoad(rtBitmap,XMLConfig.AppDisplay.IconFile.Value, clFuchsia) ;
+     imagelist1.FileLoad(rtBitmap,TraceConfig.AppDisplay_IconFile, clFuchsia) ;
    end ;
 
-   SaveDialog1.InitialDir   := XMLConfig.General.LastSavedPath.Value ;   // same dialog box for all Save
+   SaveDialog1.InitialDir   := TraceConfig.General_LastSavedPath ;   // same dialog box for all Save
 
-   if XMLConfig.AppDisplay.StayOnTop.Value then
+   if TraceConfig.AppDisplay_StayOnTop then
       actViewStayOnTopExecute(nil);
 
    // show main form on startup is done on the Tracetool.dpr file :
@@ -478,9 +455,8 @@ begin
    // open socket port 1
    try
       if TCPServer.DefaultPort <> 0 then begin
-         if TraceConfig.DebugMode then
-            LowTrace('Activate tcp/udp 1') ;
-         if XMLConfig.General.Udp1.Value then
+         LowTrace('Activate tcp/udp 1') ;
+         if TraceConfig.General_Udp1 then
             UdpServer1.Active := true
          else
             TCPServer.Active := true ;
@@ -493,9 +469,8 @@ begin
       end ;
       on e : EIdCouldNotBindSocket do begin
          // InitError := 'EIdCouldNotBindSocket' ;
-         MessageDlg('Unable to open socket port ' + inttostr(XMLConfig.General.SocketPort.Value), mtWarning, [mbOK], 0);
-         if TraceConfig.DebugMode then
-            LowTrace('EIdCouldNotBindSocket : Unable to open socket port ' + inttostr(XMLConfig.General.SocketPort.Value)) ;
+         MessageDlg('Unable to open socket port ' + inttostr(TraceConfig.General_SocketPort), mtWarning, [mbOK], 0);
+         LowTrace('EIdCouldNotBindSocket : Unable to open socket port ' + inttostr(TraceConfig.General_SocketPort)) ;
          FAllowClose := true;
          //TCPServer.Destroy ;
          exit ;
@@ -506,15 +481,14 @@ begin
          FAllowClose := true;
       end ;
    end ;
-   if (InitError <> '') and (TraceConfig.DebugMode) then
+   if (InitError <> '') then
       LowTrace(InitError) ;
 
    // open socket port 2
    try
       if TCPServer2.DefaultPort <> 0 then begin
-         if TraceConfig.DebugMode then
-            LowTrace('Activate tcp/upd 2') ;
-         if XMLConfig.General.Udp2.Value then
+         LowTrace('Activate tcp/upd 2') ;
+         if TraceConfig.General_Udp2 then
             UdpServer2.Active := true
          else
             TCPServer2.Active := true ;
@@ -527,9 +501,8 @@ begin
       end ;
       on e : EIdCouldNotBindSocket do begin
          // InitError := 'EIdCouldNotBindSocket' ;
-         MessageDlg('Unable to open socket port ' + inttostr(XMLConfig.General.SocketPort2.Value), mtWarning, [mbOK], 0);
-         if TraceConfig.DebugMode then
-            LowTrace('EIdCouldNotBindSocket : Unable to open socket port ' + inttostr(XMLConfig.General.SocketPort2.Value)) ;
+         MessageDlg('Unable to open socket port ' + inttostr(TraceConfig.General_SocketPort2), mtWarning, [mbOK], 0);
+         LowTrace('EIdCouldNotBindSocket : Unable to open socket port ' + inttostr(TraceConfig.General_SocketPort2)) ;
          FAllowClose := true;
          //TCPServer2.Destroy ;
          exit ;
@@ -541,14 +514,13 @@ begin
       end ;
    end ;
 
-   if (InitError <> '') and (TraceConfig.DebugMode) then
+   if (InitError <> '')  then
       LowTrace(InitError) ;
 
    // open http port
    try
       if IdHTTPServer.DefaultPort <> 0 then begin
-         if TraceConfig.DebugMode then
-            LowTrace('Activate http') ;
+         LowTrace('Activate http') ;
          IdHTTPServer.active := true ;
       end ;
    except
@@ -560,8 +532,8 @@ begin
       on e : EIdCouldNotBindSocket do begin
          MessageDlg('Unable to open socket port ' + inttostr(IdHTTPServer.DefaultPort), mtWarning, [mbOK], 0);
          //InitError := 'EIdCouldNotBindSocket' ;
-         if TraceConfig.DebugMode then
-            LowTrace('EIdCouldNotBindSocket : Unable to open socket port ' + inttostr(IdHTTPServer.DefaultPort)) ;
+
+         LowTrace('EIdCouldNotBindSocket : Unable to open socket port ' + inttostr(IdHTTPServer.DefaultPort)) ;
       end ;
 
       on e : exception do begin
@@ -569,14 +541,13 @@ begin
       end ;
    end ;
 
-   if (InitError <> '') and (TraceConfig.DebugMode) then
+   if (InitError <> '') then
       LowTrace(InitError) ;
 
    // open socket Policy server
    try
-      if XMLConfig.General.SocketPolicyServer.Value <> false then begin
-         if TraceConfig.DebugMode then
-            LowTrace('Activate PolicyServer') ;
+      if TraceConfig.General_SocketPolicyServer <> false then begin
+         LowTrace('Activate PolicyServer') ;
          SocketPolicyServer.active := true ;
       end ;
    except
@@ -588,15 +559,14 @@ begin
       on e : EIdCouldNotBindSocket do begin
          MessageDlg('Unable to open socket port ' + inttostr(SocketPolicyServer.DefaultPort), mtWarning, [mbOK], 0);
          //InitError := 'EIdCouldNotBindSocket' ;
-         if TraceConfig.DebugMode then
-            LowTrace('EIdCouldNotBindSocket : Unable to open socket port ' + inttostr(SocketPolicyServer.DefaultPort)) ;
+         LowTrace('EIdCouldNotBindSocket : Unable to open socket port ' + inttostr(SocketPolicyServer.DefaultPort)) ;
       end ;
 
       on e : exception do begin
          InitError := e.Message ;
       end ;
    end ;
-   if (InitError <> '') and (TraceConfig.DebugMode) then
+   if (InitError <> '')  then
       LowTrace(InitError) ;
 
    Application.OnMessage := ApplicationMsgHandler;
@@ -610,12 +580,12 @@ begin
    FTaskIcon.OnDblClick := TrayIconDblClick;
    FTaskIcon.Icon := imgMessage.Picture.Icon;
 
-   if (XMLConfig.AppDisplay.ShowOnstartup.Value = true) and (TraceConfig.AppDisplay_HideViewer = false) then
+   if (TraceConfig.AppDisplay_ShowOnstartup = true) and (TraceConfig.AppDisplay_HideViewer = false) then
       Application.ShowMainForm := true
    else
       actHideExecute(nil) ; //TaskBarButton (false) ;
-   if TraceConfig.DebugMode then
-      LowTrace('init part 1 finished') ;
+
+   LowTrace('constructor TFrm_Tool.Create end ') ;
 
 end;
 
@@ -630,7 +600,7 @@ var
 
 begin
    if TraceConfig.DebugMode then
-      LowTrace('start init part2') ;
+      LowTrace('TFrm_Tool.FormCreate begin') ;
 
    uniqueId := 0 ;
 
@@ -644,8 +614,7 @@ begin
    // connection should be actived in TFrm_Tool.Create procedure
    //if (TCPServer.active = false) and (InitError = 'EIdCouldNotBindSocket') then  begin
    if InitError <> '' then begin
-      if TraceConfig.DebugMode then
-         LowTrace('init part2 terminated : error : ' + InitError) ;
+      LowTrace('TFrm_Tool.FormCreate terminated : error : ' + InitError) ;
       close ;
       exit ;
    end ;
@@ -680,8 +649,7 @@ begin
    end ;
 
    // create the internal trace window (invisible)
-   if TraceConfig.DebugMode then
-      LowTrace('create internal trace window (invisible)') ;
+   LowTrace('create internal trace window (invisible)') ;
    FrmInternalTraces := TFrm_Trace.Create(nil);
    FrmInternalTraces.Name := 'FrmInternalTraces' ;
    FrmInternalTraces.ID := 'ERRID' ;
@@ -695,40 +663,37 @@ begin
    end ;
 
    // create the main Trace window
-   if TraceConfig.DebugMode then
-      LowTrace('create the main Trace window') ;
+   LowTrace('create the main Trace window') ;
    Frm_Trace := TFrm_Trace.Create(nil);
    Frm_Trace.Id := '' ;  // main trace form don't have ID
-   Frm_Trace.Caption := XMLConfig.Framework.MainTraceTitle.value ;
+   Frm_Trace.Caption := TraceConfig.Framework_MainTraceTitle ;
    Frm_Trace.DockToMainPanel();
-   Frm_Trace.getPageContainer().actViewTraceInfo.Checked := XMLConfig.Framework.ShowMembers.Value ;  // remain members button state only for main win
+   Frm_Trace.getPageContainer().actViewTraceInfo.Checked := TraceConfig.Framework_ShowMembers ;  // remain members button state only for main win
    Frm_Trace.ViewTraceInfo ;
-   if XMLConfig.Framework.Enabled.Value = true then
+   if TraceConfig.Framework_Enabled = true then
       Frm_Trace.Show
    else
       Frm_Trace.Hide ;
 
    // create the main watch window
-   if TraceConfig.DebugMode then
-      LowTrace('create the main watch window') ;
-   Frm_Watches := CreateWatchForm('', XMLConfig.Watches.MainWatchesTitle.value) ;  // windows id and name
-   if XMLConfig.Watches.Enabled.Value = true then
+   LowTrace('create the main watch window') ;
+   Frm_Watches := CreateWatchForm('', TraceConfig.Watches_MainWatchesTitle) ;  // windows id and name
+   if TraceConfig.Watches_Enabled = true then
       Frm_Watches.Show
    else
       Frm_Watches.Hide ;
 
    // create the ODS window
-   if TraceConfig.DebugMode then
-      LowTrace('create the ODS window') ;
+   LowTrace('create the ODS window') ;
    Frm_ODS := TFrm_ODS.Create(nil);  // start if ConfigInfo.EnableODS ;
-   Frm_ODS.Caption := XMLConfig.Ods.Title.Value  ;  // 'ODS'
+   Frm_ODS.Caption := TraceConfig.Ods_Title  ;  // 'ODS'
 
-   if XMLConfig.ods.Enabled.Value then begin
+   if TraceConfig.ods_Enabled then begin
       Frm_ODS.DockToMainPanel() ;
       Frm_ODS.Visible := true ;
    end ;
 
-   mnuODS.Visible := XMLConfig.Ods.VisibleMenu.Value ;
+   mnuODS.Visible := TraceConfig.Ods_VisibleMenu ;
    mitTrayShow.Enabled := not TraceConfig.AppDisplay_HideViewer ;
    mitTrayShow.Visible := not TraceConfig.AppDisplay_HideViewer ;
 
@@ -741,7 +706,7 @@ begin
    MainPageContainer.DockingPagecontrol.onChange(nil) ;
 
    // set the main trace as the active form
-   if XMLConfig.Framework.Enabled.Value = true then
+   if TraceConfig.Framework_Enabled = true then
       Frm_Trace.SetActivePage ;
 
    FrmSelectTail := TFrmSelectTail.Create(Application);   // Application.CreateForm(TFrmSelectTail, FrmSelectTail);
@@ -767,12 +732,18 @@ begin
       FrmSelectTail.OpenFile(TailFileName);
       Frm_Tool.actShowExecute (nil) ;
    end ;
-
-   if TraceConfig.DebugMode then
-      LowTrace('init part 2 finished') ;
+   LowTrace('TFrm_Tool.FormCreate end') ;
 end;
 
 //------------------------------------------------------------------------------
+
+procedure TFrm_Tool.FormShow(Sender: TObject);
+begin
+   LowTrace('TFrm_Tool.FormShow') ;
+end;
+
+//------------------------------------------------------------------------------
+
 
 destructor TFrm_Tool.Destroy;
 var
@@ -780,7 +751,7 @@ var
    frm : TFrm_Trace ;
    isclosed : boolean ;
 begin
-  frmDebugOptions.SaveSettings ;
+  //SaveSettings ();
 
   // stop plugins (added in version 9)
   StopAllplugins() ;
@@ -833,6 +804,696 @@ end;
 
 //------------------------------------------------------------------------------
 
+function TFrm_Tool.LoadTracetoolConfig () : IXMLConfig ;
+var
+   XmlDocument : IXmlDocument ;
+   XMLConfig : IXMLConfig ;
+   traceToolStrings : TStringList ;
+   traceToolText : string ;
+begin
+   if FileExists (strConfigFile) then begin   
+      traceToolStrings := TStringList.Create ;
+      traceToolStrings.LoadFromFile(strConfigFile);
+      traceToolText := traceToolStrings.Text ;
+      traceToolStrings.Free;
+      XmlDocument := LoadXMLData(traceToolText) ;
+      XMLConfig := GetConfig (XmlDocument) ;
+      XmlDocument := nil ;
+   end else begin
+      LowTrace('create config file') ;
+      XMLConfig := NewConfig() ;  
+   end;
+     result := XMLConfig ; 
+end;
+
+procedure TFrm_Tool.SaveTracetoolConfig (XMLConfig : IXMLConfig) ;
+var
+   traceToolStrings : TStringList ;
+   traceToolText : string ;
+begin
+   traceToolText := XMLConfig.OwnerDocument.XML.Text ;
+
+   traceToolStrings := TStringList.Create ;
+   traceToolStrings.Text := traceToolText ;
+   traceToolStrings.SaveToFile(strConfigFile);
+   traceToolStrings.Free;
+end;
+
+//------------------------------------------------------------------------------
+
+procedure TFrm_Tool.LoadConfiguration();
+var
+   XMLConfig : IXMLConfig ;
+   //XmlDocument : IXmlDocument ;
+   //traceToolStrings : TStringList ;
+   //traceToolText : string ;
+begin
+   strConfigFile := ParamStr(0) ;                   // c:\pf\Tracetool.exe
+   strRunPath := ExtractFilePath(strConfigFile) ;   // c:\pf\
+
+   // the donet api (tracetool.dll) has a documentation file : TraceTool.xml 
+   // in version 12.x, the tracetool utility had a configuration file : TraceTool.xml 
+   // both files were in conflict (and locked when a dotnet plugin was loaded)
+   // Starting with version 13.0, the tracetool utility config file is renamed to TraceToolConfig.xml
+   
+   strConfigFile := strRunPath + 'TraceToolConfig.xml' ;
+   if FileExists (strConfigFile) then begin   
+      XMLConfig := LoadTracetoolConfig() ;
+   end else begin
+      strConfigFile := strRunPath + 'TraceTool.xml' ; 
+      XMLConfig := LoadTracetoolConfig() ;
+      DeleteFile(strConfigFile) ;  // delete old TraceTool.xml file, if exist. 'TraceToolConfig.xml' will be recreated later   
+      strConfigFile := strRunPath + 'TraceToolConfig.xml' ; 
+   end;
+   
+   CheckXml(XMLConfig) ;     // check if all options are valid
+   XmlToLocal(XMLConfig) ;   // convert Xml to local config
+   SaveSettings() ;          // save missing default settings 
+   
+   XMLConfig := nil ;
+end;
+
+//------------------------------------------------------------------------------
+
+// Ensure the xml file is correct
+procedure TFrm_Tool.CheckXml (XMLConfig : IXMLConfig);
+var
+   Reg: TRegistry;
+   Buf: array[0..MAX_PATH + 1] of Char;
+   c : integer ;
+//   jvms : TStringList ;
+begin
+   Reg := TRegistry.Create;
+   try try
+      Reg.RootKey := HKEY_LOCAL_MACHINE;
+      Reg.OpenKey('Software\TraceTool',true);
+      GetModuleFileName(HINSTANCE, Buf, SizeOf(Buf)-1);
+      Reg.WriteString('FilePath', StrPas(Buf));
+      except
+         on e: exception do begin
+            //LowTrace('WriteString : ' + e.Message );
+         end ;
+      end ;
+   finally
+      Reg.CloseKey ;
+      Reg.Free;
+   end ;
+
+   // General options
+   // -----------------------------------------------------------------------
+
+   if XMLConfig.General.LastStyleSheet.Attributes           ['Value'] = Null then XMLConfig.General.LastStyleSheet.Value := '' ;
+   if XMLConfig.General.LastSavedPath.Attributes            ['Value'] = Null then XMLConfig.General.LastSavedPath.Value := '' ;
+   if XMLConfig.General.InternalLog.Attributes              ['Value'] = Null then XMLConfig.General.InternalLog.Value := 'c:\temp\TracetoolInternalLog.txt' ;
+   if XMLConfig.General.SocketPort.Attributes               ['Value'] = Null then XMLConfig.General.SocketPort.Value := 8090 ;
+   if XMLConfig.General.SocketPort2.Attributes              ['Value'] = Null then XMLConfig.General.SocketPort2.Value := 4502 ;
+   if XMLConfig.General.Udp1.Attributes                     ['Value'] = Null then XMLConfig.General.Udp1.Value := false ;
+   if XMLConfig.General.Udp2.Attributes                     ['Value'] = Null then XMLConfig.General.Udp2.Value := false ;
+   if XMLConfig.General.HTTPPort.Attributes                 ['Value'] = Null then XMLConfig.General.HTTPPort.Value := 0 ;  // disabled by default
+   if XMLConfig.General.ShowSocketWarning.Attributes        ['Value'] = Null then XMLConfig.General.ShowSocketWarning.Value := false ;
+   if XMLConfig.General.SocketPolicyServer.Attributes       ['Value'] = Null then XMLConfig.General.SocketPolicyServer.Value := false ;
+   if XMLConfig.General.HttpPolicyServer.Attributes         ['Value'] = Null then XMLConfig.General.HttpPolicyServer.Value := false ;
+
+   // display options
+   // -----------------------------------------------------------------------
+
+   if XMLConfig.AppDisplay.SmallBut.Attributes              ['Value'] = Null then XMLConfig.AppDisplay.SmallBut.Value := true ;
+   if XMLConfig.AppDisplay.ToolbarStandard.Attributes       ['Value'] = Null then XMLConfig.AppDisplay.ToolbarStandard.Value := true ;
+   if XMLConfig.AppDisplay.ToolbarSearch.Attributes         ['Value'] = Null then XMLConfig.AppDisplay.ToolbarSearch.Value   := true ;
+   if XMLConfig.AppDisplay.ToolbarBookmark.Attributes       ['Value'] = Null then XMLConfig.AppDisplay.ToolbarBookmark.Value := true ;
+   if XMLConfig.AppDisplay.ToolbarFilter.Attributes         ['Value'] = Null then XMLConfig.AppDisplay.ToolbarFilter.Value   := true ;
+   if XMLConfig.AppDisplay.HideViewer.Attributes            ['Value'] = Null then XMLConfig.AppDisplay.HideViewer.Value      := false ;
+   if XMLConfig.AppDisplay.DisableInternalLog.Attributes    ['Value'] = Null then XMLConfig.AppDisplay.DisableInternalLog.Value := false ;
+   if XMLConfig.AppDisplay.ApplicationTitle.Attributes      ['Value'] = Null then XMLConfig.AppDisplay.ApplicationTitle.Value := 'Trace and Object inspector Tool' ;
+   if XMLConfig.AppDisplay.left.Attributes                  ['Value'] = Null then XMLConfig.AppDisplay.left.Value := Screen.Width - 700 ;
+   if XMLConfig.AppDisplay.top.Attributes                   ['Value'] = Null then XMLConfig.AppDisplay.top.Value := 0 ;
+   if XMLConfig.AppDisplay.width.Attributes                 ['Value'] = Null then XMLConfig.AppDisplay.width.Value := 700 ;
+   if XMLConfig.AppDisplay.height.Attributes                ['Value'] = Null then XMLConfig.AppDisplay.height.Value := 600 ;
+   if XMLConfig.AppDisplay.stayOnTop.Attributes             ['Value'] = Null then XMLConfig.AppDisplay.stayOnTop.Value := false ;
+   if XMLConfig.AppDisplay.ShowOnstartup.Attributes         ['Value'] = Null then XMLConfig.AppDisplay.ShowOnstartup.Value := true ;
+   if XMLConfig.AppDisplay.ShowOnMessageReceived.Attributes ['Value'] = Null then XMLConfig.AppDisplay.ShowOnMessageReceived.Value := false ;
+   if XMLConfig.AppDisplay.FocusToReceivedMessage.Attributes['Value'] = Null then XMLConfig.AppDisplay.FocusToReceivedMessage.Value := true ;
+   if XMLConfig.AppDisplay.Maximized.Attributes             ['Value'] = Null then XMLConfig.AppDisplay.Maximized.Value := false ;
+   if XMLConfig.AppDisplay.IconFile.Attributes              ['Value'] = Null then XMLConfig.AppDisplay.IconFile.Value := '' ;
+   if XMLConfig.AppDisplay.MinimizeToSystray.Attributes     ['Value'] = Null then XMLConfig.AppDisplay.MinimizeToSystray.Value := false ;
+
+   // Trace Framework
+   // autoclear, MaxNode and MinNode are used for trace framework
+   // -----------------------------------------------------------------------
+
+   if XMLConfig.Framework.ShowMembers.Attributes            ['Value'] = Null then XMLConfig.Framework.ShowMembers.Value := false ;
+   if XMLConfig.Framework.AutoClear.Attributes              ['Value'] = Null then XMLConfig.Framework.AutoClear.Value := true ;
+   if XMLConfig.Framework.MaxNode.Attributes                ['Value'] = Null then XMLConfig.Framework.MaxNode.Value := 2000 ;
+   if XMLConfig.Framework.MinNode.Attributes                ['Value'] = Null then XMLConfig.Framework.MinNode.Value := 1000 ;
+   if XMLConfig.Framework.Enabled.Attributes                ['Value'] = Null then XMLConfig.Framework.Enabled.Value := true ;
+   if XMLConfig.Framework.VisibleMenu.Attributes            ['Value'] = Null then XMLConfig.Framework.VisibleMenu.value := true ;
+   if XMLConfig.Framework.MainTraceTitle.Attributes         ['Value'] = Null then XMLConfig.Framework.MainTraceTitle.value := 'Traces' ;
+
+   if XMLConfig.Framework.Trace.FontName.Attributes         ['Value'] = Null then XMLConfig.Framework.Trace.FontName.Value := 'MS Sans Serif' ;
+   if XMLConfig.Framework.Trace.FontSize.Attributes         ['Value'] = Null then XMLConfig.Framework.Trace.FontSize.Value := 8 ;
+   if XMLConfig.Framework.Trace.NodeHeight.Attributes       ['Value'] = Null then XMLConfig.Framework.Trace.NodeHeight.Value := 18 ;
+
+   if XMLConfig.Framework.Info.FontName.Attributes          ['Value'] = Null then XMLConfig.Framework.Info.FontName.Value := 'MS Sans Serif' ;
+   if XMLConfig.Framework.Info.FontSize.Attributes          ['Value'] = Null then XMLConfig.Framework.Info.FontSize.Value := 8 ;
+   if XMLConfig.Framework.Info.NodeHeight.Attributes        ['Value'] = Null then XMLConfig.Framework.Info.NodeHeight.Value := 18 ;
+
+   if XMLConfig.Framework.Orphans.DeletedNode.Attributes           ['Value'] = Null then XMLConfig.Framework.Orphans.DeletedNode.Value := 'CreateUnderLostAndFound' ;
+   if XMLConfig.Framework.Orphans.DefaultLeftText.Attributes       ['Value'] = Null then XMLConfig.Framework.Orphans.DefaultLeftText.Value := 'Restored' ;
+   if XMLConfig.Framework.Orphans.DefaultRightText.Attributes      ['Value'] = Null then XMLConfig.Framework.Orphans.DefaultRightText.Value := '' ;
+   if XMLConfig.Framework.Orphans.LostAndFoundLeftText.Attributes  ['Value'] = Null then XMLConfig.Framework.Orphans.LostAndFoundLeftText.Value := 'Lost and found' ;
+   if XMLConfig.Framework.Orphans.LostAndFoundRightText.Attributes ['Value'] = Null then XMLConfig.Framework.Orphans.LostAndFoundRightText.Value :=  '' ;
+
+   // Watches
+   // -----------------------------------------------------------------------
+
+   if XMLConfig.Watches.Enabled.Attributes                  ['Value'] = Null then XMLConfig.Watches.Enabled.Value := false ;  // by default, don't display watches window
+   if XMLConfig.Watches.VisibleMenu.Attributes              ['Value'] = Null then XMLConfig.Watches.VisibleMenu.value := true ;
+   if XMLConfig.Watches.MainWatchesTitle.Attributes         ['Value'] = Null then XMLConfig.Watches.MainWatchesTitle.value := 'Watches' ;
+
+   if XMLConfig.Watches.Trace.FontName.Attributes           ['Value'] = Null then XMLConfig.Watches.Trace.FontName.Value := 'MS Sans Serif' ;
+   if XMLConfig.Watches.Trace.FontSize.Attributes           ['Value'] = Null then XMLConfig.Watches.Trace.FontSize.Value := 8 ;
+   if XMLConfig.Watches.Trace.NodeHeight.Attributes         ['Value'] = Null then XMLConfig.Watches.Trace.NodeHeight.Value := 18 ;
+
+   if XMLConfig.Watches.Info.FontName.Attributes            ['Value'] = Null then XMLConfig.Watches.Info.FontName.Value := 'MS Sans Serif' ;
+   if XMLConfig.Watches.Info.FontSize.Attributes            ['Value'] = Null then XMLConfig.Watches.Info.FontSize.Value := 8 ;
+   //if XMLConfig.Watches.Info.NodeHeight.Attributes          ['Value'] = Null then XMLConfig.Watches.Info.NodeHeight.Value := 18 ;
+
+   // outputdebugString options
+   // -----------------------------------------------------------------------
+
+   if XMLConfig.ods.Enabled.Attributes                      ['Value'] = Null then XMLConfig.ods.Enabled.Value := true ;
+   if XMLConfig.ods.Title.Attributes                        ['Value'] = Null then XMLConfig.ods.Title.Value := 'ODS' ;
+   if XMLConfig.ods.AutoClear.Attributes                    ['Value'] = Null then XMLConfig.ods.AutoClear.Value := true ;
+   if XMLConfig.ods.MaxNode.Attributes                      ['Value'] = Null then XMLConfig.ods.MaxNode.Value := 2000 ;
+   if XMLConfig.ods.MinNode.Attributes                      ['Value'] = Null then XMLConfig.ods.MinNode.Value := 1000 ;
+   if XMLConfig.ods.VisibleMenu.Attributes                  ['Value'] = Null then XMLConfig.ods.VisibleMenu.value := true ;
+
+   if XMLConfig.ods.Trace.FontName.Attributes               ['Value'] = Null then XMLConfig.ods.Trace.FontName.Value := 'MS Sans Serif' ;
+   if XMLConfig.ods.Trace.FontSize.Attributes               ['Value'] = Null then XMLConfig.ods.Trace.FontSize.Value := 8 ;
+   if XMLConfig.ods.Trace.NodeHeight.Attributes             ['Value'] = Null then XMLConfig.ods.Trace.NodeHeight.Value := 18 ;
+
+   if XMLConfig.ods.Info.FontName.Attributes                ['Value'] = Null then XMLConfig.ods.Info.FontName.Value := 'MS Sans Serif' ;
+   if XMLConfig.ods.Info.FontSize.Attributes                ['Value'] = Null then XMLConfig.ods.Info.FontSize.Value := 8 ;
+   //if XMLConfig.ods.Info.NodeHeight.Attributes              ['Value'] = Null then XMLConfig.ods.Info.NodeHeight.Value := 18 ;
+
+   // event Log options
+   //------------------------------------------------------------------------
+
+   if XMLConfig.EventLog.VisibleMenu.Attributes             ['Value'] = Null then XMLConfig.EventLog.VisibleMenu.value := true ;
+   if XMLConfig.EventLog.Trace.FontName.Attributes          ['Value'] = Null then XMLConfig.EventLog.Trace.FontName.Value := 'MS Sans Serif' ;
+   if XMLConfig.EventLog.Trace.FontSize.Attributes          ['Value'] = Null then XMLConfig.EventLog.Trace.FontSize.Value := 8 ;
+   if XMLConfig.EventLog.Trace.NodeHeight.Attributes        ['Value'] = Null then XMLConfig.EventLog.Trace.NodeHeight.Value := 18 ;
+
+   if XMLConfig.EventLog.Info.FontName.Attributes           ['Value'] = Null then XMLConfig.EventLog.Info.FontName.Value := 'MS Sans Serif' ;
+   if XMLConfig.EventLog.Info.FontSize.Attributes           ['Value'] = Null then XMLConfig.EventLog.Info.FontSize.Value := 8 ;
+   //if XMLConfig.EventLog.Info.NodeHeight.Attributes         ['Value'] = Null then XMLConfig.EventLog.Info.NodeHeight.Value := 18 ;
+
+   // tail options
+   // -----------------------------------------------------------------------
+
+   if XMLConfig.Tail.LastPath.Attributes                    ['Value'] = Null then XMLConfig.Tail.LastPath.Value := '' ;
+   if XMLConfig.tail.AutoClear.Attributes                   ['Value'] = Null then XMLConfig.tail.AutoClear.Value := true ;
+   if XMLConfig.tail.MaxNode.Attributes                     ['Value'] = Null then XMLConfig.tail.MaxNode.Value := 2000 ;
+   if XMLConfig.tail.MinNode.Attributes                     ['Value'] = Null then XMLConfig.tail.MinNode.Value := 1000 ;
+   if XMLConfig.tail.ColumnStyle.Attributes                 ['Value'] = Null then XMLConfig.tail.ColumnStyle.value := 'Multi' ; // Classic , Lines , Multi
+   if XMLConfig.tail.AutoCreateColStyle.Attributes          ['Value'] = Null then XMLConfig.tail.AutoCreateColStyle.value := 'Each' ; // First, Each , Fixed
+   if XMLConfig.tail.TextQualifier.Attributes               ['Value'] = Null then XMLConfig.tail.TextQualifier.value := 'None' ;
+   if XMLConfig.tail.Separator.Attributes                   ['Value'] = Null then XMLConfig.tail.Separator.value := '9' ;
+   if XMLConfig.tail.FirstcolIsTitle.Attributes             ['Value'] = Null then XMLConfig.tail.FirstcolIsTitle.value := true ;
+   if XMLConfig.tail.FixedColCount.Attributes               ['Value'] = Null then XMLConfig.tail.FixedColCount.value := 5 ;
+   if XMLConfig.tail.OpenFromFavorites.Attributes           ['Value'] = Null then XMLConfig.tail.OpenFromFavorites.value := false ;
+   if XMLConfig.tail.SizeToLoad.Attributes                  ['Value'] = Null then XMLConfig.tail.SizeToLoad.value := 800 ;
+   if XMLConfig.tail.VisibleMenu.Attributes                 ['Value'] = Null then XMLConfig.tail.VisibleMenu.value := true ;
+
+   if XMLConfig.tail.Trace.FontName.Attributes              ['Value'] = Null then XMLConfig.tail.Trace.FontName.Value := 'MS Sans Serif' ;
+   if XMLConfig.tail.Trace.FontSize.Attributes              ['Value'] = Null then XMLConfig.tail.Trace.FontSize.Value := 8 ;
+   if XMLConfig.tail.Trace.NodeHeight.Attributes            ['Value'] = Null then XMLConfig.tail.Trace.NodeHeight.Value := 18 ;
+
+   if XMLConfig.tail.Info.FontName.Attributes               ['Value'] = Null then XMLConfig.tail.Info.FontName.Value := 'MS Sans Serif' ;
+   if XMLConfig.tail.Info.FontSize.Attributes               ['Value'] = Null then XMLConfig.tail.Info.FontSize.Value := 8 ;
+   //if XMLConfig.tail.Info.NodeHeight.Attributes             ['Value'] = Null then XMLConfig.tail.Info.NodeHeight.Value := 18 ;
+
+   // clipboard options
+   // -----------------------------------------------------------------------
+
+   if XMLConfig.TextExport.ProcessName.Attributes           ['Value'] = Null then XMLConfig.TextExport.ProcessName.Value := false ;
+   if XMLConfig.TextExport.ThreadID.Attributes              ['Value'] = Null then XMLConfig.TextExport.ThreadID.Value := true ;
+   if XMLConfig.TextExport.Time.Attributes                  ['Value'] = Null then XMLConfig.TextExport.Time.Value := true ;
+   if XMLConfig.TextExport.Col1.Attributes                  ['Value'] = Null then XMLConfig.TextExport.Col1.Value := true ;
+   if XMLConfig.TextExport.Col2.Attributes                  ['Value'] = Null then XMLConfig.TextExport.Col2.Value := true ;
+   if XMLConfig.TextExport.GenerateColumnHeader.Attributes  ['Value'] = Null then XMLConfig.TextExport.GenerateColumnHeader.Value := false ;
+   if XMLConfig.TextExport.TreeIndentation.Attributes       ['Value'] = Null then XMLConfig.TextExport.TreeIndentation.Value := 3 ;
+   if XMLConfig.TextExport.Separator.Attributes             ['Value'] = Null then XMLConfig.TextExport.Separator.Value := '9' ;
+   if XMLConfig.TextExport.TextQualifier.Attributes         ['Value'] = Null then XMLConfig.TextExport.TextQualifier.Value := 'None' ;
+
+   //plugins
+   // -----------------------------------------------------------------------
+
+   for c := 0 to XMLConfig.Plugins.Plugin.Count-1 do begin
+      if XMLConfig.Plugins.Plugin[c].Kind = '' then
+         XMLConfig.Plugins.Plugin[c].Kind := 'Win32' ;
+
+      if (XMLConfig.Plugins.Plugin[c].Enabled.Attributes['Value'] = Null) or
+         (XMLConfig.Plugins.Plugin[c].Enabled.Attributes['Value'] = '') then
+         XMLConfig.Plugins.Plugin[c].Enabled.value := false ;
+   end ;
+end;
+
+//------------------------------------------------------------------------------
+
+// Map IXMLConfig to TTraceConfig instance
+procedure TFrm_Tool.XmlToLocal(XMLConfig : IXMLConfig) ;
+var
+   c : integer ;
+   xmlPlugin : IXMLPlugin ;
+   plugKind : string ;
+   plugin : TPlugin ;
+   Win32plugin : TWin32Plugin ;
+   DotNetPlugin : TDotNetPlugin ;
+begin
+
+   // General options
+   // -----------------------------------------------------------------------
+
+   TraceConfig.General_LastStyleSheet                   := XMLConfig.General.LastStyleSheet.Value ;
+   TraceConfig.General_LastSavedPath                    := XMLConfig.General.LastSavedPath.Value ;
+   TraceConfig.General_InternalLog                      := XMLConfig.General.InternalLog.Value  ;
+   TraceConfig.General_SocketPort                       := XMLConfig.General.SocketPort.Value ;
+   TraceConfig.General_SocketPort2                      := XMLConfig.General.SocketPort2.Value ;
+   TraceConfig.General_Udp1                             := XMLConfig.General.Udp1.Value ;
+   TraceConfig.General_Udp2                             := XMLConfig.General.Udp2.Value ;
+   TraceConfig.General_HTTPPort                         := XMLConfig.General.HTTPPort.Value ;
+   TraceConfig.General_ShowSocketWarning                := XMLConfig.General.ShowSocketWarning.Value ;
+   TraceConfig.General_SocketPolicyServer               := XMLConfig.General.SocketPolicyServer.Value ;
+   TraceConfig.General_HttpPolicyServer                 := XMLConfig.General.HttpPolicyServer.Value ;
+
+   // display options
+   // -----------------------------------------------------------------------
+
+   TraceConfig.AppDisplay_SmallBut                      := XMLConfig.AppDisplay.SmallBut.Value ;
+   TraceConfig.AppDisplay_ToolbarStandard               := XMLConfig.AppDisplay.ToolbarStandard.Value ;
+   TraceConfig.AppDisplay_ToolbarSearch                 := XMLConfig.AppDisplay.ToolbarSearch.Value   ;
+   TraceConfig.AppDisplay_ToolbarBookmark               := XMLConfig.AppDisplay.ToolbarBookmark.Value ;
+   TraceConfig.AppDisplay_ToolbarFilter                 := XMLConfig.AppDisplay.ToolbarFilter.Value   ;
+   TraceConfig.AppDisplay_HideViewer                    := XMLConfig.AppDisplay.HideViewer.Value      ;
+   TraceConfig.AppDisplay_DisableInternalLog            := XMLConfig.AppDisplay.DisableInternalLog.Value ;
+   TraceConfig.AppDisplay_ApplicationTitle              := XMLConfig.AppDisplay.ApplicationTitle.Value ;
+   TraceConfig.AppDisplay_left                          := XMLConfig.AppDisplay.left.Value ;
+   TraceConfig.AppDisplay_top                           := XMLConfig.AppDisplay.top.Value ;
+   TraceConfig.AppDisplay_Width                         := XMLConfig.AppDisplay.width.Value ;
+   TraceConfig.AppDisplay_Height                        := XMLConfig.AppDisplay.height.Value ;
+   TraceConfig.AppDisplay_StayOnTop                     := XMLConfig.AppDisplay.stayOnTop.Value ;
+   TraceConfig.AppDisplay_ShowOnstartup                 := XMLConfig.AppDisplay.ShowOnstartup.Value ;
+   TraceConfig.AppDisplay_ShowOnMessageReceived         := XMLConfig.AppDisplay.ShowOnMessageReceived.Value ;
+   TraceConfig.AppDisplay_FocusToReceivedMessage        := XMLConfig.AppDisplay.FocusToReceivedMessage.Value ;
+   TraceConfig.AppDisplay_Maximized                     := XMLConfig.AppDisplay.Maximized.Value ;
+   TraceConfig.AppDisplay_IconFile                      := XMLConfig.AppDisplay.IconFile.Value ;
+   TraceConfig.AppDisplay_MinimizeToSystray             := XMLConfig.AppDisplay.MinimizeToSystray.Value ;
+
+   // Trace Framework
+   // -----------------------------------------------------------------------
+
+   TraceConfig.Framework_ShowMembers                    := XMLConfig.Framework.ShowMembers.Value ;
+   TraceConfig.Framework_AutoClear                      := XMLConfig.Framework.AutoClear.Value ;
+   TraceConfig.Framework_MaxNode                        := XMLConfig.Framework.MaxNode.Value ;
+   TraceConfig.Framework_MinNode                        := XMLConfig.Framework.MinNode.Value ;
+   TraceConfig.Framework_Enabled                        := XMLConfig.Framework.Enabled.Value ;
+   TraceConfig.Framework_VisibleMenu                    := XMLConfig.Framework.VisibleMenu.value ;
+   TraceConfig.Framework_MainTraceTitle                 := XMLConfig.Framework.MainTraceTitle.value ;
+
+   TraceConfig.Framework_Trace_FontName                 := XMLConfig.Framework.Trace.FontName.Value ;
+   TraceConfig.Framework_Trace_FontSize                 := XMLConfig.Framework.Trace.FontSize.Value ;
+   TraceConfig.Framework_Trace_NodeHeight               := XMLConfig.Framework.Trace.NodeHeight.Value ;
+
+   TraceConfig.Framework_Info_FontName                  := XMLConfig.Framework.Info.FontName.Value ;
+   TraceConfig.Framework_Info_FontSize                  := XMLConfig.Framework.Info.FontSize.Value ;
+   TraceConfig.Framework_Info_NodeHeight                := XMLConfig.Framework.Info.NodeHeight.Value ;
+
+   TraceConfig.Framework_Orphans_DeletedNode            := XMLConfig.Framework.Orphans.DeletedNode.Value ;
+   TraceConfig.Framework_Orphans_DefaultLeftText        := XMLConfig.Framework.Orphans.DefaultLeftText.Value ;
+   TraceConfig.Framework_Orphans_DefaultRightText       := XMLConfig.Framework.Orphans.DefaultRightText.Value ;
+   TraceConfig.Framework_Orphans_LostAndFoundLeftText   := XMLConfig.Framework.Orphans.LostAndFoundLeftText.Value ;
+   TraceConfig.Framework_Orphans_LostAndFoundRightText  := XMLConfig.Framework.Orphans.LostAndFoundRightText.Value ;
+
+   // Watches
+   // -----------------------------------------------------------------------
+
+   TraceConfig.Watches_Enabled                          := XMLConfig.Watches.Enabled.Value ;
+   TraceConfig.Watches_VisibleMenu                      := XMLConfig.Watches.VisibleMenu.value ;
+   TraceConfig.Watches_MainWatchesTitle                 := XMLConfig.Watches.MainWatchesTitle.value ;
+
+   TraceConfig.Watches_Trace_FontName                   := XMLConfig.Watches.Trace.FontName.Value ;
+   TraceConfig.Watches_Trace_FontSize                   := XMLConfig.Watches.Trace.FontSize.Value ;
+   TraceConfig.Watches_Trace_NodeHeight                 := XMLConfig.Watches.Trace.NodeHeight.Value ;
+
+   TraceConfig.Watches_Info_FontName                    := XMLConfig.Watches.Info.FontName.Value ;
+   TraceConfig.Watches_Info_FontSize                    := XMLConfig.Watches.Info.FontSize.Value ;
+
+   // outputdebugString options
+   // -----------------------------------------------------------------------
+
+   TraceConfig.ods_Enabled                              := XMLConfig.ods.Enabled.Value ;
+   TraceConfig.Ods_Title                                := XMLConfig.ods.Title.Value ;
+   TraceConfig.Ods_AutoClear                            := XMLConfig.ods.AutoClear.Value ;
+   TraceConfig.Ods_MaxNode                              := XMLConfig.ods.MaxNode.Value ;
+   TraceConfig.Ods_MinNode                              := XMLConfig.ods.MinNode.Value ;
+   TraceConfig.Ods_VisibleMenu                          := XMLConfig.ods.VisibleMenu.value ;
+
+   TraceConfig.Ods_Trace_FontName                       := XMLConfig.ods.Trace.FontName.Value ;
+   TraceConfig.Ods_Trace_FontSize                       := XMLConfig.ods.Trace.FontSize.Value ;
+   TraceConfig.Ods_Trace_NodeHeight                     := XMLConfig.ods.Trace.NodeHeight.Value ;
+
+   TraceConfig.Ods_Info_FontName                        := XMLConfig.ods.Info.FontName.Value ;
+   TraceConfig.Ods_Info_FontSize                        := XMLConfig.ods.Info.FontSize.Value ;
+
+   // event Log options
+   //------------------------------------------------------------------------
+
+   TraceConfig.EventLog_VisibleMenu                     := XMLConfig.EventLog.VisibleMenu.value ;
+   TraceConfig.EventLog_Trace_FontName                  := XMLConfig.EventLog.Trace.FontName.Value ;
+   TraceConfig.EventLog_Trace_FontSize                  := XMLConfig.EventLog.Trace.FontSize.Value ;
+   TraceConfig.EventLog_Trace_NodeHeight                := XMLConfig.EventLog.Trace.NodeHeight.Value ;
+
+   TraceConfig.EventLog_Info_FontName                   := XMLConfig.EventLog.Info.FontName.Value ;
+   TraceConfig.EventLog_Info_FontSize                   := XMLConfig.EventLog.Info.FontSize.Value ;
+
+   // tail options
+   // -----------------------------------------------------------------------
+
+   TraceConfig.Tail_LastPath                            := XMLConfig.Tail.LastPath.Value ;
+   TraceConfig.Tail_AutoClear                           := XMLConfig.tail.AutoClear.Value ;
+   TraceConfig.Tail_MaxNode                             := XMLConfig.tail.MaxNode.Value ;
+   TraceConfig.Tail_MinNode                             := XMLConfig.tail.MinNode.Value ;
+   TraceConfig.tail_ColumnStyle                         := XMLConfig.tail.ColumnStyle.value ;
+   TraceConfig.tail_AutoCreateColStyle                  := XMLConfig.tail.AutoCreateColStyle.value ;
+   TraceConfig.tail_TextQualifier                       := XMLConfig.tail.TextQualifier.value ;
+   TraceConfig.tail_Separator                           := XMLConfig.tail.Separator.value ;
+   TraceConfig.tail_FirstcolIsTitle                     := XMLConfig.tail.FirstcolIsTitle.value ;
+   TraceConfig.tail_FixedColCount                       := XMLConfig.tail.FixedColCount.value ;
+   TraceConfig.tail_OpenFromFavorites                   := XMLConfig.tail.OpenFromFavorites.value ;
+   TraceConfig.tail_SizeToLoad                          := XMLConfig.tail.SizeToLoad.value  ;
+   TraceConfig.Tail_VisibleMenu                         := XMLConfig.tail.VisibleMenu.value ;
+
+   TraceConfig.Tail_Trace_FontName                      := XMLConfig.tail.Trace.FontName.Value ;
+   TraceConfig.Tail_Trace_FontSize                      := XMLConfig.tail.Trace.FontSize.Value ;
+   TraceConfig.Tail_Trace_NodeHeight                    := XMLConfig.tail.Trace.NodeHeight.Value ;
+
+   TraceConfig.Tail_Info_FontName                       := XMLConfig.tail.Info.FontName.Value ;
+   TraceConfig.Tail_Info_FontSize                       := XMLConfig.tail.Info.FontSize.Value ;
+
+   // clipboard options
+   // -----------------------------------------------------------------------
+
+   TraceConfig.TextExport_ProcessName                   := XMLConfig.TextExport.ProcessName.Value ;
+   TraceConfig.TextExport_ThreadId                      := XMLConfig.TextExport.ThreadID.Value ;
+   TraceConfig.TextExport_Time                          := XMLConfig.TextExport.Time.Value ;
+   TraceConfig.TextExport_Col1                          := XMLConfig.TextExport.Col1.Value ;
+   TraceConfig.TextExport_Col2                          := XMLConfig.TextExport.Col2.Value ;
+   TraceConfig.TextExport_GenerateColumnHeader          := XMLConfig.TextExport.GenerateColumnHeader.Value ;
+   TraceConfig.TextExport_TreeIndentation               := XMLConfig.TextExport.TreeIndentation.Value ;
+
+   if strtointDef(XMLConfig.TextExport.Separator.Value,-1) = -1 then
+      TraceConfig.TextExport_Separator := XMLConfig.TextExport.Separator.Value
+   else
+      TraceConfig.TextExport_Separator := chr (StrToIntDef(XMLConfig.TextExport.Separator.Value, 9)) ;
+
+   if XMLConfig.TextExport.TextQualifier.Value = 'None'   then TraceConfig.TextExport_TextQualifier := '' ;
+   if XMLConfig.TextExport.TextQualifier.Value = 'Single' then TraceConfig.TextExport_TextQualifier := '''' ;
+   if XMLConfig.TextExport.TextQualifier.Value = 'Double' then TraceConfig.TextExport_TextQualifier := '"' ;
+
+   // plugins
+   // ----------------------------------
+
+   for c := 0 to XMLConfig.Plugins.Plugin.Count-1 do begin
+      xmlPlugin := XMLConfig.Plugins.Plugin[c] ;
+      plugKind := xmlPlugin.Kind ;
+      plugin := nil;
+      if stricomp (pchar(plugKind) , 'Win32') = 0 then begin
+         Win32plugin := TWin32Plugin.create ;
+         plugin := Win32plugin;
+      end else if stricomp (pchar(plugKind) , 'DotNet') = 0 then begin
+         DotNetPlugin := TDotNetPlugin.create ;
+         plugin := DotNetPlugin ;
+      end;
+
+      plugin.plugKind  := pchar(plugKind) ;
+      plugin.FileName  := AnsiString(xmlPlugin.FileName) ;
+      plugin.param     := AnsiString(xmlPlugin.param) ;
+      plugin.startup   := xmlPlugin.Enabled.Value ;
+      TraceConfig.PluginList.add (plugin) ;
+    end ;
+
+    // Favorites
+    // -------------------------------------
+
+   for c := 0 to XMLConfig.Tail.Favorites.Count-1 do
+      TraceConfig.FavoriteTailList.add(XMLConfig.Tail.Favorites.FileName[c]) ;
+
+end ;
+
+//------------------------------------------------------------------------------
+
+procedure TFrm_Tool.SaveSettings();
+var
+   PosAndSize : PWindowPlacement;
+   XMLConfig : IXMLConfig ;
+   xmlPlugin : IXmlPlugin ;
+   c : Integer ;
+   plugin: TPlugin;
+begin
+
+   try
+      XMLConfig := LoadTracetoolConfig() ;
+
+      //XMLConfig := Config.LoadConfig('TraceTool.xml')  ;
+
+      // if the window state is maximized, Delphi return negative values for the Form positions and size.
+      // the GetWindowPlacement function return the correct windows position.
+      GetMem(PosAndSize,SizeOf(TWindowPlacement));
+      try
+         PosAndSize^.Length := SizeOf(TWindowPlacement);
+         if GetWindowPlacement(Frm_Tool.Handle,PosAndSize) then begin
+            XMLConfig.AppDisplay.left.Value := PosAndSize^.rcNormalPosition.Left;
+            XMLConfig.AppDisplay.top.Value := PosAndSize^.rcNormalPosition.Top;
+            XMLConfig.AppDisplay.width.Value := PosAndSize^.rcNormalPosition.Right - PosAndSize^.rcNormalPosition.Left  ;
+            XMLConfig.AppDisplay.height.Value := PosAndSize^.rcNormalPosition.Bottom - PosAndSize^.rcNormalPosition.Top ;
+            XMLConfig.AppDisplay.Maximized.Value  := (Frm_Tool.WindowState = wsMaximized) ;
+
+            //if PosAndSize^.ShowCmd = SW_SHOWNORMAL then
+            //   ...
+            //else if PosAndSize^.ShowCmd = SW_SHOWMINIMIZED then
+            //   ...
+            //else if PosAndSize^.ShowCmd = SW_SHOWMAXIMIZED then
+            //   ...
+         end;
+
+         //if GetWindowPlacement(Application.Handle,PosAndSize) then  begin
+         //   if PosAndSize^.ShowCmd = SW_SHOWNORMAL then
+         //      ...
+         //   else if PosAndSize^.ShowCmd = SW_SHOWMINIMIZED then
+         //      ...
+         //   else if PosAndSize^.ShowCmd = SW_SHOWMAXIMIZED then
+         //      ...
+         //end;
+      finally
+         FreeMem(PosAndSize,SizeOf(TWindowPlacement))
+      end;
+
+      XMLConfig.AppDisplay.StayOnTop.Value  := Frm_Tool.stayOnTop ;
+
+      if Frm_Trace <> nil then      
+         XMLConfig.Framework.ShowMembers.Value := Frm_Trace.PanelRight.Visible ;     // flag for main Frm_Trace form
+
+      // General options
+      // -----------------------------------------------------------------------
+
+      XMLConfig.General.LastStyleSheet.Value                  := TraceConfig.General_LastStyleSheet ;
+      XMLConfig.General.LastSavedPath.Value                   := TraceConfig.General_LastSavedPath ;
+      XMLConfig.General.InternalLog.Value                     := TraceConfig.General_InternalLog ;
+      XMLConfig.General.SocketPort.Value                      := TraceConfig.General_SocketPort ;
+      XMLConfig.General.SocketPort2.Value                     := TraceConfig.General_SocketPort2 ;
+      XMLConfig.General.Udp1.Value                            := TraceConfig.General_Udp1 ;
+      XMLConfig.General.Udp2.Value                            := TraceConfig.General_Udp2 ;
+      XMLConfig.General.HTTPPort.Value                        := TraceConfig.General_HTTPPort ;
+      XMLConfig.General.ShowSocketWarning.Value               := TraceConfig.General_ShowSocketWarning ;
+      XMLConfig.General.SocketPolicyServer.Value              := TraceConfig.General_SocketPolicyServer ;
+      XMLConfig.General.HttpPolicyServer.Value                := TraceConfig.General_HttpPolicyServer ;
+
+      // display options
+      // -----------------------------------------------------------------------
+
+      XMLConfig.AppDisplay.SmallBut.Value                     := TraceConfig.AppDisplay_SmallBut ;
+      XMLConfig.AppDisplay.ToolbarStandard.Value              := TraceConfig.AppDisplay_ToolbarStandard ;
+      XMLConfig.AppDisplay.ToolbarSearch.Value                := TraceConfig.AppDisplay_ToolbarSearch ;
+      XMLConfig.AppDisplay.ToolbarBookmark.Value              := TraceConfig.AppDisplay_ToolbarBookmark ;
+      XMLConfig.AppDisplay.ToolbarFilter.Value                := TraceConfig.AppDisplay_ToolbarFilter ;
+      XMLConfig.AppDisplay.HideViewer.Value                   := TraceConfig.AppDisplay_HideViewer ;
+      XMLConfig.AppDisplay.DisableInternalLog.Value           := TraceConfig.AppDisplay_DisableInternalLog ;
+      XMLConfig.AppDisplay.ApplicationTitle.Value             := TraceConfig.AppDisplay_ApplicationTitle ;
+      //XMLConfig.AppDisplay.left.Value                         := TraceConfig.AppDisplay_left ;
+      //XMLConfig.AppDisplay.top.Value                          := TraceConfig.AppDisplay_top ;
+      //XMLConfig.AppDisplay.width.Value                        := TraceConfig.AppDisplay_Width ;
+      //XMLConfig.AppDisplay.height.Value                       := TraceConfig.AppDisplay_Height ;
+      //XMLConfig.AppDisplay.stayOnTop.Value                    := TraceConfig.AppDisplay_StayOnTop ;
+      XMLConfig.AppDisplay.ShowOnstartup.Value                := TraceConfig.AppDisplay_ShowOnstartup ;
+      XMLConfig.AppDisplay.ShowOnMessageReceived.Value        := TraceConfig.AppDisplay_ShowOnMessageReceived ;
+      XMLConfig.AppDisplay.FocusToReceivedMessage.Value       := TraceConfig.AppDisplay_FocusToReceivedMessage ;
+      //XMLConfig.AppDisplay.Maximized.Value                    := TraceConfig.AppDisplay_Maximized ;
+      XMLConfig.AppDisplay.IconFile.Value                     := TraceConfig.AppDisplay_IconFile ;
+      XMLConfig.AppDisplay.MinimizeToSystray.Value            := TraceConfig.AppDisplay_MinimizeToSystray ;
+
+      // Trace Framework
+      // -----------------------------------------------------------------------
+
+      //XMLConfig.Framework.ShowMembers.Value                   := TraceConfig.Framework_ShowMembers ;
+      XMLConfig.Framework.AutoClear.Value                     := TraceConfig.Framework_AutoClear ;
+      XMLConfig.Framework.MaxNode.Value                       := TraceConfig.Framework_MaxNode ;
+      XMLConfig.Framework.MinNode.Value                       := TraceConfig.Framework_MinNode ;
+      XMLConfig.Framework.Enabled.Value                       := TraceConfig.Framework_Enabled ;
+      XMLConfig.Framework.VisibleMenu.value                   := TraceConfig.Framework_VisibleMenu ;
+      XMLConfig.Framework.MainTraceTitle.value                := TraceConfig.Framework_MainTraceTitle ;
+
+      XMLConfig.Framework.Trace.FontName.Value                := TraceConfig.Framework_Trace_FontName ;
+      XMLConfig.Framework.Trace.FontSize.Value                := TraceConfig.Framework_Trace_FontSize ;
+      XMLConfig.Framework.Trace.NodeHeight.Value              := TraceConfig.Framework_Trace_NodeHeight ;
+
+      XMLConfig.Framework.Info.FontName.Value                 := TraceConfig.Framework_Info_FontName ;
+      XMLConfig.Framework.Info.FontSize.Value                 := TraceConfig.Framework_Info_FontSize ;
+      XMLConfig.Framework.Info.NodeHeight.Value               := TraceConfig.Framework_Info_NodeHeight ;
+
+      XMLConfig.Framework.Orphans.DeletedNode.Value           := TraceConfig.Framework_Orphans_DeletedNode ;
+      XMLConfig.Framework.Orphans.DefaultLeftText.Value       := TraceConfig.Framework_Orphans_DefaultLeftText ;
+      XMLConfig.Framework.Orphans.DefaultRightText.Value      := TraceConfig.Framework_Orphans_DefaultRightText ;
+      XMLConfig.Framework.Orphans.LostAndFoundLeftText.Value  := TraceConfig.Framework_Orphans_LostAndFoundLeftText ;
+      XMLConfig.Framework.Orphans.LostAndFoundRightText.Value := TraceConfig.Framework_Orphans_LostAndFoundRightText ;
+
+      // Watches
+      // -----------------------------------------------------------------------
+
+      XMLConfig.Watches.Enabled.Value                         := TraceConfig.Watches_Enabled ;
+      XMLConfig.Watches.VisibleMenu.value                     := TraceConfig.Watches_VisibleMenu ;
+      XMLConfig.Watches.MainWatchesTitle.value                := TraceConfig.Watches_MainWatchesTitle ;
+
+      XMLConfig.Watches.Trace.FontName.Value                  := TraceConfig.Watches_Trace_FontName ;
+      XMLConfig.Watches.Trace.FontSize.Value                  := TraceConfig.Watches_Trace_FontSize ;
+      XMLConfig.Watches.Trace.NodeHeight.Value                := TraceConfig.Watches_Trace_NodeHeight ;
+
+      XMLConfig.Watches.Info.FontName.Value                   := TraceConfig.Watches_Info_FontName ;
+      XMLConfig.Watches.Info.FontSize.Value                   := TraceConfig.Watches_Info_FontSize ;
+
+      // outputdebugString options
+      // -----------------------------------------------------------------------
+
+      XMLConfig.ods.Enabled.Value                             := TraceConfig.ods_Enabled ;
+      XMLConfig.ods.Title.Value                               := TraceConfig.Ods_Title ;
+      XMLConfig.ods.AutoClear.Value                           := TraceConfig.Ods_AutoClear ;
+      XMLConfig.ods.MaxNode.Value                             := TraceConfig.Ods_MaxNode ;
+      XMLConfig.ods.MinNode.Value                             := TraceConfig.Ods_MinNode ;
+      XMLConfig.ods.VisibleMenu.value                         := TraceConfig.Ods_VisibleMenu ;
+
+      XMLConfig.ods.Trace.FontName.Value                      := TraceConfig.Ods_Trace_FontName ;
+      XMLConfig.ods.Trace.FontSize.Value                      := TraceConfig.Ods_Trace_FontSize ;
+      XMLConfig.ods.Trace.NodeHeight.Value                    := TraceConfig.Ods_Trace_NodeHeight ;
+
+      XMLConfig.ods.Info.FontName.Value                       := TraceConfig.Ods_Info_FontName ;
+      XMLConfig.ods.Info.FontSize.Value                       := TraceConfig.Ods_Info_FontSize ;
+
+      // event Log options
+      //------------------------------------------------------------------------
+
+      XMLConfig.EventLog.VisibleMenu.value                    := TraceConfig.EventLog_VisibleMenu ;
+      XMLConfig.EventLog.Trace.FontName.Value                 := TraceConfig.EventLog_Trace_FontName ;
+      XMLConfig.EventLog.Trace.FontSize.Value                 := TraceConfig.EventLog_Trace_FontSize ;
+      XMLConfig.EventLog.Trace.NodeHeight.Value               := TraceConfig.EventLog_Trace_NodeHeight ;
+
+      XMLConfig.EventLog.Info.FontName.Value                  := TraceConfig.EventLog_Info_FontName ;
+      XMLConfig.EventLog.Info.FontSize.Value                  := TraceConfig.EventLog_Info_FontSize ;
+
+      // tail options
+      // -----------------------------------------------------------------------
+
+      XMLConfig.Tail.LastPath.Value                           := TraceConfig.Tail_LastPath ;
+      XMLConfig.tail.AutoClear.Value                          := TraceConfig.Tail_AutoClear ;
+      XMLConfig.tail.MaxNode.Value                            := TraceConfig.Tail_MaxNode ;
+      XMLConfig.tail.MinNode.Value                            := TraceConfig.Tail_MinNode ;
+      XMLConfig.tail.ColumnStyle.value                        := TraceConfig.tail_ColumnStyle ;
+      XMLConfig.tail.AutoCreateColStyle.value                 := TraceConfig.tail_AutoCreateColStyle ;
+      XMLConfig.tail.TextQualifier.value                      := TraceConfig.tail_TextQualifier ;
+      XMLConfig.tail.Separator.value                          := TraceConfig.tail_Separator ;
+      XMLConfig.tail.FirstcolIsTitle.value                    := TraceConfig.tail_FirstcolIsTitle ;
+      XMLConfig.tail.FixedColCount.value                      := TraceConfig.tail_FixedColCount ;
+      XMLConfig.tail.OpenFromFavorites.value                  := TraceConfig.tail_OpenFromFavorites ;
+      XMLConfig.tail.SizeToLoad.value                         := TraceConfig.tail_SizeToLoad ;
+      XMLConfig.tail.VisibleMenu.value                        := TraceConfig.Tail_VisibleMenu ;
+
+      XMLConfig.tail.Trace.FontName.Value                     := TraceConfig.Tail_Trace_FontName ;
+      XMLConfig.tail.Trace.FontSize.Value                     := TraceConfig.Tail_Trace_FontSize ;
+      XMLConfig.tail.Trace.NodeHeight.Value                   := TraceConfig.Tail_Trace_NodeHeight ;
+
+      XMLConfig.tail.Info.FontName.Value                      := TraceConfig.Tail_Info_FontName ;
+      XMLConfig.tail.Info.FontSize.Value                      := TraceConfig.Tail_Info_FontSize ;
+
+      // clipboard options
+      // -----------------------------------------------------------------------
+
+      XMLConfig.TextExport.ProcessName.Value                  := TraceConfig.TextExport_ProcessName ;
+      XMLConfig.TextExport.ThreadID.Value                     := TraceConfig.TextExport_ThreadId ;
+      XMLConfig.TextExport.Time.Value                         := TraceConfig.TextExport_Time ;
+      XMLConfig.TextExport.Col1.Value                         := TraceConfig.TextExport_Col1 ;
+      XMLConfig.TextExport.Col2.Value                         := TraceConfig.TextExport_Col2 ;
+      XMLConfig.TextExport.GenerateColumnHeader.Value         := TraceConfig.TextExport_GenerateColumnHeader ;
+      XMLConfig.TextExport.TreeIndentation.Value              := TraceConfig.TextExport_TreeIndentation ;
+      XMLConfig.TextExport.Separator.Value                    := TraceConfig.TextExport_Separator ;
+
+      if TraceConfig.TextExport_TextQualifier = ''   then XMLConfig.TextExport.TextQualifier.Value := 'None'  ;
+      if TraceConfig.TextExport_TextQualifier = '''' then XMLConfig.TextExport.TextQualifier.Value := 'Single' ;
+      if TraceConfig.TextExport_TextQualifier = '"'  then XMLConfig.TextExport.TextQualifier.Value := 'Double' ;
+
+      // plugins
+      // ----------------------------------
+
+      XMLConfig.Plugins.Plugin.Clear() ;
+
+      for c := 0 to TraceConfig.PluginList.Count - 1 do begin
+         plugin := TPlugin(TraceConfig.PluginList.Items[c]);
+         xmlPlugin := XMLConfig.Plugins.Plugin.Add ;
+         if plugin is TWin32Plugin then
+            xmlPlugin.Kind := 'Win32'
+         else if plugin is TDotNetPlugin then
+            xmlPlugin.Kind := 'DotNet' ;
+
+         xmlPlugin.Enabled.Value := plugin.startup ;
+         xmlPlugin.FileName := string(plugin.FileName) ;
+         xmlPlugin.Param := string(plugin.param) ;
+         //xmlPlugin.ClassName => for java, no more needed
+         xmlPlugin := nil ;
+      end;
+
+       // Favorites
+       // -------------------------------------
+
+      XMLConfig.Tail.Favorites.Clear() ;
+
+      for c := 0 to TraceConfig.FavoriteTailList.Count-1 do
+         XMLConfig.tail.Favorites.Add(TraceConfig.FavoriteTailList[c] ) ;
+
+      SaveTracetoolConfig(XMLConfig);
+
+      //XMLConfig.OwnerDocument.XML.SaveToFile(strConfigFile);
+      //XMLConfig.OwnerDocument.SaveToFile(strConfigFile);
+      //TXMLDocument(XMLConfig).Active := False ;
+
+      //XMLConfig.text.
+      XMLConfig := nil ;
+   except
+      on e: exception do begin
+         LowTrace('TfrmDebugOptions.SaveSettings : ' + e.Message );
+      end ;
+   end ;
+
+end;
+
+//------------------------------------------------------------------------------
 // The shell creates a button on the taskbar whenever an application creates a window that isn't owned.
 // To ensure that the window button is placed on the taskbar, create an unowned window with the WS_EX_APPWINDOW
 // extended style. To prevent the window button from being placed on the taskbar, create the unowned window
@@ -993,7 +1654,7 @@ begin
    if PluginsInitialized = false then begin
       if FindWindow('TFormReceiver', 'FormReceiver') <> 0 then begin
          PluginsInitialized := true ;
-         InitPlugins ();  // must be called after InternalTraceSheet is created
+         frmDebugOptions.InitPlugins ();  // must be called after InternalTrace is created
       end ;
    end ;
 
@@ -1060,10 +1721,8 @@ var
    c : integer ;
    List : TObjectList ;
 begin
-
    TimerStatus.Enabled := false ;
-   TimerTraces.Enabled := false ;
-
+   TimerTraces.Enabled := false ;  
 
    // terminate active socket connection don't work when calling "TCPServer.Active := false"
    // the TCPServerListener never finish.
@@ -1110,7 +1769,8 @@ begin
    list.Clear ;
    List.Free ;
    FAllowClose := True;
-   frmDebugOptions.SaveSettings ;
+
+   SaveSettings() ;
    Close;
 end;
 
@@ -1163,24 +1823,26 @@ procedure TFrm_Tool.actOptionsExecute(Sender: TObject);
 var
    c : integer ;
 begin
+   frmDebugOptions.FillPlugins() ;
+   frmDebugOptions.VSTOptionsChange (frmDebugOptions.VSTOptions, frmDebugOptions.VSTOptions.GetFirst) ;
+   frmDebugOptions.ShowCurrentConfig () ;
 
-   frmDebugOptions.FillPlugins ;
    frmDebugOptions.VSTOptions.Selected [frmDebugOptions.VSTOptions.GetFirst] := true ;
    frmDebugOptions.VSTOptionsChange (frmDebugOptions.VSTOptions, frmDebugOptions.VSTOptions.GetFirst) ;
    if frmDebugOptions.ShowModal <> mrOk then
       exit ;
 
-   if (XMLConfig.General.SocketPort.Value <> TCPServer.DefaultPort) or
-      (TCPServer.Active = XMLConfig.General.Udp1.Value) or
-      (UdpServer1.Active <> XMLConfig.General.Udp1.Value) then begin
+   if (TraceConfig.General_SocketPort <> TCPServer.DefaultPort) or
+      (TCPServer.Active = TraceConfig.General_Udp1) or
+      (UdpServer1.Active <> TraceConfig.General_Udp1) then begin
      try
         UDPServer1.Active := false ;
         TCPServer.Active := false ;
-        TCPServer.DefaultPort := XMLConfig.General.SocketPort.Value ;
+        TCPServer.DefaultPort := TraceConfig.General_SocketPort ;
         TCPServer.Bindings.clear() ;
         TCPServer.Bindings.add() ;
         if TCPServer.DefaultPort <> 0 then
-            if XMLConfig.General.Udp1.Value then
+            if TraceConfig.General_Udp1 then
                UdpServer1.Active := true
             else
                TCPServer.Active := true ;
@@ -1192,17 +1854,17 @@ begin
      end ;
    end ;
 
-   if (XMLConfig.General.SocketPort2.Value <> TCPServer2.DefaultPort) or
-      (TCPServer2.Active = XMLConfig.General.Udp2.Value) or
-      (UdpServer2.Active <> XMLConfig.General.Udp2.Value) then begin
+   if (TraceConfig.General_SocketPort2 <> TCPServer2.DefaultPort) or
+      (TCPServer2.Active = TraceConfig.General_Udp2) or
+      (UdpServer2.Active <> TraceConfig.General_Udp2) then begin
      try
         UDPServer2.Active := false ;
         TCPServer2.Active := false ;
-        TCPServer2.DefaultPort := XMLConfig.General.SocketPort2.Value ;
+        TCPServer2.DefaultPort := TraceConfig.General_SocketPort2 ;
         TCPServer2.Bindings.clear() ;
         TCPServer2.Bindings.add() ;
         if TCPServer2.DefaultPort <> 0 then
-           if XMLConfig.General.Udp2.Value then
+           if TraceConfig.General_Udp2 then
                UdpServer2.Active := true
             else
                TCPServer2.Active := true ;
@@ -1214,10 +1876,10 @@ begin
      end ;
    end ;
 
-   if XMLConfig.General.HTTPPort.Value <> IdHTTPServer.DefaultPort then begin
+   if TraceConfig.General_HTTPPort <> IdHTTPServer.DefaultPort then begin
      try
         IdHTTPServer.Active := false ;
-        IdHTTPServer.DefaultPort := XMLConfig.General.HTTPPort.Value ;
+        IdHTTPServer.DefaultPort := TraceConfig.General_HTTPPort ;
         IdHTTPServer.Bindings.clear() ;
         IdHTTPServer.Bindings.add() ;
         if IdHTTPServer.DefaultPort <> 0 then
@@ -1230,7 +1892,7 @@ begin
      end ;
    end ;
 
-   if XMLConfig.General.SocketPolicyServer.Value <> SocketPolicyServer.active then begin
+   if TraceConfig.General_SocketPolicyServer <> SocketPolicyServer.active then begin
      try
         SocketPolicyServer.Active := false ;
         SocketPolicyServer.Bindings.clear() ;
@@ -1264,7 +1926,7 @@ begin
    if Frm_Trace.Parent = nil then
       Frm_Trace.DockToMainPanel() ;
 
-   XMLConfig.Framework.Enabled.Value := true ;
+   TraceConfig.Framework_Enabled := true ;
    PageControl := Frm_Trace.getPageControl ;
    if PageControl = nil then     // should not happens
       exit ;
@@ -1284,7 +1946,7 @@ begin
    if Frm_Watches.Parent = nil then
       Frm_Watches.DockToMainPanel() ;
 
-   XMLConfig.Watches.Enabled.Value := true ;
+   TraceConfig.Watches_Enabled := true ;
    PageControl := Frm_Watches.getPageControl ;
    if PageControl = nil then     // should not happens
       exit ;
@@ -1333,10 +1995,10 @@ var
    Trace : TFrm_Trace ;
 begin
    OpenDialog1.Filter := 'Xml file (*.xml)|*.xml' ;
-   OpenDialog1.InitialDir := XMLConfig.General.LastSavedPath.Value ;
+   OpenDialog1.InitialDir := TraceConfig.General_LastSavedPath ;
    if OpenDialog1.Execute = false then
       exit ;
-   XMLConfig.General.LastSavedPath.Value := ExtractFilePath(OpenDialog1.FileName) ;
+   TraceConfig.General_LastSavedPath := ExtractFilePath(OpenDialog1.FileName) ;
 
    // create the trace form
    Application.CreateForm(TFrm_Trace, Trace);
@@ -1397,7 +2059,7 @@ end;
 procedure TFrm_Tool.HookSysCmd(var Message: TMessage);
 begin
    if (TWMSYSCOMMAND(Message).CmdType and $FFF0 = SC_MINIMIZE) and (Application.MainForm = Self) then begin
-      if XMLConfig.AppDisplay.MinimizeToSystray.Value = true then
+      if TraceConfig.AppDisplay_MinimizeToSystray = true then
          close
       else
          inherited ;
@@ -1507,8 +2169,8 @@ begin
       inc(AnsiPtr) ;
    end;
 
-   if TraceConfig.DebugMode = true then
-      TFrm_Trace.InternalTraceFromThread(command) ;
+   //if TraceConfig.DebugMode = true then
+   //   TFrm_Trace.InternalTraceFromThread(command) ;
 
    // check command : <policy-file-request/>
    if command = '<policy-file-request/>'  then begin
@@ -1761,7 +2423,7 @@ begin
    CST_THREAD_ID             : result := 'CST_THREAD_ID         (id)     ' ; // param : thread ID
    CST_PROCESS_NAME          : result := 'CST_PROCESS_NAME      (name)   ' ; // param process name
    CST_MESSAGE_TIME          : result := 'CST_MESSAGE_TIME      (time)   ' ; // param : the time of the message
-   CST_THREAD_NAME           : result := 'CST_THREAD_NAME       (name)   ' ; // param : thread name (java)
+   CST_THREAD_NAME           : result := 'CST_THREAD_NAME       (name)   ' ; // param : thread name
    CST_IP                    : result := 'CST_IP                (string) ' ; // param : client IP adress
    CST_CREATE_MEMBER         : result := 'CST_CREATE_MEMBER     (col1)   ' ; // param : Member name
    CST_MEMBER_FONT_DETAIL    : result := 'CST_MEMBER_FONT_DETAIL(6 p)    ' ; // param : ColId Bold Italic Color size  Fontname
@@ -1878,23 +2540,29 @@ var
 
    procedure AddTrace (msg1 : string; msg2 : string = '') ;
    begin
-      if TraceConfig.AppDisplay_DisableInternalLog = true then
-         unt_utility.LowTrace(msg1 + ' ' + msg2)
-      else
+      //if TraceConfig.AppDisplay_DisableInternalLog = true then
+      LowTrace(msg1 + ' ' + msg2) ;
+      if (treeRec <> nil) then           
          TreeRec.Members.SubMembers.Add(TMember.create(msg1,msg2));
    end ;
 begin
    TreeRec := nil ;
    report := string (exceptIntf.BugReport) ; // same as GetBugReport (true) ;
 
-   if TraceConfig.AppDisplay_DisableInternalLog = true then
-      unt_utility.LowTrace(string(exceptIntf.ExceptClass) + ' ' + string(exceptIntf.ExceptMessage))
-   else begin
+   //if TraceConfig.AppDisplay_DisableInternalLog = true then
+   LowTrace(string(exceptIntf.ExceptClass) + ' ' + string(exceptIntf.ExceptMessage))  ;
+   //else begin
+   try
       ParentNode := TFrm_Trace.InternalTrace (string(exceptIntf.ExceptClass),string(exceptIntf.ExceptMessage)) ;
       TreeRec := FrmInternalTraces.vstTrace.GetNodeData(ParentNode) ;
       if TreeRec.Members = nil then
          TreeRec.Members := TMember.create();
+      
+   except on E: Exception do
+      TreeRec := nil ;
    end;
+   
+   //end;
 
    repList := TStringList.create() ;
    repList.Text := report ;
@@ -1940,7 +2608,8 @@ begin
          while BeforeAddList.count > 0 do begin
             member := TMember (BeforeAddList[0]) ;
             BeforeAddList.Delete(0);
-            TreeRec.Members.SubMembers.Add(member);
+            if TreeRec <> nil then            
+               TreeRec.Members.SubMembers.Add(member);
          end ;
 
          AddTrace('---');
@@ -2001,10 +2670,11 @@ begin
    msgLen := 0 ;
    Compressed := '' ;
    if TraceConfig.DebugMode = true then
-      TFrm_Trace.InternalTraceFromThread ('From ' + ARequestInfo.RemoteIP +            // '127.0.0.1'
-                                          ' ' + ARequestInfo.Command  +                //  GET
-                                          ' (' + inttostr(sender.DefaultPort) + ') ' + // (81)
-                                          doc + '?' + ARequestInfo.UnparsedParams) ;   // /WMD?msgId=6_6&msg=%20%20304...
+      TFrm_Trace.InternalTraceFromThread (
+          'From ' + ARequestInfo.RemoteIP +            // '127.0.0.1'
+          ' ' + ARequestInfo.Command  +                //  GET
+          ' (' + inttostr(sender.DefaultPort) + ') ' + // (81)
+          doc + '?' + ARequestInfo.UnparsedParams) ;   // /WMD?msgId=6_6&msg=%20%20304...
 
    //UnparsedParams : 
    // msgId=6d3638ef881a4c2aa40fecaf10afd36a_2&msg=
@@ -2106,7 +2776,7 @@ begin
       AResponseInfo.ContentStream := TStringStream.Create(strHtml) ;
 
    end else if StrIComp (pchar(doc), '/clientaccesspolicy.xml') = 0 then begin
-      if XMLConfig.General.HttpPolicyServer.Value = false then begin
+      if TraceConfig.General_HttpPolicyServer = false then begin
          if TraceConfig.DebugMode = true then
             TFrm_Trace.InternalTraceFromThread ('Http Policy Server flag not enabled');
          exit ;
@@ -2127,7 +2797,7 @@ begin
       FileToLoad.Free ;
 
    end else if StrIComp (pchar(doc), '/crossdomain.xml') = 0 then begin
-      if XMLConfig.General.HttpPolicyServer.Value = false then begin
+      if TraceConfig.General_HttpPolicyServer = false then begin
          if TraceConfig.DebugMode = true then
             TFrm_Trace.InternalTraceFromThread ('Http Policy Server flag not enabled');
          exit ;
@@ -2282,10 +2952,16 @@ end;
 //------------------------------------------------------------------------------
 
 initialization
+   TraceConfig := TTraceConfig.create ;
+   TraceConfig.DebugMode := false ;
+   CriticalSection := TCriticalSection.create ;
+   FileCriticalSection := TCriticalSection.create ;
+
    InternalTraceMessageStack := TStringList.create ;
    InternalTraceMessageStack2 := TStringList.create ;
-   TraceConfig     := TTraceConfig.create ;
-   PluginList      := TObjectList.Create (true) ;      // owner
+
+   PluginsInitialized := false ;
+
    MessageStack    := TObjectList.create (false);      // don't own objects
    SwapStack       := TObjectList.create (false);      // don't own objects
    ConnectionList  := TObjectList.Create (false) ;
@@ -2297,7 +2973,6 @@ initialization
    BoldDetail      := TFontDetail.create(0 , true , false , -1 , 0 , '') ;
    ScriptMessages  := TStringList.create() ;
 
-   TraceConfig.DebugMode := false ;
    Received := 0 ;
 
 finalization
@@ -2313,7 +2988,6 @@ finalization
    TraceConfig.Free ;
    SwapStack.Clear ;                  FreeAndNil(SwapStack) ;                  // not owner
    MessageStack.Clear ;               FreeAndNil(MessageStack) ;               // not owner
-   PluginList.Clear ;                 FreeAndNil(PluginList) ;                 // owner
    InternalTraceMessageStack.Clear ;  FreeAndNil(InternalTraceMessageStack) ;  // strings
    InternalTraceMessageStack2.Clear ; FreeAndNil(InternalTraceMessageStack2) ; // strings
    ConnectionList.Clear ;             FreeAndNil(ConnectionList) ;             // not owner
@@ -2325,25 +2999,6 @@ finalization
    criticalsection.Free ;
    BoldDetail.free ;
    ScriptMessages.free ;
-
-   // dot net plugins
-   if DotNetManager <> nil then
-      DotNetManager.free ;
-
-   // java plugins
-//   if JRuntime <> nil then begin
-//      RegisterExpectedMemoryLeak(JRuntime.GetVM) ;
-//      JRuntime.free ;
-//      JRuntime := nil ;
-//      if WrapperClass <> nil then
-//         WrapperClass.free ;
-//      if StringClass <> nil then
-//         StringClass.free ;
-//      if ObjectClass <> nil then
-//         ObjectClass.free ;
-//      TClasspath.getDefault.Free ;
-//   end ;
-
    FileCriticalSection.Free ;
 
 end.

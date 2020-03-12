@@ -162,8 +162,14 @@ var
 
 implementation
 
-uses unt_selectEvent , unt_ODS, unt_utility, DebugOptions, application6 ,
-  Config, unt_search;
+uses
+   unt_selectEvent
+   , unt_ODS
+   , unt_utility
+   , DebugOptions
+   , application6
+   , unt_TraceConfig
+   , unt_search;
 
 {$R *.dfm}
 
@@ -874,11 +880,11 @@ var
 
 begin
 
-   Frm_Tool.SaveDialog1.InitialDir := XMLConfig.General.LastSavedPath.Value ;
+   Frm_Tool.SaveDialog1.InitialDir := TraceConfig.General_LastSavedPath ;
    Frm_Tool.SaveDialog1.Filter := 'Xml file (*.xml)|*.xml' ;
    if Frm_Tool.SaveDialog1.Execute = false then
       exit ;
-   XMLConfig.General.LastSavedPath.Value := ExtractFilePath(Frm_Tool.SaveDialog1.FileName) ;
+   TraceConfig.General_LastSavedPath := ExtractFilePath(Frm_Tool.SaveDialog1.FileName) ;
 
    application.ProcessMessages ;
    SetCursor(Screen.Cursors[crHourGlass]);

@@ -37,16 +37,12 @@ object frmDebugOptions: TfrmDebugOptions
       Top = 1
       Width = 416
       Height = 493
-      ActivePage = TabSheetPlugins
+      ActivePage = TabSheetFramework
       Align = alLeft
       TabOrder = 1
       object TabSheetGeneral: TTabSheet
         Caption = 'General'
         ImageIndex = 2
-        ExplicitLeft = 0
-        ExplicitTop = 0
-        ExplicitWidth = 0
-        ExplicitHeight = 0
         object PnlGeneral: TPanel
           Left = 0
           Top = 0
@@ -230,10 +226,6 @@ object frmDebugOptions: TfrmDebugOptions
       object TabSheetFramework: TTabSheet
         Caption = 'Framework'
         ImageIndex = 4
-        ExplicitLeft = 0
-        ExplicitTop = 0
-        ExplicitWidth = 0
-        ExplicitHeight = 0
         object PnlFramework: TPanel
           Left = 0
           Top = 0
@@ -554,10 +546,6 @@ object frmDebugOptions: TfrmDebugOptions
       object TabSheet2: TTabSheet
         Caption = 'Delete'
         ImageIndex = 8
-        ExplicitLeft = 0
-        ExplicitTop = 0
-        ExplicitWidth = 0
-        ExplicitHeight = 0
         object PnlFrameworkDelete: TPanel
           Left = 0
           Top = 0
@@ -736,10 +724,6 @@ object frmDebugOptions: TfrmDebugOptions
       object TabSheet1: TTabSheet
         Caption = 'Watches'
         ImageIndex = 7
-        ExplicitLeft = 0
-        ExplicitTop = 0
-        ExplicitWidth = 0
-        ExplicitHeight = 0
         object pnlWatches: TPanel
           Left = 0
           Top = 0
@@ -902,10 +886,6 @@ object frmDebugOptions: TfrmDebugOptions
       object TabSheetODS: TTabSheet
         Caption = 'OutputDebugString'
         ImageIndex = 5
-        ExplicitLeft = 0
-        ExplicitTop = 0
-        ExplicitWidth = 0
-        ExplicitHeight = 0
         object PnlODS: TPanel
           Left = 0
           Top = 0
@@ -1104,10 +1084,6 @@ object frmDebugOptions: TfrmDebugOptions
       object TabSheetTail: TTabSheet
         Caption = 'Tail windows'
         ImageIndex = 6
-        ExplicitLeft = 0
-        ExplicitTop = 0
-        ExplicitWidth = 0
-        ExplicitHeight = 0
         object PnlTail: TPanel
           Left = 0
           Top = 0
@@ -1311,10 +1287,6 @@ object frmDebugOptions: TfrmDebugOptions
       object TabSheetEventLog: TTabSheet
         Caption = 'Event Log'
         ImageIndex = 7
-        ExplicitLeft = 0
-        ExplicitTop = 0
-        ExplicitWidth = 0
-        ExplicitHeight = 0
         object PnlEventLog: TPanel
           Left = 0
           Top = 0
@@ -1463,10 +1435,6 @@ object frmDebugOptions: TfrmDebugOptions
       object TabSheetClipboard: TTabSheet
         Caption = 'Clipboard export'
         ImageIndex = 1
-        ExplicitLeft = 0
-        ExplicitTop = 0
-        ExplicitWidth = 0
-        ExplicitHeight = 0
         object PnlClipboard: TPanel
           Left = 0
           Top = 0
@@ -1601,10 +1569,6 @@ object frmDebugOptions: TfrmDebugOptions
       object TabSheetPlugins: TTabSheet
         Caption = 'Plugins'
         ImageIndex = 3
-        ExplicitLeft = 0
-        ExplicitTop = 0
-        ExplicitWidth = 0
-        ExplicitHeight = 0
         object PnlPlugins: TPanel
           Left = 0
           Top = 0
@@ -1613,25 +1577,6 @@ object frmDebugOptions: TfrmDebugOptions
           Align = alClient
           BevelOuter = bvNone
           TabOrder = 0
-          DesignSize = (
-            408
-            465)
-          object Label20: TLabel
-            Left = 12
-            Top = 188
-            Width = 195
-            Height = 13
-            Caption = 'JVM Engine (Home path, relative JVM dll)'
-            Visible = False
-          end
-          object Label22: TLabel
-            Left = 12
-            Top = 134
-            Width = 105
-            Height = 13
-            Caption = 'Java Plugin ClassPath'
-            Visible = False
-          end
           object ButNewWin32Plugin: TButton
             Left = 8
             Top = 8
@@ -1649,57 +1594,6 @@ object frmDebugOptions: TfrmDebugOptions
             Caption = 'Add Dot Net plugin'
             TabOrder = 1
             OnClick = ButNewDotNetPluginClick
-          end
-          object ButNewJavaPlugin: TButton
-            Left = 8
-            Top = 88
-            Width = 121
-            Height = 25
-            Caption = 'Add Java plugin'
-            TabOrder = 2
-            Visible = False
-            OnClick = ButNewJavaPluginClick
-          end
-          object ComboJVM: TComboBox
-            Left = 12
-            Top = 205
-            Width = 381
-            Height = 21
-            Anchors = [akLeft, akTop, akRight]
-            TabOrder = 3
-            Visible = False
-            OnChange = ComboJVMChange
-            OnDropDown = ComboJVMDropDown
-          end
-          object EditPluginClassPath: TEdit
-            Left = 12
-            Top = 153
-            Width = 381
-            Height = 21
-            Anchors = [akLeft, akTop, akRight]
-            TabOrder = 4
-            Visible = False
-            OnChange = EditPluginClassPathChange
-          end
-          object MemoVMClassPath: TMemo
-            Left = 12
-            Top = 240
-            Width = 353
-            Height = 200
-            Anchors = [akLeft, akTop, akRight, akBottom]
-            BorderStyle = bsNone
-            Color = clBtnFace
-            Font.Charset = DEFAULT_CHARSET
-            Font.Color = clWindowText
-            Font.Height = -12
-            Font.Name = 'MS Sans Serif'
-            Font.Style = []
-            Lines.Strings = (
-              'MemoVMClassPath')
-            ParentFont = False
-            ReadOnly = True
-            TabOrder = 5
-            Visible = False
           end
         end
       end

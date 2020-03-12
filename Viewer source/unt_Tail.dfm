@@ -54,8 +54,8 @@ object FrmTail: TFrmTail
       Header.Font.Height = -11
       Header.Font.Name = 'MS Sans Serif'
       Header.Font.Style = []
+      Header.Height = 17
       Header.Options = [hoColumnResize, hoDblClickResize, hoDrag, hoVisible]
-      Header.Style = hsThickButtons
       HintAnimation = hatNone
       HintMode = hmTooltip
       Indent = 15
@@ -138,8 +138,8 @@ object FrmTail: TFrmTail
         Header.Font.Height = -11
         Header.Font.Name = 'MS Sans Serif'
         Header.Font.Style = []
+        Header.Height = 17
         Header.Options = [hoAutoResize, hoColumnResize, hoDrag, hoVisible]
-        Header.Style = hsThickButtons
         HintAnimation = hatNone
         HintMode = hmTooltip
         Indent = 15

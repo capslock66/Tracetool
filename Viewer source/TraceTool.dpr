@@ -37,7 +37,6 @@ uses
   unt_traceWinProperty in 'unt_traceWinProperty.pas' {FrmTraceWinProp},
   unt_plugin in 'unt_plugin.pas',
   unt_FrmPlugin in 'unt_FrmPlugin.pas' {frmPlugin: TFrame},
-  unt_addJavaPlug in 'unt_addJavaPlug.pas' {FrmAddJavaPlugin},
   Unt_TailProgress in 'Unt_TailProgress.pas' {FrmTailProgress},
   unt_PageContainer in 'unt_PageContainer.pas' {FrmPageContainer},
   unt_search in 'unt_search.pas' {FrmSearch},
@@ -53,34 +52,35 @@ uses
   untPrintPreview in 'untPrintPreview.pas' {FrmPrintPreview},
   Application6 in 'Application6.pas',
   Preview in 'Preview\Preview.pas',
-  Config in 'Config.pas';
+  Config in 'Config.pas',
+  unt_TraceConfig in 'unt_TraceConfig.pas';
 
 {$R *.res}
 
 begin
-  // LowTrace ('traceTool started') ;
-  SetLastError(NO_ERROR);
-  CreateMutex (nil,false, 'TraceTool') ;
-  if getlasterror = ERROR_ALREADY_EXISTS then begin
-     manyInstances() ;
-     exit ;
-  end ;
+   ResetLowTrace() ;  // delete internal lowtrace file
+   //LowTrace ('traceTool started') ;
+   SetLastError(NO_ERROR);
+   CreateMutex (nil,false, 'TraceTool') ;
+   if getlasterror = ERROR_ALREADY_EXISTS then begin
+      manyInstances() ;
+      exit ;
+   end ;
 
-  Application.Initialize;
-  Application.Title := 'TraceTool';
+   Application.Initialize;
+   Application.Title := 'TraceTool';
+   Application.CreateForm(TFrm_Tool, Frm_Tool);
+   Application.CreateForm(TfrmDebugOptions, frmDebugOptions);
+   Application.CreateForm(TFormReceiver, FormReceiver);
+   Application.CreateForm(TFrmAbout, FrmAbout);
+   Application.CreateForm(TFrmSelectEvent, FrmSelectEvent);
+   Application.CreateForm(TFrmSave, FrmSave);
+   Application.CreateForm(TFrmTraceWinProp, FrmTraceWinProp);
+   Application.CreateForm(TFrmSearch, FrmSearch);
+   Application.CreateForm(TFrmPrintPreview, FrmPrintPreview);
 
-  Application.CreateForm(TFrm_Tool, Frm_Tool);
-  Application.CreateForm(TFormReceiver, FormReceiver);
-  Application.CreateForm(TFrmAbout, FrmAbout);
-  Application.CreateForm(TFrmSelectEvent, FrmSelectEvent);
-  Application.CreateForm(TFrmSave, FrmSave);
-  Application.CreateForm(TfrmDebugOptions, frmDebugOptions);
-  Application.CreateForm(TFrmTraceWinProp, FrmTraceWinProp);
-  Application.CreateForm(TFrmAddJavaPlugin, FrmAddJavaPlugin);
-  Application.CreateForm(TFrmSearch, FrmSearch);
-  //Application.CreateForm(TFrmFilter, FrmFilter);
-  Application.CreateForm(TFrmPrintPreview, FrmPrintPreview);
-  if Frm_Tool.InitError <> '' then
-     exit ;
-  Application.Run;
+   if Frm_Tool.InitError <> '' then
+      exit ;
+   //LowTrace ('Application.Run') ;
+   Application.Run;
 end.

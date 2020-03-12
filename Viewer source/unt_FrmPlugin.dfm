@@ -30,16 +30,16 @@ object frmPlugin: TfrmPlugin
   object Label2: TLabel
     Left = 13
     Top = 65
-    Width = 52
+    Width = 45
     Height = 13
-    Caption = 'ClassName'
+    Caption = 'Plug type'
   end
-  object LabelClassName: TLabel
+  object LabelPlugType: TLabel
     Left = 85
     Top = 65
-    Width = 77
+    Width = 45
     Height = 13
-    Caption = 'LabelClassName'
+    Caption = 'Plug type'
   end
   object Label1: TLabel
     Left = 13
@@ -127,6 +127,12 @@ object frmPlugin: TfrmPlugin
     Width = 425
     Height = 21
     Anchors = [akLeft, akTop, akRight]
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clGrayText
+    Font.Height = -11
+    Font.Name = 'Tahoma'
+    Font.Style = []
+    ParentFont = False
     TabOrder = 8
     Text = 'EditFileName'
     OnKeyPress = EditFileNameKeyPress

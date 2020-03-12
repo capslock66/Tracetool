@@ -31,7 +31,15 @@ var
 
 implementation
 
-uses unt_traceWin , unt_tool, unt_SelectTail, unt_saveDlg, unt_utility ,DebugOptions, VirtualTrees ;
+uses
+   unt_traceWin
+   , unt_tool
+   , unt_SelectTail
+   , unt_saveDlg
+   , unt_utility
+   , DebugOptions
+   , unt_TraceConfig
+   , VirtualTrees ;
 
 
 // called only by the timer (then main thread) for each messages in the stack object list
@@ -416,7 +424,7 @@ begin
                                      // or to replace the Master tree name
                                      TempStr := getStr() ;
                                      if TempStr = '_' then
-                                        TraceForm.Caption := XMLConfig.Framework.MainTraceTitle.value  // 'Trace'
+                                        TraceForm.Caption := TraceConfig.Framework_MainTraceTitle  // 'Trace'
                                      else
                                         TraceForm.Caption := TempStr ;
                                   end ;

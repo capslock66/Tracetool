@@ -55,9 +55,9 @@ object Frm_ODS: TFrm_ODS
       Header.Font.Height = -11
       Header.Font.Name = 'MS Sans Serif'
       Header.Font.Style = []
+      Header.Height = 17
       Header.MainColumn = 1
       Header.Options = [hoAutoResize, hoColumnResize, hoDrag, hoVisible]
-      Header.Style = hsThickButtons
       HintAnimation = hatNone
       HintMode = hmTooltip
       Images = Frm_Tool.ImageList1
@@ -145,8 +145,8 @@ object Frm_ODS: TFrm_ODS
         Header.Font.Height = -11
         Header.Font.Name = 'MS Sans Serif'
         Header.Font.Style = []
+        Header.Height = 17
         Header.Options = [hoAutoResize, hoColumnResize, hoDrag, hoVisible]
-        Header.Style = hsThickButtons
         HintAnimation = hatNone
         HintMode = hmTooltip
         Indent = 15

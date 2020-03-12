@@ -270,14 +270,26 @@ interface
 
 implementation
 
-   uses Unt_receiver, unt_about, unt_tail, xmldom, unt_saveDlg,
-      Config, unt_ODS, unt_traceWinProperty, unt_plugin,
-      unt_decode,
-      unt_Details_base,
-      unt_Details_bitmap,
-      unt_Details_xml,
-      unt_Details_table,
-      unt_Details_Classic, Unt_TailProgress, untPrintPreview, Preview;
+uses
+   Unt_receiver
+   , unt_about
+   , unt_tail
+   , xmldom
+   , unt_saveDlg
+   , unt_TraceConfig
+   , unt_ODS
+   , unt_traceWinProperty
+   , unt_plugin
+   , unt_decode
+   , unt_Details_base
+   , unt_Details_bitmap
+   , unt_Details_xml
+   , unt_Details_table
+   , unt_Details_Classic
+   , Unt_TailProgress
+   , untPrintPreview
+   , Preview
+   ;
    {$R *.dfm}
    // ------------------------------------------------------------------------------
    // ------------------------------------------------------------------------------
@@ -594,8 +606,7 @@ implementation
             inc(Ptr);
          end;
          if hexa_representation <> '' then
-            InternalTraceFromThread(intTohex(beginLine, 6)
-                  + ' ' + hexa_representation + ' ' + Str_representation);
+            InternalTraceFromThread(intTohex(beginLine, 6) + ' ' + hexa_representation + ' ' + Str_representation);
       end;
 
    end;
@@ -825,9 +836,8 @@ implementation
       TreeRec.TreeIcon := -1;
       TreeRec.OriginalOrder := LastChildOrder;
       TreeRec.LastChildOrder := 0;
-      TreeRec.LeftMsg := XMLConfig.Framework.Orphans.LostAndFoundLeftText.Value;
-      TreeRec.RightMsg :=
-         XMLConfig.Framework.Orphans.LostAndFoundRightText.Value;
+      TreeRec.LeftMsg  := TraceConfig.Framework_Orphans_LostAndFoundLeftText;
+      TreeRec.RightMsg := TraceConfig.Framework_Orphans_LostAndFoundRightText;
    end;
 
    // -------------------------------------------------
@@ -848,8 +858,8 @@ implementation
       TreeRec.TreeIcon := -1;
       TreeRec.OriginalOrder := LastChildOrder;
       TreeRec.LastChildOrder := 0;
-      TreeRec.LeftMsg := XMLConfig.Framework.Orphans.DefaultLeftText.Value;
-      TreeRec.RightMsg := XMLConfig.Framework.Orphans.DefaultRightText.Value;
+      TreeRec.LeftMsg  := TraceConfig.Framework_Orphans_DefaultLeftText;
+      TreeRec.RightMsg := TraceConfig.Framework_Orphans_DefaultRightText;
    end;
 
    // -------------------------------------------------
@@ -915,24 +925,17 @@ implementation
 
       if Result = nil then begin
 
-         if XMLConfig.Framework.Orphans.DeletedNode.Value = 'CreateOnRoot' then
-            begin
+         if TraceConfig.Framework_Orphans_DeletedNode = 'CreateOnRoot' then begin
             // create parents on root
             Result := CreateDefaultNode(nil);
-         end
-         else if XMLConfig.Framework.Orphans.DeletedNode.Value =
-            'CreateUnderLostAndFound' then begin
+         end else if TraceConfig.Framework_Orphans_DeletedNode = 'CreateUnderLostAndFound' then begin
             // create parents under a main LostAndFound node
             CheckLostAndFound();
             // create the parent under LostAndFound.
             Result := CreateDefaultNode(LostAndFound);
-         end
-         else if XMLConfig.Framework.Orphans.DeletedNode.Value =
-            'AddChildrenOnRoot' then begin
+         end else if TraceConfig.Framework_Orphans_DeletedNode = 'AddChildrenOnRoot' then begin
             Result := nil;
-         end
-         else if XMLConfig.Framework.Orphans.DeletedNode.Value =
-            'AddChildrenUnderLostAndFound' then begin
+         end else if TraceConfig.Framework_Orphans_DeletedNode = 'AddChildrenUnderLostAndFound' then begin
             if IsNew then
                Result := CreateDefaultNode(LostAndFound);
             // else : CST_USE_NODE -> Ignore updates. result stay to nil
@@ -942,7 +945,6 @@ implementation
       // if node exist, add to MostUsedList
       if Result <> nil then
          MostUsedList.AddToList(Result);
-
    end;
 
    // ------------------------------------------------------------------------------
@@ -1146,13 +1148,9 @@ implementation
          end;
       except
          on e: exception do begin
-            LowTrace
-               ('vstTraceFreeNode exception when deleting from bookmark : ' +
-                  e.message);
+            LowTrace ('vstTraceFreeNode exception when deleting from bookmark : ' + e.message);
             if (FrmInternalTraces <> nil) and (FrmInternalTraces <> self) then
-               InternalTrace(
-                  'vstTraceFreeNode exception when deleting from bookmark',
-                  e.message);
+               InternalTrace('vstTraceFreeNode exception when deleting from bookmark', e.message);
          end;
       end;
 
@@ -1161,13 +1159,9 @@ implementation
             NodeToFocus := nil;
       except
          on e: exception do begin
-            LowTrace
-               ('vstTraceFreeNode exception when reseting NodeToFocus : ' +
-                  e.message);
+            LowTrace ('vstTraceFreeNode exception when reseting NodeToFocus : ' + e.message);
             if (FrmInternalTraces <> nil) and (FrmInternalTraces <> self) then
-               InternalTrace(
-                  'vstTraceFreeNode exception when reseting NodeToFocus',
-                  e.message);
+               InternalTrace('vstTraceFreeNode exception when reseting NodeToFocus', e.message);
          end;
       end;
 
@@ -1176,13 +1170,9 @@ implementation
             LostAndFound := nil;
       except
          on e: exception do begin
-            LowTrace
-               ('vstTraceFreeNode exception when reseting LostAndFound : ' +
-                  e.message);
+            LowTrace('vstTraceFreeNode exception when reseting LostAndFound : ' +e.message);
             if (FrmInternalTraces <> nil) and (FrmInternalTraces <> self) then
-               InternalTrace(
-                  'vstTraceFreeNode exception when reseting LostAndFound',
-                  e.message);
+               InternalTrace('vstTraceFreeNode exception when reseting LostAndFound',e.message);
          end;
       end;
 
@@ -1193,12 +1183,9 @@ implementation
          // remove the node and his children
       except
          on e: exception do begin
-            LowTrace(
-               'vstTraceFreeNode exception when deleting from MostUsedList or LastUsedList : ' + e.message);
+            LowTrace('vstTraceFreeNode exception when deleting from MostUsedList or LastUsedList : ' + e.message);
             if (FrmInternalTraces <> nil) and (FrmInternalTraces <> self) then
-               InternalTrace(
-                  'vstTraceFreeNode exception when deleting from MostUsedList',
-                  e.message);
+               InternalTrace('vstTraceFreeNode exception when deleting from MostUsedList',e.message);
          end;
       end;
 
@@ -1209,12 +1196,9 @@ implementation
          // remove the node and his children
       except
          on e: exception do begin
-            LowTrace(
-               'vstTraceFreeNode exception when deleting from MostUsedList or LastUsedList : ' + e.message);
+            LowTrace('vstTraceFreeNode exception when deleting from MostUsedList or LastUsedList : ' + e.message);
             if (FrmInternalTraces <> nil) and (FrmInternalTraces <> self) then
-               InternalTrace(
-                  'vstTraceFreeNode exception when deleting from LastUsedList',
-                  e.message);
+               InternalTrace('vstTraceFreeNode exception when deleting from LastUsedList',e.message);
          end;
       end;
 
@@ -1238,12 +1222,9 @@ implementation
 
       except
          on e: exception do begin
-            LowTrace('vstTraceFreeNode exception when clearing TreeRec : ' +
-                  e.message);
+            LowTrace('vstTraceFreeNode exception when clearing TreeRec : ' +e.message);
             if (FrmInternalTraces <> nil) and (FrmInternalTraces <> self) then
-               InternalTrace
-                  ('vstTraceFreeNode exception when clearing TreeRec',
-                  e.message);
+               InternalTrace('vstTraceFreeNode exception when clearing TreeRec',e.message);
          end;
       end;
    end;
@@ -1684,10 +1665,10 @@ implementation
    begin
       // close main trace
       if self = Frm_Trace then
-         XMLConfig.Framework.Enabled.Value := false;
+         TraceConfig.Framework_Enabled := false;
       // close main watches
       if self = Frm_Watches then
-         XMLConfig.Watches.Enabled.Value := false;
+         TraceConfig.Watches_Enabled := false;
       CloseWin();
    end;
 
@@ -3114,7 +3095,7 @@ implementation
 
       // store the file relative to the viewer if no path specified
       if ExtractFilePath(FileToWrite) = '' then
-         FileToWrite := strRunPath + FileToWrite;
+         FileToWrite := Frm_Tool.strRunPath + FileToWrite;
       // strRunPath containt the last backslash
 
       try
@@ -3686,8 +3667,8 @@ implementation
       LinkedPlugin: TLinkedPlugin;
    begin
       pluginName := AnsiString(trim(UpperCase(string(pluginName))));
-      for c := 0 to PluginList.Count - 1 do begin
-         plugin := TPlugin(PluginList.Items[c]);
+      for c := 0 to TraceConfig.PluginList.Count - 1 do begin
+         plugin := TPlugin(TraceConfig.PluginList.Items[c]);
          if AnsiString(UpperCase(string(plugin.PlugName))) = pluginName then
             begin
             // check if the plugin is not already linked to window before adding it

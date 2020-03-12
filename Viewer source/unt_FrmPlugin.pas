@@ -21,7 +21,7 @@ type
     LabelPlugName: TLabel;
     LabelStatus: TLabel;
     Label2: TLabel;
-    LabelClassName: TLabel;
+    LabelPlugType: TLabel;
     chkLoadAtStartup: TCheckBox;
     butLoadAndStart: TButton;
     butUnload: TButton;
@@ -51,7 +51,7 @@ type
 
 implementation
 
-uses DebugOptions;
+uses DebugOptions, unt_TraceConfig;
 
 {$R *.dfm}
 
@@ -101,23 +101,14 @@ end;
 
 procedure TfrmPlugin.Display;
 begin
-   if (plugin.PlugName <> '') and (plugin.PlugName <> '_') then
-      LabelPlugName.Caption := String(plugin.PlugName)
-   else
-      LabelPlugName.Caption := String(plugin.FileName) ;
+   LabelPlugName.Caption := String(plugin.PlugName) ;
+   LabelPlugType.Caption := plugin.className ;
 
-   LabelPlugName.Caption := LabelPlugName.Caption + ' (' + plugin.plugKind + ')'  ;
-
-   if plugin.plugKind = 'Java' then begin
-      EditFileName.Visible := false ;
-   end else begin
-      EditFileName.Visible := true ;
-      EditFileName.text := String(plugin.FileName) ;
-   end ;
+   EditFileName.Visible := true ;
+   EditFileName.text := String(plugin.FileName) ;
 
    MemoParam.Text := string(plugin.param);
 
-   LabelClassName.Caption := plugin.className ;
    chkLoadAtStartup.Checked := plugin.startup ;
 
    case plugin.Status of
@@ -125,7 +116,7 @@ begin
          begin
             LabelStatus.caption := 'Unloaded' ;
             butLoadAndStart .Visible := true ;
-            butLoadAndStart .top  := 200 ;
+            //butLoadAndStart .top  := 224 ;
             butLoadAndStart .left := 16 ;
             butUnload       .Visible := false ;
             butStopAndUnload.Visible := false ;
@@ -179,7 +170,7 @@ end;
 
 procedure TfrmPlugin.chkLoadAtStartupClick(Sender: TObject);
 begin
-   plugin.startup := chkLoadAtStartup.Checked ;
+   //plugin.startup := chkLoadAtStartup.Checked ;
 end;
 
 //------------------------------------------------------------------------------
@@ -187,11 +178,10 @@ end;
 procedure TfrmPlugin.butRemoveClick(Sender: TObject);
 begin
    // save to xml
-   XMLConfig.Plugins.Plugin.Remove(plugin.xmlPlugin) ;
-   XMLConfig.OwnerDocument.SaveToFile(strConfigFile);
-   plugin.xmlPlugin := nil ;
+   TraceConfig.PluginList.Remove(plugin) ;
+   Frm_Tool.SaveSettings() ;
 
-   // remove from list, screen and tree 
+   // remove from list, screen and tree
    self.parent := nil ;
    //PluginList.Remove(plugin) ;    // remove call plugin destructor (wich free frmPlugin)
    frmDebugOptions.VSTOptions.DeleteNode(node);

@@ -377,12 +377,9 @@ type
   IXMLPlugins = interface(IXMLNode)
     ['{1C0D6009-B26C-4495-BF62-51AB5B6E2D74}']
     { Property Accessors }
-    function Get_JVMEngine: IXMLStringTagValue;
-    function Get_JavaPLuginClassPath: IXMLStringTagValue;
+
     function Get_Plugin: IXMLPluginList;
     { Methods & Properties }
-    property JVMEngine: IXMLStringTagValue read Get_JVMEngine;
-    property JavaPLuginClassPath: IXMLStringTagValue read Get_JavaPLuginClassPath;
     property Plugin: IXMLPluginList read Get_Plugin;
   end;
 
@@ -772,8 +769,6 @@ type
     FPlugin: IXMLPluginList;
   protected
     { IXMLPlugins }
-    function Get_JVMEngine: IXMLStringTagValue;
-    function Get_JavaPLuginClassPath: IXMLStringTagValue;
     function Get_Plugin: IXMLPluginList;
   public
     procedure AfterConstruction; override;
@@ -1625,21 +1620,9 @@ end;
 
 procedure TXMLPlugins.AfterConstruction;
 begin
-  RegisterChildNode('JVMEngine', TXMLStringTagValue);
-  RegisterChildNode('JavaPLuginClassPath', TXMLStringTagValue);
   RegisterChildNode('Plugin', TXMLPlugin);
   FPlugin := CreateCollection(TXMLPluginList, IXMLPlugin, 'Plugin') as IXMLPluginList;
   inherited;
-end;
-
-function TXMLPlugins.Get_JVMEngine: IXMLStringTagValue;
-begin
-  Result := ChildNodes['JVMEngine'] as IXMLStringTagValue;
-end;
-
-function TXMLPlugins.Get_JavaPLuginClassPath: IXMLStringTagValue;
-begin
-  Result := ChildNodes['JavaPLuginClassPath'] as IXMLStringTagValue;
 end;
 
 function TXMLPlugins.Get_Plugin: IXMLPluginList;
