@@ -125,9 +125,6 @@ namespace CSharpPlugin
                 //+TraceConst.CST_PLUG_ONTIMER
                 );
 
-
-            //var allSockets = new List<IWebSocketConnection>();
-
             //TTrace.Debug.Send($"WebsockPlugin started with param {strParameter}") ;
 
             FleckLog.Level = LogLevel.Error ;
@@ -139,17 +136,14 @@ namespace CSharpPlugin
                 //socket.OnOpen = () =>
                 //{
                 //    PlugTraces.Debug.Send("Websock Opened");
-                //    allSockets.Add(socket);
                 //};
                 //socket.OnClose = () =>
                 //{
                 //    PlugTraces.Debug.Send("Websock Closed");
-                //    allSockets.Remove(socket);
                 //};
                 //socket.OnMessage = message =>
                 //{
                 //    PlugTraces.Debug.Send($"OnMessage", message);
-                //    allSockets.ToList().ForEach(s => s.Send("Echo: " + message));
                 //};
                 socket.OnBinary = buffer =>
                 {
@@ -256,12 +250,22 @@ namespace CSharpPlugin
         /// </returns>
         public bool OnAction(string WinId, int ResourceId, string NodeId)
         {
-            if (ResourceId != labelWinsockResourceId)
-                return true;
+            try
+            {
+                if (ResourceId != labelWinsockResourceId)
+                    return true;
 
-            PlugTraces.Debug.Send("Incoming websocket",$"{webSocketHost}:{webSocketPort}");
-            PlugTraces.Debug.Send("Tracetool viewer",$"{viewerSocketHost}:{viewerSocketPort}");
-            PlugTraces.Debug.Send("Received message count",$"{messageCount}");
+                PlugTraces.Debug.Send("Incoming websocket", $"{webSocketHost}:{webSocketPort}");
+                PlugTraces.Debug.Send("Tracetool viewer", $"{viewerSocketHost}:{viewerSocketPort}");
+                PlugTraces.Debug.Send("Received message count", $"{messageCount}");
+
+            }
+            catch (Exception e)
+            {
+                PlugTraces.Error.Send($"websock plugin : OnAction exception {e.Message}");
+                throw;
+            }
+
             return true;
         }
 
