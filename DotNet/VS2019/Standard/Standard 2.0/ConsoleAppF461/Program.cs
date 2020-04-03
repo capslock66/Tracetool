@@ -20,7 +20,7 @@ namespace ConsoleAppF461
             Console.WriteLine("6 - windows msg Async");
 
             int intChoice = Convert.ToInt32(Console.ReadLine());
-            string strChoice = "";
+            string strChoice;
             switch (intChoice)
             {
                 case 1:
@@ -73,7 +73,9 @@ namespace ConsoleAppF461
                 TTrace.Debug.Send($"{i}");
             TTrace.Debug.Send($"done {strChoice}").Show();
             TTrace.Show(true);
-            TTrace.Flush();
+            
+            if (TTrace.Options.UseWorkerThread == true)   // async flush don't work yet on blazor
+                TTrace.Flush();   
             Console.WriteLine($"{DateTime.Now.ToString("hh:mm:ss.fff")} last error : {TTrace.LastSocketError}");
             TTrace.CloseSocket();
             TTrace.Stop();
