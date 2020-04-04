@@ -6,7 +6,7 @@ namespace ConsoleAppF461
 {
     class Program
     {
-        static void Main()
+        static async System.Threading.Tasks.Task Main()
         {
 
             TTrace.Options.SocketHost = "127.0.0.1";
@@ -69,13 +69,17 @@ namespace ConsoleAppF461
             TTrace.ClearAll();
             TTrace.Debug.Send($"console framework {strChoice} ", TTrace.Debug.GetType().Assembly.Location);
             TTrace.Debug.SendValue("val1", TTrace.Debug);
-            for (int i = 0; i < 100; i++)
+            for (int i = 0; i < 300; i++)
                 TTrace.Debug.Send($"{i}");
             TTrace.Debug.Send($"done {strChoice}").Show();
             TTrace.Show(true);
             
-            if (TTrace.Options.UseWorkerThread == true)   // async flush don't work yet on blazor
-                TTrace.Flush();   
+            // You need to flush before stopping the application, else you will lose traces
+            if (TTrace.Options.UseWorkerThread) 
+                TTrace.Flush();                 // blocking
+            else
+                await TTrace.FlushAsync() ;     // blocking
+            
             Console.WriteLine($"{DateTime.Now.ToString("hh:mm:ss.fff")} last error : {TTrace.LastSocketError}");
             TTrace.CloseSocket();
             TTrace.Stop();
