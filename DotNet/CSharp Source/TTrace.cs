@@ -57,6 +57,7 @@ using System.Net.Sockets;
 using System.Net.WebSockets;
 using System.IO;                         // file exist
 using System.Xml;
+using System.Threading.Tasks;
 
 // generic start in F2
 #if (!NETCF1 && !NETF1)
@@ -102,7 +103,7 @@ namespace TraceTool
         private static readonly ManualResetEvent StopEvent;
         private static readonly CancellationTokenSource cancellationTocket;
 
-        private static readonly StrKeyObjectList FlushList;    // AutoResetEvent flush list
+        private static readonly StrKeyObjectList FlushList;    // TaskCompletionSource<string> flush list
         private static readonly InternalWinTrace DefaultWinTrace;
         private static readonly InternalWinTraceList FormTraceList;
         private static Thread _traceThread;
@@ -146,7 +147,7 @@ namespace TraceTool
         static TTrace()
         {
             //Console.WriteLine($"{DateTime.Now.ToString("hh:mm:ss.fff")} TTrace static init");
-            FlushList = new StrKeyObjectList();              // AutoResetEvent flush list
+            FlushList = new StrKeyObjectList();              // TaskCompletionSource<string> flush list
             FormTraceList = new InternalWinTraceList();
             DefaultWinTrace = new InternalWinTrace();       // main InternalWinTrace. Id is empty
             FormTraceList.Add(DefaultWinTrace);
@@ -906,13 +907,14 @@ namespace TraceTool
                     if (commandList.Count > 0) // only one message
                     {
                         string msg = commandList[0];
-                        if (Int32.Parse(msg.Substring(0, 5)) == TraceConst.CST_FLUSH)
+                        if (int.Parse(msg.Substring(0, 5)) == TraceConst.CST_FLUSH)
                         {
-                            String key = msg.Substring(5, msg.Length - 5);
+                            var key = msg.Substring(5, msg.Length - 5);
+                            //Console.WriteLine($"{DateTime.Now.ToString("hh:mm:ss.fff")} flush {key} received in worker thread");
                             try
                             {
-                                var flushEvent = (AutoResetEvent)FlushList[key];
-                                flushEvent.Set();
+                                var flushEvent = (TaskCompletionSource<string>)FlushList[key];
+                                flushEvent.TrySetResult(key);
                             }
                             catch
                             {
@@ -1002,7 +1004,7 @@ namespace TraceTool
                 _msgQueue.Add(newCommandList);
                 if (isAsyncRunning)
                 {
-                    //Console.WriteLine($"{DateTime.Now.ToString("hh:mm:ss.fff")} already in SendToViewerAsync. Add message to Queue");                  
+                    //Console.WriteLine($"{DateTime.Now.ToString("hh:mm:ss.fff")} already in SendToViewerAsync. Message added to Queue {_msgQueue.Count}");                  
                     return; // already waiting connection or sending message
                 }
                 else
@@ -1021,7 +1023,7 @@ namespace TraceTool
                 // lock the message queue and swap _msgQueue with the empty local queue (workQueue)
                 lock (DataReady)
                 {
-                    //swap = swap + "Begin at " + DateTime.Now.ToString("HH:mm:ss:fff") + " : " + MsgQueue.Count ;
+                    //Console.WriteLine($"{DateTime.Now.ToString("hh:mm:ss.fff")} SendToViewerAsync : Sending {_msgQueue.Count} message");
 
                     var tempList = workQueue; // used for swap queue
                     workQueue = _msgQueue;    // MsgQueue is the list of message to send
@@ -1050,9 +1052,9 @@ namespace TraceTool
                             string key = msg.Substring(5, msg.Length - 5);
                             try
                             {
-                                //Console.WriteLine($"{DateTime.Now.ToString("hh:mm:ss.fff")} Flush received");
-                                var flushEvent = (AutoResetEvent)FlushList[key];
-                                flushEvent.Set();
+                                //Console.WriteLine($"{DateTime.Now.ToString("hh:mm:ss.fff")} flush {key} received in async");
+                                var flushEvent = (TaskCompletionSource<string>)FlushList[key];
+                                flushEvent.TrySetResult(key);
                             }
                             catch
                             {
@@ -1269,7 +1271,7 @@ namespace TraceTool
             }
             catch (Exception ex)
             {
-                //Console.WriteLine($"SendToWebSocket : connect and wait exception : {ex.Message}");
+                //Console.WriteLine($"{DateTime.Now.ToString("hh:mm:ss.fff")} SendToWebSocket : connect and wait exception : {ex.Message}");
                 webSocketClient = null; // force recreate socket
                 _isSocketError = true;
                 _errorTime = DateTime.Now.Ticks;
@@ -1297,35 +1299,48 @@ namespace TraceTool
 
         //------------------------------------------------------------------------------
 
+        public static async Task FlushAsync()
+        {
+            string key = Helper.NewGuid().ToString();
+            StringList commandList = new StringList();
+
+            var flushEvent = new TaskCompletionSource<string>();
+            FlushList.Add(key, flushEvent);
+            commandList.Insert(0, String.Format("{0,5}{1}", TraceConst.CST_FLUSH, key));
+
+            await SendToViewerAsync(commandList);
+            await flushEvent.Task;  
+
+            FlushList.Remove(key);
+        }
+
+        //------------------------------------------------------------------------------
+
         /// flush remaining traces to the viewer
         public static void Flush()
         {
-            //Console.WriteLine($"{DateTime.Now.ToString("hh:mm:ss.fff")} start flush");
+            if (!Options.UseWorkerThread)
+                throw new Exception("Dont' call Flush() in Async mode. use FlushAsync()");
+
+
+            string key = Helper.NewGuid().ToString();
             StringList commandList = new StringList();
 
-            AutoResetEvent flushEvent = new AutoResetEvent(false);
-            string key = Helper.NewGuid().ToString();
+            var flushEvent = new TaskCompletionSource<string>();
             FlushList.Add(key, flushEvent);
 
             commandList.Insert(0, String.Format("{0,5}{1}", TraceConst.CST_FLUSH, key));
 
-            if (Options.UseWorkerThread)
+            lock (DataReady)    // don't lock the MsgQue, because we can swap with workQueue
             {
-                lock (DataReady)    // don't lock the MsgQue, because we can swap with workQueue
-                {
-                    _msgQueue.Add(commandList);
-                }
-                // signal that data are ready to be send
-                DataReady.Set();
+                _msgQueue.Add(commandList);
             }
-            else
-            {
-                throw new Exception("Flush is a synchronous method. PLease use FlushAsync (in incoming version)") ;
-                //_ = SendToViewerAsync(commandList);
-            }
-            flushEvent.WaitOne();
-            FlushList.Remove(key);
-            //Console.WriteLine($"{DateTime.Now.ToString("hh:mm:ss.fff")} flush done");
+
+            // signal that data are ready to be send
+            DataReady.Set();
+
+            var key2 = flushEvent.Task.Result ;   // wait sync
+            FlushList.Remove(key2);
         }
 
 #if (!NETCF1 && !NETCF2 && !NETCF3 && !NETSTANDARD1_6)
