@@ -18,7 +18,7 @@
 //using System.Reflection;
 //using System.Text;
 
-#if (!NETCF1 && !SILVERLIGHT)
+#if (!NETCF1)
 //using System.Xml.XPath;
 #endif
 

@@ -23,7 +23,7 @@ using System.Drawing.Imaging;
 using System.IO;           // streams
 #endif
 
-#if (!NETCF1 && !SILVERLIGHT)
+#if (!NETCF1)
 using System.Xml.XPath;
 #endif
 
@@ -33,10 +33,10 @@ using System.Collections.Generic;
 #endif
 
 #if (NETF3 && !NETSTANDARD1_6 && !NETSTANDARD2_0)
-using System.Windows.Markup.Primitives;   // dependency properties (don't work with Silverlight).  Assembly : PresentationFramework
+using System.Windows.Markup.Primitives;   // dependency properties.  Assembly : PresentationFramework
 #endif
 
-#if (NETF3 || SILVERLIGHT) && !NETSTANDARD1_6  && !NETSTANDARD2_0
+#if (NETF3) && !NETSTANDARD1_6  && !NETSTANDARD2_0
 using System.Windows.Media.Imaging;
 #endif
 
@@ -300,7 +300,7 @@ namespace TraceTool
          //XPathNavigator DocumentationNav = null;
          Object documentationNav = null;
 
-#if (!NETCF1 && !NETCF2 && !NETCF3 && !SILVERLIGHT)
+#if (!NETCF1 && !NETCF2 && !NETCF3)
          string xmlDocFileName = ReflectionHelper.AssemblyDocumentationFileName(oType);
 
          if ((flags & TraceDisplayFlags.ShowDoc) != 0)
@@ -386,7 +386,7 @@ namespace TraceTool
                   classGroup.Add("IsSpecialName");
 
 
-#if (!NETCF1 && !NETCF2 && !NETCF3 && !SILVERLIGHT)
+#if (!NETCF1 && !NETCF2 && !NETCF3)
 
 
 #if !NETSTANDARD1_6
@@ -488,7 +488,7 @@ namespace TraceTool
                 classGroup.Add("GUID", oType.GetTypeInfo().GUID.ToString());
                 if (oType.GetTypeInfo().TypeInitializer != null)
                     classGroup.Add("TypeInitializer", oType.GetTypeInfo().TypeInitializer.ToString());
-#elif (!NETCF1 && !NETCF2 && !NETCF3 && !SILVERLIGHT)
+#elif (!NETCF1 && !NETCF2 && !NETCF3)
                classGroup.Add("GUID", oType.GUID.ToString());
                if (oType.TypeInitializer != null)
                   classGroup.Add("TypeInitializer", oType.TypeInitializer.ToString());
@@ -529,7 +529,7 @@ namespace TraceTool
                    classGroup.Add("Assembly", e.GetType().ToString());
                }
 
-#if (!NETCF1 && !NETCF2 && !NETCF3 && !SILVERLIGHT)
+#if (!NETCF1 && !NETCF2 && !NETCF3)
                try
                {
 #if NETSTANDARD1_6
@@ -613,7 +613,7 @@ namespace TraceTool
       }
 
       //----------------------------------------------------------------------
-#if (!NETCF1 && !NETCF2 && !NETCF3 && !SILVERLIGHT)
+#if (!NETCF1 && !NETCF2 && !NETCF3)
 
       /// <summary>
       /// add documentation for a type or a member
@@ -1173,7 +1173,7 @@ namespace TraceTool
       internal Dictionary<string, TMemberNode> GetDependencyPropertiesValues(Object objToSend)
       {
           Dictionary < string, TMemberNode> result = new Dictionary<string, TMemberNode>();
-#if (NETF3 && !NETSTANDARD1_6  && !NETSTANDARD2_0)   // silverlight don't support MarkupWriter to retreive Dependency Properties 
+#if (NETF3 && !NETSTANDARD1_6  && !NETSTANDARD2_0) 
           try
           {
               MarkupObject markupObject = MarkupWriter.GetMarkupObjectFor(objToSend);
@@ -1507,7 +1507,7 @@ namespace TraceTool
                   fieldsGroup.Add (memberNode) ;
 
                   // add doc and custom attrib
-#if (!NETCF1 && !NETCF2 && !NETCF3 && !SILVERLIGHT)
+#if (!NETCF1 && !NETCF2 && !NETCF3)
                   AddDocumentation (documentationNav, memberNode,oType,member ) ;
 #endif
 
@@ -1664,7 +1664,7 @@ namespace TraceTool
                   TMemberNode memberNode = new TMemberNode ( memberName, memberValue ,memberModifier + memberType) ;
                   propertiesGroup.Add (memberNode) ;
                   // add doc and custom attrib
-#if (!NETCF1 && !NETCF2 && !NETCF3 && !SILVERLIGHT)
+#if (!NETCF1 && !NETCF2 && !NETCF3)
                   AddDocumentation (documentationNav, memberNode,oType,member ) ;
 #endif
                   if ((flags & TraceDisplayFlags.ShowCustomAttributes) != 0)
@@ -1734,7 +1734,7 @@ namespace TraceTool
                   constructorGroup.Add (memberNode) ;
 
                   // add doc and custom attrib
-#if (!NETCF1 && !NETCF2 && !NETCF3 && !SILVERLIGHT)
+#if (!NETCF1 && !NETCF2 && !NETCF3)
                   AddDocumentation (documentationNav, memberNode,oType,member ) ;
 #endif
                   if ((flags & TraceDisplayFlags.ShowCustomAttributes) != 0)
@@ -1840,7 +1840,7 @@ namespace TraceTool
                       groupToUse.Add(memberNode);
 
                       // add doc and custom attrib
-#if (!NETCF1 && !NETCF2 && !NETCF3 && !SILVERLIGHT)
+#if (!NETCF1 && !NETCF2 && !NETCF3)
                       AddDocumentation (documentationNav, memberNode,oType,member ) ;
 #endif
                       if ((flags & TraceDisplayFlags.ShowCustomAttributes) != 0)
@@ -1921,7 +1921,7 @@ namespace TraceTool
                   eventsGroup.Add (memberNode) ;
 
                   // add doc and custom attrib
-#if (!NETCF1 && !NETCF2 && !NETCF3 && !SILVERLIGHT)
+#if (!NETCF1 && !NETCF2 && !NETCF3)
                   AddDocumentation (documentationNav, memberNode,oType,member ) ;
 #endif
                   if ((flags & TraceDisplayFlags.ShowCustomAttributes) != 0)
@@ -2002,9 +2002,9 @@ namespace TraceTool
                          assemblyName = "" ;
                       else
 #if NETSTANDARD1_6
-                         assemblyName = oneMethod.DeclaringType.GetTypeInfo().Assembly.GetName().Name;   // Silverlight Assembly.GetName() is [SecurityCritical]
+                         assemblyName = oneMethod.DeclaringType.GetTypeInfo().Assembly.GetName().Name;  
 #else
-                         assemblyName = oneMethod.DeclaringType.Assembly.GetName().Name;   // Silverlight Assembly.GetName() is [SecurityCritical]
+                         assemblyName = oneMethod.DeclaringType.Assembly.GetName().Name;
 #endif
                   }
                   catch (MethodAccessException)
@@ -2113,9 +2113,9 @@ namespace TraceTool
                   {
                       if (oneMethod.DeclaringType != null)
 #if NETSTANDARD1_6
-                         assemblyName = oneMethod.DeclaringType.GetTypeInfo().Assembly.GetName().Name; // Silverlight Assembly.GetName() is [SecurityCritical]
+                         assemblyName = oneMethod.DeclaringType.GetTypeInfo().Assembly.GetName().Name; 
 #else
-                         assemblyName = oneMethod.DeclaringType.Assembly.GetName().Name; // Silverlight Assembly.GetName() is [SecurityCritical]
+                         assemblyName = oneMethod.DeclaringType.Assembly.GetName().Name;
 #endif
                   }
                   catch (MethodAccessException)
@@ -2138,7 +2138,7 @@ namespace TraceTool
 
       //------------------------------------------------------------------------------
 
-#if (!SILVERLIGHT && !NETSTANDARD1_6  && !NETSTANDARD2_0)
+#if (!NETSTANDARD1_6  && !NETSTANDARD2_0)
       /// <summary>
       /// Add a bitmap
       /// </summary>
@@ -2175,15 +2175,12 @@ namespace TraceTool
           }
 
       }
-#endif  // SILVERLIGHT
+#endif  
 
       //------------------------------------------------------------------------------
 
 #endif  // (!NETCF1 && !NETCF2 && !NETCF3)
 
-// currently not possibe in silverlight 2 : 
-// - No way to read the Image content
-// - BmpBitmapEncoder is not supported
 #if (NETF3  && !NETSTANDARD1_6  && !NETSTANDARD2_0)  
       /// <summary>
       /// Add a bitmap

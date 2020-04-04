@@ -280,8 +280,8 @@ namespace TraceTool
       ///   1, Viewer log enabled. No size limit.
       ///   2, Viewer log enabled. A new file is create each day (CCYYMMDD is appended to the filename)
       ///   3, Local log is disabled
-      ///   4, Local log enabled. No size limit. Ignored in silverlight 2
-      ///   5, Local log enabled. A new file is create each day (CCYYMMDD is appended to the filename). Ignored in silverlight 2
+      ///   4, Local log enabled. No size limit.
+      ///   5, Local log enabled. A new file is create each day (CCYYMMDD is appended to the filename).
       ///   </code>
       ///   </summary>
       ///   <param name="fileName">\File to open</param>
@@ -305,8 +305,8 @@ namespace TraceTool
       ///   1, Viewer log enabled. No size limit.
       ///   2, Viewer log enabled. A new file is create each day (CCYYMMDD is appended to the filename)
       ///   3, Local log is disabled
-      ///   4, Local log enabled. No size limit. Ignored in silverlight 2
-      ///   5, Local log enabled. A new file is create each day (CCYYMMDD is appended to the filename). Ignored in silverlight 2
+      ///   4, Local log enabled. No size limit. 
+      ///   5, Local log enabled. A new file is create each day (CCYYMMDD is appended to the filename). 
       ///   </code>
       ///   </summary>
       ///   <param name="fileName">\File to open</param>

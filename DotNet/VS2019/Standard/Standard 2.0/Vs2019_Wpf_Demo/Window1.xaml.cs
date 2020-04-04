@@ -184,7 +184,7 @@ namespace Vs2017_Wpf_Demo
          TTrace.Debug.Send("---");
 
          // send traces with special font style (bold and Italic), color font size and font name
-         // use System.Drawing.Color.ToArgb() (not supported in Silverlight) or (int)Helper.ToArgb(System.Windows.Media.Color) to specify Argb color
+         // use System.Drawing.Color.ToArgb() or (int)Helper.ToArgb(System.Windows.Media.Color) to specify Argb color
          TTrace.Debug.Send("Special font", "Symbol 12")
              .SetFontDetail(-1, false, true)                                        // set whole line to italic 
              .SetFontDetail(3, true, false, System.Drawing.Color.Red.ToArgb())                      // set col 3 (Left Msg)  to bold and Red

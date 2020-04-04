@@ -119,7 +119,7 @@ namespace TraceTool
               {
                   string result = Type2ShortString (type.GetElementType());    // recursive
                   result += '[';
-#if ((!NETCF1) )  // GetArrayRank start from CF 2. Silverlight ?     || (NETCF2)|| (NETCF3)
+#if ((!NETCF1) )  // GetArrayRank start from CF 2.   || (NETCF2)|| (NETCF3)
                   for (int i = type.GetArrayRank(); i > 1; i--)
                       result += ','  ;
 
@@ -621,7 +621,7 @@ namespace TraceTool
                       else
                           methodName += "," + t.Name;
                       genpos++;
-#if (!NETCF1 && !NETCF2 && !NETCF3 && !SILVERLIGHT )
+#if (!NETCF1 && !NETCF2 && !NETCF3)
                       if (t.IsGenericParameter)
                       {
                           // t.DeclaringMethod : MethodBase
@@ -766,7 +766,7 @@ namespace TraceTool
 #endif
                    result += "params ";
 
-                #if (!NETCF1 && !NETCF2 && !NETCF3 && !SILVERLIGHT)
+                #if (!NETCF1 && !NETCF2 && !NETCF3)
                 if (param.IsIn)         result += "[In()] ";
                 if (param.IsOut)        result += "[Out()] ";      // param.ParameterType will add "ref"
                 if (param.IsOptional)   result += "[Optional()] ";
@@ -901,7 +901,7 @@ namespace TraceTool
       //}
 
       //----------------------------------------------------------------------
-      #if (!NETCF1 && !NETCF2  && !NETCF3 && !SILVERLIGHT )
+      #if (!NETCF1 && !NETCF2  && !NETCF3 )
       /// <summary>
       /// return the name of the XML assembly documentation file for a type.Empty string if not found
       /// </summary>
