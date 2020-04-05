@@ -1,5 +1,4 @@
-﻿
-using System;
+﻿using System;
 using TraceTool;
 
 namespace ConsoleAppF461
@@ -8,7 +7,6 @@ namespace ConsoleAppF461
     {
         static async System.Threading.Tasks.Task Main()
         {
-
             TTrace.Options.SocketHost = "127.0.0.1";
 
             Console.WriteLine("select how traces are sent to viewer");

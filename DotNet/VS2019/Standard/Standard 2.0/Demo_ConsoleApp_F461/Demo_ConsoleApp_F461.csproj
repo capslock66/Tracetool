@@ -49,9 +49,9 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Vs2019_Standard_20_Lib\Vs2019_Standard_20_Lib.csproj">
-      <Project>{d122d3c3-4e38-49a7-abd2-c6bda4f4c7d5}</Project>
-      <Name>Vs2019_Standard_20_Lib</Name>
+    <ProjectReference Include="..\Lib_Standard_20\Lib_Standard_20.csproj">
+      <Project>{cbf21930-6e95-435c-a3dd-e592eff9ab78}</Project>
+      <Name>Lib_Standard_20</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

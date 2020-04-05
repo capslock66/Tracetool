@@ -11,34 +11,44 @@
         <TabControl Name="TabControl1"  DockPanel.Dock="Bottom">
             <TabItem Header="Basic" Name="TabBasic">
                 <Grid>
-                    <Button HorizontalAlignment="Left" Margin="12.833,236.643,0,0" Name="ButFullInfo" TabIndex="36" Width="208" VerticalAlignment="Top" Height="21.277" Click="butFullInfo_Click">Display full form information</Button>
-                    <Button Height="23" HorizontalAlignment="Left" Margin="12.833,188.87,0,0" Name="ButVariant" TabIndex="35" VerticalAlignment="Top" Width="208" Click="butVariant_Click">SendValue (obects and arrays)</Button>
-                    <Button Height="23" HorizontalAlignment="Left" Margin="12.833,453,0,0" Name="ButLogFile" TabIndex="46" VerticalAlignment="Top" Width="208" Click="butLogFile_Click">setLogFile on client and on viewer</Button>
-                    <Button Height="24" Margin="12.833,407.063,0,0" Name="ButLoadXml" TabIndex="44" VerticalAlignment="Top" Click="butLoadXml_Click" HorizontalAlignment="Left" Width="208">LoadXml (\"c:\\temp\\log.xml\")</Button>
-                    <Button Height="23" HorizontalAlignment="Left" Margin="12.833,363.063,0,0" Name="ButSaveToXml" TabIndex="39" VerticalAlignment="Top" Width="208" Click="butSaveToXml_Click">Save To Xml file (\"c:\\temp\\log.xml\")</Button>
-                    <Button Height="23" HorizontalAlignment="Left" Margin="12.833,320.266,0,0" Name="ButSaveToTxt" TabIndex="38" VerticalAlignment="Top" Width="208" Click="butSaveToTXT_Click">Save to text file (\"c:\\temp\\log.txt\")</Button>
-                    <Button Height="23" HorizontalAlignment="Left" Margin="12.833,282.781,0,0" Name="ButDoc" TabIndex="37" VerticalAlignment="Top" Width="208" Click="butDoc_Click">Display object (button) documentation</Button>
-                    <GroupBox Header="Samples traces" Margin="0.833,6.664,6,0" Name="GroupBox3" Height="161.25" VerticalAlignment="Top">
+                    <Button Height="23" HorizontalAlignment="Left" Margin="10,288,0,0" Name="IndentButton" TabIndex="47" VerticalAlignment="Top" Width="152" Click="IndentButton_Click">Indent/UnIndent</Button>
+                    <Button Height="23" HorizontalAlignment="Left" Margin="10,233,0,0" Name="ButTrace" TabIndex="28" VerticalAlignment="Top" Width="152" Click="butTrace_Click">Samples traces</Button>
+                    <Button HorizontalAlignment="Left" Margin="10,371,0,0" Name="ButFullInfo" TabIndex="36" Width="208" VerticalAlignment="Top" Height="21" Click="butFullInfo_Click">Display full form information</Button>
+                    <Button Height="23" HorizontalAlignment="Left" Margin="10,328,0,0" Name="ButVariant" TabIndex="35" VerticalAlignment="Top" Width="208" Click="butVariant_Click">SendValue (obects and arrays)</Button>
+                    <Button Height="23" HorizontalAlignment="Left" Margin="345,413,0,0" Name="ButLogFile" TabIndex="46" VerticalAlignment="Top" Width="208" Click="butLogFile_Click">setLogFile on client and on viewer</Button>
+                    <Button Height="24" Margin="345,368,0,0" Name="ButLoadXml" TabIndex="44" VerticalAlignment="Top" Click="butLoadXml_Click" HorizontalAlignment="Left" Width="208">LoadXml (\"c:\\temp\\log.xml\")</Button>
+                    <Button Height="23" HorizontalAlignment="Left" Margin="345,328,0,0" Name="ButSaveToXml" TabIndex="39" VerticalAlignment="Top" Width="208" Click="butSaveToXml_Click">Save To Xml file (\"c:\\temp\\log.xml\")</Button>
+                    <Button Height="23" HorizontalAlignment="Left" Margin="345,288,0,0" Name="ButSaveToTxt" TabIndex="38" VerticalAlignment="Top" Width="208" Click="butSaveToTXT_Click">Save to text file (\"c:\\temp\\log.txt\")</Button>
+                    <Button Height="23" HorizontalAlignment="Left" Margin="10,413,0,0" Name="ButDoc" TabIndex="37" VerticalAlignment="Top" Width="208" Click="butDoc_Click">Display object (button) documentation</Button>
+                    <GroupBox Header="Options" Margin="1,7,6,0" Name="GroupBox3" Height="200" VerticalAlignment="Top">
                         <Grid>
-                            <Button Height="23" HorizontalAlignment="Left" Margin="10,102,0,0" Name="IndentButton" TabIndex="47" VerticalAlignment="Top" Width="152" Click="IndentButton_Click">Indent/UnIndent</Button>
-                            <CheckBox Height="24" HorizontalAlignment="Left" Margin="364.682,75,0,0" Name="ChkSendProcessName" TabIndex="36" VerticalAlignment="Top" Width="128" Checked="chkSendProcessName_Checked" IsChecked="False">Send Process name</CheckBox>
-                            <Label FontFamily="Microsoft Sans Serif" FontSize="11" Height="26" Margin="235.101,105,0,0" Name="Label6" TabIndex="34" VerticalAlignment="Top" HorizontalAlignment="Left" Width="80">Send mode</Label>
-                            <CheckBox Height="24" HorizontalAlignment="Left" Margin="236.682,75,0,0" Name="ChkSendEvents" TabIndex="33" VerticalAlignment="Top" Width="104" Checked="chkSendEvents_Checked" IsChecked="False">Send Events</CheckBox>
-                            <CheckBox Height="24" HorizontalAlignment="Left" Margin="364.682,42.5,0,0" Name="ChkSendInherited" TabIndex="32" VerticalAlignment="Top" Width="104" Checked="chkSendInherited_Checked" IsChecked="False">Send Inherited</CheckBox>
-                            <CheckBox Height="24" HorizontalAlignment="Left" Margin="236.682,42.483,0,0" Name="ChkSendFunctions" TabIndex="31" VerticalAlignment="Top" Width="104" Checked="chkSendFunctions_Checked" IsChecked="False">Send Functions</CheckBox>
-                            <ComboBox Height="21" Margin="340.682,0,178,16" Name="ComboMode" TabIndex="30" VerticalAlignment="Bottom" SelectionChanged="comboMode_SelectionChanged">
+
+                            <Label FontFamily="Microsoft Sans Serif" FontSize="11" Height="26" Margin="246,9,0,0" TabIndex="34" VerticalAlignment="Top" HorizontalAlignment="Left" Width="80" RenderTransformOrigin="2.112,0.385">Socket Host</Label>
+                            <TextBox HorizontalAlignment="Left" Height="23" Margin="346,10,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="120" Name="SocketHost" LostFocus="SocketHost_LostFocus"  />
+                            <Label FontFamily="Microsoft Sans Serif" FontSize="11" Height="26" Margin="246,38,0,0" TabIndex="34" VerticalAlignment="Top" HorizontalAlignment="Left" Width="80">Socket Port</Label>
+                            <TextBox HorizontalAlignment="Left" Height="23" Margin="346,38,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="120" Name="SocketPort" LostFocus="SocketPort_LostFocus" />
+
+                            <CheckBox Height="24" HorizontalAlignment="Left" Margin="474,125,0,0" Name="ChkSendProcessName" TabIndex="36" VerticalAlignment="Top" Width="128" Checked="chkSendProcessName_Checked" IsChecked="False">Send Process name</CheckBox>
+                            <Label FontFamily="Microsoft Sans Serif" FontSize="11" Height="26" Margin="10,10,0,0" Name="Label6" TabIndex="34" VerticalAlignment="Top" HorizontalAlignment="Left" Width="80">Send mode</Label>
+                            <CheckBox Height="24" HorizontalAlignment="Left" Margin="346,125,0,0" Name="ChkSendEvents" TabIndex="33" VerticalAlignment="Top" Width="104" Checked="chkSendEvents_Checked" IsChecked="False">Send Events</CheckBox>
+                            <CheckBox Height="24" HorizontalAlignment="Left" Margin="474,93,0,0" Name="ChkSendInherited" TabIndex="32" VerticalAlignment="Top" Width="104" Checked="chkSendInherited_Checked" IsChecked="False">Send Inherited</CheckBox>
+                            <CheckBox Height="24" HorizontalAlignment="Left" Margin="346,92,0,0" Name="ChkSendFunctions" TabIndex="31" VerticalAlignment="Top" Width="104" Checked="chkSendFunctions_Checked" IsChecked="False">Send Functions</CheckBox>
+                            <ComboBox Height="21" Margin="10,38,509,0" Name="ComboMode" TabIndex="30" VerticalAlignment="Top" SelectionChanged="comboMode_SelectionChanged">
                                 <ComboBoxItem>Windows messages</ComboBoxItem>
                                 <ComboBoxItem>Socket messages</ComboBoxItem>
                                 <ComboBoxItem>Socket messages UDP</ComboBoxItem>
+                                <ComboBoxItem>Web Socket</ComboBoxItem>
                                 <ComboBoxItem>None</ComboBoxItem>
                             </ComboBox>
-                            <Button Height="23" HorizontalAlignment="Left" Margin="10,22,0,0" Name="ButTrace" TabIndex="28" VerticalAlignment="Top" Width="152" Click="butTrace_Click">Samples traces</Button>
-                            <Label FontFamily="Microsoft Sans Serif" FontSize="11" Height="26.25" Margin="231,10,0,0" Name="Label7" TabIndex="39" VerticalAlignment="Top" HorizontalAlignment="Left" Width="298.821">Samples traces options :</Label>
+                            <RadioButton x:Name="UseWorkerThread" Content="Use Worker thread" Margin="10,99,580,63" IsChecked="True" Checked="UseWorkerThread_Checked"/>
+                            <RadioButton x:Name="UseAsync" Content="Async" Margin="10,119,643,40" Checked="UseAsync_Checked"/>
+
+
                         </Grid>
                     </GroupBox>
-                    <Button Height="23" Margin="347.515,188.87,296.485,0" Name="ButSearch" VerticalAlignment="Top" Click="butSearch_Click">Search</Button>
-                    <Button Height="23" Margin="454,188.87,0,0" Name="ButFilter" VerticalAlignment="Top" HorizontalAlignment="Left" Width="74.654" Click="butFilter_Click">Filter</Button>
-                    <Button Height="23" Margin="0,188.87,85,0" Name="ButClearFilter" VerticalAlignment="Top" HorizontalAlignment="Right" Width="74.654" Click="butClearFilter_Click">Clear Filter</Button>
+                    <Button Height="23" Margin="345,233,299,0" Name="ButSearch" VerticalAlignment="Top" Click="butSearch_Click">Search</Button>
+                    <Button Height="23" Margin="451,233,0,0" Name="ButFilter" VerticalAlignment="Top" HorizontalAlignment="Left" Width="75" Click="butFilter_Click">Filter</Button>
+                    <Button Height="23" Margin="0,233,88,0" Name="ButClearFilter" VerticalAlignment="Top" HorizontalAlignment="Right" Width="75" Click="butClearFilter_Click">Clear Filter</Button>
                 </Grid>
             </TabItem>
             <TabItem Header="Other Traces" x:Name="TabOthers">
