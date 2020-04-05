@@ -433,8 +433,18 @@ namespace TraceTool
             {                // SendMode
                 if (paramValue.ToLower().CompareTo("socket") == 0)
                     Options.SendMode = SendMode.Socket;
+                else if (paramValue.ToLower().CompareTo("websocket") == 0)
+                    Options.SendMode = SendMode.WebSocket;
                 else if (paramValue.ToLower().CompareTo("none") == 0)
                     Options.SendMode = SendMode.None;
+                // else keep 
+            }
+            else if (paramName.CompareTo("useworkerthread") == 0)
+            {       // bool UseWorkerThread
+                if (paramValue.ToLower().CompareTo("true") == 0)
+                    Options.UseWorkerThread = true;
+                else if (paramValue.ToLower().CompareTo("false") == 0)
+                    Options.UseWorkerThread = false;
             }
             else if (paramName.CompareTo("sockethost") == 0)
             {       // string SocketHost
@@ -462,7 +472,6 @@ namespace TraceTool
                     Options.ObjectTreeDepth = 3;
                 }
             }
-
             else if (paramName.CompareTo("sendmodifiers") == 0)           // 1
             {
                 if (paramValue.ToLower().CompareTo("true") == 0)
