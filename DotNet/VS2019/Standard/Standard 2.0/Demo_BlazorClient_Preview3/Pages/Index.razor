@@ -1,0 +1,41 @@
+﻿@page "/"
+
+@using TraceTool
+
+<h1>tracetool demo</h1>
+
+<button class="btn btn-primary" @onclick="SimpleTraces">trace tool with flush</button>
+<button class="btn btn-primary" @onclick="CloseSock">close sockets</button>
+
+@code {
+
+    protected override void OnInitialized()
+    {
+        TTrace.Options.SendMode = SendMode.WebSocket;
+        TTrace.Options.UseWorkerThread = false; // blazor is single thread. Set to false to use Async communication
+        TTrace.Options.SocketHost = "127.0.0.1";
+        TTrace.Options.SocketPort = 8091;
+    }
+
+    private async void SimpleTraces()
+    {
+
+        TTrace.ClearAll();
+        TTrace.Show(true);
+        TTrace.Debug.Send($"trace from blazor ", TTrace.Debug.GetType().Assembly.Location);
+        TTrace.Debug.Send($"Current time : {DateTime.Now} (Preview always return UTC time)");
+        TTrace.Debug.SendValue("Value", TTrace.Debug);
+        TTrace.Debug.SendObject("Object", TTrace.Debug);
+        for (int i = 0; i < 100; i++)
+            TTrace.Debug.Send($"{i}");
+
+        await TTrace.FlushAsync();   // give thread to the browser and wait for all message send
+        TTrace.Debug.Send($"done").Show();
+    }
+
+    private void CloseSock()
+    {
+        TTrace.CloseSocket();
+    }
+
+}
