@@ -1,6 +1,0 @@
-create a new virtual folder :
-1) Alias : AspTraces
-2) Directory : Where is the tracetool vs2003 demo , for example D:\TraceTool\DotNet\VS2003\Asp.Net\
-3) properties/Directory Security/
-   Anonymous access and authentication methods for this resources. click Edit.
-   Ckeck the "intergrated Windows authentication" checkbox
