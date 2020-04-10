@@ -25,7 +25,7 @@
 // 12.8.5 : 2016 10 05 : stack trace display the class of the method. Modifier is removed (public static,...)
 // 12.9   : 2017 11 03 : Add conditional compilation for Dot Net Standard (1.6)
 // 12.9   : 2017 11 06 : Add conditional compilation for Dot Net Standard (2.0)
-// 13.0   : 2020 04 05 : Add WebSocket mode, add Async mode, remove Silverlight
+// 13.0   : 2020 04 05 : Add WebSocket mode, add Async mode, remove pocket pc, Silverlight, upgrade dot net framework 4.7.1
 
 using System.Text;
 using System;
@@ -33,15 +33,12 @@ using System.Collections.Generic;
 
 #if !NETSTANDARD1_6  
 using System.Runtime.InteropServices;
+using System.Net.WebSockets;
 #endif
 
 #if !NETSTANDARD1_6 && !NETSTANDARD2_0  
 using System.Configuration;
 using System.Diagnostics ;                // Process
-#endif
-
-#if NETSTANDARD1_6
-using System.Threading.Tasks;
 #endif
 
 #if !NETSTANDARD2_0  
@@ -51,7 +48,6 @@ using System.Reflection ;
 using System.Threading;                  // thead pool, ResetEvent
 using System.Net;
 using System.Net.Sockets;
-using System.Net.WebSockets;
 using System.IO;                         // file exist
 using System.Xml;
 using System.Threading.Tasks;
@@ -109,11 +105,15 @@ namespace TraceTool
         private static byte[] _buffToSend;  // buffer to send to viewer
 
         private static Socket _socket;                       // Normal socket
-        private static ClientWebSocket webSocketClient;     // Web socket
         private static bool isAsyncRunning = false;  // indicate if SendToViewerAsync is waiting connections or sending to viewer (await)
         private static bool _isSocketError;
 
         private static TextWriter _writterOut;
+
+#if !NETSTANDARD1_6
+        private static ClientWebSocket webSocketClient;     // Web socket
+#endif
+
 
 #if NETSTANDARD1_6
         // no udp for NETSTANDARD1_6. You need to switch to NETSTANDARD2_0
@@ -155,7 +155,6 @@ namespace TraceTool
 
             //_traceThread = new Thread(SendThreadEntryPoint); //  new Thread(SendThreadEntryPoint);
             //// force the thread to be killed when all foreground thread are terminated.
-            //// compatibility : don't work on compact framework 1. Work on all platform.
             //_traceThread.IsBackground = true;  
             //_traceThread.Start();
 
@@ -174,7 +173,7 @@ namespace TraceTool
                 Options.SocketHost = "127.0.0.1";
 
                 // 1) check the existence of the App.exe.Config file (with "exe" extension) using classic framework
-                //    no API for that in compact framework or dot Net Standard
+                //    no API for that in dot Net Standard
 
                 // 2) check the existence of the MyProg.config file (without "exe" or similar extension !)
                 configFile = Helper.GetCurrentProcessName() + ".config";
@@ -652,6 +651,7 @@ namespace TraceTool
                 _socket = null;
             }
 
+#if !NETSTANDARD1_6
             if (Options.SendMode == SendMode.WebSocket && webSocketClient != null && webSocketClient.State == WebSocketState.Open)
             {
                 var timeout = new CancellationTokenSource(10000); // MS, 10 sec
@@ -667,6 +667,7 @@ namespace TraceTool
                 //cancellationTocket ?
 
             }
+#endif
         }
 
         //------------------------------------------------------------------------------
@@ -839,7 +840,6 @@ namespace TraceTool
                         _traceThread = new Thread(SendToViewerThread);
 
                         // force the thread to be killed when all foreground thread are terminated.
-                        // compatibility : don't work on compact framework 1. Work on all platform.
                         _traceThread.IsBackground = true;
                         _traceThread.Start();
                     }
@@ -952,7 +952,7 @@ namespace TraceTool
                         {
 #if NETSTANDARD1_6  // only socket
                             if (Options.SendMode == SendMode.Socket)
-                                SendToSocket(sb);
+                                SendToSocketSync(sb);
 #else
 
                             // Sync mode (thread)
@@ -1091,30 +1091,27 @@ namespace TraceTool
 
                         try
                         {
-#if NETSTANDARD1_6 // compact framework : only socket
-                            if (Options.SendMode == SendMode.Socket)
-                                SendToSocket(sb);
-#else
-
                             // Async mode 
+#if !NETSTANDARD1_6 
 
                             if (Options.SendMode == SendMode.WinMsg)
                             {
                                 SendToWindowsSync(sb);   // no need for Async 
-                            }
-                            else if (Options.SendMode == SendMode.Socket)
-                            {
-                                await SendToSocketAsync(sb);
-                                //Console.WriteLine($"{DateTime.Now.ToString("hh:mm:ss.fff")} SendToSocketAsync done");                  
                             }
                             else if (Options.SendMode == SendMode.WebSocket)
                             {
                                 await SendToWebSocketAsync(sb);
                                 //Console.WriteLine($"{DateTime.Now.ToString("hh:mm:ss.fff")} SendToWebSocketAsync done");                  
                             }
-                            // else no transport
-                            // else no transport
+                            else 
 #endif
+                            if (Options.SendMode == SendMode.Socket)
+                            {
+                                await SendToSocketAsync(sb);
+                                //Console.WriteLine($"{DateTime.Now.ToString("hh:mm:ss.fff")} SendToSocketAsync done");                  
+                            }
+                            // else no transport
+                            // else no transport
                         }
                         catch (Exception ex)
                         {
@@ -1144,6 +1141,7 @@ namespace TraceTool
                 _socket = null; // auto close connection
 
             // Also done in CloseSocket
+#if !NETSTANDARD1_6
             if (Options.SendMode == SendMode.WebSocket && webSocketClient != null)
             {
                 //Console.WriteLine($"{DateTime.Now.ToString("hh:mm:ss.fff")} Closing websocket");
@@ -1157,9 +1155,11 @@ namespace TraceTool
                 webSocketClient = null; // auto close connection
                 //cancellationTocket ?
             }
+#endif
         }  // async task function
 
         //------------------------------------------------------------------------------
+#if !NETSTANDARD1_6
         internal static void SendToWebSocketSync(StringBuilder message)
         {
             if (_isSocketError)
@@ -1289,8 +1289,10 @@ namespace TraceTool
                 _lastError = ex.Message;         // for debug purpose
             }
         }
+#endif
 
         //------------------------------------------------------------------------------
+        /// flush remaining traces to the viewer
 
         public static async Task FlushAsync()
         {
@@ -1490,7 +1492,7 @@ namespace TraceTool
                 Task<IPHostEntry> hostEntryTask = Dns.GetHostEntryAsync(Options.SocketHost);  
                 Task.WaitAll(hostEntryTask) ;
                 IPHostEntry hostEntry =  hostEntryTask.Result ;
-#else // NETF2 or more or standard 2
+#else // NETF45 or more or standard 2
                 IPHostEntry hostEntry = Dns.GetHostEntry(Options.SocketHost);
 #endif
                 // Don't get the first adress. It's perhaps a IPv6 adress.

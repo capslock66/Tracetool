@@ -629,7 +629,6 @@ namespace TraceTool
         {
             try
             {
-                // for compact framework compatibility, the first argument is not passed as an XPathNavigator object
                 XPathNavigator documentationNav = (XPathNavigator)documentation;
                 if (documentationNav != null)
                 {
