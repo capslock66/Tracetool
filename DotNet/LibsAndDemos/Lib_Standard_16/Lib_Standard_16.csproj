@@ -1,0 +1,44 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard1.6</TargetFramework>
+    <AssemblyName>TraceTool</AssemblyName>
+    <RootNamespace>TraceTool</RootNamespace>
+    <Version>12.9.0</Version>
+    <Product>TraceTool library</Product>
+    <Authors>Thierry Parent</Authors>
+    <Company />
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DefineConstants>TRACE;NETF2;NETF3;RELEASE;NETSTANDARD1_6</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DefineConstants>TRACE;DEBUG;NETF2;NETF3;NETSTANDARD1_6</DefineConstants>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="..\..\CSharp Source\Helper.cs" Link="Helper.cs" />
+    <Compile Include="..\..\CSharp Source\member.cs" Link="member.cs" />
+    <Compile Include="..\..\CSharp Source\reflection.cs" Link="reflection.cs" />
+    <Compile Include="..\..\CSharp Source\TraceNode.cs" Link="TraceNode.cs" />
+    <Compile Include="..\..\CSharp Source\TraceNodeBase.cs" Link="TraceNodeBase.cs" />
+    <Compile Include="..\..\CSharp Source\TraceNodeEx.cs" Link="TraceNodeEx.cs" />
+    <Compile Include="..\..\CSharp Source\TraceTable.cs" Link="TraceTable.cs" />
+    <Compile Include="..\..\CSharp Source\TraceToSend.cs" Link="TraceToSend.cs" />
+    <Compile Include="..\..\CSharp Source\TTrace.cs" Link="TTrace.cs" />
+    <Compile Include="..\..\CSharp Source\WinTrace.cs" Link="WinTrace.cs" />
+    <Compile Include="..\..\CSharp Source\WinWatch.cs" Link="WinWatch.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="System.Diagnostics.Process" Version="4.3.0" />
+    <PackageReference Include="System.Diagnostics.StackTrace" Version="4.3.0" />
+    <PackageReference Include="System.Net.NameResolution" Version="4.3.0" />
+    <PackageReference Include="System.Threading.Thread" Version="4.3.0" />
+    <PackageReference Include="System.Xml.XmlDocument" Version="4.3.0" />
+    <PackageReference Include="System.Xml.XPath" Version="4.3.0" />
+  </ItemGroup>
+
+</Project>
