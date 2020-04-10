@@ -9,13 +9,6 @@
 // See License.txt for license information
 
 
-//using System.Runtime.InteropServices;     // for DDL import
-//using Microsoft.Win32 ;                   // registry
-//using System.IO ;                         // file exist
-//using System.Threading ;                  // thread pool, ResetEvent
-//using System.Net;
-//using System.Net.Sockets;
-
 // ReSharper disable ClassNeverInstantiated.Global
 // ReSharper disable ConvertIfStatementToNullCoalescingExpression
 // ReSharper disable ConvertIfStatementToConditionalTernaryExpression

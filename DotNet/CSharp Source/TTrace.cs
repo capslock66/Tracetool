@@ -36,13 +36,14 @@ using System.Runtime.InteropServices;
 using System.Net.WebSockets;
 #endif
 
-#if !NETSTANDARD1_6 && !NETSTANDARD2_0  
+#if NETFULL 
 using System.Configuration;
 using System.Diagnostics ;                // Process
+using Microsoft.Win32;                   // registry
 #endif
 
-#if !NETSTANDARD2_0  
-using System.Reflection ;
+#if NETSTANDARD1_6 || NETFULL  
+using System.Reflection;  // Type.GetTypeInfo (NETSTANDARD1_6) , Type.Assembly (NETFULL). Not needed in NETSTANDARD2
 #endif
 
 using System.Threading;                  // thead pool, ResetEvent
@@ -52,11 +53,6 @@ using System.IO;                         // file exist
 using System.Xml;
 using System.Threading.Tasks;
 
-//using System.Collections.Generic;
-
-#if !NETSTANDARD1_6 && !NETSTANDARD2_0
-using Microsoft.Win32 ;                   // registry
-#endif
 
 // ReSharper disable ClassNeverInstantiated.Global
 // ReSharper disable ConvertIfStatementToNullCoalescingExpression
@@ -188,7 +184,7 @@ namespace TraceTool
                 // 4) check the existence of tracetool.dll.TraceTool file
 #if NETSTANDARD1_6
                 configFile = typeof(TTrace).GetTypeInfo().Assembly.ToString();
-#else //2.0
+#else // NETFULL or NETSTANDARD1_6
                 configFile = typeof(TTrace).Module.ToString();
 #endif
                 configFile = configFile + ".TraceTool";
@@ -204,11 +200,7 @@ namespace TraceTool
                 XmlNode config;
 
                 // 1) check the existence of the App.exe.Config file (with "exe" extension) using classic framework API
-#if NETF2
                 config = (XmlNode) ConfigurationManager.GetSection("TraceTool");
-#else
-                config = (XmlNode) System.Configuration.ConfigurationSettings.GetConfig("TraceTool") ;
-#endif
 
                 if (config != null) {
                    //Debug.Send ("App.Config file exist") ;
@@ -1492,7 +1484,7 @@ namespace TraceTool
                 Task<IPHostEntry> hostEntryTask = Dns.GetHostEntryAsync(Options.SocketHost);  
                 Task.WaitAll(hostEntryTask) ;
                 IPHostEntry hostEntry =  hostEntryTask.Result ;
-#else // NETF45 or more or standard 2
+#else // NETFULL or standard 2
                 IPHostEntry hostEntry = Dns.GetHostEntry(Options.SocketHost);
 #endif
                 // Don't get the first adress. It's perhaps a IPv6 adress.
@@ -1604,7 +1596,7 @@ namespace TraceTool
                 Task<IPHostEntry> hostEntryTask = Dns.GetHostEntryAsync(Options.SocketHost);  
                 Task.WaitAll(hostEntryTask) ;
                 IPHostEntry hostEntry =  hostEntryTask.Result ;
-#else // NETF2 or more or standard 2
+#else // NETFULL or standard 2
                 IPHostEntry hostEntry = Dns.GetHostEntry(Options.SocketHost);
 #endif
                 // Don't get the first adress. It's perhaps a IPv6 adress.

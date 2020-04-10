@@ -14,21 +14,15 @@ using System.Reflection;
 using System.Diagnostics;  // Process
 using System.Collections;  // ArrayList, queue
 
-#if !NETSTANDARD1_6 && !NETSTANDARD2_0
+#if NETFULL
 using System.Drawing.Imaging;
 using System.IO;           // streams
+using System.Windows.Markup.Primitives;   // dependency properties.  Assembly : PresentationFramework
+using System.Windows.Media.Imaging;
 #endif
 
 using System.Xml.XPath;
 using System.Collections.Generic;
-
-#if NETF3 && !NETSTANDARD1_6 && !NETSTANDARD2_0
-using System.Windows.Markup.Primitives;   // dependency properties.  Assembly : PresentationFramework
-#endif
-
-#if NETF3 && !NETSTANDARD1_6  && !NETSTANDARD2_0
-using System.Windows.Media.Imaging;
-#endif
 
 // ReSharper disable ClassNeverInstantiated.Global
 // ReSharper disable ConvertIfStatementToNullCoalescingExpression
@@ -1135,36 +1129,36 @@ namespace TraceTool
         internal Dictionary<string, TMemberNode> GetDependencyPropertiesValues(Object objToSend)
         {
             Dictionary<string, TMemberNode> result = new Dictionary<string, TMemberNode>();
-#if NETF3 && !NETSTANDARD1_6 && !NETSTANDARD2_0
-          try
-          {
-              MarkupObject markupObject = MarkupWriter.GetMarkupObjectFor(objToSend);
-              int nameErrorCount = 0 ;
-              foreach (MarkupProperty mp in markupObject.Properties)
-              {
-                  if (mp.DependencyProperty == null)
-                        continue ;
-                  string strTypeName = "" ;
-                  if (TTrace.Options.SendTypeWithValue)
-                  {
-                      strTypeName = ReflectionHelper.Type2ShortString(mp.PropertyType);
-                      if (mp.IsAttached)
-                          strTypeName += " [attached]";
-                  } 
-                  string mpName ;
-                  string mpStringValue ;
-                  
-                  try {mpName = mp.DependencyProperty.Name;} catch (Exception){mpName="?" + nameErrorCount++;}
-                  try {mpStringValue = mp.StringValue;} catch (Exception){mpStringValue="?";}
+#if NETFULL && !NETSTANDARD1_6 && !NETSTANDARD2_0
+            try
+            {
+                MarkupObject markupObject = MarkupWriter.GetMarkupObjectFor(objToSend);
+                int nameErrorCount = 0;
+                foreach (MarkupProperty mp in markupObject.Properties)
+                {
+                    if (mp.DependencyProperty == null)
+                        continue;
+                    string strTypeName = "";
+                    if (TTrace.Options.SendTypeWithValue)
+                    {
+                        strTypeName = ReflectionHelper.Type2ShortString(mp.PropertyType);
+                        if (mp.IsAttached)
+                            strTypeName += " [attached]";
+                    }
+                    string mpName;
+                    string mpStringValue;
 
-                  TMemberNode fieldNode = new TMemberNode(mpName, mpStringValue, strTypeName);
-                  result.Add(mpName, fieldNode);
-              }
-          }
-          catch (Exception )
-          {
+                    try { mpName = mp.DependencyProperty.Name; } catch (Exception) { mpName = "?" + nameErrorCount++; }
+                    try { mpStringValue = mp.StringValue; } catch (Exception) { mpStringValue = "?"; }
+
+                    TMemberNode fieldNode = new TMemberNode(mpName, mpStringValue, strTypeName);
+                    result.Add(mpName, fieldNode);
+                }
+            }
+            catch (Exception)
+            {
                 // eat exception
-          }
+            }
 #endif
             return result;
         }
@@ -1497,40 +1491,40 @@ namespace TraceTool
         {
             try
             {
-#if NETF3 && !NETSTANDARD1_6 && !NETSTANDARD2_0
-              if (objToSend == null)
-                  return;
+#if NETFULL && !NETSTANDARD1_6 && !NETSTANDARD2_0
+                if (objToSend == null)
+                    return;
 
-              MarkupObject markupObject = MarkupWriter.GetMarkupObjectFor(objToSend);
-              
-              TMemberNode propertiesGroup = null;
-              foreach (MarkupProperty mp in markupObject.Properties)
-              {
-                  if (mp.DependencyProperty == null)
-                      continue ;
-                  TMemberNode fieldNode;
+                MarkupObject markupObject = MarkupWriter.GetMarkupObjectFor(objToSend);
 
-                  if (propertiesGroup == null)
-                  {
-                      propertiesGroup = new TMemberNode("Dependency Properties").SetFontDetail(0, true);
-                      propertiesGroup.ViewerKind = TraceConst.CST_VIEWER_OBJECT;
-                      Members.Add(propertiesGroup);
-                  }
+                TMemberNode propertiesGroup = null;
+                foreach (MarkupProperty mp in markupObject.Properties)
+                {
+                    if (mp.DependencyProperty == null)
+                        continue;
+                    TMemberNode fieldNode;
 
-                  string mpName ;
-                  string mpStringValue ;
-                  string strTypeName = ReflectionHelper.Type2ShortString(mp.PropertyType);
+                    if (propertiesGroup == null)
+                    {
+                        propertiesGroup = new TMemberNode("Dependency Properties").SetFontDetail(0, true);
+                        propertiesGroup.ViewerKind = TraceConst.CST_VIEWER_OBJECT;
+                        Members.Add(propertiesGroup);
+                    }
 
-                  try {mpName = mp.Name;} catch (Exception){mpName="?";}
-                  try {mpStringValue = mp.StringValue;} catch (Exception){mpStringValue="?";}
+                    string mpName;
+                    string mpStringValue;
+                    string strTypeName = ReflectionHelper.Type2ShortString(mp.PropertyType);
+
+                    try { mpName = mp.Name; } catch (Exception) { mpName = "?"; }
+                    try { mpStringValue = mp.StringValue; } catch (Exception) { mpStringValue = "?"; }
 
 
-                  if (mp.IsAttached)
-                      fieldNode = new TMemberNode(mpName, mpStringValue, strTypeName + "[attached]");
-                  else
-                      fieldNode = new TMemberNode(mpName, mpStringValue, strTypeName);
-                  propertiesGroup.Add(fieldNode);
-              }
+                    if (mp.IsAttached)
+                        fieldNode = new TMemberNode(mpName, mpStringValue, strTypeName + "[attached]");
+                    else
+                        fieldNode = new TMemberNode(mpName, mpStringValue, strTypeName);
+                    propertiesGroup.Add(fieldNode);
+                }
 #endif
             }
             catch (Exception e)
@@ -2085,93 +2079,93 @@ namespace TraceTool
         //------------------------------------------------------------------------------
 
 #if !NETSTANDARD1_6 && !NETSTANDARD2_0
-      /// <summary>
-      /// Add a bitmap
-      /// </summary>
-      /// <param name="image">The Image</param>
-      public void AddBitmap(System.Drawing.Image image)
-      {
-         if (Enabled == false)
-            return;
+        /// <summary>
+        /// Add a bitmap
+        /// </summary>
+        /// <param name="image">The Image</param>
+        public void AddBitmap(System.Drawing.Image image)
+        {
+            if (Enabled == false)
+                return;
 
-          try
-          {
-              // 1) put the image into a stream
-              MemoryStream imgStream = new MemoryStream();
-              image.Save(imgStream, ImageFormat.Bmp);
-              imgStream.Position = 0;
+            try
+            {
+                // 1) put the image into a stream
+                MemoryStream imgStream = new MemoryStream();
+                image.Save(imgStream, ImageFormat.Bmp);
+                imgStream.Position = 0;
 
-              // 2) create a byte array from the stream
-              int sourceLength = (int)imgStream.Length;
-              byte[] sourceData = new byte[sourceLength];
-              imgStream.Read(sourceData, 0, sourceLength);
-              imgStream.Close();
+                // 2) create a byte array from the stream
+                int sourceLength = (int)imgStream.Length;
+                byte[] sourceData = new byte[sourceLength];
+                imgStream.Read(sourceData, 0, sourceLength);
+                imgStream.Close();
 
-              // 3) encode (base 64) source array into another array
-              char[] base64Data = new char[(int)(Math.Ceiling((double)sourceLength / 3) * 4)];
-              Convert.ToBase64CharArray(sourceData, 0, sourceLength, base64Data, 0);
+                // 3) encode (base 64) source array into another array
+                char[] base64Data = new char[(int)(Math.Ceiling((double)sourceLength / 3) * 4)];
+                Convert.ToBase64CharArray(sourceData, 0, sourceLength, base64Data, 0);
 
-              // 4) attach the encoded array to a new member. the member vierwer kind specify a bitmap viewer
-              TMemberNode member = Members.Add(new String(base64Data));
-              member.ViewerKind = TraceConst.CST_VIEWER_BITMAP;
-          }
-          catch (Exception e)
-          {
-              Members.Add("AddBitmap threw an exception of type " + e.GetType());
-          }
+                // 4) attach the encoded array to a new member. the member vierwer kind specify a bitmap viewer
+                TMemberNode member = Members.Add(new String(base64Data));
+                member.ViewerKind = TraceConst.CST_VIEWER_BITMAP;
+            }
+            catch (Exception e)
+            {
+                Members.Add("AddBitmap threw an exception of type " + e.GetType());
+            }
 
-      }
+        }
 #endif
 
         //------------------------------------------------------------------------------
 
-#if NETF3 && !NETSTANDARD1_6 && !NETSTANDARD2_0
-      /// <summary>
-      /// Add a bitmap
-      /// </summary>
-      /// <param name="image">The Image</param>
-      public void AddBitmap(System.Windows.Controls.Image image)
-      {
-         if (Enabled == false)
-            return;
+#if NETFULL && !NETSTANDARD1_6 && !NETSTANDARD2_0
+        /// <summary>
+        /// Add a bitmap
+        /// </summary>
+        /// <param name="image">The Image</param>
+        public void AddBitmap(System.Windows.Controls.Image image)
+        {
+            if (Enabled == false)
+                return;
 
-          try
-          {
-              BmpBitmapEncoder encoder = new BmpBitmapEncoder();
-              BitmapSource source = image.Source as BitmapSource ;
-              if (source != null)
-              {
-                  BitmapFrame bitmapFrame = BitmapFrame.Create(source);
-                  encoder.Frames.Add(bitmapFrame);
-              }
+            try
+            {
+                BmpBitmapEncoder encoder = new BmpBitmapEncoder();
+                BitmapSource source = image.Source as BitmapSource;
+                if (source != null)
+                {
+                    BitmapFrame bitmapFrame = BitmapFrame.Create(source);
+                    encoder.Frames.Add(bitmapFrame);
+                }
 
-              // 1) put the image into a stream
-              MemoryStream imgStream = new MemoryStream();
+                // 1) put the image into a stream
+                MemoryStream imgStream = new MemoryStream();
 
-              encoder.Save(imgStream);
+                encoder.Save(imgStream);
 
-              ////////image.Save(imgStream, System.Drawing.Imaging.ImageFormat.Bmp);
-              imgStream.Position = 0;
+                ////////image.Save(imgStream, System.Drawing.Imaging.ImageFormat.Bmp);
+                imgStream.Position = 0;
 
-              // 2) create a byte array from the stream
-              int sourceLength = (int)imgStream.Length;
-              byte[] sourceData = new byte[sourceLength];
-              imgStream.Read(sourceData, 0, sourceLength);
-              imgStream.Close();
+                // 2) create a byte array from the stream
+                int sourceLength = (int)imgStream.Length;
+                byte[] sourceData = new byte[sourceLength];
+                imgStream.Read(sourceData, 0, sourceLength);
+                imgStream.Close();
 
-              // 3) encode (base 64) source array into another array
-              char[] base64Data = new char[(int)(Math.Ceiling((double)sourceLength / 3) * 4)];
-              Convert.ToBase64CharArray(sourceData, 0, sourceLength, base64Data, 0);
+                // 3) encode (base 64) source array into another array
+                char[] base64Data = new char[(int)(Math.Ceiling((double)sourceLength / 3) * 4)];
+                Convert.ToBase64CharArray(sourceData, 0, sourceLength, base64Data, 0);
 
-              // 4) attach the encoded array to a new member. the member vierwer kind specify a bitmap viewer
-              TMemberNode member = Members.Add(new String(base64Data));
-              member.ViewerKind = TraceConst.CST_VIEWER_BITMAP;
-          }
-          catch (Exception e)
-          {
-              Members.Add("AddBitmap threw an exception of type " + e.GetType());
-          }
-      }
+                // 4) attach the encoded array to a new member. the member vierwer kind specify a bitmap viewer
+                TMemberNode member = Members.Add(new String(base64Data));
+                member.ViewerKind = TraceConst.CST_VIEWER_BITMAP;
+            }
+            catch (Exception e)
+            {
+                Members.Add("AddBitmap threw an exception of type " + e.GetType());
+            }
+        }
 #endif
 
         /// <summary>
@@ -2404,28 +2398,28 @@ namespace TraceTool
             // add Dependency Properties
             //--------------------------
 
-#if NETF3 && !NETSTANDARD1_6 && !NETSTANDARD2_0
-         bool hasDependencyproperties = false;
-         MarkupObject markupObject = MarkupWriter.GetMarkupObjectFor(itemObject);
-         
-         string allProperties = "";
-         foreach (MarkupProperty mp in markupObject.Properties)
-         {
-            if (mp.DependencyProperty == null)
-                 continue ;
-            string nameAndValue = mp.Name + "=" + mp.StringValue;
-            if (allProperties == "")
-               allProperties = nameAndValue;
+#if NETFULL && !NETSTANDARD1_6 && !NETSTANDARD2_0
+            bool hasDependencyproperties = false;
+            MarkupObject markupObject = MarkupWriter.GetMarkupObjectFor(itemObject);
+
+            string allProperties = "";
+            foreach (MarkupProperty mp in markupObject.Properties)
+            {
+                if (mp.DependencyProperty == null)
+                    continue;
+                string nameAndValue = mp.Name + "=" + mp.StringValue;
+                if (allProperties == "")
+                    allProperties = nameAndValue;
+                else
+                    allProperties += ", " + nameAndValue;
+                hasDependencyproperties = true;
+            }
+            if (isFirstCol)
+                fCurrentRow.Col1 = allProperties;
             else
-               allProperties += ", " + nameAndValue;
-            hasDependencyproperties = true;
-         }
-         if (isFirstCol) 
-            fCurrentRow.Col1 = allProperties;
-         else
-            fCurrentRow.Col1 = fCurrentRow.Col1 + "\t" + allProperties;
-         //isFirstCol = false ;
-         return hasDependencyproperties;
+                fCurrentRow.Col1 = fCurrentRow.Col1 + "\t" + allProperties;
+            //isFirstCol = false ;
+            return hasDependencyproperties;
 #else
             return false;
 #endif

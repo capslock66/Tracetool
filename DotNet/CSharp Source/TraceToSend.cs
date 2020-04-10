@@ -350,49 +350,49 @@ namespace TraceTool
 
 #if !NETSTANDARD1_6 && !NETSTANDARD2_0
 
-      /// <summary>
-      /// Send a bitmap
-      /// </summary>
-      /// <param name="leftMsg">Trace message</param>
-      /// <param name="image">The Image</param>
-      /// <returns>the new node</returns>
-      public TraceNode SendBitmap(string leftMsg, System.Drawing.Image image)
-      {
-         if (Enabled == false)
-            return new TraceNode(this);
+        /// <summary>
+        /// Send a bitmap
+        /// </summary>
+        /// <param name="leftMsg">Trace message</param>
+        /// <param name="image">The Image</param>
+        /// <returns>the new node</returns>
+        public TraceNode SendBitmap(string leftMsg, System.Drawing.Image image)
+        {
+            if (Enabled == false)
+                return new TraceNode(this);
 
-         TraceNodeEx result = new TraceNodeEx(this, true);  // create a node with same properties as "this" with new ID
-         List<string> commandList = PrepareNewNode(leftMsg, result.Id);
+            TraceNodeEx result = new TraceNodeEx(this, true);  // create a node with same properties as "this" with new ID
+            List<string> commandList = PrepareNewNode(leftMsg, result.Id);
 
-         result.AddBitmap(image);
-         result.Members.AddToStringList(commandList); // convert all groups and nested items/group to strings
+            result.AddBitmap(image);
+            result.Members.AddToStringList(commandList); // convert all groups and nested items/group to strings
 
-         TTrace.SendToWinTraceClient(commandList, WinTraceId);
-         return new TraceNode(result);
-      }
+            TTrace.SendToWinTraceClient(commandList, WinTraceId);
+            return new TraceNode(result);
+        }
 #endif
 
-#if NETF3 && !NETSTANDARD1_6 && !NETSTANDARD2_0
-      /// <summary>
-      /// Send a bitmap
-      /// </summary>
-      /// <param name="leftMsg">Trace message</param>
-      /// <param name="image">The Image</param>
-      /// <returns>the new node</returns>
-      public TraceNode SendBitmap(string leftMsg, System.Windows.Controls.Image image)
-      {
-         if (Enabled == false)
-            return new TraceNode(this);
+#if NETFULL 
+        /// <summary>
+        /// Send a bitmap
+        /// </summary>
+        /// <param name="leftMsg">Trace message</param>
+        /// <param name="image">The Image</param>
+        /// <returns>the new node</returns>
+        public TraceNode SendBitmap(string leftMsg, System.Windows.Controls.Image image)
+        {
+            if (Enabled == false)
+                return new TraceNode(this);
 
-         TraceNodeEx result = new TraceNodeEx(this, true);  // create a node with same properties as "this" with new ID
-         List<string> commandList = PrepareNewNode(leftMsg, result.Id);
+            TraceNodeEx result = new TraceNodeEx(this, true);  // create a node with same properties as "this" with new ID
+            List<string> commandList = PrepareNewNode(leftMsg, result.Id);
 
-         result.AddBitmap(image);
-         result.Members.AddToStringList(commandList); // convert all groups and nested items/group to strings
+            result.AddBitmap(image);
+            result.Members.AddToStringList(commandList); // convert all groups and nested items/group to strings
 
-         TTrace.SendToWinTraceClient(commandList, WinTraceId);
-         return new TraceNode(result);
-      }
+            TTrace.SendToWinTraceClient(commandList, WinTraceId);
+            return new TraceNode(result);
+        }
 
 #endif
 
