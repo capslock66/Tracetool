@@ -87,7 +87,6 @@ namespace TraceTool
 
         private static readonly AutoResetEvent DataReady;     // data is ready to send
         private static readonly ManualResetEvent StopEvent;
-        private static readonly CancellationTokenSource cancellationTocket;
 
         private static readonly Dictionary<String, Object> FlushList;    // TaskCompletionSource<string> flush list
         private static readonly InternalWinTrace DefaultWinTrace;
@@ -107,6 +106,7 @@ namespace TraceTool
         private static TextWriter _writterOut;
 
 #if !NETSTANDARD1_6
+        private static readonly CancellationTokenSource cancellationTocket;
         private static ClientWebSocket webSocketClient;     // Web socket
 #endif
 
@@ -147,8 +147,9 @@ namespace TraceTool
             // create the lock system and the thread
             DataReady = new AutoResetEvent(false);  // initial state false
             StopEvent = new ManualResetEvent(false);   // ask the thread to quit
+#if !NETSTANDARD1_6
             cancellationTocket = new CancellationTokenSource();
-
+#endif
             //_traceThread = new Thread(SendThreadEntryPoint); //  new Thread(SendThreadEntryPoint);
             //// force the thread to be killed when all foreground thread are terminated.
             //_traceThread.IsBackground = true;  
@@ -187,7 +188,7 @@ namespace TraceTool
 #else // NETFULL or NETSTANDARD1_6
                 configFile = typeof(TTrace).Module.ToString();
 #endif
-                configFile = configFile + ".TraceTool";
+                configFile += ".TraceTool";
                 if (GetConfigFomFile(configFile))
                     return;
 
@@ -222,7 +223,7 @@ namespace TraceTool
                 // 4) check the existence of tracetool.dll.TraceTool file
                 Assembly asm = typeof(TTrace).Assembly;
                 configFile = asm.Location;                  // Bin/Debug/tracetool.dll
-                configFile = configFile + ".TraceTool";     // Bin/Debug/tracetool.dll.TraceTool
+                configFile += ".TraceTool";     // Bin/Debug/tracetool.dll.TraceTool
                 if (GetConfigFomFile(configFile))
                    return;
 
@@ -321,9 +322,7 @@ namespace TraceTool
                     if (tagName.CompareTo("param") == 0)
                     {
                         // get the name and value attributes
-                        string paramName;
-                        string paramValue;
-                        GetParamNameAndValue(node, out paramName, out paramValue);
+                        GetParamNameAndValue(node, out string paramName, out string paramValue);
                         InitOptions(paramName, paramValue);
                     }
                     else if (tagName.CompareTo("debug") == 0)
@@ -376,9 +375,7 @@ namespace TraceTool
                 if (tagName.CompareTo("param") == 0)
                 {
                     // get the name and value attributes
-                    string paramName;
-                    string paramValue;
-                    GetParamNameAndValue(node, out paramName, out paramValue);
+                    GetParamNameAndValue(node, out string paramName, out string paramValue);
 
                     if (paramName.CompareTo("enabled") == 0)
                     {                // bool Enabled
@@ -829,10 +826,10 @@ namespace TraceTool
 
                     if (_traceThread == null)
                     {
-                        _traceThread = new Thread(SendToViewerThread);
-
-                        // force the thread to be killed when all foreground thread are terminated.
-                        _traceThread.IsBackground = true;
+                        _traceThread = new Thread(SendToViewerThread)
+                        {
+                            IsBackground = true // force the thread to be killed when all foreground thread are terminated.
+                        };
                         _traceThread.Start();
                     }
                     _msgQueue.Add(commandList);
@@ -1345,11 +1342,12 @@ namespace TraceTool
             int debugWin = StartTDebug();
             if (debugWin != 0)
             {
-                COPYDATASTRUCT cds = new COPYDATASTRUCT();  // StructLayout.CharSet is CharSet.Ansi
-
-                cds.dwData = (IntPtr)TraceConst.WMD;
-                cds.cbData = message.Length * 2;    // unicode are 2 bytes
-                cds.lpData = VarPtr(message.ToString());     // automatically convert string to unicode (see StructLayout attribute in COPYDATASTRUCT)
+                COPYDATASTRUCT cds = new COPYDATASTRUCT
+                {
+                    dwData = (IntPtr)TraceConst.WMD,
+                    cbData = message.Length * 2,    // unicode are 2 bytes
+                    lpData = VarPtr(message.ToString())     // automatically convert string to unicode (see StructLayout attribute in COPYDATASTRUCT)
+                };  // StructLayout.CharSet is CharSet.Ansi
                 Helper.SendMessage(debugWin, TraceConst.WM_COPYDATA, IntPtr.Zero, VarPtr(cds));
             }
         }
@@ -1659,10 +1657,12 @@ namespace TraceTool
             InternalWinTrace result = null;
             if (doCreate)
             {
-                result = new InternalWinTrace();
-                result.LogFileName = "";
-                result.LogFileType = 3;   // no log
-                result.IsMultiColTree = false;
+                result = new InternalWinTrace
+                {
+                    LogFileName = "",
+                    LogFileType = 3,   // no log
+                    IsMultiColTree = false
+                };
                 FormTraceList.Add(result);
                 result.Id = traceWinId;
             }
@@ -2208,7 +2208,17 @@ namespace TraceTool
         /// indicate if the process name must be send. Displayed on the status bar.
         /// </summary>
         public bool SendProcessName;
-
+        
+        /// <summary>
+        /// Framework type (DotNet framework, Dot net standard 1.6, DotNet statndard 2.0)
+        /// </summary>
+#if NETFULL
+        public string Framework => "DotNet framework 4";
+#elif NETSTANDARD1_6
+        public string Framework => "Dot net standard 1.6";
+#elif NETSTANDARD1_6
+        public string Framework => "DotNet statndard 2.0";
+#endif
         private bool _sendDate;
         /// <summary>
         /// indicate if the date must be send with the time.
@@ -2238,23 +2248,23 @@ namespace TraceTool
             TraceDisplayFlags flags = 0;
 
             if (TTrace.Options.SendModifiers)
-                flags = flags | TraceDisplayFlags.ShowModifiers;           // 1
+                flags |= TraceDisplayFlags.ShowModifiers;           // 1
             if (TTrace.Options.SendClassInfo)
-                flags = flags | TraceDisplayFlags.ShowClassInfo;           // 2
+                flags |= TraceDisplayFlags.ShowClassInfo;           // 2
             if (TTrace.Options.SendFields)
-                flags = flags | TraceDisplayFlags.ShowFields;              // 4
+                flags |= TraceDisplayFlags.ShowFields;              // 4
             if (TTrace.Options.SendCustomAttributes)
-                flags = flags | TraceDisplayFlags.ShowCustomAttributes;    // 8    
+                flags |= TraceDisplayFlags.ShowCustomAttributes;    // 8    
             if (TTrace.Options.SendNonPublic)
-                flags = flags | TraceDisplayFlags.ShowNonPublic;           // 16
+                flags |= TraceDisplayFlags.ShowNonPublic;           // 16
             if (TTrace.Options.SendInherited)
-                flags = flags | TraceDisplayFlags.ShowInheritedMembers;    // 32   
+                flags |= TraceDisplayFlags.ShowInheritedMembers;    // 32   
             if (TTrace.Options.SendEvents)
-                flags = flags | TraceDisplayFlags.ShowEvents;              // 64
+                flags |= TraceDisplayFlags.ShowEvents;              // 64
             if (TTrace.Options.SendFunctions)
-                flags = flags | TraceDisplayFlags.ShowMethods;             // 128
+                flags |= TraceDisplayFlags.ShowMethods;             // 128
             if (TTrace.Options.SendDoc)
-                flags = flags | TraceDisplayFlags.ShowDoc;                 // 256
+                flags |= TraceDisplayFlags.ShowDoc;                 // 256
 
             return flags;
         }

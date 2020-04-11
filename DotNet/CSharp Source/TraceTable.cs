@@ -43,8 +43,10 @@ namespace TraceTool
         /// </summary>
         public TraceTable()
         {
-            _members = new TMemberNode();
-            _members.ViewerKind = TraceConst.CST_VIEWER_TABLE;
+            _members = new TMemberNode
+            {
+                ViewerKind = TraceConst.CST_VIEWER_TABLE
+            };
             _currentRow = null;
         }
 

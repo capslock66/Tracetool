@@ -140,7 +140,7 @@ namespace TraceTool
                 if (type.IsGenericType)
 #endif
                 {
-                    name = name + "<";
+                    name += "<";
                     // type.IsGenericTypeDefinition 
                     // if true : Type is open (not gived) : typeof(templateTest<,>)
                     // if false : Generics parametersare gived : MyClass<int,int>

@@ -333,7 +333,7 @@ namespace TraceTool
             if (color != -1)
             {
                 // remove Alpha blending
-                color = color & 0xFFFFFF;
+                color &= 0xFFFFFF;
                 // Color is coded as RGB. convert to BGR
                 int b = color & 0xff;
                 int g = (color >> 8) & 0xff;

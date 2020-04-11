@@ -229,7 +229,7 @@ namespace TraceTool
             if ((flags & TraceDisplayFlags.ShowModifiers) != 0)
             {
                 if (strModifier != "")
-                    strModifier = strModifier + " ";
+                    strModifier += " ";
             }
             else
             {
@@ -265,8 +265,10 @@ namespace TraceTool
             // detect recursive call to SendObject when DisplayFields try to get fields values
             if (SendObjectRecursiveStatus > 0)
             {
-                TMemberNode memberError = new TMemberNode("Recursive call detected");
-                memberError.ViewerKind = TraceConst.CST_VIEWER_OBJECT;
+                TMemberNode memberError = new TMemberNode("Recursive call detected")
+                {
+                    ViewerKind = TraceConst.CST_VIEWER_OBJECT
+                };
                 Members.Add(memberError);
                 memberError.Add("Error : A Field Read method has called SendObject/AddObject.");
                 memberError.Add("->Possible recursive call is stopped now");
@@ -565,8 +567,10 @@ namespace TraceTool
             }
             catch (Exception e)
             {
-                TMemberNode memberError = new TMemberNode("Recursive call detected");
-                memberError.ViewerKind = TraceConst.CST_VIEWER_OBJECT;
+                TMemberNode memberError = new TMemberNode("Recursive call detected")
+                {
+                    ViewerKind = TraceConst.CST_VIEWER_OBJECT
+                };
                 Members.Add(memberError);
                 memberError.Add("AddTypeObject threw an exception of type " + e.GetType());
             }
@@ -759,7 +763,7 @@ namespace TraceTool
                     Type oType = objToSend.GetType();
                     ReflectionHelper.Type2String(oType, ref strModifier, ref strName);
                     if (strModifier != "")
-                        strModifier = strModifier + " ";
+                        strModifier += " ";
                 }
             }
             catch
@@ -796,14 +800,16 @@ namespace TraceTool
 
                 // create the top node using only title.
                 // Value (col2) and Type (col3) will be added by inner_addValue
-                TMemberNode result = new TMemberNode(objTitle); //  strValue
-                result.ViewerKind = TraceConst.CST_VIEWER_VALUE;
+                TMemberNode result = new TMemberNode(objTitle)
+                {
+                    ViewerKind = TraceConst.CST_VIEWER_VALUE
+                }; //  strValue
 
                 // add top node to trace
                 Members.Add(result);
 
                 // recursive fill members
-                inner_addValue(objToSend, result, sendPrivate, maxLevel, alreadyParsedObjects);
+                Inner_addValue(objToSend, result, sendPrivate, maxLevel, alreadyParsedObjects);
             }
             catch (Exception ex)
             {
@@ -813,7 +819,7 @@ namespace TraceTool
 
         //----------------------------------------------------------------------
 
-        internal void inner_addValue(Object objTosend, TMemberNode upperNode, bool sendPrivate, int maxLevel, ParsedObjectList alreadyParsedObjects)
+        internal void Inner_addValue(Object objTosend, TMemberNode upperNode, bool sendPrivate, int maxLevel, ParsedObjectList alreadyParsedObjects)
         {
             try
             {
@@ -911,7 +917,7 @@ namespace TraceTool
                 AddAllFieldsValue(objTosend, oType, upperNode, sendPrivate, maxLevel, alreadyParsedObjects);
                 Dictionary<string, TMemberNode> dependencyProperties = GetDependencyPropertiesValues(objTosend);
                 AddProperties(objTosend, oType, upperNode, sendPrivate, maxLevel, alreadyParsedObjects, dependencyProperties);
-                AddDependencyPropertiesValues(objTosend, upperNode, dependencyProperties);
+                AddDependencyPropertiesValues(upperNode, dependencyProperties);
             }
             catch (Exception e)
             {
@@ -936,7 +942,7 @@ namespace TraceTool
                     TMemberNode itemNode = new TMemberNode(new StringBuilder().Append("[").Append(c).Append("]").ToString());
                     upperNode.Add(itemNode);
                     // recursive call to display the value in col2 and type in col 3
-                    inner_addValue(itemObject, itemNode, sendPrivate, maxLevel - 1, alreadyParsedObjects);
+                    Inner_addValue(itemObject, itemNode, sendPrivate, maxLevel - 1, alreadyParsedObjects);
                     c++;
                 }
             }
@@ -959,7 +965,7 @@ namespace TraceTool
                     TMemberNode itemNode = new TMemberNode(new StringBuilder().Append("[").Append(itemDic.Key).Append("]").ToString());
                     upperNode.Add(itemNode);
                     // recursive call to display the value in col2 and type in col 3
-                    inner_addValue(itemDic.Value, itemNode, sendPrivate, maxLevel - 1, alreadyParsedObjects);
+                    Inner_addValue(itemDic.Value, itemNode, sendPrivate, maxLevel - 1, alreadyParsedObjects);
                 }
             }
             catch (Exception e)
@@ -1027,7 +1033,7 @@ namespace TraceTool
                         arrelement = ex.GetType().ToString();
                     }
                     // recursive call to display the value in col2 and type in col 3
-                    inner_addValue(arrelement, itemNode, sendPrivate, maxLevel - 1, alreadyParsedObjects);
+                    Inner_addValue(arrelement, itemNode, sendPrivate, maxLevel - 1, alreadyParsedObjects);
 
                     currentDim = dimCount - 1;
                     while (currentDim >= 0)
@@ -1116,7 +1122,7 @@ namespace TraceTool
                     TMemberNode fieldNode = new TMemberNode(memberName, "", memberModifier);
                     upperNode.Add(fieldNode);
 
-                    inner_addValue(memberValue, fieldNode, sendPrivate, maxLevel - 1, alreadyParsedObjects);
+                    Inner_addValue(memberValue, fieldNode, sendPrivate, maxLevel - 1, alreadyParsedObjects);
                 }
             }
             catch (Exception e)
@@ -1167,7 +1173,7 @@ namespace TraceTool
         //----------------------------------------------------------------------
         // caller : inner_addValue
         // ReSharper disable once UnusedParameter.Global
-        internal void AddDependencyPropertiesValues(Object objToSend, TMemberNode upperNode, Dictionary<string, TMemberNode> markupObjectProperties)
+        internal void AddDependencyPropertiesValues(TMemberNode upperNode, Dictionary<string, TMemberNode> markupObjectProperties)
         {
             try
             {
@@ -1238,8 +1244,7 @@ namespace TraceTool
                     }
 
                     string fieldNameKey = field.Name;
-                    TMemberNode markupNode;
-                    bool dependencyExist = markupObjectProperties.TryGetValue(fieldNameKey, out markupNode);
+                    bool dependencyExist = markupObjectProperties.TryGetValue(fieldNameKey, out var markupNode);
 
                     // get only properties with "get"
                     if (field.CanRead == false)
@@ -1282,7 +1287,7 @@ namespace TraceTool
                     }
                     upperNode.Add(fieldNode);
 
-                    inner_addValue(oValue, fieldNode, sendPrivate, maxLevel - 1, alreadyParsedObjects);
+                    Inner_addValue(oValue, fieldNode, sendPrivate, maxLevel - 1, alreadyParsedObjects);
                 }
             }
             catch (Exception e)
@@ -2045,8 +2050,7 @@ namespace TraceTool
                     string memberModifier = "";
                     string memberName = "";
 
-                    MethodInfo methodInfo = oneMethod as MethodInfo;
-                    if (methodInfo != null)
+                    if (oneMethod is MethodInfo methodInfo)
                         ReflectionHelper.Method2String(methodInfo, ref memberModifier, ref memberName);
                     else
                         ReflectionHelper.Constructor2String((ConstructorInfo)oneMethod, ref memberModifier, ref memberName);
@@ -2132,8 +2136,7 @@ namespace TraceTool
             try
             {
                 BmpBitmapEncoder encoder = new BmpBitmapEncoder();
-                BitmapSource source = image.Source as BitmapSource;
-                if (source != null)
+                if (image.Source is BitmapSource source)
                 {
                     BitmapFrame bitmapFrame = BitmapFrame.Create(source);
                     encoder.Frames.Add(bitmapFrame);
@@ -2276,7 +2279,7 @@ namespace TraceTool
 
         //------------------------------------------------------------------------------
 
-        internal bool inner_AddTable(TMemberNode tableMembers, Object itemObject, bool isFirstRow, string firstcolValue)
+        internal bool Inner_AddTable(TMemberNode tableMembers, Object itemObject, bool isFirstRow, string firstcolValue)
         {
             object memberValue;
             string strMemberValue;
@@ -2452,7 +2455,7 @@ namespace TraceTool
                     tableMembers.Col1 = "Index"; // set first col title
                     foreach (Object itemObject in (Array)list)
                     {
-                        if (inner_AddTable(tableMembers, itemObject, isFirst, "[" + c + "]"))
+                        if (Inner_AddTable(tableMembers, itemObject, isFirst, "[" + c + "]"))
                             hasDependencyProperties = true;
 
                         isFirst = false;
@@ -2466,7 +2469,7 @@ namespace TraceTool
                     tableMembers.Col1 = "Key"; // set first col title
                     foreach (DictionaryEntry itemDic in (IDictionary)list)
                     {
-                        if (inner_AddTable(tableMembers, itemDic.Value, isFirst, "[" + itemDic.Key + "]"))  // key cannot be null
+                        if (Inner_AddTable(tableMembers, itemDic.Value, isFirst, "[" + itemDic.Key + "]"))  // key cannot be null
                             hasDependencyProperties = true;
                         isFirst = false;
                     }
@@ -2477,7 +2480,7 @@ namespace TraceTool
                     // Error may occur here if your LINQ query contains errors
                     foreach (Object itemObject in (IEnumerable)list)
                     {
-                        if (inner_AddTable(tableMembers, itemObject, isFirst, null)) // no first column
+                        if (Inner_AddTable(tableMembers, itemObject, isFirst, null)) // no first column
                             hasDependencyProperties = true;
                         isFirst = false;
                     }
@@ -2485,7 +2488,7 @@ namespace TraceTool
                 else
                 {
                     // not a collection : print single object  
-                    if (inner_AddTable(tableMembers, list, /*isFirst*/ true, null)) // no first column
+                    if (Inner_AddTable(tableMembers, list, /*isFirst*/ true, null)) // no first column
                         hasDependencyProperties = true;
                 }
                 if (hasDependencyProperties)
@@ -2520,10 +2523,12 @@ namespace TraceTool
         {
             if (Enabled == false)
                 return;
-            FontDetail fontDetail = new FontDetail();
-            fontDetail.ColId = colId;
-            fontDetail.Color = color;
-            fontDetail.FontName = "BackgroundColor";  // special name. Indicate that color is for background, not font itsef
+            FontDetail fontDetail = new FontDetail
+            {
+                ColId = colId,
+                Color = color,
+                FontName = "BackgroundColor"  // special name. Indicate that color is for background, not font itsef
+            };
             FontDetails.Add(fontDetail);
         }
 
@@ -2597,13 +2602,15 @@ namespace TraceTool
             if (Enabled == false)
                 return this;
 
-            FontDetail fontDetail = new FontDetail();
-            fontDetail.ColId = colId;
-            fontDetail.Bold = bold;
-            fontDetail.Italic = italic;
-            fontDetail.Color = color;         // color is stored in ARGB. Converted to BGR before sending the trace
-            fontDetail.Size = size;
-            fontDetail.FontName = fontName;
+            FontDetail fontDetail = new FontDetail
+            {
+                ColId = colId,
+                Bold = bold,
+                Italic = italic,
+                Color = color,         // color is stored in ARGB. Converted to BGR before sending the trace
+                Size = size,
+                FontName = fontName
+            };
 
             if (FontDetails == null)
                 FontDetails = new List<FontDetail>();

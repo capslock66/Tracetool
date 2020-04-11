@@ -2051,6 +2051,11 @@
             indicate if the process name must be send. Displayed on the status bar.
             </summary>
         </member>
+        <member name="P:TraceTool.TTraceOptions.Framework">
+            <summary>
+            Framework type (DotNet framework, Dot net standard 1.6, DotNet statndard 2.0)
+            </summary>
+        </member>
         <member name="P:TraceTool.TTraceOptions.SendDate">
             <summary>
             indicate if the date must be send with the time.

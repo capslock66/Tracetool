@@ -132,8 +132,10 @@ namespace TraceTool
             // detect null type
             if (oType == null)
             {
-                TMemberNode node = new TMemberNode("Null Type");
-                node.ViewerKind = TraceConst.CST_VIEWER_OBJECT;
+                TMemberNode node = new TMemberNode("Null Type")
+                {
+                    ViewerKind = TraceConst.CST_VIEWER_OBJECT
+                };
                 result.Members.Add(node);
                 result.Members.AddToStringList(commandList);
                 TTrace.SendToWinTraceClient(commandList, WinTraceId);
@@ -199,7 +201,7 @@ namespace TraceTool
                     Type oType = objToSend.GetType();
                     ReflectionHelper.Type2String(oType, ref strModifier, ref strName);
                     if (strModifier != "")
-                        strModifier = strModifier + " ";
+                        strModifier += " ";
                 }
             }
             catch
@@ -271,8 +273,10 @@ namespace TraceTool
             // detect null type
             if (oType == null)
             {
-                TMemberNode node = new TMemberNode("Null Type");
-                node.ViewerKind = TraceConst.CST_VIEWER_OBJECT;
+                TMemberNode node = new TMemberNode("Null Type")
+                {
+                    ViewerKind = TraceConst.CST_VIEWER_OBJECT
+                };
                 result.Members.Add(node);
                 result.Members.AddToStringList(commandList);
                 TTrace.SendToWinTraceClient(commandList, WinTraceId);
@@ -729,12 +733,16 @@ namespace TraceTool
             string thId = Helper.GetCurrentThreadId();
 
 
-            NodeContext newContext = new NodeContext();
-            newContext.ThreadId = thId;
-            newContext.NodeId = Helper.NewGuid().ToString();
+            NodeContext newContext = new NodeContext
+            {
+                ThreadId = thId,
+                NodeId = Helper.NewGuid().ToString()
+            };
 
-            TraceNode result = new TraceNode(this);
-            result.Id = newContext.NodeId;
+            TraceNode result = new TraceNode(this)
+            {
+                Id = newContext.NodeId
+            };
 
             List<string> commandList = new List<string>();
             NodeContext lastContext = GetLastContext();

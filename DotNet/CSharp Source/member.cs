@@ -201,13 +201,15 @@ namespace TraceTool
         /// <returns>The TMember node</returns>
         public TMemberNode SetFontDetail(int colId, bool bold, bool italic, int color, int size, string fontName)
         {
-            FontDetail fontDetail = new FontDetail();
-            fontDetail.ColId = colId;
-            fontDetail.Bold = bold;
-            fontDetail.Italic = italic;
-            fontDetail.Color = color;
-            fontDetail.Size = size;
-            fontDetail.FontName = fontName;
+            FontDetail fontDetail = new FontDetail
+            {
+                ColId = colId,
+                Bold = bold,
+                Italic = italic,
+                Color = color,
+                Size = size,
+                FontName = fontName
+            };
 
             if (FontDetails == null)
                 FontDetails = new List<FontDetail>();
@@ -230,7 +232,7 @@ namespace TraceTool
             foreach (TMemberNode node in Members)
             {
                 if (node != null)
-                    node._AddToStringList(commandList);
+                    node.AddToStringListInternal(commandList);
             }
 
             // once copied to Commandlist, clear the array
@@ -239,7 +241,7 @@ namespace TraceTool
 
         //----------------------------------------------------------------------
         // internal use only, used to recursively add sub members to the array
-        internal void _AddToStringList(List<string> commandList)
+        internal void AddToStringListInternal(List<string> commandList)
         {
             // create the member and set col1
             Helper.AddCommand(commandList, TraceConst.CST_CREATE_MEMBER, Col1);
@@ -301,7 +303,7 @@ namespace TraceTool
             // recursive add sub nodes, if any
             foreach (TMemberNode node in Members)
                 if (node != null)
-                    node._AddToStringList(commandList);
+                    node.AddToStringListInternal(commandList);
 
             // close the member group
             Helper.AddCommand(commandList, TraceConst.CST_ADD_MEMBER);

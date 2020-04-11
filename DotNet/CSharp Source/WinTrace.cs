@@ -89,23 +89,29 @@ namespace TraceTool
 
             //fWinTraceContext = null ;
 
-            _warning = new TraceNode(null, false);
-            _warning.IconIndex = TraceConst.CST_ICO_WARNING;
-            _warning.WinTraceId = Id;
-            _warning.WinTraceContext = ContextList;
-            _warning.Enabled = true;
+            _warning = new TraceNode(null, false)
+            {
+                IconIndex = TraceConst.CST_ICO_WARNING,
+                WinTraceId = Id,
+                WinTraceContext = ContextList,
+                Enabled = true
+            };
 
-            _error = new TraceNode(null, false);
-            _error.IconIndex = TraceConst.CST_ICO_ERROR;
-            _error.WinTraceId = Id;
-            _error.WinTraceContext = ContextList;
-            _error.Enabled = true;
+            _error = new TraceNode(null, false)
+            {
+                IconIndex = TraceConst.CST_ICO_ERROR,
+                WinTraceId = Id,
+                WinTraceContext = ContextList,
+                Enabled = true
+            };
 
-            _debug = new TraceNode(null, false);
-            _debug.IconIndex = TraceConst.CST_ICO_INFO;
-            _debug.WinTraceId = Id;
-            _debug.WinTraceContext = ContextList;
-            _debug.Enabled = true;
+            _debug = new TraceNode(null, false)
+            {
+                IconIndex = TraceConst.CST_ICO_INFO,
+                WinTraceId = Id,
+                WinTraceContext = ContextList,
+                Enabled = true
+            };
         }
 
         //------------------------------------------------------------------------------
