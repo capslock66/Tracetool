@@ -1316,7 +1316,7 @@ namespace TraceTool
 
                         // return ALL interfaces, not only interfaces for the current type
 #if NETSTANDARD1_6
-                      Type[] typeIntfs = oType.GetTypeInfo().GetInterfaces();
+                      Type[] typeInterfaceList = oType.GetTypeInfo().GetInterfaces();
 #else
                         Type[] typeInterfaceList = oType.GetInterfaces();
 #endif
