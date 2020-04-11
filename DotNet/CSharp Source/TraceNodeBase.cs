@@ -33,7 +33,7 @@ namespace TraceTool
     public abstract class TraceNodeBase
     {
         /// <summary>
-        /// The unique ID. Normally it's a GUID, but can be replaced by something else for interprocess traces.
+        /// The unique ID. Normally it's a GUID, but can be replaced by something else for inter process traces.
         /// </summary>
         public string Id;
         /// <summary>

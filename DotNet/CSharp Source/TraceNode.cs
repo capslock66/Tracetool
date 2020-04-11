@@ -353,10 +353,10 @@ namespace TraceTool
         /// <summary>
         /// append right and left texts to an existing node
         /// </summary>
-        /// <param name="leftMsgtoAdd">left message</param>
-        /// <param name="rightMsgtoAdd">right message</param>
+        /// <param name="leftMsgToAdd">left message</param>
+        /// <param name="rightMsgToAdd">right message</param>
         /// <returns>The trace node</returns>
-        public TraceNode Append(string leftMsgtoAdd, string rightMsgtoAdd)
+        public TraceNode Append(string leftMsgToAdd, string rightMsgToAdd)
         {
             if (Enabled == false)
                 return this;
@@ -365,9 +365,9 @@ namespace TraceTool
                 throw new Exception("Node Id is null, root node cannot be modified (for now)");
 
             List<string> commandList = new List<string>();
-            Helper.AddCommand(commandList, TraceConst.CST_USE_NODE, Id);                  // param : guid
-            Helper.AddCommand(commandList, TraceConst.CST_APPEND_LEFT_MSG, leftMsgtoAdd);   // param : right string
-            Helper.AddCommand(commandList, TraceConst.CST_APPEND_RIGHT_MSG, rightMsgtoAdd);  // param : right string
+            Helper.AddCommand(commandList, TraceConst.CST_USE_NODE, Id);                     // param : guid
+            Helper.AddCommand(commandList, TraceConst.CST_APPEND_LEFT_MSG, leftMsgToAdd);    // param : right string
+            Helper.AddCommand(commandList, TraceConst.CST_APPEND_RIGHT_MSG, rightMsgToAdd);  // param : right string
 
             // don't resend members and icon
             TTrace.SendToWinTraceClient(commandList, WinTraceId);
@@ -378,9 +378,9 @@ namespace TraceTool
         /// <summary>
         /// append left text to an existing node
         /// </summary>
-        /// <param name="leftMsgtoAdd">left message</param>
+        /// <param name="leftMsgToAdd">left message</param>
         /// <returns>The trace node</returns>
-        public TraceNode AppendLeft(string leftMsgtoAdd)
+        public TraceNode AppendLeft(string leftMsgToAdd)
         {
             if (Enabled == false)
                 return this;
@@ -389,8 +389,8 @@ namespace TraceTool
                 throw new Exception("Node Id is null, root node cannot be modified (for now)");
 
             List<string> commandList = new List<string>();
-            Helper.AddCommand(commandList, TraceConst.CST_USE_NODE, Id);                  // param : guid
-            Helper.AddCommand(commandList, TraceConst.CST_APPEND_LEFT_MSG, leftMsgtoAdd);   // param : right string
+            Helper.AddCommand(commandList, TraceConst.CST_USE_NODE, Id);                    // param : guid
+            Helper.AddCommand(commandList, TraceConst.CST_APPEND_LEFT_MSG, leftMsgToAdd);   // param : right string
 
             // don't resend members and icon
             TTrace.SendToWinTraceClient(commandList, WinTraceId);
@@ -401,9 +401,9 @@ namespace TraceTool
         /// <summary>
         /// append right text to an existing node
         /// </summary>
-        /// <param name="rightMsgtoAdd">right message</param>
+        /// <param name="rightMsgToAdd">right message</param>
         /// <returns>The trace node</returns>
-        public TraceNode AppendRight(string rightMsgtoAdd)
+        public TraceNode AppendRight(string rightMsgToAdd)
         {
             if (Enabled == false)
                 return this;
@@ -413,7 +413,7 @@ namespace TraceTool
 
             List<string> commandList = new List<string>();
             Helper.AddCommand(commandList, TraceConst.CST_USE_NODE, Id);                  // param : guid
-            Helper.AddCommand(commandList, TraceConst.CST_APPEND_RIGHT_MSG, rightMsgtoAdd);  // param : right string
+            Helper.AddCommand(commandList, TraceConst.CST_APPEND_RIGHT_MSG, rightMsgToAdd);  // param : right string
 
             // don't resend members and icon
             TTrace.SendToWinTraceClient(commandList, WinTraceId);

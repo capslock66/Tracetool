@@ -1,7 +1,7 @@
 ﻿using System;
 using TraceTool;
 
-namespace ConsoleAppCore20
+namespace Demo_ConsoleApp_Core20
 {
     class Program
     {

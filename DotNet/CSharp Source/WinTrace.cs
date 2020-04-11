@@ -425,9 +425,9 @@ namespace TraceTool
         //------------------------------------------------------------------------------
 
         /// <summary>
-        /// Set the focus to a bookmarked node identified by his position. Bookmarks are cheched by the user or with the node.SetBookmark() function
+        /// Set the focus to a bookmarked node identified by his position. Bookmarks are checked by the user or with the node.SetBookmark() function
         /// </summary>
-        /// <param name="pos">Indice of the bookmark </param>
+        /// <param name="pos">Index of the bookmark </param>
         public void GotoBookmark(int pos)
         {
             List<string> commandList = new List<string>();
@@ -465,7 +465,7 @@ namespace TraceTool
         /// Add a filter to node. Multiple calls to this function can be done. Call ApplyFilter() to apply filtering
         /// </summary>
         /// <param name="column">Column to apply filter.<p/>
-        ///   In multicolumn mode the first column start at 0 <p/>
+        ///   In multi column mode the first column start at 0 <p/>
         ///   In normal mode : <p/>
         ///   col icone   = 999    <p/>
         ///   col time    = 1      <p/>
@@ -625,10 +625,10 @@ namespace TraceTool
         /// Plugin API : Attach a winTrace to a plugin. Many winTrace can be attached to a plugin.
         /// Note that a plugin don't need to be attached to a WinTrace.
         /// The plugin is identified by his internal name (not dll name).
-        /// When linked, the plugin can receive event (see ITracePLugin).
+        /// When linked, the plugin can receive event (see ITracePlugin).
         /// </summary>
         /// <param name="pluginName">name of the plugin</param>
-        /// <param name="flags">combinaison of CST_PLUG_ONACTION , CST_PLUG_ONBEFOREDELETE , CST_PLUG_ONTIMER</param>
+        /// <param name="flags">Combinaison of CST_PLUG_ONACTION , CST_PLUG_ONBEFOREDELETE , CST_PLUG_ONTIMER</param>
 
         public void LinkToPlugin(string pluginName, int flags)
         {

@@ -142,22 +142,22 @@ namespace TraceTool
                 {
                     name += "<";
                     // type.IsGenericTypeDefinition 
-                    // if true : Type is open (not gived) : typeof(templateTest<,>)
-                    // if false : Generics parametersare gived : MyClass<int,int>
+                    // if true : Type is open (not give) : typeof(templateTest<,>)
+                    // if false : Generics parameters are give : MyClass<int,int>
                     //            you can call GetGenericTypeDefinition to get the open type
 
-                    int genpos = 0;
+                    int genPos = 0;
 #if NETSTANDARD1_6
                   foreach (Type t in type.GetTypeInfo().GetGenericArguments())
 #else
                     foreach (Type t in type.GetGenericArguments())
 #endif
                     {
-                        if (genpos == 0)
+                        if (genPos == 0)
                             name += t.Name;
                         else
                             name += "," + t.Name;
-                        genpos++;
+                        genPos++;
                         if (t.IsGenericParameter)
                         {
                             // t.GenericParameterPosition is the parameter (constraint) position
@@ -387,7 +387,7 @@ namespace TraceTool
             try
             {
                 strModifier = Method2StringModifier(ctor);
-                //  ctor.Name can be 'ctor' or 'cctor' Beter is to use the class name
+                //  ctor.Name can be 'ctor' or 'cctor' Better is to use the class name
                 if (ctor.DeclaringType != null)
                     strName = ctor.DeclaringType.Name;
                 strName += " (" + MethodParams2String(ctor) + ")";
@@ -479,7 +479,7 @@ namespace TraceTool
                 else
                     oneMethod = setMethod;
 
-                // retreive private, public, abstract, ... of that method
+                // retrieve private, public, abstract, ... of that method
                 if (oneMethod != null)
                     strModifier += Method2StringModifier(oneMethod);
 
@@ -523,7 +523,7 @@ namespace TraceTool
                 // get the "add" method of the event
                 MethodInfo oneMethod = field.GetAddMethod(true);
 
-                // retreive private, public, abstract, ... of that method
+                // retrieve private, public, abstract, ... of that method
                 if (oneMethod != null)
                     strModifier += Method2StringModifier(oneMethod);
 
@@ -593,14 +593,14 @@ namespace TraceTool
                 if (method.IsGenericMethod)
                 {
                     methodName += "<";
-                    int genpos = 0;
+                    int genPos = 0;
                     foreach (Type t in method.GetGenericArguments())
                     {
-                        if (genpos == 0)
+                        if (genPos == 0)
                             methodName += t.Name;
                         else
                             methodName += "," + t.Name;
-                        genpos++;
+                        genPos++;
                         if (t.IsGenericParameter)
                         {
                             // t.DeclaringMethod : MethodBase
@@ -696,16 +696,16 @@ namespace TraceTool
                 // 'virtual' and not 'newslot' is then an 'override' over that fct
                 if (oneMethod.IsVirtual)
                 {
-                    if ((attrs & MethodAttributes.NewSlot) != 0)   // not redefined
+                    if ((attrs & MethodAttributes.NewSlot) != 0)     // not redefined
                         if (oneMethod.IsAbstract)
                             strModifier += "abstract ";              // only for type, no instance possible
                         else
                             strModifier += "virtual ";               // virtual fct not redefined
-                    else                                           // redefined in sub class
+                    else                                             // redefined in sub class
                         if (oneMethod.IsAbstract)
-                        strModifier += "abstract override";      // abtract fct redefined. Not tested
+                        strModifier += "abstract override";          // abstract fct redefined. Not tested
                     else
-                        strModifier += "override ";              // virtual fct redefined
+                        strModifier += "override ";                  // virtual fct redefined
 
                 }
             }
@@ -771,7 +771,7 @@ namespace TraceTool
         //----------------------------------------------------------------------
 
         /// <summary>
-        /// return the parameters type of a method , usefull to retreive XML documentation for a method
+        /// return the parameters type of a method , useful to retrieve XML documentation for a method
         /// parenthesis are included only if parameters exists
         /// </summary>
         public static string MethodParamsType2String(MethodBase method) // (ParameterInfo[] parameters)
@@ -804,7 +804,7 @@ namespace TraceTool
         //----------------------------------------------------------------------
 
         /// <summary>
-        /// return the parameters type of a property , usefull to retreive XML documentation for a property
+        /// return the parameters type of a property , useful to retrieve XML documentation for a property
         /// parenthesis are included only if parameters exists
         /// </summary>
         public static string PropertyParamsType2String(PropertyInfo prop)
@@ -858,7 +858,7 @@ namespace TraceTool
         //----------------------------------------------------------------------
 
         /// <summary>
-        /// indicate if the type is an aray.
+        /// indicate if the type is an array.
         /// </summary>
         // ReSharper disable once MemberCanBePrivate.Global
         public static bool IsArray(Type type)

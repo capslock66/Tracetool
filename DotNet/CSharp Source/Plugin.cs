@@ -24,13 +24,14 @@
 // ReSharper disable MergeCastWithTypeCheck
 // ReSharper disable UsePatternMatching
 // ReSharper disable ArrangeAccessorOwnerBody
+// ReSharper disable UnusedType.Global
 
 namespace TraceTool
 {
     /// <summary>
     /// Plugin interface. Inherit from this interface to create a TraceTool plugin
     /// </summary>
-    public interface ITracePLugin
+    public interface ITracePlugin
     {
         /// <summary>
         /// Get the plugin name
@@ -75,5 +76,5 @@ namespace TraceTool
         /// Stop the plugin
         /// </summary>
         void Stop();
-    }   // ITracePLugin
+    }   // ITracePlugin
 }      // namespace TraceTool

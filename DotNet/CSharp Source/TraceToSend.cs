@@ -30,7 +30,7 @@ using System.Collections.Generic;
 namespace TraceTool
 {
 
-    /// TraceToSend methodes create new traces and send it to the viewer
+    /// TraceToSend methods create new traces and send it to the viewer
     /// Common base class for TraceNode and WinTrace
     /// TTrace.warning, debug and error are TraceNode
     public abstract class TraceToSend : TraceNodeBase   // no base constructor
@@ -142,7 +142,7 @@ namespace TraceTool
                 return new TraceNode(result);
             }
 
-            // informations are added to the Members array of the new created object.
+            // information are added to the Members array of the new created object.
             // This current instance can be the public 'Warning' node for example used by multi thread application
             result.AddTypeObject(objToSend, oType, flags);
             result.Members.AddToStringList(commandList);   // convert all groups and nested items/group to strings
@@ -230,7 +230,7 @@ namespace TraceTool
             TraceNodeEx result = new TraceNodeEx(this, true);  // create a node with same properties as "this" with new ID
             List<string> commandList = PrepareNewNode(leftMsg, result.Id);
 
-            // informations are added to the Members array of the new created object the actual object.
+            // information are added to the Members array of the new created object the actual object.
             // This current instance can be the public 'Warning' node for example used by multi thread application
             result.AddValue(objToSend, sendPrivate, maxLevel, objTitle);
             result.Members.AddToStringList(commandList);   // convert all groups and nested items/group to strings
@@ -283,7 +283,7 @@ namespace TraceTool
                 return new TraceNode(result);
             }
 
-            // informations are added to the Members array of the new created object the actual object
+            // information are added to the Members array of the new created object the actual object
             // the current instance can be the public 'Warning' node for example used by multi thread application
             result.AddTypeObject(null, oType, flags);
             result.Members.AddToStringList(commandList); // convert all groups and nested items/group to strings
@@ -405,7 +405,7 @@ namespace TraceTool
         /// Send byte dump.
         /// </summary>
         /// <param name="leftMsg">Trace message</param>
-        /// <param name="shortTitle">Tite to display in the first col</param>
+        /// <param name="shortTitle">Title to display in the first col</param>
         /// <param name="adr">Pointer to the buffer to dump</param>
         /// <param name="count">Number of byte to dump</param>
         /// <returns>the new node</returns>

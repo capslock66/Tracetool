@@ -226,8 +226,8 @@ namespace TraceTool
         public void AddToStringList(List<string> commandList)
         {
             // the root node node itself is not send for now.
-            // Later we can send the 3 columns text to specify the header, if specfied.
-            // the text should be like that : "Myfirstcol:150" where 150 is the column with
+            // Later we can send the 3 columns text to specify the header, if specified.
+            // the text should be like that : "MyFirstCol:150" where 150 is the column with
             // sub nodes, if any
             foreach (TMemberNode node in Members)
             {
@@ -235,7 +235,7 @@ namespace TraceTool
                     node.AddToStringListInternal(commandList);
             }
 
-            // once copied to Commandlist, clear the array
+            // once copied to CommandList, clear the array
             Members.Clear();
         }
 
@@ -297,7 +297,7 @@ namespace TraceTool
 
                 }
                 FontDetails.Clear();
-                FontDetails = null;  // once copied to Commandlist, clear the array
+                FontDetails = null;  // once copied to CommandList, clear the array
             }
 
             // recursive add sub nodes, if any

@@ -2,7 +2,7 @@
 //
 // classes : TTrace , TTraceOptions , TTraceListener
 //
-// Provide access to the warning, eror and debug node and
+// Provide access to the Warning, Error and Debug node and
 
 // send the trace using socket or windows messages
 //
@@ -100,14 +100,14 @@ namespace TraceTool
         private static byte[] _buffToSend;  // buffer to send to viewer
 
         private static Socket _socket;                       // Normal socket
-        private static bool isAsyncRunning = false;  // indicate if SendToViewerAsync is waiting connections or sending to viewer (await)
+        private static bool _isAsyncRunning ;  // indicate if SendToViewerAsync is waiting connections or sending to viewer (await)
         private static bool _isSocketError;
 
-        private static TextWriter _writterOut;
+        private static TextWriter _writerOut;
 
 #if !NETSTANDARD1_6
-        private static readonly CancellationTokenSource cancellationTocket;
-        private static ClientWebSocket webSocketClient;     // Web socket
+        private static readonly CancellationTokenSource CancellationToken;
+        private static ClientWebSocket _webSocketClient;     // Web socket
 #endif
 
 
@@ -148,7 +148,7 @@ namespace TraceTool
             DataReady = new AutoResetEvent(false);  // initial state false
             StopEvent = new ManualResetEvent(false);   // ask the thread to quit
 #if !NETSTANDARD1_6
-            cancellationTocket = new CancellationTokenSource();
+            CancellationToken = new CancellationTokenSource();
 #endif
             //_traceThread = new Thread(SendThreadEntryPoint); //  new Thread(SendThreadEntryPoint);
             //// force the thread to be killed when all foreground thread are terminated.
@@ -369,7 +369,7 @@ namespace TraceTool
         {
             foreach (XmlNode node in xmlTraceNode.ChildNodes)
             {
-                // detect 'param' tag wihout case sensitive
+                // detect 'param' tag without case sensitive
                 string tagName = node.Name.ToLower();
                 // ReSharper disable StringCompareToIsCultureSpecific
                 if (tagName.CompareTo("param") == 0)
@@ -395,7 +395,7 @@ namespace TraceTool
                             // no change
                         }
                     }     // param name="xxx"
-                          // ReSharper restore StringCompareToIsCultureSpecific
+                    // ReSharper restore StringCompareToIsCultureSpecific
                 }        // param tag
             }           // next param
         }
@@ -544,7 +544,7 @@ namespace TraceTool
 
         //------------------------------------------------------------------------------
         /// <summary>
-        /// return initialisation error
+        /// return initialization error
         /// </summary>
         public static string InitError()
         {
@@ -641,19 +641,21 @@ namespace TraceTool
             }
 
 #if !NETSTANDARD1_6
-            if (Options.SendMode == SendMode.WebSocket && webSocketClient != null && webSocketClient.State == WebSocketState.Open)
+            if (Options.SendMode == SendMode.WebSocket && _webSocketClient != null && _webSocketClient.State == WebSocketState.Open)
             {
                 var timeout = new CancellationTokenSource(10000); // MS, 10 sec
 
                 // Bad ?
-                webSocketClient.CloseAsync(WebSocketCloseStatus.NormalClosure, "", timeout.Token).Wait();
+                _webSocketClient
+                    .CloseAsync(WebSocketCloseStatus.NormalClosure, "", timeout.Token)
+                    .Wait(timeout.Token);
                 //Console.WriteLine($"{DateTime.Now.ToString("hh:mm:ss.fff")} close async done");
 
                 // Good ? 
                 //socket.CloseOutputAsync(WebSocketCloseStatus.NormalClosure, "", timeout.Token).Wait();
 
-                webSocketClient = null; // auto close connection
-                //cancellationTocket ?
+                _webSocketClient = null; // auto close connection
+                //cancellationToken ?
 
             }
 #endif
@@ -738,9 +740,9 @@ namespace TraceTool
         {
             get
             {
-                if (_writterOut == null)
-                    _writterOut = new TTraceWriter();
-                return _writterOut;
+                if (_writerOut == null)
+                    _writerOut = new TTraceWriter();
+                return _writerOut;
             }
         }
 
@@ -840,6 +842,7 @@ namespace TraceTool
             else
             {
                 // no worker thread. send to viewer async
+                // ReSharper disable once AssignmentIsFullyDiscarded
                 _ = SendToViewerAsync(commandList);
             }
         }
@@ -875,7 +878,7 @@ namespace TraceTool
                 if (_isSocketError && Options.SendMode == SendMode.Socket)
                 {
                     long actTime = DateTime.Now.Ticks;
-                    if (actTime - _errorTime > 50000000) // 5 secs = 50 millions of ticks (100 nanos sec).
+                    if (actTime - _errorTime > 50000000) // 5 secs = 50 millions of ticks (100 nano sec).
                         _isSocketError = false;
                 }
 
@@ -930,7 +933,7 @@ namespace TraceTool
                         }
                         sb.Append('\0');
                         // For previous version of tracetool,it's important to understand that strings was send in ASCII (1 byte per char),
-                        // because it's the common denominator for all languages targetting tracetool.
+                        // because it's the common denominator for all languages targeting tracetool.
                         // the tracetool dot net API is now unicode by default. 
                         sb.Insert(0, char.ToString((char)0xFEFF)); // start with the UTF-16, little endian byte order mark
 
@@ -979,12 +982,12 @@ namespace TraceTool
         //------------------------------------------------------------------------------
         // the async function that send messages to the server
 
-        private static async System.Threading.Tasks.Task SendToViewerAsync(List<string> newCommandList)
+        private static async Task SendToViewerAsync(List<string> newCommandList)
         {
             lock (DataReady)    // don't lock the MsgQue, because we can swap with workQueue
             {
                 _msgQueue.Add(newCommandList);
-                if (isAsyncRunning)
+                if (_isAsyncRunning)
                 {
                     //Console.WriteLine($"{DateTime.Now.ToString("hh:mm:ss.fff")} already in SendToViewerAsync. Message added to Queue {_msgQueue.Count}");                  
                     return; // already waiting connection or sending message
@@ -992,7 +995,7 @@ namespace TraceTool
                 else
                 {
                     //Console.WriteLine($"{DateTime.Now.ToString("hh:mm:ss.fff")} entering SendToViewerAsync");
-                    isAsyncRunning = true;
+                    _isAsyncRunning = true;
                 }
             }
 
@@ -1015,7 +1018,7 @@ namespace TraceTool
                 if (_isSocketError && Options.SendMode == SendMode.Socket)
                 {
                     long actTime = DateTime.Now.Ticks;
-                    if (actTime - _errorTime > 50000000) // 5 secs = 50 millions of ticks (100 nanos sec).
+                    if (actTime - _errorTime > 50000000) // 5 secs = 50 millions of ticks (100 nano sec).
                         _isSocketError = false;
                 }
 
@@ -1070,7 +1073,7 @@ namespace TraceTool
                         }
                         sb.Append('\0');
                         // For previous version of tracetool,it's important to understand that strings was send in ASCII (1 byte per char),
-                        // because it's the common denominator for all languages targetting tracetool.
+                        // because it's the common denominator for all languages targeting tracetool.
                         // the tracetool dot net API is now unicode by default. 
 
                         sb.Insert(0, char.ToString((char)0xFEFF)); // start with the UTF-16, little endian byte order mark
@@ -1116,7 +1119,7 @@ namespace TraceTool
                     lock (DataReady)   // not needed to use lock. Blazor Single thread
                     {
                         //Console.WriteLine($"{DateTime.Now.ToString("hh:mm:ss.fff")} workQueue message are sent and _msgQueue empty, leaving SendToViewerAsync");
-                        isAsyncRunning = false;
+                        _isAsyncRunning = false;
                     }
                     return;
                 }
@@ -1131,18 +1134,20 @@ namespace TraceTool
 
             // Also done in CloseSocket
 #if !NETSTANDARD1_6
-            if (Options.SendMode == SendMode.WebSocket && webSocketClient != null)
+            if (Options.SendMode == SendMode.WebSocket && _webSocketClient != null)
             {
                 //Console.WriteLine($"{DateTime.Now.ToString("hh:mm:ss.fff")} Closing websocket");
                 var timeout = new CancellationTokenSource(10000); // MS, 10 sec
                                                                   // Bad ?
-                webSocketClient.CloseAsync(WebSocketCloseStatus.NormalClosure, "", timeout.Token).Wait();
+                _webSocketClient
+                    .CloseAsync(WebSocketCloseStatus.NormalClosure, "", timeout.Token)
+                    .Wait(timeout.Token);
 
                 // Good ? 
                 //socket.CloseOutputAsync(WebSocketCloseStatus.NormalClosure, "", timeout.Token).Wait();
 
-                webSocketClient = null; // auto close connection
-                //cancellationTocket ?
+                _webSocketClient = null; // auto close connection
+                //cancellationToken ?
             }
 #endif
         }  // async task function
@@ -1155,7 +1160,7 @@ namespace TraceTool
             {
                 long actTime = DateTime.Now.Ticks;
 
-                if (actTime - _errorTime > 50000000) // 5 secs = 50 millions of ticks (100 nanos sec).
+                if (actTime - _errorTime > 50000000) // 5 secs = 50 millions of ticks (100 nano sec).
                     _isSocketError = false;
                 else
                     return;  // lose message
@@ -1170,17 +1175,17 @@ namespace TraceTool
             if (Options.SocketPort == 0)
                 Options.SocketPort = 8091;
 
-            if (webSocketClient == null)
-                webSocketClient = new ClientWebSocket();
+            if (_webSocketClient == null)
+                _webSocketClient = new ClientWebSocket();
 
             try
             {
-                if (webSocketClient.State != WebSocketState.Open)
+                if (_webSocketClient.State != WebSocketState.Open)
                 {
                     // Connect Async but WAIT
                     //Console.WriteLine($"{DateTime.Now.ToString("hh:mm:ss.fff")} SendToWebSocketSync: connect and wait");
                     string url = "ws://" + Options.SocketHost + ":" + Options.SocketPort.ToString();  // "ws://localhost:8091
-                    webSocketClient.ConnectAsync(new Uri(url), cancellationTocket.Token)
+                    _webSocketClient.ConnectAsync(new Uri(url), CancellationToken.Token)
                        .Wait();
                     //Console.WriteLine($"{DateTime.Now.ToString("hh:mm:ss.fff")} SendToWebSocketSync : connected");
                 }
@@ -1188,7 +1193,7 @@ namespace TraceTool
             catch (Exception ex)
             {
                 //Console.WriteLine($"{DateTime.Now.ToString("hh:mm:ss.fff")} SendToWebSocketSync : connect and wait exception : {ex.Message}");
-                webSocketClient = null; // force recreate socket
+                _webSocketClient = null; // force recreate socket
                 _isSocketError = true;
                 _errorTime = DateTime.Now.Ticks;
                 _lastError = ex.Message;         // for debug purpose
@@ -1201,14 +1206,14 @@ namespace TraceTool
                 //Console.WriteLine($"{DateTime.Now.ToString("hh:mm:ss.fff")} SendToWebSocketSync : send and wait");
                 var sendBuffer = new ArraySegment<byte>(_buffToSend);
 
-                webSocketClient.SendAsync(sendBuffer, WebSocketMessageType.Binary, endOfMessage: true, cancellationToken: cancellationTocket.Token)
+                _webSocketClient.SendAsync(sendBuffer, WebSocketMessageType.Binary, endOfMessage: true, cancellationToken: CancellationToken.Token)
                   .Wait();
                 //Console.WriteLine($"{DateTime.Now.ToString("hh:mm:ss.fff")} SendToWebSocketAsync : is send");
             }
             catch (Exception ex)
             {
                 //Console.WriteLine($"{DateTime.Now.ToString("hh:mm:ss.fff")} SendToWebSocketSync : send async exception : {ex.Message}");
-                webSocketClient = null; // force recreate socket
+                _webSocketClient = null; // force recreate socket
                 _isSocketError = true;
                 _errorTime = DateTime.Now.Ticks;
                 _lastError = ex.Message;         // for debug purpose
@@ -1217,13 +1222,13 @@ namespace TraceTool
 
         //------------------------------------------------------------------------------
 
-        internal static async System.Threading.Tasks.Task SendToWebSocketAsync(StringBuilder message)
+        internal static async Task SendToWebSocketAsync(StringBuilder message)
         {
             if (_isSocketError)
             {
                 long actTime = DateTime.Now.Ticks;
 
-                if (actTime - _errorTime > 50000000) // 5 secs = 50 millions of ticks (100 nanos sec).
+                if (actTime - _errorTime > 50000000) // 5 secs = 50 millions of ticks (100 nano sec).
                     _isSocketError = false;
                 else
                     return;  // lose message
@@ -1238,23 +1243,23 @@ namespace TraceTool
             if (Options.SocketPort == 0)
                 Options.SocketPort = 8091;
 
-            if (webSocketClient == null)
-                webSocketClient = new ClientWebSocket();
+            if (_webSocketClient == null)
+                _webSocketClient = new ClientWebSocket();
 
             try
             {
-                if (webSocketClient.State != WebSocketState.Open)
+                if (_webSocketClient.State != WebSocketState.Open)
                 {
                     //Console.WriteLine($"{DateTime.Now.ToString("hh:mm:ss.fff")} SendToWebSocketAsync: connect and wait");
                     string url = "ws://" + Options.SocketHost + ":" + Options.SocketPort.ToString();  // "ws://localhost:8091
-                    await webSocketClient.ConnectAsync(new Uri(url), cancellationTocket.Token);
+                    await _webSocketClient.ConnectAsync(new Uri(url), CancellationToken.Token);
                     //Console.WriteLine($"{DateTime.Now.ToString("hh:mm:ss.fff")} SendToWebSocketAsync : connected");
                 }
             }
             catch (Exception ex)
             {
                 //Console.WriteLine($"{DateTime.Now.ToString("hh:mm:ss.fff")} SendToWebSocket : connect and wait exception : {ex.Message}");
-                webSocketClient = null; // force recreate socket
+                _webSocketClient = null; // force recreate socket
                 _isSocketError = true;
                 _errorTime = DateTime.Now.Ticks;
                 _lastError = ex.Message;         // for debug purpose
@@ -1266,13 +1271,13 @@ namespace TraceTool
                 //Console.WriteLine($"{DateTime.Now.ToString("hh:mm:ss.fff")} SendToWebSocketAsync : send and wait");
                 var sendBuffer = new ArraySegment<byte>(_buffToSend);
 
-                await webSocketClient.SendAsync(sendBuffer, WebSocketMessageType.Binary, endOfMessage: true, cancellationToken: cancellationTocket.Token);
+                await _webSocketClient.SendAsync(sendBuffer, WebSocketMessageType.Binary, endOfMessage: true, cancellationToken: CancellationToken.Token);
                 //Console.WriteLine($"{DateTime.Now.ToString("hh:mm:ss.fff")} SendToWebSocketAsync : is send");
             }
             catch (Exception ex)
             {
                 //Console.WriteLine($"{DateTime.Now.ToString("hh:mm:ss.fff")} SendToWebSocketAsync : send async exception : {ex.Message}");
-                webSocketClient = null; // force recreate socket
+                _webSocketClient = null; // force recreate socket
                 _isSocketError = true;
                 _errorTime = DateTime.Now.Ticks;
                 _lastError = ex.Message;         // for debug purpose
@@ -1304,7 +1309,7 @@ namespace TraceTool
         public static void Flush()
         {
             if (!Options.UseWorkerThread)
-                throw new Exception("Dont' call Flush() in Async mode. use FlushAsync()");
+                throw new Exception("Don't call Flush() in Async mode. use FlushAsync()");
 
 
             string key = Helper.NewGuid().ToString();
@@ -1358,7 +1363,7 @@ namespace TraceTool
         internal static void Prepare_buffToSend(StringBuilder message)
         {
             // For previous version of tracetool,it's important to understand that strings was send in ASCII (1 byte per char),
-            // because it's the common denominator for all languages targetting tracetool.
+            // because it's the common denominator for all languages targeting tracetool.
             // the tracetool dot net API is now unicode by default. 
 
             int intMsgLen = message.Length * 2; // number of bytes in the message : message len * 2 (unicode)
@@ -1367,7 +1372,7 @@ namespace TraceTool
             if (c == 0)  // force new version
             {
                 // new version : 
-                // write the init byte (WMD = 123d) then message lenght (4 bytes) as a DWORD then the message
+                // write the init byte (WMD = 123d) then message length (4 bytes) as a DWORD then the message
 
                 _buffToSend = new byte[5 + intMsgLen]; // create the buffer : WMD byte + message len as a DWORD + message
                                                        // write the WMD byte into the buffer
@@ -1381,7 +1386,7 @@ namespace TraceTool
             else
             {
                 // old version :
-                // insert the lenght followed by the null terminator and the message.
+                // insert the length followed by the null terminator and the message.
                 // for compatibility issue, the length is coded as a AnsiString (single byte)
 
                 string strMsgLen = intMsgLen.ToString();
@@ -1425,13 +1430,13 @@ namespace TraceTool
 
         //------------------------------------------------------------------------------
 
-        internal static async System.Threading.Tasks.Task SendToSocketAsync(StringBuilder message)
+        internal static async Task SendToSocketAsync(StringBuilder message)
         {
             if (_isSocketError)
             {
                 long actTime = DateTime.Now.Ticks;
 
-                if (actTime - _errorTime > 50000000) // 5 secs = 50 millions of ticks (100 nanos sec).
+                if (actTime - _errorTime > 50000000) // 5 secs = 50 millions of ticks (100 nano sec).
                     _isSocketError = false;
                 else
                     return;  // lose message
@@ -1476,7 +1481,7 @@ namespace TraceTool
             // if the socket is disconnect since the last use, reopen it
             if (_socket.Connected == false)
             {
-                // resolve adress
+                // resolve address
 
 #if NETSTANDARD1_6
                 Task<IPHostEntry> hostEntryTask = Dns.GetHostEntryAsync(Options.SocketHost);  
@@ -1485,7 +1490,7 @@ namespace TraceTool
 #else // NETFULL or standard 2
                 IPHostEntry hostEntry = Dns.GetHostEntry(Options.SocketHost);
 #endif
-                // Don't get the first adress. It's perhaps a IPv6 adress.
+                // Don't get the first address. It's perhaps a IPv6 address.
                 // Thanks BCheng for the IPV4 fix.
                 IPEndPoint endPoint = null;
                 foreach (IPAddress ip in hostEntry.AddressList)
@@ -1540,7 +1545,7 @@ namespace TraceTool
             {
                 long actTime = DateTime.Now.Ticks;
 
-                if (actTime - _errorTime > 50000000) // 5 secs = 50 millions of ticks (100 nanos sec).
+                if (actTime - _errorTime > 50000000) // 5 secs = 50 millions of ticks (100 nano sec).
                     _isSocketError = false;
                 else
                     return;  // lose message
@@ -1588,7 +1593,7 @@ namespace TraceTool
             // if the socket is disconnect since the last use, reopen it
             if (_socket.Connected == false)
             {
-                // resolve adress
+                // resolve address
 
 #if NETSTANDARD1_6
                 Task<IPHostEntry> hostEntryTask = Dns.GetHostEntryAsync(Options.SocketHost);  
@@ -1597,7 +1602,7 @@ namespace TraceTool
 #else // NETFULL or standard 2
                 IPHostEntry hostEntry = Dns.GetHostEntry(Options.SocketHost);
 #endif
-                // Don't get the first adress. It's perhaps a IPv6 adress.
+                // Don't get the first address. It's perhaps a IPv6 address.
                 // Thanks BCheng for the IPV4 fix.
                 IPEndPoint endPoint = null;
                 foreach (IPAddress ip in hostEntry.AddressList)
@@ -1842,7 +1847,7 @@ namespace TraceTool
 
             //string FileToWrite = "";
             if (traceForm.LogFileType == 3)
-            {            // 3, Local log disaled.
+            {            // 3, Local log disabled.
                          // should not happens. Detected before parsing
                 return;
             }
@@ -1862,26 +1867,26 @@ namespace TraceTool
             else
             {                                     // 5, Local log enabled. A new file is create each day (CCYYMMDD is appended to the filename)
                 string fileExt = Path.GetExtension(traceForm.LogFileName);  // include the dot
-                StringBuilder strbBuilder = new StringBuilder();
-                strbBuilder.Append(traceForm.LogFileName.Substring(0, traceForm.LogFileName.Length - fileExt.Length));
+                StringBuilder strBuilder = new StringBuilder();
+                strBuilder.Append(traceForm.LogFileName.Substring(0, traceForm.LogFileName.Length - fileExt.Length));
                 // append YYYYMMDD
                 DateTime now = DateTime.Now;
                 var temp = now.Year;
-                strbBuilder.Append(temp);
+                strBuilder.Append(temp);
                 temp = now.Month;
                 if (temp < 10)
-                    strbBuilder.Append('0');
-                strbBuilder.Append(temp);
+                    strBuilder.Append('0');
+                strBuilder.Append(temp);
                 temp = now.Day;
                 if (temp < 10)
-                    strbBuilder.Append('0');
-                strbBuilder.Append(temp);
+                    strBuilder.Append('0');
+                strBuilder.Append(temp);
                 // add CurrentFileNumber if <> 0
                 if (traceForm.CurrentFileNumber != 0)
-                    strbBuilder.Append('_').Append(traceForm.CurrentFileNumber);
+                    strBuilder.Append('_').Append(traceForm.CurrentFileNumber);
                 // append file extension (XML)
-                strbBuilder.Append(fileExt);
-                traceForm.LastLocalLogFileName = strbBuilder.ToString();
+                strBuilder.Append(fileExt);
+                traceForm.LastLocalLogFileName = strBuilder.ToString();
             }
 
             FileStream f;
@@ -1892,8 +1897,8 @@ namespace TraceTool
                 // include header in file
                 if (traceForm.IsMultiColTree)
                 {
-                    StringBuilder strbBuilder = new StringBuilder();
-                    strbBuilder.Append("<MainColumn>").Append(traceForm.MainCol).Append("</MainColumn>");
+                    StringBuilder strBuilder = new StringBuilder();
+                    strBuilder.Append("<MainColumn>").Append(traceForm.MainCol).Append("</MainColumn>");
                     // ReSharper disable once RedundantExplicitParamsArrayCreation
                     // ReSharper disable once RedundantExplicitArrayCreation
                     string[] cols = traceForm.TitleList.Split(new char[] { '\t' });
@@ -1901,10 +1906,10 @@ namespace TraceTool
                     foreach (string col in cols)
                     {
                         if (col != "")
-                            strbBuilder.Append("<ColTitle Order=\"").Append(c).Append("\">").Append(col).Append("</ColTitle>");
+                            strBuilder.Append("<ColTitle Order=\"").Append(c).Append("\">").Append(col).Append("</ColTitle>");
                         c++;
                     }
-                    xml.Insert(0, strbBuilder.ToString());
+                    xml.Insert(0, strBuilder.ToString());
                 }
                 xml.Insert(0, "<Data>");
             }
@@ -1956,7 +1961,7 @@ namespace TraceTool
             String debugFilename = (string) reg.GetValue("FilePath");
             if (File.Exists(debugFilename) == false)
             {
-               //MessageBox.Show("StartTDebug : DebugFilename unknow");
+               //MessageBox.Show("StartTDebug : DebugFilename unknown");
                return 0;
             }
 
@@ -2042,7 +2047,7 @@ namespace TraceTool
         /// rather than FormatDate().</para>
         /// </remarks>
         /// <param name="dateToFormat">The date to render into a string.</param>
-        /// <returns>The stringbuilder passed.</returns>
+        /// <returns>The stringBuilder passed.</returns>
         internal static string FormatDate(DateTime dateToFormat)
         {
             StringBuilder buffer = new StringBuilder();
@@ -2067,7 +2072,7 @@ namespace TraceTool
                 buffer.Append(LastTime);
             }
 
-            // Append the current milli info
+            // Append the current millisecond info
             buffer.Append(':');
             int millis = dateToFormat.Millisecond;
             if (millis < 100)
@@ -2127,7 +2132,7 @@ namespace TraceTool
     public class TTraceOptions
     {
         /// <summary>
-        /// WinMsg (for desktop applications only), Socket (ASP , services, or remote computer), WebSocket (webassembly), None (No messages are send, use local log)
+        /// WinMsg (for desktop applications only), Socket (ASP , services, or remote computer), WebSocket (webAssembly), None (No messages are send, use local log)
         /// </summary>
         public SendMode SendMode =
 #if !NETSTANDARD1_6 && !NETSTANDARD2_0
@@ -2142,7 +2147,7 @@ namespace TraceTool
         /// </summary>
         public bool UseWorkerThread = true;
         /// <summary>
-        /// The Socket Host adress
+        /// The Socket Host address
         /// </summary>
         public string SocketHost;
         /// <summary>
@@ -2210,7 +2215,7 @@ namespace TraceTool
         public bool SendProcessName;
         
         /// <summary>
-        /// Framework type (DotNet framework, Dot net standard 1.6, DotNet statndard 2.0)
+        /// Framework type (DotNet framework, Dot net standard 1.6, DotNet standard 2.0)
         /// </summary>
 #if NETFULL
         public string Framework => "DotNet framework 4";
@@ -2244,7 +2249,7 @@ namespace TraceTool
         public TraceDisplayFlags GetDefault()
         {
             // display at least public (inherited) fields and properties
-            // Privat members are discarded
+            // Private members are discarded
             TraceDisplayFlags flags = 0;
 
             if (TTrace.Options.SendModifiers)
@@ -2279,6 +2284,7 @@ namespace TraceTool
     /// <summary>
     /// configure tracetool using app.config
     /// </summary>
+    // ReSharper disable once UnusedType.Global
     public class ConfigSectionHandler : IConfigurationSectionHandler
     {
        /// <summary>
