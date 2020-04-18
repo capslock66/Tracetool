@@ -12,8 +12,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		.editorconfig = .editorconfig
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "demoWebSock", "DemoWebSock\demoWebSock.csproj", "{626502AE-0AE0-43B2-9B8A-887DB933E285}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lib_Standard_20", "..\DotNet\LibsAndDemos\Lib_Standard_20\Lib_Standard_20.csproj", "{E344C199-A65F-4ABC-9D0C-F8ABF60D8FDD}"
 EndProject
 Global
@@ -58,22 +56,6 @@ Global
 		{C7ADEA17-8F42-4FA3-9F75-011AAD6D52EA}.Release|Win32.Build.0 = Release|Any CPU
 		{C7ADEA17-8F42-4FA3-9F75-011AAD6D52EA}.Release|x64.ActiveCfg = Release|Any CPU
 		{C7ADEA17-8F42-4FA3-9F75-011AAD6D52EA}.Release|x64.Build.0 = Release|Any CPU
-		{626502AE-0AE0-43B2-9B8A-887DB933E285}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{626502AE-0AE0-43B2-9B8A-887DB933E285}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{626502AE-0AE0-43B2-9B8A-887DB933E285}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{626502AE-0AE0-43B2-9B8A-887DB933E285}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{626502AE-0AE0-43B2-9B8A-887DB933E285}.Debug|Win32.ActiveCfg = Debug|Any CPU
-		{626502AE-0AE0-43B2-9B8A-887DB933E285}.Debug|Win32.Build.0 = Debug|Any CPU
-		{626502AE-0AE0-43B2-9B8A-887DB933E285}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{626502AE-0AE0-43B2-9B8A-887DB933E285}.Debug|x64.Build.0 = Debug|Any CPU
-		{626502AE-0AE0-43B2-9B8A-887DB933E285}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{626502AE-0AE0-43B2-9B8A-887DB933E285}.Release|Any CPU.Build.0 = Release|Any CPU
-		{626502AE-0AE0-43B2-9B8A-887DB933E285}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{626502AE-0AE0-43B2-9B8A-887DB933E285}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{626502AE-0AE0-43B2-9B8A-887DB933E285}.Release|Win32.ActiveCfg = Release|Any CPU
-		{626502AE-0AE0-43B2-9B8A-887DB933E285}.Release|Win32.Build.0 = Release|Any CPU
-		{626502AE-0AE0-43B2-9B8A-887DB933E285}.Release|x64.ActiveCfg = Release|Any CPU
-		{626502AE-0AE0-43B2-9B8A-887DB933E285}.Release|x64.Build.0 = Release|Any CPU
 		{E344C199-A65F-4ABC-9D0C-F8ABF60D8FDD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{E344C199-A65F-4ABC-9D0C-F8ABF60D8FDD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E344C199-A65F-4ABC-9D0C-F8ABF60D8FDD}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
