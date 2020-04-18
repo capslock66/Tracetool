@@ -81,7 +81,7 @@ public ref class CppPluginLoader : MarshalByRefObject
 {
 private :
 
-    // delegate to the differents ITracePLugin functions
+    // delegate to the differents ITracePlugin functions
     Delegate_GetPlugName^ _delegate_GetPlugName;
     Delegate_Start^ _delegate_Start;
     Delegate_Stop^ _delegate_Stop;
@@ -89,7 +89,7 @@ private :
     Delegate_OnBeforeDelete^ _delegate_OnBeforeDelete;
     Delegate_OnTimer^ _delegate_OnTimer;
 
-    // Point to the plugin (type ITracePLugin). Needed to unloaded the plugin
+    // Point to the plugin (type ITracePlugin). Needed to unloaded the plugin
     Object^ _plugin;
 
     // Domain that host the plugin. Needed to unloaded the domain
@@ -191,7 +191,7 @@ public:
 
     //---------------------------------------------------------------------------------------------------------------
 
-    // check if the assembly containt a class that implement the Tracetool.ITracePLugin interface
+    // check if the assembly containt a class that implement the Tracetool.ITracePlugin interface
     // throw exception on error
     void CheckPlugInFile(String^ FileName)
     {
@@ -214,7 +214,7 @@ public:
             throw gcnew Exception(ex->Message);
         }
 
-        // get all types for the assembly, check if one of the type implement the TraceTool.ITracePLugin
+        // get all types for the assembly, check if one of the type implement the TraceTool.ITracePlugin
         //-----------------------------------------
         array<Type^>^ types;
         try {
@@ -259,12 +259,12 @@ public:
             for (int d = 0; d < interfaces->Length; d++)
             {
                 Type^ OneInterface = interfaces[d];
-                if (OneInterface->FullName->Equals("TraceTool.ITracePLugin"))
+                if (OneInterface->FullName->Equals("TraceTool.ITracePlugin"))
                 {
                     // create an instance of the type and save it in the PluginLoader
                     // Error can occur if the type require parameters.
 
-                    //Singleton::trace("    Loader : CheckPlugInFile : TraceTool.ITracePLugin found. Create instance\n");
+                    //Singleton::trace("    Loader : CheckPlugInFile : TraceTool.ITracePlugin found. Create instance\n");
                     _plugin = Activator::CreateInstance(OneType);
 
                     // create delegates
@@ -304,7 +304,7 @@ public:
             }  // next interface
         }     // next type
 
-        // no TraceTool.ITracePLugin found.
+        // no TraceTool.ITracePlugin found.
         // generate exception
 
         StringBuilder^ sb = gcnew StringBuilder("PluginLoader : Assembly <");

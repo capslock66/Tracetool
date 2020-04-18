@@ -8,6 +8,8 @@
 //
 
 using System;
+using System.Text; // for lowTrace
+using System.IO;   // for lowTrace
 using System.Net;
 using System.Net.Sockets;
 using Fleck;
@@ -16,7 +18,7 @@ using TraceTool;
 namespace CSharpPlugin
 {
     // Websock plugin
-    public class WebsockPlugin : ITracePLugin
+    public class WebsockPlugin : ITracePlugin
     {
         //WinTrace PlugTraces;
         
@@ -30,6 +32,7 @@ namespace CSharpPlugin
         const int labelWinsockResourceId = 102 ;
 
         // incoming websocket 
+        private static WebSocketServer server ;
         private static string webSocketHost = "0.0.0.0";
         private static int webSocketPort = 8091;
 
@@ -44,31 +47,32 @@ namespace CSharpPlugin
         //private static string _lastError = "";
 
         //------------------------------------------------------------------------------
-        //private void trace(String source)
-        //{
-        //    FileStream f;
-        //    var FileToWrite = "c:\\temp\\DotNetWrapperLog.txt";
-        //    if (File.Exists(FileToWrite) == false)
-        //    {
-        //        f = new FileStream(FileToWrite, FileMode.Create);
-        //    }
-        //    else
-        //    {  // append only the node
-        //        f = File.Open(FileToWrite, FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite);
-        //        f.Seek(0, SeekOrigin.End);
-        //    }
-        //    var info = new UTF8Encoding(true).GetBytes(DateTime.Now.ToString("yyyyMMdd HH:mm:ss:fff ") + source);
-        //    f.Write(info, 0, info.Length);
-        //    f.Close();
-        //}
-
+#pragma warning disable CA1305 // Specify IFormatProvider
+        private void LowTrace(String source)
+        {
+            FileStream f;
+            var FileToWrite = "c:\\temp\\DotNetWrapperLog.txt";
+            if (File.Exists(FileToWrite) == false)
+            {
+                f = new FileStream(FileToWrite, FileMode.Create);
+            }
+            else
+            {  // append only the node
+                f = File.Open(FileToWrite, FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite);
+                f.Seek(0, SeekOrigin.End);
+            }
+            var info = new UTF8Encoding(true).GetBytes(DateTime.Now.ToString("yyyyMMdd HH:mm:ss:fff ") + source);
+            f.Write(info, 0, info.Length);
+            f.Close();
+        }
+#pragma warning restore CA1305 // Specify IFormatProvider
 
         /// <summary>
-        /// ITracePLugin.GetPlugName : Get the plugin name
+        /// ITracePlugin.GetPlugName : Get the plugin name
         /// </summary>
         public string GetPlugName()
         {
-            //trace("        WebSockPlugin GetPlugName\n") ;
+            //lowTrace("        WebSockPlugin GetPlugName\n") ;
             return PlugName;
         }
 
@@ -79,7 +83,7 @@ namespace CSharpPlugin
         /// </summary>
         public void Start(string strParameter)
         {
-            //trace("        WebSockPlugin Start\n") ;
+            //lowTrace("        WebSockPlugin Start\n") ;
 
             if (string.IsNullOrEmpty(strParameter))
                 strParameter = "" ;
@@ -130,7 +134,7 @@ namespace CSharpPlugin
             FleckLog.Level = LogLevel.Error ;
 
             // FlecK WebSocketServer
-            var server = new WebSocketServer($"ws://{webSocketHost}:{webSocketPort}");  
+            server = new WebSocketServer($"ws://{webSocketHost}:{webSocketPort}");  
             server.Start(socket =>
             {
                 //socket.OnOpen = () =>
@@ -230,8 +234,10 @@ namespace CSharpPlugin
         /// </summary>
         public void Stop()
         {
-            //trace("        WebSockPlugin Stop\n") ;
+            //lowTrace("        WebSockPlugin Stop\n") ;
             //PlugTraces.Debug.Send("Websock Plugin stopped");
+            server.Dispose() ;
+            server = null ;
             TTrace.Flush();
         }
 
@@ -262,10 +268,10 @@ namespace CSharpPlugin
             }
             catch (Exception e)
             {
+                LowTrace($"OnAction {e.Message}") ;
                 PlugTraces.Error.Send($"websock plugin : OnAction exception {e.Message}");
                 throw;
             }
-
             return true;
         }
 
@@ -283,7 +289,7 @@ namespace CSharpPlugin
         /// </returns>
         public bool OnBeforeDelete(string WinId, string NodeId)
         {
-            //trace("        WebSockPlugin onBeforeDelete\n") ;
+            //lowTrace("        WebSockPlugin onBeforeDelete\n") ;
             //TTrace.Debug.Send("onBeforeDelete") ;
             return true;
         }
@@ -296,7 +302,7 @@ namespace CSharpPlugin
         /// </summary>
         public void OnTimer()
         {
-            //trace("        WebSockPlugin OnTimer\n") ;
+            //lowTrace("        WebSockPlugin OnTimer\n") ;
             //TTrace.Debug.Send("OnTimer");
         }
 
