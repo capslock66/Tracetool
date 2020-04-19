@@ -21,7 +21,7 @@ namespace CSharpPlugin
     public class WebsockPlugin : ITracePlugin
     {
         //WinTrace PlugTraces;
-        
+
         const string PlugName = "Web sock";
         private static byte[] _buffToSend;  // buffer to send to viewer
         private static bool _isSocketError;
@@ -29,10 +29,10 @@ namespace CSharpPlugin
         private static long _errorTime;
 
         private static WinTrace PlugTraces;
-        const int labelWinsockResourceId = 102 ;
+        const int labelWinsockResourceId = 102;
 
         // incoming websocket 
-        private static WebSocketServer server ;
+        private static WebSocketServer server;
         private static string webSocketHost = "0.0.0.0";
         private static int webSocketPort = 8091;
 
@@ -42,6 +42,8 @@ namespace CSharpPlugin
 
         // received message count
         private static int messageCount = 0;
+        private static int activeConnection = 0;
+        private static int closedConnection = 0;
 
 
         //private static string _lastError = "";
@@ -86,22 +88,22 @@ namespace CSharpPlugin
             //lowTrace("        WebSockPlugin Start\n") ;
 
             if (string.IsNullOrEmpty(strParameter))
-                strParameter = "" ;
-            
+                strParameter = "";
+
             try
             {
-                var paramList = strParameter.Split(',') ;
+                var paramList = strParameter.Split(',');
                 foreach (var keyValue in paramList)
                 {
-                    var keyValueList = keyValue.Split('=') ;
-                    var key = keyValueList[0].Trim() ;
+                    var keyValueList = keyValue.Split('=');
+                    var key = keyValueList[0].Trim();
                     var value = keyValueList[1].Trim();
-                    if (string.Compare(key,"WebSocketHost", StringComparison.OrdinalIgnoreCase) == 0)
-                        webSocketHost = value ;
+                    if (string.Compare(key, "WebSocketHost", StringComparison.OrdinalIgnoreCase) == 0)
+                        webSocketHost = value;
                     else if (string.Compare(key, "WebSocketPort", StringComparison.OrdinalIgnoreCase) == 0)
                         webSocketPort = int.Parse(value);
                     else if (string.Compare(key, "ViewerSocketHost", StringComparison.OrdinalIgnoreCase) == 0)
-                        viewerSocketHost = value ;
+                        viewerSocketHost = value;
                     else if (string.Compare(key, "ViewerSocketPort", StringComparison.OrdinalIgnoreCase) == 0)
                         viewerSocketPort = int.Parse(value);
                 }
@@ -113,9 +115,9 @@ namespace CSharpPlugin
                 throw;
             }
 
-            TTrace.Options.SendMode = SendMode.Socket ;
-            TTrace.Options.SocketHost = viewerSocketHost ;
-            TTrace.Options.SocketPort = viewerSocketPort ;
+            TTrace.Options.SendMode = SendMode.Socket;
+            TTrace.Options.SocketHost = viewerSocketHost;
+            TTrace.Options.SocketPort = viewerSocketPort;
 
             // create a window and ask to receive timer (ignore action and onBeforeDelete events)
             PlugTraces = new WinTrace("_", "");  // match the default Wintrace. No new windows is created
@@ -124,41 +126,42 @@ namespace CSharpPlugin
             PlugTraces.CreateResource(labelWinsockResourceId, TraceConst.CST_RES_LABELH_LEFT, 100, "Web Socket");
 
             PlugTraces.LinkToPlugin(PlugName,
-                TraceConst.CST_PLUG_ONACTION 
+                TraceConst.CST_PLUG_ONACTION
                 //+TraceConst.CST_PLUG_ONBEFOREDELETE 
                 //+TraceConst.CST_PLUG_ONTIMER
                 );
 
             //TTrace.Debug.Send($"WebsockPlugin started with param {strParameter}") ;
 
-            FleckLog.Level = LogLevel.Error ;
+            FleckLog.Level = LogLevel.Error;
 
             // FlecK WebSocketServer
-            server = new WebSocketServer($"ws://{webSocketHost}:{webSocketPort}");  
+            server = new WebSocketServer($"ws://{webSocketHost}:{webSocketPort}");
             server.Start(socket =>
             {
-                //socket.OnOpen = () =>
-                //{
-                //    PlugTraces.Debug.Send("Websock Opened");
-                //};
-                //socket.OnClose = () =>
-                //{
-                //    PlugTraces.Debug.Send("Websock Closed");
-                //};
+                socket.OnOpen = () =>
+                {
+                    activeConnection++;
+                };
+                socket.OnClose = () =>
+                {
+                    activeConnection--;
+                    closedConnection++;
+                };
                 //socket.OnMessage = message =>
                 //{
                 //    PlugTraces.Debug.Send($"OnMessage", message);
                 //};
                 socket.OnBinary = buffer =>
                 {
-                    messageCount++ ;
+                    messageCount++;
                     //PlugTraces.Debug.Send($"Message, Len = {buffer.Length}");
                     //PlugTraces.SetTextResource(102, $"WebSock {buffer.Length}");
                     _buffToSend = buffer;
                     SendMessageToSocket();
                 };
             });
-            
+
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1031:Do not catch general exception types", Justification = "<Pending>")]
@@ -236,8 +239,8 @@ namespace CSharpPlugin
         {
             //lowTrace("        WebSockPlugin Stop\n") ;
             //PlugTraces.Debug.Send("Websock Plugin stopped");
-            server.Dispose() ;
-            server = null ;
+            server.Dispose();
+            server = null;
             TTrace.Flush();
         }
 
@@ -261,14 +264,16 @@ namespace CSharpPlugin
                 if (ResourceId != labelWinsockResourceId)
                     return true;
 
+                PlugTraces.ClearAll() ;
                 PlugTraces.Debug.Send("Incoming websocket", $"{webSocketHost}:{webSocketPort}");
                 PlugTraces.Debug.Send("Tracetool viewer", $"{viewerSocketHost}:{viewerSocketPort}");
+                PlugTraces.Debug.Send("Active connection", $"{activeConnection}");
+                PlugTraces.Debug.Send("Closed connection", $"{closedConnection}");
                 PlugTraces.Debug.Send("Received message count", $"{messageCount}");
-
             }
             catch (Exception e)
             {
-                LowTrace($"OnAction {e.Message}") ;
+                LowTrace($"OnAction {e.Message}");
                 PlugTraces.Error.Send($"websock plugin : OnAction exception {e.Message}");
                 throw;
             }

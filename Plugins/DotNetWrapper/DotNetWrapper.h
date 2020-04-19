@@ -23,23 +23,30 @@ extern "C"
 {
     static void trace(String^ source)
     {
-        FileStream^ f;
-        String^ FileToWrite = gcnew String("c:\\temp\\DotNetWrapperLog.txt");
-
-        // check if exist
-
-        if (File::Exists(FileToWrite) == false)
+        try
         {
-            f = gcnew FileStream(FileToWrite, FileMode::Create);
+            FileStream^ f;
+            String^ FileToWrite = gcnew String("c:\\temp\\DotNetWrapperLog.txt");
+
+            // check if exist
+
+            if (File::Exists(FileToWrite) == false)
+            {
+                f = gcnew FileStream(FileToWrite, FileMode::Create);
+            }
+            else {  // append only the node
+                f = File::Open(FileToWrite, FileMode::Open, FileAccess::ReadWrite, FileShare::ReadWrite);
+                f->Seek(0, SeekOrigin::End);
+            }
+            array<Byte>^ info = (gcnew UTF8Encoding(true))->GetBytes((DateTime::Now.ToString("yyyyMMdd HH:mm:ss:fff ") + source)->ToString());
+            f->Write(info, 0, info->Length);
+            f->Close();
+            f = nullptr;
         }
-        else {  // append only the node
-            f = File::Open(FileToWrite, FileMode::Open, FileAccess::ReadWrite, FileShare::ReadWrite);
-            f->Seek(0, SeekOrigin::End);
+        catch (const std::exception&)
+        {
+            // eat exception
         }
-        array<Byte>^ info = (gcnew UTF8Encoding(true))->GetBytes((DateTime::Now.ToString("yyyyMMdd HH:mm:ss:fff ") + source)->ToString());
-        f->Write(info, 0, info->Length);
-        f->Close();
-        f = nullptr;
     }
 }
 
@@ -70,9 +77,8 @@ public delegate void Delegate_OnTimer();
 public delegate bool Delegate_OnBeforeDelete(String^ WinId, String^ NodeId);
 public delegate bool Delegate_OnAction(String^ WinId, int ResourceId, String^ NodeId);
 
-// Each managed plugin are loaded in separated domain.
-// a PLugin loader load only one plugin. 
-// DomainPluginCaller is created from separated AppDomain
+// A DomainPluginCaller load only one managed plugin in a separated domain. 
+
 [Serializable]
 public ref class DomainPluginCaller : MarshalByRefObject
 {
@@ -86,7 +92,8 @@ private:
     Delegate_OnBeforeDelete^ _delegate_OnBeforeDelete;
     Delegate_OnTimer^ _delegate_OnTimer;
 
-    // Point to the plugin (type ITracePlugin). Needed to unloaded the plugin
+    // Point to the plugin (type ITracePlugin). 
+    // Needed to keep an object reference , so that the garbage collector will not free the plugin
     Object^ _plugin;
 
 public:
@@ -103,8 +110,15 @@ public:
 
     void UnloadPlugin()
     {
-        //trace("    DomainPluginCaller : UnloadPlugin\n");
+        //trace("    DomainPluginCaller : UnloadPlugin begin\n");
+        _delegate_GetPlugName = nullptr;
+        _delegate_Start = nullptr;
+        _delegate_Stop = nullptr;
+        _delegate_OnTimer = nullptr;
+        _delegate_OnBeforeDelete = nullptr;
+        _delegate_OnAction = nullptr;
         _plugin = nullptr;  // Garbage collected
+        //trace("    DomainPluginCaller : UnloadPlugin end\n");
     }
 
     void StartPlugin(String^ strParameter)
@@ -146,7 +160,7 @@ public:
 
     //---------------------------------------------------------------------------------------------------------------
 
-    // check if the assembly containt a class that implement the Tracetool.ITracePlugin interface
+    // check if the assembly containt a class that implement the Tracetool.ITracePlugin interface and safe delegate
     // throw exception on error
     void CheckPlugInFile(String^ FileName)
     {
@@ -230,7 +244,7 @@ public:
                 //trace("    DomainPluginCaller : CheckPlugInFile : interface <" + OneInterface->FullName + ">\n");  // TraceTool.ITracePlugin
                 if (OneInterface->FullName->Equals("TraceTool.ITracePlugin"))
                 {
-                    // create an instance of the type and save it in the PluginLoader
+                    // create an instance of the type and save it in the DomainPluginCaller
                     // Error can occur if the type require parameters.
 
                     //trace("    DomainPluginCaller : CheckPlugInFile : TraceTool.ITracePlugin found. Create instance\n");
@@ -293,10 +307,15 @@ public:
 
 //---------------------------------------------------------------------------------------------------------------
 
-// wrapper for DomainPluginCaller (loaded in another domain)
+// wrapper for DomainPluginCaller 
+// PluginWrapper is created in the DotNetWrapper domain
+// DomainPluginCaller is created in separated domain
 public ref class PluginWrapper
 {
 public:
+
+    String^ FileName;
+
     // Status of the plugin
     PluginStatus Status;
 
@@ -305,20 +324,8 @@ public:
     // Domain that host the plugin. Needed to unloaded the domain
     AppDomain^ Domain;
 
-    // wrapper to the loader
-    DomainPluginCaller^ Loader;
-
-    //String^ SatusToString(PluginStatus status)
-    //{
-    //    String^ result;
-    //    switch (status)
-    //    {
-    //    case Unloaded: result = gcnew String("Unloaded"); break;
-    //    case Loaded:   result = gcnew String("Loaded");   break;
-    //    case Started:  result = gcnew String("Started");  break;
-    //    }
-    //    return result;
-    //}
+    // Domain plugin caller
+    DomainPluginCaller^ DomainCaller;
 };
 
 //---------------------------------------------------------------------------------------------------------------

@@ -48,13 +48,151 @@ extern "C"
     }
 
     //---------------------------------------------------------------------------------------------------------------
+    bool GetPlugName(PluginWrapper^ wrapper, char* PlugName, char* strException)
+    {
+        try {
+            strcat(PlugName, wrapper->DomainCaller->GetPlugName());
+        }
+        catch (Exception^ ex) {
+            StringBuilder^ sb = gcnew StringBuilder();
+            sb
+                ->Append("GetPlugName exception")
+                ->Append(",FileName : " + wrapper->FileName + ",")
+                ->Append(ex->Message)
+                ->Append(ex->StackTrace->ToString());
+            strcat(strException, sb->ToString());
+            trace(sb->ToString() + "\n");
+            return false;
+        }
+        return true;
+    }
+
+    //---------------------------------------------------------------------------------------------------------------
+
+    bool GetDelegates(PluginWrapper^ wrapper, char* strException)
+    {
+        try {
+            wrapper->DomainCaller->CheckPlugInFile(wrapper->FileName);
+        }
+        catch (Exception^ ex) {
+            StringBuilder^ sb = gcnew StringBuilder();
+            sb
+                ->Append("DomainCaller->CheckPlugInFile exception")
+                ->Append(",FileName : " + wrapper->FileName + ",")
+                ->Append(ex->Message)
+                ->Append(ex->StackTrace->ToString());
+            strcat(strException, sb->ToString());
+            trace(sb->ToString() + "\n");
+
+            wrapper->DomainCaller = nullptr;
+            AppDomain::Unload(wrapper->Domain);
+            return false;
+        }
+        return true;
+    }
+
+    //---------------------------------------------------------------------------------------------------------------
+
+    // load the plugin in the created domain
+    bool LoadPlugin(PluginWrapper^ wrapper, char* strException)
+    {
+        // https://docs.microsoft.com/en-us/dotnet/api/system.marshalbyrefobject?view=netframework-4.8
+        // https://weblog.west-wind.com/posts/2009/Jan/19/Assembly-Loading-across-AppDomains
+        try {
+            String^ Path;
+            Path = Assembly::GetAssembly(DomainPluginCaller::typeid)->Location;
+            //trace("wrapper : CheckPlugInFile : Path : " + Path + "\n");
+
+            wrapper->DomainCaller = (DomainPluginCaller^)(wrapper->Domain->CreateInstanceFromAndUnwrap(Path, DomainPluginCaller::typeid->FullName));
+            //trace("wrapper : CheckPlugInFile : DomainCaller created " + "\n");
+
+            wrapper->Status = Loaded;
+        }
+        catch (Exception^ ex) {
+            StringBuilder^ sb = gcnew StringBuilder();
+            sb
+                ->Append("CreateInstanceFromAndUnwrap exception")
+                ->Append(",FileName : " + wrapper->FileName + ",")
+                ->Append(ex->Message)
+                ->Append(ex->StackTrace->ToString());
+
+            strcat(strException, sb->ToString());
+            trace(sb->ToString() + "\n");
+
+            return false;
+        }
+        return true;
+    }
+
+    //---------------------------------------------------------------------------------------------------------------
+
+    // create a domain for the plugin
+
+    bool CreateDomain(PluginWrapper^ wrapper, char* strException)
+    {
+        try {
+            wrapper->Domain = AppDomain::CreateDomain("PlugDomain");
+        }
+        catch (Exception^ ex) {
+            StringBuilder^ sb = gcnew StringBuilder();
+            sb
+                ->Append("CreateDomain exception")
+                ->Append(",FileName : " + wrapper->FileName + ",")
+                ->Append(ex->Message)
+                ->Append(ex->StackTrace->ToString());
+            strcat(strException, sb->ToString());
+            trace(sb->ToString() + "\n");
+            return false;
+        }
+        return true;
+    }
+    
+    //---------------------------------------------------------------------------------------------------------------
+
+    bool StartPlugin(PluginWrapper^ wrapper, char* strException)
+    {
+        try {
+            wrapper->DomainCaller->StartPlugin(wrapper->Parameters);
+            wrapper->Status = Started;
+        }
+        catch (Exception^ ex) {
+            StringBuilder^ sb = gcnew StringBuilder();
+            sb
+                ->Append("StartPlugin exception")
+                ->Append(ex->Message)
+                ->Append(ex->StackTrace->ToString());
+            strcat(strException, sb->ToString());
+            trace(sb->ToString() + "\n");
+            return false;
+        }
+        return true;
+    }
+
+    //---------------------------------------------------------------------------------------------------------------
+
+    // called by onAction, OnDelete, OnTimer when the plugin is no more accessible (server disconnected, unloaded,...)
+    bool ReLoadPlugin(PluginWrapper^ wrapper, char* strException)
+    {
+        trace("Reload plugin \n");
+        
+        wrapper->DomainCaller = nullptr;
+        wrapper->Domain = nullptr;
+        wrapper->Status = Unloaded;
+
+        if (CreateDomain(wrapper, strException) == false) return false;
+        if (LoadPlugin(wrapper, strException) == false) return false;
+        if (GetDelegates(wrapper, strException) == false) return false;
+        if (StartPlugin(wrapper, strException) == false) return false;
+
+        return true;
+    }
+
+    //---------------------------------------------------------------------------------------------------------------
 
     __declspec(dllexport) void __cdecl CheckPlugInFile(unsigned PlugId, char* FileName, char* PlugName, char* strException)
     {
-        String^ strFileName = gcnew String(FileName);
         try
         {
-
             //trace ("wrapper : CheckPlugInFile(PLugin:<" + key + ">,FileName:<" + strFileName + ">\n");
             if (ManagedGlobals::WrapperDic->ContainsKey(PlugId))
             {
@@ -67,89 +205,19 @@ extern "C"
 
             // wrapper contains all informations about the pluggin
             PluginWrapper^ wrapper = gcnew PluginWrapper();
+            wrapper->FileName = gcnew String(FileName);
+            wrapper->Status = Unloaded;
 
             // create a domain for the plugin
-            //-------------------------------
+            if (CreateDomain(wrapper, strException) == false) return;
 
-            try {
-                wrapper->Domain = AppDomain::CreateDomain("PlugDomain");
-            }
-            catch (Exception^ ex) {
-                StringBuilder^ sb = gcnew StringBuilder();
-                sb
-                    ->Append("CreateDomain exception")
-                    ->Append(",FileName : " + strFileName + ",")
-                    ->Append(ex->Message)
-                    ->Append(ex->StackTrace->ToString());
-                strcat(strException, sb->ToString());
-                trace(sb->ToString() + "\n");
-                return;
-            }
+            // load the DomainCaller in the created domain. Set status to Loaded;
+            if (LoadPlugin(wrapper, strException) == false) return;
 
-            // load the loader in the created domain
-            // https://docs.microsoft.com/en-us/dotnet/api/system.marshalbyrefobject?view=netframework-4.8
-            // https://weblog.west-wind.com/posts/2009/Jan/19/Assembly-Loading-across-AppDomains
-            //----------------------------------------
+            // get delegate functions
+            if (GetDelegates(wrapper, strException) == false) return;
 
-            try {
-                String^ Path;
-                Path = Assembly::GetAssembly(DomainPluginCaller::typeid)->Location;
-                //trace("wrapper : CheckPlugInFile : Path : " + Path + "\n");
-
-                wrapper->Loader = (DomainPluginCaller^)(wrapper->Domain->CreateInstanceFromAndUnwrap(Path, DomainPluginCaller::typeid->FullName));
-                //trace("wrapper : CheckPlugInFile : Loader created " + "\n");
-            }
-            catch (Exception^ ex) {
-                StringBuilder^ sb = gcnew StringBuilder();
-                sb
-                    ->Append("CreateInstanceFromAndUnwrap exception")
-                    ->Append(",FileName : " + strFileName + ",")
-                    ->Append(ex->Message)
-                    ->Append(ex->StackTrace->ToString());
-
-                strcat(strException, sb->ToString());
-                trace(sb->ToString() + "\n");
-
-                return;
-            }
-
-            // call Loader.CheckPlugInFile
-            //----------------------------
-            try {
-                wrapper->Loader->CheckPlugInFile(strFileName);
-            }
-            catch (Exception^ ex) {
-                StringBuilder^ sb = gcnew StringBuilder();
-                sb
-                    ->Append("Loader->CheckPlugInFile exception")
-                    ->Append(",FileName : " + strFileName + ",")
-                    ->Append(ex->Message)
-                    ->Append(ex->StackTrace->ToString());
-                strcat(strException, sb->ToString());
-                trace(sb->ToString() + "\n");
-
-                wrapper->Loader = nullptr;
-                AppDomain::Unload(wrapper->Domain);
-                return;
-            }
-
-            wrapper->Status = Loaded;
-            try {
-                strcat(PlugName, wrapper->Loader->GetPlugName());
-            }
-            catch (Exception^ ex) {
-                StringBuilder^ sb = gcnew StringBuilder();
-                sb
-                    ->Append("GetPlugName exception")
-                    ->Append(",FileName : " + strFileName + ",")
-                    ->Append(ex->Message)
-                    ->Append(ex->StackTrace->ToString());
-                strcat(strException, sb->ToString());
-                trace(sb->ToString() + "\n");
-                return;
-            }
-
-            wrapper->Status = Loaded;
+            if (GetPlugName(wrapper, PlugName, strException) == false) return;
 
             // add to plugin list
             ManagedGlobals::WrapperDic->Add(PlugId, wrapper);
@@ -162,7 +230,7 @@ extern "C"
             StringBuilder^ sb = gcnew StringBuilder();
             sb
                 ->Append("CheckPlugInFile exception")
-                ->Append(",FileName : " + strFileName + ",")
+                ->Append(",FileName : ")->Append(FileName)->Append(",")
                 ->Append(ex->Message)
                 ->Append(ex->StackTrace->ToString());
             strcat(strException, sb->ToString());
@@ -210,21 +278,8 @@ extern "C"
             }
             wrapper->Parameters = gcnew String(Parameter);
 
-            try {
-                wrapper->Loader->StartPlugin(wrapper->Parameters);
-            }
-            catch (Exception^ ex) {
-                StringBuilder^ sb = gcnew StringBuilder();
-                sb
-                    ->Append("StartPlugin exception")
-                    ->Append(ex->Message)
-                    ->Append(ex->StackTrace->ToString());
-                strcat(strException, sb->ToString());
-                trace(sb->ToString() + "\n");
+            if (StartPlugin(wrapper, strException) == false)
                 return;
-            }
-
-            wrapper->Status = Started;
             strcat(strException, "OK");
         }
         catch (Exception^ ex)
@@ -269,7 +324,7 @@ extern "C"
             }
 
             try {
-                wrapper->Loader->StopPlugin();
+                wrapper->DomainCaller->StopPlugin();
             }
             catch (Exception^ ex) {
                 StringBuilder^ sb = gcnew StringBuilder();
@@ -328,20 +383,27 @@ extern "C"
                 return true;
             }
 
+            String^ strWinId = gcnew String(WinId);
+            String^ strNodeId = gcnew String(NodeId);
             try {
-                String^ strWinId = gcnew String(WinId);
-                String^ strNodeId = gcnew String(NodeId);
-                result = wrapper->Loader->OnAction(strWinId, ResourceId, strNodeId);
+                result = wrapper->DomainCaller->OnAction(strWinId, ResourceId, strNodeId);
             }
-            catch (Exception^ ex) {
-                StringBuilder^ sb = gcnew StringBuilder();
-                sb
-                    ->Append("OnAction exception")
-                    ->Append(ex->Message)
-                    ->Append(ex->StackTrace->ToString());
-                strcat(strException, sb->ToString());
-                trace(sb->ToString() + "\n");
-                return true;
+            catch (Exception^ ex) 
+            {
+                if (ReLoadPlugin(wrapper, strException) == true)
+                {
+                    // plugin reloaded. Try again OnAction
+                    result = wrapper->DomainCaller->OnAction(strWinId, ResourceId, strNodeId);
+                }  else {
+                    StringBuilder^ sb = gcnew StringBuilder();
+                    sb
+                        ->Append("OnAction exception")
+                        ->Append(ex->Message)                     // Object '/xxx' has been disconnected or does not exist at the server
+                        ->Append(ex->StackTrace->ToString());
+                    trace(sb->ToString() + "\n");
+                    strcat(strException, sb->ToString());
+                    return true;
+                }
             }
             strcat(strException, "OK");
         }
@@ -390,17 +452,24 @@ extern "C"
             }
 
             try {
-                return wrapper->Loader->OnBeforeDelete(strWinId, strNodeId);
+                return wrapper->DomainCaller->OnBeforeDelete(strWinId, strNodeId);
             }
-            catch (Exception^ ex) {
-                StringBuilder^ sb = gcnew StringBuilder();
-                sb
-                    ->Append("OnBeforeDelete exception")
-                    ->Append(ex->Message)
-                    ->Append(ex->StackTrace->ToString());
-                strcat(strException, sb->ToString());
-                trace(sb->ToString() + "\n");
-                return true;
+            catch (Exception^ ex) 
+            {
+                if (ReLoadPlugin(wrapper, strException) == true)
+                {
+                    // plugin reloaded. Try again OnBeforeDelete
+                    return wrapper->DomainCaller->OnBeforeDelete(strWinId, strNodeId);
+                } else {
+                    StringBuilder^ sb = gcnew StringBuilder();
+                    sb
+                        ->Append("OnBeforeDelete exception")
+                        ->Append(ex->Message)
+                        ->Append(ex->StackTrace->ToString());
+                    trace(sb->ToString() + "\n");
+                    strcat(strException, sb->ToString());
+                    return true;
+                }
             }
             strcat(strException, "OK");
         }
@@ -445,17 +514,24 @@ extern "C"
             }
 
             try {
-                wrapper->Loader->OnTimer();
+                wrapper->DomainCaller->OnTimer();
             }
-            catch (Exception^ ex) {
-                StringBuilder^ sb = gcnew StringBuilder();
-                sb
-                    ->Append("OnTimer exception")
-                    ->Append(ex->Message)
-                    ->Append(ex->StackTrace->ToString());
-                strcat(strException, sb->ToString());
-                trace(sb->ToString() + "\n");
-                return;
+            catch (Exception^ ex) 
+            {
+                if (ReLoadPlugin(wrapper, strException) == true)
+                {
+                    // plugin reloaded. Try again OnTimer
+                    wrapper->DomainCaller->OnTimer();
+                } else {
+                    StringBuilder^ sb = gcnew StringBuilder();
+                    sb
+                        ->Append("OnTimer exception")
+                        ->Append(ex->Message)
+                        ->Append(ex->StackTrace->ToString());
+                    trace(sb->ToString() + "\n");
+                    strcat(strException, sb->ToString());
+                    return;
+                }
             }
             strcat(strException, "OK");
         }
@@ -496,7 +572,7 @@ extern "C"
             // stop before unload
             if (wrapper->Status == Started) {
                 try {
-                    wrapper->Loader->StopPlugin();
+                    wrapper->DomainCaller->StopPlugin();
                 }
                 catch (Exception^ ex) {
                     StringBuilder^ sb = gcnew StringBuilder();
@@ -518,8 +594,21 @@ extern "C"
                 return;
             }
 
-            wrapper->Loader->UnloadPlugin();
-            wrapper->Loader = nullptr;
+            try {
+                wrapper->DomainCaller->UnloadPlugin();  // release reference to plugin
+            }
+            catch (Exception^ ex) {
+                StringBuilder^ sb = gcnew StringBuilder();
+                sb
+                    ->Append("unload domain exception")
+                    ->Append(ex->Message)
+                    ->Append(ex->StackTrace->ToString());
+                strcat(strException, sb->ToString());
+                trace(sb->ToString() + "\n");
+                // no need to reload the plugin
+                return;
+            }
+            wrapper->DomainCaller = nullptr;
             wrapper->Status = Unloaded;
             ManagedGlobals::WrapperDic->Remove(PlugId);
 
