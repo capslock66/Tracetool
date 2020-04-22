@@ -18,7 +18,7 @@
 /// <summary>
 /// Utility function : concat a Managed String to a C string buffer 
 /// </summary>
-/// <param name="dest">target buffer. The size is limited to 1024 chars </param>
+/// <param name="dest">target buffer. The size is limited to 1999 chars </param>
 /// <param name="source">source </param>
 
 void strcat(char* dest, String^ source)
@@ -26,8 +26,8 @@ void strcat(char* dest, String^ source)
     unsigned SourceLen = source->Length;
     unsigned DestLen = strlen(dest);
 
-    if ((DestLen + SourceLen) > 1024)   // limit all strings to 1024 chars max
-        SourceLen = 1024 - DestLen;
+    if ((DestLen + SourceLen) >= 1998)   // limit all strings to 1999 chars max
+        SourceLen = 1998 - DestLen;
 
     array<Char>^ SourceChars = source->ToCharArray();
 
@@ -57,9 +57,9 @@ extern "C"
         catch (Exception^ ex) {
             StringBuilder^ sb = gcnew StringBuilder();
             sb
-                ->Append("GetPlugName exception")
-                ->Append(",FileName : " + wrapper->FileName + ",")
-                ->Append(ex->Message)
+                ->Append("GetPlugName exception \n")
+                ->Append("FileName : " + wrapper->FileName + "\n")
+                ->Append(ex->Message + "\n")
                 ->Append(ex->StackTrace->ToString());
             strcat(strException, sb->ToString());
             trace(sb->ToString() + "\n");
@@ -78,9 +78,9 @@ extern "C"
         catch (Exception^ ex) {
             StringBuilder^ sb = gcnew StringBuilder();
             sb
-                ->Append("DomainCaller->CheckPlugInFile exception")
-                ->Append(",FileName : " + wrapper->FileName + ",")
-                ->Append(ex->Message)
+                ->Append("DomainCaller->CheckPlugInFile exception \n")
+                ->Append("FileName : " + wrapper->FileName + "\n")
+                ->Append(ex->Message + "\n")
                 ->Append(ex->StackTrace->ToString());
             strcat(strException, sb->ToString());
             trace(sb->ToString() + "\n");
@@ -112,9 +112,9 @@ extern "C"
         catch (Exception^ ex) {
             StringBuilder^ sb = gcnew StringBuilder();
             sb
-                ->Append("CreateInstanceFromAndUnwrap exception")
-                ->Append(",FileName : " + wrapper->FileName + ",")
-                ->Append(ex->Message)
+                ->Append("CreateInstanceFromAndUnwrap exception \n")
+                ->Append("FileName : " + wrapper->FileName + "\n")
+                ->Append(ex->Message + "\n")
                 ->Append(ex->StackTrace->ToString());
 
             strcat(strException, sb->ToString());
@@ -137,9 +137,9 @@ extern "C"
         catch (Exception^ ex) {
             StringBuilder^ sb = gcnew StringBuilder();
             sb
-                ->Append("CreateDomain exception")
-                ->Append(",FileName : " + wrapper->FileName + ",")
-                ->Append(ex->Message)
+                ->Append("CreateDomain exception \n")
+                ->Append("FileName : " + wrapper->FileName + "\n")
+                ->Append(ex->Message + "\n")
                 ->Append(ex->StackTrace->ToString());
             strcat(strException, sb->ToString());
             trace(sb->ToString() + "\n");
@@ -159,8 +159,8 @@ extern "C"
         catch (Exception^ ex) {
             StringBuilder^ sb = gcnew StringBuilder();
             sb
-                ->Append("StartPlugin exception")
-                ->Append(ex->Message)
+                ->Append("StartPlugin exception \n")
+                ->Append(ex->Message + "\n")
                 ->Append(ex->StackTrace->ToString());
             strcat(strException, sb->ToString());
             trace(sb->ToString() + "\n");
@@ -230,9 +230,9 @@ extern "C"
         {
             StringBuilder^ sb = gcnew StringBuilder();
             sb
-                ->Append("CheckPlugInFile exception")
-                ->Append(",FileName : ")->Append(FileName)->Append(",")
-                ->Append(ex->Message)
+                ->Append("CheckPlugInFile exception \n")
+                ->Append("FileName : ")->Append(FileName)->Append("\n")
+                ->Append(ex->Message + "\n")
                 ->Append(ex->StackTrace->ToString());
             strcat(strException, sb->ToString());
             trace(sb->ToString() + "\n");
@@ -246,7 +246,7 @@ extern "C"
     {
         try
         {
-            //trace("wrapper : Start(PLugin:" + PlugId + ")\n");
+            trace("wrapper : Start(PLugin:" + PlugId + ")\n");
 
             // check if plugin is know
             if (ManagedGlobals::WrapperDic->ContainsKey(PlugId) == false)
@@ -287,8 +287,8 @@ extern "C"
         {
             StringBuilder^ sb = gcnew StringBuilder();
             sb
-                ->Append("Start exception")
-                ->Append(ex->Message)
+                ->Append("Start exception \n")
+                ->Append(ex->Message + "\n")
                 ->Append(ex->StackTrace->ToString());
             strcat(strException, sb->ToString());
             trace(sb->ToString() + "\n");
@@ -330,8 +330,8 @@ extern "C"
             catch (Exception^ ex) {
                 StringBuilder^ sb = gcnew StringBuilder();
                 sb
-                    ->Append("Stop exception")
-                    ->Append(ex->Message)
+                    ->Append("Stop exception \n")
+                    ->Append(ex->Message + "\n")
                     ->Append(ex->StackTrace->ToString());
                 strcat(strException, sb->ToString());
                 trace(sb->ToString() + "\n");
@@ -345,8 +345,8 @@ extern "C"
         {
             StringBuilder^ sb = gcnew StringBuilder();
             sb
-                ->Append("Stop exception")
-                ->Append(ex->Message)
+                ->Append("Stop exception \n")
+                ->Append(ex->Message + "\n")
                 ->Append(ex->StackTrace->ToString());
             strcat(strException, sb->ToString());
             trace(sb->ToString() + "\n");
@@ -398,8 +398,8 @@ extern "C"
                 }  else {
                     StringBuilder^ sb = gcnew StringBuilder();
                     sb
-                        ->Append("OnAction exception")
-                        ->Append(ex->Message)                     // Object '/xxx' has been disconnected or does not exist at the server
+                        ->Append("OnAction exception \n")
+                        ->Append(ex->Message + "\n")                     // Object '/xxx' has been disconnected or does not exist at the server
                         ->Append(ex->StackTrace->ToString());
                     trace(sb->ToString() + "\n");
                     strcat(strException, sb->ToString());
@@ -412,8 +412,8 @@ extern "C"
         {
             StringBuilder^ sb = gcnew StringBuilder();
             sb
-                ->Append("OnAction exception")
-                ->Append(ex->Message)
+                ->Append("OnAction exception \n")
+                ->Append(ex->Message + "\n")
                 ->Append(ex->StackTrace->ToString());
             strcat(strException, sb->ToString());
             trace(sb->ToString() + "\n");
@@ -464,8 +464,8 @@ extern "C"
                 } else {
                     StringBuilder^ sb = gcnew StringBuilder();
                     sb
-                        ->Append("OnBeforeDelete exception")
-                        ->Append(ex->Message)
+                        ->Append("OnBeforeDelete exception \n")
+                        ->Append(ex->Message + "\n")
                         ->Append(ex->StackTrace->ToString());
                     trace(sb->ToString() + "\n");
                     strcat(strException, sb->ToString());
@@ -478,8 +478,8 @@ extern "C"
         {
             StringBuilder^ sb = gcnew StringBuilder();
             sb
-                ->Append("OnBeforeDelete exception")
-                ->Append(ex->Message)
+                ->Append("OnBeforeDelete exception \n")
+                ->Append(ex->Message + "\n")
                 ->Append(ex->StackTrace->ToString());
             strcat(strException, sb->ToString());
             trace(sb->ToString() + "\n");
@@ -526,8 +526,8 @@ extern "C"
                 } else {
                     StringBuilder^ sb = gcnew StringBuilder();
                     sb
-                        ->Append("OnTimer exception")
-                        ->Append(ex->Message)
+                        ->Append("OnTimer exception \n")
+                        ->Append(ex->Message + "\n")
                         ->Append(ex->StackTrace->ToString());
                     trace(sb->ToString() + "\n");
                     strcat(strException, sb->ToString());
@@ -540,8 +540,8 @@ extern "C"
         {
             StringBuilder^ sb = gcnew StringBuilder();
             sb
-                ->Append("OnTimer exception")
-                ->Append(ex->Message)
+                ->Append("OnTimer exception \n")
+                ->Append(ex->Message + "\n")
                 ->Append(ex->StackTrace->ToString());
             strcat(strException, sb->ToString());
             trace(sb->ToString() + "\n");
@@ -578,8 +578,8 @@ extern "C"
                 catch (Exception^ ex) {
                     StringBuilder^ sb = gcnew StringBuilder();
                     sb
-                        ->Append("StopPlugin exception")
-                        ->Append(ex->Message)
+                        ->Append("StopPlugin exception \n")
+                        ->Append(ex->Message + "\n")
                         ->Append(ex->StackTrace->ToString());
                     strcat(strException, sb->ToString());
                     trace(sb->ToString() + "\n");
@@ -601,8 +601,8 @@ extern "C"
             catch (Exception^ ex) {
                 StringBuilder^ sb = gcnew StringBuilder();
                 sb
-                    ->Append("unload domain exception")
-                    ->Append(ex->Message)
+                    ->Append("unload domain exception \n")
+                    ->Append(ex->Message + "\n")
                     ->Append(ex->StackTrace->ToString());
                 strcat(strException, sb->ToString());
                 trace(sb->ToString() + "\n");
@@ -636,8 +636,8 @@ extern "C"
         {
             StringBuilder^ sb = gcnew StringBuilder();
             sb
-                ->Append("Unload exception")
-                ->Append(ex->Message)
+                ->Append("Unload exception \n")
+                ->Append(ex->Message + "\n")
                 ->Append(ex->StackTrace->ToString());
             strcat(strException, sb->ToString());
             trace(sb->ToString() + "\n");
