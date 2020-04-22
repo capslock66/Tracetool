@@ -2,12 +2,13 @@
 // This dll must be installed at the same place as the viewer.
 //
 // Author : Thierry Parent
-// Version : 12.3
+// Version : 13.0
 //
 // HomePage :  http://www.codeproject.com/csharp/TraceTool.asp
 // Download :  http://sourceforge.net/projects/tracetool/
 // See License.txt for license information 
 
+#include "pch.h"
 #include <string.h>
 #include <fstream>
 #include "DotNetWrapper.h" 

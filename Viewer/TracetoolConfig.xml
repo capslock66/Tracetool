@@ -16,8 +16,8 @@
 	<AppDisplay>
 		<SmallBut Value="true"/>
 		<ApplicationTitle Value="socket: 8090 / 4502,  Http : 85, WebSocket:8091"/>
-		<Left Value="208"/>
-		<Top Value="208"/>
+		<Left Value="156"/>
+		<Top Value="156"/>
 		<Width Value="693"/>
 		<Height Value="635"/>
 		<StayOnTop Value="false"/>
@@ -36,7 +36,7 @@
 		<DisableInternalLog Value="false"/>
 	</AppDisplay>
 	<Framework>
-		<ShowMembers Value="true"/>
+		<ShowMembers Value="false"/>
 		<AutoClear Value="false"/>
 		<MaxNode Value="20"/>
 		<MinNode Value="10"/>
@@ -128,7 +128,7 @@
 		<TreeIndentation Value="3"/>
 	</TextExport>
 	<Plugins>
-		<Plugin><Kind>DotNet</Kind><Enabled Value="true"/><FileName>c:\GitHub\Tracetool\Plugins\WebsockPlugin\bin\Debug\WebsockPlugin.dll</FileName><Param>WebSocketHost = 0.0.0.0, WebSocketPort = 8091, ViewerSocketHost = 127.0.0.1, ViewerSocketPort = 8090</Param></Plugin></Plugins>
+		<Plugin><Kind>DotNet</Kind><Enabled Value="true"/><FileName>WebSock\WebsockPlugin.dll</FileName><Param>WebSocketHost = 0.0.0.0, WebSocketPort = 8091, ViewerSocketHost = 127.0.0.1, ViewerSocketPort = 8090</Param></Plugin></Plugins>
 	<Watches>
 		<Enabled Value="true"/>
 		<VisibleMenu Value="true"/>
