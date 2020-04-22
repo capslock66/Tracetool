@@ -45,7 +45,6 @@ type
     AppDisplay_IconFile               : string ;
     AppDisplay_MinimizeToSystray      : Boolean ;
 
-
     Framework_ShowMembers                   : Boolean ;
     Framework_AutoClear                     : Boolean ;
     Framework_MaxNode                       : Integer ;
@@ -163,6 +162,8 @@ begin
    General_InternalLog := 'c:\temp\TracetoolInternalLog.txt' ;
    PluginList       := TObjectList.Create (true) ;      // owner
    FavoriteTailList := TStringList.Create (true) ;      // owner
+   AppDisplay_DisableInternalLog := true ;
+
 end;
 
 
