@@ -58,7 +58,8 @@ uses
 {$R *.res}
 
 begin
-   ResetLowTrace() ;  // delete internal lowtrace file
+   //ResetLowTrace() ;  // delete internal lowtrace file
+
    //LowTrace ('traceTool started') ;
    SetLastError(NO_ERROR);
    CreateMutex (nil,false, 'TraceTool') ;

@@ -1167,7 +1167,7 @@ begin
    if FontList <> nil then
       exit ;
 
-   LowTrace('TfrmDebugOptions.InitFonts') ;
+   //LowTrace('TfrmDebugOptions.InitFonts') ;
    FontList := TStringList.create ;
    for c := 0 to Screen.Fonts.count - 1 Do Begin
       FontDetail := TFontSpec.create ;
@@ -1180,7 +1180,7 @@ begin
                        longint(FontDetail));
       FontList.AddObject (FontDetail.FontName,FontDetail) ;
    end ;
-   LowTrace('TfrmDebugOptions.InitFonts FontList filled') ;
+   //LowTrace('TfrmDebugOptions.InitFonts FontList filled') ;
 
    InitCombos (FrameworkTraceFonts , FrameworkTraceFontSize) ;
    InitCombos (FrameworkInfoFonts  , FrameworkInfoFontSize ) ;
@@ -1192,7 +1192,7 @@ begin
    InitCombos (TailInfoFonts       , TailInfoFontSize      ) ;
    InitCombos (EvntLogTraceFonts   , EvntLogTraceFontSize  ) ;
    InitCombos (EvntLogInfoFonts    , EvntLogInfoFontSize   ) ;
-   LowTrace('TfrmDebugOptions.InitFonts done') ;
+   //LowTrace('TfrmDebugOptions.InitFonts done') ;
 end ;
 
 

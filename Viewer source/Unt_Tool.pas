@@ -366,11 +366,11 @@ begin
       resetDebugMode := true ;
    end ;
 
-   LowTrace('constructor TFrm_Tool.Create begin ') ;
+   //LowTrace('constructor TFrm_Tool.Create begin ') ;
 
    DebugWin := FindWindow('TFormReceiver', 'FormReceiver');
    if DebugWin <> 0 then begin
-      LowTrace('Many instances') ;
+      //LowTrace('Many instances') ;
       InitError := 'Many instances' ;
 
       if TraceConfig.DebugMode then begin
@@ -411,7 +411,7 @@ begin
 
    LoadConfiguration() ;
 
-   LowTrace('Apply config') ;
+   //LowTrace('Apply config') ;
 
    UDPServer1.OnUDPRead :=  UDPServer1UDPRead ;
    UDPServer2.OnUDPRead :=  UDPServer1UDPRead ;
@@ -455,7 +455,7 @@ begin
    // open socket port 1
    try
       if TCPServer.DefaultPort <> 0 then begin
-         LowTrace('Activate tcp/udp 1') ;
+         //LowTrace('Activate tcp/udp 1') ;
          if TraceConfig.General_Udp1 then
             UdpServer1.Active := true
          else
@@ -487,7 +487,7 @@ begin
    // open socket port 2
    try
       if TCPServer2.DefaultPort <> 0 then begin
-         LowTrace('Activate tcp/upd 2') ;
+         //LowTrace('Activate tcp/upd 2') ;
          if TraceConfig.General_Udp2 then
             UdpServer2.Active := true
          else
@@ -520,7 +520,7 @@ begin
    // open http port
    try
       if IdHTTPServer.DefaultPort <> 0 then begin
-         LowTrace('Activate http') ;
+         //LowTrace('Activate http') ;
          IdHTTPServer.active := true ;
       end ;
    except
@@ -547,7 +547,7 @@ begin
    // open socket Policy server
    try
       if TraceConfig.General_SocketPolicyServer <> false then begin
-         LowTrace('Activate PolicyServer') ;
+         //LowTrace('Activate PolicyServer') ;
          SocketPolicyServer.active := true ;
       end ;
    except
@@ -585,7 +585,7 @@ begin
    else
       actHideExecute(nil) ; //TaskBarButton (false) ;
 
-   LowTrace('constructor TFrm_Tool.Create end ') ;
+   //LowTrace('constructor TFrm_Tool.Create end ') ;
 
 end;
 
@@ -599,8 +599,7 @@ var
    Trace : TFrm_Trace ;
 
 begin
-   if TraceConfig.DebugMode then
-      LowTrace('TFrm_Tool.FormCreate begin') ;
+   //LowTrace('TFrm_Tool.FormCreate begin') ;
 
    uniqueId := 0 ;
 
@@ -649,7 +648,7 @@ begin
    end ;
 
    // create the internal trace window (invisible)
-   LowTrace('create internal trace window (invisible)') ;
+   //LowTrace('create internal trace window (invisible)') ;
    FrmInternalTraces := TFrm_Trace.Create(nil);
    FrmInternalTraces.Name := 'FrmInternalTraces' ;
    FrmInternalTraces.ID := 'ERRID' ;
@@ -663,7 +662,7 @@ begin
    end ;
 
    // create the main Trace window
-   LowTrace('create the main Trace window') ;
+   //LowTrace('create the main Trace window') ;
    Frm_Trace := TFrm_Trace.Create(nil);
    Frm_Trace.Id := '' ;  // main trace form don't have ID
    Frm_Trace.Caption := TraceConfig.Framework_MainTraceTitle ;
@@ -676,7 +675,7 @@ begin
       Frm_Trace.Hide ;
 
    // create the main watch window
-   LowTrace('create the main watch window') ;
+   //LowTrace('create the main watch window') ;
    Frm_Watches := CreateWatchForm('', TraceConfig.Watches_MainWatchesTitle) ;  // windows id and name
    if TraceConfig.Watches_Enabled = true then
       Frm_Watches.Show
@@ -743,7 +742,6 @@ begin
 end;
 
 //------------------------------------------------------------------------------
-
 
 destructor TFrm_Tool.Destroy;
 var
