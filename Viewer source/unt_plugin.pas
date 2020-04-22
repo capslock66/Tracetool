@@ -736,10 +736,10 @@ begin
    if not assigned (CheckPlugInfile) then
       exit ;
 
-   SetLength (szPlugName,1024) ;
+   SetLength (szPlugName,2000) ;
    strcopy (pAnsiChar(szPlugName) , '') ;
 
-   SetLength (szException,1024) ;
+   SetLength (szException,2000) ;
    strcopy (pAnsiChar(szException) , '') ;
 
    try
@@ -756,7 +756,7 @@ begin
    Plug.PlugName := BufToAnsiString(pAnsiChar(szPlugName),10) ; //   AnsiString(trim(String(szPlugName))) ;
    Plug.status   := psloaded ;   // already loaded
 
-   TargetException := BufToAnsiString(pAnsiChar(szException),1024) ;
+   TargetException := BufToAnsiString(pAnsiChar(szException),1999) ;
    if trim(string(TargetException)) <> 'OK' then begin
       TFrm_Trace.InternalTraceFromThread(string(TargetException));
       Plug.status := psUnloaded ;  // if error, the plugin is not loaded
@@ -775,7 +775,7 @@ begin
    if not assigned (Start) then
       exit ;
 
-   SetLength (szException,1024) ;
+   SetLength (szException,2000) ;
    strcopy (pAnsiChar(szException) , '') ;
 
    try
@@ -787,7 +787,7 @@ begin
       end;
    end;
 
-   TargetException := BufToAnsiString(pAnsiChar(szException),1024) ;
+   TargetException := BufToAnsiString(pAnsiChar(szException),1999) ;
    if trim(string(TargetException)) <> 'OK' then
       TFrm_Trace.InternalTraceFromThread('cpp Start() return error message : ' + string(TargetException));
 end;
@@ -802,7 +802,7 @@ begin
    if not assigned (Stop) then
      exit ;
 
-   SetLength (szException,1024) ;
+   SetLength (szException,2000) ;
    strcopy (pAnsiChar(szException) , '') ;
 
    try
@@ -814,7 +814,7 @@ begin
    end;
 
 
-   TargetException := BufToAnsiString(pAnsiChar(szException),1024) ;
+   TargetException := BufToAnsiString(pAnsiChar(szException),1999) ;
    if trim(string(TargetException)) <> 'OK' then
       TFrm_Trace.InternalTraceFromThread('cpp Stop() return error message : ' + string(TargetException));
 end;
@@ -829,7 +829,7 @@ begin
    if not assigned (OnTimer) then
       exit ;
 
-   SetLength (szException,1024) ;
+   SetLength (szException,2000) ;
    strcopy (pAnsiChar(szException) , '') ;
 
    try
@@ -840,7 +840,7 @@ begin
       end;
    end;
 
-   TargetException := BufToAnsiString(pAnsiChar(szException),1024) ;
+   TargetException := BufToAnsiString(pAnsiChar(szException),999) ;
    if trim(string(TargetException)) <> 'OK' then
       TFrm_Trace.InternalTraceFromThread('cpp OnTimer() return error message : ' + string(TargetException));
 end;
@@ -856,7 +856,7 @@ begin
    if not assigned (OnAction) then
       exit ;
 
-   SetLength (szException,1024) ;
+   SetLength (szException,2000) ;
    strcopy (pAnsiChar(szException) , '') ;
 
    try
@@ -867,7 +867,7 @@ begin
       end;
    end;
 
-   TargetException := BufToAnsiString(pAnsiChar(szException),1024) ;
+   TargetException := BufToAnsiString(pAnsiChar(szException),1999) ;
    if trim(string(TargetException)) <> 'OK' then
       TFrm_Trace.InternalTraceFromThread('cpp OnAction() return error message : ' + string(TargetException));
 end;
@@ -883,7 +883,7 @@ begin
    if not assigned (OnBeforeDelete) then
       exit ;
 
-   SetLength (szException,1024) ;
+   SetLength (szException,2000) ;
    strcopy (pansiChar(szException), '') ;
 
    try
@@ -894,7 +894,7 @@ begin
       end;
    end;
 
-   TargetException := BufToAnsiString(pAnsiChar(szException),1024) ;
+   TargetException := BufToAnsiString(pAnsiChar(szException),1999) ;
    if trim(string(TargetException)) <> 'OK' then
       TFrm_Trace.InternalTraceFromThread('cpp OnBeforeDelete() return error message : ' + string(TargetException));
 end;
@@ -909,7 +909,7 @@ begin
    if not assigned (Unload) then
       exit ;
 
-   SetLength (szException,1024) ;
+   SetLength (szException,2000) ;
    strcopy (pAnsiChar(szException) , '') ;
 
    try
@@ -920,7 +920,7 @@ begin
       end;
    end;
 
-   TargetException := BufToAnsiString(pAnsiChar(szException),1024) ;
+   TargetException := BufToAnsiString(pAnsiChar(szException),1999) ;
    if trim(string(TargetException)) <> 'OK' then
       TFrm_Trace.InternalTraceFromThread('cpp Unload() return error message : ' + string(TargetException));
 
