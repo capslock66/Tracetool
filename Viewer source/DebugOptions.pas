@@ -743,7 +743,6 @@ begin
    TraceConfig.EventLog_Info_FontSize      := StrToIntDef (EvntLogInfoFontSize.Text      , 8 ) ;
 
    Frm_Tool.SaveSettings() ;
-   //XmlToLocal() ;
 
    // change font in every base form
    for c := 0 to BaseList.Count -1 do begin
@@ -976,10 +975,10 @@ begin
    DotNetPlugin.FileName  := AnsiString(Frm_Tool.OpenDialog1.FileName) ;
    DotNetPlugin.Param     := '' ;
 
-   TraceConfig.DotNetManager.DoCheckPlugInfile (DotNetPlugin) ;
-
    // add to list.Will be saved later when "Ok" is pressed
    TraceConfig.PluginList.add (DotNetPlugin) ;
+
+   TraceConfig.DotNetManager.DoCheckPlugInfile (DotNetPlugin) ;
 
    // add to tree
    try
@@ -995,7 +994,8 @@ begin
    VSTOptionsChange(VSTOptions,  node);
 
    // run the plugin
-   DotNetPlugin.doStart (PAnsiString(DotNetPlugin.param));
+   //DotNetPlugin.doStart (PAnsiString(DotNetPlugin.param));
+
    VSTOptionsChange(VSTOptions,  node);
 end;
 
