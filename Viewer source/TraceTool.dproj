@@ -171,7 +171,7 @@
 						<Source Name="MainSource">TraceTool.dpr</Source>
 					</Source>
 					<Parameters>
-						<Parameters Name="RunParams">/debug</Parameters>
+						<Parameters Name="RunParams">/NoDebug</Parameters>
 					</Parameters>
 					<VersionInfo>
 						<VersionInfo Name="IncludeVerInfo">True</VersionInfo>
