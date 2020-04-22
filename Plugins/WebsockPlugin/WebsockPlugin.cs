@@ -96,6 +96,10 @@ namespace CSharpPlugin
                 foreach (var keyValue in paramList)
                 {
                     var keyValueList = keyValue.Split('=');
+
+                    if (keyValueList.Length != 2)
+                        throw new Exception($"{PlugName} : Wrong parameter : <{strParameter}> / <{keyValue}>") ;
+
                     var key = keyValueList[0].Trim();
                     var value = keyValueList[1].Trim();
                     if (string.Compare(key, "WebSocketHost", StringComparison.OrdinalIgnoreCase) == 0)
@@ -110,8 +114,9 @@ namespace CSharpPlugin
             }
             catch (Exception)
             {
-                TTrace.Error.Send($"{PlugName} : Wrong parameters : {strParameter}");
+                TTrace.Error.Send($"{PlugName} : Wrong parameters : <{strParameter}>");
                 TTrace.Error.Send("parameters format : WebSocketHost = 0.0.0.0, WebSocketPort = 8091, ViewerSocketHost = 127.0.0.1, ViewerSocketPort = 8090");
+                TTrace.Error.Send("Select Plugin, click stop button, change parameters ans click start button") ;
                 throw;
             }
 
