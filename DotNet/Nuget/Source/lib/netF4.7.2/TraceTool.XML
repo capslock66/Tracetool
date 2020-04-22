@@ -9,41 +9,6 @@
             Specify a font detail for traces columns items and members.
             </summary>
         </member>
-        <member name="T:TraceTool.StringList">
-            <summary>
-            List of string.
-            </summary>
-        </member>
-        <member name="T:TraceTool.MemberList">
-            <summary>
-            List of Members.
-            </summary>
-        </member>
-        <member name="T:TraceTool.InternalWinTraceList">
-            <summary>
-            List of InternalWinTrace.
-            </summary>
-        </member>
-        <member name="T:TraceTool.MsgQueueList">
-            <summary>
-            List of StringList.
-            </summary>
-        </member>
-        <member name="T:TraceTool.FontDetailList">
-            <summary>
-            List of FontDetail.
-            </summary>
-        </member>
-        <member name="T:TraceTool.NodeContextList">
-            <summary>
-            List of NodeContext.
-            </summary>
-        </member>
-        <member name="T:TraceTool.StrKeyObjectList">
-            <summary>
-            List of string keys / object (Hashtable)
-            </summary>
-        </member>
         <member name="T:TraceTool.ParsedObjectList">
             <summary>
             List of parsed object.
@@ -70,6 +35,9 @@
             Windows message
         </member>
         <member name="F:TraceTool.SendMode.Socket">
+            Socket message
+        </member>
+        <member name="F:TraceTool.SendMode.WebSocket">
             Socket message
         </member>
         <member name="F:TraceTool.SendMode.None">
@@ -122,7 +90,7 @@
         </member>
         <member name="F:TraceTool.TraceDisplayFlags.ShowDoc">
             <summary>
-            show documenation for type, fields, methods,..
+            show documentation for type, fields, methods,..
             </summary>
         </member>
         <member name="T:TraceTool.TraceConst">
@@ -152,7 +120,7 @@
             <summary> Use the 'property' Icon on the gutter for the trace </summary>
         </member>
         <member name="F:TraceTool.TraceConst.CST_ICO_MENU">
-            <summary> Use the 'memu' Icon on the gutter for the trace </summary>
+            <summary> Use the 'menu' Icon on the gutter for the trace </summary>
         </member>
         <member name="F:TraceTool.TraceConst.CST_ICO_MENU_ITEM">
             <summary> Use the 'menu item' Icon on the gutter for the trace </summary>
@@ -305,7 +273,7 @@
             <summary>VIEWER INTERNAL : Open xml file on a new window (don't confuse with CST_LOADXML)  </summary>
         </member>
         <member name="F:TraceTool.TraceConst.CST_GET_OBJECT">
-            <summary>VIEWER INTERNAL : the user interface ask to retreive an object  </summary>
+            <summary>VIEWER INTERNAL : the user interface ask to retrieve an object  </summary>
         </member>
         <member name="F:TraceTool.TraceConst.CST_FLUSH">
             <summary>Flush remaining traces to server</summary>
@@ -431,7 +399,7 @@
             <summary>Delete children node on the viewer</summary>
         </member>
         <member name="F:TraceTool.TraceConst.CST_THREAD_ID">
-            <summary>The Thread ID of the sender thread (optional).Used when tracing multiple thread (actived by default)</summary>
+            <summary>The Thread ID of the sender thread (optional).Used when tracing multiple thread (active by default)</summary>
         </member>
         <member name="F:TraceTool.TraceConst.CST_PROCESS_NAME">
             <summary>The process name (optional).Used when tracing multiple process </summary>
@@ -443,7 +411,7 @@
             <summary>Thread name (Java or user defined)</summary>
         </member>
         <member name="F:TraceTool.TraceConst.CST_IP">
-            <summary>Client Ip adress</summary>
+            <summary>Client Ip address</summary>
         </member>
         <member name="F:TraceTool.TraceConst.CST_NEW_NODE">
             <summary>Command to create a new trace node</summary>
@@ -500,7 +468,7 @@
         </member>
         <member name="F:TraceTool.COPYDATASTRUCT.dwData">
             <summary>
-            The identifiant of the message (checked at destination)
+            The identifier of the message (checked at destination)
             </summary>
         </member>
         <member name="F:TraceTool.COPYDATASTRUCT.cbData">
@@ -553,35 +521,30 @@
             convert a ARGB color (dotnet) to a BGR color (windows)
             </summary>
         </member>
-        <member name="M:TraceTool.Helper.ToArgb(System.Windows.Media.Color)">
-            <summary>
-            convert a System.Windows.Media.Color color to ARGB (missing in silverlight 2) 
-            </summary>
-        </member>
         <member name="M:TraceTool.Helper.HtmlEncode(System.String,System.Text.StringBuilder)">
             <summary>
             Html encode. To reduce dependencies, the HttpUtility.HtmlEncode is reproduce here, with StringBuilder as target (faster)
             </summary>
         </member>
-        <member name="M:TraceTool.Helper.AddCommand(TraceTool.StringList,System.Int32)">
+        <member name="M:TraceTool.Helper.AddCommand(System.Collections.Generic.List{System.String},System.Int32)">
             code only
         </member>
-        <member name="M:TraceTool.Helper.AddCommand(TraceTool.StringList,System.Int32,System.Int32)">
+        <member name="M:TraceTool.Helper.AddCommand(System.Collections.Generic.List{System.String},System.Int32,System.Int32)">
             code + int
         </member>
-        <member name="M:TraceTool.Helper.AddCommand(TraceTool.StringList,System.Int32,System.Boolean)">
+        <member name="M:TraceTool.Helper.AddCommand(System.Collections.Generic.List{System.String},System.Int32,System.Boolean)">
             code + bool
         </member>
-        <member name="M:TraceTool.Helper.AddCommand(TraceTool.StringList,System.Int32,System.String)">
+        <member name="M:TraceTool.Helper.AddCommand(System.Collections.Generic.List{System.String},System.Int32,System.String)">
             code + string
         </member>
-        <member name="M:TraceTool.Helper.AddCommand(TraceTool.StringList,System.Int32,System.Int32,System.String)">
+        <member name="M:TraceTool.Helper.AddCommand(System.Collections.Generic.List{System.String},System.Int32,System.Int32,System.String)">
             code + int + string
         </member>
-        <member name="M:TraceTool.Helper.AddCommand(TraceTool.StringList,System.Int32,System.Int32,System.Int32,System.String)">
+        <member name="M:TraceTool.Helper.AddCommand(System.Collections.Generic.List{System.String},System.Int32,System.Int32,System.Int32,System.String)">
             code + int + int + string
         </member>
-        <member name="M:TraceTool.Helper.AddCommand(TraceTool.StringList,System.Int32,System.Int32,System.Int32,System.Int32,System.String)">
+        <member name="M:TraceTool.Helper.AddCommand(System.Collections.Generic.List{System.String},System.Int32,System.Int32,System.Int32,System.Int32,System.String)">
             code + int + int + int + string
         </member>
         <member name="T:TraceTool.TMemberNode">
@@ -731,18 +694,18 @@
             <param name="fontName">Change font name</param>
             <returns>The TMember node</returns>
         </member>
-        <member name="M:TraceTool.TMemberNode.AddToStringList(TraceTool.StringList)">
+        <member name="M:TraceTool.TMemberNode.AddToStringList(System.Collections.Generic.List{System.String})">
             <summary>
             recursively add members to the node CommandList
             </summary>
             <param name="commandList">target command list</param>
         </member>
-        <member name="T:TraceTool.ITracePLugin">
+        <member name="T:TraceTool.ITracePlugin">
             <summary>
             Plugin interface. Inherit from this interface to create a TraceTool plugin
             </summary>
         </member>
-        <member name="M:TraceTool.ITracePLugin.GetPlugName">
+        <member name="M:TraceTool.ITracePlugin.GetPlugName">
             <summary>
             Get the plugin name
             </summary>
@@ -750,7 +713,7 @@
             plugin name 
             </returns>
         </member>
-        <member name="M:TraceTool.ITracePLugin.OnAction(System.String,System.Int32,System.String)">
+        <member name="M:TraceTool.ITracePlugin.OnAction(System.String,System.Int32,System.String)">
             <summary>
             Called when the user click on a button, label or menu on a WinTrace.
             The plugin must call WinTrace.LinkToPlugin in order to receive this event
@@ -763,7 +726,7 @@
              when false : tracetool don't perform any action
             </returns>
         </member>
-        <member name="M:TraceTool.ITracePLugin.OnBeforeDelete(System.String,System.String)">
+        <member name="M:TraceTool.ITracePlugin.OnBeforeDelete(System.String,System.String)">
             <summary>
             Called when a node is to be deleted on a WinTrace
             The plugin must call WinTrace.LinkToPlugin in order to receive this event
@@ -775,18 +738,18 @@
              when false : tracetool don't delete the node
             </returns>
         </member>
-        <member name="M:TraceTool.ITracePLugin.OnTimer">
+        <member name="M:TraceTool.ITracePlugin.OnTimer">
             <summary>
             Called every 500 ms. Can be used for example to refresh labels
             The plugin must call LinkToPlugin in order to receive this event
             </summary>
         </member>
-        <member name="M:TraceTool.ITracePLugin.Start">
+        <member name="M:TraceTool.ITracePlugin.Start">
             <summary>
             Initialise the plugin
             </summary>
         </member>
-        <member name="M:TraceTool.ITracePLugin.Stop">
+        <member name="M:TraceTool.ITracePlugin.Stop">
             <summary>
             Stop the plugin
             </summary>
@@ -855,13 +818,13 @@
         </member>
         <member name="M:TraceTool.ReflectionHelper.MethodParamsType2String(System.Reflection.MethodBase)">
             <summary>
-            return the parameters type of a method , usefull to retreive XML documentation for a method
+            return the parameters type of a method , useful to retrieve XML documentation for a method
             parenthesis are included only if parameters exists
             </summary>
         </member>
         <member name="M:TraceTool.ReflectionHelper.PropertyParamsType2String(System.Reflection.PropertyInfo)">
             <summary>
-            return the parameters type of a property , usefull to retreive XML documentation for a property
+            return the parameters type of a property , useful to retrieve XML documentation for a property
             parenthesis are included only if parameters exists
             </summary>
         </member>
@@ -873,7 +836,7 @@
         </member>
         <member name="M:TraceTool.ReflectionHelper.IsArray(System.Type)">
             <summary>
-            indicate if the type is an aray.
+            indicate if the type is an array.
             </summary>
         </member>
         <member name="M:TraceTool.ReflectionHelper.AssemblyDocumentationFileName(System.Type)">
@@ -1052,22 +1015,22 @@
             <summary>
             append right and left texts to an existing node
             </summary>
-            <param name="leftMsgtoAdd">left message</param>
-            <param name="rightMsgtoAdd">right message</param>
+            <param name="leftMsgToAdd">left message</param>
+            <param name="rightMsgToAdd">right message</param>
             <returns>The trace node</returns>
         </member>
         <member name="M:TraceTool.TraceNode.AppendLeft(System.String)">
             <summary>
             append left text to an existing node
             </summary>
-            <param name="leftMsgtoAdd">left message</param>
+            <param name="leftMsgToAdd">left message</param>
             <returns>The trace node</returns>
         </member>
         <member name="M:TraceTool.TraceNode.AppendRight(System.String)">
             <summary>
             append right text to an existing node
             </summary>
-            <param name="rightMsgtoAdd">right message</param>
+            <param name="rightMsgToAdd">right message</param>
             <returns>The trace node</returns>
         </member>
         <member name="M:TraceTool.TraceNode.AppendStack">
@@ -1145,7 +1108,7 @@
         </member>
         <member name="F:TraceTool.TraceNodeBase.Id">
             <summary>
-            The unique ID. Normally it's a GUID, but can be replaced by something else for interprocess traces.
+            The unique ID. Normally it's a GUID, but can be replaced by something else for inter process traces.
             </summary>
         </member>
         <member name="F:TraceTool.TraceNodeBase.Enabled">
@@ -1259,7 +1222,7 @@
             Call AddType to fill the "member" tree with the object type
             </summary>
             <param name="typeToSend">Object type to send</param>
-            <param name="flags">determine what infrmation to send</param>
+            <param name="flags">determine what information to send</param>
         </member>
         <member name="F:TraceTool.TraceNodeEx.SendObjectRecursiveStatus">
             <summary>
@@ -1279,8 +1242,8 @@
              </summary>
             
         </member>
-        <member name="M:TraceTool.TraceNodeEx.DisplayCustomAttrib(TraceTool.TMemberNode,System.Attribute[])">
-            add the attributes stored in the given parameter to the submembers
+        <member name="M:TraceTool.TraceNodeEx.DisplayCustomAttribute(TraceTool.TMemberNode,System.Attribute[])">
+            add the attributes stored in the given parameter to the sub members
         </member>
         <member name="M:TraceTool.TraceNodeEx.AddValue(System.Object)">
             <summary>
@@ -1385,7 +1348,7 @@
             <summary>
             Add byte dump to the Members
             </summary>
-            <param name="shortTitle">Tite to display in the first col</param>
+            <param name="shortTitle">Title to display in the first col</param>
             <param name="bytes">Pointer to the buffer to dump</param>
             <param name="count">Number of bytes to dump</param>
         </member>
@@ -1393,7 +1356,7 @@
             <summary>
             Add byte dump to the Members
             </summary>
-            <param name="shortTitle">Tite to display in the first col</param>
+            <param name="shortTitle">Title to display in the first col</param>
             <param name="bytes">Pointer to the buffer to dump</param>
             <param name="index">start offset</param>
             <param name="count">Number of byte to dump</param>
@@ -1491,7 +1454,7 @@
             </summary>
         </member>
         <member name="T:TraceTool.TraceToSend">
-            TraceToSend methodes create new traces and send it to the viewer
+            TraceToSend methods create new traces and send it to the viewer
             Common base class for TraceNode and WinTrace
             TTrace.warning, debug and error are TraceNode
         </member>
@@ -1642,7 +1605,7 @@
             Send byte dump.
             </summary>
             <param name="leftMsg">Trace message</param>
-            <param name="shortTitle">Tite to display in the first col</param>
+            <param name="shortTitle">Title to display in the first col</param>
             <param name="adr">Pointer to the buffer to dump</param>
             <param name="count">Number of byte to dump</param>
             <returns>the new node</returns>
@@ -1870,19 +1833,19 @@
             number of message discarded (socket error)
         </member>
         <member name="F:TraceTool.TTrace.NbSend">
-            number of message send by silverlight (socket error)
+            number of message send 
         </member>
         <member name="F:TraceTool.TTrace.Options">
             TTrace Options (socket, show functions, ...)
         </member>
         <member name="M:TraceTool.TTrace.InitError">
             <summary>
-            return initialisation error
+            return initialization error
             </summary>
         </member>
         <member name="M:TraceTool.TTrace.Stop">
             <summary>
-            Stop sub-system before leaving your program. You may call TTrace.Flush() before Stop()
+            Stop sub-system (worker thread) before leaving your program. You may call TTrace.Flush() before Stop()
             </summary>
         </member>
         <member name="M:TraceTool.TTrace.Show(System.Boolean)">
@@ -1917,6 +1880,11 @@
             Tips : Socket is automatically closed when destroyed. No need to create destructor
             </summary>
         </member>
+        <member name="P:TraceTool.TTrace.LastSocketError">
+            <summary>
+            The last socket error
+            </summary>
+        </member>
         <member name="P:TraceTool.TTrace.WinTrace">
             <summary>
             The windows where is stored the main tree (read only)
@@ -1946,6 +1914,9 @@
             <summary>
             TextWriter output. For Linq to SQL for example : NORTHWNDDataContext.Log = TTrace.Out 
             </summary>
+        </member>
+        <member name="M:TraceTool.TTrace.FlushAsync">
+            flush remaining traces to the viewer
         </member>
         <member name="M:TraceTool.TTrace.Flush">
             flush remaining traces to the viewer
@@ -1981,7 +1952,7 @@
             rather than FormatDate().</para>
             </remarks>
             <param name="dateToFormat">The date to render into a string.</param>
-            <returns>The stringbuilder passed.</returns>
+            <returns>The stringBuilder passed.</returns>
         </member>
         <member name="T:TraceTool.TTraceOptions">
             <summary>
@@ -1990,12 +1961,18 @@
         </member>
         <member name="F:TraceTool.TTraceOptions.SendMode">
             <summary>
-            Change SendMode to Mode.Socket to use it under ASP
+            WinMsg (for desktop applications only), Socket (ASP , services, or remote computer), WebSocket (webAssembly), None (No messages are send, use local log)
+            </summary>
+        </member>
+        <member name="F:TraceTool.TTraceOptions.UseWorkerThread">
+            <summary>
+            Use a background thread to send traces to the viewer. Default is true. 
+            Set to false for async mode (web assembly)
             </summary>
         </member>
         <member name="F:TraceTool.TTraceOptions.SocketHost">
             <summary>
-            The Socket Host adress
+            The Socket Host address
             </summary>
         </member>
         <member name="F:TraceTool.TTraceOptions.SocketPort">
@@ -2012,6 +1989,7 @@
             <summary>
             indicate if the reflection should display modifiers (public class,...)
             </summary>
+            
         </member>
         <member name="F:TraceTool.TTraceOptions.SendClassInfo">
             <summary>
@@ -2071,6 +2049,11 @@
         <member name="F:TraceTool.TTraceOptions.SendProcessName">
             <summary>
             indicate if the process name must be send. Displayed on the status bar.
+            </summary>
+        </member>
+        <member name="P:TraceTool.TTraceOptions.Framework">
+            <summary>
+            Framework type (DotNet framework, Dot net standard 1.6, DotNet standard 2.0)
             </summary>
         </member>
         <member name="P:TraceTool.TTraceOptions.SendDate">
@@ -2217,8 +2200,8 @@
               1, Viewer log enabled. No size limit.
               2, Viewer log enabled. A new file is create each day (CCYYMMDD is appended to the filename)
               3, Local log is disabled
-              4, Local log enabled. No size limit. Ignored in silverlight 2
-              5, Local log enabled. A new file is create each day (CCYYMMDD is appended to the filename). Ignored in silverlight 2
+              4, Local log enabled. No size limit.
+              5, Local log enabled. A new file is create each day (CCYYMMDD is appended to the filename).
               </code>
               </summary>
               <param name="fileName">\File to open</param>
@@ -2236,8 +2219,8 @@
               1, Viewer log enabled. No size limit.
               2, Viewer log enabled. A new file is create each day (CCYYMMDD is appended to the filename)
               3, Local log is disabled
-              4, Local log enabled. No size limit. Ignored in silverlight 2
-              5, Local log enabled. A new file is create each day (CCYYMMDD is appended to the filename). Ignored in silverlight 2
+              4, Local log enabled. No size limit. 
+              5, Local log enabled. A new file is create each day (CCYYMMDD is appended to the filename). 
               </code>
               </summary>
               <param name="fileName">\File to open</param>
@@ -2286,9 +2269,9 @@
         </member>
         <member name="M:TraceTool.WinTrace.GotoBookmark(System.Int32)">
             <summary>
-            Set the focus to a bookmarked node identified by his position. Bookmarks are cheched by the user or with the node.SetBookmark() function
+            Set the focus to a bookmarked node identified by his position. Bookmarks are checked by the user or with the node.SetBookmark() function
             </summary>
-            <param name="pos">Indice of the bookmark </param>
+            <param name="pos">Index of the bookmark </param>
         </member>
         <member name="M:TraceTool.WinTrace.ClearBookmark">
             <summary>
@@ -2305,7 +2288,7 @@
              Add a filter to node. Multiple calls to this function can be done. Call ApplyFilter() to apply filtering
              </summary>
              <param name="column">Column to apply filter.<p/>
-               In multicolumn mode the first column start at 0 <p/>
+               In multi column mode the first column start at 0 <p/>
                In normal mode : <p/>
                col icone   = 999    <p/>
                col time    = 1      <p/>
@@ -2402,10 +2385,10 @@
             Plugin API : Attach a winTrace to a plugin. Many winTrace can be attached to a plugin.
             Note that a plugin don't need to be attached to a WinTrace.
             The plugin is identified by his internal name (not dll name).
-            When linked, the plugin can receive event (see ITracePLugin).
+            When linked, the plugin can receive event (see ITracePlugin).
             </summary>
             <param name="pluginName">name of the plugin</param>
-            <param name="flags">combinaison of CST_PLUG_ONACTION , CST_PLUG_ONBEFOREDELETE , CST_PLUG_ONTIMER</param>
+            <param name="flags">Combinaison of CST_PLUG_ONACTION , CST_PLUG_ONBEFOREDELETE , CST_PLUG_ONTIMER</param>
         </member>
         <member name="T:TraceTool.WinWatch">
             <summary>

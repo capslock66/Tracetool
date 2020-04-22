@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>Tracetool.DotNet.Api</id>
-    <version>12.9.0</version>
+    <version>13.0.0</version>
     <authors>Parent Thierry</authors>
     <owners>Parent Thierry</owners>
     <projectUrl>https://github.com/capslock66/Tracetool</projectUrl>
@@ -10,7 +10,7 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>Tracetool Library for dot net</description>
     <releaseNotes>Viewer added in viewer folder</releaseNotes>
-    <copyright>Copyright 2017</copyright>
+    <copyright>Copyright 2019</copyright>
     <tags>Tracetool Dot net trace log logs logger</tags>
     <dependencies/>
   </metadata>
