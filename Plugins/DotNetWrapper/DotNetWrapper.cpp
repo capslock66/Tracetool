@@ -320,7 +320,7 @@ extern "C"
                 StringBuilder^ sb = gcnew StringBuilder();
                 sb->Append("wrapper : Stop : PLugin ")->Append(PlugId)->Append(" is not started.");
                 strcat(strException, sb->ToString());
-                trace(sb->ToString() + "\n");
+                //trace(sb->ToString() + "\n");
                 return;
             }
 
