@@ -40,6 +40,7 @@ type
     procedure chkLoadAtStartupClick(Sender: TObject);
     procedure butRemoveClick(Sender: TObject);
     procedure EditFileNameKeyPress(Sender: TObject; var Key: Char);
+    procedure MemoParamChange(Sender: TObject);
   private
     { Private declarations }
   public
@@ -164,6 +165,11 @@ begin
     if (key = #1) or (key = #3)  then   // ctrl-A or CTRL-C : do nothing
        exit ;
     Key := Char(0) ;
+end;
+
+procedure TfrmPlugin.MemoParamChange(Sender: TObject);
+begin
+   plugin.param := MemoParam.Text ;
 end;
 
 //------------------------------------------------------------------------------

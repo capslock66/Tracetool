@@ -44,9 +44,9 @@ object frmPlugin: TfrmPlugin
   object Label1: TLabel
     Left = 13
     Top = 88
-    Width = 30
+    Width = 55
     Height = 13
-    Caption = 'Param'
+    Caption = 'Parameters'
   end
   object chkLoadAtStartup: TCheckBox
     Left = 13
@@ -120,6 +120,7 @@ object frmPlugin: TfrmPlugin
     Anchors = [akLeft, akTop, akRight]
     ScrollBars = ssBoth
     TabOrder = 0
+    OnChange = MemoParamChange
   end
   object EditFileName: TEdit
     Left = 13
