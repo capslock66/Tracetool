@@ -1,0 +1,21 @@
+﻿<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>Cake.Tracetool</id>
+    <version>$version$</version>
+    <title>Cake.Tracetool</title>
+    <authors>Parent Thierry</authors>
+    <owners>Parent Thierry</owners>
+    <licenseUrl>https://github.com/capslock66/Tracetool</licenseUrl>
+    <projectUrl>https://github.com/capslock66/Tracetool</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Wraps Tracetool functionality into a CakeBuild addin.</description>
+    <releaseNotes></releaseNotes>
+    <copyright>Copyright 2019</copyright>
+    <tags>Cake Tracetool</tags>
+  </metadata>
+  <files>
+    <file src="src/Cake.Tracetool/bin/Release/Cake.Tracetool.dll" target="lib\net45\" />    
+    <file src="src/Cake.Tracetool/bin/Release/Tracetool.dll" target="lib\net45\" />  
+  </files>
+</package>

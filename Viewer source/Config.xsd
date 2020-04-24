@@ -52,6 +52,7 @@ TraceTool configuration file
       <xs:sequence>
          <xs:element name="ShowSocketWarning" type="BooleanTagValue"/>
          <xs:element name="LastSavedPath" type="StringTagValue"/>
+         <xs:element name="InternalLog" type="StringTagValue"/>
          <xs:element name="SocketPort" type="IntegerTagValue"/>
          <xs:element name="SocketPort2" type="IntegerTagValue"/>
          <xs:element name="HTTPPort" type="IntegerTagValue"/>

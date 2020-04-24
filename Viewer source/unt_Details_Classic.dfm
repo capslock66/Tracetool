@@ -25,9 +25,9 @@ inherited frame_Classic: Tframe_Classic
     Header.Font.Height = -11
     Header.Font.Name = 'MS Sans Serif'
     Header.Font.Style = []
+    Header.Height = 17
     Header.MainColumn = 1
     Header.Options = [hoAutoResize, hoColumnResize, hoDrag, hoVisible]
-    Header.Style = hsThickButtons
     HintAnimation = hatNone
     HintMode = hmTooltip
     Indent = 15

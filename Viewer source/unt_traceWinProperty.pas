@@ -41,15 +41,17 @@ var
 
 implementation
 
+uses unt_TraceConfig ;
+
 {$R *.dfm}
 
 procedure TFrmTraceWinProp.butFileClick(Sender: TObject);
 begin
    Frm_Tool.OpenDialog1.Filter := 'Xml file (*.xml)|*.xml' ;
-   Frm_Tool.OpenDialog1.InitialDir := XMLConfig.General.LastSavedPath.Value ;
+   Frm_Tool.OpenDialog1.InitialDir := TraceConfig.General_LastSavedPath ;
    if Frm_Tool.OpenDialog1.Execute = false then
       exit ;
-   XMLConfig.General.LastSavedPath.Value := ExtractFilePath(Frm_Tool.OpenDialog1.FileName) ;
+   TraceConfig.General_LastSavedPath := ExtractFilePath(Frm_Tool.OpenDialog1.FileName) ;
    editFilename.Text := Frm_Tool.OpenDialog1.FileName ;
 end;
 

@@ -20,10 +20,8 @@ type
   TfrmPlugin = class(TFrame)
     LabelPlugName: TLabel;
     LabelStatus: TLabel;
-    LabelTitleFileName: TLabel;
     Label2: TLabel;
-    LabelFileName: TLabel;
-    LabelClassName: TLabel;
+    LabelPlugType: TLabel;
     chkLoadAtStartup: TCheckBox;
     butLoadAndStart: TButton;
     butUnload: TButton;
@@ -31,6 +29,9 @@ type
     butStop: TButton;
     butStopAndUnload: TButton;
     butRemove: TButton;
+    Label1: TLabel;
+    MemoParam: TMemo;
+    EditFileName: TEdit;
     procedure butLoadAndStartClick(Sender: TObject);
     procedure butUnloadClick(Sender: TObject);
     procedure butStopAndUnloadClick(Sender: TObject);
@@ -38,6 +39,8 @@ type
     procedure butStopClick(Sender: TObject);
     procedure chkLoadAtStartupClick(Sender: TObject);
     procedure butRemoveClick(Sender: TObject);
+    procedure EditFileNameKeyPress(Sender: TObject; var Key: Char);
+    procedure MemoParamChange(Sender: TObject);
   private
     { Private declarations }
   public
@@ -49,7 +52,7 @@ type
 
 implementation
 
-uses DebugOptions;
+uses DebugOptions, unt_TraceConfig;
 
 {$R *.dfm}
 
@@ -58,7 +61,7 @@ uses DebugOptions;
 procedure TfrmPlugin.butLoadAndStartClick(Sender: TObject);
 begin
    plugin.DoLoad() ;
-   plugin.DoStart() ;
+   plugin.DoStart(PAnsiString(plugin.param));
    Display() ;
 end;
 
@@ -83,7 +86,7 @@ end;
 
 procedure TfrmPlugin.butStartClick(Sender: TObject);
 begin
-   plugin.DoStart ;
+   plugin.DoStart (PAnsiString(plugin.param));
    Display() ;
 end;
 
@@ -99,23 +102,14 @@ end;
 
 procedure TfrmPlugin.Display;
 begin
-   if (plugin.PlugName <> '') and (plugin.PlugName <> '_') then
-      LabelPlugName.Caption := String(plugin.PlugName)
-   else
-      LabelPlugName.Caption := String(plugin.FileName) ;
+   LabelPlugName.Caption := String(plugin.PlugName) ;
+   LabelPlugType.Caption := plugin.className ;
 
-   LabelPlugName.Caption := LabelPlugName.Caption + ' (' + plugin.plugKind + ')'  ;
+   EditFileName.Visible := true ;
+   EditFileName.text := String(plugin.FileName) ;
 
-   if plugin.plugKind = 'Java' then begin
-      LabelFileName.Visible := false ;
-      LabelTitleFileName.Visible := false ;
-   end else begin
-      LabelFileName.Visible := true ;
-      LabelTitleFileName.Visible := true ;
-      LabelFileName.Caption := String(plugin.FileName) ;
-   end ;
+   MemoParam.Text := string(plugin.param);
 
-   LabelClassName.Caption := plugin.className ;
    chkLoadAtStartup.Checked := plugin.startup ;
 
    case plugin.Status of
@@ -123,7 +117,7 @@ begin
          begin
             LabelStatus.caption := 'Unloaded' ;
             butLoadAndStart .Visible := true ;
-            butLoadAndStart .top  := 160 ;
+            //butLoadAndStart .top  := 224 ;
             butLoadAndStart .left := 16 ;
             butUnload       .Visible := false ;
             butStopAndUnload.Visible := false ;
@@ -137,12 +131,12 @@ begin
             LabelStatus.caption := 'Loaded' ;
             butLoadAndStart .Visible := false ;
             butUnload       .Visible := true ;
-            butUnload       .top  := 160 ;
+            butUnload       .top  := 224 ;
             butUnload       .left := 16 ;
             butStopAndUnload.Visible := false ;
             butStop         .Visible := false ;
             butStart        .Visible := true ;
-            butStart        .top  := 160 ;
+            butStart        .top  := 224 ;
             butStart        .left := 112 ;
             butRemove       .Visible := false ;
          end ;
@@ -152,11 +146,11 @@ begin
             butLoadAndStart .Visible := false ;
             butUnload       .Visible := false ;
             butStop         .Visible := true ;
-            butStop         .top  := 160 ;
+            butStop         .top  := 224 ;
             butStop         .left := 16 ;
             butStart        .Visible := false ;
             butStopAndUnload.Visible := false ; // true ;
-            butStopAndUnload.top  := 160 ;
+            butStopAndUnload.top  := 224 ;
             butStopAndUnload.left := 112 ;
             butRemove       .Visible := false ;
         end ;
@@ -166,9 +160,23 @@ end;
 
 //------------------------------------------------------------------------------
 
+procedure TfrmPlugin.EditFileNameKeyPress(Sender: TObject; var Key: Char);
+begin
+    if (key = #1) or (key = #3)  then   // ctrl-A or CTRL-C : do nothing
+       exit ;
+    Key := Char(0) ;
+end;
+
+procedure TfrmPlugin.MemoParamChange(Sender: TObject);
+begin
+   plugin.param := MemoParam.Text ;
+end;
+
+//------------------------------------------------------------------------------
+
 procedure TfrmPlugin.chkLoadAtStartupClick(Sender: TObject);
 begin
-   plugin.startup := chkLoadAtStartup.Checked ;
+   //plugin.startup := chkLoadAtStartup.Checked ;
 end;
 
 //------------------------------------------------------------------------------
@@ -176,11 +184,10 @@ end;
 procedure TfrmPlugin.butRemoveClick(Sender: TObject);
 begin
    // save to xml
-   XMLConfig.Plugins.Plugin.Remove(plugin.xmlPlugin) ;
-   XMLConfig.OwnerDocument.SaveToFile(strConfigFile);
-   plugin.xmlPlugin := nil ;
+   TraceConfig.PluginList.Remove(plugin) ;
+   Frm_Tool.SaveSettings() ;
 
-   // remove from list, screen and tree 
+   // remove from list, screen and tree
    self.parent := nil ;
    //PluginList.Remove(plugin) ;    // remove call plugin destructor (wich free frmPlugin)
    frmDebugOptions.VSTOptions.DeleteNode(node);

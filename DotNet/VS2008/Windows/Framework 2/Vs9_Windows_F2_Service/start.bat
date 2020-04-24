@@ -1,2 +1,0 @@
-net start "MyService"
-pause

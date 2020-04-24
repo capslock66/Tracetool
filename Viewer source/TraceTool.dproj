@@ -24,7 +24,7 @@
 			<Base>true</Base>
 		</PropertyGroup>
 		<PropertyGroup Condition="'$(Base)'!=''">
-			<DCC_ExeOutput>C:\TraceTool\viewer 2010\</DCC_ExeOutput>
+			<DCC_ExeOutput>d:\GitHub\Tracetool\Viewer\</DCC_ExeOutput>
 			<DCC_ImageBase>00400000</DCC_ImageBase>
 			<DCC_UsePackage>vcl;rtl;dbrtl;adortl;vcldb;vclx;bdertl;vcldbx;ibxpress;dsnap;cds;bdecds;qrpt;teeui;teedb;tee;dss;teeqr;visualclx;visualdbclx;dsnapcrba;dsnapcon;VclSmp;vclshlctrls;vclie;xmlrtl;inet;inetdbbde;inetdbxpress;inetdb;nmfast;webdsnap;websnap;soaprtl;dbexpress;dbxcds;indy;dclOffice2k;DJCL;RxCtl6;RxDB6;RxBDE6;ZipMasterPack6</DCC_UsePackage>
 			<DCC_GenerateStackFrames>true</DCC_GenerateStackFrames>
@@ -103,9 +103,6 @@
 				<Form>frmPlugin</Form>
 				<DesignClass>TFrame</DesignClass>
 			</DCCReference>
-			<DCCReference Include="unt_addJavaPlug.pas">
-				<Form>FrmAddJavaPlugin</Form>
-			</DCCReference>
 			<DCCReference Include="Unt_TailProgress.pas">
 				<Form>FrmTailProgress</Form>
 			</DCCReference>
@@ -147,6 +144,7 @@
 			<DCCReference Include="Application6.pas"/>
 			<DCCReference Include="Preview\Preview.pas"/>
 			<DCCReference Include="Config.pas"/>
+			<DCCReference Include="unt_TraceConfig.pas"/>
 			<None Include="FastMM4Options.inc">
 				<ContainerId>File</ContainerId>
 			</None>
@@ -172,14 +170,16 @@
 					<Source>
 						<Source Name="MainSource">TraceTool.dpr</Source>
 					</Source>
-					<Parameters/>
+					<Parameters>
+						<Parameters Name="RunParams">/NoDebug</Parameters>
+					</Parameters>
 					<VersionInfo>
 						<VersionInfo Name="IncludeVerInfo">True</VersionInfo>
 						<VersionInfo Name="AutoIncBuild">True</VersionInfo>
-						<VersionInfo Name="MajorVer">12</VersionInfo>
-						<VersionInfo Name="MinorVer">9</VersionInfo>
+						<VersionInfo Name="MajorVer">13</VersionInfo>
+						<VersionInfo Name="MinorVer">0</VersionInfo>
 						<VersionInfo Name="Release">0</VersionInfo>
-						<VersionInfo Name="Build">538</VersionInfo>
+						<VersionInfo Name="Build">558</VersionInfo>
 						<VersionInfo Name="Debug">False</VersionInfo>
 						<VersionInfo Name="PreRelease">False</VersionInfo>
 						<VersionInfo Name="Special">False</VersionInfo>
@@ -191,13 +191,13 @@
 					<VersionInfoKeys>
 						<VersionInfoKeys Name="CompanyName">Thierry Parent</VersionInfoKeys>
 						<VersionInfoKeys Name="FileDescription">TraceTool utility</VersionInfoKeys>
-						<VersionInfoKeys Name="FileVersion">12.9.0.538</VersionInfoKeys>
+						<VersionInfoKeys Name="FileVersion">13.0.0.558</VersionInfoKeys>
 						<VersionInfoKeys Name="InternalName">TraceTool</VersionInfoKeys>
 						<VersionInfoKeys Name="LegalCopyright">Thierry Parent</VersionInfoKeys>
 						<VersionInfoKeys Name="LegalTrademarks">Thierry Parent</VersionInfoKeys>
 						<VersionInfoKeys Name="OriginalFilename">none</VersionInfoKeys>
 						<VersionInfoKeys Name="ProductName">TraceTool</VersionInfoKeys>
-						<VersionInfoKeys Name="ProductVersion">12.9</VersionInfoKeys>
+						<VersionInfoKeys Name="ProductVersion">13.0</VersionInfoKeys>
 						<VersionInfoKeys Name="Comments">Freeware Trace utility for  Dot Net, Javascript, Java, Delphi,  C++ and Python</VersionInfoKeys>
 					</VersionInfoKeys>
 					<Excluded_Packages>

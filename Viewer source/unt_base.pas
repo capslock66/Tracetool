@@ -74,7 +74,11 @@ var
 
 implementation
 
-uses unt_TraceWin , Types;
+uses
+Types
+,unt_TraceWin
+,unt_TraceConfig
+;
 
 {$R *.dfm}
 
@@ -292,8 +296,8 @@ begin
       NewContainer.Show ;
 
       // set toolbar buttons size and caption
-      NewContainer.ToolBar.ShowCaptions := not XMLConfig.AppDisplay.SmallBut.Value ;
-      if XMLConfig.AppDisplay.SmallBut.Value = true then
+      NewContainer.ToolBar.ShowCaptions := not TraceConfig.AppDisplay_SmallBut;
+      if TraceConfig.AppDisplay_SmallBut = true then
          NewContainer.ToolBar.ButtonHeight := 22
       else
          NewContainer.ToolBar.ButtonHeight := 36 ;

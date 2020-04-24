@@ -162,8 +162,9 @@ type
 
 implementation
 
-uses unt_base , unt_tail , unt_tool , unt_TraceWin , unt_search,
-  unt_filter;
+uses unt_base , unt_tail , unt_tool , unt_TraceWin , unt_search
+  ,unt_filter
+  ,unt_TraceConfig;
 
 {$R *.dfm}
 
@@ -733,10 +734,10 @@ var
    IsFirst : boolean ;
 begin
 
-   ToolbarStandard := XMLConfig.AppDisplay.ToolbarStandard.Attributes['Value'] ;
-   ToolbarSearch   := XMLConfig.AppDisplay.ToolbarSearch.Attributes  ['Value'] ;
-   ToolbarBookmark := XMLConfig.AppDisplay.ToolbarBookmark.Attributes['Value'] ;
-   ToolbarFilter   := XMLConfig.AppDisplay.ToolbarFilter.Attributes  ['Value'] ;
+   ToolbarStandard := traceConfig.AppDisplay_ToolbarStandard ;
+   ToolbarSearch   := traceConfig.AppDisplay_ToolbarSearch ;
+   ToolbarBookmark := traceConfig.AppDisplay_ToolbarBookmark ;
+   ToolbarFilter   := traceConfig.AppDisplay_ToolbarFilter ;
 
    if (ToolbarStandard = false) and (ToolbarSearch = false) and (ToolbarBookmark = false) and (ToolbarFilter = false) then begin
       Toolbar.Visible := false ;
@@ -745,9 +746,9 @@ begin
 
    Toolbar.Visible := true ;
 
-   ToolBar.ShowCaptions := not XMLConfig.AppDisplay.SmallBut.Value ;
+   ToolBar.ShowCaptions := not TraceConfig.AppDisplay_SmallBut ;
 
-   if XMLConfig.AppDisplay.SmallBut.Value = true then
+   if TraceConfig.AppDisplay_SmallBut = true then
       ToolBar.ButtonHeight := 22
    else
       ToolBar.ButtonHeight := 36 ;

@@ -78,6 +78,7 @@ type
     { Property Accessors }
     function Get_ShowSocketWarning: IXMLBooleanTagValue;
     function Get_LastSavedPath: IXMLStringTagValue;
+    function Get_InternalLog: IXMLStringTagValue;
     function Get_SocketPort: IXMLIntegerTagValue;
     function Get_SocketPort2: IXMLIntegerTagValue;
     function Get_HTTPPort: IXMLIntegerTagValue;
@@ -89,6 +90,7 @@ type
     { Methods & Properties }
     property ShowSocketWarning: IXMLBooleanTagValue read Get_ShowSocketWarning;
     property LastSavedPath: IXMLStringTagValue read Get_LastSavedPath;
+    property InternalLog: IXMLStringTagValue read Get_InternalLog;
     property SocketPort: IXMLIntegerTagValue read Get_SocketPort;
     property SocketPort2: IXMLIntegerTagValue read Get_SocketPort2;
     property HTTPPort: IXMLIntegerTagValue read Get_HTTPPort;
@@ -375,12 +377,9 @@ type
   IXMLPlugins = interface(IXMLNode)
     ['{1C0D6009-B26C-4495-BF62-51AB5B6E2D74}']
     { Property Accessors }
-    function Get_JVMEngine: IXMLStringTagValue;
-    function Get_JavaPLuginClassPath: IXMLStringTagValue;
+
     function Get_Plugin: IXMLPluginList;
     { Methods & Properties }
-    property JVMEngine: IXMLStringTagValue read Get_JVMEngine;
-    property JavaPLuginClassPath: IXMLStringTagValue read Get_JavaPLuginClassPath;
     property Plugin: IXMLPluginList read Get_Plugin;
   end;
 
@@ -392,14 +391,17 @@ type
     function Get_FileName: WideString;
     function Get_ClassName: WideString;
     function Get_Kind: WideString;
+    function Get_Param: WideString;
     function Get_Enabled: IXMLBooleanTagValue;
     procedure Set_FileName(Value: WideString);
     procedure Set_ClassName(Value: WideString);
     procedure Set_Kind(Value: WideString);
+    procedure Set_Param(Value: WideString);
     { Methods & Properties }
     property FileName: WideString read Get_FileName write Set_FileName;
     property ClassName: WideString read Get_ClassName write Set_ClassName;
     property Kind: WideString read Get_Kind write Set_Kind;
+    property Param: WideString read Get_Param write Set_Param;
     property Enabled: IXMLBooleanTagValue read Get_Enabled;
   end;
 
@@ -551,6 +553,7 @@ type
     { IXMLGeneral }
     function Get_ShowSocketWarning: IXMLBooleanTagValue;
     function Get_LastSavedPath: IXMLStringTagValue;
+    function Get_InternalLog: IXMLStringTagValue;
     function Get_SocketPort: IXMLIntegerTagValue;
     function Get_SocketPort2: IXMLIntegerTagValue;
     function Get_HTTPPort: IXMLIntegerTagValue;
@@ -766,8 +769,6 @@ type
     FPlugin: IXMLPluginList;
   protected
     { IXMLPlugins }
-    function Get_JVMEngine: IXMLStringTagValue;
-    function Get_JavaPLuginClassPath: IXMLStringTagValue;
     function Get_Plugin: IXMLPluginList;
   public
     procedure AfterConstruction; override;
@@ -781,10 +782,12 @@ type
     function Get_FileName: WideString;
     function Get_ClassName: WideString;
     function Get_Kind: WideString;
+    function Get_Param: WideString;
     function Get_Enabled: IXMLBooleanTagValue;
     procedure Set_FileName(Value: WideString);
     procedure Set_ClassName(Value: WideString);
     procedure Set_Kind(Value: WideString);
+    procedure Set_Param(Value: WideString);
   public
     procedure AfterConstruction; override;
   end;
@@ -962,6 +965,7 @@ procedure TXMLGeneral.AfterConstruction;
 begin
   RegisterChildNode('ShowSocketWarning', TXMLBooleanTagValue);
   RegisterChildNode('LastSavedPath', TXMLStringTagValue);
+  RegisterChildNode('InternalLog', TXMLStringTagValue);
   RegisterChildNode('SocketPort', TXMLIntegerTagValue);
   RegisterChildNode('SocketPort2', TXMLIntegerTagValue);
   RegisterChildNode('HTTPPort', TXMLIntegerTagValue);
@@ -981,6 +985,11 @@ end;
 function TXMLGeneral.Get_LastSavedPath: IXMLStringTagValue;
 begin
   Result := ChildNodes['LastSavedPath'] as IXMLStringTagValue;
+end;
+
+function TXMLGeneral.Get_InternalLog: IXMLStringTagValue;
+begin
+  Result := ChildNodes['InternalLog'] as IXMLStringTagValue;
 end;
 
 function TXMLGeneral.Get_SocketPort: IXMLIntegerTagValue;
@@ -1611,21 +1620,9 @@ end;
 
 procedure TXMLPlugins.AfterConstruction;
 begin
-  RegisterChildNode('JVMEngine', TXMLStringTagValue);
-  RegisterChildNode('JavaPLuginClassPath', TXMLStringTagValue);
   RegisterChildNode('Plugin', TXMLPlugin);
   FPlugin := CreateCollection(TXMLPluginList, IXMLPlugin, 'Plugin') as IXMLPluginList;
   inherited;
-end;
-
-function TXMLPlugins.Get_JVMEngine: IXMLStringTagValue;
-begin
-  Result := ChildNodes['JVMEngine'] as IXMLStringTagValue;
-end;
-
-function TXMLPlugins.Get_JavaPLuginClassPath: IXMLStringTagValue;
-begin
-  Result := ChildNodes['JavaPLuginClassPath'] as IXMLStringTagValue;
 end;
 
 function TXMLPlugins.Get_Plugin: IXMLPluginList;
@@ -1669,6 +1666,16 @@ end;
 procedure TXMLPlugin.Set_Kind(Value: WideString);
 begin
   ChildNodes['Kind'].NodeValue := Value;
+end;
+
+function TXMLPlugin.Get_Param: WideString;
+begin
+  Result := ChildNodes['Param'].Text;
+end;
+
+procedure TXMLPlugin.Set_Param(Value: WideString);
+begin
+  ChildNodes['Param'].NodeValue := Value;
 end;
 
 function TXMLPlugin.Get_Enabled: IXMLBooleanTagValue;

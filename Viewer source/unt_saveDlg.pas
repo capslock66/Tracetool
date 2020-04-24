@@ -52,7 +52,10 @@ var
 
 implementation
 
-uses Unt_Tool, Config;
+uses
+  Unt_Tool
+  , unt_TraceConfig
+  ;
 
 {$R *.dfm}
 
@@ -75,30 +78,30 @@ begin
    CheckOptionsList.Items.Clear ;
    SaveTofileOptions := TSaveTofileOptions.Create;
 
-   SaveTofileOptions.Copy_ProcessName := XMLConfig.TextExport.ProcessName.value  ;   // save process name in clipboard export
+   SaveTofileOptions.Copy_ProcessName := TraceConfig.TextExport_ProcessName  ;   // save process name in clipboard export
    CheckOptionsList.Items.Add('Process Name');
-   CheckOptionsList.Checked[0] := XMLConfig.TextExport.ProcessName.value ;
+   CheckOptionsList.Checked[0] := TraceConfig.TextExport_ProcessName ;
 
-   SaveTofileOptions.Copy_ThreadID    := XMLConfig.TextExport.ThreadID.value     ;   // save thread id
+   SaveTofileOptions.Copy_ThreadID    := TraceConfig.TextExport_ThreadId     ;   // save thread id
    CheckOptionsList.Items.Add('Thread ID');
-   CheckOptionsList.Checked[1] := XMLConfig.TextExport.ThreadID.value ;
+   CheckOptionsList.Checked[1] := TraceConfig.TextExport_ThreadId ;
 
-   SaveTofileOptions.Copy_Time        := XMLConfig.TextExport.Time.value         ;   // save time
+   SaveTofileOptions.Copy_Time        := TraceConfig.TextExport_Time         ;   // save time
    CheckOptionsList.Items.Add('Time');
-   CheckOptionsList.Checked[2] := XMLConfig.TextExport.Time.value ;
+   CheckOptionsList.Checked[2] := TraceConfig.TextExport_Time ;
 
-   SaveTofileOptions.Copy_col1        := XMLConfig.TextExport.col1.value         ;   // save tree column
+   SaveTofileOptions.Copy_col1        := TraceConfig.TextExport_Col1         ;   // save tree column
    CheckOptionsList.Items.Add('Tree mesage');
-   CheckOptionsList.Checked[3] := XMLConfig.TextExport.col1.value ;
+   CheckOptionsList.Checked[3] := TraceConfig.TextExport_Col1 ;
 
-   SaveTofileOptions.Copy_Col2     := XMLConfig.TextExport.col2.value      ;   // save comment
+   SaveTofileOptions.Copy_Col2     := TraceConfig.TextExport_Col2      ;   // save comment
    CheckOptionsList.Items.Add('Comment message');
-   CheckOptionsList.Checked[4] := XMLConfig.TextExport.col2.value ;
+   CheckOptionsList.Checked[4] := TraceConfig.TextExport_Col2 ;
 
-   SaveTofileOptions.Copy_ColumnTitle := XMLConfig.TextExport.GenerateColumnHeader.value  ;   // include column title in clipboard export
-   chkIncludeTitle.Checked := XMLConfig.TextExport.GenerateColumnHeader.value  ;
+   SaveTofileOptions.Copy_ColumnTitle := TraceConfig.TextExport_GenerateColumnHeader  ;   // include column title in clipboard export
+   chkIncludeTitle.Checked := TraceConfig.TextExport_GenerateColumnHeader  ;
 
-   EditStyleSheet.Text := XMLConfig.general.LastStyleSheet.Value ;
+   EditStyleSheet.Text := TraceConfig.General_LastStyleSheet ;
 
    rbXMLClick (nil) ;
 end;
@@ -119,8 +122,8 @@ begin
       if EditXml.Text = '' then
          ModalResult := mrNone ;
 
-      if EditStyleSheet.Text <> XMLConfig.general.LastStyleSheet.Value then begin
-         XMLConfig.general.LastStyleSheet.Value := EditStyleSheet.Text ;
+      if EditStyleSheet.Text <> TraceConfig.General_LastStyleSheet then begin
+         TraceConfig.General_LastStyleSheet := EditStyleSheet.Text ;
          // frmDebugOptions.SaveSettings() will be called at exit
       end ;
 
@@ -174,13 +177,13 @@ begin
       Frm_Tool.SaveDialog1.FileName := EditXml.Text
    else begin
       Frm_Tool.SaveDialog1.FileName := '' ;
-      Frm_Tool.SaveDialog1.InitialDir := XMLConfig.general.LastSavedPath.Value ;
+      Frm_Tool.SaveDialog1.InitialDir := TraceConfig.General_LastSavedPath ;
    end ;
 
    Frm_Tool.SaveDialog1.Filter := 'Xml file (*.xml)|*.xml' ;
    if Frm_Tool.SaveDialog1.Execute = false then
       exit ;
-   XMLConfig.general.LastSavedPath.Value := ExtractFilePath(Frm_Tool.SaveDialog1.FileName) ;
+   TraceConfig.General_LastSavedPath := ExtractFilePath(Frm_Tool.SaveDialog1.FileName) ;
    if ExtractFileExt (Frm_Tool.SaveDialog1.FileName) = '' then
       Frm_Tool.SaveDialog1.FileName := Frm_Tool.SaveDialog1.FileName + '.xml' ;
    EditXml.Text := Frm_Tool.SaveDialog1.FileName ;
@@ -194,13 +197,13 @@ begin
       Frm_Tool.SaveDialog1.FileName := EditText.Text
    else begin
       Frm_Tool.SaveDialog1.FileName := '' ;
-      Frm_Tool.SaveDialog1.InitialDir := XMLConfig.general.LastSavedPath.Value ;
+      Frm_Tool.SaveDialog1.InitialDir := TraceConfig.General_LastSavedPath ;
    end ;
 
    Frm_Tool.SaveDialog1.Filter := 'Text file |*.*' ;
    if Frm_Tool.SaveDialog1.Execute = false then
       exit ;
-   XMLConfig.general.LastSavedPath.Value := ExtractFilePath(Frm_Tool.SaveDialog1.FileName) ;
+   TraceConfig.General_LastSavedPath := ExtractFilePath(Frm_Tool.SaveDialog1.FileName) ;
    EditText.Text := Frm_Tool.SaveDialog1.FileName ;
 end;
 

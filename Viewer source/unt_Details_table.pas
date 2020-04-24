@@ -58,6 +58,8 @@ var
 
 implementation
 
+uses
+unt_TraceConfig ;
 
 {$R *.dfm}
 

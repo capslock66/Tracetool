@@ -3,8 +3,8 @@ object FrmAbout: TFrmAbout
   Top = 299
   BorderStyle = bsDialog
   Caption = 'About TraceTool'
-  ClientHeight = 323
-  ClientWidth = 427
+  ClientHeight = 325
+  ClientWidth = 429
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -40,9 +40,9 @@ object FrmAbout: TFrmAbout
   object Label7: TLabel
     Left = 16
     Top = 220
-    Width = 113
+    Width = 53
     Height = 13
-    Caption = 'Download Web Site'
+    Caption = 'Web Site'
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clWindowText
     Font.Height = -11
@@ -57,7 +57,7 @@ object FrmAbout: TFrmAbout
     Height = 13
     Cursor = crHandPoint
     Alignment = taCenter
-    Caption = 'http://sourceforge.net/projects/tracetool/'
+    Caption = 'https://github.com/capslock66/Tracetool'
     Color = clBtnFace
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clBlue
@@ -85,19 +85,6 @@ object FrmAbout: TFrmAbout
     Caption = 
       '- Send traces, objects or dumps using windows message or socket ' +
       'thread'
-  end
-  object Label15: TLabel
-    Left = 16
-    Top = 236
-    Width = 37
-    Height = 13
-    Caption = 'Article'
-    Font.Charset = DEFAULT_CHARSET
-    Font.Color = clWindowText
-    Font.Height = -11
-    Font.Name = 'MS Sans Serif'
-    Font.Style = [fsBold]
-    ParentFont = False
   end
   object Label16: TLabel
     Left = 151
@@ -1712,15 +1699,15 @@ object FrmAbout: TFrmAbout
     OnDblClick = Image1DblClick
   end
   object Label2: TLabel
-    Left = 15
-    Top = 258
+    Left = 16
+    Top = 265
     Width = 222
     Height = 13
     Caption = 'See the license.txt for license information (GPL)'
   end
   object Button1: TButton
-    Left = 176
-    Top = 285
+    Left = 163
+    Top = 284
     Width = 75
     Height = 25
     Caption = 'Close'

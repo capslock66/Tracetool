@@ -18,13 +18,11 @@ interface
 
 
 uses
-  Windows, SysUtils, Classes,  PSAPI, Tlhelp32, VirtualTrees, graphics , messages, printers, unt_tool;
+  Windows, SysUtils, Classes, Types, PSAPI, Tlhelp32, VirtualTrees, graphics , messages, printers, unt_tool;
 
 {$Include TraceConst.Inc}
 
 
-const
-   LowTraceName : string =  'c:\TracetoolInternalLog.txt' ;
 
   // some helper functions to retreive Process name from its ID
   Function GetExenameForProcessUsingToolhelp32( pid: DWORD ): String;
@@ -72,6 +70,8 @@ var
 
 implementation
 
+uses
+unt_TraceConfig ;
 
 //------------------------------------------------------------------------------
 
@@ -656,7 +656,7 @@ begin
    if FileCriticalSection <> nil then
       FileCriticalSection.enter ;
    try try
-     assignfile(f,LowTraceName);
+     assignfile(f,TraceConfig.General_InternalLog);
      rewrite(f);
      writeln(f, DateTimeToStr(now) );
      closefile(f);
@@ -672,14 +672,14 @@ procedure LowTrace(msg: string);
 var
    f:textfile;
 begin
-   OutputDebugString (PWideChar(msg));
    if (TraceConfig.DebugMode = false) and (TraceConfig.AppDisplay_DisableInternalLog = true) then
       exit ;
+   OutputDebugString (PWideChar(msg));
    if FileCriticalSection <> nil then
       FileCriticalSection.enter ;
    try try
-     assignfile(f,LowTraceName);
-     if FileExists(LowTraceName)
+     assignfile(f,TraceConfig.General_InternalLog);
+     if FileExists(TraceConfig.General_InternalLog)
      then
        append(f)
      else

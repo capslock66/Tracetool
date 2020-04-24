@@ -14,7 +14,6 @@ object Frm_Trace: TFrm_Trace
   OldCreateOrder = False
   OnClose = FormClose
   OnCreate = FormCreate
-  OnEndDock = FormEndDock
   PixelsPerInch = 96
   TextHeight = 13
   object PanelTTraces: TPanel

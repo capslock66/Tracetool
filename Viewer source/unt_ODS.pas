@@ -179,8 +179,14 @@ var
 
 implementation
 
-uses Unt_receiver, unt_about,Unt_linkedList , unt_TraceWin, unt_utility ,
-  Config, unt_search; //,Unt_Tool;
+uses
+   Unt_receiver
+   , unt_about
+   , Unt_linkedList
+   , unt_TraceWin
+   , unt_utility
+   , unt_TraceConfig
+   , unt_search; //,Unt_Tool;
 
 
 {$R *.dfm}
@@ -244,7 +250,7 @@ begin
 
 
    LastModified := now ;
-   if XMLConfig.Ods.Enabled.Value = true then begin
+   if TraceConfig.Ods_Enabled = true then begin
       ODSThread := TODSThread.Create (true) ;   // create suspended
       ODSThread.hCloseEvent := CreateEvent( nil, True, False, nil );  // Create the close event
       ODSThread.FreeOnTerminate := true ;
@@ -568,7 +574,7 @@ begin
                           break ;
                        end ;
        WAIT_OBJECT_0 + 1 : begin
-          if XMLConfig.ods.Enabled.Value then begin
+          if TraceConfig.ods_Enabled then begin
              // cannot be added directly from a thread. Send the message to the main thread
              Criticalsection.Enter ;
              try
@@ -599,7 +605,7 @@ end;
 procedure TFrm_ODS.butCloseClick(Sender: TObject);
 begin
    getPageContainer().actPause.Checked := true ;
-   XMLConfig.ods.Enabled.Value := not getPageContainer().actPause.Checked;
+   TraceConfig.ods_Enabled := not getPageContainer().actPause.Checked;
    CloseWin () ;
 end;
 
@@ -644,7 +650,7 @@ begin
    PageContainer.actFindNext     .Enabled := true ;
 
    PageContainer.actViewTraceInfo.checked := PanelTraceInfo.Visible ;
-   PageContainer.actPause        .checked := not XMLConfig.ods.Enabled.Value ;
+   PageContainer.actPause        .checked := not TraceConfig.ods_Enabled ;
 end;
 
 //------------------------------------------------------------------------------
@@ -762,7 +768,7 @@ procedure TFrm_ODS.PauseWin;
 begin
    // pause win is also called when the application shutdown, we cannot save EnableODS in that case
    if Frm_ODS.Visible = true then
-      XMLConfig.ods.Enabled.Value := not getPageContainer().actPause.Checked;
+      TraceConfig.ods_Enabled := not getPageContainer().actPause.Checked;
 
    // if not visible then close ODS thread
    if Frm_ODS.Visible = false then begin
@@ -772,7 +778,7 @@ begin
        exit ;
    end ;
 
-   if XMLConfig.ods.Enabled.Value = false then begin
+   if TraceConfig.ods_Enabled = false then begin
        if ODSThread <> nil then
           setevent (ODSThread.hCloseEvent) ;
        ODSThread := nil ;
@@ -1070,11 +1076,11 @@ var
    end ;
 
 begin
-   Frm_Tool.SaveDialog1.InitialDir := XMLConfig.general.LastSavedPath.Value ;
+   Frm_Tool.SaveDialog1.InitialDir := TraceConfig.general_LastSavedPath ;
    Frm_Tool.SaveDialog1.Filter := 'Xml file (*.xml)|*.xml' ;
    if Frm_Tool.SaveDialog1.Execute = false then
       exit ;
-   XMLConfig.general.LastSavedPath.Value := ExtractFilePath(Frm_Tool.SaveDialog1.FileName) ;
+   TraceConfig.general_LastSavedPath := ExtractFilePath(Frm_Tool.SaveDialog1.FileName) ;
 
    application.ProcessMessages ;
    SetCursor(Screen.Cursors[crHourGlass]);

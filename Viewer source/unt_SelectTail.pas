@@ -68,8 +68,13 @@ var
 
 implementation
 
-uses Unt_Tool, DebugOptions, Config, unt_base , XMLIntf,
-  Unt_TailProgress;
+uses
+   Unt_Tool
+   , DebugOptions
+   , unt_TraceConfig
+   , unt_base
+   , XMLIntf
+   , Unt_TailProgress;
 
 {$R *.dfm}
 
@@ -109,7 +114,7 @@ begin
       Frm_Tool.OpenDialog1.FileName := EditFileName.Text
    else begin
       Frm_Tool.OpenDialog1.FileName := '' ;
-      Frm_Tool.OpenDialog1.InitialDir := XMLConfig.tail.LastPath.Value ;
+      Frm_Tool.OpenDialog1.InitialDir := TraceConfig.tail_LastPath ;
    end ;
 
    if Frm_Tool.OpenDialog1.Execute = false then
@@ -125,7 +130,7 @@ begin
    if Frm_Tool.OpenDialog1.Execute = false then
       exit ;
    FavoriteFiles.AddItem (Frm_Tool.OpenDialog1.FileName,nil) ;
-   XMLConfig.tail.Favorites.Add(Frm_Tool.OpenDialog1.FileName) ;
+   TraceConfig.FavoriteTailList.Add(Frm_Tool.OpenDialog1.FileName) ;
 end;
 
 //------------------------------------------------------------------------------
@@ -137,9 +142,9 @@ var
 begin
    fname := FavoriteFiles.items.Strings [FavoriteFiles.ItemIndex] ;
    FavoriteFiles.items.Delete (FavoriteFiles.ItemIndex) ;
-   for c := 0 to XMLConfig.tail.Favorites.Count-1 do begin
-      if XMLConfig.tail.Favorites.FileName[c] = fname then begin
-        XMLConfig.tail.Favorites.Delete(c);
+   for c := 0 to TraceConfig.FavoriteTailList.Count-1 do begin
+      if TraceConfig.FavoriteTailList[c] = fname then begin
+        TraceConfig.FavoriteTailList.Delete(c);
         break ;
       end ;
    end ;
@@ -216,30 +221,30 @@ var
 begin
    // reload all favorites
    FavoriteFiles.Clear ;
-   for c := 0 to XMLConfig.tail.Favorites.Count-1 do
-      FavoriteFiles.AddItem(XMLConfig.tail.Favorites.FileName[c],nil);
+   for c := 0 to TraceConfig.FavoriteTailList.Count-1 do
+      FavoriteFiles.AddItem(TraceConfig.FavoriteTailList[c],nil);
 
    Frm_Tool.OpenDialog1.Filter := 'Text file (*.txt)|*.txt|Log file (*.log)|*.log' ;
-   Frm_Tool.OpenDialog1.InitialDir := XMLConfig.Tail.LastPath.Value ;
+   Frm_Tool.OpenDialog1.InitialDir := TraceConfig.Tail_LastPath;
 
-   if XMLConfig.tail.ColumnStyle.value = 'Classic' then ComboColumnsStyle.ItemIndex := 0 ; 
-   if XMLConfig.tail.ColumnStyle.value = 'Lines'   then ComboColumnsStyle.ItemIndex := 1 ; 
-   if XMLConfig.tail.ColumnStyle.value = 'Multi'   then ComboColumnsStyle.ItemIndex := 2 ;
+   if TraceConfig.tail_ColumnStyle = 'Classic' then ComboColumnsStyle.ItemIndex := 0 ;
+   if TraceConfig.tail_ColumnStyle = 'Lines'   then ComboColumnsStyle.ItemIndex := 1 ;
+   if TraceConfig.tail_ColumnStyle = 'Multi'   then ComboColumnsStyle.ItemIndex := 2 ;
 
-   if XMLConfig.tail.AutoCreateColStyle.value = 'First'  then rbFromFirstLine.Checked := true ;
-   if XMLConfig.tail.AutoCreateColStyle.value = 'Each'   then rbEachLines.Checked := true ;
-   if XMLConfig.tail.AutoCreateColStyle.value = 'Fixed'  then rbFixedcol.Checked := true ;
+   if TraceConfig.tail_AutoCreateColStyle = 'First'  then rbFromFirstLine.Checked := true ;
+   if TraceConfig.tail_AutoCreateColStyle = 'Each'   then rbEachLines.Checked := true ;
+   if TraceConfig.tail_AutoCreateColStyle = 'Fixed'  then rbFixedcol.Checked := true ;
 
-   if XMLConfig.tail.TextQualifier.value = 'None'   then ComboQualifier.ItemIndex := 0 ;
-   if XMLConfig.tail.TextQualifier.value = 'Single' then ComboQualifier.ItemIndex := 1 ;
-   if XMLConfig.tail.TextQualifier.value = 'Double' then ComboQualifier.ItemIndex := 2 ;
+   if TraceConfig.tail_TextQualifier = 'None'   then ComboQualifier.ItemIndex := 0 ;
+   if TraceConfig.tail_TextQualifier = 'Single' then ComboQualifier.ItemIndex := 1 ;
+   if TraceConfig.tail_TextQualifier = 'Double' then ComboQualifier.ItemIndex := 2 ;
 
-   EditSeparator.Text := XMLConfig.tail.Separator.value ;
-   chkTitle.Checked   := XMLConfig.tail.FirstcolIsTitle.value ;
-   EditColNumber.Text := inttostr(XMLConfig.tail.FixedColCount.value) ;
+   EditSeparator.Text := TraceConfig.tail_Separator ;
+   chkTitle.Checked   := TraceConfig.tail_FirstcolIsTitle ;
+   EditColNumber.Text := inttostr(TraceConfig.tail_FixedColCount) ;
 
-   if XMLConfig.tail.OpenFromFavorites.value = false then rbSingleFile.Checked := true ;
-   if XMLConfig.tail.OpenFromFavorites.value = true then rbFavorite.Checked := true ;
+   if TraceConfig.tail_OpenFromFavorites = false then rbSingleFile.Checked := true ;
+   if TraceConfig.tail_OpenFromFavorites = true then rbFavorite.Checked := true ;
 
    cbColumnsClick (nil) ;    // force enable/disable sub controls
    rbSingleFileClick(nil) ;  // force enable/disable sub controls
@@ -250,31 +255,31 @@ end;
 
 procedure TFrmSelectTail.SaveOptions;
 begin
-   XMLConfig.Tail.LastPath.Value := ExtractFilePath(Frm_Tool.OpenDialog1.FileName) ;
+   TraceConfig.Tail_LastPath := ExtractFilePath(Frm_Tool.OpenDialog1.FileName) ;
 
-   if ComboColumnsStyle.ItemIndex = 0 then XMLConfig.tail.ColumnStyle.value := 'Classic' ;
-   if ComboColumnsStyle.ItemIndex = 1 then XMLConfig.tail.ColumnStyle.value := 'Lines' ;
-   if ComboColumnsStyle.ItemIndex = 2 then XMLConfig.tail.ColumnStyle.value := 'Multi' ;
+   if ComboColumnsStyle.ItemIndex = 0 then TraceConfig.Tail_ColumnStyle := 'Classic' ;
+   if ComboColumnsStyle.ItemIndex = 1 then TraceConfig.Tail_ColumnStyle := 'Lines' ;
+   if ComboColumnsStyle.ItemIndex = 2 then TraceConfig.Tail_ColumnStyle := 'Multi' ;
 
-   if rbFromFirstLine.Checked then XMLConfig.tail.AutoCreateColStyle.value := 'First' ;
-   if rbEachLines.Checked     then XMLConfig.tail.AutoCreateColStyle.value := 'Each'  ;
-   if rbFixedcol.Checked      then XMLConfig.tail.AutoCreateColStyle.value := 'Fixed' ;
+   if rbFromFirstLine.Checked then TraceConfig.Tail_AutoCreateColStyle := 'First' ;
+   if rbEachLines.Checked     then TraceConfig.Tail_AutoCreateColStyle := 'Each'  ;
+   if rbFixedcol.Checked      then TraceConfig.Tail_AutoCreateColStyle := 'Fixed' ;
 
-   XMLConfig.tail.FirstcolIsTitle.value  := chkTitle.Checked  ;
-   XMLConfig.tail.FixedColCount.value    := StrToIntDef(editColNumber.Text,1) ;
+   TraceConfig.Tail_FirstcolIsTitle  := chkTitle.Checked  ;
+   TraceConfig.Tail_FixedColCount    := StrToIntDef(editColNumber.Text,1) ;
 
-   XMLConfig.tail.TextQualifier.value := ComboQualifier.Text ;
+   TraceConfig.Tail_TextQualifier := ComboQualifier.Text ;
 
    if strtointDef(EditSeparator.text,-1) = -1 then
-      XMLConfig.tail.Separator.value := EditSeparator.text
+      TraceConfig.Tail_Separator := EditSeparator.text
    else
-      XMLConfig.tail.Separator.value := EditSeparator.text ; 
+      TraceConfig.Tail_Separator := EditSeparator.text ;
 
-   if rbSingleFile.Checked = true then XMLConfig.tail.OpenFromFavorites.value := false ;
-   if rbFavorite.Checked   = true then XMLConfig.tail.OpenFromFavorites.value := true  ;
+   if rbSingleFile.Checked = true then TraceConfig.Tail_OpenFromFavorites := false ;
+   if rbFavorite.Checked   = true then TraceConfig.Tail_OpenFromFavorites := true  ;
 
 
-   frmDebugOptions.SaveSettings ;
+   Frm_Tool.SaveSettings() ;
 end;
 
 //------------------------------------------------------------------------------
