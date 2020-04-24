@@ -1,0 +1,29 @@
+relatif WebsockPlugin
+		<Plugin><Kind>DotNet</Kind><Enabled Value="true"/><FileName>WebSock\WebsockPlugin.dll</FileName><Param>
+		WebSocketHost = 0.0.0.0, WebSocketPort = 8091, ViewerSocketHost = 127.0.0.1, ViewerSocketPort = 8090</Param></Plugin></Plugins>
+
+https://github.com/capslock66/Tracetool/network/members
+
+check updates made by other developers
+   @capslock66 capslock66 / Tracetool
+   @AngusPasc AngusPasc / Tracetool
+   @gnatali gnatali / Tracetool
+   @kimkucheol kimkucheol / Tracetool
+   @PeterG75 PeterG75 / Tracetool
+   @wjx0912 wjx0912 / Tracetool
+
+
+Libs (release)
+   lib_standard_20 
+   lib_standard_16 
+   lib_framework_472 
+   DotNetWrapper 
+   WebSockPlugin 
+
+publish github + doc : 
+    viewer download + config plugin
+    blazor section : client config 
+
+publish codeproject
+   https://www.codeproject.com/Articles/5498/TraceTool-The-Swiss-Army-Knife-of-Trace
+   make reference to github !

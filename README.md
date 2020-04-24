@@ -1,15 +1,20 @@
-# Tracetool
+<!--
+https://code.visualstudio.com/docs/languages/markdown
 
+Tip: You can also right-click on the editor Tab and select Open Preview (Ctrl+Shift+V) or use the Command Palette (Ctrl+Shift+P) to run the Markdown: Open Preview to the Side command (Ctrl+K V).
 
+https://guides.github.com/features/mastering-markdown/
+https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet
+
+-->
 <img alt="Viewer" src="https://raw.githubusercontent.com/capslock66/Tracetool/master/Server1.jpg">
 
+TODO : put a menu installation, client (c#, ...) , viewer
 
-# Introduction
-The problem when debugging a multi-tier system (with perhaps multiple languages) is that traces are placed in different log files, in different formats, and in different locations on the network.
 
-# What is TraceTool
-* A viewer (written in unmanaged code) that displays multiple kinds of sources (from the provided framework, log file, event log, or the OutputDebugString method)
-* An easy and powerful client framework to send simple traces, grouped traces, class and object viewer, dump, and call stack.
+# What is TraceTool ?
+* A viewer that displays multiple kinds of sources (from the tracetool framework, log file, event log, or OutputDebugString)
+* A multi language client framework (Dotnet, Java, Javasvript, C++ , Python, Delphi) to send simple traces, class and object viewer, dump, and call stack.
 
 # Installation
 
@@ -17,18 +22,45 @@ The viewer must be install on your pc (windows only).
 
 Download the [Viewer](https://raw.githubusercontent.com/capslock66/Tracetool/master/GithubFiles/Viewer.zip "Viewer.zip") and unpack the file into a folder of your chose.
 
-Download the [Viewer](GithubFiles/Viewer.zip "Viewer.zip") and unpack the file into a folder of your chose.
 
+
+# Client Api
+
+## DotNet
+In visual studio install the client Api using "manage nuget packages","Manage Nuget Packages for solution" context menus or via the nuget console 
+>Install-Package Tracetool.DotNet.Api 
+
+The nuget contains DotNet4.7, Standard 1.6 and Standard 2.0 libraries 
+
+## Blazor (client / server)
+
+## Java
+
+## Javascript 
+
+install from Npm command line : 
+>npm install -s tracetool
+
+## TypeScript
+
+## Node
+
+## C++
+
+## Python
+
+## Delphi
+
+## ActiveX
+
+# Working with the Viewer
 
 If you plan to use the "windows message" mode, you must start once the viewer to self register the location into the registry 
 
-For Dot Net developers, in visual studio install the api using "manage nuget packages" or via the nuget console 
->Install-Package Tracetool.DotNet.Api 
-
-or via visual studio interface (Manage Nuget Packages for solution) and search for "Tracetool.DotNet.Api"
-
-If you target Javascript (browser or server) or Typescript, install from Npm command line : 
->npm install -s tracetool
+<!--- 
 
 
+https://www.codeproject.com/Articles/5498/TraceTool-The-Swiss-Army-Knife-of-Trace
+
+--->
 ..... work in progress ....
