@@ -24,9 +24,9 @@
         </dependencies>
     </metadata>
     <files>
-        <file src="..\..\libsAndDemos\Lib_Framework_472\bin\release\*.*" target="lib\net472" />
-        <file src="..\..\libsAndDemos\Lib_Standard_16\bin\release\**" target="lib" />
-        <file src="..\..\libsAndDemos\Lib_Standard_20\bin\release\netstandard2.0\*.*" target="lib\netstandard2.0" />
+        <file src="..\..\Libraries\Lib_Framework_472\bin\release\*.*" target="lib\net472" />
+        <file src="..\..\Libraries\Lib_Standard_16\bin\release\**" target="lib" />
+        <file src="..\..\Libraries\Lib_Standard_20\bin\release\netstandard2.0\*.*" target="lib\netstandard2.0" />
 
         <file src="..\..\..\viewer\WebSock\*.*" target="tools\WebSock" />
         <file src="..\..\..\viewer\clientaccesspolicy.xml" target="tools" />

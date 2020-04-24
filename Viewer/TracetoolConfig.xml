@@ -16,8 +16,8 @@
 	<AppDisplay>
 		<SmallBut Value="true"/>
 		<ApplicationTitle Value="socket: 8090 / 4502,  Http : 85, WebSocket:8091"/>
-		<Left Value="104"/>
-		<Top Value="104"/>
+		<Left Value="955"/>
+		<Top Value="290"/>
 		<Width Value="693"/>
 		<Height Value="635"/>
 		<StayOnTop Value="false"/>
@@ -33,7 +33,7 @@
 		<ToolbarBookmark Value="true"/>
 		<ToolbarFilter Value="true"/>
 		<HideViewer Value="false"/>
-		<DisableInternalLog Value="false"/>
+		<DisableInternalLog Value="true"/>
 	</AppDisplay>
 	<Framework>
 		<ShowMembers Value="false"/>
@@ -128,7 +128,7 @@
 		<TreeIndentation Value="3"/>
 	</TextExport>
 	<Plugins>
-	</Plugins>
+		<Plugin><Kind>DotNet</Kind><Enabled Value="false"/><FileName>WebSock\WebsockPlugin.dll</FileName><Param>WebSocketHost = 0.0.0.0, WebSocketPort = 8091, ViewerSocketHost = 127.0.0.1, ViewerSocketPort = 8090</Param></Plugin></Plugins>
 	<Watches>
 		<Enabled Value="true"/>
 		<VisibleMenu Value="true"/>
@@ -143,4 +143,4 @@
 			<FontSize Value="8"/>
 		</Info>
 	</Watches>
-	<Plugins/></Config>
+</Config>

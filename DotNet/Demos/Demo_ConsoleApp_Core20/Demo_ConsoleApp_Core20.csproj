@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
@@ -6,7 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Lib_Standard_20\Lib_Standard_20.csproj" />
+    <PackageReference Include="Tracetool.DotNet.Api" Version="13.0.0" />
   </ItemGroup>
 
 </Project>

@@ -5,14 +5,6 @@ VisualStudioVersion = 16.0.29519.181
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lib_Standard_20", "Lib_Standard_20\Lib_Standard_20.csproj", "{CBF21930-6E95-435C-A3DD-E592EFF9AB78}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Demo_ConsoleApp_Core20", "Demo_ConsoleApp_Core20\Demo_ConsoleApp_Core20.csproj", "{BC928D86-A695-4457-83A5-C23CE465CA8F}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Demo_ConsoleApp_F461", "Demo_ConsoleApp_F461\Demo_ConsoleApp_F461.csproj", "{626502AE-0AE0-43B2-9B8A-887DB933E285}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Demo_Wpf", "Demo_wpf\Demo_Wpf.csproj", "{3FE51DDE-964A-4A9D-AD93-089299B0AAA4}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyBlazorAppPreview3.Client", "Demo_BlazorClient_Preview3\MyBlazorAppPreview3.Client.csproj", "{F371CFC6-1FB3-42A0-8174-23F2561439C7}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lib_Standard_16", "Lib_Standard_16\Lib_Standard_16.csproj", "{2150C137-6A98-4694-A342-F7A767685036}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lib_Framework_472", "Lib_Framework_472\Lib_Framework_472.csproj", "{7CF111BE-3614-4514-966A-FDF779773E51}"
