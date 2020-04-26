@@ -1,3 +1,6 @@
+Fix ttrace.options.framework !!!
+13.0.1
+
 relatif WebsockPlugin
 		<Plugin><Kind>DotNet</Kind><Enabled Value="true"/><FileName>WebSock\WebsockPlugin.dll</FileName><Param>
 		WebSocketHost = 0.0.0.0, WebSocketPort = 8091, ViewerSocketHost = 127.0.0.1, ViewerSocketPort = 8090</Param></Plugin></Plugins>
@@ -27,3 +30,6 @@ publish github + doc :
 publish codeproject
    https://www.codeproject.com/Articles/5498/TraceTool-The-Swiss-Army-Knife-of-Trace
    make reference to github !
+
+Documentation of the TCP-communication protocol
+https://www.codeproject.com/Messages/5584289/Documentation-of-the-TCP-communication-protocol.aspx
