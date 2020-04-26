@@ -45,7 +45,6 @@ https://www.codeproject.com/Articles/5498/TraceTool-The-Swiss-Army-Knife-of-Trac
 
 * [Working with the viewer](#Working-with-the-viewer "Working with the viewer")
   * [Info Pane](#Info-Pane "Info Pane")
-  * [Log File](#Log-File "Log File")
   * [System.Trace (.NET) Support](#System-Trace-NET) Support "System.Trace (.NET) *upport")
   * [Microsoft Enterprise Framework (.NET) Support #Microsoft-Enterprise-Framework-NET-Support "Microsoft Enterprise Framework (.NET) *upport")
   * [Log4Net (.NET) Support](#Log4Net-NET-Support "Log4Net (.NET) Support")
@@ -616,8 +615,6 @@ The TracenodeEx.Resend function lets you resend the two texts (not members) at a
 ## Info Pane
 
 The info panel displays additional information for a specific trace. When available, a small blue circle is visible on the gutter. This can be the object view, dump, stack, or any data that can be displayed in a maximum of three columns. The "Info" button on the toolbar shows or hides this panel.
-
-## Log File
 
 ## System.Trace (.NET) Support
 
