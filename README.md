@@ -96,7 +96,7 @@ The "web socket" label is displayed in the trace window. Clicking on this label 
 
 ## DotNet
 
-In visual studio install the client Api using "manage nuget packages","Manage Nuget Packages for solution" context menus or via the nuget console
+In visual studio, reference the client Api nuget using "manage nuget packages","Manage Nuget Packages for solution" context menus or via the nuget console
 >Install-Package Tracetool.DotNet.Api
 
 The nuget contains DotNet4.7, Standard 1.6 and Standard 2.0 libraries
@@ -115,7 +115,7 @@ Here is the result:
 
 ![Short sample](/GithubFiles/DotNetShortSample.png)
 
-If you chose socket mode, add this code to your startup function
+If you chose socket mode (web development, service,...), add this code to your startup function
 
 ``` C#
 using TraceTool ;
@@ -357,7 +357,7 @@ TTrace.Debug.Send ("Do some work" ) ;
 TTrace.Debug.UnIndent ("end of procedure") ;
 ```
 
-![Indent](/GithubFiles/server3.jpg)
+![Indent](/GithubFiles/Server3.jpg)
 
 Note : ensure the UnIndent is called (use try finally), else you will see unexpected indentation
 
@@ -373,7 +373,7 @@ TraceNode start2 = TTrace.Debug.Send ("Start 2 ..") ;
 start2.AppendLeft ("Done") ;
 ```
 
-![Resendxxx](/GithubFiles/tracet13.gif)
+![Resendxxx](/GithubFiles/traceT13.gif)
 
 Note that the time is not changed.
 
@@ -465,15 +465,15 @@ int[] VtArr = new int[10]{7,1,5,2,0,3,4,8,6,9};
 TTrace.Debug.SendValue ("simple array", VtArr);
 ```
 
-![tracet8](/GithubFiles/tracet8.gif)
+![tracet8](/GithubFiles/traceT8.gif)
 
-![tracet9](/GithubFiles/tracet9.gif)
+![tracet9](/GithubFiles/traceT9.gif)
 
 As you can see in the previous example, SendValue is not limited to a simple type. Object properties can point to another object. Recursive object display is limited, by default, to three levels. Object reference is displayed (class@code) on the second column. Objects already displayed are replaced by a "see @" reference. Presently, the Delphi SendValue is limited to variant values (no properties) and arrays.
 
 Here is another screenshot for a complex multidimensional array with user defined bounds and types:
 
-![tracet10](/GithubFiles/tracet10.jpg)
+![tracet10](/GithubFiles/traceT10.jpg)
 
 ## SendDump , SendStack and SendCaller
 
@@ -483,7 +483,7 @@ SenDump displays the buffer dump. Sample code:
 TTrace.Debug.SendDump ("Dump test", "Unicode",  System.Text.Encoding.Unicode.GetBytes(str) ,50) ;
 ```
 
-![tracet11](/GithubFiles/tracet11.gif)
+![tracet11](/GithubFiles/traceT11.gif)
 
 Sendstack and SendCaller let you display the stack information:
 
@@ -492,7 +492,7 @@ TTrace.Debug.SendStack  ("Stack test" , 0) ;
 TTrace.Debug.SendCaller ("Caller test" , 0) ;
 ```
 
-![tracet12](/GithubFiles/tracet12.gif)
+![tracet12](/GithubFiles/traceT12.gif)
 
 ## SendBitmap
 
@@ -500,7 +500,7 @@ TTrace.Debug.SendCaller ("Caller test" , 0) ;
 TTrace.Debug.SendBitmap("Bitmap", pictureBox1.Image);
 ```
 
-![sendbitmap](/GithubFiles/sendbitmap.jpg)
+![sendbitmap](/GithubFiles/sendBitmap.jpg)
 
 ## XML
 
@@ -508,7 +508,7 @@ TTrace.Debug.SendBitmap("Bitmap", pictureBox1.Image);
 nodeEx.AddXML("<data> Hello XML </data>");
 ```
 
-![sendxml](/GithubFiles/sendxml.jpg)
+![sendxml](/GithubFiles/sendXml.jpg)
 
 ## Table
 
@@ -571,7 +571,7 @@ TTrace.Debug.SendTable("Files having length>100 in temp path (Linq)",
                        LinqToObjectQuery);
 ```
 
-![sendtable](/GithubFiles/sendtable.jpg)
+![sendtable](/GithubFiles/SendTable.jpg)
 
 ## Watches
 
@@ -633,7 +633,7 @@ Trace.Write ("myArray : ") ;
 Trace.WriteLine (myArray) ;
 ```
 
-![tracet14](/GithubFiles/tracet14.gif)
+![tracet14](/GithubFiles/traceT14.gif)
 
 ## Microsoft Enterprise Framework (.NET) Support
 
@@ -758,7 +758,7 @@ You can extend the TraceTool functionality with plug-ins. Plug-ins can be writte
 
 To display the OutputDebugString window, activate it in the window menu (show OutputDebugString). The OutputDebugString windows can be paused or cleared using the toolbar. You can also copy selected lines to the Clipboard and save the content to an XML file (the same format as the TraceTool export).
 
-![ods](/GithubFiles/ods.jpg)
+![ods](/GithubFiles/ODS.jpg)
 
 ## Tail files
 
@@ -766,7 +766,7 @@ To add a new "Tail" tab, select the Windows/Open Tail File... menu, then select 
 
 Clipboard operations are allowed, but not exported, since traces are already stored in a file. The number of displayed lines is also specified in the Options menu.
 
-![tail](/GithubFiles/tail.jpg)
+![tail](/GithubFiles/Tail.jpg)
 
 ## Event Log Traces
 
@@ -774,7 +774,7 @@ To add a new "Event log" tab, select the Windows/Open Event Log... menu, then se
 
 Clipboard operations and XML export are allowed (the same format as the TraceTool export).
 
-![evn](/GithubFiles/evn.jpg)
+![evn](/GithubFiles/Evn.jpg)
 
 ## Save/Load to XML File
 
