@@ -2220,9 +2220,9 @@ namespace TraceTool
 #if NETFULL
         public string Framework => "DotNet framework 4";
 #elif NETSTANDARD1_6
-        public string Framework => "Dot net standard 1.6";
-#elif NETSTANDARD1_6
-        public string Framework => "DotNet statndard 2.0";
+        public string Framework => "DotNet standard 1.6";
+#elif NETSTANDARD2_0
+        public string Framework => "DotNet standard 2.0";
 #endif
         private bool _sendDate;
         /// <summary>

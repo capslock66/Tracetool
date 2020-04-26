@@ -12,7 +12,7 @@
     protected override void OnInitialized()
     {
         TTrace.Options.SendMode = SendMode.WebSocket;
-        TTrace.Options.UseWorkerThread = false; // blazor is single thread. Set to false to use Async communication
+        TTrace.Options.UseWorkerThread = false; // Async communication for blazor client
         TTrace.Options.SocketHost = "127.0.0.1";
         TTrace.Options.SocketPort = 8091;
     }
@@ -22,8 +22,9 @@
 
         TTrace.ClearAll();
         TTrace.Show(true);
-        TTrace.Debug.Send($"trace from blazor ", TTrace.Debug.GetType().Assembly.Location);
-        TTrace.Debug.Send($"Current time : {DateTime.Now} (Preview always return UTC time)");
+
+        TTrace.Debug.Send($"trace from blazor client", TTrace.Debug.GetType().Assembly.Location);
+        TTrace.Debug.Send($"Current time : {DateTime.Now} (Preview always return UTC time in preview)");
         TTrace.Debug.SendValue("Value", TTrace.Debug);
         TTrace.Debug.SendObject("Object", TTrace.Debug);
         for (int i = 0; i < 100; i++)
@@ -31,6 +32,7 @@
 
         await TTrace.FlushAsync();   // give thread to the browser and wait for all message send
         TTrace.Debug.Send($"done").Show();
+
     }
 
     private void CloseSock()

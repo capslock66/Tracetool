@@ -33,6 +33,6 @@ ttrace.debug.send('Parent trace').send('Child trace') ;
 
 A demo is available in the demo folder
 
-See the [codeproject](http://www.codeproject.com/Articles/5498/TraceTool-The-Swiss-Army-Knife-of-Trace) site for all possibilities
-Everything is opensource
+See the [Github](https://github.com/capslock66/Tracetool) site for all possibilities
+
 
