@@ -166,7 +166,7 @@ Here is a simple razor page
 
 Here is the result:
 
-![plugin](/GithubFiles/blazor.png)
+![plugin](/GithubFiles/Blazor.png)
 
 See the [Samples](#Samples "Samples") section for more examples
 
