@@ -328,6 +328,10 @@ Java/Lib/tracetool/
 backupToCloud*.bat
 Viewer source/Jcl/jcl-1.103.0.3110-partnerdvd.zip
 NodeJs/Sample/typings/
+
 *.exe
 *.dll
 *.tlb
+
+!Viewer/*
+!viewer/WebSock/*.*
