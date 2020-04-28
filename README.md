@@ -21,7 +21,7 @@ https://www.codeproject.com/Articles/5498/TraceTool-The-Swiss-Army-Knife-of-Trac
 * [Viewer Installation](#Installation "Installation")
 * [Client Api](#ClientAPI "Client Api")
   * [DotNet](#DotNet)
-  * [Blazor](#Blazor)
+  * [Blazor Client / Server](#Blazor-client-/-server)
   * [Java, Android](#Java)
   * [Javascript, TypeScript, Node](#Javascript)
   * [C++](#C++)
@@ -127,7 +127,7 @@ TTrace.Options.SocketPort = 8090;
 
 See the [Samples](#Samples "Samples") section for more examples
 
-## Blazor (client / server)
+## Blazor client / server
 
 You can use tracetool on client site. Add a reference to Tracetool.DotNet.Api, specify websocket mode and async communication.
 Don't forget to enable plugin ! \
