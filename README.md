@@ -21,7 +21,7 @@ https://www.codeproject.com/Articles/5498/TraceTool-The-Swiss-Army-Knife-of-Trac
 * [Viewer Installation](#Installation "Installation")
 * [Client Api](#ClientAPI "Client Api")
   * [DotNet](#DotNet)
-  * [Blazor Client / Server](#Blazor-client-/-server)
+  * [Blazor Client / Server](#Blazor-client--server)
   * [Java, Android](#Java)
   * [Javascript, TypeScript, Node](#Javascript)
   * [C++](#C++)
