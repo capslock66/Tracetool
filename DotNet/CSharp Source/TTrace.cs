@@ -26,6 +26,7 @@
 // 12.9   : 2017 11 03 : Add conditional compilation for Dot Net Standard (1.6)
 // 12.9   : 2017 11 06 : Add conditional compilation for Dot Net Standard (2.0)
 // 13.0   : 2020 04 05 : Add WebSocket mode, add Async mode, remove pocket pc, Silverlight, upgrade dot net framework 4.7.1
+// 13.0.1 : 2020 05 17 : hotfix flush hang 
 
 using System.Text;
 using System;
@@ -1311,6 +1312,8 @@ namespace TraceTool
             if (!Options.UseWorkerThread)
                 throw new Exception("Don't call Flush() in Async mode. use FlushAsync()");
 
+            if (_traceThread == null)   // thread not yet started
+                return ;
 
             string key = Helper.NewGuid().ToString();
             List<string> commandList = new List<string>();

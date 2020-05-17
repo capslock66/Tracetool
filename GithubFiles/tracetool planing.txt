@@ -16,17 +16,6 @@ check updates made by other developers
    @wjx0912 wjx0912 / Tracetool
 
 
-Libs (release)
-   lib_standard_20 
-   lib_standard_16 
-   lib_framework_472 
-   DotNetWrapper 
-   WebSockPlugin 
-
-publish github + doc : 
-    viewer download + config plugin
-    blazor section : client config 
-
 publish codeproject
    https://www.codeproject.com/Articles/5498/TraceTool-The-Swiss-Army-Knife-of-Trace
    make reference to github !
