@@ -1311,6 +1311,8 @@ namespace TraceTool
             if (!Options.UseWorkerThread)
                 throw new Exception("Don't call Flush() in Async mode. use FlushAsync()");
 
+            if (_traceThread == null)   // thread not yet started
+                return ;
 
             string key = Helper.NewGuid().ToString();
             List<string> commandList = new List<string>();
