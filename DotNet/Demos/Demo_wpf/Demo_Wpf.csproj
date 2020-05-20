@@ -46,8 +46,8 @@
     <Reference Include="System.Xaml">
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
     </Reference>
-    <Reference Include="TraceTool, Version=13.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Tracetool.DotNet.Api.13.0.0\lib\netstandard2.0\TraceTool.dll</HintPath>
+    <Reference Include="TraceTool, Version=13.0.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Tracetool.DotNet.Api.13.0.1\lib\netstandard2.0\TraceTool.dll</HintPath>
     </Reference>
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />

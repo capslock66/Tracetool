@@ -16,8 +16,8 @@
 	<AppDisplay>
 		<SmallBut Value="true"/>
 		<ApplicationTitle Value="socket: 8090 / 4502,  Http : 85, WebSocket:8091"/>
-		<Left Value="955"/>
-		<Top Value="290"/>
+		<Left Value="208"/>
+		<Top Value="208"/>
 		<Width Value="693"/>
 		<Height Value="635"/>
 		<StayOnTop Value="false"/>
@@ -128,7 +128,7 @@
 		<TreeIndentation Value="3"/>
 	</TextExport>
 	<Plugins>
-		<Plugin><Kind>DotNet</Kind><Enabled Value="false"/><FileName>WebSock\WebsockPlugin.dll</FileName><Param>WebSocketHost = 0.0.0.0, WebSocketPort = 8091, ViewerSocketHost = 127.0.0.1, ViewerSocketPort = 8090</Param></Plugin></Plugins>
+		<Plugin><Kind>DotNet</Kind><Enabled Value="true"/><FileName>WebSock\WebsockPlugin.dll</FileName><Param>WebSocketHost = 0.0.0.0, WebSocketPort = 8091, ViewerSocketHost = 127.0.0.1, ViewerSocketPort = 8090</Param></Plugin></Plugins>
 	<Watches>
 		<Enabled Value="true"/>
 		<VisibleMenu Value="true"/>
