@@ -916,17 +916,17 @@
     {$define DELPHI_1}
   {$endif}
 
-// for further version : assume it's like a 10.4 Sydney
-//{$if CompilerVersion >= 34.0}  // DELPHI 10.4 sydney
+  // for further version : assume it's like a 10.4 Sydney
+  {$if CompilerVersion >= 34.0}  // DELPHI 10.4 sydney
 
-{$ifndef DELPHI}
-    {$define DELPHI}
-    {$define COMPILER_10_UP}
-    {$define COMPILER_12_UP}
-    {$define COMPILER_7_UP}
-    {$define COMPILER_18_UP}
-    {$define DELPHI_6_UP}
-{$endif DELPHI}
+      {$define DELPHI}
+      {$define DELPHI_6_UP}
+      {$define COMPILER_7_UP}
+      {$define COMPILER_10_UP}
+      {$define COMPILER_12_UP}
+      {$define DELPHI_16_UP}
+      {$define COMPILER_18_UP}
+  {$endif DELPHI}
 
 
 {$endif Win32}
