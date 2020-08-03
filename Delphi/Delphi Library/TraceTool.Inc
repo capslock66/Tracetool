@@ -1,7 +1,8 @@
 // unit TraceTool.inc ;
 // used by viewer and client
+// in client, what is really used : DELPHI_6_UP, COMPILER_7_UP, COMPILER_10_UP, COMPILER_12_UP, DELPHI_16_UP, COMPILER_18_UP
 
-// version 12.8
+// version 12.9
 
 {$ifdef CLR}  // The common language runtime symbol is only defined for the .NET platform.
   {$define DELPHI.NET}
@@ -60,10 +61,123 @@
 {$ifdef Win32}
 
 // Compiler defines not specific to a particlular platform.
-// http://docwiki.embarcadero.com/RADStudio/Berlin/en/Compiler_Versions
-// http://docwiki.embarcadero.com/RADStudio/Berlin/en/Conditional_compilation_(Delphi)
+// http://docwiki.embarcadero.com/RADStudio/Sydney/en/Compiler_Versions
+// http://docwiki.embarcadero.com/RADStudio/Sydney/en/Conditional_compilation_(Delphi)
 
-  {$ifdef VER310}                 // rad Berlin
+
+  {$ifdef VER330}                 // rad 10.3 Rio
+    {$define COMPILER_26}
+    {$define COMPILER_1_UP}
+    {$define COMPILER_2_UP}
+    {$define COMPILER_3_UP}
+    {$define COMPILER_4_UP}
+    {$define COMPILER_5_UP}
+    {$define COMPILER_6_UP}
+    {$define COMPILER_7_UP}
+    {$define COMPILER_8_UP}
+    {$define COMPILER_9_UP}
+    {$define COMPILER_10_UP}
+    {$define COMPILER_11_UP}
+    {$define COMPILER_12_UP}
+    {$define COMPILER_13_UP}
+    {$define COMPILER_14_UP}
+    {$define COMPILER_15_UP}
+    {$define COMPILER_16_UP}
+    {$define COMPILER_17_UP}
+    {$define COMPILER_18_UP}
+    {$define COMPILER_19_UP}
+    {$define COMPILER_20_UP}
+    {$define COMPILER_21_UP}
+    {$define COMPILER_22_UP}
+    {$define COMPILER_23_UP}
+    {$define COMPILER_24_UP}
+    {$define COMPILER_25_UP}
+    {$define COMPILER_26_UP}
+    {$define DELPHI}
+    {$define DELPHI_26}
+    {$define DELPHI_2_UP}
+    {$define DELPHI_3_UP}
+    {$define DELPHI_4_UP}
+    {$define DELPHI_5_UP}
+    {$define DELPHI_6_UP}
+    {$define DELPHI_7_UP}
+    {$define DELPHI_8_UP}
+    {$define DELPHI_9_UP}
+    {$define DELPHI_10_UP}
+    {$define DELPHI_11_UP}
+    {$define DELPHI_12_UP}
+    {$define DELPHI_13_UP}
+    {$define DELPHI_14_UP}
+    {$define DELPHI_15_UP}
+    {$define DELPHI_16_UP}
+    {$define DELPHI_17_UP}
+    {$define DELPHI_18_UP}
+    {$define DELPHI_19_UP}
+    {$define DELPHI_20_UP}
+    {$define DELPHI_21_UP}
+    {$define DELPHI_22_UP}
+    {$define DELPHI_23_UP}
+    {$define DELPHI_24_UP}
+    {$define DELPHI_25_UP}
+    {$define DELPHI_26_UP}
+  {$endif VER330}
+
+  {$ifdef VER320}                 // rad 10.2 Tokyo
+    {$define COMPILER_25}
+    {$define COMPILER_1_UP}
+    {$define COMPILER_2_UP}
+    {$define COMPILER_3_UP}
+    {$define COMPILER_4_UP}
+    {$define COMPILER_5_UP}
+    {$define COMPILER_6_UP}
+    {$define COMPILER_7_UP}
+    {$define COMPILER_8_UP}
+    {$define COMPILER_9_UP}
+    {$define COMPILER_10_UP}
+    {$define COMPILER_11_UP}
+    {$define COMPILER_12_UP}
+    {$define COMPILER_13_UP}
+    {$define COMPILER_14_UP}
+    {$define COMPILER_15_UP}
+    {$define COMPILER_16_UP}
+    {$define COMPILER_17_UP}
+    {$define COMPILER_18_UP}
+    {$define COMPILER_19_UP}
+    {$define COMPILER_20_UP}
+    {$define COMPILER_21_UP}
+    {$define COMPILER_22_UP}
+    {$define COMPILER_23_UP}
+    {$define COMPILER_24_UP}
+    {$define COMPILER_25_UP}
+    {$define DELPHI}
+    {$define DELPHI_25}
+    {$define DELPHI_2_UP}
+    {$define DELPHI_3_UP}
+    {$define DELPHI_4_UP}
+    {$define DELPHI_5_UP}
+    {$define DELPHI_6_UP}
+    {$define DELPHI_7_UP}
+    {$define DELPHI_8_UP}
+    {$define DELPHI_9_UP}
+    {$define DELPHI_10_UP}
+    {$define DELPHI_11_UP}
+    {$define DELPHI_12_UP}
+    {$define DELPHI_13_UP}
+    {$define DELPHI_14_UP}
+    {$define DELPHI_15_UP}
+    {$define DELPHI_16_UP}
+    {$define DELPHI_17_UP}
+    {$define DELPHI_18_UP}
+    {$define DELPHI_19_UP}
+    {$define DELPHI_20_UP}
+    {$define DELPHI_21_UP}
+    {$define DELPHI_22_UP}
+    {$define DELPHI_23_UP}
+    {$define DELPHI_24_UP}
+    {$define DELPHI_25_UP}
+  {$endif VER320}
+
+  {$ifdef VER310}                 // rad 10.1 Berlin
     {$define COMPILER_24}
     {$define COMPILER_1_UP}
     {$define COMPILER_2_UP}
@@ -116,7 +230,7 @@
     {$define DELPHI_24_UP}
   {$endif VER310}
 
-  {$ifdef VER300}                 // rad Seattle
+  {$ifdef VER300}                 // rad 10 Seattle
     {$define COMPILER_23}
     {$define COMPILER_1_UP}
     {$define COMPILER_2_UP}
@@ -801,6 +915,20 @@
     {$define DELPHI}
     {$define DELPHI_1}
   {$endif}
+
+// for further version : assume it's like a 10.4 Sydney
+//{$if CompilerVersion >= 34.0}  // DELPHI 10.4 sydney
+
+{$ifndef DELPHI}
+    {$define DELPHI}
+    {$define COMPILER_10_UP}
+    {$define COMPILER_12_UP}
+    {$define COMPILER_7_UP}
+    {$define COMPILER_18_UP}
+    {$define DELPHI_6_UP}
+{$endif DELPHI}
+
+
 {$endif Win32}
 
 
