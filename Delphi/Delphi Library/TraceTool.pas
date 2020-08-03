@@ -1,7 +1,7 @@
 ///  TraceTool Delphi API.
 ///
 ///  Author : Thierry Parent
-///  Version : 12.8
+///  Version : 12.9
 ///  See License.txt for license information
 ///
 ///  Optional stack traces can be done using the provided StackTrace unit that use jedi code source,
@@ -20,17 +20,17 @@
 // 12.7 : 2016/01/14 : Add TTrace.IsLive
 // 12.8 : 2016/12/28 : Add support for properties arrays 
 // 12.8 : 2017/03/16 : Add 'Unknow' in tt_GetVarValue
+// 12.9 : 2020/08/03 : Add support to 10.4 Sydney
 
 unit TraceTool;
 
 interface           
 
-{$Include TraceTool.Inc}      
+{$Include TraceTool.Inc}
 
 uses Classes , windows, ActiveX , SysUtils, Registry , Messages, Forms, //Dialogs,
      comobj , AxCtrls , SyncObjs , Contnrs, Graphics , TypInfo,
      //SynCommons,
-
 
 {$ifdef COMPILER_10_UP}    // starting 2006
    WideStrings ,
@@ -42,7 +42,7 @@ uses Classes , windows, ActiveX , SysUtils, Registry , Messages, Forms, //Dialog
 {$endif COMPILER_12_UP}
    menus ;
 
-{$Include TraceConst.inc}    
+{$Include TraceConst.inc}
 
 
 {$ifdef COMPILER_7_UP}
@@ -53,10 +53,6 @@ uses Classes , windows, ActiveX , SysUtils, Registry , Messages, Forms, //Dialog
 {$endif COMPILER_7_UP}
 
 type
-
-
-
-
    // forward declaration
 
    ITraceNodeBase = interface ;
@@ -1283,7 +1279,7 @@ var
 
 implementation
 
-{$ifdef DELPHI_6_UP} uses variants; {$endif}
+{$ifdef DELPHI_6_UP} uses variants; {$endif}    // TODO : COMPILER_6_UP
 type
 
 ///////////////// begin SynCommons /////////////////////////////
@@ -1554,6 +1550,56 @@ const
   /// codePage offset = string header size
   // - used to calc the beginning of memory allocation of a string
   SC_STRRECSIZE = SizeOf(T_SC_StrRec);
+
+function SC_ValidateObj(Obj: TObject): boolean;
+type
+  PPVmt = ^PVmt;
+  PVmt = ^TVmt;
+  TVmt = record
+    SelfPtr : TClass;
+    Other   : array[0..17] of pointer;
+  end;
+var
+  Vmt: PVmt;
+begin
+  Result := true;
+  if Assigned(Obj) then
+    try
+      // if debugger stop here, ignore and continue
+      Vmt := PVmt(Obj.ClassType);
+      Dec(Vmt);
+      if Obj.ClassType <> Vmt.SelfPtr then
+        Result := false;
+    except
+      Result := false;
+    end;
+end;
+
+//function SC_IsInstance(Data: Pointer): Boolean;
+//var
+//   VMT: Pointer;
+//begin
+//  Result := Assigned(Obj) and
+//            ValidPtr(PClass(Obj), SizeOf(TClass)) and
+//            ValidClassType(Obj.ClassType) and
+//            ValidPtr(Pointer(Obj), Obj.InstanceSize);
+//
+//
+//   if data = nil then begin
+//      result := false ;
+//   end else begin
+//      try
+//         // if debugger stop here, ignore and continue
+//         VMT := PPointer(Data)^;
+//         Result := PPointer(PByte(VMT) + vmtSelfPtr)^ = VMT;
+//      except
+//         on e : EAccessViolation do begin // eat exception. Element is not a class instance.
+//            Result := false ;
+//         end;
+//      end;
+//   end ;
+//end;
+
 
 function SC_GetTypeInfo(aTypeInfo: pointer; aExpectedKind: SC_TTypeKind): P_SC_TypeInfo; overload; inline;
 begin
@@ -6363,6 +6409,7 @@ type
    PPPTypeInfo = ^PPTypeInfo;
 
 begin
+
    if AObject = nil then begin
       upperNode.Col2 := 'nil' ;
       exit ;
@@ -6447,25 +6494,32 @@ begin
                         end ;
                         SizeOf(TObject) : begin
                             DynArrayElementValue4 := {$ifdef DELPHI_16_UP}int32{$else}integer{$endif}(DynArrayElementPointer^) ;              // 0 .. FF FF FF FF
-                            // is it an integer or a pointer or a 4 bytes value ?      
-                            try                         
+                            // is it an integer or a pointer or a 4 bytes value ?
+                            try
                                subObj := TObject (DynArrayElementValue4);
-                               Prop_Value := '@' + inttohex (DynArrayElementValue4,8) ;
-                               if (ClassTypeFound = false) and (DynArrayElementValue4 <> 0) then begin
-                                  // if debugger stop here, ignore and continue
-                                  ArrayNode.Col3 := ArrayNode.Col3 + ', class type = ' + subObj.ClassName ;
-                                  ClassTypeFound := True;
+                               if (DynArrayElementValue4 <> 0) and (SC_ValidateObj(subObj)) then begin
+                                 Prop_Value := '@' + inttohex (DynArrayElementValue4,8) ;
+                                 if (ClassTypeFound = false) and (DynArrayElementValue4 <> 0) then begin
+                                    // if debugger stop here, ignore and continue
+                                    ArrayNode.Col3 := ArrayNode.Col3 + ', class type = ' + subObj.ClassName ;
+                                    ClassTypeFound := True;
+                                 end;
+
+                               end else begin
+                                  Prop_Value := '$' + inttohex (DynArrayElementValue4,8) ;
+                                  subObj := nil;
                                end;
-                            except 
+
+                            except
                                on e : Exception do begin // eat exception. Element is not a class instance. Is it a pointer or a 4 bytes value like an int32?
                                   Prop_Value := '$' + inttohex (DynArrayElementValue4,8) ;
-                                  subObj := nil ;                              
+                                  subObj := nil ;
                                end;
-                            end;                                              
+                            end;
                           
                             fieldNode := ArrayNode.Add('[' + inttostr(j) + ']' , prop_value) ;
-                            if subObj <> nil then                  
-                               inner_addValue  (subObj ,fieldNode , MaxLevel-1, AlreadyParsedObject);   // Recursive                          
+                            if subObj <> nil then
+                               inner_addValue  (subObj ,fieldNode , MaxLevel-1, AlreadyParsedObject);   // Recursive
                         end ;
                         else begin    // 3 bytes or more than 4 bytes
                             Prop_Value := 'Dump :' ;
@@ -6793,17 +6847,21 @@ begin
                         end ;
                         SizeOf(TObject) : begin
                             DynArrayElementValue4 := {$ifdef DELPHI_16_UP}int32{$else}Integer{$endif}(DynArrayElementPointer^) ;              // 0 .. FF FF FF FF
-                            // is it an integer or a pointer ?      
-                            try                         
+                            // is it an integer or a pointer ?
+                            try
                                subObj := TObject (DynArrayElementValue4);
-                               if (ClassTypeFound = false) and (DynArrayElementValue4 <> 0) then begin                               
-                                  prop_type := prop_type + ', class type = ' + subObj.ClassName ;
-                                  ClassTypeFound := True;
+                               if (DynArrayElementValue4 <> 0) and (SC_ValidateObj(subObj)) then begin
+                                  if (ClassTypeFound = false) and (DynArrayElementValue4 <> 0) then begin
+                                     prop_type := prop_type + ', class type = ' + subObj.ClassName ;
+                                     ClassTypeFound := True;
+                                  end;
+                               end else begin
+                                 // prop_type := ???
                                end;
-                            except 
-                                // eat exception. Element is not a class instance                                                         
-                            end;                                              
-                          
+                            except
+                                // eat exception. Element is not a class instance
+                            end;
+
                             Prop_Value := Prop_Value + ' $' + inttohex (DynArrayElementValue4,8) ;
                         end ;
                         else begin  // record ?
