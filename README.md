@@ -45,7 +45,7 @@ https://www.codeproject.com/Articles/5498/TraceTool-The-Swiss-Army-Knife-of-Trac
 
 * [Working with the viewer](#Working-with-the-viewer "Working with the viewer")
   * [Info Pane](#Info-Pane "Info Pane")
-  * [System.Trace (.NET) Support](#System-Trace-NET) Support "System.Trace (.NET) *upport")
+  * [System.Trace (.NET) Support](#System-Trace-NET) Support "System.Trace (.NET) support")
   * [Microsoft Enterprise Framework (.NET) Support #Microsoft-Enterprise-Framework-NET-Support "Microsoft Enterprise Framework (.NET) *upport")
   * [Log4Net (.NET) Support](#Log4Net-NET-Support "Log4Net (.NET) Support")
   * [Log4J (Java) Support](#Log4J-Java-Support "Log4J (Java) Support")
