@@ -56,7 +56,7 @@ https://www.codeproject.com/Articles/5498/TraceTool-The-Swiss-Army-Knife-of-Trac
   * [Event Log Traces](#Event-Log-Traces "Event Log Traces")
   * [Save/Load to XML File](#Save-Load-to-XML-File "Save/Load to XML File")
 
-# What is TraceTool
+# What is TraceTool ?
 
 * A viewer that displays multiple kinds of sources (from the tracetool framework, log file, event log, or OutputDebugString)
 * A native language client framework (Dotnet, Java, Javasvript, C++ , Python, Delphi) to send simple traces, class and object viewer, dump, and call stack to the viewer. See [Working with the viewer](#Working-with-the-viewer "Working with the viewer") for user interface
