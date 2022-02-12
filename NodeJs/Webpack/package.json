@@ -1,9 +1,9 @@
 {
   "name": "@tracetool/webpack",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Webpack version ",
   "main": "lib/tracetool",
-  "typings": "lib/tracetool.d.ts", 
+  "typings": "lib/tracetool.d.ts",
   "keywords": [
     "tracetool"
   ],
@@ -15,9 +15,8 @@
   },
   "author": "Thierry Parent",
   "license": "ISC",
-  "dependencies": { 
-     "stack-trace": "^0.0.9",
-     "uuid":"^3.0.0"
-   }
-  
+  "dependencies": {
+    "stack-trace": "^0.0.9",
+    "uuid": "^3.0.0"
+  }
 }
