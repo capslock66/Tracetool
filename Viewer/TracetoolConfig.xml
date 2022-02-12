@@ -16,8 +16,8 @@
 	<AppDisplay>
 		<SmallBut Value="true"/>
 		<ApplicationTitle Value="socket: 8090 / 4502,  Http : 85, WebSocket:8091"/>
-		<Left Value="208"/>
-		<Top Value="208"/>
+		<Left Value="130"/>
+		<Top Value="130"/>
 		<Width Value="693"/>
 		<Height Value="635"/>
 		<StayOnTop Value="false"/>
@@ -36,7 +36,7 @@
 		<DisableInternalLog Value="true"/>
 	</AppDisplay>
 	<Framework>
-		<ShowMembers Value="false"/>
+		<ShowMembers Value="true"/>
 		<AutoClear Value="false"/>
 		<MaxNode Value="20"/>
 		<MinNode Value="10"/>
