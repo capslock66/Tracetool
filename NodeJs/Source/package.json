@@ -1,9 +1,9 @@
 {
   "name": "tracetool",
-  "version": "13.2.4",
+  "version": "13.2.5",
   "description": "Send traces from your nodejs application to the windows tracetool viewer.",
   "main": "lib/tracetool",
-  "typings": "lib/tracetool.d.ts", 
+  "typings": "lib/tracetool.d.ts",
   "scripts": {
     "test": "echo \"no test specified\" && exit 1"
   },
@@ -12,9 +12,9 @@
   ],
   "author": "Thierry Parent",
   "license": "ISC",
-  "dependencies": 
-   { "request": "^2.78.0"
-    ,"stack-trace": "^0.0.9" 
-    ,"uuid":"^3.0.0"
-   }
+  "dependencies": {
+    "request": "^2.78.0",
+    "stack-trace": "^0.0.9",
+    "uuid": "^3.0.0"
+  }
 }

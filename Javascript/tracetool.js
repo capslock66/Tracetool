@@ -291,7 +291,7 @@ function worker()
     {
         // no script is running.
         objMessage = toSend.shift(); // get first
-        var hostUrl = "http://" + host + "/" + objMessage.command + "?msgId=" + objMessage.msgId + "&msg=" + encodeURI(objMessage.msg);  // escape is deprecated. Generate bad encoding.
+        var hostUrl = "http://" + host + "/" + objMessage.command + "?msgId=" + objMessage.msgId + "&msg=" + encodeURIComponent(objMessage.msg);  // escape is deprecated. Generate bad encoding.
         if (objMessage.partNum !== "")
             hostUrl = hostUrl + "&partNum=" + objMessage.partNum;
 
