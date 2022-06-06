@@ -1,0 +1,101 @@
+<html>
+
+  <head>
+    <title>mad* Help...</title>
+    <meta name="description" content="mad* Help...">
+    <meta name="keywords" content="madshi, components, delphi">
+    <meta http-equiv="expires" content="900">
+    <link rel=stylesheet type="text/css" href="style.css">
+  </head>
+
+  <body background="bcklight.gif" bgcolor=#F8F8F8>
+    <table border=0 cellpadding=0 callspacing=0><tr>
+      <td valign=bottom>
+        <table border=0 cellpadding=0 cellspacing=0><tr><td bgcolor=#D8D8D8>
+          <table cellpadding=3 border=0>
+            <tr><td bgcolor=#FFFFF0>
+              <div id="verySmall"><br></div>
+              <div id="bigTitle">&nbsp;madExcept FAQ&nbsp;</div>
+              <div id="verySmall"><br></div>
+              <div id="small">
+                <a class="small" href="Content.htm">Content</a> /
+                <a class="small" href="madExcept.htm">madExcept</a> /...
+              </div>
+            </td></tr>
+          </table>
+        </td></tr></table>
+      </td>
+      <td valign=bottom>
+        <table border=0 cellpadding=0 cellspacing=0><tr><td bgcolor=#D8D8D8>
+          <table cellpadding=7 border=0>
+            <tr><td bgcolor=#F4F4F8><a href="http://www.madshi.net">www.madshi.net</a></td></tr>
+          </table>
+        </td></tr></table>
+      </td>
+    </tr></table>
+    <h3>1. Can you please add information "xxx" to the bug report header?</h3>
+    <p>Basically yes. However, I only want to add what is useful for the majority
+       of madExcept users. If you have a very special wish, which is just useful
+       for you, but not for a whole lot of other people, I'd rather not do that.
+       Each thing I add to madExcept costs footprint for all madExcept users. So I
+       have to be careful about what to add.</p>
+    <p>If you think you found a piece of information, which is not yet contained in
+       the bug report and which could be useful for a lot of madExcept users, then
+       please contact me. I'm always very willing to improve my product(s).</p>
+    <p>Please also have a look at how <a href="madExceptPlugins.htm">madExcept plugins</a> work. They might 
+       just do the trick for you.
+    <h3>2. Could you please list the function parameters in the callstack?</h3>
+    <p>I'd love to. And if Delphi would be using "stdcall" as the default calling
+       convention, it might even be possible. But as things are, Delphi is not
+       pushing the function parameters on the stack (where it would be easy for
+       madExcept to grab them). Instead Delphi passes most parameters via CPU
+       registers, which makes it difficult if not impossible for madExcept to get
+       a hold of them. My disassembler might be able to get a few parameters, but
+       only a small part and it would not be very reliable. So I don't have much
+       hope for this feature wish. I'm sorry...</p>
+    <h3>3. Can you please add feature "xxx" to madExcept?</h3>
+    <p>The way madExcept is linked into your executable makes it very difficult to
+       implement new features without automatically increasing the footprint for
+       all madExcept users. Every feature which can be turned on/off in the
+       madExcept settings dialog will be linked into your executable, no matter
+       whether you're using it or not. That means, most features when added to
+       madExcept will make madExcept's footprint bigger for each and every
+       madExcept user, even if he doesn't use the new feature.</p>
+    <p>So I have to find a good compromise between adding nice features and
+       keeping madExcept's footprint as small as possible. If you think you have a
+       wish which a whole lot of madExcept users would profit from, feel free to
+       contact me. But please understand that I have to make some tough decisions
+       here. So only *really* important things will find its way into the madExcept
+       code base.</p>
+    <p>However, madExcept offers you some very flexible and powerful exception
+       handlers. There's not much that you can't do by simply writing a little
+       custom exception handler.</p>
+    <h3>4. My forms are not redrawn while the exception box is shown. Could you please fix that?</h3>
+    <p>No. This is not a bug, it's a feature... &nbsp;:-) &nbsp;Probably you don't
+       like this sentence, do you? Anyway, madExcept suspends all running threads
+       as long as the exception box is shown. This is meant to stop follow up
+       exceptions from flooding you. If you don't like this feature - just turn it
+       off in the madExcept settings dialog by unchecking "pause all running
+       delphi/bcb threads".</p>
+    <h3>5. Why does mailing via MAPI and/or "mailto" not work on some PCs?</h3>
+    <p>There are two possible reaons why mailing doesn't work on some PCs. Either
+       you just found a bug in madExcept. Or the mail client is not correctly set
+       up on those PCs, where it doesn't work. Please have a look into madExcept's
+       "tools" folder. There you'll find a little program named "testMailingAPIs",
+       with which you can send some test "mailto" and MAPI mails to check whether
+       the APIs are set up correctly on a specific PC.</p>
+    <p>If this all is too unreliable for your product, no problem. Just let
+       madExcept upload the bug report to your web server, or let madExcept mail
+       the bug report to you via SMTP - both should be reliable, as long as the
+       user's firewall isn't too strict.</p>
+    <h3>6. Why does madExcept not work when I use command line compiling?</h3>
+    <p>madExcept needs to patch your binary file. When compiling from inside the
+       IDE, madExcept's integrated IDE wizard does that patching automatically.
+       When using command line compiling, you need to manually invoke the patching
+       process by starting the tool "madExceptPatch.exe" after having compiled your
+       project. The tool is located in madExcept's "Tools" folder. Please add the
+       parameter "-gd" to the command line when calling the compiler to make sure
+       that a detailed map file is created.</p>
+  </body>
+
+</html>

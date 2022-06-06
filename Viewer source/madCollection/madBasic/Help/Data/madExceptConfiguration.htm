@@ -1,0 +1,60 @@
+<html>
+
+  <head>
+    <title>mad* Help...</title>
+    <meta name="description" content="mad* Help...">
+    <meta name="keywords" content="madshi, components, delphi">
+    <meta http-equiv="expires" content="900">
+    <link rel=stylesheet type="text/css" href="style.css">
+  </head>
+
+  <body background="bcklight.gif" bgcolor=#F8F8F8>
+    <table border=0 cellpadding=0 callspacing=0><tr>
+      <td valign=bottom>
+        <table border=0 cellpadding=0 cellspacing=0><tr><td bgcolor=#D8D8D8>
+          <table cellpadding=3 border=0>
+            <tr><td bgcolor=#FFFFF0>
+              <div id="verySmall"><br></div>
+              <div id="bigTitle">&nbsp;madExcept Configuration&nbsp;</div>
+              <div id="verySmall"><br></div>
+              <div id="small">
+                <a class="small" href="Content.htm">Content</a> /
+                <a class="small" href="madExcept.htm">madExcept</a> /...
+              </div>
+            </td></tr>
+          </table>
+        </td></tr></table>
+      </td>
+      <td valign=bottom>
+        <table border=0 cellpadding=0 cellspacing=0><tr><td bgcolor=#D8D8D8>
+          <table cellpadding=7 border=0>
+            <tr><td bgcolor=#F4F4F8><a href="http://www.madshi.net">www.madshi.net</a></td></tr>
+          </table>
+        </td></tr></table>
+      </td>
+    </tr></table>
+    <p>In Delphi's "Tools" menu there's a menu item called "madExcept
+       configuration...". Clicking on that menu item opens a configuration dialog
+       which lets you specify how you would like <a href="madExcept.htm" href="madExceptUnit.htm">madExcept</a> to behave inside
+       of the Delphi IDE. Here's a screen shot of the configuration window:</p>
+    <p><img src='mes-cfg4.png' border=0 align=left style="margin-right:10pt;margin-bottom:10pt"></p>
+    <p>The first and most important thing you can decide is whether you want
+       <a href="madExcept.htm" href="madExceptUnit.htm">madExcept</a> to catch exceptions which happen inside of the Delphi IDE.
+       Those exceptions can be bugs in the IDE or misbehaving third party packages.
+       Or maybe your own component package.</p>
+    <p>The option "<b>enable Unicode hack for settings dialog</b>" allows you to
+       select whether madExcept should try to support Unicode in the madExcept
+       settings dialog in Delphi and BCB versions older than Delphi/BCB 2009. You
+       know, VCL Unicode support was added in Delphi/BCB 2009. The hack is limited
+       to the settings dialog. The madExcept code that is linked into your exe/dll
+       files can do Unicode without needing any hacks.</p>
+    <p>In the section "what may madExcept do to your project?" you can specify
+       what parts of your project <a href="madExcept.htm" href="madExceptUnit.htm">madExcept</a> may adjust to fit its own needs.
+       E.g. when allowing changes in the compiler & linker options, <a href="madExcept.htm" href="madExceptUnit.htm">madExcept</a>
+       makes sure that a detailed map file is generated.</p>
+    <p>Of course you can turn all that off. In that case <a href="madExcept.htm" href="madExceptUnit.htm">madExcept</a> doesn't
+       hamper around with your project, anymore. However, it's your own
+       responsibility then to make sure that <a href="madExcept.htm" href="madExceptUnit.htm">madExcept</a> gets what it needs
+       to work correctly.  </body>
+
+</html>

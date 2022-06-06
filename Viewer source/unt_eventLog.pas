@@ -67,7 +67,7 @@ type
       var CellText: String);
     procedure VstEventGetImageIndex(Sender: TBaseVirtualTree;
       Node: PVirtualNode; Kind: TVTImageKind; Column: TColumnIndex;
-      var Ghosted: Boolean; var ImageIndex: Integer);
+      var Ghosted: Boolean; var ImageIndex: TImageIndex);
     procedure butGetAllClick(Sender: TObject);
     procedure butReloadClick(Sender: TObject);
     procedure butCloseClick(Sender: TObject);
@@ -622,7 +622,7 @@ end;
 
 procedure TFrmEventLog.VstEventGetImageIndex(Sender: TBaseVirtualTree;
   Node: PVirtualNode; Kind: TVTImageKind; Column: TColumnIndex;
-  var Ghosted: Boolean; var ImageIndex: Integer);
+  var Ghosted: Boolean; var ImageIndex: TImageIndex);
 var
    EvntLogRec : PEvntLogRec ;
 begin

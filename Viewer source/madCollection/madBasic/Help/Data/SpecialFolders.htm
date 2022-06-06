@@ -1,0 +1,176 @@
+<html>
+
+  <head>
+    <title>mad* Help...</title>
+    <meta name="description" content="mad* Help...">
+    <meta name="keywords" content="madshi, components, delphi">
+    <meta http-equiv="expires" content="900">
+    <link rel=stylesheet type="text/css" href="style.css">
+  </head>
+
+  <body background="bcklight.gif" bgcolor=#F8F8F8>
+    <a name="TSpecialFolder"></a>
+    <table border=0 cellpadding=0 callspacing=0><tr>
+      <td valign=bottom>
+        <table border=0 cellpadding=0 cellspacing=0><tr><td bgcolor=#D8D8D8>
+          <table cellpadding=3 border=0>
+            <tr><td bgcolor=#FFFFF0>
+              <div id="verySmall"><br></div>
+              <div id="bigTitle">&nbsp;Special Folders&nbsp;</div>
+              <div id="verySmall"><br></div>
+              <div id="small">
+                <a class="small" href="Content.htm">Content</a> /
+                <a class="small" href="madShell.htm">madShell</a> /...
+              </div>
+            </td></tr>
+          </table>
+        </td></tr></table>
+      </td>
+      <td valign=bottom>
+        <table border=0 cellpadding=0 cellspacing=0><tr><td bgcolor=#D8D8D8>
+          <table cellpadding=7 border=0>
+            <tr><td bgcolor=#F4F4F8><a href="http://www.madshi.net">www.madshi.net</a></td></tr>
+          </table>
+        </td></tr></table>
+      </td>
+    </tr></table>
+    <p>In Windows there are several folders/objects, which have a special meaning.
+       Some of these objects have a real file system path, e.g. the "Program Files"
+       folder or the "Fonts" folder. Others do not belong to any file system,
+       nevertheless they can be browsed in the Windows Explorer, e.g. the
+       "My Computer" object or the "Control Panel".</p>
+    <p>The most important special folders/objects are listed in the following
+       enumeration type:</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>type</span><br>
+                  &nbsp;&nbsp;<span id='identifier'>TSpecialFolder</span>&nbsp;= (<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>// objects, no file system path available</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>sfDesktopObj</span>, &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>// desktop object</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>sfMyComputer</span>, &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>// my computer</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>sfNetworkObj</span>, &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>// My Network Places object</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>sfRecycleBin</span>, &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>// recycle bin</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>sfControlPanel</span>, &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>// control panel</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>sfPrintersObj</span>, &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>// printers</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>sfDialupNetwork</span>, &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>// network and dialup connections</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>sfMyDocumentsObj</span>, &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>// my documents object</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>sfIEObj</span>, &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>// internet explorer object</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>sfComputersNearMe</span>, &nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>// computers near me (workgroup)</span><br>
+                  <br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>// system directories, user independent</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>sfWindows</span>, &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>// windows folder</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>sfSystem</span>, &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>// system(32) folder</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>sfSystemX86</span>, &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>// RISC: x86 system directory</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>sfFonts</span>, &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>// fonts</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>sfResources</span>, &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>// resource directory</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>sfLocalizedResources</span>, &nbsp;<span id='comment'>// localized resource directory</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>sfProgramFiles</span>, &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>// program files</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>sfProgramFilesX86</span>, &nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>// RISC: x86 program files directory</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>sfCommonFiles</span>, &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>// program files \ common</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>sfCommonFilesX86</span>, &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>// RISC: x86 program files \ common folder</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>sfTemp</span>, &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>// windows temp folder</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>sfProfiles</span>, &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>// root directory of all user profiles</span><br>
+                  <br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>// directories of the current user</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>sfMyProfile</span>, &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>// <user> \ .</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>sfDesktopDir</span>, &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>// <user> \ desktop</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>sfStartMenu</span>, &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>// <user> \ start menu</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>sfPrograms</span>, &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>// <user> \ start menu \ programs</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>sfStartup</span>, &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>// <user> \ start menu \ programs \ startup</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>sfAltStartup</span>, &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>// <user> \ non localized startup</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>sfMyDocumentsDir</span>, &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>// <user> \ my documents</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>sfMyMusic</span>, &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>// <user> \ my music</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>sfMyPictures</span>, &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>// <user> \ my pictures</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>sfMyVideo</span>, &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>// <user> \ my video</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>sfTemplates</span>, &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>// <user> \ templates</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>sfFavorites</span>, &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>// <user> \ favorites</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>sfIECache</span>, &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>// <user> \ ie cache folder</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>sfIECookies</span>, &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>// <user> \ ie cookie folder</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>sfIEHistory</span>, &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>// <user> \ ie history folder</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>sfRecent</span>, &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>// <user> \ recent</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>sfSendTo</span>, &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>// <user> \ sendto</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>sfAppData</span>, &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>// <user> \ application data</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>sfLocalSettings</span>, &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>// <user> \ local settings \ .</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>sfLocalAppData</span>, &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>// <user> \ local settings \ application data</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>sfCdBurning</span>, &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>// <user> \ local settings \ application data \ microsoft \ cd burning</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>sfPrintersDir</span>, &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>// <user> \ printhood</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>sfNetworkDir</span>, &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>// <user> \ nethood</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>sfAdminTools</span>, &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>// <user> \ administrative tools</span><br>
+                  <br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>// directories of all users</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>sfAllUsersProfile</span>, &nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>// all users \ .</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>sfAllUsersDesktopDir</span>, &nbsp;<span id='comment'>// all users \ desktop</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>sfAllUsersStartMenu</span>, &nbsp;&nbsp;<span id='comment'>// all users \ start menu</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>sfAllUsersPrograms</span>, &nbsp;&nbsp;&nbsp;<span id='comment'>// all users \ start menu \ programs</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>sfAllUsersStartup</span>, &nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>// all users \ start menu \ programs \ startup</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>sfAllUsersAltStartup</span>, &nbsp;<span id='comment'>// all users \ non localized startup</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>sfAllUsersDocuments</span>, &nbsp;&nbsp;<span id='comment'>// all users \ documents</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>sfAllUsersMusic</span>, &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>// all users \ music</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>sfAllUsersPictures</span>, &nbsp;&nbsp;&nbsp;<span id='comment'>// all users \ pictures</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>sfAllUsersVideo</span>, &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>// all users \ video</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>sfAllUsersTemplates</span>, &nbsp;&nbsp;<span id='comment'>// all users \ templates</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>sfAllUsersFavorites</span>, &nbsp;&nbsp;<span id='comment'>// all users \ favorites</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>sfAllUsersAppData</span>, &nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>// all users \ application data</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>sfAllUsersAdminTools</span>, &nbsp;<span id='comment'>// all users \ administrative tools</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>sfAllUsersOemLinks</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>// all users \ links to OEM specific apps</span><br>
+                  &nbsp;&nbsp;);
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="GetSpecialFolder"></a>
+    <p>The function "GetSpecialFolder" returns the path of the specified special
+       folder. You should call it only for file system folders:</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>GetSpecialFolder</span>&nbsp;(<span id='identifier'>sf</span>: <a class="pascal" href="#TSpecialFolder">TSpecialFolder</a>; <span id='bold'>out</span>&nbsp;<span id='identifier'>path</span>: <span id='bold'>string</span>) : <span id='identifier'>boolean</span>;<br>
+                  <br>
+                  <span id='comment'>// Examples:</span><br>
+                  <span id='identifier'>GetSpecialFolder</span>(<span id='identifier'>sfProgramFiles</span>) &nbsp;-> &nbsp;<span id='string'>'C:\Program Files'</span><br>
+                  <span id='identifier'>GetSpecialFolder</span>(<span id='identifier'>sfSendTo</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;) &nbsp;-> &nbsp;<span id='string'>'C:\Profiles\CurrentUser\SendTo'</span>
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="WinFolder"></a>
+    <a name="SysFolder"></a>
+    <p>The following 2 functions return the path of the "Windows" and of the
+       "System" folder:</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>WinFolder</span>&nbsp;: <span id='bold'>string</span>; &nbsp;<span id='comment'>// e.g. "C:\Windows" &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;or "C:\WinNT"</span><br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>SysFolder</span>&nbsp;: <span id='bold'>string</span>; &nbsp;<span id='comment'>// e.g. "C:\Windows\System" or "C:\WinNT\System32"</span>
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </body>
+
+</html>

@@ -1,0 +1,239 @@
+<html>
+
+  <head>
+    <title>mad* Help...</title>
+    <meta name="description" content="mad* Help...">
+    <meta name="keywords" content="madshi, components, delphi">
+    <meta http-equiv="expires" content="900">
+    <link rel=stylesheet type="text/css" href="style.css">
+  </head>
+
+  <body background="bcklight.gif" bgcolor=#F8F8F8>
+    <a name="SetMadCHookOption"></a>
+    <a name="DISABLE_CHANGED_CODE_CHECK"></a>
+    <a name="SET_INTERNAL_IPC_TIMEOUT"></a>
+    <a name="DONT_TOUCH_RUNNING_PROCESSES"></a>
+    <a name="RENEW_OVERWRITTEN_HOOKS"></a>
+    <a name="INJECT_INTO_RUNNING_PROCESSES"></a>
+    <a name="UNINJECT_FROM_RUNNING_PROCESSES"></a>
+    <a name="X86_ALLOCATION_ADDRESS"></a>
+    <a name="VERIFY_HOOK_ADDRESS"></a>
+    <a name="DISASM_HOOK_TARGET"></a>
+    <a name="USE_OLD_IPC_LOGIC"></a>
+    <a name="LIMITED_IPC_PORT"></a>
+    <a name="HOOK_LOAD_LIBRARY"></a>
+    <a name="DISABLE_LDR_LOAD_DLL_SPECIAL_HOOK"></a>
+    <a name="DISABLE_PARALLEL_DLL_LOADING"></a>
+    <a name="USE_IAT_DLL_INJECTION"></a>
+    <a name="ALWAYS_CHECK_HOOKS"></a>
+    <a name="SET_SAFE_HOOKING_TIMEOUT"></a>
+    <a name="VMWARE_INJECTION_MODE"></a>
+    <table border=0 cellpadding=0 callspacing=0><tr>
+      <td valign=bottom>
+        <table border=0 cellpadding=0 cellspacing=0><tr><td bgcolor=#D8D8D8>
+          <table cellpadding=3 border=0>
+            <tr><td bgcolor=#FFFFF0>
+              <div id="verySmall"><br></div>
+              <div id="bigTitle">&nbsp;Options&nbsp;</div>
+              <div id="verySmall"><br></div>
+              <div id="small">
+                <a class="small" href="Content.htm">Content</a> /
+                <a class="small" href="madCodeHook.htm">madCodeHook</a> /...
+              </div>
+            </td></tr>
+          </table>
+        </td></tr></table>
+      </td>
+      <td valign=bottom>
+        <table border=0 cellpadding=0 cellspacing=0><tr><td bgcolor=#D8D8D8>
+          <table cellpadding=7 border=0>
+            <tr><td bgcolor=#F4F4F8><a href="http://www.madshi.net">www.madshi.net</a></td></tr>
+          </table>
+        </td></tr></table>
+      </td>
+    </tr></table>
+    <p>Some aspects of madCodeHook can be modified. For this there's a global
+       function available named "SetMadCHookOption". It allows you to change all
+       available madCodeHook options.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>SetMadCHookOption</span>&nbsp;(<span id='identifier'>option</span>: <span id='identifier'>dword</span>; <span id='identifier'>param</span>: <span id='identifier'>PWideChar</span>) : <span id='identifier'>bool</span>; <span id='bold'>stdcall</span>;<br>
+                  <br>
+                  <span id='bold'>const</span><br>
+                  &nbsp;&nbsp;<span id='comment'>// before installing an API hook madCodeHook does some security checks</span><br>
+                  &nbsp;&nbsp;<span id='comment'>// one check is verifying whether the to be hooked code was already modified</span><br>
+                  &nbsp;&nbsp;<span id='comment'>// in this case madCodeHook does not tempt to modify the code another time</span><br>
+                  &nbsp;&nbsp;<span id='comment'>// otherwise there would be a danger to run into stability issues</span><br>
+                  &nbsp;&nbsp;<span id='comment'>// with protected/compressed modules there may be false alarms, though</span><br>
+                  &nbsp;&nbsp;<span id='comment'>// so you can turn this check off</span><br>
+                  &nbsp;&nbsp;<span id='comment'>// param: unsused</span><br>
+                  &nbsp;&nbsp;<span id='identifier'>DISABLE_CHANGED_CODE_CHECK</span>&nbsp;= <span id='number'>$00000003</span>;<br>
+                  <br>
+                  &nbsp;&nbsp;<span id='comment'>// when calling SendIpcMessage you can specify a timeout value</span><br>
+                  &nbsp;&nbsp;<span id='comment'>// this value only applies to how long madCodeHook waits for the reply</span><br>
+                  &nbsp;&nbsp;<span id='comment'>// there's an additional internal timeout value which specifies how long</span><br>
+                  &nbsp;&nbsp;<span id='comment'>// madCodeHook waits for the IPC message to be accepted by the queue owner</span><br>
+                  &nbsp;&nbsp;<span id='comment'>// the default value is 7000ms</span><br>
+                  &nbsp;&nbsp;<span id='comment'>// param: internal timeout value in ms</span><br>
+                  &nbsp;&nbsp;<span id='comment'>// example: SetMadCHookOption(SET_INTERNAL_IPC_TIMEOUT, PWideChar(5000));</span><br>
+                  &nbsp;&nbsp;<span id='identifier'>SET_INTERNAL_IPC_TIMEOUT</span>&nbsp;= <span id='number'>$00000005</span>;<br>
+                  <br>
+                  &nbsp;&nbsp;<span id='comment'>// VMware: when disabling acceleration dll injection sometimes is delayed</span><br>
+                  &nbsp;&nbsp;<span id='comment'>// to work around this issue you can activate this special option</span><br>
+                  &nbsp;&nbsp;<span id='comment'>// it will result in a slightly modified dll injection logic</span><br>
+                  &nbsp;&nbsp;<span id='comment'>// as a side effect injection into DotNet applications may not work properly</span><br>
+                  &nbsp;&nbsp;<span id='comment'>// param: unused</span><br>
+                  &nbsp;&nbsp;<span id='identifier'>VMWARE_INJECTION_MODE</span>&nbsp;= <span id='number'>$00000006</span>;<br>
+                  <br>
+                  &nbsp;&nbsp;<span id='comment'>// system wide dll injection normally injects the hook dll into both:</span><br>
+                  &nbsp;&nbsp;<span id='comment'>// (1) currently running processes</span><br>
+                  &nbsp;&nbsp;<span id='comment'>// (2) newly created processes</span><br>
+                  &nbsp;&nbsp;<span id='comment'>// this flag disables injection into already running processes</span><br>
+                  &nbsp;&nbsp;<span id='comment'>// param: unused</span><br>
+                  &nbsp;&nbsp;<span id='identifier'>DONT_TOUCH_RUNNING_PROCESSES</span>&nbsp;= <span id='number'>$00000007</span>;<br>
+                  <br>
+                  &nbsp;&nbsp;<span id='comment'>// normally madCodeHook renews hooks only when they were removed</span><br>
+                  &nbsp;&nbsp;<span id='comment'>// hooks that were overwritten with some other code aren't renewed by default</span><br>
+                  &nbsp;&nbsp;<span id='comment'>// this behaviour allows other hooking libraries to co-exist with madCodeHook</span><br>
+                  &nbsp;&nbsp;<span id='comment'>// use this flag to force madCodeHook to always renew hooks</span><br>
+                  &nbsp;&nbsp;<span id='comment'>// this may result in other hooking libraries stopping to work correctly</span><br>
+                  &nbsp;&nbsp;<span id='comment'>// param: unused</span><br>
+                  &nbsp;&nbsp;<span id='identifier'>RENEW_OVERWRITTEN_HOOKS</span>&nbsp;= <span id='number'>$00000009</span>;<br>
+                  <br>
+                  &nbsp;&nbsp;<span id='comment'>// system wide dll injection normally injects the hook dll into both:</span><br>
+                  &nbsp;&nbsp;<span id='comment'>// (1) currently running processes</span><br>
+                  &nbsp;&nbsp;<span id='comment'>// (2) newly created processes</span><br>
+                  &nbsp;&nbsp;<span id='comment'>// this option enabled/disables injection into already running processes</span><br>
+                  &nbsp;&nbsp;<span id='comment'>// param: bool</span><br>
+                  &nbsp;&nbsp;<span id='comment'>// default: true</span><br>
+                  &nbsp;&nbsp;<span id='identifier'>INJECT_INTO_RUNNING_PROCESSES</span>&nbsp;= <span id='number'>$0000000a</span>;<br>
+                  <br>
+                  &nbsp;&nbsp;<span id='comment'>// system wide dll uninjection normally does two things:</span><br>
+                  &nbsp;&nbsp;<span id='comment'>// (1) uninjecting from all running processes</span><br>
+                  &nbsp;&nbsp;<span id='comment'>// (2) stop automatic injection into newly created processes</span><br>
+                  &nbsp;&nbsp;<span id='comment'>// this option controls if uninjection from running processes is performed</span><br>
+                  &nbsp;&nbsp;<span id='comment'>// param: bool</span><br>
+                  &nbsp;&nbsp;<span id='comment'>// default: true</span><br>
+                  &nbsp;&nbsp;<span id='identifier'>UNINJECT_FROM_RUNNING_PROCESSES</span>&nbsp;= <span id='number'>$0000000b</span>;<br>
+                  <br>
+                  &nbsp;&nbsp;<span id='comment'>// by default madCodeHook allocates at <= $71af0000</span><br>
+                  &nbsp;&nbsp;<span id='comment'>// you can tell madCodeHook to allocate at the address you prefer</span><br>
+                  &nbsp;&nbsp;<span id='comment'>// param: LPVOID (must be < $80000000)</span><br>
+                  &nbsp;&nbsp;<span id='comment'>// default: $71af0000</span><br>
+                  &nbsp;&nbsp;<span id='identifier'>X86_ALLOCATION_ADDRESS</span>&nbsp;= <span id='number'>$0000000c</span>;<br>
+                  <br>
+                  &nbsp;&nbsp;<span id='comment'>// By default madCodeHook performs several hook address verifications.</span><br>
+                  &nbsp;&nbsp;<span id='comment'>// You can disable that to save performance, but that means it's your</span><br>
+                  &nbsp;&nbsp;<span id='comment'>// responsibility then to provide proper addresses.</span><br>
+                  &nbsp;&nbsp;<span id='comment'>// Hook address verification includes things such as bypassing existing</span><br>
+                  &nbsp;&nbsp;<span id='comment'>// import/export table manipulations etc.</span><br>
+                  &nbsp;&nbsp;<span id='comment'>// param: bool</span><br>
+                  &nbsp;&nbsp;<span id='comment'>// default: true</span><br>
+                  &nbsp;&nbsp;<span id='identifier'>VERIFY_HOOK_ADDRESS</span>&nbsp;= <span id='number'>$0000000d</span>;<br>
+                  <br>
+                  &nbsp;&nbsp;<span id='comment'>// By default madCodeHook disassembles the whole to-be-hooked API/code,</span><br>
+                  &nbsp;&nbsp;<span id='comment'>// to make sure it can be hooked without stability issues. You can disable</span><br>
+                  &nbsp;&nbsp;<span id='comment'>// this check, but if that produces stability issues, that's on your head.</span><br>
+                  &nbsp;&nbsp;<span id='comment'>// param: bool</span><br>
+                  &nbsp;&nbsp;<span id='comment'>// default: true</span><br>
+                  &nbsp;&nbsp;<span id='identifier'>DISASM_HOOK_TARGET</span>&nbsp;= <span id='number'>$0000000e</span>;<br>
+                  <br>
+                  &nbsp;&nbsp;<span id='comment'>// madCodeHook has two different IPC solutions built in</span><br>
+                  &nbsp;&nbsp;<span id='comment'>// in Vista+ and in all 64 bit OSs the "old" IPC solution doesn't work</span><br>
+                  &nbsp;&nbsp;<span id='comment'>// so in these OSs the new IPC solution is always used</span><br>
+                  &nbsp;&nbsp;<span id='comment'>// in older OSs the old solution works, but the new one is used by default</span><br>
+                  &nbsp;&nbsp;<span id='comment'>// the new solution is based on undocumented internal Windows LPC APIs</span><br>
+                  &nbsp;&nbsp;<span id='comment'>// the old solution is based on pipes and memory mapped files</span><br>
+                  &nbsp;&nbsp;<span id='comment'>// you can optionally force the old IPC solution for the older OSs</span><br>
+                  &nbsp;&nbsp;<span id='comment'>// param: unused</span><br>
+                  &nbsp;&nbsp;<span id='identifier'>USE_OLD_IPC_LOGIC</span>&nbsp;= <span id='number'>$0000000f</span>;<br>
+                  <br>
+                  &nbsp;&nbsp;<span id='comment'>// the IPC port is usually accessible by Everyone</span><br>
+                  &nbsp;&nbsp;<span id='comment'>// if you prefer, you can assign limited access rights to the port</span><br>
+                  &nbsp;&nbsp;<span id='comment'>// only SYSTEM and the creator then have access rights</span><br>
+                  &nbsp;&nbsp;<span id='comment'>// this is not recommended because it may block communication</span><br>
+                  &nbsp;&nbsp;<span id='comment'>// so don't use it, unless you know exactly what you're doing</span><br>
+                  &nbsp;&nbsp;<span id='comment'>// param: bool</span><br>
+                  &nbsp;&nbsp;<span id='comment'>// default: false</span><br>
+                  &nbsp;&nbsp;<span id='identifier'>LIMITED_IPC_PORT</span>&nbsp;= <span id='number'>$00000010</span>;<br>
+                  <br>
+                  &nbsp;&nbsp;<span id='comment'>// By default, madCodeHook internally hooks LoadLibrary, so that it can</span><br>
+                  &nbsp;&nbsp;<span id='comment'>// automatically install your API hooks when the target DLL is loaded.</span><br>
+                  &nbsp;&nbsp;<span id='comment'>// This allows you to call HookAPI() in DllMain even for DLLs that are not</span><br>
+                  &nbsp;&nbsp;<span id='comment'>// loaded yet. You can disable this internal LoadLibrary hook, but it's not</span><br>
+                  &nbsp;&nbsp;<span id='comment'>// recommended. Set this option before you do the first HookAPI() call.</span><br>
+                  &nbsp;&nbsp;<span id='comment'>// param: bool</span><br>
+                  &nbsp;&nbsp;<span id='comment'>// default: true</span><br>
+                  &nbsp;&nbsp;<span id='identifier'>HOOK_LOAD_LIBRARY</span>&nbsp;= <span id='number'>$00000011</span>;<br>
+                  <br>
+                  &nbsp;&nbsp;<span id='comment'>// By default, madCodeHook tries to hook LoadLibrary by modifying the code</span><br>
+                  &nbsp;&nbsp;<span id='comment'>// in LoadLibraryExW which internally calls LdrLoadDll. The purpose of this</span><br>
+                  &nbsp;&nbsp;<span id='comment'>// approach is that many many people like to hook LoadLibraryExW, so by</span><br>
+                  &nbsp;&nbsp;<span id='comment'>// hooking it in a different way there's a chance we can minimize conflicts</span><br>
+                  &nbsp;&nbsp;<span id='comment'>// with other hook libraries.</span><br>
+                  &nbsp;&nbsp;<span id='comment'>// However, you can disable this solution, for whatever reason. If you do,</span><br>
+                  &nbsp;&nbsp;<span id='comment'>// madCodeHook will use "conventional" LoadLibraryExW hooking instead.</span><br>
+                  &nbsp;&nbsp;<span id='comment'>// param: bool</span><br>
+                  &nbsp;&nbsp;<span id='comment'>// default: false</span><br>
+                  &nbsp;&nbsp;<span id='identifier'>DISABLE_LDR_LOAD_DLL_SPECIAL_HOOK</span>&nbsp;= <span id='number'>$00000012</span>;<br>
+                  <br>
+                  &nbsp;&nbsp;<span id='comment'>// Starting with Windows 10, when a process is initialized, the OS likes to</span><br>
+                  &nbsp;&nbsp;<span id='comment'>// load DLLs in multiple threads. This might give a small speed improvement,</span><br>
+                  &nbsp;&nbsp;<span id='comment'>// but it can cause problems with our DLL injection technique. So madCodeHook</span><br>
+                  &nbsp;&nbsp;<span id='comment'>// by default disables "parallel loading" for processes your hook DLL gets</span><br>
+                  &nbsp;&nbsp;<span id='comment'>// injected into.</span><br>
+                  &nbsp;&nbsp;<span id='comment'>// param: bool</span><br>
+                  &nbsp;&nbsp;<span id='comment'>// default: true</span><br>
+                  &nbsp;&nbsp;<span id='identifier'>DISABLE_PARALLEL_DLL_LOADING</span>&nbsp;= <span id='number'>$00000013</span>;<br>
+                  <br>
+                  &nbsp;&nbsp;<span id='comment'>// By default, the madCodeHook injection driver injects your DLL into newly</span><br>
+                  &nbsp;&nbsp;<span id='comment'>// created processes by hooking "NtTestAlert()". Which the OS loader usually</span><br>
+                  &nbsp;&nbsp;<span id='comment'>// calls the first time right before executing the EXE's "main()" entry</span><br>
+                  &nbsp;&nbsp;<span id='comment'>// point.</span><br>
+                  &nbsp;&nbsp;<span id='comment'>// Optionally, you can activate the new IAT patching logic, which will</span><br>
+                  &nbsp;&nbsp;<span id='comment'>// modify the EXE's import table in such a way that your hook DLL appears to</span><br>
+                  &nbsp;&nbsp;<span id='comment'>// be statically linked to by the EXE. This way the OS loader will actually</span><br>
+                  &nbsp;&nbsp;<span id='comment'>// do the dirty work for us and load your hook DLL together with all the</span><br>
+                  &nbsp;&nbsp;<span id='comment'>// other statically linked DLLs. Unfortunately this also means that the OS</span><br>
+                  &nbsp;&nbsp;<span id='comment'>// considers your hook DLL essential to the new process, so we can't ever</span><br>
+                  &nbsp;&nbsp;<span id='comment'>// uninject it again.</span><br>
+                  &nbsp;&nbsp;<span id='comment'>// param: bool</span><br>
+                  &nbsp;&nbsp;<span id='comment'>// default: false</span><br>
+                  &nbsp;&nbsp;<span id='identifier'>USE_IAT_DLL_INJECTION</span>&nbsp;= <span id='number'>$00000014</span>;<br>
+                  <br>
+                  &nbsp;&nbsp;<span id='comment'>// When calling HookAPI/Code with the SAFE_HOOKING flag, madCodeHook</span><br>
+                  &nbsp;&nbsp;<span id='comment'>// by default waits forever (in a blocking way), until it's sure that</span><br>
+                  &nbsp;&nbsp;<span id='comment'>// installing the API hook can be done without stability issues.</span><br>
+                  &nbsp;&nbsp;<span id='comment'>// Optionally, you can tell madCodeHook to abort waiting after a specific</span><br>
+                  &nbsp;&nbsp;<span id='comment'>// timeout. This of course defeats the purpose of the SAFE_HOOKING flag</span><br>
+                  &nbsp;&nbsp;<span id='comment'>// to some extent. But it's your decision, of course.</span><br>
+                  &nbsp;&nbsp;<span id='comment'>// param: internal timeout value in ms &nbsp;(0 = no timeout)</span><br>
+                  &nbsp;&nbsp;<span id='comment'>// example: SetMadCHookOption(SET_SAFE_HOOKING_TIMEOUT, (LPCWSTR) 5000);</span><br>
+                  &nbsp;&nbsp;<span id='identifier'>SET_SAFE_HOOKING_TIMEOUT</span>&nbsp;= <span id='number'>$00000015</span>;<br>
+                  <br>
+                  &nbsp;&nbsp;<span id='comment'>// Normally, madCodeHook only checks if API hooks need to be installed, if</span><br>
+                  &nbsp;&nbsp;<span id='comment'>// a *new* DLL is loaded into the current process. However, the check if a</span><br>
+                  &nbsp;&nbsp;<span id='comment'>// loaded DLL is new or not consumes time on its own. So this option allows</span><br>
+                  &nbsp;&nbsp;<span id='comment'>// you to skip the check if a loaded DLL is new or not, which may save some</span><br>
+                  &nbsp;&nbsp;<span id='comment'>// time. But then that also results in madCodeHook always checking if API</span><br>
+                  &nbsp;&nbsp;<span id='comment'>// hooks need to be installed, which also consumes time. Not really sure</span><br>
+                  &nbsp;&nbsp;<span id='comment'>// which way is faster overall. &nbsp;<sigh></span><br>
+                  &nbsp;&nbsp;<span id='comment'>// param: bool</span><br>
+                  &nbsp;&nbsp;<span id='comment'>// default: false</span><br>
+                  &nbsp;&nbsp;<span id='identifier'>ALWAYS_CHECK_HOOKS</span>&nbsp;= <span id='number'>$00000016</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </body>
+
+</html>

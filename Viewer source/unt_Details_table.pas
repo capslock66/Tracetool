@@ -3,7 +3,7 @@ unit unt_Details_table;
 interface
 
 uses
-  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  system.Contnrs, Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, unt_Details_base, VirtualTrees,
   unt_Editor, Menus , ExtCtrls, clipbrd,
   unt_TraceWin ,

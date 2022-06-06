@@ -1,0 +1,100 @@
+<html>
+
+  <head>
+    <title>mad* Help...</title>
+    <meta name="description" content="mad* Help...">
+    <meta name="keywords" content="madshi, components, delphi">
+    <meta http-equiv="expires" content="900">
+    <link rel=stylesheet type="text/css" href="style.css">
+  </head>
+
+  <body background="bcklight.gif" bgcolor=#F8F8F8>
+    <table border=0 cellpadding=0 callspacing=0><tr>
+      <td valign=bottom>
+        <table border=0 cellpadding=0 cellspacing=0><tr><td bgcolor=#D8D8D8>
+          <table cellpadding=3 border=0>
+            <tr><td bgcolor=#FFFFF0>
+              <div id="verySmall"><br></div>
+              <div id="bigTitle">&nbsp;madExcept Settings (Tab 8)&nbsp;</div>
+              <div id="verySmall"><br></div>
+              <div id="small">
+                <a class="small" href="Content.htm">Content</a> /
+                <a class="small" href="madExcept.htm">madExcept</a> /
+                <a class="small" href="madExceptSettings.htm">madExcept Settings</a> /...
+              </div>
+            </td></tr>
+          </table>
+        </td></tr></table>
+      </td>
+      <td valign=bottom>
+        <table border=0 cellpadding=0 cellspacing=0><tr><td bgcolor=#D8D8D8>
+          <table cellpadding=7 border=0>
+            <tr><td bgcolor=#F4F4F8><a href="http://www.madshi.net">www.madshi.net</a></td></tr>
+          </table>
+        </td></tr></table>
+      </td>
+    </tr></table>
+    <map name="SettingsMap">
+    <area shape="rect" coords="14,72,135,113" href="madExceptSettings1.htm" onMouseover="document.images[0].src='mes-ss40.gif'" onMouseout="document.images[0].src='mes-ss47.gif'">
+    <area shape="rect" coords="14,114,135,155" href="madExceptSettings2.htm" onMouseover="document.images[0].src='mes-ss41.gif'" onMouseout="document.images[0].src='mes-ss47.gif'">
+    <area shape="rect" coords="14,156,135,197" href="madExceptSettings3.htm" onMouseover="document.images[0].src='mes-ss42.gif'" onMouseout="document.images[0].src='mes-ss47.gif'">
+    <area shape="rect" coords="14,198,135,239" href="madExceptSettings4.htm" onMouseover="document.images[0].src='mes-ss43.gif'" onMouseout="document.images[0].src='mes-ss47.gif'">
+    <area shape="rect" coords="14,240,135,281" href="madExceptSettings5a.htm" onMouseover="document.images[0].src='mes-ss44a.gif'" onMouseout="document.images[0].src='mes-ss47.gif'">
+    <area shape="rect" coords="14,282,135,323" href="madExceptSettings6.htm" onMouseover="document.images[0].src='mes-ss45.gif'" onMouseout="document.images[0].src='mes-ss47.gif'">
+    <area shape="rect" coords="14,324,135,365" href="madExceptSettings7.htm" onMouseover="document.images[0].src='mes-ss46.gif'" onMouseout="document.images[0].src='mes-ss47.gif'">
+    <area shape="rect" coords="14,408,135,449" href="madExceptSettings9.htm" onMouseover="document.images[0].src='mes-ss48.gif'" onMouseout="document.images[0].src='mes-ss47.gif'">
+    <area shape="rect" coords="14,450,135,489" href="madExceptSettings10.htm" onMouseover="document.images[0].src='mes-ss49.gif'" onMouseout="document.images[0].src='mes-ss47.gif'">
+    </map>
+    <p>You can click on the tabs in the left side of the image:</p>
+    <p><img src='mes-ss47.gif' border=0 usemap="#SettingsMap" align=left style="margin-right:10pt;margin-bottom:10pt"></p>
+    <h3>bug report elements...</h3>
+    <p>The bug report consists of multiple sections. The header of each bug report
+       contains general informations about the PC on which the exception occurred.
+       Some examples are the running operating system and the current state of the
+       resources. After that the callstack of the crashing thread and (if different)
+       also the callstack of the main thread is listed.
+    <p>Next the <b>callstacks of all running threads</b> are also listed, if there
+       are any apart from the crashing thread and the main thread. If you don't
+       like that many thread call stack traces, you can turn that feature off. In
+       that case only the crashing and the main thread are listed.</p>
+    <p>By default <a href="madExcept.htm" href="madExceptUnit.htm">madExcept</a> adds an <b>exception location disassembly</b>,
+       a list of the <b>cpu registers</b> and also a <b>stack dump</b>. All these
+       sections are mainly interesting for people who understand assembler code and
+       want the maximum information about the exception they can get. So you can
+       turn all that off, too.</p>
+    <h3>callstack options...</h3>
+    <p>If you don't like that monster call stack traces you can <b>hide callstack
+       items which have no line number information</b>. This often reduces the
+       length of the call traces quite dramatically.</p>
+    <p>The thread callstacks always contain the absolute address and line number of
+       each callstack item. Additionally <a href="madExcept.htm" href="madExceptUnit.htm">madExcept</a> can <b>show the
+       address offset to the beginning of the procedure</b> and <b>the line
+       number offset to the beginning of the procedure</b>. These can be useful
+       e.g. if you have sources which have changed slightly in comparison to those
+       with which the crashing application was originally built. The relative
+       information is much more probable to still be the same.</p>
+    <h3>disassembly fine tuning...</h3>
+    <p>The disassembly can be adjusted to your wishes. You can let <a href="madExcept.htm" href="madExceptUnit.htm">madExcept</a>
+       <b>format the disassembly output</b> for you. In that case jump labels and
+       delimiter lines are automatically added, which makes bigger disassemblies
+       much better readable. This option makes sense only if you choose a quite
+       high limit for the disassembly length (see below) or if you don't limit it
+       at all.</p>
+    <p>You (probably) never know in which function an exception will occur. If it
+       happens to happen in a very big function, the disassembly can easily reach
+       thousands of lines. So it is recommended to <b>limit the number of asm
+       instructions</b> - or in other works to limit the length of the disassembly.
+       You don't need to, but I recommend it. The limits are always used for the
+       assembler line count before and after the exception location. That means, if
+       you choose a limit of 5 instructions, the disassembly will be 11
+       instructions long (or shorter, if the to-be-disassembled function is not
+       that big).</p>
+    <h3>registered plugins...</h3>
+    <p>You can create your own plugins and register them into <a href="madExcept.htm" href="madExceptUnit.htm">madExcept</a>.
+       The properly registered plugins are listed and can be enabled for each
+       project. In the moment when you activate a plugin, the plugin unit is
+       automatically added to the uses clause of your project. If you're
+       interested in writing your own plugins, please head on over
+       <a href="madExceptPlugins.htm">here</a>.  </body>
+
+</html>

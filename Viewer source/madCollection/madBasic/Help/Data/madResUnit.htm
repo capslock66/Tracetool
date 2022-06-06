@@ -1,0 +1,260 @@
+<html>
+
+  <head>
+    <title>mad* Help...</title>
+    <meta name="description" content="mad* Help...">
+    <meta name="keywords" content="madshi, components, delphi">
+    <meta http-equiv="expires" content="900">
+    <link rel=stylesheet type="text/css" href="style.css">
+  </head>
+
+  <body background="bcklight.gif" bgcolor=#F8F8F8>
+    <table border=0 cellpadding=0 callspacing=0><tr>
+      <td valign=bottom>
+        <table border=0 cellpadding=0 cellspacing=0><tr><td bgcolor=#D8D8D8>
+          <table cellpadding=3 border=0>
+            <tr><td bgcolor=#FFFFF0>
+              <div id="verySmall"><br></div>
+              <div id="bigTitle">&nbsp;madRes Unit&nbsp;</div>
+              <div id="verySmall"><br></div>
+              <div id="small">
+                <a class="small" href="Content.htm">Content</a> /
+                <a class="small" href="madBasic.htm">madBasic</a> /...
+              </div>
+            </td></tr>
+          </table>
+        </td></tr></table>
+      </td>
+      <td valign=bottom>
+        <table border=0 cellpadding=0 cellspacing=0><tr><td bgcolor=#D8D8D8>
+          <table cellpadding=7 border=0>
+            <tr><td bgcolor=#F4F4F8><a href="http://www.madshi.net">www.madshi.net</a></td></tr>
+          </table>
+        </td></tr></table>
+      </td>
+    </tr></table>
+    <p>The Windows NT family has some nice APIs named "BeginUpdateResource",
+       "UpdateResource" and "EndUpdateResource". With these APIs you can change the
+       resources of a dll/exe file on the fly. Unfortunately the APIs are not
+       supported by the Windows 9x family. If you need to change resources there,
+       you're normally lost. Well, the Microsoft Unicode Layer for 9x promises to
+       add support for those APIs, but in the current state it has serious bugs.
+       It crashes most of the time when being used on Delphi programs/dlls.</p>
+    <p>The NT APIs aren't as reliable as you might think, either. If you use the
+       resource update APIs on a Delphi binary, which has TD32 debug infos in it,
+       the binary is totally invalid afterwards. Windows doesn't even recognize it
+       as a valid PE file anymore. Another disadvantage of the NT resource update
+       APIs is that the size of the resource section is often not adjusted, if you
+       remove resources. So your binary is bigger than it has to be.</p>
+    <p>To address all those problems, I've decided to build my own resource update
+       functions. First of all I exactly duplicated the NT APIs. Of course I didn't
+       duplicate the bugs. My functions work well with TD32 debug infos. Also the
+       resource section is always only as big as it needs to be.</p>
+    <p>Additionally to cloning the NT APIs I added some new functions. All of this
+       works on both the NT and the 9x family, of course. You can get an overview
+       of the available functions in the <a href="madResRef.htm">madRes Reference</a>.</p>
+    <a name="BeginUpdateResourceW"></a>
+    <a name="UpdateResourceW"></a>
+    <a name="EndUpdateResourceW"></a>
+    <p>First of all let's have a quick look at my API clones. I duplicated the wide
+       version of the APIs, only. All functions of this unit only work if you open
+       an update handle with "BeginUpdateResourceW" first. Then you can do some
+       changes with the function "UpdateResourceW". Finally you can save the changes
+       with the "EndUpdateResourceW" function. For more detailed documentation
+       just look at the official Microsoft documentation. What is written there is
+       in the same way true for my functions:</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='comment'>// open a dll/exe file for playing with the resources</span><br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>BeginUpdateResourceW</span>&nbsp;(<span id='identifier'>fileName</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>PWideChar</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>delExistingRes</span>&nbsp;: <span id='identifier'>bool</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;) : <span id='identifier'>dword</span>; <span id='bold'>stdcall</span>;<br>
+                  <br>
+                  <span id='comment'>// add, change or delete a resource</span><br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>UpdateResourceW</span>&nbsp;(<span id='identifier'>update</span>&nbsp;&nbsp;&nbsp;: <span id='identifier'>dword</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>type_</span>&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>PWideChar</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>name</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>PWideChar</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>language</span>&nbsp;: <span id='identifier'>word</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>data</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>pointer</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>size</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>dword</span>&nbsp;&nbsp;&nbsp;&nbsp;) : <span id='identifier'>bool</span>; <span id='bold'>stdcall</span>;<br>
+                  <br>
+                  <span id='comment'>// close the resource handle again, either save or discard the changes</span><br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>EndUpdateResourceW</span>&nbsp;(<span id='identifier'>update</span>&nbsp;&nbsp;: <span id='identifier'>dword</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>discard</span>&nbsp;: <span id='identifier'>bool</span>&nbsp;) : <span id='identifier'>bool</span>; <span id='bold'>stdcall</span>;<br>
+                  <br>
+                  <span id='comment'>// Example:</span><br>
+                  <span id='bold'>procedure</span>&nbsp;<span id='identifier'>KillBitmapResource</span>(<span id='identifier'>exeFullPath</span>, <span id='identifier'>bmpResName</span>: <span id='identifier'>PWideChar</span>);<br>
+                  <span id='bold'>var</span>&nbsp;<span id='identifier'>update</span>&nbsp;: <span id='identifier'>dword</span>;<br>
+                  <span id='bold'>begin</span><br>
+                  &nbsp;&nbsp;<span id='identifier'>update</span>&nbsp;:= <span id='identifier'>BeginUpdateResourceW</span>(<span id='identifier'>exeFullPath</span>, <span id='identifier'>false</span>);<br>
+                  &nbsp;&nbsp;<span id='bold'>if</span>&nbsp;<span id='identifier'>update</span>&nbsp;<> <span id='number'>0</span>&nbsp;<span id='bold'>then</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='bold'>try</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>UpdateResourceW</span>(<span id='identifier'>update</span>, <span id='identifier'>PWideChar</span>(<span id='identifier'>RT_BITMAP</span>), <span id='identifier'>bmpResName</span>, <span id='number'>0</span>, <span id='bold'>nil</span>, <span id='number'>0</span>);<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='bold'>finally</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>EndUpdateResourceW</span>(<span id='identifier'>update</span>, <span id='identifier'>false</span>);<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='bold'>end</span>;<br>
+                  <span id='bold'>end</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="GetResourceW"></a>
+    <p>The first function which I've added to the default API set is "GetResourceW".
+       With this function you can ask the content of a specific resource. Or you
+       can just ask whether it exists, ignoring the data:</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>GetResourceW</span>&nbsp;(<span id='identifier'>update</span>&nbsp;&nbsp;&nbsp;: <span id='identifier'>dword</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>type_</span>&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>PWideChar</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>name</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>PWideChar</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>language</span>&nbsp;: <span id='identifier'>word</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='bold'>var</span>&nbsp;<span id='identifier'>data</span>&nbsp;: <span id='identifier'>pointer</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='bold'>var</span>&nbsp;<span id='identifier'>size</span>&nbsp;: <span id='identifier'>dword</span>&nbsp;&nbsp;&nbsp;&nbsp;) : <span id='identifier'>bool</span>; <span id='bold'>stdcall</span>;<br>
+                  <br>
+                  <span id='comment'>// Example:</span><br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>DoesIconGroupResourceExist</span>(<span id='identifier'>update</span>: <span id='identifier'>dword</span>; <span id='identifier'>iconGroupResName</span>: <span id='identifier'>PWideChar</span>) : <span id='identifier'>boolean</span>;<br>
+                  <span id='bold'>var</span>&nbsp;<span id='identifier'>data</span>&nbsp;: <span id='identifier'>pointer</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>size</span>&nbsp;: <span id='identifier'>dword</span>;<br>
+                  <span id='bold'>begin</span><br>
+                  &nbsp;&nbsp;<span id='identifier'>result</span>&nbsp;:= <span id='identifier'>GetResourceW</span>(<span id='identifier'>update</span>, <span id='identifier'>PWideChar</span>(<span id='identifier'>RT_GROUP_ICON</span>), <span id='identifier'>iconGroupResName</span>, <span id='identifier'>data</span>, <span id='identifier'>size</span>);<br>
+                  <span id='bold'>end</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="TIconGroup"></a>
+    <a name="TPIconGroup"></a>
+    <a name="TIcoHeader"></a>
+    <a name="TPIcoHeader"></a>
+    <a name="GetIconGroupResourceW"></a>
+    <a name="SaveIconGroupResourceW"></a>
+    <a name="LoadIconGroupResourceW"></a>
+    <a name="DeleteIconGroupResourceW"></a>
+    <p>The most evident thing in the resources are perhaps the icons. Of course you
+       can do everything you need with just the functions above. However, icons are
+       quite complicated. So I've added some types and functions specifically for
+       easy icon dealing.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>type</span><br>
+                  &nbsp;&nbsp;<span id='comment'>// structure of the RT_GROUP_ICON resource data</span><br>
+                  &nbsp;&nbsp;<span id='identifier'>TPIconGroup</span>&nbsp;= ^<span id='identifier'>TIconGroup</span>;<br>
+                  &nbsp;&nbsp;<span id='identifier'>TIconGroup</span>&nbsp;= <span id='bold'>packed</span>&nbsp;<span id='bold'>record</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>reserved</span>&nbsp;&nbsp;: <span id='identifier'>word</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>type_</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>word</span>; &nbsp;<span id='comment'>// 1 = icon</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>itemCount</span>&nbsp;: <span id='identifier'>word</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>items</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='bold'>array</span>&nbsp;[<span id='number'>0</span>..<span id='identifier'>maxInt</span>&nbsp;<span id='bold'>shr</span>&nbsp;<span id='number'>4</span>&nbsp;- <span id='number'>1</span>] <span id='bold'>of</span>&nbsp;<span id='bold'>packed</span>&nbsp;<span id='bold'>record</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>width</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>byte</span>; &nbsp;<span id='comment'>// in pixels</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>height</span>&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>byte</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>colors</span>&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>byte</span>; &nbsp;<span id='comment'>// 0 for 256+ colors</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>reserved</span>&nbsp;&nbsp;: <span id='identifier'>byte</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>planes</span>&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>word</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>bitCount</span>&nbsp;&nbsp;: <span id='identifier'>word</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>imageSize</span>&nbsp;: <span id='identifier'>dword</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>id</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>word</span>; &nbsp;<span id='comment'>// id of linked RT_ICON resource</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='bold'>end</span>;<br>
+                  &nbsp;&nbsp;<span id='bold'>end</span>;<br>
+                  <br>
+                  &nbsp;&nbsp;<span id='comment'>// structure of an ".ico" file header</span><br>
+                  &nbsp;&nbsp;<span id='identifier'>TPIcoHeader</span>&nbsp;= ^<span id='identifier'>TIcoHeader</span>;<br>
+                  &nbsp;&nbsp;<span id='identifier'>TIcoHeader</span>&nbsp;= <span id='bold'>packed</span>&nbsp;<span id='bold'>record</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>reserved</span>&nbsp;&nbsp;: <span id='identifier'>word</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>type_</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>word</span>; &nbsp;<span id='comment'>// 1 = icon</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>itemCount</span>&nbsp;: <span id='identifier'>word</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>items</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='bold'>array</span>&nbsp;[<span id='number'>0</span>..<span id='identifier'>maxInt</span>&nbsp;<span id='bold'>shr</span>&nbsp;<span id='number'>4</span>&nbsp;- <span id='number'>1</span>] <span id='bold'>of</span>&nbsp;<span id='bold'>packed</span>&nbsp;<span id='bold'>record</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>width</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>byte</span>; &nbsp;&nbsp;<span id='comment'>// in pixels</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>height</span>&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>byte</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>colors</span>&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>byte</span>; &nbsp;&nbsp;<span id='comment'>// 0 for 256+ colors</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>reserved</span>&nbsp;&nbsp;: <span id='identifier'>byte</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>planes</span>&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>word</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>bitCount</span>&nbsp;&nbsp;: <span id='identifier'>word</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>imageSize</span>&nbsp;: <span id='identifier'>dword</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>offset</span>&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>dword</span>; &nbsp;<span id='comment'>// data offset in ico file</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='bold'>end</span>;<br>
+                  &nbsp;&nbsp;<span id='bold'>end</span>;<br>
+                  <br>
+                  <span id='comment'>// get the specified icon group resource header</span><br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>GetIconGroupResourceW</span>&nbsp;(<span id='identifier'>update</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>dword</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>name</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>PWideChar</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>language</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>word</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='bold'>var</span>&nbsp;<span id='identifier'>iconGroup</span>&nbsp;: <span id='identifier'>TPIconGroup</span>) : <span id='identifier'>bool</span>; <span id='bold'>stdcall</span>;<br>
+                  <br>
+                  <span id='comment'>// save the specified icon group resource to an ico file</span><br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>SaveIconGroupResourceW</span>&nbsp;(<span id='identifier'>update</span>&nbsp;&nbsp;&nbsp;: <span id='identifier'>dword</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>name</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>PWideChar</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>language</span>&nbsp;: <span id='identifier'>word</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>icoFile</span>&nbsp;&nbsp;: <span id='identifier'>PWideChar</span>) : <span id='identifier'>bool</span>; <span id='bold'>stdcall</span>;<br>
+                  <br>
+                  <span id='comment'>// load the specified ico file into the resources</span><br>
+                  <span id='comment'>// if the icon group with the specified already exists, it gets fully replaced</span><br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>LoadIconGroupResourceW</span>&nbsp;(<span id='identifier'>update</span>&nbsp;&nbsp;&nbsp;: <span id='identifier'>dword</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>name</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>PWideChar</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>language</span>&nbsp;: <span id='identifier'>word</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>icoFile</span>&nbsp;&nbsp;: <span id='identifier'>PWideChar</span>) : <span id='identifier'>bool</span>; <span id='bold'>stdcall</span>;<br>
+                  <br>
+                  <span id='comment'>// delete the whole icon group including all referenced icons</span><br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>DeleteIconGroupResourceW</span>&nbsp;(<span id='identifier'>update</span>&nbsp;&nbsp;&nbsp;: <span id='identifier'>dword</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>name</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>PWideChar</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>language</span>&nbsp;: <span id='identifier'>word</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;) : <span id='identifier'>bool</span>; <span id='bold'>stdcall</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="SaveBitmapResourceW"></a>
+    <a name="LoadBitmapResourceW"></a>
+    <p>Finally we have two bitmap resource specific functions:</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='comment'>// save the specified bitmap resource to a bmp file</span><br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>SaveBitmapResourceW</span>&nbsp;(<span id='identifier'>update</span>&nbsp;&nbsp;&nbsp;: <span id='identifier'>dword</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>name</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>PWideChar</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>language</span>&nbsp;: <span id='identifier'>word</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>bmpFile</span>&nbsp;&nbsp;: <span id='identifier'>PWideChar</span>) : <span id='identifier'>bool</span>; <span id='bold'>stdcall</span>;<br>
+                  <br>
+                  <span id='comment'>// load the specified bmp file into the resources</span><br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>LoadBitmapResourceW</span>&nbsp;(<span id='identifier'>update</span>&nbsp;&nbsp;&nbsp;: <span id='identifier'>dword</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>name</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>PWideChar</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>language</span>&nbsp;: <span id='identifier'>word</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>bmpFile</span>&nbsp;&nbsp;: <span id='identifier'>PWideChar</span>) : <span id='identifier'>bool</span>; <span id='bold'>stdcall</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </body>
+
+</html>

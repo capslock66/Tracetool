@@ -1,0 +1,166 @@
+<html>
+
+  <head>
+    <title>mad* Help...</title>
+    <meta name="description" content="mad* Help...">
+    <meta name="keywords" content="madshi, components, delphi">
+    <meta http-equiv="expires" content="900">
+    <link rel=stylesheet type="text/css" href="style.css">
+  </head>
+
+  <body background="bcklight.gif" bgcolor=#F8F8F8>
+    <a name="INamedBuffer"></a>
+    <table border=0 cellpadding=0 callspacing=0><tr>
+      <td valign=bottom>
+        <table border=0 cellpadding=0 cellspacing=0><tr><td bgcolor=#D8D8D8>
+          <table cellpadding=3 border=0>
+            <tr><td bgcolor=#FFFFF0>
+              <div id="verySmall"><br></div>
+              <div id="bigTitle">&nbsp;Named Buffer&nbsp;</div>
+              <div id="verySmall"><br></div>
+              <div id="small">
+                <a class="small" href="Content.htm">Content</a> /
+                <a class="small" href="madKernel.htm">madKernel</a> /...
+              </div>
+            </td></tr>
+          </table>
+        </td></tr></table>
+      </td>
+      <td valign=bottom>
+        <table border=0 cellpadding=0 cellspacing=0><tr><td bgcolor=#D8D8D8>
+          <table cellpadding=7 border=0>
+            <tr><td bgcolor=#F4F4F8><a href="http://www.madshi.net">www.madshi.net</a></td></tr>
+          </table>
+        </td></tr></table>
+      </td>
+    </tr></table>
+    <p>Sometimes you need to communicate with other modules or even other processes.
+       In that case it's very useful to have an easy to use method of sharing a
+       data block. For this purpose madKernel offers the "INamedBuffer" interface.
+       See also the <a href="INamedBufferRef.htm">INamedBuffer Reference</a>.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>type</span>&nbsp;<span id='identifier'>INamedBuffer</span>&nbsp;= <span id='bold'>interface</span>&nbsp;(<a class="pascal" href="KernelObjects.htm#IKernelObj">IKernelObj</a>) [<span id='string'>'{AA4C5EE0-C417-11D3-A530-00005A180D69}'</span>];
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="NewNamedBuffer"></a>
+    <a name="OpenNamedBuffer"></a>
+    <p>First of all you must call "NewNamedBuffer" to make it all work. Enter the
+       desired buffer size and a system wide unique name. As a result you'll get an
+       <a href="#INamedBuffer">INamedBuffer</a> instance. Now while this instance is valid every other
+       module in every other process can open this buffer for read or write access
+       by calling "OpenNamedBuffer". It's also possible to call "NewNamedBuffer"
+       instead of "OpenNamedBuffer". If the buffer already existed before you
+       called "NewNamedBuffer", the effect is the same as if you would have called
+       "OpenNamedBuffer" with write access. Please note, that you can't change the
+       size of an existing buffer.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>NewNamedBuffer</span>&nbsp;(<span id='identifier'>name</span>&nbsp;: <span id='bold'>string</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>size</span>&nbsp;: <span id='identifier'>integer</span>) : <a class="pascal" href="#INamedBuffer">INamedBuffer</a>;<br>
+                  <br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>OpenNamedBuffer</span>&nbsp;(<span id='identifier'>name</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='bold'>string</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>writeAccess</span>&nbsp;: <span id='identifier'>boolean</span>&nbsp;= <span id='identifier'>true</span>) : <a class="pascal" href="#INamedBuffer">INamedBuffer</a>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="INamedBuffer.Name"></a>
+    <p>Which name does this buffer have?</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>INamedBuffer</span>.<img src="r.gif"><span id='identifier'>Name</span>&nbsp;: <span id='bold'>string</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="INamedBuffer.Size"></a>
+    <p>How bug is this named buffer? Don't dare to write over the bounds!</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>INamedBuffer</span>.<img src="r.gif"><span id='identifier'>Size</span>&nbsp;: <span id='identifier'>integer</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="INamedBuffer.Memory"></a>
+    <p>Where in memory is this buffer located?</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>INamedBuffer</span>.<img src="r.gif"><span id='identifier'>Memory</span>&nbsp;: <span id='identifier'>pointer</span>;<br>
+                  <br>
+                  <span id='comment'>// Example:</span><br>
+                  <span id='identifier'>nb</span>&nbsp;:= <a class="pascal" href="#NewNamedBuffer">NewNamedBuffer</a>(<span id='string'>'MadshisWindowsHookHandle'</span>, <span id='number'>4</span>);<br>
+                  <span id='identifier'>cardinal</span>(<span id='identifier'>nb</span>.<span id='identifier'>Memory</span>^) := <span id='identifier'>SetWindowsHookEx</span>(...);
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="INamedBuffer.IsWriteAccess"></a>
+    <p>Do we have write access to this buffer?</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>INamedBuffer</span>.<img src="m.gif"><span id='identifier'>IsWriteAccess</span>&nbsp;: <span id='identifier'>boolean</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </body>
+
+</html>

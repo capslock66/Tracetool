@@ -1,0 +1,177 @@
+<html>
+
+  <head>
+    <title>mad* Help...</title>
+    <meta name="description" content="mad* Help...">
+    <meta name="keywords" content="madshi, components, delphi">
+    <meta http-equiv="expires" content="900">
+    <link rel=stylesheet type="text/css" href="style.css">
+  </head>
+
+  <body background="bcklight.gif" bgcolor=#F8F8F8>
+    <table border=0 cellpadding=0 callspacing=0><tr>
+      <td valign=bottom>
+        <table border=0 cellpadding=0 cellspacing=0><tr><td bgcolor=#D8D8D8>
+          <table cellpadding=3 border=0>
+            <tr><td bgcolor=#FFFFF0>
+              <div id="verySmall"><br></div>
+              <div id="bigTitle">&nbsp;System Wide API Hooking&nbsp;</div>
+              <div id="verySmall"><br></div>
+              <div id="small">
+                <a class="small" href="Content.htm">Content</a> /
+                <a class="small" href="madCodeHook.htm">madCodeHook</a> /...
+              </div>
+            </td></tr>
+          </table>
+        </td></tr></table>
+      </td>
+      <td valign=bottom>
+        <table border=0 cellpadding=0 cellspacing=0><tr><td bgcolor=#D8D8D8>
+          <table cellpadding=7 border=0>
+            <tr><td bgcolor=#F4F4F8><a href="http://www.madshi.net">www.madshi.net</a></td></tr>
+          </table>
+        </td></tr></table>
+      </td>
+    </tr></table>
+    <p>There are several ways how you can realize system wide API hooking. Due to
+       the quite different system architecture of the two OS families "win9x" and
+       "winNT" system wide hooking normally must be realized by using different
+       solutions for each OS family. The win9x family has a much lower system
+       security, so there we can hack around like crazy and can often do very
+       effective system wide hooking without even having to write a DLL. The winNT
+       family has a much more secure system base. Still we can do some hacks, but
+       doing system wide API hooking in the winNT family without using DLLs is much
+       more difficult than it is in the win9x family.</p>
+    <p>madCodeHook is meant to free you from having to care about in which OS your
+       program is running. So for the "normal" programmer I strongly recommend to
+       use madCodeHook's general OS independent solution for doing system wide API
+       hooking. This solution is based on putting your hooking code into a little
+       DLL and on then injecting this DLL into all current and in the future
+       created processes. Actually using madCodeHook this is very easy to do. If
+       you want to go this route, please skip the rest of this page and head
+       directly to the <a href="HowToUseMadCodeHook.htm">How To Use madCodeHook</a> guide.</p>
+    <p>What - you're still reading!?</p>
+    <p>That either means, you want to know it all. Or you don't care about writing
+       OS independent code. Okay, so I'll explain to you know how you can hook most
+       system APIs in win9x without using any DLLs. Sadly this solution only works
+       in win9x, but hey, life isn't easy...</p>
+    <p>In win9x the memory/address area is splitted into 2 halfs. The area from
+       $00000000 - $7FFFFFFF is private to each process. No process can directly
+       access the private memory of another process, except by using the debug APIs
+       "Read/WriteProcessMemory". The area from $80000000 - $FFFFFFFF is the so
+       called "shared area", because the memory in this area is shared between all
+       processes in win9x. In winNT/2000 there is no shared area. There the whole
+       32bit memory/address area is always private to each process.</p>
+    <p>In win9x that means, if one process changes memory in the shared area, all
+       other processes will directly see this change. This is the reason why win9x
+       is not a very stable operating system. One crashing application can
+       accidently overwrite important stuff in the shared area and so make other
+       processes or even the whole OS crash, too.</p>
+    <p>However, the shared area has also its pros. The most important for us now is
+       that it gives us the possibility to hook "shared APIs" (I mean APIs that are
+       located in the shared area) truely system wide. When "madCodeHook"
+       overwrites the code of a shared API with a jump instruction, this ends up in
+       that each and every process which calls this API thereafter, will execute
+       that jump instruction and so jump to our callback function. Voilà - we have
+       system wide API hooking.</p>
+    <p>But wait! There are some complications. Let us think about where your
+       callback function is located. Normal applications and DLLs are not loaded
+       into the shared area, so your callback function is most probably not located
+       in the shared area, either. That means, it is private to your process, so not
+       accessible in any other process. But what happens now if another process
+       calls the hooked shared API and then executes that jump instruction which
+       wants to jump to your callback function, which is unfortunately not
+       accessible in that other process? This process will crash. You see the
+       problem?</p>
+    <p>That means, when hooking shared APIs, your callback function MUST be located
+       in the shared area. No way around that. So how we can move your callback
+       function to the shared area? There are 2 possibilities:</p>
+    <table>
+      <tr>
+        <td valign=top>1.</td>
+        <td>You can put the callback function into a little DLL and make that DLL
+            being loaded by win9x into the shared area. To do so the image base
+            address must be greater than $80000000, furthermore the code section
+            and all data sections must have the "shared" flag set. This way the
+            whole DLL including your callback function will automatically be loaded
+            into the shared area.</td>
+      </tr><tr>
+        <td valign=top>2.</td>
+        <td>We can copy your callback function to the shared area. That is not an
+            easy task, because your callback function may contain relative jumps,
+            which then have to be corrected before anyone can call your copied
+            function successfully. Sounds difficult? Yes, it is. You even need a
+            little disassembler to do something like that. But - we have a little
+            disassembler - and it is also able to copy and relocate functions
+            completely automatically (see <a href="CopyFunction.htm">CopyFunction</a>)!</td>
+      </tr>
+    </table>
+    <p>Pratically spoken, when you hook a shared API, "madCodeHook" checks whether
+       your callback function is already located in the shared area. If it is not,
+       it is copied there, and all necessary corrections are also done
+       automatically.</p>
+    <p>Unfortunately the location of the callback function (shared area or not) is
+       not the only problem. There are several additional things you have to be
+       careful about when writing a system wide callback function:</p>
+    <table>
+      <tr>
+        <td valign=top>1.</td>
+        <td>Because the hook is meant to be really system wide, and because Windows
+            is a true multitasking system, your callback function has to be fully
+            reentrant and thread safe.</td>
+      </tr><tr>
+        <td valign=top>2.</td>
+        <td>You must not access any functions, APIs or variables, that are not
+            located in the shared area, because everything you access in the
+            callback function must be accessible system wide.</td>
+      </tr><tr>
+        <td valign=top>3.</td>
+        <td>You can't know which DLLs are initialized in what processes, so you must
+            only use APIs that are exported by "kernel32.dll". It's the only DLL
+            that is guaranteed to be initialized in each and every win32 process.
+            However, you can use "LoadLibrary" to initialize additional DLLs in
+            your callback function, if you really need that. Furthermore when you
+            hook e.g. a "user32.dll" API, you can also use other "user32.dll" APIs
+            in your callback function, because your "user32.dll" API hook can't get
+            called in the context of a process, which has not initialized
+            "user32.dll". That would be paradox.</td>
+      </tr><tr>
+        <td valign=top>4.</td>
+        <td>You have to make sure that all CPU registers are restored correctly.
+            Normally Delphi/C++ does that for us. But to be sure you should think
+            about writing your system wide callback function in (inline) assembler.</td>
+      </tr><tr>
+        <td valign=top>5.</td>
+        <td>You must not use structured exception handling in the callback function.</td>
+      </tr>
+    </table>
+    <p>If your callback function fulfills all the 5 requirements noted above, you
+       can safely hook any shared API in win9x without risking system stability.
+       To check if a DLL is a shared one or not, please check whether the module
+       handle of the DLL (see "GetModuleHandle") is > $80000000. The most important
+       system DLLs are shared, e.g. "kernel32.dll" and "user32.dll".</p>
+    <p>Now let us talk about unhooking. If you don't unhook system wide APIs, they
+       remain hooked even after your application has terminated. That's a very big
+       problem, if your callback function was loaded into the shared area by using
+       a little shared DLL, because this DLL gets unloaded automatically when your
+       process terminates. But the API hook does NOT get unhooked automatically. So
+       if someone now calls the still hooked API, it will try to jump to your
+       callback function. But since the DLL was unloaded, your callback function is
+       not there anymore, which will result in a crash. So when using callback
+       functions which are located in a shared DLL, please make sure that you
+       unhook all shared APIs, before you leave - even if your program crashes.
+       Please install an exception handler that unhooks the shared APIs.
+       Alternatively instead of loading your little shared DLL yourself, you can
+       <a href="DllInjecting.htm">inject</a> it into the "kernel32.dll" win9x
+       system process. This way your DLL will stay loaded until the next reboot.</p>
+    <p>If your callback function was copied to the shared area by madCodeHook,
+       things are a bit different, because such a copied function remains there
+       in any case - even if your program terminates. That means, it's up to you in
+       this case, whether you want to unhook the API before leaving your program or
+       not. E.g. you can install a kind of patch, which remains installed until the
+       next reboot, although your program has terminated already.</p>
+    <p>If you want to see a full example project about system wide API hooking,
+       please look at the <a href="SystemApi.htm">"SystemAPI" Example</a>.</p>
+  </body>
+
+</html>

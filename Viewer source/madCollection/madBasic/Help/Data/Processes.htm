@@ -1,0 +1,936 @@
+<html>
+
+  <head>
+    <title>mad* Help...</title>
+    <meta name="description" content="mad* Help...">
+    <meta name="keywords" content="madshi, components, delphi">
+    <meta http-equiv="expires" content="900">
+    <link rel=stylesheet type="text/css" href="style.css">
+  </head>
+
+  <body background="bcklight.gif" bgcolor=#F8F8F8>
+    <a name="IProcess"></a>
+    <a name="IProcesses"></a>
+    <table border=0 cellpadding=0 callspacing=0><tr>
+      <td valign=bottom>
+        <table border=0 cellpadding=0 cellspacing=0><tr><td bgcolor=#D8D8D8>
+          <table cellpadding=3 border=0>
+            <tr><td bgcolor=#FFFFF0>
+              <div id="verySmall"><br></div>
+              <div id="bigTitle">&nbsp;Processes&nbsp;</div>
+              <div id="verySmall"><br></div>
+              <div id="small">
+                <a class="small" href="Content.htm">Content</a> /
+                <a class="small" href="madKernel.htm">madKernel</a> /...
+              </div>
+            </td></tr>
+          </table>
+        </td></tr></table>
+      </td>
+      <td valign=bottom>
+        <table border=0 cellpadding=0 cellspacing=0><tr><td bgcolor=#D8D8D8>
+          <table cellpadding=7 border=0>
+            <tr><td bgcolor=#F4F4F8><a href="http://www.madshi.net">www.madshi.net</a></td></tr>
+          </table>
+        </td></tr></table>
+      </td>
+    </tr></table>
+    <p>Probably the most important kernel object is the "Process". madKernel
+       implements two interfaces for this object type. "IProcess" encapsulates a
+       single process object, while "IProcesses" makes handling with a list of
+       processes comfortable. See also the <a href="IProcessRef.htm">IProcess Reference</a> and the
+       <a href="IProcessesRef.htm">IProcesses Reference</a>.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>type</span><br>
+                  &nbsp;&nbsp;<span id='identifier'>IProcess</span>&nbsp;&nbsp;&nbsp;= <span id='bold'>interface</span>&nbsp;(<a class="pascal" href="KernelObjects.htm#IWaitableObj">IWaitableObj</a>&nbsp;) [<span id='string'>'{D2097382-9AB1-11D3-A530-00005A180D69}'</span>];<br>
+                  &nbsp;&nbsp;<span id='identifier'>IProcesses</span>&nbsp;= <span id='bold'>interface</span>&nbsp;(<a class="pascal" href="KernelObjects.htm#IWaitableObjs">IWaitableObjs</a>) [<span id='string'>'{D2097381-9AB1-11D3-A530-00005A180D69}'</span>];
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="NewProcess"></a>
+    <a name="PrintFile"></a>
+    <a name="CurrentProcess"></a>
+    <a name="ParentProcess"></a>
+    <a name="Processes"></a>
+    <a name="Process"></a>
+    <p>As with most other madKernel interfaces there are several ways to get an
+       IProcess or an IProcesses instance. You can use <a href="Threads.htm#IThread.OwnerProcess">IThread.OwnerProcess</a>
+       or <a href="Windows.htm#IWindow.OwnerProcess">IWindow.OwnerProcess</a> or one of the following functions. You can
+       either directly create a "NewProcess" or print a file with "PrintFile",
+       which also results in a new process being created. Or you can get the
+       "CurrentProcess" or the current process' "ParentProcess" (the one that
+       created the current process). Also you can convert a win32 handle dword
+       value or an <a href="Handles.htm#IHandle">IHandle</a> instance into an IProcess instance. Or you can
+       get a process by executable file name/path. Finally you can call "Processes"
+       to get a list of the processes which are currently running or to get a list
+       of instances of a specific executable file name/path.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>NewProcess</span>&nbsp;(<span id='identifier'>exeFile</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='bold'>string</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>params</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='bold'>string</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= <span id='string'>''</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>workingDir</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='bold'>string</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= <span id='string'>''</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>showCmd</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>cardinal</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= <span id='identifier'>SW_SHOWDEFAULT</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>creationFlags</span>&nbsp;&nbsp;: <span id='identifier'>cardinal</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= <span id='number'>0</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>processAttr</span>&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>PSecurityAttributes</span>&nbsp;= <span id='bold'>nil</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>threadAttr</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>PSecurityAttributes</span>&nbsp;= <span id='bold'>nil</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>inheritHandles</span>&nbsp;: <span id='identifier'>boolean</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= <span id='identifier'>true</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>environment</span>&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>pointer</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= <span id='bold'>nil</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;) : <a class="pascal" href="#IProcess">IProcess</a>;<br>
+                  <br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>PrintFile</span>&nbsp;(<span id='identifier'>file_</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='bold'>string</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>workingDir</span>&nbsp;: <span id='bold'>string</span>&nbsp;&nbsp;&nbsp;= <span id='string'>''</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>showCmd</span>&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>cardinal</span>&nbsp;= <span id='identifier'>SW_SHOWNORMAL</span>) : <a class="pascal" href="#IProcess">IProcess</a>;<br>
+                  <br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>CurrentProcess</span>&nbsp;: <a class="pascal" href="#IProcess">IProcess</a>;<br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>ParentProcess</span>&nbsp;&nbsp;: <a class="pascal" href="#IProcess">IProcess</a>;<br>
+                  <br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>Process</span>&nbsp;(<span id='bold'>const</span>&nbsp;<span id='identifier'>process</span>&nbsp;: <a class="pascal" href="Handles.htm#IHandle">IHandle</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;) : <a class="pascal" href="#IProcess">IProcess</a>; <span id='bold'>overload</span>;<br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>Process</span>&nbsp;(<span id='identifier'>process</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>cardinal</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>autoClose</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>boolean</span>&nbsp;= <span id='identifier'>true</span>) : <a class="pascal" href="#IProcess">IProcess</a>; <span id='bold'>overload</span>;<br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>Process</span>&nbsp;(<span id='identifier'>exeFile</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='bold'>string</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;) : <a class="pascal" href="#IProcess">IProcess</a>; <span id='bold'>overload</span>;<br>
+                  <br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>Processes</span>&nbsp;(<span id='identifier'>exeFile</span>: <span id='bold'>string</span>&nbsp;= <span id='string'>'*'</span>) : <a class="pascal" href="#IProcesses">IProcesses</a>; <span id='bold'>overload</span>;<br>
+                  <br>
+                  <span id='comment'>// Examples:</span><br>
+                  <span id='identifier'>NewProcess</span>(<span id='string'>'calc.exe'</span>).<a id="mono" href="KernelObjects.htm#IWaitableObj.WaitFor">WaitFor</a>;<br>
+                  <span id='identifier'>PrintFile</span>(<span id='string'>'c:\test.bmp'</span>).<a id="mono" href="KernelObjects.htm#IWaitableObj.WaitFor">WaitFor</a>;<br>
+                  <span id='identifier'>Assert</span>(<span id='identifier'>CurrentProcess</span>.<a id="mono" href="#IProcess.ParentProcess">ParentProcess</a>&nbsp;= <span id='identifier'>ParentProcess</span>);<br>
+                  <span id='identifier'>Processes</span>(<span id='string'>'notepad.exe'</span>).<a id="mono" href="#IProcesses.Terminate">Terminate</a>;<br>
+                  <span id='bold'>if</span>&nbsp;<span id='identifier'>Process</span>(<span id='string'>'explorer.exe'</span>).<span id='identifier'>IsValid</span>&nbsp;<span id='bold'>then</span>&nbsp;...
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IProcess.IsStillValid"></a>
+    <a name="IProcess.IsStillRunning"></a>
+    <p>You can check whether the process object represented by this <a href="#IProcess">IProcess</a>
+       instance is still valid. Also you can check whether the process is still
+       running or whether it was already closed.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>IProcess</span>.<img src="m.gif"><span id='identifier'>IsStillValid</span>&nbsp;&nbsp;&nbsp;: <span id='identifier'>boolean</span>;<br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>IProcess</span>.<img src="m.gif"><span id='identifier'>IsStillRunning</span>&nbsp;: <span id='identifier'>boolean</span>;<br>
+                  <br>
+                  <span id='comment'>// Example:</span><br>
+                  <span id='identifier'>Assert</span>(<a class="pascal" href="#CurrentProcess">CurrentProcess</a>.<span id='identifier'>IsStillRunning</span>);
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IProcess.Session"></a>
+    <p>In TerminalServer environments there are multiple sessions. Each process
+       running on a TerminalServer belongs to one of those sessions. XP fast user
+       switching internally is based on TerminalServer, too, so there each fast
+       user session also has its own session identifier.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IProcess</span>.<img src="r.gif"><span id='identifier'>Session</span>&nbsp;: <span id='identifier'>cardinal</span>;<br>
+                  <br>
+                  <span id='comment'>// Example:</span><br>
+                  <a class="pascal" href="#CurrentProcess">CurrentProcess</a>.<span id='identifier'>Session</span>&nbsp;&nbsp;-> &nbsp;<span id='number'>0</span>&nbsp;&nbsp;<span id='comment'>// the default session ID is 0</span>
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IProcess.ExeFile"></a>
+    <p>Asks the exe file name (including path) of this process:</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IProcess</span>.<img src="r.gif"><span id='identifier'>ExeFile</span>&nbsp;: <span id='bold'>string</span>;<br>
+                  <br>
+                  <span id='comment'>// Example:</span><br>
+                  <a class="pascal" href="#Process">Process</a>(<span id='string'>'explorer.exe'</span>).<span id='identifier'>ExeFile</span>&nbsp;&nbsp;-> &nbsp;<span id='string'>'C:\Windows\Explorer.exe'</span>
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IProcess.GetHandle"></a>
+    <p>To get a handle with full access rights, you can simply use the property
+       <a href="KernelObjects.htm#IKernelObj.Handle">IKernelObj.Handle</a>. If you need specific access rights, you can call
+       the method "GetHandle" and enter the access rights you need. Please note,
+       that madKernel takes your access wish as the minimum. That means it is
+       possible (due to handle caching) that you get a handle back, which has all
+       the access rights you need plus some more rights you didn't ask for.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>IProcess</span>.<img src="m.gif"><span id='identifier'>GetHandle</span>&nbsp;(<span id='identifier'>access</span>: <span id='identifier'>cardinal</span>&nbsp;= <span id='identifier'>PROCESS_ALL_ACCESS</span>) : <a class="pascal" href="Handles.htm#IHandle">IHandle</a>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IProcess.StoreHandle"></a>
+    <a name="IProcess.ReleaseHandle"></a>
+    <p>In win9x you can call "StoreHandle" to tell madKernel that the handles for
+       this thread should be cached. You can call "StoreHandle" as often as you
+       like, but please call "ReleaseHandle" once for each "StoreHandle" call. In
+       winNT handles are always cached, so there these properties are ignored.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>procedure</span>&nbsp;<span id='identifier'>IProcess</span>.<img src="m.gif"><span id='identifier'>StoreHandle</span>; &nbsp;&nbsp;&nbsp;<span id='comment'>// win9x only</span><br>
+                  <span id='bold'>procedure</span>&nbsp;<span id='identifier'>IProcess</span>.<img src="m.gif"><span id='identifier'>ReleaseHandle</span>; &nbsp;<span id='comment'>// win9x only</span>
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IProcess.ParentProcess"></a>
+    <p>Who is the creator of this process?</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IProcess</span>.<img src="r.gif"><span id='identifier'>ParentProcess</span>&nbsp;: <a class="pascal" href="#IProcess">IProcess</a>;<br>
+                  <br>
+                  <span id='comment'>// Example:</span><br>
+                  <span id='bold'>if</span>&nbsp;<a class="pascal" href="StringSearch.htm#PosText">PosText</a>(<span id='string'>'delphi32.exe'</span>, <a class="pascal" href="#CurrentProcess">CurrentProcess</a>.<span id='identifier'>ParentProcess</span>.<a id="mono" <a href="#IProcess.ExeFile">ExeFile</a>) > <span id='number'>0</span>&nbsp;<span id='bold'>then</span><br>
+                  &nbsp;&nbsp;<span id='identifier'>MessageBox</span>(<span id='number'>0</span>, <span id='string'>'running inside of Delphi IDE'</span>, <span id='string'>'info'</span>, <span id='number'>0</span>);
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="TOsVersion"></a>
+    <a name="IProcess.OsVersion"></a>
+    <a name="TExeType"></a>
+    <a name="IProcess.ExeType"></a>
+    <p>Use the following methods to get the version and type of the OS for which
+       this process was built:</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>type</span><br>
+                  &nbsp;&nbsp;<span id='identifier'>TOsVersion</span>&nbsp;= <span id='bold'>packed</span>&nbsp;<span id='bold'>record</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>minor</span>&nbsp;: <span id='identifier'>word</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>major</span>&nbsp;: <span id='identifier'>word</span>;<br>
+                  &nbsp;&nbsp;<span id='bold'>end</span>;<br>
+                  &nbsp;&nbsp;<span id='identifier'>TExeType</span>&nbsp;= (<span id='identifier'>etUnknown</span>, <span id='identifier'>etDos</span>, <span id='identifier'>etWin16</span>, <span id='identifier'>etConsole</span>, <span id='identifier'>etWin32</span>);<br>
+                  <br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IProcess</span>.<img src="r.gif"><span id='identifier'>OsVersion</span>&nbsp;: <span id='identifier'>TOsVersion</span>;<br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IProcess</span>.<img src="r.gif"><span id='identifier'>ExeType</span>&nbsp;&nbsp;&nbsp;: <span id='identifier'>TExeType</span>;<br>
+                  <br>
+                  <span id='comment'>// Example:</span><br>
+                  <span id='identifier'>Assert</span>(<a class="pascal" href="#CurrentProcess">CurrentProcess</a>.<span id='identifier'>ExeType</span>&nbsp;<span id='bold'>in</span>&nbsp;[<span id='identifier'>etConsole</span>, <span id='identifier'>etWin32</span>]);
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IProcess.Icon"></a>
+    <p>Which icon is shown for this process in the explorer?</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>IProcess</span>.<img src="m.gif"><span id='identifier'>Icon</span>&nbsp;(<span id='identifier'>smallIcon</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>boolean</span>&nbsp;= <span id='identifier'>true</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="e.gif">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>linkOverlayIfLnkOrPif</span>&nbsp;: <span id='identifier'>boolean</span>&nbsp;= <span id='identifier'>false</span>) : <span id='identifier'>cardinal</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IProcess.HInstance"></a>
+    <a name="IProcess.MainModule"></a>
+    <p>The following two methods return the main module (= executable module) of
+       this process. "HInstance" returns the module handle (= pointer to the
+       executable image in memory), while "MainModule" returns an <a href="Modules.htm#IModule">IModule</a>
+       instance.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IProcess</span>.<img src="r.gif"><span id='identifier'>HInstance</span>&nbsp;&nbsp;: <span id='identifier'>cardinal</span>;<br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IProcess</span>.<img src="r.gif"><span id='identifier'>MainModule</span>&nbsp;: <a class="pascal" href="Modules.htm#IModule">IModule</a>;<br>
+                  <br>
+                  <span id='comment'>// Examples:</span><br>
+                  <span id='identifier'>Assert</span>(<a class="pascal" href="#CurrentProcess">CurrentProcess</a>.<span id='identifier'>HInstance</span>&nbsp;= <span id='identifier'>HInstance</span>);<br>
+                  <span id='identifier'>Assert</span>(<a class="pascal" href="#CurrentProcess">CurrentProcess</a>.<span id='identifier'>ExeFile</span>&nbsp;= <a class="pascal" href="#CurrentProcess">CurrentProcess</a>.<span id='identifier'>MainModule</span>.<a id="mono" href="Modules.htm#IModule.FileName">FileName</a>);
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IProcess.ServiceProcess"></a>
+    <p>Use the property "ServiceProcess" to access (read/write) the service flag
+       of this process. A service process is not being listed in the task manager
+       and also survives logoff (if WM_ENDSESSION is handled correctly, what Delphi
+       doesn't do). This property is only available in win9x.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IProcess</span>.<img src="w.gif"><span id='identifier'>ServiceProcess</span>&nbsp;: <span id='identifier'>boolean</span>; &nbsp;<span id='comment'>// win9x only</span><br>
+                  <br>
+                  <span id='comment'>// Examples:</span><br>
+                  <a class="pascal" href="#CurrentProcess">CurrentProcess</a>.<span id='identifier'>ServiceProcess</span>&nbsp;:= <span id='identifier'>true</span>; &nbsp;<span id='comment'>// hide me</span>
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="TPriorityClass"></a>
+    <a name="IProcess.PriorityClass"></a>
+    <a name="IProcess.PriorityBoost"></a>
+    <p>The following properties give you access to the priority parameters of this
+       process. Please see the documentation of the win32 APIs "GetPriorityClass"
+       and "GetProcessPriorityBoost" for more information.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>type</span>&nbsp;<span id='identifier'>TPriorityClass</span>&nbsp;= (<span id='identifier'>pcUnknown</span>, <span id='identifier'>pcIdle</span>, <span id='identifier'>pcNormal</span>, <span id='identifier'>pcHigh</span>, <span id='identifier'>pcRealTime</span>);<br>
+                  <br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IProcess</span>.<img src="w.gif"><span id='identifier'>PriorityClass</span>&nbsp;: <span id='identifier'>TPriorityClass</span>;<br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IProcess</span>.<img src="w.gif"><span id='identifier'>PriorityBoost</span>&nbsp;: <span id='identifier'>boolean</span>;<br>
+                  <br>
+                  <span id='comment'>// Example:</span><br>
+                  <a class="pascal" href="#CurrentProcess">CurrentProcess</a>.<span id='identifier'>PriorityClass</span>&nbsp;:= <span id='identifier'>pcRealTime</span>; &nbsp;<span id='comment'>// not recommended!</span>
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IProcess.AffinityMask"></a>
+    <p>Access to this process' affinity mask (see "GetProcessAffinityMask" API).</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IProcess</span>.<img src="w.gif"><span id='identifier'>AffinityMask</span>&nbsp;: <span id='identifier'>cardinal</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IProcess.GetWorkingSetSize"></a>
+    <a name="IProcess.SetWorkingSetSize"></a>
+    <p>Use the following methods to get and set the working set size of this
+       process (see "GetProcessWorkingSetSize" API).</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>procedure</span>&nbsp;<span id='identifier'>IProcess</span>.<img src="m.gif"><span id='identifier'>GetWorkingSetSize</span>&nbsp;(<span id='bold'>var</span>&nbsp;<span id='identifier'>minimum</span>, <span id='identifier'>maximum</span>: <span id='identifier'>cardinal</span>);<br>
+                  <span id='bold'>function</span>&nbsp;&nbsp;<span id='identifier'>IProcess</span>.<img src="m.gif"><span id='identifier'>SetWorkingSetSize</span>&nbsp;( &nbsp;&nbsp;&nbsp;<span id='identifier'>minimum</span>, <span id='identifier'>maximum</span>: <span id='identifier'>cardinal</span>) : <span id='identifier'>boolean</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IProcess.CommandLine"></a>
+    <a name="IProcess.StartupInfo"></a>
+    <p>Get the command line string and the TStartupInfo record with which this
+       process was created. This works on other processes, as well.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IProcess</span>.<img src="r.gif"><span id='identifier'>CommandLine</span>&nbsp;: <span id='bold'>string</span>;<br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IProcess</span>.<img src="r.gif"><span id='identifier'>StartupInfo</span>&nbsp;: <span id='identifier'>TStartupInfo</span>;<br>
+                  <br>
+                  <span id='comment'>// Example:</span><br>
+                  <a class="pascal" href="#Process">Process</a>(<span id='string'>'explorer.exe'</span>).<span id='identifier'>CommandLine</span>&nbsp;&nbsp;-> &nbsp;<span id='string'>'C:\Windows\Explorer.exe'</span>
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IProcess.AllocMem"></a>
+    <a name="IProcess.FreeMem"></a>
+    <a name="IProcess.ReadMemory"></a>
+    <a name="IProcess.WriteMemory"></a>
+    <a name="IProcess.ZeroMemory"></a>
+    <p>The following methods allow you to allocate and access memory of this
+       process. In winNT the parameter "mayUseSharedArea" has no meaning. In win9x
+       it specifies whether it's okay to use shared memory for the allocation or
+       whether it must be a real private memory allocation in the destination
+       process. Allocating shared memory in win9x is faster, but shared memory is
+       more precious, so by default shared memory is not used.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>IProcess</span>.<img src="m.gif"><span id='identifier'>AllocMem</span>&nbsp;(<span id='identifier'>size</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>integer</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="e.gif">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>mayUseSharedArea</span>&nbsp;: <span id='identifier'>boolean</span>&nbsp;= <span id='identifier'>false</span>) : <span id='identifier'>pointer</span>;<br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>IProcess</span>.<img src="m.gif"><span id='identifier'>FreeMem</span>&nbsp;&nbsp;(<span id='bold'>var</span>&nbsp;<span id='identifier'>ptr</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>pointer</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;) : <span id='identifier'>boolean</span>;<br>
+                  <br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>IProcess</span>.<img src="m.gif"><span id='identifier'>ReadMemory</span>&nbsp;&nbsp;(<span id='bold'>const</span>&nbsp;<span id='identifier'>source</span>; <span id='bold'>var</span>&nbsp;<span id='identifier'>dest</span>; <span id='identifier'>count</span>: <span id='identifier'>integer</span>) : <span id='identifier'>boolean</span>;<br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>IProcess</span>.<img src="m.gif"><span id='identifier'>WriteMemory</span>&nbsp;(<span id='bold'>const</span>&nbsp;<span id='identifier'>source</span>; <span id='bold'>var</span>&nbsp;<span id='identifier'>dest</span>; <span id='identifier'>count</span>: <span id='identifier'>integer</span>) : <span id='identifier'>boolean</span>;<br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>IProcess</span>.<img src="m.gif"><span id='identifier'>ZeroMemory</span>&nbsp;&nbsp;( &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='bold'>var</span>&nbsp;<span id='identifier'>dest</span>; <span id='identifier'>count</span>: <span id='identifier'>integer</span>) : <span id='identifier'>boolean</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IProcess.CreateThread"></a>
+    <p>This method creates a remote thread in the destination process. This works
+       in both winNT and win9x:</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>IProcess</span>.<img src="m.gif"><span id='identifier'>CreateThread</span>&nbsp;(<span id='identifier'>startAddr</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>pointer</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="e.gif">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>parameter</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>pointer</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= &nbsp;&nbsp;<span id='bold'>nil</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="e.gif">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>creationFlags</span>&nbsp;: <span id='identifier'>cardinal</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= &nbsp;&nbsp;&nbsp;&nbsp;<span id='number'>0</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="e.gif">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>stackSize</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>cardinal</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= &nbsp;&nbsp;&nbsp;&nbsp;<span id='number'>0</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="e.gif">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>threadAttr</span>&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>PSecurityAttributes</span>&nbsp;= &nbsp;&nbsp;<span id='bold'>nil</span>) : <a class="pascal" href="Threads.htm#IThread">IThread</a>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IProcess.Module"></a>
+    <p>The following methods return an <a href="Modules.htm#IModule">IModule</a> instance to the specified
+       module of this process.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>IProcess</span>.<img src="m.gif"><span id='identifier'>Module</span>&nbsp;(<span id='identifier'>handle</span>&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>cardinal</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="e.gif">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>autoClose</span>&nbsp;: <span id='identifier'>boolean</span>&nbsp;= <span id='identifier'>false</span>) : <a class="pascal" href="Modules.htm#IModule">IModule</a>; <span id='bold'>overload</span>;<br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>IProcess</span>.<img src="m.gif"><span id='identifier'>Module</span>&nbsp;(<span id='identifier'>memory</span>&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>pointer</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="e.gif">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>autoClose</span>&nbsp;: <span id='identifier'>boolean</span>&nbsp;= <span id='identifier'>false</span>) : <a class="pascal" href="Modules.htm#IModule">IModule</a>; <span id='bold'>overload</span>;<br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>IProcess</span>.<img src="m.gif"><span id='identifier'>Module</span>&nbsp;(<span id='identifier'>fileName</span>&nbsp;&nbsp;: <span id='bold'>string</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="e.gif">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>autoClose</span>&nbsp;: <span id='identifier'>boolean</span>&nbsp;= <span id='identifier'>false</span>) : <a class="pascal" href="Modules.htm#IModule">IModule</a>; <span id='bold'>overload</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IProcess.LoadModule"></a>
+    <p>To inject a module (dll) into the destination process you can use the method
+       "LoadModule". If you set "autoClose" to "true", the module is unloaded again
+       as soon as the resulting <a href="Modules.htm#IModule">IModule</a> instance is freed. If you don't want
+       that, please set "autoClose" to "false".</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>IProcess</span>.<img src="m.gif"><span id='identifier'>LoadModule</span>&nbsp;(<span id='identifier'>fileName</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='bold'>string</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="e.gif">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>autoClose</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>boolean</span>&nbsp;= <span id='identifier'>true</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="e.gif">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>withoutReferences</span>&nbsp;: <span id='identifier'>boolean</span>&nbsp;= <span id='identifier'>false</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="e.gif">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>onlyAsDataFile</span>&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>boolean</span>&nbsp;= <span id='identifier'>false</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="e.gif">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>alteredSearchPath</span>&nbsp;: <span id='identifier'>boolean</span>&nbsp;= <span id='identifier'>false</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="e.gif">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>timeOut</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>integer</span>&nbsp;= <span id='number'>3000</span>&nbsp;) : <a class="pascal" href="Modules.htm#IModule">IModule</a>;<br>
+                  <br>
+                  <span id='comment'>// Example:</span><br>
+                  <a class="pascal" href="#Process">Process</a>(<span id='string'>'explorer.exe'</span>).<span id='identifier'>LoadModule</span>(<span id='string'>'hookExpl.dll'</span>, <span id='identifier'>false</span>);
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IProcess.Modules"></a>
+    <a name="IProcess.ExportList"></a>
+    <a name="IProcess.TrayIcons"></a>
+    <a name="IProcess.Windows_"></a>
+    <a name="IProcess.TaskbarWindows"></a>
+    <a name="IProcess.Threads"></a>
+    <a name="IProcess.Handles"></a>
+    <p>The following methods return a list of what belongs to this process. Most of
+       the methods are easy to understand. The "ExportList" contains all exported
+       functions of all modules loaded in this process. The "TaskbarWindows" are
+       those windows, which belong to this process and are shown in the task bar.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IProcess</span>.<img src="r.gif"><span id='identifier'>Modules</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <a class="pascal" href="Modules.htm#IModules">IModules</a>;<br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IProcess</span>.<img src="r.gif"><span id='identifier'>ExportList</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <a class="pascal" href="Modules.htm#IXxportList">IXxportList</a>;<br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IProcess</span>.<img src="r.gif"><span id='identifier'>TrayIcons</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <a class="pascal" href="TrayIcons.htm#ITrayIcons">ITrayIcons</a>;<br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IProcess</span>.<img src="r.gif"><span id='identifier'>Windows_</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <a class="pascal" href="Windows.htm#IWindows">IWindows</a>;<br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IProcess</span>.<img src="r.gif"><span id='identifier'>TaskbarWindows</span>&nbsp;: <a class="pascal" href="Windows.htm#IWindows">IWindows</a>;<br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IProcess</span>.<img src="r.gif"><span id='identifier'>Threads</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <a class="pascal" href="Threads.htm#IThreads">IThreads</a>;<br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IProcess</span>.<img src="r.gif"><span id='identifier'>Handles</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <a class="pascal" href="Handles.htm#IHandles">IHandles</a>;<br>
+                  <br>
+                  <span id='comment'>// Examples:</span><br>
+                  <span id='identifier'>MessageBox</span>(<span id='number'>0</span>, <span id='identifier'>pchar</span>(<span id='identifier'>IntToStr</span>(<a class="pascal" href="#CurrentProcess">CurrentProcess</a>.<span id='identifier'>Windows_</span>.<span id='identifier'>ItemCount</span>) + <span id='string'>' windows belong to me!'</span>), <span id='string'>'info'</span>, <span id='number'>0</span>);<br>
+                  <a class="pascal" href="#Process">Process</a>(<span id='string'>'msimn.exe'</span>).<span id='identifier'>TrayIcons</span>.<a id="mono" href="TrayIcons.htm#ITrayIcons.Delete">Delete</a>; &nbsp;<span id='comment'>// delete outlook's tray icons</span>
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IProcess.Minimize"></a>
+    <a name="IProcess.Maximize"></a>
+    <a name="IProcess.Restore"></a>
+    <p>In order to minimize, maximize or restore this process you can call one of
+       the following methods:</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>IProcess</span>.<img src="m.gif"><span id='identifier'>Minimize</span>&nbsp;(<span id='identifier'>activate</span>: <span id='identifier'>boolean</span>&nbsp;= <span id='identifier'>false</span>) : <span id='identifier'>boolean</span>;<br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>IProcess</span>.<img src="m.gif"><span id='identifier'>Maximize</span>&nbsp;(<span id='identifier'>activate</span>: <span id='identifier'>boolean</span>&nbsp;= <span id='identifier'>true</span>&nbsp;) : <span id='identifier'>boolean</span>;<br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>IProcess</span>.<img src="m.gif"><span id='identifier'>Restore</span>&nbsp;&nbsp;(<span id='identifier'>activate</span>: <span id='identifier'>boolean</span>&nbsp;= <span id='identifier'>true</span>&nbsp;) : <span id='identifier'>boolean</span>;<br>
+                  <br>
+                  <span id='comment'>// Example:</span><br>
+                  <a class="pascal" href="#Process">Process</a>(<span id='string'>'notepad.exe'</span>).<span id='identifier'>Minimize</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="TExecuteFunctionProc"></a>
+    <a name="IProcess.ExecuteFunction"></a>
+    <p>If you want to execute a specific function inside of the context of this
+       destination process, you can do so by calling "ExecuteFunction". As a result
+       the specified function "func" is copied from our process to the other
+       process and executed there. All parameters must be valid in OUR process.
+       They're automatically mapped into the context of the other process. Please
+       note, that the specified function must not call any other functions, only
+       APIs which are exported by system dlls may be called.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>type</span>&nbsp;<span id='identifier'>TExecuteFunctionProc</span>&nbsp;= <span id='bold'>procedure</span>&nbsp;(<span id='bold'>var</span>&nbsp;<span id='identifier'>params</span>);<br>
+                  <br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>IProcess</span>.<img src="m.gif"><span id='identifier'>ExecuteFunction</span>&nbsp;(<span id='identifier'>func</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>TExecuteFunctionProc</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="e.gif">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>timeOut</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>cardinal</span>&nbsp;= <span id='number'>1000</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="e.gif">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>params</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>pointer</span>&nbsp;&nbsp;= <span id='bold'>nil</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="e.gif">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>paramsSize</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>cardinal</span>&nbsp;= <span id='number'>0</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="e.gif">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>acceptUnknownTargets</span>&nbsp;: <span id='identifier'>boolean</span>&nbsp;&nbsp;= <span id='identifier'>false</span>) : <span id='identifier'>boolean</span>;<br>
+                  <br>
+                  <span id='comment'>// Example:</span><br>
+                  <span id='bold'>procedure</span>&nbsp;<span id='identifier'>ShowMessageBox</span>(<span id='bold'>var</span>&nbsp;<span id='identifier'>params</span>);<br>
+                  <span id='bold'>var</span>&nbsp;<span id='identifier'>arrCh</span>&nbsp;: <span id='bold'>array</span>&nbsp;[<span id='number'>0</span>..<span id='identifier'>MAX_PATH</span>] <span id='bold'>of</span>&nbsp;<span id='identifier'>char</span>;<br>
+                  <span id='bold'>begin</span><br>
+                  &nbsp;&nbsp;<span id='identifier'>GetModuleFileName</span>(<span id='number'>0</span>, <span id='identifier'>arrCh</span>, <span id='identifier'>MAX_PATH</span>);<br>
+                  &nbsp;&nbsp;<span id='identifier'>MessageBox</span>(<span id='number'>0</span>, <span id='identifier'>arrCh</span>, <span id='identifier'>pchar</span>(@<span id='identifier'>params</span>), <span id='number'>0</span>);<br>
+                  <span id='bold'>end</span>;<br>
+                  <br>
+                  <a class="pascal" href="#Process">Process</a>(<span id='string'>'notepad.exe'</span>).<span id='identifier'>ExecuteFunction</span>(<span id='identifier'>ShowMessageBox</span>, <span id='identifier'>INFINITE</span>, <span id='identifier'>pchar</span>(<span id='string'>'yep!'</span>), <span id='number'>5</span>);
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IProcess.Suspend"></a>
+    <a name="IProcess.Resume"></a>
+    <p>If you want to suspend or resume this process simply call:</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>IProcess</span>.<img src="m.gif"><span id='identifier'>Suspend</span>&nbsp;: <span id='identifier'>boolean</span>;<br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>IProcess</span>.<img src="m.gif"><span id='identifier'>Resume</span>&nbsp;&nbsp;: <span id='identifier'>boolean</span>;<br>
+                  <br>
+                  <span id='comment'>// Example:</span><br>
+                  <a class="pascal" href="#CurrentProcess">CurrentProcess</a>.<span id='identifier'>Suspend</span>; &nbsp;<span id='comment'>// freeze me</span>
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IProcess.WaitForInputIdle"></a>
+    <p>The following method waits until this process is ready for receiving user
+       input:</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>IProcess</span>.<img src="m.gif"><span id='identifier'>WaitForInputIdle</span>&nbsp;(<span id='identifier'>timeOut</span>: <span id='identifier'>cardinal</span>&nbsp;= <span id='identifier'>INFINITE</span>) : <span id='identifier'>boolean</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IProcess.Close"></a>
+    <a name="IProcess.Quit"></a>
+    <a name="IProcess.Exit_"></a>
+    <a name="IProcess.Terminate"></a>
+    <p>You can close this process by either calling "Close" (WM_CLOSE to the main
+       window), "Quit" (WM_QUIT to the main thread), "Exit_" (ExitProcess in the
+       context of the process) or "Terminate" (TerminateProcess). The only
+       recommended way to close another application is to use "Close". But if you
+       don't like that "Do you want to save the changed file?" question, you can
+       use one of the 3 other possibilities. Some processes like being stopped by
+       "Quit", others don't, they prefer "Exit_". Again other processes only react
+       properly on "Terminate". The most hard/forced way of stopping a process is
+       using "Terminate". But this can result in broken data files and such
+       things.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>IProcess</span>.<img src="m.gif"><span id='identifier'>Close</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>boolean</span>;<br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>IProcess</span>.<img src="m.gif"><span id='identifier'>Quit</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>boolean</span>;<br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>IProcess</span>.<img src="m.gif"><span id='identifier'>Exit_</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span id='identifier'>exitCode</span>: <span id='identifier'>cardinal</span>&nbsp;= <span id='number'>0</span>) : <span id='identifier'>boolean</span>;<br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>IProcess</span>.<img src="m.gif"><span id='identifier'>Terminate</span>&nbsp;(<span id='identifier'>exitCode</span>: <span id='identifier'>cardinal</span>&nbsp;= <span id='number'>0</span>) : <span id='identifier'>boolean</span>;<br>
+                  <br>
+                  <span id='comment'>// Examples:</span><br>
+                  <a class="pascal" href="#Process">Process</a>(<span id='string'>'calc.exe'</span>).<span id='identifier'>Close</span>;<br>
+                  <a class="pascal" href="#Process">Process</a>(<span id='string'>'notepad.exe'</span>).<span id='identifier'>Quit</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IProcess.ExitCode"></a>
+    <p>Asks the process's exit code. If the process is still running, you'll get
+       "STILL_ACTIVE".</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IProcess</span>.<img src="r.gif"><span id='identifier'>ExitCode</span>&nbsp;: <span id='identifier'>cardinal</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IProcess.GetTimes"></a>
+    <p>The following method asks how much time the process has spent with process
+       creation, with process exiting, in kernel land and in user land. This method
+       works only in winNT.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>IProcess</span>.<img src="m.gif"><span id='identifier'>GetTimes</span>&nbsp;(<span id='bold'>var</span>&nbsp;<span id='identifier'>creation</span>, <span id='bold'>exit</span>, <span id='identifier'>kernel</span>, <span id='identifier'>user</span>: <span id='identifier'>int64</span>) : <span id='identifier'>boolean</span>; &nbsp;<span id='comment'>// only winNT </span>
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IProcess.TokenInformation"></a>
+    <a name="IProcess.UserName"></a>
+    <p>The following methods can be used to get token information about the
+       process, or the user name the process is running under.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='comment'>// the resulting string is a data buffer containing the requested record</span><br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IProcess</span>.<img src="r.gif"><span id='identifier'>TokenInformation</span>&nbsp;[<span id='identifier'>tokenLevel</span>: <span id='identifier'>TTokenInformationClass</span>] : <span id='identifier'>AnsiString</span>;<br>
+                  <br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IProcess</span>.<img src="r.gif"><span id='identifier'>UserName</span>&nbsp;: <span id='identifier'>AnsiString</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IProcesses.Items"></a>
+    <a name="IProcesses.RefreshItems"></a>
+    <p>Of course the <a href="#IProcesses">IProcesses</a> interface allows easy access to it's items.
+       Furthermore you can refresh the process list, if you like (that is look for
+       new, deleted and changed processes).</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IProcesses</span>.<img src="r.gif"><span id='identifier'>Items</span>&nbsp;[<span id='bold'>index</span>: <span id='identifier'>integer</span>] : <a class="pascal" href="#IProcess">IProcess</a>;<br>
+                  <br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>IProcesses</span>.<img src="m.gif"><span id='identifier'>RefreshItems</span>&nbsp;: <span id='identifier'>boolean</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IProcesses.SetServiceProcess"></a>
+    <a name="IProcesses.SetPriorityClass"></a>
+    <a name="IProcesses.SetPriorityBoost"></a>
+    <a name="IProcesses.SetAffinityMask"></a>
+    <a name="IProcesses.SetWorkingSetSize"></a>
+    <a name="IProcesses.Minimize"></a>
+    <a name="IProcesses.Maximize"></a>
+    <a name="IProcesses.Restore"></a>
+    <a name="IProcesses.IsStillRunning"></a>
+    <a name="IProcesses.Suspend"></a>
+    <a name="IProcesses.Resume"></a>
+    <a name="IProcesses.Close"></a>
+    <a name="IProcesses.Quit"></a>
+    <a name="IProcesses.Exit_"></a>
+    <a name="IProcesses.Terminate"></a>
+    <p>The following <a href="#IProcesses">IProcesses</a> methods are more or less identical to the
+       <a href="#IProcess">IProcess</a> methods with the same name. It's just that if you call the
+       <a href="#IProcesses">IProcesses</a> methods, they are called for all processes in the list.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>procedure</span>&nbsp;<span id='identifier'>IProcesses</span>.<img src="m.gif"><span id='identifier'>SetServiceProcess</span>&nbsp;(<span id='identifier'>serviceProcess</span>: <span id='identifier'>boolean</span>&nbsp;= <span id='identifier'>true</span>);<br>
+                  <br>
+                  <span id='bold'>procedure</span>&nbsp;<span id='identifier'>IProcesses</span>.<img src="m.gif"><span id='identifier'>SetPriorityClass</span>&nbsp;(<span id='identifier'>priorityClass</span>: <a class="pascal" href="#TPriorityClass">TPriorityClass</a>);<br>
+                  <span id='bold'>procedure</span>&nbsp;<span id='identifier'>IProcesses</span>.<img src="m.gif"><span id='identifier'>SetPriorityBoost</span>&nbsp;(<span id='identifier'>priorityBoost</span>: <span id='identifier'>boolean</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;);<br>
+                  <br>
+                  <span id='bold'>procedure</span>&nbsp;<span id='identifier'>IProcesses</span>.<img src="m.gif"><span id='identifier'>SetAffinityMask</span>&nbsp;(<span id='identifier'>affinityMask</span>: <span id='identifier'>cardinal</span>);<br>
+                  <br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>IProcesses</span>.<img src="m.gif"><span id='identifier'>SetWorkingSetSize</span>&nbsp;(<span id='identifier'>minimum</span>, <span id='identifier'>maximum</span>: <span id='identifier'>cardinal</span>) : <span id='identifier'>boolean</span>;<br>
+                  <br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>IProcesses</span>.<img src="m.gif"><span id='identifier'>Minimize</span>&nbsp;(<span id='identifier'>activate</span>: <span id='identifier'>boolean</span>&nbsp;= <span id='identifier'>false</span>) : <span id='identifier'>boolean</span>;<br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>IProcesses</span>.<img src="m.gif"><span id='identifier'>Maximize</span>&nbsp;(<span id='identifier'>activate</span>: <span id='identifier'>boolean</span>&nbsp;= <span id='identifier'>true</span>&nbsp;) : <span id='identifier'>boolean</span>;<br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>IProcesses</span>.<img src="m.gif"><span id='identifier'>Restore</span>&nbsp;&nbsp;(<span id='identifier'>activate</span>: <span id='identifier'>boolean</span>&nbsp;= <span id='identifier'>true</span>&nbsp;) : <span id='identifier'>boolean</span>;<br>
+                  <br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>IProcesses</span>.<img src="m.gif"><span id='identifier'>IsStillRunning</span>&nbsp;(<span id='identifier'>all</span>: <span id='identifier'>boolean</span>&nbsp;= <span id='identifier'>false</span>) : <span id='identifier'>boolean</span>;<br>
+                  <br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>IProcesses</span>.<img src="m.gif"><span id='identifier'>Suspend</span>&nbsp;: <span id='identifier'>boolean</span>;<br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>IProcesses</span>.<img src="m.gif"><span id='identifier'>Resume</span>&nbsp;&nbsp;: <span id='identifier'>boolean</span>;<br>
+                  <br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>IProcesses</span>.<img src="m.gif"><span id='identifier'>Close</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>boolean</span>;<br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>IProcesses</span>.<img src="m.gif"><span id='identifier'>Quit</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>boolean</span>;<br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>IProcesses</span>.<img src="m.gif"><span id='identifier'>Exit_</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span id='identifier'>exitCode</span>: <span id='identifier'>cardinal</span>&nbsp;= <span id='number'>0</span>) : <span id='identifier'>boolean</span>;<br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>IProcesses</span>.<img src="m.gif"><span id='identifier'>Terminate</span>&nbsp;(<span id='identifier'>exitCode</span>: <span id='identifier'>cardinal</span>&nbsp;= <span id='number'>0</span>) : <span id='identifier'>boolean</span>;<br>
+                  <br>
+                  <span id='comment'>// Example:</span><br>
+                  <a class="pascal" href="#Processes">Processes</a>(<span id='string'>'calc.exe'</span>).<span id='identifier'>Close</span>;<br>
+                  <a class="pascal" href="#Processes">Processes</a>.<span id='identifier'>Minimize</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IProcesses.ExeFile"></a>
+    <p>Does this <a href="#IProcesses">IProcesses</a> instance only enumerate instances of a specific
+       executable file name/path?</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IProcesses</span>.<img src="r.gif"><span id='identifier'>ExeFile</span>&nbsp;: <span id='bold'>string</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="Icon"></a>
+    <a name="ExeType"></a>
+    <p>The following two functions give you the icon and the executable type of the
+       specified executable file:</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>Icon</span>&nbsp;(<span id='identifier'>file_</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='bold'>string</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>smallIcon</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>boolean</span>&nbsp;= <span id='identifier'>true</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>linkOverlayIfLnkOrPif</span>&nbsp;: <span id='identifier'>boolean</span>&nbsp;= <span id='identifier'>false</span>) : <span id='identifier'>cardinal</span>;<br>
+                  <br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>ExeType</span>&nbsp;(<span id='identifier'>exeFile</span>: <span id='bold'>string</span>) : <a class="pascal" href="#TExeType">TExeType</a>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </body>
+
+</html>

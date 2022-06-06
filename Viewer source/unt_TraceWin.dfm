@@ -48,7 +48,6 @@ object Frm_Trace: TFrm_Trace
         Align = alClient
         BevelInner = bvLowered
         BevelOuter = bvRaised
-        CheckImageKind = ckDarkCheck
         Colors.BorderColor = clWindowText
         Colors.HotColor = clBlack
         Colors.UnfocusedSelectionColor = clGray
@@ -61,15 +60,9 @@ object Frm_Trace: TFrm_Trace
         Font.Style = []
         Header.AutoSizeIndex = -1
         Header.DefaultHeight = 17
-        Header.Font.Charset = DEFAULT_CHARSET
-        Header.Font.Color = clWindowText
-        Header.Font.Height = -11
-        Header.Font.Name = 'MS Sans Serif'
-        Header.Font.Style = []
         Header.Height = 17
         Header.MainColumn = 1
         Header.Options = [hoAutoResize, hoColumnResize, hoDrag, hoVisible]
-        HintAnimation = hatNone
         HintMode = hmTooltip
         Images = Frm_Tool.ilActions
         Indent = 15
@@ -95,6 +88,7 @@ object Frm_Trace: TFrm_Trace
         OnDblClick = vstTraceDblClick
         OnEditCancelled = vstTraceEditCancelled
         OnEdited = vstTraceEdited
+        OnEditing = vstTraceEditing
         OnFreeNode = vstTraceFreeNode
         OnGetText = vstTraceGetText
         OnPaintText = vstTracePaintText
@@ -103,6 +97,8 @@ object Frm_Trace: TFrm_Trace
         OnHeaderDragged = vstTraceHeaderDragged
         OnKeyAction = vstTraceKeyAction
         OnMeasureItem = vstTraceMeasureItem
+        Touch.InteractiveGestures = [igPan, igPressAndTap]
+        Touch.InteractiveGestureOptions = [igoPanSingleFingerHorizontal, igoPanSingleFingerVertical, igoPanInertia, igoPanGutter, igoParentPassthrough]
         Columns = <
           item
             Options = [coAllowClick, coDraggable, coEnabled, coParentBidiMode, coParentColor, coShowDropMark, coVisible]
@@ -112,28 +108,28 @@ object Frm_Trace: TFrm_Trace
           end
           item
             Position = 1
+            Text = 'Time'
             Width = 75
-            WideText = 'Time'
           end
           item
             Position = 2
-            WideText = 'ThId'
+            Text = 'ThId'
           end
           item
             Color = 16705515
             MinWidth = 100
             Options = [coAllowClick, coDraggable, coEnabled, coParentBidiMode, coResizable, coShowDropMark, coVisible, coAllowFocus]
             Position = 3
+            Text = 'Traces'
             Width = 150
-            WideText = 'Traces'
           end
           item
             Color = 16705515
             MinWidth = 3000
             Options = [coAllowClick, coDraggable, coEnabled, coParentBidiMode, coResizable, coShowDropMark, coVisible, coAllowFocus]
             Position = 4
+            Text = 'Comment'
             Width = 3000
-            WideText = 'Comment'
           end>
       end
       object PanelGutter: TPanel
@@ -201,7 +197,6 @@ object Frm_Trace: TFrm_Trace
         Width = 22
         Height = 22
         Anchors = [akTop, akRight]
-        DoubleBuffered = True
         Glyph.Data = {
           36030000424D3603000000000000360000002800000010000000100000000100
           1800000000000003000000000000000000000000000000000000FF00FFFF00FF
@@ -229,7 +224,6 @@ object Frm_Trace: TFrm_Trace
           FF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00
           FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF
           00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FF}
-        ParentDoubleBuffered = False
         TabOrder = 0
         OnClick = butCloseClick
       end

@@ -1,0 +1,150 @@
+<html>
+
+  <head>
+    <title>mad* Help...</title>
+    <meta name="description" content="mad* Help...">
+    <meta name="keywords" content="madshi, components, delphi">
+    <meta http-equiv="expires" content="900">
+    <link rel=stylesheet type="text/css" href="style.css">
+  </head>
+
+  <body background="bcklight.gif" bgcolor=#F8F8F8>
+    <table border=0 cellpadding=0 callspacing=0><tr>
+      <td valign=bottom>
+        <table border=0 cellpadding=0 cellspacing=0><tr><td bgcolor=#D8D8D8>
+          <table cellpadding=3 border=0>
+            <tr><td bgcolor=#FFFFF0>
+              <div id="verySmall"><br></div>
+              <div id="bigTitle">&nbsp;madExcept Plugins&nbsp;</div>
+              <div id="verySmall"><br></div>
+              <div id="small">
+                <a class="small" href="Content.htm">Content</a> /
+                <a class="small" href="madExcept.htm">madExcept</a> /
+                <a class="small" href="madExceptSettings.htm">madExcept Settings</a> /
+                <a class="small" href="madExceptSettings8.htm">madExcept Settings (Tab 8)</a> /...
+              </div>
+            </td></tr>
+          </table>
+        </td></tr></table>
+      </td>
+      <td valign=bottom>
+        <table border=0 cellpadding=0 cellspacing=0><tr><td bgcolor=#D8D8D8>
+          <table cellpadding=7 border=0>
+            <tr><td bgcolor=#F4F4F8><a href="http://www.madshi.net">www.madshi.net</a></td></tr>
+          </table>
+        </td></tr></table>
+      </td>
+    </tr></table>
+    <p>There are multiple ways to add custom data to the bug report created by
+       <a href="madExcept.htm" href="madExceptUnit.htm">madExcept</a>:</p>
+    <table>
+      <tr><td align=right valign=top>1.</td>
+          <td>First of all you can change madExcept.pas, which is not recommended,
+              though, because you would have to do that again and again, everytime
+              a new <a href="madExcept.htm" href="madExceptUnit.htm">madExcept</a> version is released.</td></tr>
+      <tr><td align=right valign=top>2.</td>
+          <td>If you think that you found a good addition to the bug report, which
+              might be useful for the majority of <a href="madExcept.htm" href="madExceptUnit.htm">madExcept</a> users, you can
+              contact me. I might consider to add it to the <a href="madExcept.htm" href="madExceptUnit.htm">madExcept</a> code
+              base. But please be aware that I have to find a good balance between
+              footprint and fany features.</td></tr>
+      <tr><td align=right valign=top>3.</td>
+          <td>You can register a little exception handler, e.g. by using
+              <a href="madExceptUnit.htm#RegisterExceptionHandler">RegisterExceptionHandler</a>. In your handler you can then add
+              your custom information to the bug report. This works just fine.
+              Using this method has one disadvantage, though: You have to manually
+              add code to each of your projects. And sharing your solution with
+              other <a href="madExcept.htm" href="madExceptUnit.htm">madExcept</a> users is not that easy, either.</p>
+      <tr><td align=right valign=top>4.</td>
+          <td>If you want to extend the bug report in a multitude of projects,
+              or/and if you want to share your idea with other <a href="madExcept.htm" href="madExceptUnit.htm">madExcept</a>
+              users, you should consider creating a madExcept plugin.</td></tr>
+    </table>
+    <p>Creating a madExcept plugin is quite easy. Just write a function which
+       returns a string, put this function in a seperate unit and call
+       <a href="#RegisterBugReportPlugin">RegisterBugReportPlugin</a> in the initialization. Finally rename the
+       unit from "pas" to "mep" (for <b>m</b>ad<b>E</b>xcept <b>p</b>lugin).
+       That's it. Here's a little example:</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>unit</span>&nbsp;<span id='identifier'>madExamplePlugin</span>;<br>
+                  <br>
+                  <span id='bold'>interface</span><br>
+                  <br>
+                  <span id='comment'>// you have to put the function into the interface part, too</span><br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>GetExampleData</span>&nbsp;: <span id='bold'>string</span>;<br>
+                  <br>
+                  <span id='bold'>implementation</span><br>
+                  <br>
+                  <span id='bold'>uses</span>&nbsp;<span id='identifier'>madExcept</span>;<br>
+                  <br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>GetExampleData</span>&nbsp;: <span id='bold'>string</span>;<br>
+                  <span id='bold'>begin</span><br>
+                  &nbsp;&nbsp;<span id='identifier'>result</span>&nbsp;:= <span id='string'>'some text...'</span>;<br>
+                  <span id='bold'>end</span>;<br>
+                  <br>
+                  <span id='bold'>initialization</span><br>
+                  &nbsp;&nbsp;<a class="pascal" href="#RegisterBugReportPlugin">RegisterBugReportPlugin</a>(<span id='string'>'example'</span>, <span id='string'>'just a little example plugin'</span>, <span id='identifier'>GetExampleData</span>);<br>
+                  <span id='bold'>finalization</span><br>
+                  &nbsp;&nbsp;<a class="pascal" href="#UnregisterBugReportPlugin">UnregisterBugReportPlugin</a>(<span id='string'>'example'</span>); &nbsp;<br>
+                  <span id='bold'>end</span>.
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <p>If you have written such a plugin, installing it is straightforward: Simply
+       double click the "mep" file and the plugin is automatically installed into
+       every Delphi version installed on your PC. You can even install a plugin
+       while the Delphi IDE is running - the madExcept settings dialog will show
+       the new plugin without needing a restart of the IDE. Can it be any easier?</p>
+    <a name="TBugReportPlugin"></a>
+    <a name="TBugReportPluginEx"></a>
+    <a name="RegisterBugReportPlugin"></a>
+    <a name="UnregisterBugReportPlugin"></a>
+    <p>Here's the definition of the register/unregister functions. If you set
+       "ownSection" to "true", your text is put into a seperate section. Line
+       breaks are allowed in that case. If you set "ownSection" to "false", your
+       text is added the bug report header, instead. No line breaks in that case,
+       please.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>type</span><br>
+                  &nbsp;&nbsp;<span id='comment'>// this is how your plugin main function has to look like</span><br>
+                  &nbsp;&nbsp;<span id='identifier'>TBugReportPlugin</span>&nbsp;&nbsp;&nbsp;= <span id='bold'>function</span>&nbsp;: <span id='bold'>string</span>;<br>
+                  &nbsp;&nbsp;<span id='identifier'>TBugReportPluginEx</span>&nbsp;= <span id='bold'>function</span>&nbsp;(<span id='bold'>const</span>&nbsp;<span id='identifier'>exceptIntf</span>: <span id='identifier'>IMEException</span>) : <span id='bold'>string</span>;<br>
+                  <br>
+                  <span id='bold'>procedure</span>&nbsp;<span id='identifier'>RegisterBugReportPlugin</span>&nbsp;(<span id='identifier'>name</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='bold'>string</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>description</span>&nbsp;: <span id='bold'>string</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>proc</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>TBugReportPlugin</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>ownSection</span>&nbsp;&nbsp;: <span id='identifier'>boolean</span>&nbsp;= <span id='identifier'>true</span>&nbsp;&nbsp;&nbsp;&nbsp;); <span id='bold'>overload</span>;<br>
+                  <span id='bold'>procedure</span>&nbsp;<span id='identifier'>RegisterBugReportPlugin</span>&nbsp;(<span id='identifier'>name</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='bold'>string</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>description</span>&nbsp;: <span id='bold'>string</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>proc</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>TBugReportPluginEx</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>ownSection</span>&nbsp;&nbsp;: <span id='identifier'>boolean</span>&nbsp;= <span id='identifier'>true</span>&nbsp;&nbsp;&nbsp;&nbsp;); <span id='bold'>overload</span>;<br>
+                  <br>
+                  <span id='bold'>procedure</span>&nbsp;<span id='identifier'>UnregisterBugReportPlugin</span>&nbsp;(<span id='identifier'>name</span>: <span id='bold'>string</span>);
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </body>
+
+</html>

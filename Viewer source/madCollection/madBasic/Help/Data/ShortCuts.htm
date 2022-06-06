@@ -1,0 +1,260 @@
+<html>
+
+  <head>
+    <title>mad* Help...</title>
+    <meta name="description" content="mad* Help...">
+    <meta name="keywords" content="madshi, components, delphi">
+    <meta http-equiv="expires" content="900">
+    <link rel=stylesheet type="text/css" href="style.css">
+  </head>
+
+  <body background="bcklight.gif" bgcolor=#F8F8F8>
+    <a name="IShortCut"></a>
+    <table border=0 cellpadding=0 callspacing=0><tr>
+      <td valign=bottom>
+        <table border=0 cellpadding=0 cellspacing=0><tr><td bgcolor=#D8D8D8>
+          <table cellpadding=3 border=0>
+            <tr><td bgcolor=#FFFFF0>
+              <div id="verySmall"><br></div>
+              <div id="bigTitle">&nbsp;ShortCuts/ShellLinks&nbsp;</div>
+              <div id="verySmall"><br></div>
+              <div id="small">
+                <a class="small" href="Content.htm">Content</a> /
+                <a class="small" href="madShell.htm">madShell</a> /...
+              </div>
+            </td></tr>
+          </table>
+        </td></tr></table>
+      </td>
+      <td valign=bottom>
+        <table border=0 cellpadding=0 cellspacing=0><tr><td bgcolor=#D8D8D8>
+          <table cellpadding=7 border=0>
+            <tr><td bgcolor=#F4F4F8><a href="http://www.madshi.net">www.madshi.net</a></td></tr>
+          </table>
+        </td></tr></table>
+      </td>
+    </tr></table>
+    <p>The "IShortCut" interface implements functionality for handling
+       shortCuts/shellLinks. It is an encapsulation of the Windows standard
+       "IShellLink" COM object. The functionality is basically the same, but my
+       interface is (of course) much easier to use. A list of methods and
+       properties can be found in the <a href="IShortCutRef.htm">IShortCut Reference</a>.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>type</span>&nbsp;<span id='identifier'>IShortCut</span>&nbsp;= <span id='bold'>interface</span>&nbsp;(<a class="pascal" href="IBasicBaseInterface.htm#IBasic">IBasic</a>) [<span id='string'>'{00BED963-C78D-11D3-A530-00005A180D69}'</span>];
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="LoadShortCut"></a>
+    <a name="NewShortCut"></a>
+    <a name="ShortCut"></a>
+    <p>There are multiple ways to get an "IShortCut" instance, e.g. loading an
+       existing shortCut/shellLink file or creating a new one. Besides the in the
+       following box listed functions you can also use <a href="ShellObjs.htm#IShellObj.NewShortCut">IShellObj.NewShortCut</a>
+       and <a href="ShellObjs.htm#IShellObj.LoadShortCut">IShellObj.LoadShortCut</a>.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>LoadShortCut</span>&nbsp;(<span id='identifier'>shortCutFile</span>: <span id='bold'>string</span>) : <span id='identifier'>IShortCut</span>;<br>
+                  <br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>NewShortCut</span>&nbsp;(<span id='identifier'>path</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='bold'>string</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;) : <span id='identifier'>IShortCut</span>; <span id='bold'>overload</span>;<br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>NewShortCut</span>&nbsp;(<span id='identifier'>sf</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <a class="pascal" href="SpecialFolders.htm#TSpecialFolder">TSpecialFolder</a>) : <span id='identifier'>IShortCut</span>; <span id='bold'>overload</span>;<br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>NewShortCut</span>&nbsp;(<span id='bold'>const</span>&nbsp;<span id='identifier'>idList</span>&nbsp;: <a class="pascal" href="IDLists.htm#IIDList">IIDList</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;) : <span id='identifier'>IShortCut</span>; <span id='bold'>overload</span>;<br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>NewShortCut</span>&nbsp;(<span id='bold'>const</span>&nbsp;<span id='identifier'>sfi</span>&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>IShellFolder</span>&nbsp;&nbsp;) : <span id='identifier'>IShortCut</span>; <span id='bold'>overload</span>;<br>
+                  <br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>ShortCut</span>&nbsp;(<span id='bold'>const</span>&nbsp;<span id='identifier'>sli</span>: <span id='identifier'>IShellLink</span>) : <span id='identifier'>IShortCut</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IShortCut.ShortCutFileName"></a>
+    <a name="IShortCut.IsDirty"></a>
+    <a name="IShortCut.Save"></a>
+    <p>If the property "ShortCutFileName" is filled with a specific path, you can
+       call "Save" without any parameters. The property "IsDirty" tells you,
+       whether the "IShortCut" object was modified. If a dirty object gets
+       destroyed, changes are saved automatically - but only, if the property
+       "ShortCutFileName" is filled correctly.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IShortCut</span>.<img src="w.gif"><span id='identifier'>ShortCutFileName</span>&nbsp;: <span id='bold'>string</span>;<br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>IShortCut</span>.<img src="m.gif"><span id='identifier'>IsDirty</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>boolean</span>;<br>
+                  <br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>IShortCut</span>.<img src="m.gif"><span id='identifier'>Save</span>&nbsp;(<span id='identifier'>shortCutFileName</span>&nbsp;: <span id='bold'>string</span>&nbsp;&nbsp;= <span id='string'>''</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="e.gif">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>tryToResolve</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>boolean</span>&nbsp;= <span id='identifier'>true</span>) : <span id='identifier'>boolean</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IShortCut.IDList"></a>
+    <a name="IShortCut.Path"></a>
+    <p>The following 2 properties have basically the same meaning, only the format
+       differs. While one represents the shortCut/shellLink target as a file system
+       path, the other uses an <a href="IDLists.htm#IIDList">IIDList</a> for that purpose. For non file system
+       objects you should choose the "IDList" property.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IShortCut</span>.<img src="w.gif"><span id='identifier'>Path</span>&nbsp;&nbsp;&nbsp;: <span id='bold'>string</span>;<br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IShortCut</span>.<img src="r.gif"><span id='identifier'>IDList</span>&nbsp;: <a class="pascal" href="IDLists.htm#IIDList">IIDList</a>;<br>
+                  <br>
+                  <span id='comment'>// Example:</span><br>
+                  <a class="pascal" href="#LoadShortCut">LoadShortCut</a>(<span id='string'>'C:\Notepad.lnk'</span>).<span id='identifier'>Path</span>&nbsp;&nbsp;-> &nbsp;<span id='string'>'C:\Windows\Notepad.exe'</span>
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IShortCut.Description"></a>
+    <a name="IShortCut.Params"></a>
+    <a name="IShortCut.WorkingDir"></a>
+    <a name="IShortCut.HotKey"></a>
+    <a name="IShortCut.ShowCmd"></a>
+    <p>You have easy access to the most important properties of the
+       shortCut/shellLink:</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IShortCut</span>.<img src="w.gif"><span id='identifier'>Description</span>&nbsp;: <span id='bold'>string</span>;<br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IShortCut</span>.<img src="w.gif"><span id='identifier'>Params</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='bold'>string</span>;<br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IShortCut</span>.<img src="w.gif"><span id='identifier'>WorkingDir</span>&nbsp;&nbsp;: <span id='bold'>string</span>;<br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IShortCut</span>.<img src="w.gif"><span id='identifier'>HotKey</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='bold'>string</span>;<br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IShortCut</span>.<img src="w.gif"><span id='identifier'>ShowCmd</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>integer</span>;<br>
+                  <br>
+                  <span id='comment'>// Example:</span><br>
+                  <span id='bold'>with</span>&nbsp;<a class="pascal" href="#NewShortCut">NewShortCut</a>(<span id='string'>'C:\Windows\Notepad.Exe'</span>) <span id='bold'>do</span>&nbsp;<span id='bold'>begin</span><br>
+                  &nbsp;&nbsp;<span id='identifier'>WorkingDir</span>&nbsp;:= <span id='string'>'C:\Notepad Documents'</span>;<br>
+                  &nbsp;&nbsp;<span id='identifier'>ShowCmd</span>&nbsp;&nbsp;&nbsp;&nbsp;:= <span id='identifier'>SW_SHOWMAXIMIZED</span>;<br>
+                  &nbsp;&nbsp;<a class="pascal" href="ShortCuts.htm#IShortCut.Save">Save</a>(<span id='string'>'C:\Notepad.lnk'</span>);<br>
+                  <span id='bold'>end</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IShortCut.IconPath"></a>
+    <a name="IShortCut.IconIndex"></a>
+    <a name="IShortCut.SetIcon"></a>
+    <p>Each shortCut/shellLink can be combined with a specific icon:</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IShortCut</span>.<img src="w.gif"><span id='identifier'>IconPath</span>&nbsp;&nbsp;: <span id='bold'>string</span>;<br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IShortCut</span>.<img src="w.gif"><span id='identifier'>IconIndex</span>&nbsp;: <span id='identifier'>integer</span>;<br>
+                  <br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>IShortCut</span>.<img src="m.gif"><span id='identifier'>SetIcon</span>&nbsp;&nbsp;&nbsp;(<span id='identifier'>iconPath</span>&nbsp;&nbsp;: <span id='bold'>string</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="e.gif">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>iconIndex</span>&nbsp;: <span id='identifier'>integer</span>) : <span id='identifier'>boolean</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IShortCut.FindData"></a>
+    <p>The following function returns a complete TWin32FindData structure for the
+       linked object:</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IShortCut</span>.<img src="r.gif"><span id='identifier'>FindData</span>&nbsp;: <span id='identifier'>TWin32FindData</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IShortCut.Resolve"></a>
+    <p>The "Resolve" method looks for the linked object and updates the IDList and
+       the icon, if necessary.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>IShortCut</span>.<img src="m.gif"><span id='identifier'>Resolve</span>&nbsp;(<span id='identifier'>parentWnd</span>&nbsp;: <span id='identifier'>cardinal</span>&nbsp;= <span id='identifier'>INVALID_HANDLE_VALUE</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="e.gif">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>timeOut</span>&nbsp;&nbsp;&nbsp;: <span id='identifier'>word</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= <span id='number'>3000</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;) : <span id='identifier'>boolean</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IShortCut.IShellLink_"></a>
+    <p>The following property gives you access to the Windows standard "IShellLink"
+       COM object, which represents the current shortCut/shellLink.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IShortCut</span>.<img src="r.gif"><span id='identifier'>IShellLink_</span>&nbsp;: <span id='identifier'>IShellLink</span>; 
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </body>
+
+</html>

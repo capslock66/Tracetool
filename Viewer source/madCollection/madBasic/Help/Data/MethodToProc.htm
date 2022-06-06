@@ -1,0 +1,133 @@
+<html>
+
+  <head>
+    <title>mad* Help...</title>
+    <meta name="description" content="mad* Help...">
+    <meta name="keywords" content="madshi, components, delphi">
+    <meta http-equiv="expires" content="900">
+    <link rel=stylesheet type="text/css" href="style.css">
+  </head>
+
+  <body background="bcklight.gif" bgcolor=#F8F8F8>
+    <a name="MethodToProcedure"></a>
+    <table border=0 cellpadding=0 callspacing=0><tr>
+      <td valign=bottom>
+        <table border=0 cellpadding=0 cellspacing=0><tr><td bgcolor=#D8D8D8>
+          <table cellpadding=3 border=0>
+            <tr><td bgcolor=#FFFFF0>
+              <div id="verySmall"><br></div>
+              <div id="bigTitle">&nbsp;MethodToProcedure&nbsp;</div>
+              <div id="verySmall"><br></div>
+              <div id="small">
+                <a class="small" href="Content.htm">Content</a> /
+                <a class="small" href="madBasic.htm">madBasic</a> /
+                <a class="small" href="madToolsUnit.htm">madTools Unit</a> /...
+              </div>
+            </td></tr>
+          </table>
+        </td></tr></table>
+      </td>
+      <td valign=bottom>
+        <table border=0 cellpadding=0 cellspacing=0><tr><td bgcolor=#D8D8D8>
+          <table cellpadding=7 border=0>
+            <tr><td bgcolor=#F4F4F8><a href="http://www.madshi.net">www.madshi.net</a></td></tr>
+          </table>
+        </td></tr></table>
+      </td>
+    </tr></table>
+    <p>Sometimes you need to pass a procedure address to a Windows API, but you
+       would rather pass a method instead. In such a situation the function
+       "MethodToProcedure" can come in handy. You enter a method address and your
+       current "Self" value and you get a procedure address as the result, which you
+       then can pass to a Windows API.</p>
+    <p>Please note that this works only for *stdcall* methods! Don't use it for
+       any other calling convention! (But since almost all Windows APIs are stdcall,
+       this should not be a big problem.)</p>
+    <p>After you don't need the procedure pointer anymore, please free it with
+       "VirtualFree".</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>MethodToProcedure</span>&nbsp;(<span id='identifier'>self</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>TObject</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>methodAddr</span>&nbsp;: <span id='identifier'>pointer</span>) : <span id='identifier'>pointer</span>; <span id='bold'>overload</span>;<br>
+                  <br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>MethodToProcedure</span>&nbsp;(<span id='identifier'>method</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>TMethod</span>) : <span id='identifier'>pointer</span>; <span id='bold'>overload</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <p>Here comes a little example which demonstrates a correct and useful usage of
+       "MethodToProcedure":</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>unit</span>&nbsp;<span id='identifier'>EnumWindows</span>;<br>
+                  <br>
+                  <span id='comment'>// this unit implements a little class named TEnumWindows, which does nothing</span><br>
+                  <span id='comment'>// but enumerate all windows</span><br>
+                  <br>
+                  <span id='bold'>interface</span><br>
+                  <br>
+                  <span id='bold'>implementation</span><br>
+                  <br>
+                  <span id='bold'>uses</span>&nbsp;<span id='identifier'>Windows</span>, <span id='identifier'>SysUtils</span>, <span id='identifier'>madTools</span>;<br>
+                  <br>
+                  <span id='bold'>type</span><br>
+                  &nbsp;&nbsp;<span id='identifier'>TEnumWindows</span>&nbsp;= <span id='bold'>class</span><br>
+                  &nbsp;&nbsp;<span id='bold'>private</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='bold'>function</span>&nbsp;<span id='identifier'>EnumCallbackMethod</span>(<span id='identifier'>window</span>: <span id='identifier'>dword</span>; <span id='identifier'>lParam</span>: <span id='identifier'>integer</span>) : <span id='identifier'>bool</span>; <span id='bold'>stdcall</span>;<br>
+                  &nbsp;&nbsp;<span id='bold'>public</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='bold'>constructor</span>&nbsp;<span id='identifier'>Create</span>;<br>
+                  &nbsp;&nbsp;<span id='bold'>end</span>;<br>
+                  <br>
+                  <span id='bold'>constructor</span>&nbsp;<span id='identifier'>TEnumWindows</span>.<span id='identifier'>Create</span>;<br>
+                  <span id='bold'>var</span>&nbsp;<span id='identifier'>EnumCallbackProc</span>&nbsp;: <span id='identifier'>pointer</span>;<br>
+                  <span id='bold'>begin</span><br>
+                  &nbsp;&nbsp;<span id='bold'>inherited</span>;<br>
+                  <br>
+                  &nbsp;&nbsp;<span id='comment'>// you must pass a procedure address to EnumWindows</span><br>
+                  &nbsp;&nbsp;<span id='comment'>// if you passed "@TWindowList.EnumCallbackMethod" your code would crash</span><br>
+                  &nbsp;&nbsp;<span id='comment'>// because methods have an additional hidden "Self" parameter</span><br>
+                  &nbsp;&nbsp;<span id='comment'>// so we need to convert our method to a procedure first</span><br>
+                  &nbsp;&nbsp;<span id='identifier'>EnumCallbackProc</span>&nbsp;:= <a class="pascal" href="#MethodToProcedure">MethodToProcedure</a>(<span id='identifier'>Self</span>, @<span id='identifier'>TEnumWindows</span>.<span id='identifier'>EnumCallbackMethod</span>);<br>
+                  <br>
+                  &nbsp;&nbsp;<span id='comment'>// "EnumCallbackProc" now contains a pointer to a newly allocated procedure</span><br>
+                  &nbsp;&nbsp;<span id='comment'>// which does nothing but jump to our "EnumCallbackMethod" with the correct parameters</span><br>
+                  &nbsp;&nbsp;<span id='identifier'>EnumWindows</span>(<span id='identifier'>EnumCallbackProc</span>, <span id='number'>0</span>);<br>
+                  <br>
+                  &nbsp;&nbsp;<span id='comment'>// don't forget to free the allocated procedure</span><br>
+                  &nbsp;&nbsp;<span id='identifier'>VirtualFree</span>(<span id='identifier'>EnumCallbackProc</span>, <span id='number'>0</span>, <span id='identifier'>MEM_RELEASE</span>);<br>
+                  <span id='bold'>end</span>;<br>
+                  <br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>TEnumWindows</span>.<span id='identifier'>EnumCallbackMethod</span>(<span id='identifier'>window</span>: <span id='identifier'>dword</span>; <span id='identifier'>lParam</span>: <span id='identifier'>integer</span>) : <span id='identifier'>bool</span>; <span id='bold'>stdcall</span>;<br>
+                  <span id='bold'>begin</span><br>
+                  &nbsp;&nbsp;<span id='identifier'>result</span>&nbsp;:= <span id='identifier'>true</span>;<br>
+                  <br>
+                  &nbsp;&nbsp;<span id='comment'>// do anything with the "window"s you get here...</span><br>
+                  &nbsp;&nbsp;[...]<br>
+                  <span id='bold'>end</span>;<br>
+                  <br>
+                  <span id='bold'>end</span>.
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </body>
+
+</html>

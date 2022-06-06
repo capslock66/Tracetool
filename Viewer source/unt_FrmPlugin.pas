@@ -13,7 +13,7 @@ unit unt_FrmPlugin;
 interface
 
 uses
-  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms, 
+  system.Contnrs, system.types, Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, StdCtrls , VirtualTrees, unt_plugin , unt_tool;
 
 type
@@ -169,7 +169,7 @@ end;
 
 procedure TfrmPlugin.MemoParamChange(Sender: TObject);
 begin
-   plugin.param := MemoParam.Text ;
+   plugin.param := AnsiString(MemoParam.Text) ;
 end;
 
 //------------------------------------------------------------------------------

@@ -1,0 +1,168 @@
+<html>
+
+  <head>
+    <title>mad* Help...</title>
+    <meta name="description" content="mad* Help...">
+    <meta name="keywords" content="madshi, components, delphi">
+    <meta http-equiv="expires" content="900">
+    <link rel=stylesheet type="text/css" href="style.css">
+  </head>
+
+  <body background="bcklight.gif" bgcolor=#F8F8F8>
+    <a name="TIpcCallback"></a>
+    <a name="CreateIpcQueue"></a>
+    <a name="CreateIpcQueueEx"></a>
+    <a name="DestroyIpcQueue"></a>
+    <table border=0 cellpadding=0 callspacing=0><tr>
+      <td valign=bottom>
+        <table border=0 cellpadding=0 cellspacing=0><tr><td bgcolor=#D8D8D8>
+          <table cellpadding=3 border=0>
+            <tr><td bgcolor=#FFFFF0>
+              <div id="verySmall"><br></div>
+              <div id="bigTitle">&nbsp;IPC Functionality&nbsp;</div>
+              <div id="verySmall"><br></div>
+              <div id="small">
+                <a class="small" href="Content.htm">Content</a> /
+                <a class="small" href="madCodeHook.htm">madCodeHook</a> /...
+              </div>
+            </td></tr>
+          </table>
+        </td></tr></table>
+      </td>
+      <td valign=bottom>
+        <table border=0 cellpadding=0 cellspacing=0><tr><td bgcolor=#D8D8D8>
+          <table cellpadding=7 border=0>
+            <tr><td bgcolor=#F4F4F8><a href="http://www.madshi.net">www.madshi.net</a></td></tr>
+          </table>
+        </td></tr></table>
+      </td>
+    </tr></table>
+    <p>When <a href="DllInjecting.htm">injecting</a> a DLL into other processes,
+       your DLL usually needs to contact your base application somehow. This can be
+       quite a difficult task, because you have to communicate over process
+       boundaries here. The easiest way to do such IPC (inter process communication)
+       is to use the message APIs like FindWindow + PostMessage. Unfortunately
+       messages may not work inside of non interactive service/system processes.
+       So we need different methods to build up a reliable IPC
+       connection. Since this is a quite basic problem which will touch most
+       madCodeHook users, I've decided to add some nice and easy to use IPC
+       functions to madCodeHook.</p>
+    <p>Let's say your application injects a DLL into all processes system wide. Now
+       the DLL(duplicate)s loaded into all the different processes want to contact
+       your application and send some information. Maybe the DLLs even want to get
+       an answer from the application. This all can be realized easily by using
+       madCodeHook's IPC functionality. Before injecting the DLL, the application
+       should create an IPC queue, giving in a unique IPC name and an appropriate
+       IPC message handling function. This function will later be called for each
+       incoming message.</p>
+    <p>CAUTION: When using the default parameters each IPC message is handled by a
+       seperate thread, as a result your handler will be called in the context of a
+       different thread each time. This is has some advantages and some
+       disadvantages. One problem is that when using multiple threads Windows' time
+       scheduler will do whatever it likes. This may result in that the order of
+       the incoming messages is slightly different to how they were sent. If that
+       is a problem for you, please specifiy a maximum thread count of "1". This
+       will make sure that the order of the messages stays the same.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>type</span><br>
+                  &nbsp;&nbsp;<span id='comment'>// This is how you get notified about incoming ipc messages.</span><br>
+                  &nbsp;&nbsp;<span id='comment'>// You have to write a function which fits to this type definition</span><br>
+                  &nbsp;&nbsp;<span id='comment'>// and then you enter it into "CreateIpcQueue".</span><br>
+                  &nbsp;&nbsp;<span id='comment'>// CAUTION: madCodeHook v4 introduced the "context" parameter.</span><br>
+                  &nbsp;&nbsp;<span id='comment'>// So when switching from v3 to v4, please update your IPC callbacks.</span><br>
+                  &nbsp;&nbsp;<span id='identifier'>TIpcCallback</span>&nbsp;= <span id='bold'>procedure</span>&nbsp;(<span id='identifier'>name</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>pchar</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>messageBuf</span>&nbsp;: <span id='identifier'>pointer</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>messageLen</span>&nbsp;: <span id='identifier'>dword</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>answerBuf</span>&nbsp;&nbsp;: <span id='identifier'>pointer</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>answerLen</span>&nbsp;&nbsp;: <span id='identifier'>dword</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>context</span>&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>pointer</span>); <span id='bold'>stdcall</span>;<br>
+                  <br>
+                  <span id='comment'>// Create an ipc queue.</span><br>
+                  <span id='comment'>// Please choose a unique ipc name to avoid conflicts with other programs.</span><br>
+                  <span id='comment'>// Only one ipc queue with the same name can be open at the same time.</span><br>
+                  <span id='comment'>// So if 2 programs try to create the same ipc queue, the second call will fail.</span><br>
+                  <span id='comment'>// You can specify how many threads may be created to handle incoming messages.</span><br>
+                  <span id='comment'>// If the order of the messages is crucial for you, set "maxThreadCount" to "1".</span><br>
+                  <span id='comment'>// In its current implementation "maxThreadCount" only supports "1" or unlimited.</span><br>
+                  <span id='comment'>// The parameter "maxQueueLen" is not yet implemented at all.</span><br>
+                  <span id='comment'>// The "context" is a simple pointer value that is forwarded to your callback.</span><br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>CreateIpcQueue</span>&nbsp;(<span id='identifier'>ipc</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>pchar</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>callback</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>TIpcCallback</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>context</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>pointer</span>&nbsp;= <span id='bold'>nil</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>maxThreadCount</span>&nbsp;: <span id='identifier'>dword</span>&nbsp;&nbsp;&nbsp;= <span id='number'>16</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>maxQueueLen</span>&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>dword</span>&nbsp;&nbsp;&nbsp;= <span id='number'>$1000</span>) : <span id='identifier'>bool</span>; <span id='bold'>stdcall</span>;<br>
+                  <br>
+                  <span id='comment'>// destroy the ipc queue again</span><br>
+                  <span id='comment'>// when the queue owning process quits, the ipc queue is automatically deleted</span><br>
+                  <span id='comment'>// only the queue owning process can destroy the queue</span><br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>DestroyIpcQueue</span>&nbsp;(<span id='identifier'>ipc</span>: <span id='identifier'>pchar</span>) : <span id='identifier'>bool</span>; <span id='bold'>stdcall</span>;<br>
+                  <br>
+                  <span id='comment'>// Example:</span><br>
+                  <span id='bold'>procedure</span>&nbsp;<span id='identifier'>GetMsgFromDLL</span>(<span id='identifier'>name</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>pchar</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>messageBuf</span>&nbsp;: <span id='identifier'>pointer</span>; <span id='identifier'>messageLen</span>&nbsp;: <span id='identifier'>dword</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>answerBuf</span>&nbsp;&nbsp;: <span id='identifier'>pointer</span>; <span id='identifier'>answerLen</span>&nbsp;&nbsp;: <span id='identifier'>dword</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>context</span>&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>pointer</span>); <span id='bold'>stdcall</span>;<br>
+                  <span id='bold'>begin</span><br>
+                  &nbsp;&nbsp;<span id='comment'>// this code has to be thread safe!</span><br>
+                  &nbsp;&nbsp;<span id='identifier'>boolean</span>(<span id='identifier'>answerBuf</span>^) := <span id='identifier'>MessageBox</span>(<span id='number'>0</span>, <span id='identifier'>pchar</span>(<span id='identifier'>messageBuf</span>), <span id='string'>'question'</span>, <span id='identifier'>MB_YESNO</span>) = <span id='identifier'>ID_YES</span>;<br>
+                  <span id='bold'>end</span>;<br>
+                  <br>
+                  <span id='bold'>initialization</span><br>
+                  &nbsp;&nbsp;<span id='identifier'>CreateIpcQueue</span>(<span id='string'>'JustAnExample'</span>, <span id='identifier'>GetMsgFromDLL</span>);<br>
+                  <span id='bold'>end</span>.
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="SendIpcMessage"></a>
+    <p>In order to send an IPC message to the application, the DLL just needs to
+       call "SendIpcMessage". If no answer is needed, only the first 3 parameters
+       need to be filled. If the message sender wants to get a reply, it can
+       specify a wait timeout value. Also it can specify whether the current thread
+       shall handle window messages while waiting for the IPC message answer.</p>
+    <p>If you call SendIpcMessage in the initialization (DLL_PROCESS_ATTACH) of a
+       hook dll, then please set "handleMessages" to false. Because otherwise your
+       hook dll might eat DDE messages. Besides, during hook dll initialization
+       it doesn't make much sense to handle messages while waiting, anyway.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>SendIpcMessage</span>(<span id='identifier'>ipc</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>pchar</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>messageBuf</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>pointer</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>messageLen</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>dword</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>answerBuf</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>pointer</span>&nbsp;= <span id='bold'>nil</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>answerLen</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>dword</span>&nbsp;&nbsp;&nbsp;= <span id='number'>0</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>answerTimeOut</span>&nbsp;&nbsp;: <span id='identifier'>dword</span>&nbsp;&nbsp;&nbsp;= <span id='identifier'>INFINITE</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>handleMessages</span>&nbsp;: <span id='identifier'>bool</span>&nbsp;&nbsp;&nbsp;&nbsp;= <span id='identifier'>true</span>&nbsp;&nbsp;&nbsp;&nbsp;) : <span id='identifier'>bool</span>; <span id='bold'>stdcall</span>;<br>
+                  <br>
+                  <span id='comment'>// Example:</span><br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>AskApplication</span>(<span id='identifier'>question</span>: <span id='bold'>string</span>) : <span id='identifier'>boolean</span>;<br>
+                  <span id='bold'>begin</span><br>
+                  &nbsp;&nbsp;<span id='identifier'>result</span>&nbsp;:= <span id='identifier'>false</span>;<br>
+                  &nbsp;&nbsp;<span id='identifier'>SendIpcMessage</span>(<span id='string'>'JustAnExample'</span>, <span id='identifier'>pchar</span>(<span id='identifier'>question</span>), <span id='identifier'>Length</span>(<span id='identifier'>question</span>), @<span id='identifier'>result</span>, <span id='identifier'>sizeOf</span>(<span id='identifier'>result</span>));<br>
+                  <span id='bold'>end</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </body>
+
+</html>

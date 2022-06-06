@@ -1,0 +1,120 @@
+<html>
+
+  <head>
+    <title>mad* Help...</title>
+    <meta name="description" content="mad* Help...">
+    <meta name="keywords" content="madshi, components, delphi">
+    <meta http-equiv="expires" content="900">
+    <link rel=stylesheet type="text/css" href="style.css">
+  </head>
+
+  <body background="bcklight.gif" bgcolor=#F8F8F8>
+    <table border=0 cellpadding=0 callspacing=0><tr>
+      <td valign=bottom>
+        <table border=0 cellpadding=0 cellspacing=0><tr><td bgcolor=#D8D8D8>
+          <table cellpadding=3 border=0>
+            <tr><td bgcolor=#FFFFF0>
+              <div id="verySmall"><br></div>
+              <div id="bigTitle">&nbsp;64bit OS&nbsp;</div>
+              <div id="verySmall"><br></div>
+              <div id="small">
+                <a class="small" href="Content.htm">Content</a> /
+                <a class="small" href="madCodeHook.htm">madCodeHook</a> /...
+              </div>
+            </td></tr>
+          </table>
+        </td></tr></table>
+      </td>
+      <td valign=bottom>
+        <table border=0 cellpadding=0 cellspacing=0><tr><td bgcolor=#D8D8D8>
+          <table cellpadding=7 border=0>
+            <tr><td bgcolor=#F4F4F8><a href="http://www.madshi.net">www.madshi.net</a></td></tr>
+          </table>
+        </td></tr></table>
+      </td>
+    </tr></table>
+    <h3>Driver Land</h3>
+    <p>The driver land of an x64 OS is fully 64bit. There is no 32bit
+       code running in driver land whatsoever. Consequently all drivers must be
+       64bit. 32bit drivers are not supported at all.</p>
+    <p>Because driver land is so much different and all drivers had to be
+       rewritten, anyway, Microsoft has taken the opportunity to change one
+       important thing: Patching or hooking in driver land is strictly forbidden!
+       This is not the case in any 32bit Microsoft OS. This new policy in 64bit OSs
+       is meant to improve stability and security. But don't worry, madCodeHook
+       has never hooked or patched anything in driver land. And user land hooking
+       is still allowed in 64bit OSs, so madCodeHook isn't affected by the policy
+       change at all.</p>
+    <p>For madCodeHook this all means that we need a 32bit driver for 32bit OSs and
+       a 64bit driver for 64bit OSs. Yes, madCodeHook needs a
+       <a href="mchInjDrv.htm">driver</a>, it's used for automatically injecting
+       your hook dll into all newly created processes. You can find more
+       information about the madCodeHook driver
+       <a href="mchInjDrv.htm">here</a>.</p>
+    <h3>Processes</h3>
+    <p>A Windows x64 OS can run both 64bit and 32bit processes. Each process
+       is either strictly 64bit or strictly 32bit. There is no such thing as a
+       mixed bitdepth process (let's ignore some malware which tries to work
+       around this). Most services and system processes are native 64bit processes. Only very few system processes are
+       still 32bit. The Internet Explorer is available in both 32bit and 64bit.
+       The reason for that is that many plugins are only available in 32bit and
+       a 64bit process cannot use 32bit plugins, because (as said above) a 64bit
+       process is strictly 64bit and can not run any 32bit code.</p>
+    <p>If you're wondering whether you should write 32bit or 64bit processes, it's
+       your choice. But the advantage of going native 64bit is rather low for most
+       normal applications. You gain the chance to have a larger memory address
+       range and you can make use of 64bit ASM instructions to speed up certain
+       calculations. But apart from that there's little reason to go 64bit right
+       now, when writing normal applications.</p>
+    <p>When using madCodeHook, however, there is one important reason why you do
+       need to begin looking into creating a 64bit process or service: Microsoft
+       has decided that 32bit processes can not create remote threads in 64bit
+       processes. Practically that means that madCodeHook is not able to inject
+       hook dlls into 64bit processes, if you call madCodeHook from within a 32bit
+       process! So if you want to hook 64bit processes, too, you have no choice but
+       to write at least a small injector helper tool in native 64bit. Fortunately
+       Microsoft allows 64bit processes to create remote threads in 32bit processes,
+       so you can do all injection tasks from within one 64bit application or
+       service.</p>
+    <h3>DLLs</h3>
+    <p>A native 64bit process has strictly only 64bit dlls loaded. If you call
+       LoadLibrary(some32bit.dll), it will simply fail. Obviously all system dlls
+       are available in native 64bit. So inside of a 64bit process ntdll.dll,
+       kernel32.dll etc are all native 64bit dlls.</p>
+    <p>A native 32bit process is a bit weird. It mostly has only 32bit dlls loaded.
+       However, there are a few 64bit dlls loaded, as well. You cannot manually
+       add any further 64bit dlls, though. Again LoadLibrary will fail if you try
+       to load a dll with the "wrong" bitdepth. Also you can't really use any of
+       the loaded 64bit dlls at all. They're there, but they're pretty much useless
+       (to you, anyway). Inside of a native 32bit process, the usual system dlls
+       (ntdll.dll, kernel32.dll etc) are all native 32bit dlls. The exception is
+       "ntdll.dll", which is loaded in both 32bit and 64bit. For all intends and
+       purposes you may want to forget that the 64bit version is loaded, though.
+       Just pretend only the 32bit version was mapped.</p>
+    <p>Generally let me repeat that a 64bit dll can not load any 32bit dlls. And
+       a 32bit process can not load any 64bit dlls (apart from the few already
+       mapped system dlls). Which means that if you want to hook a 32bit process,
+       you need a 32bit hook dll. And if you want to hook a 64bit process, you
+       need a 64bit hook dll. The same 32bit hook dll will work on conventional
+       32bit OSs, and on 64bit OSs, too, but it will only ever affect 32bit
+       processes. The 64bit hook dll obviously will only work on 64bit OSs, and it
+       will only affect 64bit processes.</p>
+    <h3>File System</h3>
+    <p>So we already learned above that there are 32bit and 64bit versions of all
+       system dlls available. They are stored in these standard paths:</p>
+    <p>32bit: C:\Windows\SysWOW64<br>
+    64bit: C:\Windows\System32</p>
+    <p>Does that look a bit backward to you? It does to me. But that's the way it
+       is. But now it's getting even more funny. Here's what you get if you call
+       the API "GetSystemDirectory":</p>
+    <p>32bit: C:\Windows\System32<br>
+    64bit: C:\Windows\System32</p>
+    <p>Huh? Are you confused now? I hope so. The trick is that whenever a 32bit
+       process accesses "C:\Windows\System32", it's automatically redirected in
+       driver land to "C:\Windows\SysWOW64". Tricky, eh? The purpose of this
+       approach is probably to improve compatability, because I guess there are
+       some applications out there which are hard coded to
+       "C:\Windows\System32".</p>
+  </body>
+
+</html>

@@ -1,0 +1,76 @@
+<html>
+
+  <head>
+    <title>mad* Help...</title>
+    <meta name="description" content="mad* Help...">
+    <meta name="keywords" content="madshi, components, delphi">
+    <meta http-equiv="expires" content="900">
+    <link rel=stylesheet type="text/css" href="style.css">
+  </head>
+
+  <body background="bcklight.gif" bgcolor=#F8F8F8>
+    <table border=0 cellpadding=0 callspacing=0><tr>
+      <td valign=bottom>
+        <table border=0 cellpadding=0 cellspacing=0><tr><td bgcolor=#D8D8D8>
+          <table cellpadding=3 border=0>
+            <tr><td bgcolor=#FFFFF0>
+              <div id="verySmall"><br></div>
+              <div id="bigTitle">&nbsp;madRemote&nbsp;</div>
+              <div id="verySmall"><br></div>
+              <div id="small">
+                <a class="small" href="Content.htm">Content</a> /...
+              </div>
+            </td></tr>
+          </table>
+        </td></tr></table>
+      </td>
+      <td valign=bottom>
+        <table border=0 cellpadding=0 cellspacing=0><tr><td bgcolor=#D8D8D8>
+          <table cellpadding=7 border=0>
+            <tr><td bgcolor=#F4F4F8><a href="http://www.madshi.net">www.madshi.net</a></td></tr>
+          </table>
+        </td></tr></table>
+      </td>
+    </tr></table>
+    <p>The package "madRemote" gives you the basic tools you need to get into
+       foreign processes. You can allocate&free memory in a specified process
+       (<a href="AllocFreeMemEx.htm#AllocMemEx">AllocMemEx</a>/<a href="AllocFreeMemEx.htm#FreeMemEx">FreeMemEx</a>), you can copy a function to the memory
+       context of a specified process (<a href="CopyFunction.htm">CopyFunction</a>) and you can even create
+       a remote thread in any 32bit process (<a href="CreateRemoteThread.htm">CreateRemoteThreadEx</a>).</p>
+    <p>To make your life even easier, you can use the high level function
+       <a href="RemoteExecute.htm">RemoteExecute</a>, which internally makes use of the low level functions
+       mentioned above. Also you can enumerate processes (<a href="EnumProcesses.htm">EnumProcesses</a>).</p>
+    <p>Well, you might now say: The Windows API already offers "VirtualAllocEx" for
+       memory allocation and "CreateRemoteThread" for thread creation in foreign
+       processes, so what is so special about madRemote? The special thing is that
+       the mentioned Windows APIs only work in NT based systems, while madRemote
+       offers you the full power in NT *and* in 9x/ME. And I'm not talking about a
+       more or less working "CreateRemoteThread" simulation (by e.g. misusing
+       "SetWindowsHookEx" or "Get/SetThreadContext"). I'm talking about the *real*
+       one, that works always, that does not need any cooperation of the
+       destination process!</p>
+    <p>A reference of what is contained in madRemote can be found in the
+       <a href="madRemoteRef.htm">madRemote Reference</a>.</p>
+    <table border=0 cellpadding=0 callspacing=0>
+      <tr><td bgcolor=#D8D8D8>
+        <table border=0 cellpadding=7>
+          <tr>
+            <td bgcolor=#6060B0><div id="smallTitle">Functions</div></td>
+            <td bgcolor=#F8F0F0><a href="AllocFreeMemEx.htm">Alloc/FreeMemEx</a></td>
+            <td bgcolor=#F4F4F8><a href="CopyFunction.htm">CopyFunction</a></td>
+            <td bgcolor=#F8F0F0><a href="CreateRemoteThread.htm">CreateRemoteThreadEx</a></td>
+            <td bgcolor=#F4F4F8><a href="RemoteExecute.htm">RemoteExecute</a></td>
+            <td bgcolor=#F8F0F0><a href="EnumProcesses.htm">EnumProcesses</a></td>
+            <td bgcolor=#F4F4F8><a href="ProcessHandleToId.htm">ProcessHandleToId</a></td>
+          </tr>
+        </table>
+      </td></tr>
+    </table>
+    <p>The package "madRemote" is needed by the packages <a href="madCodeHook.htm">madCodeHook</a> and
+       <a href="madKernel.htm">madKernel</a>.</p>
+    <p>madRemote is free for non-commercial usage (only).</p>
+    <p>You can find more information including the full download at
+       <a href="http://madRemote.madshi.net">http://madRemote.madshi.net</a>.</p>
+  </body>
+
+</html>

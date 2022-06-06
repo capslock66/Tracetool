@@ -1,0 +1,1149 @@
+<html>
+
+  <head>
+    <title>mad* Help...</title>
+    <meta name="description" content="mad* Help...">
+    <meta name="keywords" content="madshi, components, delphi">
+    <meta http-equiv="expires" content="900">
+    <link rel=stylesheet type="text/css" href="style.css">
+  </head>
+
+  <body background="bcklight.gif" bgcolor=#F8F8F8>
+    <table border=0 cellpadding=0 callspacing=0><tr>
+      <td valign=bottom>
+        <table border=0 cellpadding=0 cellspacing=0><tr><td bgcolor=#D8D8D8>
+          <table cellpadding=3 border=0>
+            <tr><td bgcolor=#FFFFF0>
+              <div id="verySmall"><br></div>
+              <div id="bigTitle">&nbsp;madExcept Unit&nbsp;</div>
+              <div id="verySmall"><br></div>
+              <div id="small">
+                <a class="small" href="Content.htm">Content</a> /
+                <a class="small" href="madExcept.htm">madExcept</a> /...
+              </div>
+            </td></tr>
+          </table>
+        </td></tr></table>
+      </td>
+      <td valign=bottom>
+        <table border=0 cellpadding=0 cellspacing=0><tr><td bgcolor=#D8D8D8>
+          <table cellpadding=7 border=0>
+            <tr><td bgcolor=#F4F4F8><a href="http://www.madshi.net">www.madshi.net</a></td></tr>
+          </table>
+        </td></tr></table>
+      </td>
+    </tr></table>
+    <p>The unit "madExcept" implements all the exception handling stuff. A full
+       list of what is contained in this unit can be found in the
+       <a href="madExceptUnitRef.htm">madExcept Unit Reference</a>.</p>
+    <p>When an exception occurs, madExcept creates an interface named
+       "IMEException", which not only contains all the information about the
+       exception, but which inherits the <a href="madExceptSettings.htm">madExcept settings</a> from the module,
+       in which the exception occurred. In your own exception callbacks you can
+       then change the settings for the current exception only, if you like, by
+       accessing the properties which the "IMEException" interface inherited from
+       the <a href="MESettings.htm#IMESettings">IMESettings</a> interface.</p>
+    <a name="IMEException"></a>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>type</span><br>
+                  &nbsp;&nbsp;<span id='identifier'>IMEException</span>&nbsp;= <span id='bold'>interface</span>&nbsp;(<a class="pascal" href="MESettings.htm#IMESettings">IMESettings</a>) [<span id='string'>'{5EE7E49B-571F-4504-B9E6-1EEF6587C51F}'</span>];
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="TExceptPhase"></a>
+    <a name="IMEException.Phase"></a>
+    <a name="IMEException.CanContinue"></a>
+    <p>The "IMEException" interface contains information about the current state of
+       the exception:</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='comment'>// STATE INFORMATION</span><br>
+                  <br>
+                  <span id='bold'>type</span><br>
+                  &nbsp;&nbsp;<span id='comment'>// in what phase of exception handling are we right now?</span><br>
+                  &nbsp;&nbsp;<span id='identifier'>TExceptPhase</span>&nbsp;= (<span id='identifier'>epNotHandledYet</span>, &nbsp;&nbsp;<span id='comment'>// for manually created exception only</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>// see <a class="pascal" href="#NewException">NewException</a></span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>epQuickFiltering</span>, &nbsp;<span id='comment'>// called before bugReport/screenShot are created</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>// main purpose: fast exception filtering</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>epMainPhase</span>, &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>// you can do everything here, e.g. showing your</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>// own exception box, filtering, whatever</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>epPostProcessing</span>, &nbsp;<span id='comment'>// you can't filter exceptions (= abort exception</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>// handling) during this phase, anymore</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>epCompleteReport</span>&nbsp;&nbsp;&nbsp;<span id='comment'>// gets called when the rendering of the bug</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>// report is complete</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;);<br>
+                  <br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IMEException</span>.<img src="r.gif"><span id='identifier'>Phase</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>TExceptPhase</span>; &nbsp;<span id='comment'>// see type definition above</span><br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IMEException</span>.<img src="w.gif"><span id='identifier'>CanContinue</span>&nbsp;: <span id='identifier'>boolean</span>; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>// can the program continue after this exception?</span>
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="TExceptType"></a>
+    <a name="TExceptSource"></a>
+    <a name="IMEException.ExceptType"></a>
+    <a name="IMEException.ExceptObject"></a>
+    <a name="IMEException.ExceptClass"></a>
+    <a name="IMEException.ExceptMessage"></a>
+    <a name="IMEException.ExceptAddr"></a>
+    <a name="IMEException.CrashedThreadId"></a>
+    <a name="IMEException.Context"></a>
+    <a name="IMEException.Source"></a>
+    <a name="IMEException.RelatedObject"></a>
+    <a name="IMEException.Package"></a>
+    <a name="IMEException.BugReportHeader"></a>
+    <a name="IMEException.BugReportSections"></a>
+    <a name="IMEException.ScreenShot"></a>
+    <a name="IMEException.ThreadIds"></a>
+    <a name="IMEException.Callstacks"></a>
+    <a name="IMEException.ExceptionRecord"></a>
+    <p>There are lots of properties which give you more information about the
+       exception itself and about the circumstances in which it occurred:</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='comment'>// EXCEPTION INFORMATION</span><br>
+                  <br>
+                  <span id='bold'>type</span><br>
+                  &nbsp;&nbsp;<span id='comment'>// what kind of exception is this?</span><br>
+                  &nbsp;&nbsp;<span id='identifier'>TExceptType</span>&nbsp;= (<span id='identifier'>etNormal</span>, <span id='identifier'>etFrozen</span>, <span id='identifier'>etHidden</span>);<br>
+                  <br>
+                  &nbsp;&nbsp;<span id='comment'>// who initiated madExcept exception handling?</span><br>
+                  &nbsp;&nbsp;<span id='identifier'>TExceptSource</span>&nbsp;= (<span id='identifier'>esManual</span>, &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>// you called HandleException manually</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>esAntiFreezeCheck</span>, &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>// the anti freeze check gave alarm</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>esBcbAbnormalProgramTermination</span>, &nbsp;<span id='comment'>// BCB: abnormal program termination detected</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>esSysUtilsShowException</span>, &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>// SysUtils.ShowException was called</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>esApplicationShowException</span>, &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>// Application.ShowException was called</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>esApplicationHandleException</span>, &nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>// Application.HandleException was called</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>esCGI</span>, &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>// TCGIApplication.HandleException was called</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>esISAPI</span>, &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>// TISAPIApplication.HandleException was called</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>esHttpExtension</span>, &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>// exception inside of our HttpExtensionProc</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>esIntraweb</span>, &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>// exception inside of IntraWeb client session</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>esTThreadSynchronize</span>, &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>// exception inside of TThread.Synchronize</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>esRuntimeError</span>, &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>// runtime error detected</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>esInitializePackage</span>, &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>// init. of dynamically loaded package crashed</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>esExceptProc</span>, &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>// System.ExceptProc was called</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>esSystemExceptionHandler</span>, &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>// System.ExceptionHandler caught exception</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>esHidden</span>, &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>// hidden exception was detected</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>esThreadFrame</span>, &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>// win32 thread function crashed</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>esTThreadExecute</span>, &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>// TThread.Execute crashed</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>esUnhandledFilter</span>); &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>// unhandled exception filter was called</span><br>
+                  <br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IMEException</span>.<img src="r.gif"><span id='identifier'>ExceptType</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>TExceptType</span>; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>// what kind of exception is this?</span><br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IMEException</span>.<img src="r.gif"><span id='identifier'>ExceptObject</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>TObject</span>; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>// return the "ExceptObject" that was raised</span><br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IMEException</span>.<img src="r.gif"><span id='identifier'>ExceptClass</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='bold'>string</span>; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>// which class does the "ExceptObject" have?</span><br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IMEException</span>.<img src="w.gif"><span id='identifier'>ExceptMessage</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='bold'>string</span>; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>// which message does the "ExceptObject" contain?</span><br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IMEException</span>.<img src="r.gif"><span id='identifier'>ExceptAddr</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>pointer</span>; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>// at which code address was the exception raised?</span><br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IMEException</span>.<img src="r.gif"><span id='identifier'>CrashedThreadId</span>&nbsp;&nbsp;&nbsp;: <span id='identifier'>dword</span>; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>// which thread crashed?</span><br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IMEException</span>.<img src="r.gif"><span id='identifier'>Context</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>PContext</span>; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>// which context did the thread have at crash time?</span><br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IMEException</span>.<img src="w.gif"><span id='identifier'>ExceptionRecord</span>&nbsp;&nbsp;&nbsp;: <span id='identifier'>TExceptionRecord</span>; &nbsp;<span id='comment'>// which exception record belongs to the exception?</span><br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IMEException</span>.<img src="r.gif"><span id='identifier'>Source</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>TExceptSource</span>; &nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>// where was the exception caught by madExcept?</span><br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IMEException</span>.<img src="r.gif"><span id='identifier'>RelatedObject</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>TObject</span>; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>// can e.g. be the TThread object of the crashing thread</span><br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IMEException</span>.<img src="r.gif"><span id='identifier'>Package</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>dword</span>; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>// the package which crashed during "InitializePackage"</span><br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IMEException</span>.<img src="r.gif"><span id='identifier'>BugReportHeader</span>&nbsp;&nbsp;&nbsp;: <a class="pascal" href="MESettings.htm#IMEFields">IMEFields</a>; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>// access to the bug report header</span><br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IMEException</span>.<img src="r.gif"><span id='identifier'>BugReportSections</span>&nbsp;: <a class="pascal" href="MESettings.htm#IMEFields">IMEFields</a>; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>// access to the bug report sections</span><br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IMEException</span>.<img src="w.gif"><span id='identifier'>ScreenShot</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <a class="pascal" href="madNVBitmapUnit.htm#INVBitmap">INVBitmap</a>; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>// access to the screen shot</span><br>
+                  <br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IMEException</span>.<img src="r.gif"><span id='identifier'>ThreadIds</span>&nbsp;&nbsp;[<span id='bold'>index</span>: <span id='identifier'>integer</span>] : <span id='identifier'>dword</span>; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>// id of the specified thread index (enum until 0)</span><br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IMEException</span>.<img src="r.gif"><span id='identifier'>Callstacks</span>&nbsp;[<span id='bold'>index</span>: <span id='identifier'>integer</span>] : <span id='identifier'>TStackTrace</span>; &nbsp;&nbsp;<span id='comment'>// callstack of the specific thread index</span>
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IMEException.GetBugReport"></a>
+    <a name="IMEException.BugReport"></a>
+    <p>There are 2 ways to ask the composed bug report text. You can either ask the
+       "IMEException.BugReport" property. Or you can call the
+       "IMEException.GetBugReport" method. If you want to understand the 
+       difference, you first need to understand, that <a href="madExcept.htm">madExcept</a> calculates
+       the bug report in a background thread, while already calling your registered
+       exception handlers at the same time. As long as you behave nicely, this 
+       logic works quite fine and results in that the exception box can be shown
+       without delay, although the calculation of the full bug report might not be
+       fully done yet.</p>
+    <p>However, if you ask "IMEException.BugReport" or if you call
+       "IMEException.GetBugReport(true)", then you force <a href="madExcept.htm">madExcept</a> to 
+       complete the full bug report composition, before it can return to you. When
+       doing this in your registered exception handler you might delay the showing
+       of the exception box and you might see a progress bar window instead. You
+       can get around that by calling "IMEException.GetBugReport(false)" instead.
+       In that case you'll get a bug report without delaying anything. However, the
+       bug report may not be fully rendered yet.</p>
+    <p>Generally you should avoid asking "IMEException.BugReport" or calling
+       "IMEException.GetBugReport(true)" in your exception handler. If you
+       absolutely do need access to the complete bug report text, you
+       should when calling <a href="#RegisterExceptionHandler">RegisterExceptionHandler</a> explicitly ask for being
+       called when the exception phase is "epCompleteReport". This way you don't
+       delay anything, however, the exception box is likely to be shown before your
+       exception callback is called. Hey - you can't have it all. But at least you
+       have the choice.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>IMEException</span>.<img src="m.gif"><span id='identifier'>GetBugReport</span>&nbsp;(<span id='identifier'>mustBeComplete</span>: <span id='identifier'>boolean</span>&nbsp;= <span id='identifier'>true</span>) : <span id='bold'>string</span>;<br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IMEException</span>.<img src="w.gif">&nbsp;&nbsp;&nbsp;<span id='identifier'>BugReport</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='bold'>string</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IMEException.CallstackCrc"></a>
+    <p>In some situations you might want to check whether the current exception
+       is already stored somewhere. Comparing exceptions is not too easy, though.
+       Especially comparing callstacks is tough. So <a href="madExcept.htm">madExcept</a> offers you
+       some help by adding a "CallstackCrc" property to the "IMEException"
+       interface. It consists of 3 dwords. The first dword designates the exception
+       location only. The second dword is a crc of the callstack of the crashed
+       thread. The third dword is a crc of the callstack of all delphi threads.
+       Please note that this information is only available after all the callstacks
+       were fully calculated. So asking this property before the "epCompleteReport"
+       phase doesn't make too much sense.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IMEException</span>.<img src="r.gif"><span id='identifier'>CallstackCrc</span>&nbsp;[<span id='bold'>index</span>: <span id='identifier'>integer</span>] : <span id='identifier'>dword</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="TBugReportCallback"></a>
+    <a name="TBugReportCallbackOO"></a>
+    <a name="IMEException.RegisterBugReportCallback"></a>
+    <a name="IMEException.RegisterBugReportCallback"></a>
+    <a name="IMEException.UnregisterBugReportCallback"></a>
+    <a name="IMEException.UnregisterBugReportCallback"></a>
+    <p>As already explained, the composition of the bug report is done in
+       background. If you want to be notified about any progress the composition
+       makes, you can register a callback function. The "critical" parameter
+       states if your callback absolutely does need to get the complete bug report.
+       If not, and if the user aborts the exception box before the rendering of the
+       bug report is complete, the rendering can be aborted to save processing
+       time.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>type</span><br>
+                  &nbsp;&nbsp;<span id='identifier'>TBugReportCallback</span>&nbsp;&nbsp;&nbsp;= <span id='bold'>procedure</span>&nbsp;(<span id='identifier'>complete</span>: <span id='identifier'>boolean</span>; <span id='identifier'>bugReport</span>: <span id='bold'>string</span>; <span id='identifier'>exceptIntf</span>: <a class="pascal" href="#IMEException">IMEException</a>);<br>
+                  &nbsp;&nbsp;<span id='identifier'>TBugReportCallbackOO</span>&nbsp;= <span id='bold'>procedure</span>&nbsp;(<span id='identifier'>complete</span>: <span id='identifier'>boolean</span>; <span id='identifier'>bugReport</span>: <span id='bold'>string</span>; <span id='identifier'>exceptIntf</span>: <a class="pascal" href="#IMEException">IMEException</a>) <span id='bold'>of</span>&nbsp;<span id='bold'>object</span>;<br>
+                  <br>
+                  <span id='bold'>procedure</span>&nbsp;<span id='identifier'>IMEException</span>.<img src="m.gif">&nbsp;&nbsp;<span id='identifier'>RegisterBugReportCallback</span>&nbsp;(<span id='identifier'>bugReportCallback</span>: <span id='identifier'>TBugReportCallback</span>; &nbsp;&nbsp;<span id='identifier'>critical</span>: <span id='identifier'>boolean</span>); <span id='bold'>overload</span>;<br>
+                  <span id='bold'>procedure</span>&nbsp;<span id='identifier'>IMEException</span>.<img src="m.gif">&nbsp;&nbsp;<span id='identifier'>RegisterBugReportCallback</span>&nbsp;(<span id='identifier'>bugReportCallback</span>: <span id='identifier'>TBugReportCallbackOO</span>; <span id='identifier'>critical</span>: <span id='identifier'>boolean</span>); <span id='bold'>overload</span>;<br>
+                  <span id='bold'>procedure</span>&nbsp;<span id='identifier'>IMEException</span>.<img src="m.gif"><span id='identifier'>UnregisterBugReportCallback</span>&nbsp;(<span id='identifier'>bugReportCallback</span>: <span id='identifier'>TBugReportCallback</span>&nbsp;&nbsp;); <span id='bold'>overload</span>;<br>
+                  <span id='bold'>procedure</span>&nbsp;<span id='identifier'>IMEException</span>.<img src="m.gif"><span id='identifier'>UnregisterBugReportCallback</span>&nbsp;(<span id='identifier'>bugReportCallback</span>: <span id='identifier'>TBugReportCallbackOO</span>); <span id='bold'>overload</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IMEException.BeginUpdate"></a>
+    <a name="IMEException.EndUpdate"></a>
+    <p>Everytime you change the bug report header or the bug report sections, 
+       callbacks registered through <a href="#IMEException.RegisterBugReportCallback">IMEException.RegisterBugReportCallback</a>
+       are called, which can result in follow up actions. If you are doing multiple
+       changes to the bug report header and/or sections, you should call
+       "IMEException.BeginUpdate" before and "IMEException.EndUpdate" after doing
+       your changes. This will make sure that the callbacks are fired only once.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>procedure</span>&nbsp;<span id='identifier'>IMEException</span>.<img src="m.gif"><span id='identifier'>BeginUpdate</span>;<br>
+                  <span id='bold'>procedure</span>&nbsp;<span id='identifier'>IMEException</span>.<img src="m.gif"><span id='identifier'>EndUpdate</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IMEException.CreateBugReport"></a>
+    <a name="IMEException.CreateScreenShot"></a>
+    <a name="IMEException.CallHandlers"></a>
+    <p>There are some settings stored in the "IMEException" interface, which you
+       can change, which however only have effect during the "epQuickFiltering"
+       phase:</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IMEException</span>.<img src="w.gif"><span id='identifier'>CreateBugReport</span>&nbsp;&nbsp;: <span id='identifier'>boolean</span>; &nbsp;<span id='comment'>// shall a bug report be created for this exception?</span><br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IMEException</span>.<img src="w.gif"><span id='identifier'>CreateScreenShot</span>&nbsp;: <span id='identifier'>boolean</span>; &nbsp;<span id='comment'>// shall a screen shot be created for this exception?</span><br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IMEException</span>.<img src="w.gif"><span id='identifier'>CallHandlers</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>boolean</span>; &nbsp;<span id='comment'>// shall event handlers get called for this exception?</span>
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IMEException.AppendScreenShot"></a>
+    <a name="IMEException.ShowAssistant"></a>
+    <a name="IMEException.ShowSetting"></a>
+    <p>The following settings can be changed and show effect during all phases of
+       exception handling:</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IMEException</span>.<img src="w.gif"><span id='identifier'>AppendScreenShot</span>&nbsp;: <span id='identifier'>boolean</span>; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>// append the screen shot when sending the bug report?</span><br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IMEException</span>.<img src="w.gif"><span id='identifier'>ShowSetting</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <a class="pascal" href="MESettings.htm#TMEShowSetting">TMEShowSetting</a>; &nbsp;<span id='comment'>// what shall be shown for this exception?</span><br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IMEException</span>.<img src="w.gif"><span id='identifier'>ShowAssistant</span>&nbsp;&nbsp;&nbsp;&nbsp;: <span id='bold'>string</span>; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>// which assistant shall be shown for this exception?</span>
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IMEException.Show"></a>
+    <p>You can force an exception box to be shown by calling "IMEException.Show".
+       But actually this makes sense only, if you've manually created the
+       exception by calling <a href="#NewException">NewException</a>. Otherwise you usually shouldn't
+       call this method.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>procedure</span>&nbsp;<span id='identifier'>IMEException</span>.<img src="m.gif"><span id='identifier'>Show</span>; &nbsp;<span id='comment'>// show the exception box</span>
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IMEException.ShowBugReport"></a>
+    <a name="IMEException.SendBugReport"></a>
+    <a name="IMEException.SaveBugReport"></a>
+    <a name="IMEException.PrintBugReport"></a>
+    <a name="IMEException.ContinueApplication"></a>
+    <a name="IMEException.RestartApplication"></a>
+    <a name="IMEException.CloseApplication"></a>
+    <p>Calling one of the following methods has the same effect as the end user
+       pressing one of the buttons in the exception box. Calling "ShowBugReport"
+       only has any effect if the exception box is actually currently visible.
+       The other methods work even if the exception box is not currently visible.
+       If you leave the "parentWindow" parameter zero, madExcept will use its own
+       exception box main window handle as the parent window.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>procedure</span>&nbsp;<span id='identifier'>IMEException</span>.<img src="m.gif">&nbsp;<span id='identifier'>ShowBugReport</span>&nbsp;(<span id='identifier'>parentWindow</span>: <span id='identifier'>dword</span>&nbsp;= <span id='number'>0</span>); &nbsp;<span id='comment'>// show the bug report details</span><br>
+                  <span id='bold'>procedure</span>&nbsp;<span id='identifier'>IMEException</span>.<img src="m.gif">&nbsp;<span id='identifier'>SendBugReport</span>&nbsp;(<span id='identifier'>parentWindow</span>: <span id='identifier'>dword</span>&nbsp;= <span id='number'>0</span>);<br>
+                  <span id='bold'>procedure</span>&nbsp;<span id='identifier'>IMEException</span>.<img src="m.gif">&nbsp;<span id='identifier'>SaveBugReport</span>&nbsp;(<span id='identifier'>parentWindow</span>: <span id='identifier'>dword</span>&nbsp;= <span id='number'>0</span>);<br>
+                  <span id='bold'>procedure</span>&nbsp;<span id='identifier'>IMEException</span>.<img src="m.gif"><span id='identifier'>PrintBugReport</span>&nbsp;(<span id='identifier'>parentWindow</span>: <span id='identifier'>dword</span>&nbsp;= <span id='number'>0</span>);<br>
+                  <br>
+                  <span id='bold'>procedure</span>&nbsp;<span id='identifier'>IMEException</span>.<img src="m.gif"><span id='identifier'>ContinueApplication</span>&nbsp;(<span id='identifier'>parentWindow</span>: <span id='identifier'>dword</span>&nbsp;= <span id='number'>0</span>);<br>
+                  <span id='bold'>procedure</span>&nbsp;<span id='identifier'>IMEException</span>.<img src="m.gif">&nbsp;<span id='identifier'>RestartApplication</span>&nbsp;(<span id='identifier'>parentWindow</span>: <span id='identifier'>dword</span>&nbsp;= <span id='number'>0</span>);<br>
+                  <span id='bold'>procedure</span>&nbsp;<span id='identifier'>IMEException</span>.<img src="m.gif">&nbsp;&nbsp;&nbsp;<span id='identifier'>CloseApplication</span>&nbsp;(<span id='identifier'>parentWindow</span>: <span id='identifier'>dword</span>&nbsp;= <span id='number'>0</span>);
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="NewException"></a>
+    <p>You can manually create an "IMEException" interface. You can do that if you
+       want to get a bug report, or if you want to show an exception box. You can
+       ignore most parameters. If you just want to have a snapshot of the current
+       situation (makes sense e.g. if the application seems to be frozen), just
+       leave all parameters empty.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>NewException</span>&nbsp;(<span id='identifier'>exceptType</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <a class="pascal" href="#TExceptType">TExceptType</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= <span id='identifier'>etFrozen</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>exceptObject</span>&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>TObject</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= <span id='bold'>nil</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>exceptAddr</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>pointer</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= <span id='bold'>nil</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>canContinue</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>boolean</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= <span id='identifier'>true</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>crashedThreadId</span>&nbsp;: <span id='identifier'>dword</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= <span id='number'>0</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>currentEsp</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>dword</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= <span id='number'>0</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>currentEbp</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>dword</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= <span id='number'>0</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>context</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>PContext</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= <span id='bold'>nil</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>settings</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <a class="pascal" href="MESettings.htm#IMEModuleSettings">IMEModuleSettings</a>&nbsp;= <span id='bold'>nil</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>source</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <a class="pascal" href="#TExceptSource">TExceptSource</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= <span id='identifier'>esManual</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>relatedObject</span>&nbsp;&nbsp;&nbsp;: <span id='identifier'>TObject</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= <span id='bold'>nil</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>package</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>dword</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= <span id='number'>0</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>preparedStack</span>&nbsp;&nbsp;&nbsp;: <span id='identifier'>pointer</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= <span id='bold'>nil</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>dontCompleteYet</span>&nbsp;: <span id='identifier'>boolean</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= <span id='identifier'>false</span>&nbsp;&nbsp;&nbsp;) : <a class="pascal" href="#IMEException">IMEException</a>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="ImportBugReport"></a>
+    <p>If you got a bug report from somewhere in text form, you can turn it into
+       an "IMEException" interface by calling "ImportBugReport". Please note that
+       many properties won't work properly, e.g. <a href="#IMEException.ExceptObject">IMEException.ExceptObject</a>.
+       The main purpose of this function is to show the bug report with the
+       standard madExcept dialog.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>ImportBugReport</span>&nbsp;(<span id='bold'>const</span>&nbsp;<span id='identifier'>bugReport</span>: <span id='identifier'>UnicodeString</span>) : <a class="pascal" href="#IMEException">IMEException</a>;<br>
+                  <br>
+                  <span id='comment'>// Example:</span><br>
+                  <span id='identifier'>ImportBugReport</span>(<span id='identifier'>someBugReport</span>).<span id='identifier'>Show</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="HandleException"></a>
+    <p>The function "HandleException" does all the stuff like firing the registered
+       exception handlers and showing the exception box. If you want your dlls to
+       handle their own exceptions, you should put a "try..except" frame around
+       every exported function and around every message handler.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>procedure</span>&nbsp;<span id='identifier'>HandleException</span>&nbsp;(<span id='identifier'>exceptType</span>&nbsp;&nbsp;&nbsp;&nbsp;: <a class="pascal" href="#TExceptType">TExceptType</a>&nbsp;&nbsp;&nbsp;= <span id='identifier'>etNormal</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>exceptObject</span>&nbsp;&nbsp;: <span id='identifier'>TObject</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= <span id='bold'>nil</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>exceptAddr</span>&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>pointer</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= <span id='bold'>nil</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>canContinue</span>&nbsp;&nbsp;&nbsp;: <span id='identifier'>boolean</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= <span id='identifier'>true</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>currentEsp</span>&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>dword</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= <span id='number'>0</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>currentEbp</span>&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>dword</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= <span id='number'>0</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>context</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>PContext</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= <span id='bold'>nil</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>source</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <a class="pascal" href="#TExceptSource">TExceptSource</a>&nbsp;= <span id='identifier'>esManual</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>relatedObject</span>&nbsp;: <span id='identifier'>TObject</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= <span id='bold'>nil</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>package</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>dword</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= <span id='number'>0</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>showReport</span>&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>TPString</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= <span id='bold'>nil</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;);<br>
+                  <br>
+                  <span id='comment'>// Example:</span><br>
+                  <span id='bold'>library</span>&nbsp;<span id='identifier'>blabla</span>;<br>
+                  <br>
+                  <span id='bold'>uses</span>&nbsp;<span id='identifier'>madExcept</span>, <span id='identifier'>SysUtils</span>;<br>
+                  <br>
+                  <span id='bold'>procedure</span>&nbsp;<span id='identifier'>DllExportedFunction</span>;<br>
+                  <span id='bold'>begin</span><br>
+                  &nbsp;&nbsp;<span id='bold'>try</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>// real code here</span><br>
+                  &nbsp;&nbsp;<span id='bold'>except</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<a class="pascal" href="#HandleException">HandleException</a>;<br>
+                  &nbsp;&nbsp;<span id='bold'>end</span>;<br>
+                  <span id='bold'>end</span>;<br>
+                  <br>
+                  <span id='bold'>exports</span>&nbsp;<span id='identifier'>DllExportedFunction</span>;<br>
+                  <br>
+                  <span id='bold'>end</span>.
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="PauseMeEventually"></a>
+    <p>When using the option "pause running delphi/bcb threads", madExcept
+       automatically suspends all delphi/bcb threads in the moment when they call
+       GetMessage or PeekMessage. If you have a thread which you want to be
+       paused during exception handling, but which doesn't call GetMessage nor
+       PeekMessage, you can call "PauseMeEventually" in the thread's main loop.
+       Calling this function doesn't harm anywhere. It just checks whether the
+       current thread should be suspended and in that case suspends it. You can add
+       it to your threads without danger.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>procedure</span>&nbsp;<span id='identifier'>PauseMeEventually</span>;<br>
+                  <br>
+                  <span id='comment'>// Example:</span><br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>SomeThread</span>(<span id='identifier'>param</span>: <span id='identifier'>pointer</span>) : <span id='identifier'>integer</span>; <span id='bold'>stdcall</span>;<br>
+                  <span id='comment'>// this thread gets suspended during exception handling thanks to the</span><br>
+                  <span id='comment'>// "PauseMeEventually" call. Place the call at the location where you want</span><br>
+                  <span id='comment'>// the thread to be suspended (during exception handling)</span><br>
+                  <span id='bold'>begin</span><br>
+                  &nbsp;&nbsp;<span id='bold'>while</span>&nbsp;<span id='identifier'>ReadFile</span>(...) <span id='bold'>do</span>&nbsp;<span id='bold'>begin</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>// do some stuff</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>PauseMeEventually</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>// do some other stuff</span><br>
+                  &nbsp;&nbsp;<span id='bold'>end</span>;<br>
+                  <span id='bold'>end</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="TExceptEvent"></a>
+    <a name="TExceptEventOO"></a>
+    <a name="TSyncType"></a>
+    <a name="RegisterExceptionHandler"></a>
+    <a name="RegisterExceptionHandler"></a>
+    <a name="UnregisterExceptionHandler"></a>
+    <a name="UnregisterExceptionHandler"></a>
+    <p>You can register exception handlers, which then get called for every
+       exception that occurs thereafter. There's no limit, you can register as many
+       exception handlers as you like. Each one is called in a row, until one sets
+       "handled" to true. For each exception handler you can choose whether you
+       want madExcept to try to call your handler in the context of the main
+       thread - and what shall happen if the main thread doesn't respond (see
+       "TSyncType"). Furthermore you can choose in what phase of exception handling
+       you want your handler to be called (see "TExceptPhase").</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>type</span><br>
+                  &nbsp;&nbsp;<span id='comment'>// stDontSync: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Don't synchronize the handler, instead call it in the context</span><br>
+                  &nbsp;&nbsp;<span id='comment'>// &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;of madExcept's exception handling thread.</span><br>
+                  &nbsp;&nbsp;<span id='comment'>// &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ It doesn't matter what the main thread is doing.</span><br>
+                  &nbsp;&nbsp;<span id='comment'>// &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- You must not use the VCL, cause it's not thread safe.</span><br>
+                  &nbsp;&nbsp;<span id='comment'>// stTrySyncCallOnSuccess: Try to call the handler in the context of the main thread.</span><br>
+                  &nbsp;&nbsp;<span id='comment'>// &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;If the main thread doesn't react, don't call this handler.</span><br>
+                  &nbsp;&nbsp;<span id='comment'>// &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ You may use the VCL, cause the handler is only ever called</span><br>
+                  &nbsp;&nbsp;<span id='comment'>// &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;in the context of the main thread.</span><br>
+                  &nbsp;&nbsp;<span id='comment'>// &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- If synchronzation fails, your handler isn't called.</span><br>
+                  &nbsp;&nbsp;<span id='comment'>// stTrySyncCallAlways: &nbsp;&nbsp;&nbsp;Try to call the handler in the context of the main thread.</span><br>
+                  &nbsp;&nbsp;<span id='comment'>// &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;If the main thread doesn't react, call the handler nevertheless.</span><br>
+                  &nbsp;&nbsp;<span id='comment'>// &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ The handler is always called - and if possible in the context</span><br>
+                  &nbsp;&nbsp;<span id='comment'>// &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;of the main thread. In the latter case you may use the VCL.</span><br>
+                  &nbsp;&nbsp;<span id='comment'>// &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- You may use the VCL only if you're in the main thread context.</span><br>
+                  &nbsp;&nbsp;<span id='comment'>// &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(if GetCurrentThreadID = MainThreadID then)</span><br>
+                  &nbsp;&nbsp;<span id='identifier'>TSyncType</span>&nbsp;= (<span id='identifier'>stDontSync</span>, <span id='identifier'>stTrySyncCallOnSuccess</span>, <span id='identifier'>stTrySyncCallAlways</span>);<br>
+                  &nbsp;&nbsp;&nbsp;<br>
+                  &nbsp;&nbsp;<span id='comment'>// types for RegisterExceptionHandler</span><br>
+                  &nbsp;&nbsp;<span id='identifier'>TExceptEvent</span>&nbsp;&nbsp;&nbsp;= <span id='bold'>procedure</span>&nbsp;(<span id='bold'>const</span>&nbsp;<span id='identifier'>exceptIntf</span>&nbsp;: <a class="pascal" href="#IMEException">IMEException</a>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='bold'>var</span>&nbsp;<span id='identifier'>handled</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>boolean</span>);<br>
+                  &nbsp;&nbsp;<span id='identifier'>TExceptEventOO</span>&nbsp;= <span id='bold'>procedure</span>&nbsp;(<span id='bold'>const</span>&nbsp;<span id='identifier'>exceptIntf</span>&nbsp;: <a class="pascal" href="#IMEException">IMEException</a>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='bold'>var</span>&nbsp;<span id='identifier'>handled</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>boolean</span>) <span id='bold'>of</span>&nbsp;<span id='bold'>object</span>;<br>
+                  <br>
+                  <span id='bold'>procedure</span>&nbsp;&nbsp;<span id='identifier'>RegisterExceptionHandler</span>&nbsp;(<span id='identifier'>exceptHandler</span>: <span id='identifier'>TExceptEvent</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>sync</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>TSyncType</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>phase</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <a class="pascal" href="#TExceptPhase">TExceptPhase</a>&nbsp;= <span id='identifier'>epMainPhase</span>); <span id='bold'>overload</span>;<br>
+                  <span id='bold'>procedure</span>&nbsp;&nbsp;<span id='identifier'>RegisterExceptionHandler</span>&nbsp;(<span id='identifier'>exceptHandler</span>: <span id='identifier'>TExceptEventOO</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>sync</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>TSyncType</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>phase</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <a class="pascal" href="#TExceptPhase">TExceptPhase</a>&nbsp;= <span id='identifier'>epMainPhase</span>); <span id='bold'>overload</span>;<br>
+                  <br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>UnregisterExceptionHandler</span>&nbsp;(<span id='identifier'>exceptHandler</span>: <span id='identifier'>TExceptEvent</span>&nbsp;&nbsp;) : <span id='identifier'>boolean</span>; <span id='bold'>overload</span>;<br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>UnregisterExceptionHandler</span>&nbsp;(<span id='identifier'>exceptHandler</span>: <span id='identifier'>TExceptEventOO</span>) : <span id='identifier'>boolean</span>; <span id='bold'>overload</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="TExceptAction"></a>
+    <a name="TExceptActionEvent"></a>
+    <a name="TExceptActionEventOO"></a>
+    <a name="RegisterExceptActionHandler"></a>
+    <a name="RegisterExceptActionHandler"></a>
+    <a name="UnregisterExceptActionHandler"></a>
+    <a name="UnregisterExceptActionHandler"></a>
+    <p>The following "exception action handlers" get called whenever action happens
+       as a result of an exception. You can register as many exception action
+       handlers as you like. Each one is called in a row. If the action is
+       "eaSendBugReport", "eaSaveBugReport" or "eaPrintBugReport" and a handler
+       sets the parameter "handled" (for all other actions this parameter has no
+       meaning) to true, <a href="madExcept.htm">madExcept</a> doesn't send/save/print the bug report
+       anymore, it's your duty then. Furthermore in that case the handler calling
+       row is canceled.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>type</span><br>
+                  &nbsp;&nbsp;<span id='identifier'>TExceptAction</span>&nbsp;= (<span id='identifier'>eaSendBugReport</span>, &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>// a bug report is about to be sent &nbsp;&nbsp;&nbsp;- assistant not shown yet</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>eaSaveBugReport</span>, &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>// a bug report is about to be saved &nbsp;&nbsp;- assistant not shown yet</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>eaPrintBugReport</span>, &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>// a bug report is about to be printed - assistant not shown yet</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>eaSendBugReport2</span>, &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>// a bug report is about to be sent &nbsp;&nbsp;&nbsp;- assistant completed</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>eaSaveBugReport2</span>, &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>// a bug report is about to be saved &nbsp;&nbsp;- assistant completed</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>eaPrintBugReport2</span>, &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>// a bug report is about to be printed - assistant completed</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>eaSendBugReport3</span>, &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>// a bug report was sent</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>eaSaveBugReport3</span>, &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>// a bug report was saved</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>eaPrintBugReport3</span>, &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>// a bug report was printed</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>eaShowBugReport</span>, &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>// the user pressed the "show bug report" button</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>eaHelp</span>, &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>// the user pressed F1</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>eaContinueApplication</span>, &nbsp;<span id='comment'>// the application is about to be continued</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>eaRestartApplication</span>, &nbsp;&nbsp;<span id='comment'>// the application is about to be restarted</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>eaCloseApplication</span>); &nbsp;&nbsp;&nbsp;<span id='comment'>// the application is about to be closed</span><br>
+                  <br>
+                  &nbsp;&nbsp;<span id='identifier'>TExceptActionEvent</span>&nbsp;&nbsp;&nbsp;= <span id='bold'>procedure</span>&nbsp;(<span id='identifier'>action</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>TExceptAction</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='bold'>const</span>&nbsp;<span id='identifier'>exceptIntf</span>&nbsp;: <a class="pascal" href="#IMEException">IMEException</a>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='bold'>var</span>&nbsp;<span id='identifier'>handled</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>boolean</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;);<br>
+                  &nbsp;&nbsp;<span id='identifier'>TExceptActionEventOO</span>&nbsp;= <span id='bold'>procedure</span>&nbsp;(<span id='identifier'>action</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>TExceptAction</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='bold'>const</span>&nbsp;<span id='identifier'>exceptIntf</span>&nbsp;: <a class="pascal" href="#IMEException">IMEException</a>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='bold'>var</span>&nbsp;<span id='identifier'>handled</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>boolean</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;) <span id='bold'>of</span>&nbsp;<span id='bold'>object</span>;<br>
+                  <br>
+                  <span id='bold'>procedure</span>&nbsp;&nbsp;<span id='identifier'>RegisterExceptActionHandler</span>&nbsp;(<span id='identifier'>actionHandler</span>: <span id='identifier'>TExceptActionEvent</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>sync</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <a class="pascal" href="#TSyncType">TSyncType</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;); <span id='bold'>overload</span>;<br>
+                  <span id='bold'>procedure</span>&nbsp;&nbsp;<span id='identifier'>RegisterExceptActionHandler</span>&nbsp;(<span id='identifier'>actionHandler</span>: <span id='identifier'>TExceptActionEventOO</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>sync</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <a class="pascal" href="#TSyncType">TSyncType</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;); <span id='bold'>overload</span>;<br>
+                  <br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>UnregisterExceptActionHandler</span>&nbsp;(<span id='identifier'>actionHandler</span>: <span id='identifier'>TExceptActionEvent</span>&nbsp;&nbsp;) : <span id='identifier'>boolean</span>; <span id='bold'>overload</span>;<br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>UnregisterExceptActionHandler</span>&nbsp;(<span id='identifier'>actionHandler</span>: <span id='identifier'>TExceptActionEventOO</span>) : <span id='identifier'>boolean</span>; <span id='bold'>overload</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="RegisterHiddenExceptionHandler"></a>
+    <a name="RegisterHiddenExceptionHandler"></a>
+    <a name="UnregisterHiddenExceptionHandler"></a>
+    <a name="UnregisterHiddenExceptionHandler"></a>
+    <p>Sometimes you want to be notified even about exceptions, which are handled
+       by a try..except statement somewhere. Normally such exceptions are hidden
+       from you and the user. But in a kind of debug mode there might be situations
+       where you want to know about such exceptions, too. With the following
+       functions you can tell madExcept to catch such "hidden exceptions" for you
+       and notify you about them. Please note, however, that this makes sense only
+       for debugging. You should not enable this feature by default in a shipping
+       product, because otherwise this option does cost time during the normal
+       program flow, while all the other features of madExcept cost time only when
+       a "real" exception occurs.</p>
+    <p>When a hidden exception occurs, your handler will be called with "handled"
+       initialized to "true". That means if you don't do anything, you're only
+       notified about the exception, but nothing more happens. If you want the
+       exception to behave like normal exceptions, just set "handled" to "false".
+       You can ask <a href="#IMEException.BugReport">IMEException.BugReport</a>, but doing so in the hidden
+       exception handler will result in a delay, because the bug report will be
+       calculated in the very moment you access the "BugReport" property.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>procedure</span>&nbsp;&nbsp;<span id='identifier'>RegisterHiddenExceptionHandler</span>&nbsp;(<span id='identifier'>hiddenHandler</span>: <a class="pascal" href="#TExceptEvent">TExceptEvent</a>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>sync</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <a class="pascal" href="#TSyncType">TSyncType</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;); <span id='bold'>overload</span>;<br>
+                  <span id='bold'>procedure</span>&nbsp;&nbsp;<span id='identifier'>RegisterHiddenExceptionHandler</span>&nbsp;(<span id='identifier'>hiddenHandler</span>: <a class="pascal" href="#TExceptEventOO">TExceptEventOO</a>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>sync</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <a class="pascal" href="#TSyncType">TSyncType</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;); <span id='bold'>overload</span>;<br>
+                  <br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>UnregisterHiddenExceptionHandler</span>&nbsp;(<span id='identifier'>hiddenHandler</span>: <a class="pascal" href="#TExceptEvent">TExceptEvent</a>&nbsp;&nbsp;) : <span id='identifier'>boolean</span>; <span id='bold'>overload</span>;<br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>UnregisterHiddenExceptionHandler</span>&nbsp;(<span id='identifier'>hiddenHandler</span>: <a class="pascal" href="#TExceptEventOO">TExceptEventOO</a>) : <span id='identifier'>boolean</span>; <span id='bold'>overload</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="GetExceptBoxHandle"></a>
+    <a name="SetTopmost"></a>
+    <p>The madExcept exception box is always on top. Sometimes inside of an
+       exception handler you may want to show other windows or start other programs.
+       In such a situation it might make sense to temporarily remove the topmost
+       state of the exception box. The following two functions help you do that.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='comment'>// get the handle of the madExcept exception box</span><br>
+                  <span id='comment'>// returns 0, if the box is not currently visible</span><br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>GetExceptBoxHandle</span>&nbsp;: <span id='identifier'>dword</span>;<br>
+                  <br>
+                  <span id='comment'>// sets or unsets the topmost state of a window</span><br>
+                  <span id='comment'>// the return value is the old topmost state</span><br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>SetTopmost</span>&nbsp;(<span id='identifier'>window</span>: <span id='identifier'>dword</span>; <span id='identifier'>topmost</span>: <span id='identifier'>boolean</span>) : <span id='identifier'>boolean</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="PauseMadExcept"></a>
+    <p>You can pause madExcept's exception catching powers, if you like. But please
+       don't call this from multiple threads at the same time. Also please don't
+       turn it on and off again all the time. It should work ok, but it's not fully
+       thread safe, so be careful. Each "PauseMadExcept(true)" must have its own
+       "PauseMadExcept(false)" call.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='comment'>// pause madExcept's exception catching powers</span><br>
+                  <span id='bold'>procedure</span>&nbsp;<span id='identifier'>PauseMadExcept</span>&nbsp;(<span id='identifier'>pause</span>: <span id='identifier'>boolean</span>&nbsp;= <span id='identifier'>true</span>);
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="PauseFreezeCheck"></a>
+    <a name="ImNotFrozen"></a>
+    <a name="SetFreezeTimeout"></a>
+    <p>With the following function you can influence freeze checking.
+       "PauseFreeCheck" manually pauses & resumes freeze checking. You should use
+       it for code blocks where the main thread is doing time consuming tasks
+       without handling messages. Otherwise you're in danger of getting false
+       freezing alarms. Also you can call "ImNotFrozen" at any time to reset the
+       freeze check timer. Furthermore you can change the timeout value by calling
+       "SetFreezeTimeout".</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='comment'>// pause/restart freeze checking</span><br>
+                  <span id='comment'>// each PauseFreezeCheck(true) should get its own PauseFreezeCheck(false)</span><br>
+                  <span id='bold'>procedure</span>&nbsp;<span id='identifier'>PauseFreezeCheck</span>&nbsp;(<span id='identifier'>pause</span>: <span id='identifier'>boolean</span>&nbsp;= <span id='identifier'>true</span>);<br>
+                  <br>
+                  <span id='comment'>// reset the freeze detection timer</span><br>
+                  <span id='bold'>procedure</span>&nbsp;<span id='identifier'>ImNotFrozen</span>;<br>
+                  <br>
+                  <span id='comment'>// set a new freeze timeout time (in seconds)</span><br>
+                  <span id='bold'>procedure</span>&nbsp;<span id='identifier'>SetFreezeTimeout</span>&nbsp;(<span id='identifier'>newTimeout</span>: <span id='identifier'>dword</span>);
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="StartLeakChecking"></a>
+    <a name="StopLeakChecking"></a>
+    <a name="ReportLeaksNow"></a>
+    <a name="GetLeakReport"></a>
+    <a name="GetLeakCallstack"></a>
+    <a name="ClearLeaks"></a>
+    <a name="ShowLeakReport"></a>
+    <a name="HideLeak"></a>
+    <a name="SetLeakReportFile"></a>
+    <a name="ShowLeakProgressWindow"></a>
+    <a name="ShowNoLeaksWindow"></a>
+    <a name="SetDebugMmAlignment"></a>
+    <a name="HideInitializationLeaks"></a>
+    <a name="SetChildLeakFiltering"></a>
+    <a name="WaitForCleanExitProcess"></a>
+    <p>Leak checking is normally turned on/off globally in the madExcept settings
+       dialog. However, you can also activate it manually, even for specific
+       threads, only, if you prefer it that way. Furthermore you can also
+       explicitly tell madExcept to not report a specific handle or pointer as a
+       leak. Doing so makes sense if you have an "intentional" leak somewhere or
+       madExcept gets confused about a specific handle or pointer for some strange
+       reason.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='comment'>// You can start/stop leak checking at runtime.</span><br>
+                  <span id='comment'>// The file "madExcept32.dll" must be available for leak checking to work.</span><br>
+                  <span id='comment'>// You can call StartLeakChecking multiple times, from the same thread or</span><br>
+                  <span id='comment'>// different threads, but for every StartLeakChecking call you need to call</span><br>
+                  <span id='comment'>// StopLeakChecking with matching parameters to turn leak checking off again.</span><br>
+                  <span id='bold'>procedure</span>&nbsp;<span id='identifier'>StartLeakChecking</span>&nbsp;(<span id='identifier'>limitedToCurrentThread</span>: <span id='identifier'>boolean</span>&nbsp;= <span id='identifier'>true</span>);<br>
+                  <span id='bold'>procedure</span>&nbsp;&nbsp;<span id='identifier'>StopLeakChecking</span>&nbsp;(<span id='identifier'>limitedToCurrentThread</span>: <span id='identifier'>boolean</span>&nbsp;= <span id='identifier'>true</span>);<br>
+                  <br>
+                  <span id='comment'>// By default leaks are reported when the exe closes down, or the dll is</span><br>
+                  <span id='comment'>// unloaded. If you want to have a leak report earlier than that, you can</span><br>
+                  <span id='comment'>// manually invoke it. Doing so will start the madExceptViewer (if it is</span><br>
+                  <span id='comment'>// installed on the PC). The reported leaks are cleared.</span><br>
+                  <span id='bold'>procedure</span>&nbsp;<span id='identifier'>ReportLeaksNow</span>&nbsp;(<span id='identifier'>limitedToCurrentThread</span>: <span id='identifier'>boolean</span>&nbsp;= <span id='identifier'>true</span>);<br>
+                  <br>
+                  <span id='comment'>// You can call "GetLeakReport" at any time to get a leak report in string</span><br>
+                  <span id='comment'>// form. You can decide if you want the leak report to contain callstacks and</span><br>
+                  <span id='comment'>// if you want child leaks to be hidden. The reported leaks are *not* cleared.</span><br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>GetLeakReport</span>&nbsp;(<span id='identifier'>limitedToCurrentThread</span>: <span id='identifier'>boolean</span>&nbsp;= <span id='identifier'>true</span>; <span id='identifier'>includeCallstacks</span>: <span id='identifier'>boolean</span>&nbsp;= <span id='identifier'>true</span>; <span id='identifier'>hideChildLeaks</span>: <span id='identifier'>boolean</span>&nbsp;= <span id='identifier'>true</span>) : <span id='identifier'>UnicodeString</span>;<br>
+                  <br>
+                  <span id='comment'>// If you call "GetLeakReport" with "includeCallstacks = false", you can</span><br>
+                  <span id='comment'>// request the callstack of a specific leak (identified by the allocation</span><br>
+                  <span id='comment'>// number).</span><br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>GetLeakCallstack</span>&nbsp;(<span id='identifier'>allocationNumber</span>: <span id='identifier'>int64</span>) : <span id='identifier'>UnicodeString</span>;<br>
+                  <br>
+                  <span id='comment'>// This clears all currently known leaks.</span><br>
+                  <span id='bold'>procedure</span>&nbsp;<span id='identifier'>ClearLeaks</span>&nbsp;(<span id='identifier'>limitedToCurrentThread</span>: <span id='identifier'>boolean</span>&nbsp;= <span id='identifier'>true</span>; <span id='identifier'>rememberLeakParents</span>: <span id='identifier'>boolean</span>&nbsp;= <span id='identifier'>true</span>);<br>
+                  <br>
+                  <span id='comment'>// Calling "ShowLeakReport" will open the madExceptViewer (if available).</span><br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>ShowLeakReport</span>&nbsp;(<span id='bold'>const</span>&nbsp;<span id='identifier'>leakReport</span>: <span id='identifier'>UnicodeString</span>) : <span id='identifier'>boolean</span>;<br>
+                  <br>
+                  <span id='comment'>// you can call these functions to hide something from leak detection</span><br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>HideLeak</span>&nbsp;(<span id='identifier'>memory</span>: <span id='identifier'>pointer</span>) : <span id='identifier'>boolean</span>; <span id='bold'>overload</span>;<br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>HideLeak</span>&nbsp;(<span id='identifier'>handle</span>: <span id='identifier'>THandle</span>) : <span id='identifier'>boolean</span>; <span id='bold'>overload</span>;<br>
+                  <br>
+                  <span id='comment'>// Call this API to hide expected object leaks.</span><br>
+                  <span id='comment'>// If more objects are leaked than expected, all will be shown.</span><br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>HideLeak</span>&nbsp;(<span id='identifier'>someClass</span>: <span id='identifier'>TClass</span>; <span id='identifier'>count</span>: <span id='identifier'>integer</span>) : <span id='identifier'>boolean</span>; <span id='bold'>overload</span>;<br>
+                  <br>
+                  <span id='comment'>// This API allows you to hide leaks based on their callstack.</span><br>
+                  <span id='comment'>// e.g. 'MakeObjectInstance|TApplication.Create'</span><br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>HideLeak</span>&nbsp;(<span id='bold'>const</span>&nbsp;<span id='identifier'>callstack</span>: <span id='identifier'>UnicodeString</span>) : <span id='identifier'>boolean</span>; <span id='bold'>overload</span>;<br>
+                  <br>
+                  <span id='comment'>// This function hides all leaks in unit "initialization" sections.</span><br>
+                  <span id='comment'>// It's ok to use this for EXEs, but not recommended for DLLs.</span><br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>HideInitializationLeaks</span>&nbsp;: <span id='identifier'>boolean</span>;<br>
+                  <br>
+                  <span id='comment'>// force leak reporting to save the report to a specific file</span><br>
+                  <span id='comment'>// the report will always be saved and not displayed in the viewer </span><br>
+                  <span id='bold'>procedure</span>&nbsp;<span id='identifier'>SetLeakReportFile</span>&nbsp;(<span id='bold'>const</span>&nbsp;<span id='identifier'>leakReportFile</span>: <span id='identifier'>UnicodeString</span>);<br>
+                  <br>
+                  <span id='comment'>// do you want the "Creating leak report..." progress window to be shown?</span><br>
+                  <span id='bold'>procedure</span>&nbsp;<span id='identifier'>ShowLeakProgressWindow</span>&nbsp;(<span id='identifier'>show</span>: <span id='identifier'>boolean</span>);<br>
+                  <br>
+                  <span id='comment'>// do you want the "Well done - no leaks found!" info window to be shown?</span><br>
+                  <span id='bold'>procedure</span>&nbsp;<span id='identifier'>ShowNoLeaksWindow</span>&nbsp;(<span id='identifier'>show</span>: <span id='identifier'>boolean</span>);<br>
+                  <br>
+                  <span id='comment'>// Do you want child leaks to be filtered (can be very slow)?</span><br>
+                  <span id='bold'>procedure</span>&nbsp;<span id='identifier'>SetChildLeakFiltering</span>&nbsp;(<span id='identifier'>doFiltering</span>: <span id='identifier'>boolean</span>);<br>
+                  <br>
+                  <span id='comment'>// Sets the alignment of the debug memory manager (default 4).</span><br>
+                  <span id='bold'>procedure</span>&nbsp;<span id='identifier'>SetDebugMmAlignment</span>&nbsp;(<span id='identifier'>alignment</span>: <span id='identifier'>integer</span>&nbsp;= <span id='number'>4</span>);<br>
+                  <br>
+                  <span id='comment'>// Should leak reporting wait until ExitProcess is called with a finalized EXE (default true)?</span><br>
+                  <span id='bold'>procedure</span>&nbsp;<span id='identifier'>WaitForCleanExitProcess</span>&nbsp;(<span id='identifier'>wait</span>: <span id='identifier'>boolean</span>);
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="NameThread"></a>
+    <a name="GetThreadName"></a>
+    <p>If your project uses multiple threads, bug reports usually contain the
+       callstacks of all threads. The callstack of the main thread shows up under
+       the name "main thread", of course. But the callstacks of the other threads
+       are named only with either "thread $[id]" (pure win32 threads created by
+       CreateThread or BeginThread) or with their TThread class name. As a result
+       it's often difficult to find out, which callstack belongs to which of your
+       secondary threads. To make the bug report better understandable you can give
+       all your threads a name with the function "NameThread". If you want to
+       exclude specific threads from the bug report, call "NameThread" with the
+       name "-".</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='comment'>// to make the bug report more readable, you can name your secondardy threads</span><br>
+                  <span id='bold'>procedure</span>&nbsp;<span id='identifier'>NameThread</span>&nbsp;(<span id='identifier'>threadID</span>: <span id='identifier'>dword</span>; <span id='identifier'>threadName</span>: <span id='bold'>string</span>);<br>
+                  <br>
+                  <span id='comment'>// ask the name of a specific thread (0 = current thread)</span><br>
+                  <span id='comment'>// if the thread has no name, "thread %id%" is returned</span><br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>GetThreadName</span>&nbsp;(<span id='identifier'>threadID</span>: <span id='identifier'>dword</span>&nbsp;= <span id='number'>0</span>) : <span id='bold'>string</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="InitAntiFreeze"></a>
+    <a name="CloseAntiFreeze"></a>
+    <p>When writing NT/2k/XP services, you will notice that the anti freeze detection
+       doesn't work. In fact it brings false alarms all the time. The reason is that
+       in NT/2k/XP services the main thread is sleeping for the most part and doesn't
+       handle messages at all. The main work is done in a seperate thread.</p>
+    <p>In case you want anti freeze detection for that worker thread, you can't use
+       the <a href="madExceptSettings.htm">madExcept settings dialog</a> to turn on
+       anti freeze detection, instead turn it off there and call "InitAntiFreeze" at
+       the beginning of your worker thread.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>procedure</span>&nbsp;&nbsp;<span id='identifier'>InitAntiFreeze</span>;<br>
+                  <span id='bold'>procedure</span>&nbsp;<span id='identifier'>CloseAntiFreeze</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="CreateBugReport"></a>
+    <p>Sometimes there are situations where you might want to catch exceptions in a
+       try..except statement. Nevertheless you might want to get a full bug report
+       in the except..end block. That's possible by manually calling the function
+       "CreateBugReport", which creates a full bug report according to your
+       <a href="madExceptSettings.htm">madExcept settings</a>.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>CreateBugReport</span>&nbsp;(<span id='identifier'>exceptType</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <a class="pascal" href="#TExceptType">TExceptType</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= <span id='identifier'>etFrozen</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>exceptObject</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>TObject</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= <span id='bold'>nil</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>exceptAddr</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>pointer</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= <span id='bold'>nil</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>callingThreadId</span>&nbsp;&nbsp;&nbsp;: <span id='identifier'>dword</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= <span id='number'>0</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>currentEsp</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>dword</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= <span id='number'>0</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>currentEbp</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>dword</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= <span id='number'>0</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>context</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>PContext</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= <span id='bold'>nil</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>showPleaseWaitBox</span>&nbsp;: <span id='identifier'>boolean</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= <span id='identifier'>false</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>settings</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <a class="pascal" href="MESettings.htm#IMEModuleSettings">IMEModuleSettings</a>&nbsp;= <span id='bold'>nil</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>source</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <a class="pascal" href="#TExceptSource">TExceptSource</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= <span id='identifier'>esManual</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>relatedObject</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>TObject</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= <span id='bold'>nil</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>package</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>dword</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= <span id='number'>0</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>preparedStack</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>pointer</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= <span id='bold'>nil</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;) : <span id='bold'>string</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="GetCrashStackTrace"></a>
+    <a name="GetThreadStackTrace"></a>
+    <p>If you need a stack trace for one specific thread, only, you can call one
+       of the following two functions. Generally you can leave all parameters
+       unchanged, unless you have special needs:</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='comment'>// get the crash stack trace for the current thread</span><br>
+                  <span id='comment'>// the current thread must be in a try..except block for this to work</span><br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>GetCrashStackTrace</span>&nbsp;&nbsp;(<span id='identifier'>hideUglyItems</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>boolean</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= <span id='identifier'>false</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>showRelativeAddrs</span>&nbsp;&nbsp;&nbsp;: <span id='identifier'>boolean</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= <span id='identifier'>false</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>showRelativeLines</span>&nbsp;&nbsp;&nbsp;: <span id='identifier'>boolean</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= <span id='identifier'>false</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>stackTrace</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>TPStackTrace</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= <span id='bold'>nil</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='bold'>const</span>&nbsp;<span id='identifier'>progressAlert</span>&nbsp;: <a class="pascal" href="madNVPrgrAlertUnit.htm#IProgressAlert">IProgressAlert</a>&nbsp;&nbsp;&nbsp;&nbsp;= <span id='bold'>nil</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>dumbTrace</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>boolean</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= <span id='identifier'>false</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>pCrc1</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>TPCardinal</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= <span id='bold'>nil</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>pCrc2</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>TPCardinal</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= <span id='bold'>nil</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>pDelphiThread</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>TPBoolean</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= <span id='bold'>nil</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>pMinDebugInfos</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>TPDAUnicodeString</span>&nbsp;= <span id='bold'>nil</span>&nbsp;&nbsp;) : <span id='bold'>string</span>;<br>
+                  <br>
+                  <span id='comment'>// get a stack trace for any running thread</span><br>
+                  <span id='comment'>// neither the calling thread nor the target thread have to be in a try..except block</span><br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>GetThreadStackTrace</span>&nbsp;(<span id='identifier'>threadId</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>dword</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= <span id='number'>0</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>hideUglyItems</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>boolean</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= <span id='identifier'>false</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>showRelativeAddrs</span>&nbsp;&nbsp;&nbsp;: <span id='identifier'>boolean</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= <span id='identifier'>false</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>showRelativeLines</span>&nbsp;&nbsp;&nbsp;: <span id='identifier'>boolean</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= <span id='identifier'>false</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>stackTrace</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>TPStackTrace</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= <span id='bold'>nil</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='bold'>const</span>&nbsp;<span id='identifier'>progressAlert</span>&nbsp;: <a class="pascal" href="madNVPrgrAlertUnit.htm#IProgressAlert">IProgressAlert</a>&nbsp;&nbsp;&nbsp;&nbsp;= <span id='bold'>nil</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>dumbTrace</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>boolean</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= <span id='identifier'>false</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>pCrc1</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>TPCardinal</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= <span id='bold'>nil</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>pCrc2</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>TPCardinal</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= <span id='bold'>nil</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>pDelphiThread</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>TPBoolean</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= <span id='bold'>nil</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>pMinDebugInfos</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>TPDAUnicodeString</span>&nbsp;= <span id='bold'>nil</span>&nbsp;&nbsp;) : <span id='bold'>string</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IsUserAdmin"></a>
+    <a name="GetTSClientName"></a>
+    <a name="GetOsVersionString"></a>
+    <a name="GetOsLanguageString"></a>
+    <a name="GetSystemUpTime"></a>
+    <a name="GetProgramUpTime"></a>
+    <a name="GetCpuName"></a>
+    <a name="GetCpuCount"></a>
+    <a name="GetMemoryStatus"></a>
+    <a name="Get9xResourceReport"></a>
+    <a name="GetDisplayModeString"></a>
+    <a name="GetAllocatedMemory"></a>
+    <a name="GetLargestFreeBlock"></a>
+    <p>In the bug report you'll find a whole collection of useful system 
+       information. If you want to use the same information in your own functions,
+       you can do so by calling the following functions:</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>IsUserAdmin</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>boolean</span>; &nbsp;<span id='comment'>// does the current user have admin rights?</span><br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>GetTSClientName</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='bold'>string</span>; &nbsp;&nbsp;<span id='comment'>// client session name (terminal server)</span><br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>GetOsVersionString</span>&nbsp;&nbsp;&nbsp;: <span id='bold'>string</span>; &nbsp;&nbsp;<span id='comment'>// e.g. "Windows XP Service Pack 1 build 2600"</span><br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>GetOsLanguageString</span>&nbsp;&nbsp;: <span id='bold'>string</span>; &nbsp;&nbsp;<span id='comment'>// e.g. "English"</span><br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>GetSystemUpTime</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='bold'>string</span>; &nbsp;&nbsp;<span id='comment'>// e.g. "9 hours 52 minutes"</span><br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>GetProgramUpTime</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='bold'>string</span>; &nbsp;&nbsp;<span id='comment'>// e.g. "15 seconds"</span><br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>GetCpuName</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='bold'>string</span>; &nbsp;&nbsp;<span id='comment'>// e.g. "Intel(R) Pentium(R) 4 CPU 2.80GHz"</span><br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>GetCpuCount</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>integer</span>; &nbsp;<span id='comment'>// number of installed CPUs (HT-CPUs count as 2)</span><br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>GetMemoryStatus</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='bold'>string</span>; &nbsp;&nbsp;<span id='comment'>// e.g. "327/511 MB (free/total)"</span><br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>Get9xResourceReport</span>&nbsp;&nbsp;: <span id='bold'>string</span>; &nbsp;&nbsp;<span id='comment'>// e.g. "99/97 (gdi/user)"</span><br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>GetDisplayModeString</span>&nbsp;: <span id='bold'>string</span>; &nbsp;&nbsp;<span id='comment'>// e.g. "1024x768, 32 bit"</span><br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>GetAllocatedMemory</span>&nbsp;&nbsp;&nbsp;: <span id='bold'>string</span>; &nbsp;&nbsp;<span id='comment'>// e.g. "3.52 MB"</span><br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>GetLargestFreeBlock</span>&nbsp;&nbsp;: <span id='bold'>string</span>; &nbsp;&nbsp;<span id='comment'>// e.g. "1.46 GB"</span>
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="SendBugReport"></a>
+    <a name="SaveBugReport"></a>
+    <a name="PrintBugReport"></a>
+    <a name="RestartApplication"></a>
+    <a name="CloseApplication"></a>
+    <a name="AutoSaveBugReport"></a>
+    <a name="AutoSendBugReport"></a>
+    <p>Finally you can call all the action functions, which are executed, when a
+       user hits one of the exception box buttons. This way you can easily create
+       your own exception box without having to reimplement all the functionality
+       like mailing and printing etc...</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='comment'>// if you have a window, enter it as the parentWindow, otherwise leave it 0</span><br>
+                  <span id='bold'>function</span>&nbsp;&nbsp;<span id='identifier'>SendBugReport</span>&nbsp;(<span id='identifier'>bugReport</span>&nbsp;&nbsp;&nbsp;&nbsp;: <span id='bold'>string</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>screenShot</span>&nbsp;&nbsp;&nbsp;: <a class="pascal" href="madNVBitmapUnit.htm#INVBitmap">INVBitmap</a>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>parentWindow</span>&nbsp;: <span id='identifier'>dword</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= <span id='number'>0</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>settings</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <a class="pascal" href="MESettings.htm#IMESettings">IMESettings</a>&nbsp;= <span id='bold'>nil</span>) : <span id='identifier'>TExtBool</span>;<br>
+                  <span id='bold'>function</span>&nbsp;&nbsp;<span id='identifier'>SaveBugReport</span>&nbsp;(<span id='identifier'>bugReport</span>&nbsp;&nbsp;&nbsp;&nbsp;: <span id='bold'>string</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>parentWindow</span>&nbsp;: <span id='identifier'>dword</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= <span id='number'>0</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>settings</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <a class="pascal" href="MESettings.htm#IMESettings">IMESettings</a>&nbsp;= <span id='bold'>nil</span>) : <span id='identifier'>boolean</span>;<br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>PrintBugReport</span>&nbsp;(<span id='identifier'>bugReport</span>&nbsp;&nbsp;&nbsp;&nbsp;: <span id='bold'>string</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>parentWindow</span>&nbsp;: <span id='identifier'>dword</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= <span id='number'>0</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>settings</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <a class="pascal" href="MESettings.htm#IMESettings">IMESettings</a>&nbsp;= <span id='bold'>nil</span>) : <span id='identifier'>boolean</span>;<br>
+                  <br>
+                  <span id='bold'>procedure</span>&nbsp;<span id='identifier'>RestartApplication</span>;<br>
+                  <span id='bold'>procedure</span>&nbsp;<span id='identifier'>CloseApplication</span>;<br>
+                  <br>
+                  <span id='comment'>// this is for secretly saving/sending the bug report (without UI)</span><br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>AutoSendBugReport</span>&nbsp;(<span id='identifier'>bugReport</span>&nbsp;&nbsp;: <span id='bold'>string</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>screenShot</span>&nbsp;: <a class="pascal" href="madNVBitmapUnit.htm#INVBitmap">INVBitmap</a>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>settings</span>&nbsp;&nbsp;&nbsp;: <a class="pascal" href="MESettings.htm#IMESettings">IMESettings</a>&nbsp;= <span id='bold'>nil</span>) : <span id='identifier'>TExtBool</span>;<br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>AutoSaveBugReport</span>&nbsp;(<span id='identifier'>bugReport</span>&nbsp;&nbsp;: <span id='bold'>string</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>settings</span>&nbsp;&nbsp;&nbsp;: <a class="pascal" href="MESettings.htm#IMESettings">IMESettings</a>&nbsp;= <span id='bold'>nil</span>) : <span id='identifier'>boolean</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </body>
+
+</html>

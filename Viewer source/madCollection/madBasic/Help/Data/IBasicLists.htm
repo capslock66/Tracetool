@@ -1,0 +1,193 @@
+<html>
+
+  <head>
+    <title>mad* Help...</title>
+    <meta name="description" content="mad* Help...">
+    <meta name="keywords" content="madshi, components, delphi">
+    <meta http-equiv="expires" content="900">
+    <link rel=stylesheet type="text/css" href="style.css">
+  </head>
+
+  <body background="bcklight.gif" bgcolor=#F8F8F8>
+    <a name="IBasicList"></a>
+    <table border=0 cellpadding=0 callspacing=0><tr>
+      <td valign=bottom>
+        <table border=0 cellpadding=0 cellspacing=0><tr><td bgcolor=#D8D8D8>
+          <table cellpadding=3 border=0>
+            <tr><td bgcolor=#FFFFF0>
+              <div id="verySmall"><br></div>
+              <div id="bigTitle">&nbsp;IBasic Lists&nbsp;</div>
+              <div id="verySmall"><br></div>
+              <div id="small">
+                <a class="small" href="Content.htm">Content</a> /
+                <a class="small" href="madBasic.htm">madBasic</a> /
+                <a class="small" href="madListsUnit.htm">madLists Unit</a> /...
+              </div>
+            </td></tr>
+          </table>
+        </td></tr></table>
+      </td>
+      <td valign=bottom>
+        <table border=0 cellpadding=0 cellspacing=0><tr><td bgcolor=#D8D8D8>
+          <table cellpadding=7 border=0>
+            <tr><td bgcolor=#F4F4F8><a href="http://www.madshi.net">www.madshi.net</a></td></tr>
+          </table>
+        </td></tr></table>
+      </td>
+    </tr></table>
+    <p>While the <a href="ICustomBasicListBaseInterface.htm#ICustomBasicList">ICustomBasicList</a> interface, which was introduced in the
+       <a href="madBasic.htm" href="madBasicUnit.htm">madBasic</a> unit, is only a base interface which you can't use directly,
+       here comes a full list interface, which can store any <a href="IBasicBaseInterface.htm#IBasic">IBasic</a> items.
+       Since all my interfaces are based on <a href="IBasicBaseInterface.htm#IBasic">IBasic</a> that means that you can
+       simply store all my interfaces in this list. You can even store other lists
+       in this list. For a full list of methods and properties look at the
+       <a href="IBasicListRef.htm">IBasicList Reference</a>.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>type</span>&nbsp;<span id='identifier'>IBasicList</span>&nbsp;= <span id='bold'>interface</span>&nbsp;(<a class="pascal" href="ICustomBasicListBaseInterface.htm#ICustomBasicList">ICustomBasicList</a>) [<span id='string'>'{0DDE44C0-71EB-11D3-A52D-00005A180D69}'</span>];
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="NewBasicList"></a>
+    <p>When creating a new "BasicList", you can either create it emptily, or you can
+       right away fill it with some items:</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>NewBasicList</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>IBasicList</span>; <span id='bold'>overload</span>;<br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>NewBasicList</span>&nbsp;(<span id='bold'>const</span>&nbsp;<span id='identifier'>items</span>: <span id='bold'>array</span>&nbsp;<span id='bold'>of</span>&nbsp;<a class="pascal" href="IBasicBaseInterface.htm#IBasic">IBasic</a>) : <span id='identifier'>IBasicList</span>; <span id='bold'>overload</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IBasicList.Items"></a>
+    <p>The "Items" property gives you read and write access to the items of the list:</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IBasicList</span>.<img src="w.gif"><span id='identifier'>Items</span>&nbsp;[<span id='bold'>index</span>: <span id='identifier'>integer</span>] : <a class="pascal" href="IBasicBaseInterface.htm#IBasic">IBasic</a>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IBasicList.Capacity"></a>
+    <p>With the following property you can get and even directly set the size of
+       the array which holds the items. That means when you set the array to a size
+       which is smaller then <a href="IListBaseInterface.htm#IList.ItemCount">IList.ItemCount</a> you're deleting items from the
+       list. Setting the "Capacity" to zero consequently deletes all items from the
+       list.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IBasicList</span>.<img src="w.gif"><span id='identifier'>Capacity</span>&nbsp;: <span id='identifier'>integer</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IBasicList.AddItem"></a>
+    <a name="IBasicList.AddItems"></a>
+    <a name="IBasicList.InsertItem"></a>
+    <p>Use the methods "AddItem(s)" to add one or more items to our list. The
+       method "InsertItem" inserts the specified item at the specified position.
+       This makes sense only for a non sorted list, of course. The result of all 3
+       methods is the new index of the (first) added item.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>IBasicList</span>.<img src="m.gif"><span id='identifier'>AddItem</span>&nbsp;&nbsp;&nbsp;&nbsp;(<span id='bold'>const</span>&nbsp;<span id='identifier'>item</span>&nbsp;: <a class="pascal" href="IBasicBaseInterface.htm#IBasic">IBasic</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;) : <span id='identifier'>integer</span>;<br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>IBasicList</span>.<img src="m.gif"><span id='identifier'>AddItems</span>&nbsp;&nbsp;&nbsp;(<span id='bold'>const</span>&nbsp;<span id='identifier'>items</span>: <span id='bold'>array</span>&nbsp;<span id='bold'>of</span>&nbsp;<a class="pascal" href="IBasicBaseInterface.htm#IBasic">IBasic</a>) : <span id='identifier'>integer</span>;<br>
+                  <br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>IBasicList</span>.<img src="m.gif"><span id='identifier'>InsertItem</span>&nbsp;(<span id='bold'>const</span>&nbsp;<span id='identifier'>item</span>&nbsp;: <a class="pascal" href="IBasicBaseInterface.htm#IBasic">IBasic</a>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="e.gif">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='bold'>index</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>integer</span>&nbsp;= <span id='number'>0</span>&nbsp;&nbsp;&nbsp;&nbsp;) : <span id='identifier'>integer</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IBasicList.DeleteItem"></a>
+    <a name="IBasicList.Clear"></a>
+    <p>You can either delete an item from the list by giving in it's index or by
+       giving in the item itself. With the method "Clear" you can delete all items
+       at once.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>function</span>&nbsp;&nbsp;<span id='identifier'>IBasicList</span>.<img src="m.gif"><span id='identifier'>DeleteItem</span>&nbsp;( &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='bold'>index</span>&nbsp;: <span id='identifier'>integer</span>) : <span id='identifier'>boolean</span>; <span id='bold'>overload</span>;<br>
+                  <span id='bold'>function</span>&nbsp;&nbsp;<span id='identifier'>IBasicList</span>.<img src="m.gif"><span id='identifier'>DeleteItem</span>&nbsp;(<span id='bold'>const</span>&nbsp;<span id='identifier'>item</span>&nbsp;&nbsp;: <a class="pascal" href="IBasicBaseInterface.htm#IBasic">IBasic</a>&nbsp;) : <span id='identifier'>boolean</span>; <span id='bold'>overload</span>;<br>
+                  <br>
+                  <span id='bold'>procedure</span>&nbsp;<span id='identifier'>IBasicList</span>.<img src="m.gif"><span id='identifier'>Clear</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IBasicList.Swap"></a>
+    <p>The following method simply swaps the position of two items in the list. This
+       makes sense only for non sorted lists, or course.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>IBasicList</span>.<img src="m.gif"><span id='identifier'>Swap</span>&nbsp;(<span id='identifier'>index1</span>, <span id='identifier'>index2</span>: <span id='identifier'>integer</span>) : <span id='identifier'>boolean</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </body>
+
+</html>

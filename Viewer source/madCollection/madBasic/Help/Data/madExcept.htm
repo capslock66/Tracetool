@@ -1,0 +1,145 @@
+<html>
+
+  <head>
+    <title>mad* Help...</title>
+    <meta name="description" content="mad* Help...">
+    <meta name="keywords" content="madshi, components, delphi">
+    <meta http-equiv="expires" content="900">
+    <link rel=stylesheet type="text/css" href="style.css">
+  </head>
+
+  <body background="bcklight.gif" bgcolor=#F8F8F8>
+    <table border=0 cellpadding=0 callspacing=0><tr>
+      <td valign=bottom>
+        <table border=0 cellpadding=0 cellspacing=0><tr><td bgcolor=#D8D8D8>
+          <table cellpadding=3 border=0>
+            <tr><td bgcolor=#FFFFF0>
+              <div id="verySmall"><br></div>
+              <div id="bigTitle">&nbsp;madExcept&nbsp;</div>
+              <div id="verySmall"><br></div>
+              <div id="small">
+                <a class="small" href="Content.htm">Content</a> /...
+              </div>
+            </td></tr>
+          </table>
+        </td></tr></table>
+      </td>
+      <td valign=bottom>
+        <table border=0 cellpadding=0 cellspacing=0><tr><td bgcolor=#D8D8D8>
+          <table cellpadding=7 border=0>
+            <tr><td bgcolor=#F4F4F8><a href="http://www.madshi.net">www.madshi.net</a></td></tr>
+          </table>
+        </td></tr></table>
+      </td>
+    </tr></table>
+    <p><img src='exc-ss1.gif' align=left style="margin-right:10pt;margin-bottom:10pt">
+       Do you know this box? ;-) Well, nobody is perfect. So it happens from time
+       to time that we programmers ship a product, which is not totally bug free.
+       That's okay (more or less), you might say. As long as your product has less
+       bugs than Windows, it's fine.</p>
+    <p>But what do your customers say? Let's say a customer mails you that he gets
+       this "invalid pointer operation" box quite often and that he either wants
+       his money back or a new version which fixes this bug. He's willing to help
+       you finding the bug, he even sends you a screen shot of the exception box.
+       But does that really help much? I don't think so. There's absolutely *NO*
+       useful information in that box. And on your computer this bug simply doesn't
+       occur, no idea why. So what can you do now?</p>
+    <p>What you would really need is more information - a *lot* more information.
+       You would need the exact source code location where the exception occured,
+       and - also important - how the program got to that location. In other words:
+       You need the exception callstack, with unit name, function name and line
+       number for each item. THEN you would have good hope to find the bug. Right?</p>
+    <p>Okay, the package "madExcept" was exactly build for that purpose, namely to
+       replace Delphi's standard exception handling with a new logic, which finds
+       out the full callstack with as much details and infos as possible. The exact
+       behaviour of madExcept's exception handling can be totally
+       <a href="madExceptSettings.htm">customized</a>. You can choose whether you
+       want to see an exception box or not, how the box should look like, which
+       buttons it should have, how the buttons should be labeled and so on. If you
+       don't do any customization, the default box looks like this:</p>
+    <p><img src='exc-ss3.gif' align=left style="margin-right:10pt;margin-bottom:10pt">
+       The usual customer doesn't really want to read madExcept's detailed bug
+       report. He just wants to send the bug report to the programmer, hoping that
+       this will lead to a corrected new version. So in the default
+       <a href="madExceptSettings.htm">settings</a> madExcept's box doesn't show
+       any exception information, not even the exception message itself. The
+       customer can just mail the bug report, or he can continue, restart or close
+       the application.</p>
+    <p>One thing should be mentioned here: madExcept's exception box is *not* using
+       any VCL stuff, instead it's build on pure win32 API calls. It's no fun
+       designing a nice box with bitmap buttons and so on with win32 APIs only, but
+       in this case it was absolutely necessary. The VCL is not thread safe, but
+       our exception box must be able to show up in the context of each thread -
+       thus it has to be thread safe, thus it must not use the VCL.</p>
+    <p>Apart from pure exception handling madExcept does one more thing
+       (<a href="madExceptSettings1.htm">if you want it to</a>),
+       namely checking whether the main thread is frozen or not. Sometimes your
+       program doesn't react anymore, although no exception occured. That can
+       happen e.g. if your main thread runs in an infinite loop or if there's a bug
+       in the synchronization of multiple threads, with the result of a dead lock.
+       Such a bug can be *very* difficult to find, because your program is just
+       frozen, without showing an exception. But with madExcept the situation is
+       not that hopeless anymore: If your main thread doesn't react on messages for
+       a specified time, madExcept raises an exception in the context of the main
+       thread. In the resulting bug report you can see what the main thread was
+       doing exactly and also what all other threads were doing at that time. That
+       should help a lot finding infinite loop and dead lock bugs.</p>
+    <p>Okay, I've talked enough. If you now just want this extended exception
+       handling, then (after having 
+       <a href="http://www.madshi.net/madCollection.exe">downloaded</a> and
+       installed the package) please read <a href="HowToUseMadExcept.htm">How To Use madExcept</a>.
+       Customization details can be found on the
+       <a href="madExceptSettings.htm">madExcept Settings</a> page. The <a href="madExceptFaq.htm">madExcept FAQ</a> page answers some
+       frequently asked question. If you want to know how "madExcept" works
+       internally in all details, you can head on over to the
+       <a href="madExceptInternals.htm">madExcept Internals</a>. If you're interested in a little
+       <a href="madExceptDemo.htm">demo</a> that shows "madExcept" in action when
+       working with an application & dll combo, continue
+       <a href="madExceptDemo.htm">here</a>. Finally, you may be interested to read
+       something about the different <a href="TraceMethods.htm">Stack Tracing Methods</a> available on the
+       market.</p>
+    <table border=0 cellpadding=0 callspacing=0>
+      <tr><td bgcolor=#D8D8D8>
+        <table border=0 cellpadding=7>
+          <tr>
+            <td bgcolor=#6060B0><div id="smallTitle">Topics</div></td>
+            <td bgcolor=#F8F0F0><a href="madExceptWhatsNew.htm">What Is New</a></td>
+            <td bgcolor=#F4F4F8><a href="HowToUseMadExcept.htm">How To Use</a></td>
+            <td bgcolor=#F8F0F0><a href="madExceptSettings.htm">Settings</a></td>
+            <td bgcolor=#F4F4F8><a href="madExceptConfiguration.htm">Configuration</a></td>
+            <td bgcolor=#F8F0F0><a href="madExceptInternals.htm">Internals</a></td>
+            <td bgcolor=#F4F4F8><a href="madExceptDemo.htm">Demo</a></td>
+            <td bgcolor=#F8F0F0><a href="TraceMethods.htm">Stack Tracing Methods</a></td>
+            <td bgcolor=#F4F4F8><a href="madExceptFaq.htm">FAQ</a></td>
+          </tr>
+        </table>
+      </td></tr>
+    </table>
+    <p>A full list of what is contained in the package "madExcept" can be found in
+       the <a href="madExceptRef.htm">madExcept Reference</a>. In case you want to explore the seperate
+       units and what else you can do with them, you can find documentation about
+       them here:</p>
+    <table border=0 cellpadding=0 callspacing=0>
+      <tr><td bgcolor=#D8D8D8>
+        <table border=0 cellpadding=7>
+          <tr>
+            <td bgcolor=#6060B0><div id="smallTitle">Units</div></td>
+            <td bgcolor=#F8F0F0><a href="madMapFileUnit.htm">madMapFile</a></td>
+            <td bgcolor=#F4F4F8><a href="madStackTraceUnit.htm">madStackTrace</a></td>
+            <td bgcolor=#F8F0F0><a href="madExceptUnit.htm">madExcept</a></td>
+            <td bgcolor=#F4F4F8><a href="madExceptVclUnit.htm">madExceptVcl</a></td>
+            <td bgcolor=#F8F0F0><a href="madLinkDisAsmUnit.htm">madLinkDisAsm</a></td>
+            <td bgcolor=#F4F4F8><a href="madNVBitmapUnit.htm">madNVBitmap</a></td>
+            <td bgcolor=#F8F0F0><a href="madNVAssistantUnit.htm">madNVAssistant</a></td>
+            <td bgcolor=#F4F4F8><a href="madNVPrgrAlertUnit.htm">madNVPrgrAlert</a></td>
+          </tr>
+        </table>
+      </td></tr>
+    </table>
+    <p>madExcept is free for non-commercial usage (only).</p>
+    <p>You can find more information including the full download at
+       <a href="http://www.madExcept.com">http://www.madExcept.com</a>.</p>
+    
+  </body>
+
+</html>

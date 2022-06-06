@@ -1,0 +1,174 @@
+<html>
+
+  <head>
+    <title>mad* Help...</title>
+    <meta name="description" content="mad* Help...">
+    <meta name="keywords" content="madshi, components, delphi">
+    <meta http-equiv="expires" content="900">
+    <link rel=stylesheet type="text/css" href="style.css">
+  </head>
+
+  <body background="bcklight.gif" bgcolor=#F8F8F8>
+    <table border=0 cellpadding=0 callspacing=0><tr>
+      <td valign=bottom>
+        <table border=0 cellpadding=0 cellspacing=0><tr><td bgcolor=#D8D8D8>
+          <table cellpadding=3 border=0>
+            <tr><td bgcolor=#FFFFF0>
+              <div id="verySmall"><br></div>
+              <div id="bigTitle">&nbsp;"RemoteCmdLine" Example&nbsp;</div>
+              <div id="verySmall"><br></div>
+              <div id="small">
+                <a class="small" href="Content.htm">Content</a> /
+                <a class="small" href="madRemote.htm">madRemote</a> /
+                <a class="small" href="RemoteExecute.htm">RemoteExecute</a> /...
+              </div>
+            </td></tr>
+          </table>
+        </td></tr></table>
+      </td>
+      <td valign=bottom>
+        <table border=0 cellpadding=0 cellspacing=0><tr><td bgcolor=#D8D8D8>
+          <table cellpadding=7 border=0>
+            <tr><td bgcolor=#F4F4F8><a href="http://www.madshi.net">www.madshi.net</a></td></tr>
+          </table>
+        </td></tr></table>
+      </td>
+    </tr></table>
+    <p>We have two variations of the "RemoteCmdLine" Example. The first one is
+       using the low level functions <a href="CopyFunction.htm">CopyFunction</a>,
+       <a href="AllocFreeMemEx.htm#AllocMemEx">AllocMemEx</a>/<a href="AllocFreeMemEx.htm#FreeMemEx">FreeMemEx</a> and <a href="CreateRemoteThread.htm">CreateRemoteThreadEx</a>, while
+       the second one is using the higher level function <a href="RemoteExecute.htm">RemoteExecute</a>.</p>
+    <p>The second variation can also be found in the "Demo" folder on your
+       harddisk.</p>
+    <p>Here come the first variation using the low level functions:</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='comment'>// demonstrate how to use CopyFunction, AllocMemEx and CreateRemoteThread to</span><br>
+                  <span id='comment'>// execute a function in the context of another process</span><br>
+                  <br>
+                  <span id='comment'>// this demo shows us the command line of the explorer, which normally is not</span><br>
+                  <span id='comment'>// possible when using normal win32 APIs</span><br>
+                  <br>
+                  <span id='bold'>program</span>&nbsp;<span id='identifier'>RemoteCmdLine</span>;<br>
+                  <br>
+                  <span id='bold'>uses</span>&nbsp;<span id='identifier'>Windows</span>, <a class="pascal" href="madRemote.htm">madRemote</a>;<br>
+                  <br>
+                  <span id='comment'>// this is our thread function, which will be copied to and then executed in the</span><br>
+                  <span id='comment'>// context of any desired process</span><br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>GetCmdLineThread</span>(<span id='identifier'>buffer</span>: <span id='identifier'>pchar</span>) : <span id='identifier'>dword</span>; <span id='bold'>stdcall</span>;<br>
+                  <span id='bold'>var</span>&nbsp;<span id='identifier'>cl</span>&nbsp;: <span id='identifier'>pchar</span>;<br>
+                  <span id='bold'>begin</span><br>
+                  &nbsp;&nbsp;<span id='comment'>// first let's get the command line of the current process</span><br>
+                  &nbsp;&nbsp;<span id='identifier'>cl</span>&nbsp;:= <span id='identifier'>GetCommandLine</span>;<br>
+                  <br>
+                  &nbsp;&nbsp;<span id='comment'>// now let's copy the characters to the specified buffer</span><br>
+                  &nbsp;&nbsp;<span id='comment'>// we can't use StrPCopy, because that's not available in other processes</span><br>
+                  &nbsp;&nbsp;<span id='comment'>// we use "result" as the loop variable, so the length of the copied</span><br>
+                  &nbsp;&nbsp;<span id='comment'>// command line is automatically the exit code of the thread</span><br>
+                  &nbsp;&nbsp;<span id='bold'>for</span>&nbsp;<span id='identifier'>result</span>&nbsp;:= <span id='number'>0</span>&nbsp;<span id='bold'>to</span>&nbsp;<span id='identifier'>MAX_PATH</span>&nbsp;- <span id='number'>1</span>&nbsp;<span id='bold'>do</span>&nbsp;<span id='bold'>begin</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>buffer</span>[<span id='identifier'>result</span>] := <span id='identifier'>cl</span>[<span id='identifier'>result</span>];<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='bold'>if</span>&nbsp;<span id='identifier'>buffer</span>[<span id='identifier'>result</span>] = <span id='string'>#0</span>&nbsp;<span id='bold'>then</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>break</span>;<br>
+                  &nbsp;&nbsp;<span id='bold'>end</span>;<br>
+                  <span id='bold'>end</span>;<br>
+                  <br>
+                  <span id='comment'>// this function can give us the command line of any specified 32bit process</span><br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>GetProcessCmdLine</span>(<span id='identifier'>processHandle</span>: <span id='identifier'>dword</span>) : <span id='bold'>string</span>;<br>
+                  <span id='bold'>var</span>&nbsp;<span id='identifier'>th</span>, <span id='identifier'>tid</span>&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>dword</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>entryPoint</span>&nbsp;: <span id='identifier'>pointer</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>buffer</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>pointer</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>params</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>pointer</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>len</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>dword</span>;<br>
+                  <span id='bold'>begin</span><br>
+                  &nbsp;&nbsp;<span id='comment'>// first of all we copy the function to the specified process</span><br>
+                  &nbsp;&nbsp;<span id='identifier'>entryPoint</span>&nbsp;:= <a class="pascal" href="CopyFunction.htm">CopyFunction</a>(@<span id='identifier'>GetCmdLineThread</span>, <span id='identifier'>processHandle</span>, <span id='identifier'>false</span>, @<span id='identifier'>buffer</span>);<br>
+                  <br>
+                  &nbsp;&nbsp;<span id='comment'>// now we allocate a temporare buffer in the context of the specified process</span><br>
+                  &nbsp;&nbsp;<span id='identifier'>params</span>&nbsp;:= <a class="pascal" href="AllocFreeMemEx.htm#AllocMemEx">AllocMemEx</a>(<span id='identifier'>MAX_PATH</span>, <span id='identifier'>processHandle</span>);<br>
+                  <br>
+                  &nbsp;&nbsp;<span id='comment'>// finally we create the remote thread and enter the entryPoint of the</span><br>
+                  &nbsp;&nbsp;<span id='comment'>// copied fuction and the temporare buffer as the parameter</span><br>
+                  &nbsp;&nbsp;<span id='comment'>// both addresses are valid in the context of the destination process</span><br>
+                  &nbsp;&nbsp;<span id='identifier'>th</span>&nbsp;:= <a class="pascal" href="CreateRemoteThread.htm">CreateRemoteThreadEx</a>(<span id='identifier'>processHandle</span>, <span id='bold'>nil</span>, <span id='number'>0</span>, <span id='identifier'>entryPoint</span>, <span id='identifier'>params</span>, <span id='number'>0</span>, <span id='identifier'>tid</span>);<br>
+                  <br>
+                  &nbsp;&nbsp;<span id='comment'>// let's wait until the remote thread has done it's work</span><br>
+                  &nbsp;&nbsp;<span id='identifier'>WaitForSingleObject</span>(<span id='identifier'>th</span>, <span id='identifier'>INFINITE</span>);<br>
+                  <br>
+                  &nbsp;&nbsp;<span id='comment'>// the exit code of the remote thread is the length of the command line</span><br>
+                  &nbsp;&nbsp;<span id='identifier'>GetExitCodeThread</span>(<span id='identifier'>th</span>, <span id='identifier'>len</span>);<br>
+                  &nbsp;&nbsp;<span id='identifier'>SetLength</span>(<span id='identifier'>result</span>, <span id='identifier'>len</span>);<br>
+                  <br>
+                  &nbsp;&nbsp;<span id='comment'>// finally let's fill the result string from the temporare buffer</span><br>
+                  &nbsp;&nbsp;<span id='identifier'>ReadProcessMemory</span>(<span id='identifier'>processHandle</span>, <span id='identifier'>params</span>, <span id='identifier'>pointer</span>(<span id='identifier'>result</span>), <span id='identifier'>len</span>, <span id='identifier'>len</span>);<br>
+                  <br>
+                  &nbsp;&nbsp;<span id='comment'>// never forget to close handles</span><br>
+                  &nbsp;&nbsp;<span id='identifier'>CloseHandle</span>(<span id='identifier'>th</span>);<br>
+                  <br>
+                  &nbsp;&nbsp;<span id='comment'>// also don't forget to free whatever we allocated in the other process</span><br>
+                  &nbsp;&nbsp;<a class="pascal" href="AllocFreeMemEx.htm#FreeMemEx">FreeMemEx</a>(<span id='identifier'>params</span>, <span id='identifier'>processHandle</span>);<br>
+                  &nbsp;&nbsp;<a class="pascal" href="AllocFreeMemEx.htm#FreeMemEx">FreeMemEx</a>(<span id='identifier'>buffer</span>, <span id='identifier'>processHandle</span>);<br>
+                  <span id='bold'>end</span>;<br>
+                  <br>
+                  <span id='comment'>// now we demonstrate the functionality by showing the explorer's command line</span><br>
+                  <span id='bold'>var</span>&nbsp;<span id='identifier'>wnd</span>, <span id='identifier'>pid</span>, <span id='identifier'>ph</span>&nbsp;: <span id='identifier'>dword</span>;<br>
+                  <span id='bold'>begin</span><br>
+                  &nbsp;&nbsp;<span id='comment'>// first we ask the taskbar's window handle and the corresponding process ID</span><br>
+                  &nbsp;&nbsp;<span id='identifier'>wnd</span>&nbsp;:= <span id='identifier'>FindWindow</span>(<span id='string'>'Shell_TrayWnd'</span>, <span id='string'>''</span>);<br>
+                  &nbsp;&nbsp;<span id='identifier'>GetWindowThreadProcessID</span>(<span id='identifier'>wnd</span>, @<span id='identifier'>pid</span>);<br>
+                  <br>
+                  &nbsp;&nbsp;<span id='comment'>// then we open the process, which is the explorer, of course</span><br>
+                  &nbsp;&nbsp;<span id='identifier'>ph</span>&nbsp;:= <span id='identifier'>OpenProcess</span>(<span id='identifier'>PROCESS_ALL_ACCESS</span>, <span id='identifier'>false</span>, <span id='identifier'>pid</span>);<br>
+                  <br>
+                  &nbsp;&nbsp;<span id='comment'>// and finally show it's command line</span><br>
+                  &nbsp;&nbsp;<span id='identifier'>MessageBox</span>(<span id='number'>0</span>, <span id='identifier'>pchar</span>(<span id='string'>'"'</span>&nbsp;+ <span id='identifier'>GetProcessCmdLine</span>(<span id='identifier'>ph</span>) + <span id='string'>'"'</span>),<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='string'>'explorer'</span><span id='string'>'s command line...'</span>, <span id='identifier'>MB_ICONINFORMATION</span>);<br>
+                  <br>
+                  &nbsp;&nbsp;<span id='comment'>// again: don't forget to close the handles</span><br>
+                  &nbsp;&nbsp;<span id='identifier'>CloseHandle</span>(<span id='identifier'>ph</span>);<br>
+                  <span id='bold'>end</span>.
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <p>The second variation is in some parts identical to the first one. Only the
+       function "GetProcessCmdLine" differs. There the 2nd variation uses the
+       higher level function <a href="RemoteExecute.htm">RemoteExecute</a>:</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>GetProcessCmdLine</span>(<span id='identifier'>processHandle</span>: <span id='identifier'>dword</span>) : <span id='bold'>string</span>;<br>
+                  <span id='bold'>var</span>&nbsp;<span id='identifier'>arrCh</span>&nbsp;: <span id='bold'>array</span>&nbsp;[<span id='number'>0</span>..<span id='identifier'>MAX_PATH</span>&nbsp;- <span id='number'>1</span>] <span id='bold'>of</span>&nbsp;<span id='identifier'>char</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>len</span>&nbsp;&nbsp;&nbsp;: <span id='identifier'>dword</span>;<br>
+                  <span id='bold'>begin</span><br>
+                  &nbsp;&nbsp;<span id='comment'>// we simply execute "GetCmdLineThread" in the context of the target process</span><br>
+                  &nbsp;&nbsp;<span id='bold'>if</span>&nbsp;<a class="pascal" href="RemoteExecute.htm">RemoteExecute</a>(<span id='identifier'>processHandle</span>, @<span id='identifier'>RemoteGetCmdLine</span>, <span id='identifier'>len</span>, @<span id='identifier'>arrCh</span>, <span id='identifier'>MAX_PATH</span>) <span id='bold'>then</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>// if this succeeds, "arrCh" will contain the command line and</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>// the function result "len" will contain the length of the command line</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>SetString</span>(<span id='identifier'>result</span>, <span id='identifier'>arrCh</span>, <span id='identifier'>len</span>)<br>
+                  &nbsp;&nbsp;<span id='bold'>else</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>result</span>&nbsp;:= <span id='string'>''</span>;<br>
+                  <span id='bold'>end</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </body>
+
+</html>

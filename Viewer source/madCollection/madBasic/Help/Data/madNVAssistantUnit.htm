@@ -1,0 +1,442 @@
+<html>
+
+  <head>
+    <title>mad* Help...</title>
+    <meta name="description" content="mad* Help...">
+    <meta name="keywords" content="madshi, components, delphi">
+    <meta http-equiv="expires" content="900">
+    <link rel=stylesheet type="text/css" href="style.css">
+  </head>
+
+  <body background="bcklight.gif" bgcolor=#F8F8F8>
+    <table border=0 cellpadding=0 callspacing=0><tr>
+      <td valign=bottom>
+        <table border=0 cellpadding=0 cellspacing=0><tr><td bgcolor=#D8D8D8>
+          <table cellpadding=3 border=0>
+            <tr><td bgcolor=#FFFFF0>
+              <div id="verySmall"><br></div>
+              <div id="bigTitle">&nbsp;madNVAssistant Unit&nbsp;</div>
+              <div id="verySmall"><br></div>
+              <div id="small">
+                <a class="small" href="Content.htm">Content</a> /
+                <a class="small" href="madExcept.htm">madExcept</a> /...
+              </div>
+            </td></tr>
+          </table>
+        </td></tr></table>
+      </td>
+      <td valign=bottom>
+        <table border=0 cellpadding=0 cellspacing=0><tr><td bgcolor=#D8D8D8>
+          <table cellpadding=7 border=0>
+            <tr><td bgcolor=#F4F4F8><a href="http://www.madshi.net">www.madshi.net</a></td></tr>
+          </table>
+        </td></tr></table>
+      </td>
+    </tr></table>
+    <p>The "madNVAssistant" unit is used by <a href="madExcept.htm" href="madExceptUnit.htm">madExcept</a> to show thread safe
+       assistants to the end user. Each assistant consists of one or more forms,
+       which are shown until the end user either aborts one of the forms, or until
+       all steps/forms of the assistant are through.</p>
+    <p>A full list of what is contained in the whole unit can be found in the
+       <a href="madNVAssistantRef.htm">madNVAssistant Reference</a>.</p>
+    <a name="INVAssistant"></a>
+    <a name="TNVModalResult"></a>
+    <a name="INVAssistant.ShowModal"></a>
+    <p>The assistant is managed through an interfaced named "INVAssistant". The
+       only way to get an instance of such an interface is indirectly through the 
+       <a href="MESettings.htm#IMESettings">IMESettings</a> interface. The single most interesting method of the
+       "INVAssistant" interface is the "ShowModal" method:</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>type</span><br>
+                  &nbsp;&nbsp;<span id='identifier'>INVAssistant</span>&nbsp;= <span id='bold'>interface</span>&nbsp;[<span id='string'>'{14A3AFE4-B39F-4745-8F85-08FFABE8771C}'</span>];<br>
+                  <br>
+                  <span id='bold'>type</span><br>
+                  &nbsp;&nbsp;<span id='identifier'>TNVModalResult</span>&nbsp;= (<span id='identifier'>nvmInvalid</span>, <span id='identifier'>nvmOk</span>, <span id='identifier'>nvmSkip</span>, <span id='identifier'>nvmCancel</span>);<br>
+                  <br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>INVAssistant</span>.<img src="m.gif"><span id='identifier'>ShowModal</span>&nbsp;(<span id='identifier'>parentWindow</span>: <span id='identifier'>dword</span>&nbsp;= <span id='number'>0</span>) : <span id='identifier'>TNVModalResult</span>;<br>
+                  <br>
+                  <span id='comment'>// Example:</span><br>
+                  <a class="pascal" href="MESettings.htm">MESettings</a>.<span id='identifier'>GetAssistant</span>(<span id='string'>'SomeAssistant'</span>).<span id='identifier'>ShowModal</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="INVAssistant.Title"></a>
+    <a name="INVAssistant.FormCount"></a>
+    <a name="INVAssistant.Forms"></a>
+    <a name="INVAssistant.Form"></a>
+    <a name="INVAssistant.ModalResult"></a>
+    <a name="INVAssistant.OnAction"></a>
+    <a name="INVAssistant.Exception"></a>
+    <a name="INVAssistant.Data"></a>
+    <a name="TNVAction"></a>
+    <a name="TNVActionHandler"></a>
+    <p>There are some more properties, which are more or less interesting. E.g. you
+       can retrieve the exception interface, in case the assistant was created from
+       an exception context. Plus you can set and get a "Data" pointer, which you
+       can use for any purpose you like.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>type</span><br>
+                  &nbsp;&nbsp;<span id='identifier'>TNVAction</span>&nbsp;= (<span id='identifier'>nvaFormCreate</span>, <span id='identifier'>nvaFormShow</span>, <span id='identifier'>nvaFormClose</span>, <span id='identifier'>nvaItemEvent</span>);<br>
+                  <br>
+                  <span id='bold'>type</span><br>
+                  &nbsp;&nbsp;<span id='identifier'>TNVActionHandler</span>&nbsp;= <span id='bold'>procedure</span>&nbsp;(<span id='identifier'>form</span>: <a class="pascal" href="#INVForm">INVForm</a>; <span id='identifier'>action</span>: <span id='identifier'>TNVAction</span>; <span id='identifier'>item</span>: <a class="pascal" href="#INVItem">INVItem</a>; <span id='identifier'>exception</span>: <span id='identifier'>IMEException</span>);<br>
+                  <br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>INVAssistant</span>.<img src="w.gif"><span id='identifier'>Title</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='bold'>string</span>;<br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>INVAssistant</span>.<img src="r.gif"><span id='identifier'>FormCount</span>&nbsp;&nbsp;&nbsp;: <span id='identifier'>integer</span>;<br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>INVAssistant</span>.<img src="r.gif"><span id='identifier'>Forms</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[<span id='bold'>index</span>&nbsp;: <span id='identifier'>integer</span>] : <a class="pascal" href="#INVForm">INVForm</a>;<br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>INVAssistant</span>.<img src="r.gif"><span id='identifier'>Form</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[<span id='identifier'>name</span>&nbsp;&nbsp;: <span id='bold'>string</span>&nbsp;] : <a class="pascal" href="#INVForm">INVForm</a>;<br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>INVAssistant</span>.<img src="r.gif"><span id='identifier'>ModalResult</span>&nbsp;: <a class="pascal" href="#TNVModalResult">TNVModalResult</a>;<br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>INVAssistant</span>.<img src="w.gif"><span id='identifier'>OnAction</span>&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>TNVActionHandler</span>;<br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>INVAssistant</span>.<img src="w.gif"><span id='identifier'>Exception</span>&nbsp;&nbsp;&nbsp;: <span id='identifier'>IUnknown</span>; &nbsp;<span id='comment'>// can be typecasted to IMEException</span><br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>INVAssistant</span>.<img src="w.gif"><span id='identifier'>Data</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>pointer</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="INVForm"></a>
+    <p>Each step/form of an assistant is represented by an "INVForm" interface.
+       The only way to get an "INVForm" interface instance is indirectly through
+       either the <a href="#INVAssistant">INVAssistant</a> interface or the <a href="#TNVActionHandler">TNVActionHandler</a>
+       callback.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>type</span><br>
+                  &nbsp;&nbsp;<span id='identifier'>INVForm</span>&nbsp;= <span id='bold'>interface</span>&nbsp;[<span id='string'>'{9C62303F-3C4A-4E2F-9C14-74C518871995}'</span>];
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="INVForm.ItemCount"></a>
+    <a name="INVForm.Items"></a>
+    <a name="INVForm.nvEdit"></a>
+    <a name="INVForm.nvLabel"></a>
+    <a name="INVForm.nvButton"></a>
+    <a name="INVForm.nvCheckBox"></a>
+    <a name="INVForm.nvImage"></a>
+    <a name="INVForm.ContinueButton"></a>
+    <a name="INVForm.SkipButton"></a>
+    <a name="INVForm.CancelButton"></a>
+    <p>The only situation where it makes sense for you to even touch the "INVForm"
+       interface is probably inside of an <a href="#TNVActionHandler">TNVActionHandler</a> event. During
+       that event it might make sense for you to access the forms controls and to
+       do something with them.</p>
+    <p>You can either enumerate through all controls by using the "ItemCount" and
+       "Items" properties. Or you can directly access any controls by referencing
+       them via their type and name. Finally you can directly access the three
+       default main buttons that belong to each form.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>INVForm</span>.<img src="r.gif"><span id='identifier'>ItemCount</span>&nbsp;: <span id='identifier'>integer</span>;<br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>INVForm</span>.<img src="r.gif"><span id='identifier'>Items</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[<span id='bold'>index</span>: <span id='identifier'>integer</span>] : <a class="pascal" href="#INVItem">INVItem</a>;<br>
+                  <br>
+                  <span id='comment'>// Example:</span><br>
+                  <span id='bold'>for</span>&nbsp;<span id='identifier'>i1</span>&nbsp;:= <span id='number'>0</span>&nbsp;<span id='bold'>to</span>&nbsp;<span id='identifier'>form</span>.<span id='identifier'>ItemCount</span>&nbsp;- <span id='number'>1</span>&nbsp;<span id='bold'>do</span><br>
+                  &nbsp;&nbsp;<span id='identifier'>form</span>.<span id='identifier'>Items</span>[<span id='identifier'>i1</span>].<span id='identifier'>Enabled</span>&nbsp;:= <span id='identifier'>false</span>;<br>
+                  <br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>INVForm</span>.<img src="m.gif"><span id='identifier'>nvEdit</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span id='identifier'>item</span>: <span id='bold'>string</span>) : <a class="pascal" href="#INVEdit">INVEdit</a>;<br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>INVForm</span>.<img src="m.gif"><span id='identifier'>nvLabel</span>&nbsp;&nbsp;&nbsp;&nbsp;(<span id='identifier'>item</span>: <span id='bold'>string</span>) : <a class="pascal" href="#INVLabel">INVLabel</a>;<br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>INVForm</span>.<img src="m.gif"><span id='identifier'>nvButton</span>&nbsp;&nbsp;&nbsp;(<span id='identifier'>item</span>: <span id='bold'>string</span>) : <a class="pascal" href="#INVButton">INVButton</a>;<br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>INVForm</span>.<img src="m.gif"><span id='identifier'>nvCheckBox</span>&nbsp;(<span id='identifier'>item</span>: <span id='bold'>string</span>) : <a class="pascal" href="#INVCheckBox">INVCheckBox</a>;<br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>INVForm</span>.<img src="m.gif"><span id='identifier'>nvImage</span>&nbsp;&nbsp;&nbsp;&nbsp;(<span id='identifier'>item</span>: <span id='bold'>string</span>) : <a class="pascal" href="#INVImage">INVImage</a>;<br>
+                  <br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>INVForm</span>.<img src="r.gif"><span id='identifier'>ContinueButton</span>&nbsp;: <a class="pascal" href="#INVButton">INVButton</a>;<br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>INVForm</span>.<img src="r.gif"><span id='identifier'>SkipButton</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <a class="pascal" href="#INVButton">INVButton</a>;<br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>INVForm</span>.<img src="r.gif"><span id='identifier'>CancelButton</span>&nbsp;&nbsp;&nbsp;: <a class="pascal" href="#INVButton">INVButton</a>;<br>
+                  <br>
+                  <span id='comment'>// Example:</span><br>
+                  <span id='identifier'>form</span>.<span id='identifier'>ContinueButton</span>.<span id='identifier'>Enabled</span>&nbsp;:= <span id='identifier'>form</span>.<span id='identifier'>nvEdit</span>(<span id='string'>'NameEdit'</span>).<span id='identifier'>Text</span>&nbsp;<> <span id='string'>''</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="INVForm.Assistant"></a>
+    <a name="INVForm.Name"></a>
+    <a name="INVForm.Title"></a>
+    <a name="INVForm.Message"></a>
+    <a name="INVForm.ActiveControl"></a>
+    <a name="INVForm.Timer"></a>
+    <a name="INVForm.Handle"></a>
+    <a name="INVForm.ModalResult"></a>
+    <a name="INVForm.OnAction"></a>
+    <a name="INVForm.ShowModal"></a>
+    <a name="INVForm.Exception"></a>
+    <a name="INVForm.Data"></a>
+    <p>As with the <a href="#INVAssistant">INVAssistant</a> interface, the "INVForm" interface also has
+       some more properties, which will probably be less exciting to you. Here's a
+       list just for the sake of completeness:</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>INVForm</span>.<img src="r.gif"><span id='identifier'>Assistant</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <a class="pascal" href="#INVAssistant">INVAssistant</a>;<br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>INVForm</span>.<img src="r.gif"><span id='identifier'>Name</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='bold'>string</span>;<br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>INVForm</span>.<img src="r.gif"><span id='identifier'>Title</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='bold'>string</span>;<br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>INVForm</span>.<img src="r.gif"><span id='bold'>Message</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='bold'>string</span>;<br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>INVForm</span>.<img src="r.gif"><span id='identifier'>Handle</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>dword</span>;<br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>INVForm</span>.<img src="r.gif"><span id='identifier'>Timer</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>dword</span>;<br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>INVForm</span>.<img src="r.gif"><span id='identifier'>ModalResult</span>&nbsp;&nbsp;&nbsp;: <a class="pascal" href="#TNVModalResult">TNVModalResult</a>;<br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>INVForm</span>.<img src="w.gif"><span id='identifier'>ActiveControl</span>&nbsp;: <span id='bold'>string</span>;<br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>INVForm</span>.<img src="w.gif"><span id='identifier'>OnAction</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <a class="pascal" href="#TNVActionHandler">TNVActionHandler</a>;<br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>INVForm</span>.<img src="w.gif"><span id='identifier'>Exception</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>IUnknown</span>; &nbsp;<span id='comment'>// can be typecasted to IMEException</span><br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>INVForm</span>.<img src="w.gif"><span id='identifier'>Data</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>pointer</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="INVItem"></a>
+    <a name="INVItem.Name"></a>
+    <a name="INVItem.Handle"></a>
+    <a name="INVItem.TabStop"></a>
+    <a name="INVItem.Spacing"></a>
+    <a name="INVItem.Enabled"></a>
+    <a name="INVItem.SetFocus"></a>
+    <p>The controls are all descendants of the basic "INVItem" interface and thus
+       share some general properties & methods, e.g. the control "Name" and the
+       "Enabled" state.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>type</span><br>
+                  &nbsp;&nbsp;<span id='identifier'>INVItem</span>&nbsp;= <span id='bold'>interface</span>&nbsp;[<span id='string'>'{36EE4E77-B6B3-41D0-ABA7-3D9B90847EC0}'</span>];<br>
+                  <br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>INVItem</span>.<img src="r.gif"><span id='identifier'>Name</span>&nbsp;&nbsp;&nbsp;&nbsp;: <span id='bold'>string</span>;<br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>INVItem</span>.<img src="r.gif"><span id='identifier'>Handle</span>&nbsp;&nbsp;: <span id='identifier'>dword</span>;<br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>INVItem</span>.<img src="r.gif"><span id='identifier'>TabStop</span>&nbsp;: <span id='identifier'>boolean</span>;<br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>INVUtem</span>.<img src="r.gif"><span id='identifier'>Spacing</span>&nbsp;: <span id='identifier'>integer</span>;<br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>INVItem</span>.<img src="w.gif"><span id='identifier'>Enabled</span>&nbsp;: <span id='identifier'>boolean</span>;<br>
+                  <br>
+                  <span id='bold'>procedure</span>&nbsp;<span id='identifier'>INVItem</span>.<img src="m.gif"><span id='identifier'>SetFocus</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="INVLabel"></a>
+    <a name="INVLabel.Caption"></a>
+    <p>The label control is fairly easy. It only adds the property "Caption" to the
+       <a href="#INVItem">INVItem</a> basic interface.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>type</span><br>
+                  &nbsp;&nbsp;<span id='identifier'>INVLabel</span>&nbsp;= <span id='bold'>interface</span>&nbsp;(<a class="pascal" href="#INVItem">INVItem</a>) [<span id='string'>'{EA968486-7DA2-486F-9D40-DE0B7BDECBEC}'</span>];<br>
+                  <br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>INVLabel</span>.<img src="w.gif"><span id='identifier'>Caption</span>&nbsp;: <span id='bold'>string</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="INVButton"></a>
+    <a name="INVButton.Caption"></a>
+    <a name="INVButton.MinWidth"></a>
+    <p>For button controls you can specify a "MinWidth". If the button "Caption" 
+       needs more space than you entered in "MinWidth", the real width is auto
+       adjusted to the width needed to draw the full "Caption".</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>type</span><br>
+                  &nbsp;&nbsp;<span id='identifier'>INVButton</span>&nbsp;= <span id='bold'>interface</span>&nbsp;(<a class="pascal" href="#INVItem">INVItem</a>) [<span id='string'>'{20E07644-4788-4FDF-8F90-B62C0E61E20B}'</span>];<br>
+                  <br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>INVButton</span>.<img src="w.gif"><span id='identifier'>Caption</span>&nbsp;&nbsp;: <span id='bold'>string</span>;<br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>INVButton</span>.<img src="r.gif"><span id='identifier'>MinWidth</span>&nbsp;: <span id='identifier'>integer</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="INVCheckBox"></a>
+    <a name="INVCheckBox.Caption"></a>
+    <a name="INVCheckBox.Checked"></a>
+    <a name="INVCheckBox.OutputName"></a>
+    <p>The check box control is slightly more complex. It has a "Caption" and a
+       "Checked" property, just like the VCL check box component. Additionally it
+       has a property named "OutputName". If you write a name in here, the check
+       box value (that is "yes" or "no") is added to the bug report header under
+       the name specified by "OutputName". If you leave the field empty, the check
+       box value is not added to the bug report header.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>type</span><br>
+                  &nbsp;&nbsp;<span id='identifier'>INVCheckBox</span>&nbsp;= <span id='bold'>interface</span>&nbsp;(<a class="pascal" href="#INVItem">INVItem</a>) [<span id='string'>'{34E76977-C2B5-4819-B8F6-B6170089A03C}'</span>];<br>
+                  <br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>INVCheckBox</span>.<img src="w.gif"><span id='identifier'>Caption</span>&nbsp;: <span id='bold'>string</span>;<br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>INVCheckBox</span>.<img src="w.gif"><span id='identifier'>Checked</span>&nbsp;: <span id='identifier'>boolean</span>;<br>
+                  <br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>INVCheckBox</span>.<img src="w.gif"><span id='identifier'>OutputName</span>&nbsp;: <span id='bold'>string</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="INVEdit"></a>
+    <a name="INVEdit.Text"></a>
+    <a name="INVEdit.Lines"></a>
+    <a name="INVEdit.Optional"></a>
+    <a name="INVEdit.Colored"></a>
+    <a name="INVEdit.Valid"></a>
+    <a name="TOutputType"></a>
+    <a name="INVEdit.OutputType"></a>
+    <a name="INVEdit.OutputName"></a>
+    <p>The edit control can behave as either an edit box or a memo field, depending
+       on how the "Lines" property is set. If "Lines" is greater than 1, we have a
+       memo control. The property "Optional" defines whether the user must fill
+       this edit/memo control before he may forward to the next assistant step. If
+       "Optional" is false, the continue button is automatically disabled, as
+       long as the edit/memo control contains no text or invalid text. You can
+       specify whether an edit control has valid content by settings the "Valid"
+       property. It makes sense to do that in an <a href="#INVForm.OnAction">INVForm.OnAction</a> event
+       handler. If the "Colored" property is true, the edit/memo field is colored
+       in green or red, depending on whether the content is valid. Otherwise it is
+       colored black.</p>
+    <p>If the "OutputName" property
+       is filled, the edit/memo text is written to the bug report. Depending on how
+       "OutputType" is set, the edit/memo text is either added to the bug report
+       header, or stored into a seperate bug report section.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>type</span><br>
+                  &nbsp;&nbsp;<span id='identifier'>INVEdit</span>&nbsp;= <span id='bold'>interface</span>&nbsp;(<a class="pascal" href="#INVItem">INVItem</a>) [<span id='string'>'{22AC205D-0FED-425B-BEBB-9FBAB850C1DC}'</span>];<br>
+                  <br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>INVEdit</span>.<img src="r.gif"><span id='identifier'>Lines</span>&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>integer</span>;<br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>INVEdit</span>.<img src="w.gif"><span id='identifier'>Optional</span>&nbsp;: <span id='identifier'>boolean</span>;<br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>INVEdit</span>.<img src="w.gif"><span id='identifier'>Text</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='bold'>string</span>;<br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>INVEdit</span>.<img src="w.gif"><span id='identifier'>Colored</span>&nbsp;&nbsp;: <span id='identifier'>boolean</span>;<br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>INVEdit</span>.<img src="w.gif"><span id='identifier'>Valid</span>&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>boolean</span>;<br>
+                  <br>
+                  <span id='bold'>type</span><br>
+                  &nbsp;&nbsp;<span id='identifier'>TOutputType</span>&nbsp;= (<span id='identifier'>otHeader</span>, <span id='identifier'>otOwnSection</span>);<br>
+                  <br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>INVEdit</span>.<img src="w.gif"><span id='identifier'>OutputName</span>&nbsp;: <span id='bold'>string</span>;<br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>INVEdit</span>.<img src="w.gif"><span id='identifier'>OutputType</span>&nbsp;: <span id='identifier'>TOutputType</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="INVImage"></a>
+    <a name="INVImage.File_"></a>
+    <a name="INVImage.Bitmap"></a>
+    <a name="INVImage.Clickable"></a>
+    <a name="INVImage.Border"></a>
+    <a name="INVImage.Width"></a>
+    <a name="INVImage.Height"></a>
+    <p>The image control can load an image "File_" from harddisk, or you can
+       manually fill the image by writing to the "Bitmap" property. If you specify
+       the "Width" and "Height" properties at design time, the image is zoomed (if
+       necessary) to fit your wishes. When zooming the aspect ratio of the image
+       is maintained, though. So if you specify e.g. a "Width" and "Height" of e.g.
+       200 pixels each and then enter a bitmap with 800x600 pixels, the final
+       size of the image will be 200x150 pixels. If you leave "Width" and "Height"
+       empty at design time, the optimal size of the image is auto calculated.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>type</span><br>
+                  &nbsp;&nbsp;<span id='identifier'>INVImage</span>&nbsp;= <span id='bold'>interface</span>&nbsp;(<a class="pascal" href="#INVItem">INVItem</a>) [<span id='string'>'{A0DE7AC1-F790-4BDB-B6B2-453AF25A6B7B}'</span>];<br>
+                  <br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>INVImage</span>.<img src="r.gif"><span id='identifier'>File_</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='bold'>string</span>;<br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>INVImage</span>.<img src="w.gif"><span id='identifier'>Bitmap</span>&nbsp;&nbsp;&nbsp;&nbsp;: <a class="pascal" href="madNVBitmapUnit.htm#INVBitmap">INVBitmap</a>;<br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>INVImage</span>.<img src="r.gif"><span id='identifier'>Clickable</span>&nbsp;: <span id='identifier'>boolean</span>;<br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>INVImage</span>.<img src="r.gif"><span id='identifier'>Border</span>&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>boolean</span>;<br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>INVImage</span>.<img src="r.gif"><span id='identifier'>Width</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>integer</span>;<br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>INVImage</span>.<img src="r.gif"><span id='identifier'>Height</span>&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>integer</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </body>
+
+</html>

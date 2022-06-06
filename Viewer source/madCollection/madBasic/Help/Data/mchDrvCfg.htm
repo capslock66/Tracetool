@@ -1,0 +1,146 @@
+<html>
+
+  <head>
+    <title>mad* Help...</title>
+    <meta name="description" content="mad* Help...">
+    <meta name="keywords" content="madshi, components, delphi">
+    <meta http-equiv="expires" content="900">
+    <link rel=stylesheet type="text/css" href="style.css">
+  </head>
+
+  <body background="bcklight.gif" bgcolor=#F8F8F8>
+    <table border=0 cellpadding=0 callspacing=0><tr>
+      <td valign=bottom>
+        <table border=0 cellpadding=0 cellspacing=0><tr><td bgcolor=#D8D8D8>
+          <table cellpadding=3 border=0>
+            <tr><td bgcolor=#FFFFF0>
+              <div id="verySmall"><br></div>
+              <div id="bigTitle">&nbsp;Driver Configuration&nbsp;</div>
+              <div id="verySmall"><br></div>
+              <div id="small">
+                <a class="small" href="Content.htm">Content</a> /
+                <a class="small" href="madCodeHook.htm">madCodeHook</a> /
+                <a class="small" href="mchInjDrv.htm">Injection Driver</a> /...
+              </div>
+            </td></tr>
+          </table>
+        </td></tr></table>
+      </td>
+      <td valign=bottom>
+        <table border=0 cellpadding=0 cellspacing=0><tr><td bgcolor=#D8D8D8>
+          <table cellpadding=7 border=0>
+            <tr><td bgcolor=#F4F4F8><a href="http://www.madshi.net">www.madshi.net</a></td></tr>
+          </table>
+        </td></tr></table>
+      </td>
+    </tr></table>
+    <p>The madCodeHook injection drivers need to be configured and
+       <a href="mchDrvSign.htm">signed</a>, otherwise they won't work at all.
+       By configuring the driver file, you give it a unique name. Also you can
+       make a set of "good" hook dlls known to the driver.
+       The driver is only ever willing to inject those hook dlls which are known
+       to it, or which are signed with the same certificate as the driver itself.
+       Injection of any unknown hook dll is always refused.</p>
+    <p>There's a command line tool available named "madConfigDrv.exe". You need
+       to call this tool to configure the driver to your specific needs. Here's the
+       help output of the tool:</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                  <span id='mono'>
+                    madConfigDrv v1.0.3.0, madshi.net<br>
+                    <br>
+                    - add your hook dlls to the list of allowed dlls<br>
+                    - define whether the driver can be stopped or not<br>
+                    <br>
+                    madConfigDrv driver.sys drivername [hook1.dll] [...] [hook40.dll] [-options]<br>
+                    -cert=some.dll &nbsp;&nbsp;&nbsp;&nbsp;consider all dlls trustworthy which are signed like this dll<br>
+                    -unsafeStopAllowed driver can be stopped by anyone at any time<br>
+                    -safeStopAllowed &nbsp;&nbsp;driver can be stopped only...<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(1) if no dll injection is active and<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(2) by using a special madCodeHook API<br>
+                    -stopDisallowed &nbsp;&nbsp;&nbsp;driver can't be stopped at all<br>
+                    <br>
+                    The driver must not be signed yet.<br>
+                    Sign the driver after having allowed all your hook dlls.<br>
+                           </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <p>In order to properly configure a driver, there is only one thing you *have* to
+       do: You need to specify a driver name. The name should be unique. I'd
+       suggest something like "yourCompanyNameProductNameInjDrv". This name is not
+       directly visible anywhere, so don't worry about using cryptical names. The
+       name will later be used by the
+       <a href="DllInjecting.htm#LoadInjectionDriver">driver API</a> to contact
+       your driver. The length of the name is limited to max 39 characters.</p>
+    <p>Optionally you can tell the driver which dlls you want to have injected. A hash
+       of each dll file will then be stored into the driver file. Each driver can
+       store up to 40 different dll hashs. The driver will refuse to inject any dlls
+       which are not considered trustworthy. There are 3 ways to make a dll be trusted
+       by the driver: 1) If the driver knows the dll by hash (see above), it's of
+       course considered trustworthy. 2) Alternatively, any dll which is signed with
+       the same certificate as the driver itself, is also "good". 3) Finally, if you
+       use the "-cert=some.dll" option, the driver remembers the first certificate of
+       the "some.dll" and compares this certificate to all dlls you're later trying
+       to inject. Only dlls which match this certificate will be considered trustworthy.
+       If you use the "-cert=some.dll" option, dlls which don't match this certificate,
+       but do match the certificate the driver itself was signed with, are *not*
+       considered trustworthy, anymore.</p>
+    <p>Optionally you can also tell the driver to allow being stopped. By default
+       the driver refuses to ever be stopped to make sure that a malware application
+       can't possible stop the driver behind your back. The option
+       "-safeStopAllowed" means that the driver can be stopped only by calling the
+       <a href="DllInjecting.htm#StopInjectionDriver">StopInjectionDriver</a> API, but not by using the device manager GUI, nor
+       by using "sc.exe". Also stopping will only work if no DLL injection is
+       currently active. The option "-unsafeStopAllowed" means that the driver can
+       be stopped at any time, by anyone, no matter what. This may make sense if
+       you want to use a standard uninstallation software.</p>
+    <p>Here's a sample batch file:</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                  <span id='mono'>
+                    madConfigDrv DemoDriver32.sys HookProcessCreationDemoDriver HookProcessCreation32.dll -unsafeStopAllowed<br>
+                    madConfigDrv DemoDriver64.sys HookProcessCreationDemoDriver HookProcessCreation32.dll HookProcessCreation64.dll -unsafeStopAllowed<br>
+                           </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <p>Please note that the driver internally uses an OS resource which can only be
+       used 8 times (up to XP) respectively 64 times (Vista and newer) at the same
+       time. That means you need to be a bit careful about how to configure your
+       drivers. If you have a dozen of products and every one needs dll injection
+       you may run into trouble with the limited OS resource, especially in XP.
+       Furthermore other companies are also using the very same OS resource in some
+       of their drivers. So you might want to think about maybe using only one
+       driver for all of your products. One driver supports up to 40 different
+       dlls. Or if you sign all your hook dlls with the same certificate you sign
+       your driver with, the driver supports injecting a virtually unlimited number
+       of different hook dlls.</p>
+    <p>Please be aware that if your driver is not signed with the same certificate
+       as your driver, you have to make the hook dll known to the driver. Otherwise
+       injection will be refused. Furthermore, in this situation you also need to
+       reconfigure and
+       <a href="mchDrvSign.htm">re-sign</a> your driver, everytime you even recompile
+       the hook dll. A recompiled dll looks like a different dll to madCodeHook.
+       Of course if you reconfigure the same driver file again and again, you will
+       soon run into the limit of max 40 dlls per driver. So my tip is to always
+       start with a "virgin" driver, when you need to reconfigure.</p>
+    <p>But really, the best solution is to sign both your drivers and the hook dlls
+       with the same certificate. Then you only have to touch the driver when your
+       certificate runs out, of when you want to switch to a newer driver version.  </body>
+
+</html>

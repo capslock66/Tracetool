@@ -1,0 +1,272 @@
+<html>
+
+  <head>
+    <title>mad* Help...</title>
+    <meta name="description" content="mad* Help...">
+    <meta name="keywords" content="madshi, components, delphi">
+    <meta http-equiv="expires" content="900">
+    <link rel=stylesheet type="text/css" href="style.css">
+  </head>
+
+  <body background="bcklight.gif" bgcolor=#F8F8F8>
+    <table border=0 cellpadding=0 callspacing=0><tr>
+      <td valign=bottom>
+        <table border=0 cellpadding=0 cellspacing=0><tr><td bgcolor=#D8D8D8>
+          <table cellpadding=3 border=0>
+            <tr><td bgcolor=#FFFFF0>
+              <div id="verySmall"><br></div>
+              <div id="bigTitle">&nbsp;"TReader.SkipValue" disassembly&nbsp;</div>
+              <div id="verySmall"><br></div>
+              <div id="small">
+                <a class="small" href="Content.htm">Content</a> /
+                <a class="small" href="madDisAsm.htm">madDisAsm</a> /...
+              </div>
+            </td></tr>
+          </table>
+        </td></tr></table>
+      </td>
+      <td valign=bottom>
+        <table border=0 cellpadding=0 cellspacing=0><tr><td bgcolor=#D8D8D8>
+          <table cellpadding=7 border=0>
+            <tr><td bgcolor=#F4F4F8><a href="http://www.madshi.net">www.madshi.net</a></td></tr>
+          </table>
+        </td></tr></table>
+      </td>
+    </tr></table>
+    <p>I've chosen "TReader.SkipValue", because it has a little case instruction,
+       which <a href="madDisAsm.htm">madDisAsm</a> handles quite nicely (in contrast to Delphi's built
+       in disassembler).</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                  <span id='mono'>
+                    00479ba4 public TReader.SkipValue: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;; function entry point<br>
+                    00479ba4 &nbsp;&nbsp;push &nbsp;&nbsp;&nbsp;ebp<br>
+                    00479ba5 &nbsp;&nbsp;mov &nbsp;&nbsp;&nbsp;&nbsp;ebp, esp<br>
+                    00479ba7 &nbsp;&nbsp;add &nbsp;&nbsp;&nbsp;&nbsp;esp, -8<br>
+                    00479baa &nbsp;&nbsp;xor &nbsp;&nbsp;&nbsp;&nbsp;edx, edx<br>
+                    00479bac &nbsp;&nbsp;mov &nbsp;&nbsp;&nbsp;&nbsp;[ebp-8], edx<br>
+                    00479baf &nbsp;&nbsp;mov &nbsp;&nbsp;&nbsp;&nbsp;[ebp-4], eax<br>
+                    00479bb2 &nbsp;&nbsp;xor &nbsp;&nbsp;&nbsp;&nbsp;eax, eax<br>
+                    00479bb4 &nbsp;&nbsp;push &nbsp;&nbsp;&nbsp;ebp<br>
+                    00479bb5 &nbsp;&nbsp;push &nbsp;&nbsp;&nbsp;$479d33 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;; @HandleFinally<br>
+                    00479bba &nbsp;&nbsp;push &nbsp;&nbsp;&nbsp;dword ptr fs:[eax]<br>
+                    00479bbd &nbsp;&nbsp;mov &nbsp;&nbsp;&nbsp;&nbsp;fs:[eax], esp<br>
+                    00479bc0 &nbsp;&nbsp;mov &nbsp;&nbsp;&nbsp;&nbsp;eax, [ebp-4]<br>
+                    00479bc3 &nbsp;&nbsp;call &nbsp;&nbsp;&nbsp;-$134 ($479a94) &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;; TReader.ReadValue<br>
+                    00479bc3<br>
+                    00479bc8 &nbsp;&nbsp;and &nbsp;&nbsp;&nbsp;&nbsp;eax, $7f<br>
+                    00479bcb &nbsp;&nbsp;cmp &nbsp;&nbsp;&nbsp;&nbsp;eax, $14<br>
+                    00479bce &nbsp;&nbsp;ja &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;loc_479d1d<br>
+                    00479bce<br>
+                    00479bd4 &nbsp;&nbsp;jmp &nbsp;&nbsp;&nbsp;&nbsp;dword ptr [eax*4+$479bdb]<br>
+                    00479bd4<br>
+                    00479bd4 ; ---------------------------------------------------------<br>
+                    00479bd4<br>
+                    00479bdb &nbsp;&nbsp;dd loc_479d1d &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;; case jump table<br>
+                    00479bdf &nbsp;&nbsp;dd loc_479c34<br>
+                    00479be3 &nbsp;&nbsp;dd loc_479c40<br>
+                    00479be7 &nbsp;&nbsp;dd loc_479c52<br>
+                    00479beb &nbsp;&nbsp;dd loc_479c64<br>
+                    00479bef &nbsp;&nbsp;dd loc_479c76<br>
+                    00479bf3 &nbsp;&nbsp;dd loc_479c88<br>
+                    00479bf7 &nbsp;&nbsp;dd loc_479c88<br>
+                    00479bfb &nbsp;&nbsp;dd loc_479d1d<br>
+                    00479bff &nbsp;&nbsp;dd loc_479d1d<br>
+                    00479c03 &nbsp;&nbsp;dd loc_479c98<br>
+                    00479c07 &nbsp;&nbsp;dd loc_479ca6<br>
+                    00479c0b &nbsp;&nbsp;dd loc_479cb0<br>
+                    00479c0f &nbsp;&nbsp;dd loc_479d1d<br>
+                    00479c13 &nbsp;&nbsp;dd loc_479cbe<br>
+                    00479c17 &nbsp;&nbsp;dd loc_479cc7<br>
+                    00479c1b &nbsp;&nbsp;dd loc_479cd6<br>
+                    00479c1f &nbsp;&nbsp;dd loc_479ce5<br>
+                    00479c23 &nbsp;&nbsp;dd loc_479cf4<br>
+                    00479c27 &nbsp;&nbsp;dd loc_479d02<br>
+                    00479c2b &nbsp;&nbsp;dd loc_479d11<br>
+                    00479c2f<br>
+                    00479c2f ; ---------------------------------------------------------<br>
+                    00479c2f<br>
+                    00479c34 loc_479c34:<br>
+                    00479c34 &nbsp;&nbsp;push &nbsp;&nbsp;&nbsp;ebp<br>
+                    00479c35 &nbsp;&nbsp;call &nbsp;&nbsp;&nbsp;-$14a ($479af0) &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;; SkipList<br>
+                    00479c35<br>
+                    00479c3a &nbsp;&nbsp;pop &nbsp;&nbsp;&nbsp;&nbsp;ecx<br>
+                    00479c3b &nbsp;&nbsp;jmp &nbsp;&nbsp;&nbsp;&nbsp;loc_479d1d<br>
+                    00479c3b<br>
+                    00479c3b ; ---------------------------------------------------------<br>
+                    00479c3b<br>
+                    00479c40 loc_479c40:<br>
+                    00479c40 &nbsp;&nbsp;mov &nbsp;&nbsp;&nbsp;&nbsp;edx, 1<br>
+                    00479c45 &nbsp;&nbsp;mov &nbsp;&nbsp;&nbsp;&nbsp;eax, [ebp-4]<br>
+                    00479c48 &nbsp;&nbsp;call &nbsp;&nbsp;&nbsp;+$34f ($479f9c) &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;; TReader.SkipBytes<br>
+                    00479c48<br>
+                    00479c4d &nbsp;&nbsp;jmp &nbsp;&nbsp;&nbsp;&nbsp;loc_479d1d<br>
+                    00479c4d<br>
+                    00479c4d ; ---------------------------------------------------------<br>
+                    00479c4d<br>
+                    00479c52 loc_479c52:<br>
+                    00479c52 &nbsp;&nbsp;mov &nbsp;&nbsp;&nbsp;&nbsp;edx, 2<br>
+                    00479c57 &nbsp;&nbsp;mov &nbsp;&nbsp;&nbsp;&nbsp;eax, [ebp-4]<br>
+                    00479c5a &nbsp;&nbsp;call &nbsp;&nbsp;&nbsp;+$33d ($479f9c) &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;; TReader.SkipBytes<br>
+                    00479c5a<br>
+                    00479c5f &nbsp;&nbsp;jmp &nbsp;&nbsp;&nbsp;&nbsp;loc_479d1d<br>
+                    00479c5f<br>
+                    00479c5f ; ---------------------------------------------------------<br>
+                    00479c5f<br>
+                    00479c64 loc_479c64:<br>
+                    00479c64 &nbsp;&nbsp;mov &nbsp;&nbsp;&nbsp;&nbsp;edx, 4<br>
+                    00479c69 &nbsp;&nbsp;mov &nbsp;&nbsp;&nbsp;&nbsp;eax, [ebp-4]<br>
+                    00479c6c &nbsp;&nbsp;call &nbsp;&nbsp;&nbsp;+$32b ($479f9c) &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;; TReader.SkipBytes<br>
+                    00479c6c<br>
+                    00479c71 &nbsp;&nbsp;jmp &nbsp;&nbsp;&nbsp;&nbsp;loc_479d1d<br>
+                    00479c71<br>
+                    00479c71 ; ---------------------------------------------------------<br>
+                    00479c71<br>
+                    00479c76 loc_479c76:<br>
+                    00479c76 &nbsp;&nbsp;mov &nbsp;&nbsp;&nbsp;&nbsp;edx, $a<br>
+                    00479c7b &nbsp;&nbsp;mov &nbsp;&nbsp;&nbsp;&nbsp;eax, [ebp-4]<br>
+                    00479c7e &nbsp;&nbsp;call &nbsp;&nbsp;&nbsp;+$319 ($479f9c) &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;; TReader.SkipBytes<br>
+                    00479c7e<br>
+                    00479c83 &nbsp;&nbsp;jmp &nbsp;&nbsp;&nbsp;&nbsp;loc_479d1d<br>
+                    00479c83<br>
+                    00479c83 ; ---------------------------------------------------------<br>
+                    00479c83<br>
+                    00479c88 loc_479c88:<br>
+                    00479c88 &nbsp;&nbsp;lea &nbsp;&nbsp;&nbsp;&nbsp;edx, [ebp-8]<br>
+                    00479c8b &nbsp;&nbsp;mov &nbsp;&nbsp;&nbsp;&nbsp;eax, [ebp-4]<br>
+                    00479c8e &nbsp;&nbsp;call &nbsp;&nbsp;&nbsp;-$3db ($4798b8) &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;; TReader.ReadStr<br>
+                    00479c8e<br>
+                    00479c93 &nbsp;&nbsp;jmp &nbsp;&nbsp;&nbsp;&nbsp;loc_479d1d<br>
+                    00479c93<br>
+                    00479c93 ; ---------------------------------------------------------<br>
+                    00479c93<br>
+                    00479c98 loc_479c98:<br>
+                    00479c98 &nbsp;&nbsp;push &nbsp;&nbsp;&nbsp;ebp<br>
+                    00479c99 &nbsp;&nbsp;mov &nbsp;&nbsp;&nbsp;&nbsp;eax, 1<br>
+                    00479c9e &nbsp;&nbsp;call &nbsp;&nbsp;&nbsp;-$18b ($479b18) &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;; SkipBinary<br>
+                    00479c9e<br>
+                    00479ca3 &nbsp;&nbsp;pop &nbsp;&nbsp;&nbsp;&nbsp;ecx<br>
+                    00479ca4 &nbsp;&nbsp;jmp &nbsp;&nbsp;&nbsp;&nbsp;loc_479d1d<br>
+                    00479ca4<br>
+                    00479ca4 ; ---------------------------------------------------------<br>
+                    00479ca4<br>
+                    00479ca6 loc_479ca6:<br>
+                    00479ca6 &nbsp;&nbsp;mov &nbsp;&nbsp;&nbsp;&nbsp;eax, [ebp-4]<br>
+                    00479ca9 &nbsp;&nbsp;call &nbsp;&nbsp;&nbsp;-$206 ($479aa8) &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;; TReader.SkipSetBody<br>
+                    00479ca9<br>
+                    00479cae &nbsp;&nbsp;jmp &nbsp;&nbsp;&nbsp;&nbsp;loc_479d1d<br>
+                    00479cae<br>
+                    00479cae ; ---------------------------------------------------------<br>
+                    00479cae<br>
+                    00479cb0 loc_479cb0:<br>
+                    00479cb0 &nbsp;&nbsp;push &nbsp;&nbsp;&nbsp;ebp<br>
+                    00479cb1 &nbsp;&nbsp;mov &nbsp;&nbsp;&nbsp;&nbsp;eax, 1<br>
+                    00479cb6 &nbsp;&nbsp;call &nbsp;&nbsp;&nbsp;-$1a3 ($479b18) &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;; SkipBinary<br>
+                    00479cb6<br>
+                    00479cbb &nbsp;&nbsp;pop &nbsp;&nbsp;&nbsp;&nbsp;ecx<br>
+                    00479cbc &nbsp;&nbsp;jmp &nbsp;&nbsp;&nbsp;&nbsp;loc_479d1d<br>
+                    00479cbc<br>
+                    00479cbc ; ---------------------------------------------------------<br>
+                    00479cbc<br>
+                    00479cbe loc_479cbe:<br>
+                    00479cbe &nbsp;&nbsp;push &nbsp;&nbsp;&nbsp;ebp<br>
+                    00479cbf &nbsp;&nbsp;call &nbsp;&nbsp;&nbsp;-$17c ($479b48) &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;; SkipCollection<br>
+                    00479cbf<br>
+                    00479cc4 &nbsp;&nbsp;pop &nbsp;&nbsp;&nbsp;&nbsp;ecx<br>
+                    00479cc5 &nbsp;&nbsp;jmp &nbsp;&nbsp;&nbsp;&nbsp;loc_479d1d<br>
+                    00479cc5<br>
+                    00479cc5 ; ---------------------------------------------------------<br>
+                    00479cc5<br>
+                    00479cc7 loc_479cc7:<br>
+                    00479cc7 &nbsp;&nbsp;mov &nbsp;&nbsp;&nbsp;&nbsp;edx, 4<br>
+                    00479ccc &nbsp;&nbsp;mov &nbsp;&nbsp;&nbsp;&nbsp;eax, [ebp-4]<br>
+                    00479ccf &nbsp;&nbsp;call &nbsp;&nbsp;&nbsp;+$2c8 ($479f9c) &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;; TReader.SkipBytes<br>
+                    00479ccf<br>
+                    00479cd4 &nbsp;&nbsp;jmp &nbsp;&nbsp;&nbsp;&nbsp;loc_479d1d<br>
+                    00479cd4<br>
+                    00479cd4 ; ---------------------------------------------------------<br>
+                    00479cd4<br>
+                    00479cd6 loc_479cd6:<br>
+                    00479cd6 &nbsp;&nbsp;mov &nbsp;&nbsp;&nbsp;&nbsp;edx, 8<br>
+                    00479cdb &nbsp;&nbsp;mov &nbsp;&nbsp;&nbsp;&nbsp;eax, [ebp-4]<br>
+                    00479cde &nbsp;&nbsp;call &nbsp;&nbsp;&nbsp;+$2b9 ($479f9c) &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;; TReader.SkipBytes<br>
+                    00479cde<br>
+                    00479ce3 &nbsp;&nbsp;jmp &nbsp;&nbsp;&nbsp;&nbsp;loc_479d1d<br>
+                    00479ce3<br>
+                    00479ce3 ; ---------------------------------------------------------<br>
+                    00479ce3<br>
+                    00479ce5 loc_479ce5:<br>
+                    00479ce5 &nbsp;&nbsp;mov &nbsp;&nbsp;&nbsp;&nbsp;edx, 8<br>
+                    00479cea &nbsp;&nbsp;mov &nbsp;&nbsp;&nbsp;&nbsp;eax, [ebp-4]<br>
+                    00479ced &nbsp;&nbsp;call &nbsp;&nbsp;&nbsp;+$2aa ($479f9c) &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;; TReader.SkipBytes<br>
+                    00479ced<br>
+                    00479cf2 &nbsp;&nbsp;jmp &nbsp;&nbsp;&nbsp;&nbsp;loc_479d1d<br>
+                    00479cf2<br>
+                    00479cf2 ; ---------------------------------------------------------<br>
+                    00479cf2<br>
+                    00479cf4 loc_479cf4:<br>
+                    00479cf4 &nbsp;&nbsp;push &nbsp;&nbsp;&nbsp;ebp<br>
+                    00479cf5 &nbsp;&nbsp;mov &nbsp;&nbsp;&nbsp;&nbsp;eax, 2<br>
+                    00479cfa &nbsp;&nbsp;call &nbsp;&nbsp;&nbsp;-$1e7 ($479b18) &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;; SkipBinary<br>
+                    00479cfa<br>
+                    00479cff &nbsp;&nbsp;pop &nbsp;&nbsp;&nbsp;&nbsp;ecx<br>
+                    00479d00 &nbsp;&nbsp;jmp &nbsp;&nbsp;&nbsp;&nbsp;loc_479d1d<br>
+                    00479d00<br>
+                    00479d00 ; ---------------------------------------------------------<br>
+                    00479d00<br>
+                    00479d02 loc_479d02:<br>
+                    00479d02 &nbsp;&nbsp;mov &nbsp;&nbsp;&nbsp;&nbsp;edx, 8<br>
+                    00479d07 &nbsp;&nbsp;mov &nbsp;&nbsp;&nbsp;&nbsp;eax, [ebp-4]<br>
+                    00479d0a &nbsp;&nbsp;call &nbsp;&nbsp;&nbsp;+$28d ($479f9c) &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;; TReader.SkipBytes<br>
+                    00479d0a<br>
+                    00479d0f &nbsp;&nbsp;jmp &nbsp;&nbsp;&nbsp;&nbsp;loc_479d1d<br>
+                    00479d0f<br>
+                    00479d0f ; ---------------------------------------------------------<br>
+                    00479d0f<br>
+                    00479d11 loc_479d11:<br>
+                    00479d11 &nbsp;&nbsp;push &nbsp;&nbsp;&nbsp;ebp<br>
+                    00479d12 &nbsp;&nbsp;mov &nbsp;&nbsp;&nbsp;&nbsp;eax, 1<br>
+                    00479d17 &nbsp;&nbsp;call &nbsp;&nbsp;&nbsp;-$204 ($479b18) &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;; SkipBinary<br>
+                    00479d17<br>
+                    00479d1c &nbsp;&nbsp;pop &nbsp;&nbsp;&nbsp;&nbsp;ecx<br>
+                    00479d1d<br>
+                    00479d1d loc_479d1d:<br>
+                    00479d1d &nbsp;&nbsp;xor &nbsp;&nbsp;&nbsp;&nbsp;eax, eax<br>
+                    00479d1f &nbsp;&nbsp;pop &nbsp;&nbsp;&nbsp;&nbsp;edx<br>
+                    00479d20 &nbsp;&nbsp;pop &nbsp;&nbsp;&nbsp;&nbsp;ecx<br>
+                    00479d21 &nbsp;&nbsp;pop &nbsp;&nbsp;&nbsp;&nbsp;ecx<br>
+                    00479d22 &nbsp;&nbsp;mov &nbsp;&nbsp;&nbsp;&nbsp;fs:[eax], edx<br>
+                    00479d25 &nbsp;&nbsp;push &nbsp;&nbsp;&nbsp;$479d3a<br>
+                    00479d2a<br>
+                    00479d2a loc_479d2a:<br>
+                    00479d2a &nbsp;&nbsp;lea &nbsp;&nbsp;&nbsp;&nbsp;eax, [ebp-8]<br>
+                    00479d2d &nbsp;&nbsp;call &nbsp;&nbsp;&nbsp;-$75556 ($4047dc) &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;; @LStrClr<br>
+                    00479d2d<br>
+                    00479d32 &nbsp;&nbsp;ret<br>
+                    00479d32<br>
+                    00479d32 ; ---------------------------------------------------------<br>
+                    00479d32<br>
+                    00479d33 &nbsp;&nbsp;jmp &nbsp;&nbsp;&nbsp;&nbsp;-$75ca0 ($404098) &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;; @HandleFinally<br>
+                    00479d33<br>
+                    00479d38 &nbsp;&nbsp;jmp &nbsp;&nbsp;&nbsp;&nbsp;loc_479d2a<br>
+                    00479d38<br>
+                    00479d38 ; ---------------------------------------------------------<br>
+                    00479d38<br>
+                    00479d3a &nbsp;&nbsp;pop &nbsp;&nbsp;&nbsp;&nbsp;ecx<br>
+                    00479d3b &nbsp;&nbsp;pop &nbsp;&nbsp;&nbsp;&nbsp;ecx<br>
+                    00479d3c &nbsp;&nbsp;pop &nbsp;&nbsp;&nbsp;&nbsp;ebp<br>
+                    00479d3d &nbsp;&nbsp;ret<br>
+                           </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </body>
+
+</html>

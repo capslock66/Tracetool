@@ -16,7 +16,7 @@ unit unt_Tail;
 interface
 
 uses
-  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms, pscMenu ,
+  system.Contnrs , system.types, Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms, pscMenu ,
   Dialogs, ExtCtrls, VirtualTrees, StdCtrls, ComCtrls , dirmon, ToolWin, unt_TraceWin,
   Buttons, Clipbrd, unt_base , unt_pageContainer ,  unt_editor , VstSort,unt_filter, unt_tool,
   generics.collections,

@@ -1,0 +1,86 @@
+<html>
+
+  <head>
+    <title>mad* Help...</title>
+    <meta name="description" content="mad* Help...">
+    <meta name="keywords" content="madshi, components, delphi">
+    <meta http-equiv="expires" content="900">
+    <link rel=stylesheet type="text/css" href="style.css">
+  </head>
+
+  <body background="bcklight.gif" bgcolor=#F8F8F8>
+    <table border=0 cellpadding=0 callspacing=0><tr>
+      <td valign=bottom>
+        <table border=0 cellpadding=0 cellspacing=0><tr><td bgcolor=#D8D8D8>
+          <table cellpadding=3 border=0>
+            <tr><td bgcolor=#FFFFF0>
+              <div id="verySmall"><br></div>
+              <div id="bigTitle">&nbsp;madKernel&nbsp;</div>
+              <div id="verySmall"><br></div>
+              <div id="small">
+                <a class="small" href="Content.htm">Content</a> /...
+              </div>
+            </td></tr>
+          </table>
+        </td></tr></table>
+      </td>
+      <td valign=bottom>
+        <table border=0 cellpadding=0 cellspacing=0><tr><td bgcolor=#D8D8D8>
+          <table cellpadding=7 border=0>
+            <tr><td bgcolor=#F4F4F8><a href="http://www.madshi.net">www.madshi.net</a></td></tr>
+          </table>
+        </td></tr></table>
+      </td>
+    </tr></table>
+    <p>The package madKernel is about <a href="KernelObjects.htm">Kernel Objects</a> for the biggest part.
+       The most important object types are wrapped up in nice interfaces, utilizing
+       all the specific kernel32 APIs and also utilizing a whole lot of undocumented
+       stuff. You often won't notice the undocumented parts of madKernel, though,
+       because all what you can do seems natural and logical. There are simply a
+       lot of holes in the win32 API, which madKernel has to fill in order to make
+       the interfaces complete. Just one example: The well known API
+       "ShellExecuteEx" can give you a process handle of the newly created process.
+       But what process ID does the process have? The win32 API *should* contain an
+       API like "ProcessHandleToProcessID", but it doesn't. So madKernel uses
+       undocumented stuff to fill the holes.</p>
+    <p>madKernel has nice interface wrappers for <a href="EventsAndMutexes.htm">Events and Mutexes</a> and for
+       <a href="Threads.htm">Threads</a> and <a href="Processes.htm">Processes</a>. Furthermore, also some other basic
+       elements of Windows are covered, like <a href="Windows.htm">Windows</a>, <a href="Modules.htm">Modules</a> and
+       <a href="TrayIcons.htm">Tray Icons</a>. Those elements are no <a href="KernelObjects.htm">Kernel Objects</a>, but they're
+       really important, so madKernel supports them, too.</p>
+    <p>Most of the time, you handle <a href="KernelObjects.htm">Kernel Objects</a> through kernel
+       <a href="Handles.htm">Handles</a>. E.g. almost all win32 APIs want to have <a href="Handles.htm">Handles</a>.
+       So madKernel wraps up kernel <a href="Handles.htm">Handles</a> in nice interfaces, too.</p>
+    <p>Finally we have a little bonus interface. When trying to establish a
+       conversation between different <a href="Modules.htm">Modules</a> or between different
+       <a href="Processes.htm">Processes</a> it's often useful to have a shared memory area, which can
+       be accessed through a system wide unique name. For that purpose the win32
+       API offers named file mapping objects, which madKernel wraps up with an
+       interface called <a href="NamedBuffer.htm">Named Buffer</a>.</p>
+    <p>A quick reference of what is contained in madKernel can be found in the
+       <a href="madKernelRef.htm">madKernel Reference</a>.</p>
+    <table border=0 cellpadding=0 callspacing=0>
+      <tr><td bgcolor=#D8D8D8>
+        <table border=0 cellpadding=7>
+          <tr>
+            <td bgcolor=#6060B0><div id="smallTitle">Topics</div></td>
+            <td bgcolor=#F8F0F0><a href="KernelObjects.htm">Kernel&nbsp;Objects</a></td>
+            <td bgcolor=#F4F4F8><a href="Handles.htm">Handles</a></td>
+            <td bgcolor=#F8F0F0><a href="EventsAndMutexes.htm">Events&nbsp;and&nbsp;Mutexes</a></td>
+            <td bgcolor=#F4F4F8><a href="Threads.htm">Threads</a></td>
+            <td bgcolor=#F8F0F0><a href="Processes.htm">Processes</a></td>
+            <td bgcolor=#F4F4F8><a href="Windows.htm">Windows</a></td>
+            <td bgcolor=#F8F0F0><a href="TrayIcons.htm">Tray&nbsp;Icons</a></td>
+            <td bgcolor=#F4F4F8><a href="Modules.htm">Modules</a></td>
+            <td bgcolor=#F8F0F0><a href="NamedBuffer.htm">Named&nbsp;Buffer</a></td>
+          </tr>
+        </table>
+      </td></tr>
+    </table>
+    <p>madKernel is free for non-commercial usage (only).</p>
+    <p>You can find more information including the full download at
+       <a href="http://madKernel.madshi.net">http://madKernel.madshi.net</a>.</p>
+    
+  </body>
+
+</html>

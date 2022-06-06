@@ -1,0 +1,68 @@
+<html>
+
+  <head>
+    <title>mad* Help...</title>
+    <meta name="description" content="mad* Help...">
+    <meta name="keywords" content="madshi, components, delphi">
+    <meta http-equiv="expires" content="900">
+    <link rel=stylesheet type="text/css" href="style.css">
+  </head>
+
+  <body background="bcklight.gif" bgcolor=#F8F8F8>
+    <a name="TPPointer"></a>
+    <a name="TAPointer"></a>
+    <a name="TPAPointer"></a>
+    <a name="TDAPointer"></a>
+    <a name="TPDAPointer"></a>
+    <table border=0 cellpadding=0 callspacing=0><tr>
+      <td valign=bottom>
+        <table border=0 cellpadding=0 cellspacing=0><tr><td bgcolor=#D8D8D8>
+          <table cellpadding=3 border=0>
+            <tr><td bgcolor=#FFFFF0>
+              <div id="verySmall"><br></div>
+              <div id="bigTitle">&nbsp;Pointer Types&nbsp;</div>
+              <div id="verySmall"><br></div>
+              <div id="small">
+                <a class="small" href="Content.htm">Content</a> /
+                <a class="small" href="madBasic.htm">madBasic</a> /
+                <a class="small" href="madTypesUnit.htm">madTypes Unit</a> /...
+              </div>
+            </td></tr>
+          </table>
+        </td></tr></table>
+      </td>
+      <td valign=bottom>
+        <table border=0 cellpadding=0 cellspacing=0><tr><td bgcolor=#D8D8D8>
+          <table cellpadding=7 border=0>
+            <tr><td bgcolor=#F4F4F8><a href="http://www.madshi.net">www.madshi.net</a></td></tr>
+          </table>
+        </td></tr></table>
+      </td>
+    </tr></table>
+    <p>Some "pointer" type extensions:</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>type</span><br>
+                  &nbsp;&nbsp;<span id='identifier'>TPPointer</span>&nbsp;&nbsp;&nbsp;= ^<span id='identifier'>pointer</span>;<br>
+                  <br>
+                  &nbsp;&nbsp;<span id='identifier'>TAPointer</span>&nbsp;&nbsp;&nbsp;= <span id='bold'>array</span>&nbsp;[<span id='number'>0</span>..<span id='identifier'>maxInt</span>&nbsp;<span id='bold'>shr</span>&nbsp;<span id='number'>2</span>-<span id='number'>1</span>] <span id='bold'>of</span>&nbsp;<span id='identifier'>pointer</span>;<br>
+                  &nbsp;&nbsp;<span id='identifier'>TPAPointer</span>&nbsp;&nbsp;= ^<span id='identifier'>TAPointer</span>;<br>
+                  <br>
+                  &nbsp;&nbsp;<span id='identifier'>TDAPointer</span>&nbsp;&nbsp;= <span id='bold'>array</span>&nbsp;<span id='bold'>of</span>&nbsp;<span id='identifier'>pointer</span>;<br>
+                  &nbsp;&nbsp;<span id='identifier'>TPDAPointer</span>&nbsp;= ^<span id='identifier'>TDAPointer</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </body>
+
+</html>

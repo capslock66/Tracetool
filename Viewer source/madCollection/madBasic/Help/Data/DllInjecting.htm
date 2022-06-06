@@ -1,0 +1,326 @@
+<html>
+
+  <head>
+    <title>mad* Help...</title>
+    <meta name="description" content="mad* Help...">
+    <meta name="keywords" content="madshi, components, delphi">
+    <meta http-equiv="expires" content="900">
+    <link rel=stylesheet type="text/css" href="style.css">
+  </head>
+
+  <body background="bcklight.gif" bgcolor=#F8F8F8>
+    <table border=0 cellpadding=0 callspacing=0><tr>
+      <td valign=bottom>
+        <table border=0 cellpadding=0 cellspacing=0><tr><td bgcolor=#D8D8D8>
+          <table cellpadding=3 border=0>
+            <tr><td bgcolor=#FFFFF0>
+              <div id="verySmall"><br></div>
+              <div id="bigTitle">&nbsp;Dll Injection&nbsp;</div>
+              <div id="verySmall"><br></div>
+              <div id="small">
+                <a class="small" href="Content.htm">Content</a> /
+                <a class="small" href="madCodeHook.htm">madCodeHook</a> /...
+              </div>
+            </td></tr>
+          </table>
+        </td></tr></table>
+      </td>
+      <td valign=bottom>
+        <table border=0 cellpadding=0 cellspacing=0><tr><td bgcolor=#D8D8D8>
+          <table cellpadding=7 border=0>
+            <tr><td bgcolor=#F4F4F8><a href="http://www.madshi.net">www.madshi.net</a></td></tr>
+          </table>
+        </td></tr></table>
+      </td>
+    </tr></table>
+    <h3>Introduction</h3>
+    <p>If you want to hook some APIs in another process (e.g. Notepad) or if you
+       want to do system wide API hooking, you have to write a little DLL which
+       does all the hooking work. This DLL then needs to be loaded into the target
+       process(es) to do its work there. There's no official win32 API to inject a
+       DLL into another process. Windows does offer some ways to inject DLLs, but
+       they all come with their own share of problems.</p>
+    <p>Just to mention one, "SetWindowsHookEx()" is often (mis)used for injecting DLLs,
+       but doing so has the following disadvantages: (1) It effects performance,
+       because you have to set up a real message hook, which then gets called all
+       the time, although you are not interested in the results at all. (2) It
+       works only for processes which handle messages, not all processes do so.
+       For example most console applications don't. (3) It works only if the target
+       process is not blocked, frozen or crashed. (4) The DLL might be loaded into
+       the target process later than expected. As a result you might miss some
+       important API calls. (5) It doesn't work for system processes.</p>
+    <p>madCodeHook offers various injection related APIs, which work without
+       any of the mentioned disadvantages.</p>
+    <h3>madCodeHook APIs for injecting a DLL into one specific process</h3>
+    <a name="CreateProcessEx"></a>
+    <a name="CreateProcessExA"></a>
+    <a name="CreateProcessExW"></a>
+    <p>The "CreateProcessEx" function basically works exactly like the well known
+       Windows API "CreateProcess". But it has one additional parameter that lets
+       you define a DLL which you want to have injected into the to-be-started
+       process. When called, "CreateProcessEx" starts the specified process, but
+       patches it in such a way, that it behaves as if it had a "LoadLibrary" call
+       right in the first line of it's source code.</p>
+    <p>A 64bit process can use this API to start both 32bit and 64bit processes.
+       Unfortunately due to some limitations in the win32 API, this API doesn't allow
+       you to create a 64bit process from within a 32bit process. The underlying win32
+       API "CreateProcess" itself supports starting a 64bit process, but the DLL
+       injection part doesn't work, because a 32bit process only has limited access
+       to a 64bit process. So if you want to use CreateProcessEx for starting a 64bit
+       process, your own process must be 64bit, too.</p>
+    <p>The bitdepth of the hook DLL *always* needs to match the bitdepth of the
+       target process. Otherwise CreateProcessExA/W will fail.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='comment'>// start a process and inject your hook DLL into it</span><br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>CreateProcessExA</span>/<span id='identifier'>W</span>&nbsp;(<span id='identifier'>applicationName</span>, <span id='identifier'>commandLine</span>&nbsp;: <span id='identifier'>PAnsi</span>/<span id='identifier'>WideChar</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>processAttr</span>, <span id='identifier'>threadAttr</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>PSecurityAttributes</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>inheritHandles</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>bool</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>creationFlags</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>dword</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>environment</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>pointer</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>currentDirectory</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>PAnsi</span>/<span id='identifier'>WideChar</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='bold'>const</span>&nbsp;<span id='identifier'>startupInfo</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>TStartupInfoA</span>/<span id='identifier'>W</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='bold'>var</span>&nbsp;<span id='identifier'>processInfo</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>TProcessInformation</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>loadLibrary</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>PAnsi</span>/<span id='identifier'>WideChar</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;) : <span id='identifier'>boolean</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="UninjectLibrary"></a>
+    <a name="UninjectLibraryA"></a>
+    <a name="UninjectLibraryW"></a>
+    <a name="InjectLibrary"></a>
+    <a name="InjectLibraryA"></a>
+    <a name="InjectLibraryW"></a>
+    <p>The function "InjectLibrary" is able to inject your DLL into one specific
+       already running 32bit or <a href="Os64.htm">64bit process</a>.
+       You can inject 32bit DLLs into 32bit processes and 64bit DLLs into
+       <a href="Os64.htm">64bit processes</a>. Don't worry, you can't do anything
+       wrong. madCodeHook will simply refuse to inject a DLL with a non-matching
+       bitdepth.</p>
+    <p>If you call this API from inside a 32bit process, you cannot inject
+       <a href="Os64.htm">64bit processes</a>. If you call this API from inside a
+       <a href="Os64.htm">64bit process</a>, you can inject hook DLLs into both
+       32bit and 64bit processes. The bitdepth of the DLL and the target process
+       must always match, though.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='comment'>// inject a DLL into one specific process</span><br>
+                  <span id='bold'>function</span>&nbsp;(<span id='identifier'>Un</span>)<span id='identifier'>InjectLibraryA</span>/<span id='identifier'>W</span>&nbsp;(<span id='identifier'>libFileName</span>&nbsp;&nbsp;&nbsp;: <span id='identifier'>PWide</span>/<span id='identifier'>AnsiChar</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>processHandle</span>&nbsp;: <span id='identifier'>dword</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>timeOut</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>dword</span>&nbsp;= <span id='number'>7000</span>) : <span id='identifier'>boolean</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <h3>madCodeHook APIs for system wide DLL injection</h3>
+    <p>You can also inject your hook DLL system (or session) wide. This works only
+       if you have administrator rights, though. System wide DLL injection
+       generally consists of two separate parts:<p>
+    <p>(1) Injection into already running processes and<br>
+       (2) automatic injection into newly created processes.</p>
+    <a name="LoadInjectionDriver"></a>
+    <a name="InstallInjectionDriver"></a>
+    <a name="UninstallInjectionDriver"></a>
+    <a name="StopInjectionDriver"></a>
+    <a name="StartInjectionDriver"></a>
+    <a name="IsInjectionDriverInstalled"></a>
+    <a name="IsInjectionDriverRunning"></a>
+    <p>Automatic injection into newly created processes is handled by a little
+       kernel mode <a href="mchInjDrv.htm">driver</a>. This <a href="mchInjDrv.sys">driver</a>
+       is available as an external file (or rather 2 files, one for 32bit OSs and one for
+       <a href="Os64.htm">64bit OSs</a>). You need to <a href="mchDrvCfg.htm">configure</a>
+       this <a href="mchInjDrv.htm">driver</a> and <a href="mchDrvSign.htm">sign</a> it
+       afterwards, otherwise it won't work. After you've done that, your program needs to
+       "activate" the <a href="mchInjDrv.htm">driver</a> by using the following APIs, all of
+       which need admin rights:</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='comment'>// (de)activate the injection driver</span><br>
+                  <br>
+                  <span id='comment'>// option 1: dynamically load the driver without installing it</span><br>
+                  <span id='comment'>// the driver will be loaded and start running at once</span><br>
+                  <span id='comment'>// it will stay active only until the next reboot</span><br>
+                  <span id='comment'>// you may prefer this technique if you want your product to not require any</span><br>
+                  <span id='comment'>// installation and uninstallation procedures</span><br>
+                  <span id='comment'>// loading the same driver twice fails with ERROR_SERVICE_ALREADY_RUNNING</span><br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>LoadInjectionDriver</span>&nbsp;(<span id='identifier'>driverName</span>, <span id='identifier'>fileName32bit</span>, <span id='identifier'>fileName64bit</span>: <span id='identifier'>PWideChar</span>) : <span id='identifier'>bool</span>; <span id='bold'>stdcall</span>;<br>
+                  <br>
+                  <span id='comment'>// option 2: permanently install your injection driver</span><br>
+                  <span id='comment'>// after installation it will automatically start running at once</span><br>
+                  <span id='comment'>// it will survive reboots, it will stay installed until you uninstall it</span><br>
+                  <span id='comment'>// for a clean uninstall call StopInjectionDriver first, then Uninstall</span><br>
+                  <span id='comment'>// installing the same driver twice fails succeeds and updates all parameters</span><br>
+                  <span id='bold'>function</span>&nbsp;&nbsp;&nbsp;<span id='identifier'>InstallInjectionDriver</span>&nbsp;(<span id='identifier'>driverName</span>, <span id='identifier'>fileName32bit</span>, <span id='identifier'>fileName64bit</span>, <span id='identifier'>description</span>: <span id='identifier'>PWideChar</span>) : <span id='identifier'>bool</span>; <span id='bold'>stdcall</span>;<br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>UninstallInjectionDriver</span>&nbsp;(<span id='identifier'>driverName</span>: <span id='identifier'>PWideChar</span>) : <span id='identifier'>bool</span>; <span id='bold'>stdcall</span>;<br>
+                  <br>
+                  <span id='comment'>// stopping the driver may not work, depending on how it was configured</span><br>
+                  <span id='comment'>// call Stop + Start to update an installed driver to a newer version</span><br>
+                  <span id='comment'>// call Stop + Load &nbsp;to update a &nbsp;loaded &nbsp;&nbsp;&nbsp;driver to a newer version</span><br>
+                  <span id='bold'>function</span>&nbsp;&nbsp;<span id='identifier'>StopInjectionDriver</span>&nbsp;(<span id='identifier'>driverName</span>: <span id='identifier'>PWideChar</span>) : <span id='identifier'>bool</span>; <span id='bold'>stdcall</span>;<br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>StartInjectionDriver</span>&nbsp;(<span id='identifier'>driverName</span>: <span id='identifier'>PWideChar</span>) : <span id='identifier'>bool</span>; <span id='bold'>stdcall</span>;<br>
+                  <br>
+                  <span id='comment'>// checks whether the specific injection driver is installed</span><br>
+                  <span id='comment'>// returns true &nbsp;if you used InstallInjectionDriver</span><br>
+                  <span id='comment'>// returns false if you used LoadInjectionDriver</span><br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>IsInjectionDriverInstalled</span>&nbsp;(<span id='identifier'>driverName</span>: <span id='identifier'>PWideChar</span>) : <span id='identifier'>bool</span>; <span id='bold'>stdcall</span>;<br>
+                  <br>
+                  <span id='comment'>// checks whether the specific injection driver is running</span><br>
+                  <span id='comment'>// returns true if you used InstallInjectionDriver and</span><br>
+                  <span id='comment'>// &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if the driver is running (not paused / stopped)</span><br>
+                  <span id='comment'>// returns true if you used LoadInjectionDriver</span><br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>IsInjectionDriverRunning</span>&nbsp;(<span id='identifier'>driverName</span>: <span id='identifier'>PWideChar</span>) : <span id='identifier'>bool</span>; <span id='bold'>stdcall</span>;<br>
+                  <br>
+                  <span id='comment'>// Example:</span><br>
+                  <span id='identifier'>success</span>&nbsp;:= <span id='identifier'>LoadInjectionDriver</span>(<span id='string'>'yourFancyDriverName'</span>, <span id='string'>'your32.sys'</span>, <span id='string'>'your64.sys'</span>);
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="ALL_SESSIONS"></a>
+    <a name="CURRENT_SESSION"></a>
+    <a name="UninjectAllLibraries"></a>
+    <a name="UninjectAllLibrariesA"></a>
+    <a name="UninjectAllLibrariesW"></a>
+    <a name="TARGET_PROCESS_IS_64BIT"></a>
+    <a name="TARGET_PROCESS_IS_SYSTEM"></a>
+    <a name="TARGET_PROCESS_IS_ELEVATED"></a>
+    <a name="TARGET_PROCESS_IS_PROTECTED"></a>
+    <a name="TARGET_PROCESS_IS_NEWLY_CREATED"></a>
+    <a name="INJECT_SYSTEM_PROCESSES"></a>
+    <a name="INJECT_PERMANENTLY"></a>
+    <a name="INJECT_METRO_APPS"></a>
+    <a name="INJECT_VIA_IAT_PATCHING"></a>
+    <a name="INJECT_ALLOW_THREAD"></a>
+    <a name="TInjectApprovalCallbackRoutine"></a>
+    <p>Once the <a href="mchInjDrv.htm">injection driver</a> has been activated
+       (see above), you can call the following APIs to inject your hook DLL system
+       or session wide. If you call these APIs from within a 32bit process, you can
+       only inject 32bit hook DLLs. If you call these APIs from within a
+       <a href="Os64.htm">64bit process</a>, you can inject both 32bit and 64bit
+       DLLs.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='comment'>// inject a DLL into all running processes</span><br>
+                  <br>
+                  <span id='bold'>const</span><br>
+                  &nbsp;&nbsp;<span id='comment'>// flags for injection/uninjection "session" parameter</span><br>
+                  &nbsp;&nbsp;<span id='identifier'>ALL_SESSIONS</span>&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>dword</span>&nbsp;= <span id='identifier'>dword</span>(-<span id='number'>1</span>);<br>
+                  &nbsp;&nbsp;<span id='identifier'>CURRENT_SESSION</span>&nbsp;: <span id='identifier'>dword</span>&nbsp;= <span id='identifier'>dword</span>(-<span id='number'>2</span>);<br>
+                  <br>
+                  <span id='bold'>const</span><br>
+                  &nbsp;&nbsp;<span id='comment'>// flags for injection/uninjection "options" parameter</span><br>
+                  &nbsp;&nbsp;<span id='identifier'>INJECT_SYSTEM_PROCESSES</span>&nbsp;= <span id='number'>$0001</span>;<br>
+                  &nbsp;&nbsp;<span id='identifier'>INJECT_PERMANENTLY</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= <span id='number'>$0002</span>; &nbsp;<span id='comment'>// shall the DLL stay after reboot?</span><br>
+                  &nbsp;&nbsp;<span id='identifier'>INJECT_METRO_APPS</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= <span id='number'>$0004</span>;<br>
+                  &nbsp;&nbsp;<span id='identifier'>INJECT_VIA_IAT_PATCHING</span>&nbsp;= <span id='number'>$0008</span>;<br>
+                  &nbsp;&nbsp;<span id='identifier'>INJECT_ALLOW_THREAD</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= <span id='number'>$0010</span>; &nbsp;<span id='comment'>// allow a secondary thread to load the hook dll?</span><br>
+                  <br>
+                  &nbsp;&nbsp;<span id='comment'>// flags for inject approval callbacks (see below)</span><br>
+                  &nbsp;&nbsp;<span id='identifier'>TARGET_PROCESS_IS_64BIT</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>dword</span>&nbsp;= <span id='number'>$00000001</span>;<br>
+                  &nbsp;&nbsp;<span id='identifier'>TARGET_PROCESS_IS_SYSTEM</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>dword</span>&nbsp;= <span id='number'>$00000002</span>;<br>
+                  &nbsp;&nbsp;<span id='identifier'>TARGET_PROCESS_IS_ELEVATED</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>dword</span>&nbsp;= <span id='number'>$00000004</span>;<br>
+                  &nbsp;&nbsp;<span id='identifier'>TARGET_PROCESS_IS_PROTECTED</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>dword</span>&nbsp;= <span id='number'>$00000008</span>;<br>
+                  &nbsp;&nbsp;<span id='identifier'>TARGET_PROCESS_IS_NEWLY_CREATED</span>&nbsp;: <span id='identifier'>dword</span>&nbsp;= <span id='number'>$00000010</span>;<br>
+                  <br>
+                  <span id='bold'>type</span><br>
+                  &nbsp;&nbsp;<span id='comment'>// callback approval definition for system/user wide dll injection</span><br>
+                  &nbsp;&nbsp;<span id='identifier'>TInjectApprovalCallbackRoutine</span>&nbsp;= <span id='bold'>function</span>&nbsp;(<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>context</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>pointer</span>; &nbsp;&nbsp;&nbsp;<span id='comment'>// you can use this for whatever purpose you like</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>processId</span>&nbsp;&nbsp;&nbsp;: <span id='identifier'>dword</span>; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>// injection target process ID</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>parentId</span>&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>dword</span>; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>// which process started the target process?</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>sessionId</span>&nbsp;&nbsp;&nbsp;: <span id='identifier'>dword</span>; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>// to which session does the process belong?</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>flags</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>dword</span>; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>// see TARGET_PROCESS_IS_XXX flags (defined above)</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>imagePath</span>&nbsp;&nbsp;&nbsp;: <span id='identifier'>PWideChar</span>; &nbsp;<span id='comment'>// exe file name/path</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>commandLine</span>&nbsp;: <span id='identifier'>PWideChar</span>&nbsp;&nbsp;&nbsp;<span id='comment'>// full command line</span><br>
+                  &nbsp;&nbsp;) : <span id='identifier'>bool</span>; <span id='bold'>stdcall</span>;<br>
+                  <br>
+                  <span id='comment'>// (un)injects a library to/from all processes of the specified session(s)</span><br>
+                  <span id='comment'>// driverName: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;name of the driver to use</span><br>
+                  <span id='comment'>// libFileName: &nbsp;&nbsp;&nbsp;&nbsp;full file path/name of the hook dll</span><br>
+                  <span id='comment'>// session: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;session id into which you want the dll to be injected</span><br>
+                  <span id='comment'>// &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"-1" or "ALL_SESSIONS" means all sessions</span><br>
+                  <span id='comment'>// &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"-2" or "CURRENT_SESSION" means the current session</span><br>
+                  <span id='comment'>// options: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;various options, see INJECT_xxx flags</span><br>
+                  <span id='comment'>// includeMask: &nbsp;&nbsp;&nbsp;&nbsp;list of exe file name/path masks into which the hook dll shall be injected</span><br>
+                  <span id='comment'>// &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;you can use multiple masks separated by a "|" char</span><br>
+                  <span id='comment'>// &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;you can either use a full path, or a file name, only</span><br>
+                  <span id='comment'>// &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;leaving this parameter empty means that all processes are "included"</span><br>
+                  <span id='comment'>// &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Example: "c:\program files\*.exe|calc.exe|*.scr"</span><br>
+                  <span id='comment'>// excludeMask: &nbsp;&nbsp;&nbsp;&nbsp;list of exe file name/path masks which shall be excluded from dll injection</span><br>
+                  <span id='comment'>// &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;the excludeMask has priority over the includeMask</span><br>
+                  <span id='comment'>// &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;leaving this parameter empty means that no processes are "excluded"</span><br>
+                  <span id='comment'>// excludePIDs: &nbsp;&nbsp;&nbsp;&nbsp;list of process IDs which shall not be touched</span><br>
+                  <span id='comment'>// &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;when used, the list must be terminated with a "0" PID item</span><br>
+                  <span id='comment'>// callback: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;will be called for each potential to-be-injected-into process</span><br>
+                  <span id='comment'>// &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;callback decides whether to perform injection or not</span><br>
+                  <span id='comment'>// &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if callback doesn't reply within 5 sec timeout, a "true" reply is inferred</span><br>
+                  <span id='comment'>// &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;caution: slow callback results in new processes starting delayed</span><br>
+                  <span id='comment'>// callbackContext: this pointer is forwarded to your callback function</span><br>
+                  <span id='comment'>// &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;use for any purpose you like</span><br>
+                  <span id='bold'>function</span>&nbsp;(<span id='identifier'>Un</span>)<span id='identifier'>InjectLibraryA</span>/<span id='identifier'>W</span>&nbsp;(<span id='identifier'>driverName</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>PAnsi</span>/<span id='identifier'>WideChar</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>libFileName</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>PAnsi</span>/<span id='identifier'>WideChar</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>session</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>dword</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>options</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>dword</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>includeMask</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>PAnsi</span>/<span id='identifier'>WideChar</span>&nbsp;= <span id='bold'>nil</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>excludeMask</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>PAnsi</span>/<span id='identifier'>WideChar</span>&nbsp;= <span id='bold'>nil</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>excludePIDs</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>TPCardinal</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= <span id='bold'>nil</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>callback</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>TInjectApprovalCallbackRoutine</span>&nbsp;= <span id='bold'>nil</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>callbackContext</span>&nbsp;: <span id='identifier'>pointer</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= <span id='bold'>nil</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>timeOut</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>dword</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= <span id='number'>7000</span>) : <span id='identifier'>bool</span>; <span id='bold'>stdcall</span>; <span id='bold'>overload</span>;<br>
+                  <br>
+                  <span id='comment'>// uninjects every currently active system/session wide injection</span><br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>UninjectAllLibrariesA</span>/<span id='identifier'>W</span>&nbsp;(<span id='identifier'>driverName</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>PAnsi</span>/<span id='identifier'>WideChar</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>excludePIDs</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>TPCardinal</span>&nbsp;= <span id='bold'>nil</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>timeOutPerUninject</span>&nbsp;: <span id='identifier'>dword</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= <span id='number'>7000</span>) : <span id='identifier'>bool</span>; <span id='bold'>stdcall</span>;<br>
+                  <br>
+                  <span id='comment'>// Example:</span><br>
+                  <span id='comment'>// we inject both a 32bit and a 64bit hook DLL</span><br>
+                  <span id='comment'>// let madCodeHook worry about choosing the right DLL for any given process</span><br>
+                  <span id='comment'>// this will only work if you call this from within a 64bit process</span><br>
+                  <span id='comment'>// you can't inject 64bit hook DLLs from within a 32bit process</span><br>
+                  <span id='identifier'>InjectLibraryA</span>(<span id='string'>'yourFancyDriverName'</span>, <span id='string'>'your32.dll'</span>, <span id='identifier'>CURRENT_SESSION</span>, <span id='identifier'>false</span>);<br>
+                  <span id='identifier'>InjectLibraryA</span>(<span id='string'>'yourFancyDriverName'</span>, <span id='string'>'your64.dll'</span>, <span id='identifier'>CURRENT_SESSION</span>, <span id='identifier'>false</span>);
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </body>
+
+</html>

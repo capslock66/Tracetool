@@ -1,0 +1,126 @@
+<html>
+
+  <head>
+    <title>mad* Help...</title>
+    <meta name="description" content="mad* Help...">
+    <meta name="keywords" content="madshi, components, delphi">
+    <meta http-equiv="expires" content="900">
+    <link rel=stylesheet type="text/css" href="style.css">
+  </head>
+
+  <body background="bcklight.gif" bgcolor=#F8F8F8>
+    <table border=0 cellpadding=0 callspacing=0><tr>
+      <td valign=bottom>
+        <table border=0 cellpadding=0 cellspacing=0><tr><td bgcolor=#D8D8D8>
+          <table cellpadding=3 border=0>
+            <tr><td bgcolor=#FFFFF0>
+              <div id="verySmall"><br></div>
+              <div id="bigTitle">&nbsp;madCrypt Unit&nbsp;</div>
+              <div id="verySmall"><br></div>
+              <div id="small">
+                <a class="small" href="Content.htm">Content</a> /
+                <a class="small" href="madBasic.htm">madBasic</a> /...
+              </div>
+            </td></tr>
+          </table>
+        </td></tr></table>
+      </td>
+      <td valign=bottom>
+        <table border=0 cellpadding=0 cellspacing=0><tr><td bgcolor=#D8D8D8>
+          <table cellpadding=7 border=0>
+            <tr><td bgcolor=#F4F4F8><a href="http://www.madshi.net">www.madshi.net</a></td></tr>
+          </table>
+        </td></tr></table>
+      </td>
+    </tr></table>
+    <p>One of my customers asked me to add encryption to <a href="madExcept.htm" href="madExceptUnit.htm">madExcept</a>, so I
+       looked on the net and found that the
+       <a href="http://en.wikipedia.org/wiki/Blowfish_%28cipher%29">
+       blowfish encryption</a> is good, easy, fast and besides also patent free. So
+       here it is. madCrypt is a simple Delphi blowfish implementation. No fancy
+       features, just the basic encryption. I've successfully tested madCrypt
+       against blowfish test vectors, so I can say that everything is in order.</p>
+    <a name="Encrypt"></a>
+    <a name="Decrypt"></a>
+    <p>There are two overloaded Encrypt/Decrypt functions, one works with a Delphi
+       string (my favorite), the other one with a dumb pointer. Just use what makes
+       more sense for you.</p>
+    <p>The string variation automatically adds padding bytes to the end of the
+       data. When decrypting such a string, the padding bytes get deleted again, of
+       course. This logic makes sure that you can encrypt strings of any length.</p>
+    <p>The pointer variation in contrast does not change the length of the data.
+       Encryption only works in 8 byte chunks, so here odd bytes will remain
+       unencrypted. That means: When using the pointer variation of the "Encrypt"
+       function, please make sure that the data size is a multiple of 8.</p>
+    <p>If you leave the initialization vector "iv" uninitialized, madCrypt uses the
+       simplest form of encryption ("ECB"). If you specify an initialization vector,
+       madCrypt uses the counter mode ("CTR"), which is another bit safer.</p>
+    <a name="OldEncrypt"></a>
+    <a name="OldDecrypt"></a>
+    <p><b>CAUTION:</b> The version 1.1 (or higher) of madCrypt is not compatible
+       with the 1.0 version. If you need to use the old way of
+       encrypting/decrypting, you can use the functions "OldEncrypt" and
+       "OldDecrypt", which are supported for compatability reasons.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>procedure</span>&nbsp;<span id='identifier'>Encrypt</span>&nbsp;(<span id='bold'>var</span>&nbsp;<span id='identifier'>data</span>: <span id='bold'>string</span>; <span id='identifier'>password</span>: <span id='bold'>string</span>; <span id='identifier'>iv</span>: <span id='identifier'>int64</span>&nbsp;= <span id='number'>0</span>); <span id='bold'>overload</span>;<br>
+                  <span id='bold'>procedure</span>&nbsp;<span id='identifier'>Decrypt</span>&nbsp;(<span id='bold'>var</span>&nbsp;<span id='identifier'>data</span>: <span id='bold'>string</span>; <span id='identifier'>password</span>: <span id='bold'>string</span>; <span id='identifier'>iv</span>: <span id='identifier'>int64</span>&nbsp;= <span id='number'>0</span>); <span id='bold'>overload</span>;<br>
+                  <br>
+                  <span id='bold'>procedure</span>&nbsp;<span id='identifier'>Encrypt</span>&nbsp;(<span id='identifier'>buf</span>: <span id='identifier'>pointer</span>; <span id='identifier'>len</span>: <span id='identifier'>dword</span>; <span id='identifier'>password</span>: <span id='bold'>string</span>; <span id='identifier'>iv</span>: <span id='identifier'>int64</span>&nbsp;= <span id='number'>0</span>); <span id='bold'>overload</span>;<br>
+                  <span id='bold'>procedure</span>&nbsp;<span id='identifier'>Decrypt</span>&nbsp;(<span id='identifier'>buf</span>: <span id='identifier'>pointer</span>; <span id='identifier'>len</span>: <span id='identifier'>dword</span>; <span id='identifier'>password</span>: <span id='bold'>string</span>; <span id='identifier'>iv</span>: <span id='identifier'>int64</span>&nbsp;= <span id='number'>0</span>); <span id='bold'>overload</span>;<br>
+                  <br>
+                  <span id='comment'>// Example:</span><br>
+                  <span id='identifier'>strVar</span>&nbsp;:= <span id='string'>'Currently this is readable, but not for long...'</span>;<br>
+                  <span id='identifier'>Encrypt</span>(<span id='identifier'>strVar</span>, <span id='string'>'D0n'</span><span id='string'>'t u5e weak pa55w0rd5!'</span>);<br>
+                  <span id='identifier'>Decrypt</span>(<span id='identifier'>strVar</span>, <span id='string'>'D0n'</span><span id='string'>'t u5e weak pa55w0rd5!'</span>);<br>
+                  <span id='identifier'>ShowMessage</span>(<span id='identifier'>strVar</span>);
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="Encode"></a>
+    <a name="Decode"></a>
+    <p>Sometimes you will need to store encrypted data as a clear text, e.g. when
+       storing an encrypted password in an ini file. For this purpose madCrypt now
+       also offers base64 encoding/decoding. This is a widely used encoding method
+       which converts binary data to readable text. Because readable text can only
+       consist of a subset of characters, the resulting buffer will always be
+       bigger than the original buffer. Base64 encoding is used for mailing binary
+       attachments, btw.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>Encode</span>&nbsp;(<span id='identifier'>data</span>: <span id='bold'>string</span>) : <span id='bold'>string</span>; <span id='bold'>overload</span>;<br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>Decode</span>&nbsp;(<span id='identifier'>data</span>: <span id='bold'>string</span>) : <span id='bold'>string</span>; <span id='bold'>overload</span>;<br>
+                  <br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>Encode</span>&nbsp;(<span id='identifier'>data</span>: <span id='identifier'>pchar</span>; <span id='identifier'>len</span>: <span id='identifier'>integer</span>) : <span id='bold'>string</span>; <span id='bold'>overload</span>;<br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>Decode</span>&nbsp;(<span id='identifier'>data</span>: <span id='identifier'>pchar</span>; <span id='identifier'>len</span>: <span id='identifier'>integer</span>) : <span id='bold'>string</span>; <span id='bold'>overload</span>;<br>
+                  <br>
+                  <span id='comment'>// Example:</span><br>
+                  <span id='identifier'>strVar</span>&nbsp;:= <span id='string'>'Currently this is readable, but not for long...'</span>;<br>
+                  <span id='identifier'>Encrypt</span>(<span id='identifier'>strVar</span>, <span id='string'>'D0n'</span><span id='string'>'t u5e weak pa55w0rd5!'</span>);<br>
+                  <span id='identifier'>ShowMessage</span>(<span id='identifier'>Encode</span>(<span id='identifier'>strVar</span>));
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </body>
+
+</html>

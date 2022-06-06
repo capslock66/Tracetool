@@ -14,7 +14,8 @@ unit DebugOptions;
 interface
 
 uses
-  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, Contnrs,
+  Windows, Messages, SysUtils, AnsiStrings,
+  Classes, Graphics, Controls, Forms, Dialogs, Contnrs,
   StdCtrls, ComCtrls, variants, CheckLst, ExtCtrls, ImgList
   , VirtualTrees
   ,ColorPickerButton
@@ -251,7 +252,7 @@ type
     procedure ButNewDotNetPluginClick(Sender: TObject);
     procedure VSTOptionsGetImageIndex(Sender: TBaseVirtualTree;
       Node: PVirtualNode; Kind: TVTImageKind; Column: TColumnIndex;
-      var Ghosted: Boolean; var ImageIndex: Integer);
+      var Ghosted: Boolean; var ImageIndex: TImageIndex);
     procedure FontsDrawItem(Control: TWinControl; Index: Integer;
       Rect: TRect; State: TOwnerDrawState);
     procedure FontsChange(Sender: TObject);
@@ -804,7 +805,7 @@ end;
 
 procedure TfrmDebugOptions.VSTOptionsGetImageIndex(
   Sender: TBaseVirtualTree; Node: PVirtualNode; Kind: TVTImageKind;
-  Column: TColumnIndex; var Ghosted: Boolean; var ImageIndex: Integer);
+  Column: TColumnIndex; var Ghosted: Boolean; var ImageIndex: TImageIndex);
 var
    obj : tObject ;
    plugin : TPlugin ;
@@ -898,7 +899,7 @@ begin
       if assigned (Win32plugin.getPlugName) then begin
          SetLength (szName,1200) ;
          pName := PAnsiString(szName) ;
-         strcopy (pansiChar(pName), '') ;
+         System.AnsiStrings.strcopy (pansiChar(pName), '') ;
          Win32plugin.GetPlugName (pName) ;   // get ANSI plugin name
 
          tempStringW := BufToString (pAnsichar(pName),pAnsichar(pName)+1000) ;  // convert null terminated ansiString to string

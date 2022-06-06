@@ -1,0 +1,177 @@
+<html>
+
+  <head>
+    <title>mad* Help...</title>
+    <meta name="description" content="mad* Help...">
+    <meta name="keywords" content="madshi, components, delphi">
+    <meta http-equiv="expires" content="900">
+    <link rel=stylesheet type="text/css" href="style.css">
+  </head>
+
+  <body background="bcklight.gif" bgcolor=#F8F8F8>
+    <a name="CENEWHDR"></a>
+    <a name="CEMAGIC"></a>
+    <a name="CPEMAGIC"></a>
+    <a name="TImageImportDirectory"></a>
+    <a name="PImageImportDirectory"></a>
+    <a name="TImageExportDirectory"></a>
+    <a name="PImageExportDirectory"></a>
+    <table border=0 cellpadding=0 callspacing=0><tr>
+      <td valign=bottom>
+        <table border=0 cellpadding=0 cellspacing=0><tr><td bgcolor=#D8D8D8>
+          <table cellpadding=3 border=0>
+            <tr><td bgcolor=#FFFFF0>
+              <div id="verySmall"><br></div>
+              <div id="bigTitle">&nbsp;Module Stuff&nbsp;</div>
+              <div id="verySmall"><br></div>
+              <div id="small">
+                <a class="small" href="Content.htm">Content</a> /
+                <a class="small" href="madBasic.htm">madBasic</a> /
+                <a class="small" href="madToolsUnit.htm">madTools Unit</a> /...
+              </div>
+            </td></tr>
+          </table>
+        </td></tr></table>
+      </td>
+      <td valign=bottom>
+        <table border=0 cellpadding=0 cellspacing=0><tr><td bgcolor=#D8D8D8>
+          <table cellpadding=7 border=0>
+            <tr><td bgcolor=#F4F4F8><a href="http://www.madshi.net">www.madshi.net</a></td></tr>
+          </table>
+        </td></tr></table>
+      </td>
+    </tr></table>
+    <p>A typical win32 process consists of the executable module (*.exe) and
+       several dynamic link libraries (*.dll). Most of those dlls are system
+       libraries, some may be private libraries used only by this process.</p>
+    <p>Executable modules and dynamic link libraries share the same format, which
+       is named "PE" (for Portable Executable). Each PE file has a specific PE file
+       header, where things like imported and exported APIs are stored.</p>
+    <p>Some PE header structures are already defined in "windows.pas", but some
+       important structures and constants are missing there. So we'll declare them
+       here:</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>const</span><br>
+                  &nbsp;&nbsp;<span id='comment'>// PE header constants</span><br>
+                  &nbsp;&nbsp;<span id='identifier'>CENEWHDR</span>&nbsp;= <span id='number'>$003C</span>; &nbsp;<span id='comment'>// offset of new EXE header</span><br>
+                  &nbsp;&nbsp;<span id='identifier'>CEMAGIC</span>&nbsp;&nbsp;= <span id='number'>$5A4D</span>; &nbsp;<span id='comment'>// old EXE magic id: &nbsp;'MZ'</span><br>
+                  &nbsp;&nbsp;<span id='identifier'>CPEMAGIC</span>&nbsp;= <span id='number'>$4550</span>; &nbsp;<span id='comment'>// NT portable executable</span><br>
+                  <br>
+                  <span id='bold'>type</span><br>
+                  &nbsp;&nbsp;<span id='comment'>// directory structure for imported APIs</span><br>
+                  &nbsp;&nbsp;<span id='identifier'>TImageImportDirectory</span>&nbsp;= <span id='bold'>packed</span>&nbsp;<span id='bold'>record</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>HintNameArray</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>dword</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>TimeDateStamp</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>dword</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>ForwarderChain</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>dword</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>Name_</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>dword</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>ThunkArray</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>dword</span>;<br>
+                  &nbsp;&nbsp;<span id='bold'>end</span>;<br>
+                  &nbsp;&nbsp;<span id='comment'>// directory structure for exported APIs</span><br>
+                  &nbsp;&nbsp;<span id='identifier'>TImageExportDirectory</span>&nbsp;= <span id='bold'>packed</span>&nbsp;<span id='bold'>record</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>Characteristics</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>dword</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>TimeDateStamp</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>dword</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>MajorVersion</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>word</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>MinorVersion</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>word</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>Name_</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>dword</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>Base</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>dword</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>NumberOfFunctions</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>integer</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>NumberOfNames</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>integer</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>AddressOfFunctions</span>&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>dword</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>AddressOfNames</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>dword</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>AddressOfNameOrdinals</span>&nbsp;: <span id='identifier'>dword</span>;<br>
+                  &nbsp;&nbsp;<span id='bold'>end</span>;<br>
+                  &nbsp;&nbsp;<span id='identifier'>PImageImportDirectory</span>&nbsp;= ^<span id='identifier'>TImageImportDirectory</span>;<br>
+                  &nbsp;&nbsp;<span id='identifier'>PImageExportDirectory</span>&nbsp;= ^<span id='identifier'>TImageExportDirectory</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="GetImageNtHeaders"></a>
+    <a name="GetImageImportDirectory"></a>
+    <a name="GetImageExportDirectory"></a>
+    <p>The following functions give you easy access to some of the most important
+       structures of the PE image file header. Just enter the module handle
+       and you get back a direct pointer to the desired structure:</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>GetImageNtHeaders</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span id='identifier'>module</span>: <span id='identifier'>dword</span>) : <span id='identifier'>PImageNtHeaders</span>;<br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>GetImageImportDirectory</span>&nbsp;(<span id='identifier'>module</span>: <span id='identifier'>dword</span>) : <span id='identifier'>PImageImportDirectory</span>;<br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>GetImageExportDirectory</span>&nbsp;(<span id='identifier'>module</span>: <span id='identifier'>dword</span>) : <span id='identifier'>PImageExportDirectory</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="GetImageProcAddress"></a>
+    <a name="GetImageProcName"></a>
+    <p>Now we move up a level and check out some functions, which parse the
+       mentioned structures for us to give us some specific information. First we
+       have "GetImageProcAddress". Most of the time it is equal to the well known
+       win32 API "GetProcAddress". But there are 2 important exceptions:</p>
+    <p>(1) IAT hooking often hooks GetProcAddress, too, and fakes the result.<br>
+       (2) in win9x GetProcAddress refuses to work for ordinal kernel32 APIs.</p>
+    <p>Also we have the function "GetImageProcName", which is exactly the opposite
+       of GetProcAddress. There's no win32 API equivalent to that.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>GetImageProcAddress</span>&nbsp;(<span id='identifier'>module</span>: <span id='identifier'>dword</span>; <span id='bold'>const</span>&nbsp;<span id='identifier'>name</span>&nbsp;: <span id='bold'>string</span>; <span id='identifier'>doubleCheck</span>: <span id='identifier'>boolean</span>&nbsp;= <span id='identifier'>false</span>) : <span id='identifier'>pointer</span>; <span id='bold'>overload</span>;<br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>GetImageProcAddress</span>&nbsp;(<span id='identifier'>module</span>: <span id='identifier'>dword</span>; <span id='bold'>index</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>integer</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;) : <span id='identifier'>pointer</span>; <span id='bold'>overload</span>;<br>
+                  <br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>GetImageProcName</span>&nbsp;(<span id='identifier'>module</span>: <span id='identifier'>dword</span>; <span id='identifier'>proc</span>: <span id='identifier'>pointer</span>) : <span id='bold'>string</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="FindModule"></a>
+    <p>Let's suppose you have the address of a function and you want to know in
+       which module the code of this function resides. For this purpose you can
+       use "FindModule".</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>FindModule</span>&nbsp;(<span id='identifier'>addr</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>pointer</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='bold'>var</span>&nbsp;<span id='identifier'>moduleHandle</span>&nbsp;: <span id='identifier'>dword</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='bold'>var</span>&nbsp;<span id='identifier'>moduleName</span>&nbsp;&nbsp;&nbsp;: <span id='bold'>string</span>) : <span id='identifier'>boolean</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    
+  </body>
+
+</html>

@@ -1,0 +1,346 @@
+<html>
+
+  <head>
+    <title>mad* Help...</title>
+    <meta name="description" content="mad* Help...">
+    <meta name="keywords" content="madshi, components, delphi">
+    <meta http-equiv="expires" content="900">
+    <link rel=stylesheet type="text/css" href="style.css">
+  </head>
+
+  <body background="bcklight.gif" bgcolor=#F8F8F8>
+    <table border=0 cellpadding=0 callspacing=0><tr>
+      <td valign=bottom>
+        <table border=0 cellpadding=0 cellspacing=0><tr><td bgcolor=#D8D8D8>
+          <table cellpadding=3 border=0>
+            <tr><td bgcolor=#FFFFF0>
+              <div id="verySmall"><br></div>
+              <div id="bigTitle">&nbsp;API Hooking Methods&nbsp;</div>
+              <div id="verySmall"><br></div>
+              <div id="small">
+                <a class="small" href="Content.htm">Content</a> /
+                <a class="small" href="madCodeHook.htm">madCodeHook</a> /...
+              </div>
+            </td></tr>
+          </table>
+        </td></tr></table>
+      </td>
+      <td valign=bottom>
+        <table border=0 cellpadding=0 cellspacing=0><tr><td bgcolor=#D8D8D8>
+          <table cellpadding=7 border=0>
+            <tr><td bgcolor=#F4F4F8><a href="http://www.madshi.net">www.madshi.net</a></td></tr>
+          </table>
+        </td></tr></table>
+      </td>
+    </tr></table>
+    <p>Sometimes you need to hook a specific function or API. Unfortunately there's
+       no official way to do such things, instead you'll find a lot of different
+       hacks that were invented by a lot of different people. All those API hooking
+       hacks have advantages and disadvantages. There's no perfect solution.</p>
+    <p>When analysing API hooking methods you should ask the following questions.
+       Each question does have a sense, of course. The questions are meant to make
+       existing differences between all the available API hooking methods more
+       evident:</p>
+    <table>
+      <tr><td align=right valign=top>1.</td>
+          <td>Does the method need to manipulate the to-be-hooked binary files on
+              the harddisk or is it capable to do it's work by only patching memory?
+              The latter solution should be prefered in most cases.</td></tr>
+      <tr><td align=right valign=top>2.</td>
+          <td>Can the method install a hook on functions, which are not exported?
+              Sometimes it is useful to hook some Delphi/C++ RTL functions or to
+              hook non-virtual methods or similar stuff.</td></tr>
+      <tr><td align=right valign=top>3.</td>
+          <td>Can the method safely install a hook on each and every API,
+              regardless of how the binary code of the API is structured? Some API
+              hooking methods get unstable, if the binary code of the to-be-hooked
+              API is shorter than 5 or 6 bytes or if it is structured strangely.</td></tr>
+      <tr><td align=right valign=top>4.</td>
+          <td>If hooking a specific API would end up in instability, does the
+              hooking method automatically detect this and does it consequently
+              react to the situation by either refusing to install the hook or even
+              by automatically switching to an appropriate alternative hooking
+              method?</td></tr>
+      <tr><td align=right valign=top>5.</td>
+          <td>Once installed, does the hook catch those API calls, which were
+              statically linked before the hook was installed?</td></tr>
+      <tr><td align=right valign=top>6.</td>
+          <td>Once installed, does the hook catch those API calls, which were
+              statically linked after the hook was installed?</td></tr>
+      <tr><td align=right valign=top>7.</td>
+          <td>Once installed, does the hook catch those API calls, which were
+              dynamically linked before the hook was installed?</td></tr>
+      <tr><td align=right valign=top>8.</td>
+          <td>Once installed, does the hook catch those API calls, which were
+              dynamically linked after the hook was installed?</td></tr>
+      <tr><td align=right valign=top>9.</td>
+          <td>Can the method properly undo an API hook?</td></tr>
+      <tr><td align=right valign=top>10.</td>
+          <td>Can the original API be called directly without having to temporarily
+              unhook the API?</td></tr>
+      <tr><td align=right valign=top>11.</td>
+          <td>Is a real hook chain built automatically? In other words: What
+              happens if you hook an API twice and then unhook in the wrong order?
+              If the hook method doesn't build a real hook queue, you'll leave the
+              hooked API in a wild state, which will result in a crash as soon as
+              the API is called the next time.</td></tr>
+      <tr><td align=right valign=top>12.</td>
+          <td>Is it possible to safely unload a hook DLL? If a hook DLL uninstalls
+              its API hooks when being unloaded from a process, some hook callback
+              functions might still be in use. In that case the process will later
+              crash.</td></tr>
+    </table>
+    <p>Generally I prefer solutions which doesn't touch the standard/system DLLs
+       on harddisk, so I'll only talk about methods here, which work purely in
+       memory. Here comes a description of the most important hooking methods:</p>
+    <h3>Import Table Patching</h3>
+    <p>The best known and most often used method is "Import Table Patching". Each
+       win32 module (application/DLL) has a so-called "import table", which is
+       basically a list of all APIs, which this module calls. Patching this import
+       table is a quite easy job and works very nicely. Unfortunately only the
+       statically linked API calls go through the import table. Dynamically linked
+       API calls (GetProcAddress) are not caught by this method at all. That
+       means: It's absolutely possible, even quite probable that you'll miss some
+       API calls when using this method.</p>
+    <p>To reduce the danger of missing API calls, you should not only patch the
+       import table of the application's module, but you should also patch the
+       import tables of each and every DLL that is loaded by the application.</p>
+    <h3>Extended Import Table Patching</h3>
+    <p>There are some ways to make "Import Table Patching" catch more APIs. You can
+       hook the API "LoadLibrary" to be notified about when new DLLs are loaded.
+       Then you can right away patch those DLLs, too. If you don't do that, you
+       won't catch API calls that are made from DLLs, which are loaded after you
+       did install the hook.</p>
+    <p>Another extension is to hook the API "GetProcAddress" and then when called
+       not return the real API address, but the address of your callback function
+       instead. This way you would also get those API calls, that are dynamically
+       linked after you've installed your hook. Unfortunately if you do this, you
+       can't unhook such calls, anymore.</p>
+    <h3>Export Table Patching</h3>
+    <p>Each win32 module has an "export table", which lists all functions that this
+       module exports. Patching this export table is not very difficult and brings
+       some interesting results: All new linkings (both static and dynamic) to the
+       patched API will automatically be bound to your callback function instead of
+       to the original function. That's very nice! Well, but unfortunately patching
+       an export table has absolutely NO effect on already existing API linkings
+       (e.g. static bindings of already loaded DLLs). So using export table
+       patching alone is only of quite restricted use. Besides, undoing the patch
+       has again no effect on past bindings. So you can't really undo an API hook
+       which was established by export table patching.</p>
+    <p>You should not patch the export table of DLLs which are loaded in the shared
+       area of win9x. Also you should not patch the export table of DLLs, which are
+       not loaded there, but have a shared export table nevertheless. If you do
+       that, you risk system stability again.</p>
+    <h3>Simple Code Overwriting</h3>
+    <p>Instead of changing any tables, you can also directly manipulate the API's
+       binary code in memory. The most often used method is to overwrite the first
+       5 bytes of the API code with a JMP instruction, which then jumps to your
+       callback function.</p>
+    <p>This method is quite effective. It catches really 100% of all API calls. But
+       it has also some big disadvantages. The biggest is that you can't call the
+       original API in your callback function anymore, because when you would do
+       that, the JMP instruction would again jump to your callback function, which
+       would result in an endless loop.</p>
+    <p>Of course you could temporarily undo the hook in order to first restore and
+       then call the original API, but that's a bad idea because of two reasons:
+       (1) Steadily hooking and unhooking consumes precious time. (2) While you've
+       temporarily unhooked the API, you're in big danger to miss a lot of API
+       calls.</p>
+    <p>Finally the code of the to-be-hooked API has to be at least 5 bytes long.
+       Otherwise you would overwrite more than the original API code, which would
+       most probably result in a crash sooner or later. Furthermore there must not
+       be any jumps later in the API code, which jump into the bytes
+       <nobr>2-5</nobr> of the API code. In such a case overwriting the first 5
+       bytes would also probably result in a crash sooner or later.</p>
+    <h3>Extended Code Overwriting</h3>
+    <p>The biggest disadvantage of the "Simple Code Overwriting" method was that
+       you can't call the original API, at least as long as the API is hooked. Now
+       clever people thought about it and found a way to erase this problem
+       completely.</p>
+    <p>The solution sounds simple: We need to overwrite 5 bytes of the API's code.
+       So we simply copy these bytes to another location and call it there,
+       whenever we want to call the original API. Unfortunately it's not as easy as
+       it sounds. You need to know that every binary code consists of single
+       instructions. Each instruction can have a different length. So if we copy
+       5 bytes from the API, that can be exactly one instruction, or one and a
+       half, or two and a half or ... We don't know that for sure. But we know for
+       sure that when executing half copied instructions we will make our program
+       crash. That means we need a real little disassembler, which can tell us how
+       many bytes we really have to copy, so that we copy complete instructions
+       instead of half instructions.</p>
+    <p>The "Extended Code Overwriting" method is quite difficult to implement,
+       but once you have it ready, it is a very good method. The only disadvantage is
+       that the to-be-hooked API's code may be structured in a way, which doesn't allow
+       you to use the "Code Overwriting" method without risking crashes.</p>
+    <h3>Madshi's Code Overwriting</h3>
+    <p>The method used by my "madCodeHook" package is a polished version of the
+       "Extended Code Overwriting" method. When multiple madCodeHook hook dlls try
+       to hook the same API, madCodeHook builds up an automatic hook queue, which
+       allows you to unhook the APIs in any order without getting memory leaks or
+       stability issues. Furthermore, DLL uninjection is automatically delayed, as
+       long as any hook callback functions are still "in use". The only remaining
+       problem now is that the code of some APIs is too short (or strangely structured)
+       to be hookable by any code overwriting method.</p>
+    <p>madCodeHook's disassembler examines the whole to-be-hooked API before hooking
+       it and then decides whether code overwriting can be safely used. If not,
+       madCodeHook automatically switches to:</p>
+    <h3>Madshi's Mixture Mode</h3>
+    <p>Now what can we do with APIs, whose code is too short to be hooked by code
+       overwriting? Well, we can simply enlarge the code! That is quite easily done
+       in 2 steps: (1) We build an API header, which does nothing but jump to the
+       original API. The header itself is long enough to be hooked by code
+       overwriting. (2) Now we patch the export table and all import tables so that
+       everything points to our newly allocated API header. From now on it looks as
+       if the original API has always begun at our API header. And it will remain
+       this way until the process exits. The result of the whole operation is simply, that now such a
+       manipulated API can be hooked by code overwriting.</p>
+    <p>Because this solution combines import table patching, export table patching
+       and code overwriting, I've called it the "Mixture Mode". It has one
+       disadvantage: API calls that were linked dynamically before the API was
+       hooked the first time, will not be caught, because they still jump directly
+       to the original API instead of to our enlarged API header.</p>
+    <p>&nbsp;</p>   
+    <p>Now let's compare the best known API hooking methods/packages in a table.
+       Each column is one API hooking method/package. Each row answers one of the
+       14 questions asked on the beginning of this page:<p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=7 border=0>
+            <tr bgcolor=#6060B0>
+              <td></td>
+              <td id='linkTitle' align=center>Import<br>Table<br>Patching</td>
+              <td id='linkTitle' align=center>Ext.Imp.<br>Table<br>Patching</td>
+              <td id='linkTitle' align=center>Export<br>Table<br>Patching</td>
+              <td id='linkTitle' align=center>Simple<br>Code<br>Overwr.</td>
+              <td id='linkTitle' align=center>Ext. Code<br>Overwr.<br>Detours</td>
+              <td id='linkTitle' align=center>Madshi's<br>Code<br>Overwr.</td>
+              <td id='linkTitle' align=center>Madshi's<br>Mixture<br>Mode</td>
+            </tr>
+            <tr align=center>
+              <td id='linkTitle' bgcolor=#6060B0 align=left>1. only patches memory</td>
+              <td id='small' valign=top align=right bgcolor=#C0F8C0></td>
+              <td id='small' valign=top align=right bgcolor=#C0F8C0></td>
+              <td id='small' valign=top align=right bgcolor=#C0F8C0></td>
+              <td id='small' valign=top align=right bgcolor=#C0F8C0></td>
+              <td id='small' valign=top align=right bgcolor=#C0F8C0></td>
+              <td id='small' valign=top align=right bgcolor=#C0F8C0></td>
+              <td id='small' valign=top align=right bgcolor=#C0F8C0></td>
+            </tr>
+            <tr align=center>
+              <td id='linkTitle' bgcolor=#6060B0 align=left>2. hook non exported funcs</td>
+              <td id='small' valign=top align=right bgcolor=#F8C0C0></td>
+              <td id='small' valign=top align=right bgcolor=#F8C0C0></td>
+              <td id='small' valign=top align=right bgcolor=#F8C0C0></td>
+              <td id='small' valign=top align=right bgcolor=#C0F8C0></td>
+              <td id='small' valign=top align=right bgcolor=#C0F8C0></td>
+              <td id='small' valign=top align=right bgcolor=#C0F8C0></td>
+              <td id='small' valign=top align=right bgcolor=#F8C0C0></td>
+            </tr>
+            <tr align=center>
+              <td id='linkTitle' bgcolor=#6060B0 align=left>3. hook every API</td>
+              <td id='small' valign=top align=right bgcolor=#C0F8C0></td>
+              <td id='small' valign=top align=right bgcolor=#C0F8C0></td>
+              <td id='small' valign=top align=right bgcolor=#C0F8C0></td>
+              <td id='small' valign=top align=right bgcolor=#F8C0C0></td>
+              <td id='small' valign=top align=right bgcolor=#F8C0C0></td>
+              <td id='small' valign=top align=right bgcolor=#F8C0C0></td>
+              <td id='small' valign=top align=right bgcolor=#C0F8C0></td>
+            </tr>
+            <tr align=center>
+              <td id='linkTitle' bgcolor=#6060B0 align=left>4. detect non hookable APIs</td>
+              <td id='small' valign=top align=right bgcolor=#F0F0F0></td>
+              <td id='small' valign=top align=right bgcolor=#F0F0F0></td>
+              <td id='small' valign=top align=right bgcolor=#F0F0F0></td>
+              <td id='small' valign=top align=right bgcolor=#F8C0C0></td>
+              <td id='small' valign=top align=right bgcolor=#F8C0C0></td>
+              <td id='small' valign=top align=right bgcolor=#C0F8C0></td>
+              <td id='small' valign=top align=right bgcolor=#F0F0F0></td>
+            </tr>
+            <tr align=center>
+              <td id='linkTitle' bgcolor=#6060B0 align=left>5. catch old static links</td>
+              <td id='small' valign=top align=right bgcolor=#C0F8C0></td>
+              <td id='small' valign=top align=right bgcolor=#C0F8C0></td>
+              <td id='small' valign=top align=right bgcolor=#F8C0C0></td>
+              <td id='small' valign=top align=right bgcolor=#C0F8C0></td>
+              <td id='small' valign=top align=right bgcolor=#C0F8C0></td>
+              <td id='small' valign=top align=right bgcolor=#C0F8C0></td>
+              <td id='small' valign=top align=right bgcolor=#C0F8C0></td>
+            </tr>
+            <tr align=center>
+              <td id='linkTitle' bgcolor=#6060B0 align=left>6. catch new static links</td>
+              <td id='small' valign=top align=right bgcolor=#F8C0C0></td>
+              <td id='small' valign=top align=right bgcolor=#C0F8C0></td>
+              <td id='small' valign=top align=right bgcolor=#C0F8C0></td>
+              <td id='small' valign=top align=right bgcolor=#C0F8C0></td>
+              <td id='small' valign=top align=right bgcolor=#C0F8C0></td>
+              <td id='small' valign=top align=right bgcolor=#C0F8C0></td>
+              <td id='small' valign=top align=right bgcolor=#C0F8C0></td>
+            </tr>
+            <tr align=center>
+              <td id='linkTitle' bgcolor=#6060B0 align=left>7. catch old dynamic links</td>
+              <td id='small' valign=top align=right bgcolor=#F8C0C0></td>
+              <td id='small' valign=top align=right bgcolor=#F8C0C0></td>
+              <td id='small' valign=top align=right bgcolor=#F8C0C0></td>
+              <td id='small' valign=top align=right bgcolor=#C0F8C0></td>
+              <td id='small' valign=top align=right bgcolor=#C0F8C0></td>
+              <td id='small' valign=top align=right bgcolor=#C0F8C0></td>
+              <td id='small' valign=top align=right bgcolor=#F8C0C0></td>
+            </tr>
+            <tr align=center>
+              <td id='linkTitle' bgcolor=#6060B0 align=left>8. catch new dynamic links</td>
+              <td id='small' valign=top align=right bgcolor=#F8C0C0></td>
+              <td id='small' valign=top align=right bgcolor=#C0F8C0></td>
+              <td id='small' valign=top align=right bgcolor=#C0F8C0></td>
+              <td id='small' valign=top align=right bgcolor=#C0F8C0></td>
+              <td id='small' valign=top align=right bgcolor=#C0F8C0></td>
+              <td id='small' valign=top align=right bgcolor=#C0F8C0></td>
+              <td id='small' valign=top align=right bgcolor=#C0F8C0></td>
+            </tr>
+            <tr align=center>
+              <td id='linkTitle' bgcolor=#6060B0 align=left>9. can call original API</td>
+              <td id='small' valign=top align=right bgcolor=#C0F8C0></td>
+              <td id='small' valign=top align=right bgcolor=#C0F8C0></td>
+              <td id='small' valign=top align=right bgcolor=#C0F8C0></td>
+              <td id='small' valign=top align=right bgcolor=#F8C0C0></td>
+              <td id='small' valign=top align=right bgcolor=#C0F8C0></td>
+              <td id='small' valign=top align=right bgcolor=#C0F8C0></td>
+              <td id='small' valign=top align=right bgcolor=#C0F8C0></td>
+            </tr>
+            <tr align=center>
+              <td id='linkTitle' bgcolor=#6060B0 align=left>10. proper unhook possible</td>
+              <td id='small' valign=top align=right bgcolor=#C0F8C0></td>
+              <td id='small' valign=top align=right bgcolor=#F8C0C0></td>
+              <td id='small' valign=top align=right bgcolor=#F8C0C0></td>
+              <td id='small' valign=top align=right bgcolor=#C0F8C0></td>
+              <td id='small' valign=top align=right bgcolor=#C0F8C0></td>
+              <td id='small' valign=top align=right bgcolor=#C0F8C0></td>
+              <td id='small' valign=top align=right bgcolor=#C0F8C0></td>
+            </tr>
+            <tr align=center>
+              <td id='linkTitle' bgcolor=#6060B0 align=left>11. automatic hook queue</td>
+              <td id='small' valign=top align=right bgcolor=#F8C0C0></td>
+              <td id='small' valign=top align=right bgcolor=#F8C0C0></td>
+              <td id='small' valign=top align=right bgcolor=#F8C0C0></td>
+              <td id='small' valign=top align=right bgcolor=#F8C0C0></td>
+              <td id='small' valign=top align=right bgcolor=#F8C0C0></td>
+              <td id='small' valign=top align=right bgcolor=#C0F8C0></td>
+              <td id='small' valign=top align=right bgcolor=#C0F8C0></td>
+            </tr>
+            <tr align=center>
+              <td id='linkTitle' bgcolor=#6060B0 align=left>12. safe DLL uninjecting</td>
+              <td id='small' valign=top align=right bgcolor=#F8C0C0></td>
+              <td id='small' valign=top align=right bgcolor=#F8C0C0></td>
+              <td id='small' valign=top align=right bgcolor=#F8C0C0></td>
+              <td id='small' valign=top align=right bgcolor=#F8C0C0></td>
+              <td id='small' valign=top align=right bgcolor=#F8C0C0></td>
+              <td id='small' valign=top align=right bgcolor=#C0F8C0></td>
+              <td id='small' valign=top align=right bgcolor=#C0F8C0></td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </body>
+
+</html>

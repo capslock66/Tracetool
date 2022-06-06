@@ -1,0 +1,184 @@
+<html>
+
+  <head>
+    <title>mad* Help...</title>
+    <meta name="description" content="mad* Help...">
+    <meta name="keywords" content="madshi, components, delphi">
+    <meta http-equiv="expires" content="900">
+    <link rel=stylesheet type="text/css" href="style.css">
+  </head>
+
+  <body background="bcklight.gif" bgcolor=#F8F8F8>
+    <table border=0 cellpadding=0 callspacing=0><tr>
+      <td valign=bottom>
+        <table border=0 cellpadding=0 cellspacing=0><tr><td bgcolor=#D8D8D8>
+          <table cellpadding=3 border=0>
+            <tr><td bgcolor=#FFFFF0>
+              <div id="verySmall"><br></div>
+              <div id="bigTitle">&nbsp;madExcept Demo&nbsp;</div>
+              <div id="verySmall"><br></div>
+              <div id="small">
+                <a class="small" href="Content.htm">Content</a> /
+                <a class="small" href="madExcept.htm">madExcept</a> /...
+              </div>
+            </td></tr>
+          </table>
+        </td></tr></table>
+      </td>
+      <td valign=bottom>
+        <table border=0 cellpadding=0 cellspacing=0><tr><td bgcolor=#D8D8D8>
+          <table cellpadding=7 border=0>
+            <tr><td bgcolor=#F4F4F8><a href="http://www.madshi.net">www.madshi.net</a></td></tr>
+          </table>
+        </td></tr></table>
+      </td>
+    </tr></table>
+    <p>Let's look at a little demo, consisting of one tiny application and an even
+       tinier DLL. The application's project file looks like this:</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='comment'>{01}</span>&nbsp;<span id='bold'>program</span>&nbsp;<span id='identifier'>CrashApp</span>;<br>
+                  <span id='comment'>{02}</span><br>
+                  <span id='comment'>{03}</span>&nbsp;<span id='bold'>uses</span><br>
+                  <span id='comment'>{04}</span>&nbsp;&nbsp;&nbsp;<a class="pascal" href="madExcept.htm" class="pascal" href="madExceptUnit.htm">madExcept</a>,<br>
+                  <span id='comment'>{05}</span>&nbsp;&nbsp;&nbsp;<a class="pascal" href="madLinkDisAsmUnit.htm">madLinkDisAsm</a>,<br>
+                  <span id='comment'>{06}</span>&nbsp;&nbsp;&nbsp;<span id='identifier'>Forms</span>,<br>
+                  <span id='comment'>{07}</span>&nbsp;&nbsp;&nbsp;<span id='identifier'>CrashUnit</span>&nbsp;<span id='bold'>in</span>&nbsp;<span id='string'>'CrashUnit.pas'</span>&nbsp;<span id='comment'>{CrashForm}</span>;<br>
+                  <span id='comment'>{08}</span><br>
+                  <span id='comment'>{09}</span>&nbsp;<span id='comment'>{$R</span>&nbsp;*.<span id='comment'>RES}</span><br>
+                  <span id='comment'>{10}</span><br>
+                  <span id='comment'>{11}</span>&nbsp;<span id='bold'>begin</span><br>
+                  <span id='comment'>{12}</span>&nbsp;&nbsp;&nbsp;<span id='identifier'>Application</span>.<span id='identifier'>Initialize</span>;<br>
+                  <span id='comment'>{13}</span>&nbsp;&nbsp;&nbsp;<span id='identifier'>Application</span>.<span id='identifier'>CreateForm</span>(<span id='identifier'>TCrashForm</span>, <span id='identifier'>CrashForm</span>);<br>
+                  <span id='comment'>{14}</span>&nbsp;&nbsp;&nbsp;<span id='identifier'>Application</span>.<span id='identifier'>Run</span>;<br>
+                  <span id='comment'>{15}</span>&nbsp;<span id='bold'>end</span>.
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <p>As you can see, there's nothing to speak about, just one unit with a form.
+       The unit looks like this:</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='comment'>{01}</span>&nbsp;<span id='bold'>unit</span>&nbsp;<span id='identifier'>CrashUnit</span>;<br>
+                  <span id='comment'>{02}</span><br>
+                  <span id='comment'>{03}</span>&nbsp;<span id='bold'>interface</span><br>
+                  <span id='comment'>{04}</span><br>
+                  <span id='comment'>{05}</span>&nbsp;<span id='bold'>uses</span><br>
+                  <span id='comment'>{06}</span>&nbsp;&nbsp;&nbsp;<span id='identifier'>Windows</span>, <span id='identifier'>Messages</span>, <span id='identifier'>SysUtils</span>, <span id='identifier'>Variants</span>, <span id='identifier'>Classes</span>, <span id='identifier'>Graphics</span>, <span id='identifier'>Controls</span>, <span id='identifier'>Forms</span>,<br>
+                  <span id='comment'>{07}</span>&nbsp;&nbsp;&nbsp;<span id='identifier'>Dialogs</span>, <span id='identifier'>StdCtrls</span>;<br>
+                  <span id='comment'>{08}</span><br>
+                  <span id='comment'>{09}</span>&nbsp;<span id='bold'>type</span><br>
+                  <span id='comment'>{10}</span>&nbsp;&nbsp;&nbsp;<span id='identifier'>TCrashForm</span>&nbsp;= <span id='bold'>class</span>(<span id='identifier'>TForm</span>)<br>
+                  <span id='comment'>{11}</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>CrashButton</span>: <span id='identifier'>TButton</span>;<br>
+                  <span id='comment'>{12}</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='bold'>procedure</span>&nbsp;<span id='identifier'>CrashButtonClick</span>(<span id='identifier'>Sender</span>: <span id='identifier'>TObject</span>);<br>
+                  <span id='comment'>{13}</span>&nbsp;&nbsp;&nbsp;<span id='bold'>private</span><br>
+                  <span id='comment'>{14}</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>{</span>&nbsp;<span id='comment'>Private</span>-<span id='comment'>Deklarationen</span>&nbsp;<span id='comment'>}</span><br>
+                  <span id='comment'>{15}</span>&nbsp;&nbsp;&nbsp;<span id='bold'>public</span><br>
+                  <span id='comment'>{16}</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>{</span>&nbsp;<span id='comment'>Public</span>-<span id='comment'>Deklarationen</span>&nbsp;<span id='comment'>}</span><br>
+                  <span id='comment'>{17}</span>&nbsp;&nbsp;&nbsp;<span id='bold'>end</span>;<br>
+                  <span id='comment'>{18}</span><br>
+                  <span id='comment'>{19}</span>&nbsp;<span id='bold'>var</span><br>
+                  <span id='comment'>{20}</span>&nbsp;&nbsp;&nbsp;<span id='identifier'>CrashForm</span>: <span id='identifier'>TCrashForm</span>;<br>
+                  <span id='comment'>{21}</span><br>
+                  <span id='comment'>{22}</span>&nbsp;<span id='bold'>implementation</span><br>
+                  <span id='comment'>{23}</span><br>
+                  <span id='comment'>{24}</span>&nbsp;<span id='comment'>{$R</span>&nbsp;*.<span id='comment'>DFM}</span><br>
+                  <span id='comment'>{25}</span><br>
+                  <span id='comment'>{26}</span>&nbsp;<span id='bold'>procedure</span>&nbsp;<span id='identifier'>CrashDllProc</span>; <span id='bold'>external</span>&nbsp;<span id='string'>'crashDll.dll'</span>;<br>
+                  <span id='comment'>{27}</span><br>
+                  <span id='comment'>{28}</span>&nbsp;<span id='bold'>procedure</span>&nbsp;<span id='identifier'>CrashProc</span>;<br>
+                  <span id='comment'>{29}</span>&nbsp;<span id='bold'>begin</span><br>
+                  <span id='comment'>{30}</span>&nbsp;&nbsp;&nbsp;<span id='identifier'>CrashDllProc</span>;<br>
+                  <span id='comment'>{31}</span>&nbsp;<span id='bold'>end</span>;<br>
+                  <span id='comment'>{32}</span><br>
+                  <span id='comment'>{33}</span>&nbsp;<span id='bold'>procedure</span>&nbsp;<span id='identifier'>TCrashForm</span>.<span id='identifier'>CrashButtonClick</span>(<span id='identifier'>Sender</span>: <span id='identifier'>TObject</span>);<br>
+                  <span id='comment'>{34}</span>&nbsp;<span id='bold'>begin</span><br>
+                  <span id='comment'>{35}</span>&nbsp;&nbsp;&nbsp;<span id='identifier'>CrashProc</span>;<br>
+                  <span id='comment'>{36}</span>&nbsp;<span id='bold'>end</span>;<br>
+                  <span id='comment'>{37}</span><br>
+                  <span id='comment'>{38}</span>&nbsp;<span id='bold'>end</span>.
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <p>You can see that we have one button, which when being clicked
+       on calls a function in our DLL. Furthermore we've enabled <a href="madExcept.htm" href="madExceptUnit.htm">madExcept</a>
+       support for our project in the <a href="madExceptSettings.htm">madExcept settings</a> dialog, which
+       results in "madExcept" and "madLinkDisAsm" being automatically added to the
+       project's uses clause. That's all. Now let's see how the DLL looks like:</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='comment'>{01}</span>&nbsp;<span id='bold'>library</span>&nbsp;<span id='identifier'>CrashDll</span>;<br>
+                  <span id='comment'>{02}</span><br>
+                  <span id='comment'>{03}</span>&nbsp;<span id='bold'>uses</span>&nbsp;<a class="pascal" href="madExcept.htm" class="pascal" href="madExceptUnit.htm">madExcept</a>, <a class="pascal" href="madLinkDisAsmUnit.htm">madLinkDisAsm</a>, <span id='identifier'>SysUtils</span>;<br>
+                  <span id='comment'>{04}</span><br>
+                  <span id='comment'>{05}</span>&nbsp;<span id='comment'>{$R</span>&nbsp;*.<span id='comment'>RES}</span><br>
+                  <span id='comment'>{06}</span><br>
+                  <span id='comment'>{07}</span>&nbsp;<span id='bold'>procedure</span>&nbsp;<span id='identifier'>CrashDllProc</span>;<br>
+                  <span id='comment'>{08}</span>&nbsp;<span id='bold'>begin</span><br>
+                  <span id='comment'>{09}</span>&nbsp;&nbsp;&nbsp;<span id='identifier'>integer</span>(<span id='bold'>nil</span>^) := <span id='number'>0</span>;<br>
+                  <span id='comment'>{10}</span>&nbsp;<span id='bold'>end</span>;<br>
+                  <span id='comment'>{11}</span><br>
+                  <span id='comment'>{12}</span>&nbsp;<span id='bold'>exports</span>&nbsp;<span id='identifier'>CrashDllProc</span>;<br>
+                  <span id='comment'>{13}</span><br>
+                  <span id='comment'>{14}</span>&nbsp;<span id='bold'>end</span>.
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <p>The DLL does nothing but export one function, which raises an access
+       violation, when being called. Okay, now let's compile both projects, run the
+       application, press the button and see what happens. Point the mouse at the
+       tabs of the window to see the contents of the other tabs.</p>
+    <map name="ExceptBoxMap">
+    <area shape="rect" coords="10,120,58,139" href="#" onMouseover="document.images[3].src='mes-dem1.gif'">
+    <area shape="rect" coords="59,120,113,139" href="#" onMouseover="document.images[3].src='mes-dem2.gif'">
+    <area shape="rect" coords="114,120,166,139" href="#" onMouseover="document.images[3].src='mes-dem3.gif'">
+    <area shape="rect" coords="167,120,232,139" href="#" onMouseover="document.images[3].src='mes-dem4.gif'">
+    <area shape="rect" coords="233,120,276,139" href="#" onMouseover="document.images[3].src='mes-dem5.gif'">
+    </map>
+    <p><img src='mes-dem2.gif' border=0 usemap="#ExceptBoxMap" align=left style="margin-right:10pt;margin-bottom:10pt"></p>
+    <p>If we follow the call stack from the bottom to the top we begin with line 14
+       in the project, which is the line "Application.Run". The next stack item in
+       our own sources is the line in "TCrashForm.CrashButtonClick", where the
+       "CrashProc" is called. In between we can follow the way in which the code
+       walked from the message loop in "Application.Run" to our button click event
+       handler. Okay, the next stack item in our sources is the line in "CrashProc",
+       where the function from the DLL is called. Finally we're reaching the real
+       exception location, which is inside of the DLL.</p>
+    <p>This demo is very short and easy just to give you a first idea of how
+       <a href="madExcept.htm" href="madExceptUnit.htm">madExcept</a> works. If you want to see a more detailed and complicated
+       demo, please look in the "Demos" folder of your madExcept installation or
+       directly download the
+       <a href="http://madshi.net/ExcCatch.zip">ExcCatch demo</a>.</p>
+  </body>
+
+</html>

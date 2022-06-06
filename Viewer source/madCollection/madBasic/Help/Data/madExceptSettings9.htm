@@ -1,0 +1,145 @@
+<html>
+
+  <head>
+    <title>mad* Help...</title>
+    <meta name="description" content="mad* Help...">
+    <meta name="keywords" content="madshi, components, delphi">
+    <meta http-equiv="expires" content="900">
+    <link rel=stylesheet type="text/css" href="style.css">
+  </head>
+
+  <body background="bcklight.gif" bgcolor=#F8F8F8>
+    <table border=0 cellpadding=0 callspacing=0><tr>
+      <td valign=bottom>
+        <table border=0 cellpadding=0 cellspacing=0><tr><td bgcolor=#D8D8D8>
+          <table cellpadding=3 border=0>
+            <tr><td bgcolor=#FFFFF0>
+              <div id="verySmall"><br></div>
+              <div id="bigTitle">&nbsp;madExcept Settings (Tab 9)&nbsp;</div>
+              <div id="verySmall"><br></div>
+              <div id="small">
+                <a class="small" href="Content.htm">Content</a> /
+                <a class="small" href="madExcept.htm">madExcept</a> /
+                <a class="small" href="madExceptSettings.htm">madExcept Settings</a> /...
+              </div>
+            </td></tr>
+          </table>
+        </td></tr></table>
+      </td>
+      <td valign=bottom>
+        <table border=0 cellpadding=0 cellspacing=0><tr><td bgcolor=#D8D8D8>
+          <table cellpadding=7 border=0>
+            <tr><td bgcolor=#F4F4F8><a href="http://www.madshi.net">www.madshi.net</a></td></tr>
+          </table>
+        </td></tr></table>
+      </td>
+    </tr></table>
+    <map name="SettingsMap">
+    <area shape="rect" coords="14,72,135,113" href="madExceptSettings1.htm" onMouseover="document.images[0].src='mes-ss40.gif'" onMouseout="document.images[0].src='mes-ss48.gif'">
+    <area shape="rect" coords="14,114,135,155" href="madExceptSettings2.htm" onMouseover="document.images[0].src='mes-ss41.gif'" onMouseout="document.images[0].src='mes-ss48.gif'">
+    <area shape="rect" coords="14,156,135,197" href="madExceptSettings3.htm" onMouseover="document.images[0].src='mes-ss42.gif'" onMouseout="document.images[0].src='mes-ss48.gif'">
+    <area shape="rect" coords="14,198,135,239" href="madExceptSettings4.htm" onMouseover="document.images[0].src='mes-ss43.gif'" onMouseout="document.images[0].src='mes-ss48.gif'">
+    <area shape="rect" coords="14,240,135,281" href="madExceptSettings5a.htm" onMouseover="document.images[0].src='mes-ss44a.gif'" onMouseout="document.images[0].src='mes-ss48.gif'">
+    <area shape="rect" coords="14,282,135,323" href="madExceptSettings6.htm" onMouseover="document.images[0].src='mes-ss45.gif'" onMouseout="document.images[0].src='mes-ss48.gif'">
+    <area shape="rect" coords="14,324,135,365" href="madExceptSettings7.htm" onMouseover="document.images[0].src='mes-ss46.gif'" onMouseout="document.images[0].src='mes-ss48.gif'">
+    <area shape="rect" coords="14,366,135,407" href="madExceptSettings8.htm" onMouseover="document.images[0].src='mes-ss47.gif'" onMouseout="document.images[0].src='mes-ss48.gif'">
+    <area shape="rect" coords="14,450,135,489" href="madExceptSettings10.htm" onMouseover="document.images[0].src='mes-ss49.gif'" onMouseout="document.images[0].src='mes-ss48.gif'">
+    </map>
+    <p>You can click on the tabs in the left side of the image:</p>
+    <p><img src='mes-ss48.gif' border=0 usemap="#SettingsMap" align=left style="margin-right:10pt;margin-bottom:10pt"></p>
+    <h3>assistant manager...</h3>
+    <p>A madExcept assistant is a series of forms, all of which are displayed to
+       the end user one after the other. Usually a madExcept assistant is shown
+       when the user presses the button "send bug report", or in similar
+       situations. However, you can also configure <a href="madExcept.htm" href="madExceptUnit.htm">madExcept</a> so that it
+       shows an assistant instead of the exception box. Or you can show madExcept
+       assistants manually at runtime.</p>
+    <p>If the user doesn't abort any of the assistant steps/forms, the input fields
+       of the assistant are cached for the current exception. So if the user e.g.
+       prints the bug report twice, the 2nd time the assistant is shown, all input
+       fields are already filled with the values the user gave in earlier.</p>
+    <p>Assistants have to be thread safe, because they will often be shown in the
+       context of secondary threads. Because of that the assistant GUI system
+       doesn't use the VCL internally, but is built on pure win32 API calls.</p>
+    <p>madExcept predefines a set of default assistants. You can customize them
+       or replace them with your own. Also you can add further assistants. All the
+       assistants are stored into your executable in a way that gives translation
+       tools access to the strings.</p>
+    <h3>form manager...</h3>
+    <p>Each assistant consists of one or more forms. Each form consists of three
+       buttons (continue, skip, abort), some properties and eventually some more
+       components like labels, edit/memo boxes, check boxes, buttons and images.</p>
+    <p>Setting up forms works somewhat similar to Delphi's object inspector.
+       However, in madExcept you can't really locate the components freely.
+       The layout of the forms is automatically generated by madExcept for
+       you. The spacing between the components on the form is calculated in a way
+       that should fit most situations quite fine. If you find the automatic
+       spacing algorythm lacking, you can change the spacing manually. That's about
+       the only control you have over component position, though.</p>
+    <p>There are no custom events, there's only one central event named "OnAction".
+       You can put in there your event handler by specifying it via
+       "UnitName.EventHandlerName". Your handler is called for all possible events.
+       You have to check the parameters of the handler to find out which event has
+       happened. The event handler must look like this:</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>type</span>&nbsp;<span id='identifier'>TNVActionHandler</span>&nbsp;= <span id='bold'>procedure</span>&nbsp;(<span id='identifier'>form</span>: <span id='identifier'>INVForm</span>; <span id='identifier'>action</span>: <span id='identifier'>TNVAction</span>; <span id='identifier'>item</span>: <span id='identifier'>INVItem</span>; <span id='identifier'>exception</span>: <span id='identifier'>IUnknown</span>);
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <p>The properties of the controls are explained here:</p>
+    <table border="0"><tr><td>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=7 border=0>
+            <tr bgcolor=#6060B0>
+              <td id='linkTitle' align=left><nobr>control</nobr></td>
+              <td id='linkTitle' align=left width=100%>documentation link</td>
+            </tr>
+            <tr align=center>
+              <td valign=top align=left bgcolor=#F8F0F0><nobr>(all&nbsp;controls)</nobr></td>
+              <td valign=top align=left bgcolor=#F4F4F8 width=100%><a href="madNVAssistantUnit.htm#INVItem">INVItem</td>
+            </tr>
+            <tr align=center>
+              <td valign=top align=left bgcolor=#F4F4F8><nobr>label</nobr></td>
+              <td valign=top align=left bgcolor=#F8F0F0 width=100%><a href="madNVAssistantUnit.htm#INVLabel">INVLabel</a></td>
+            </tr>
+            <tr align=center>
+              <td valign=top align=left bgcolor=#F8F0F0><nobr>button</nobr></td>
+              <td valign=top align=left bgcolor=#F4F4F8 width=100%><a href="madNVAssistantUnit.htm#INVButton">INVButton</a></td>
+            </tr>
+            <tr align=center>
+              <td valign=top align=left bgcolor=#F4F4F8><nobr>checkbox</nobr></td>
+              <td valign=top align=left bgcolor=#F8F0F0 width=100%><a href="madNVAssistantUnit.htm#INVCheckBox">INVCheckBox</a></td>
+            </tr>
+            <tr align=center>
+              <td valign=top align=left bgcolor=#F8F0F0><nobr>edit</nobr></td>
+              <td valign=top align=left bgcolor=#F4F4F8 width=100%><a href="madNVAssistantUnit.htm#INVEdit">INVEdit</a></td>
+            </tr>
+            <tr align=center>
+              <td valign=top align=left bgcolor=#F4F4F8><nobr>image</nobr></td>
+              <td valign=top align=left bgcolor=#F8F0F0 width=100%><a href="madNVAssistantUnit.htm#INVImage">INVImage</a></td>
+            </tr>
+            <tr align=center>
+              <td valign=top align=left bgcolor=#F8F0F0><nobr>form</nobr></td>
+              <td valign=top align=left bgcolor=#F4F4F8 width=100%><a href="madNVAssistantUnit.htm#INVForm">INVForm</a></td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    </td></tr></table>
+  </body>
+
+</html>

@@ -1,0 +1,291 @@
+<html>
+
+  <head>
+    <title>mad* Help...</title>
+    <meta name="description" content="mad* Help...">
+    <meta name="keywords" content="madshi, components, delphi">
+    <meta http-equiv="expires" content="900">
+    <link rel=stylesheet type="text/css" href="style.css">
+  </head>
+
+  <body background="bcklight.gif" bgcolor=#F8F8F8>
+    <a name="IAcl"></a>
+    <table border=0 cellpadding=0 callspacing=0><tr>
+      <td valign=bottom>
+        <table border=0 cellpadding=0 cellspacing=0><tr><td bgcolor=#D8D8D8>
+          <table cellpadding=3 border=0>
+            <tr><td bgcolor=#FFFFF0>
+              <div id="verySmall"><br></div>
+              <div id="bigTitle">&nbsp;ACLs&nbsp;</div>
+              <div id="verySmall"><br></div>
+              <div id="small">
+                <a class="small" href="Content.htm">Content</a> /
+                <a class="small" href="madSecurity.htm">madSecurity</a> /...
+              </div>
+            </td></tr>
+          </table>
+        </td></tr></table>
+      </td>
+      <td valign=bottom>
+        <table border=0 cellpadding=0 cellspacing=0><tr><td bgcolor=#D8D8D8>
+          <table cellpadding=7 border=0>
+            <tr><td bgcolor=#F4F4F8><a href="http://www.madshi.net">www.madshi.net</a></td></tr>
+          </table>
+        </td></tr></table>
+      </td>
+    </tr></table>
+    <p>The interface "IAcl" implements everything you need when dealing with ACLs
+       ("Access-Control Lists"). An ACL determines which users/groups may and which
+       may not access a specific object. In win9x "madSecurity" simulates ACLs and
+       internally maps their meaning to win9x' APIs. A list of methods and
+       properties can be found in the <a href="IAclRef.htm">IAcl Reference</a>.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>type</span>&nbsp;<span id='identifier'>IAcl</span>&nbsp;= <span id='bold'>interface</span>&nbsp;(<a class="pascal" href="ICustomBasicListBaseInterface.htm#ICustomBasicList">ICustomBasicList</a>) [<span id='string'>'{28D27EC0-3A98-11D3-A52D-00005A180D69}'</span>];
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="Acl"></a>
+    <a name="NewAcl"></a>
+    <p>You can create an "IAcl" object by giving in a Windows standard ACL
+       structure. You can also simply create a new (empty) "IAcl" object.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>function</span>&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>Acl</span>&nbsp;(<span id='identifier'>acl</span>: <span id='identifier'>PAcl</span>) : <span id='identifier'>IAcl</span>;<br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>NewAcl</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>IAcl</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IAcl.IsStillValid"></a>
+    <p>The property "IsStillValid" tests whether the ACL is still valid. Win9x
+       always returns true.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>IAcl</span>.<img src="m.gif"><span id='identifier'>IsStillValid</span>&nbsp;: <span id='identifier'>boolean</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IAcl.IsAllocated"></a>
+    <a name="IAcl.Allocate"></a>
+    <a name="IAcl.Deallocate"></a>
+    <a name="IAcl.Clear"></a>
+    <p>When a Windows standard ACL structure pointer is "nil", that ACL grants
+       access for everyone. An allocated, but empty ACL grants access to no one.
+       The method "IsAllocated" returns whether the ACL pointer, which is hold by
+       the current "IAcl" object, is allocated. If it is not, then the ACL grants
+       access for everyone. The method "Allocate" makes sure that the ACL is
+       allocated (so that it does not grant access for everyone). The method
+       "Deallocate" makes sure, that the ACL is freed, as a result everyone has
+       access. The method "Clear" makes sure that the ACL is allocated, but empty,
+       as a result the ACL grants access to no one.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>function</span>&nbsp;&nbsp;<span id='identifier'>IAcl</span>.<img src="m.gif"><span id='identifier'>IsAllocated</span>&nbsp;: <span id='identifier'>boolean</span>;<br>
+                  <br>
+                  <span id='bold'>procedure</span>&nbsp;<span id='identifier'>IAcl</span>.<img src="m.gif"><span id='identifier'>Allocate</span>; &nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>// access for the current ACE items (eventually no one)</span><br>
+                  <span id='bold'>procedure</span>&nbsp;<span id='identifier'>IAcl</span>.<img src="m.gif"><span id='identifier'>Deallocate</span>; &nbsp;&nbsp;<span id='comment'>// access for everyone</span><br>
+                  <span id='bold'>procedure</span>&nbsp;<span id='identifier'>IAcl</span>.<img src="m.gif"><span id='identifier'>Clear</span>; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>// access for no one</span>
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IAcl.Items"></a>
+    <a name="IAcl.NewItem"></a>
+    <a name="IAcl.AddItem"></a>
+    <a name="IAcl.InsertItem"></a>
+    <a name="IAcl.DeleteItem"></a>
+    <a name="IAcl.DeleteItems"></a>
+    <p>The items of an ACL are <a href="ACEs.htm">ACEs</a>. You can add new <a href="ACEs.htm">ACEs</a> to the
+       current ACL (either at the end or at a specified index) or you can delete
+       specified <a href="ACEs.htm">ACEs</a>.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IAcl</span>.<img src="r.gif"><span id='identifier'>Items</span>&nbsp;[<span id='bold'>index</span>: <span id='identifier'>integer</span>] : <a class="pascal" href="ACEs.htm#IAce">IAce</a>;<br>
+                  <br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>IAcl</span>.<img src="m.gif"><span id='identifier'>NewItem</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span id='bold'>const</span>&nbsp;<span id='identifier'>account</span>&nbsp;: <a class="pascal" href="Accounts.htm#IAccount">IAccount</a>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="e.gif">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>access</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>cardinal</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="e.gif">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>type_</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <a class="pascal" href="ACEs.htm#TAceType">TAceType</a>&nbsp;&nbsp;= <span id='identifier'>atAllowed</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="e.gif">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>flags</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <a class="pascal" href="ACEs.htm#TAceFlags">TAceFlags</a>&nbsp;= [] &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;) : <span id='identifier'>integer</span>;<br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>IAcl</span>.<img src="m.gif"><span id='identifier'>AddItem</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span id='bold'>const</span>&nbsp;<span id='identifier'>item</span>&nbsp;&nbsp;&nbsp;&nbsp;: <a class="pascal" href="IBasicBaseInterface.htm#IBasic">IBasic</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;) : <span id='identifier'>integer</span>;<br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>IAcl</span>.<img src="m.gif"><span id='identifier'>InsertItem</span>&nbsp;&nbsp;(<span id='bold'>const</span>&nbsp;<span id='identifier'>item</span>&nbsp;&nbsp;&nbsp;&nbsp;: <a class="pascal" href="IBasicBaseInterface.htm#IBasic">IBasic</a>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="e.gif">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='bold'>index</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>integer</span>&nbsp;&nbsp;&nbsp;= <span id='number'>0</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;) : <span id='identifier'>integer</span>;<br>
+                  <br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>IAcl</span>.<img src="m.gif"><span id='identifier'>DeleteItem</span>&nbsp;&nbsp;(<span id='bold'>index</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>integer</span>&nbsp;) : <span id='identifier'>boolean</span>;<br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>IAcl</span>.<img src="m.gif"><span id='identifier'>DeleteItems</span>&nbsp;(<span id='bold'>const</span>&nbsp;<span id='identifier'>account</span>&nbsp;: <a class="pascal" href="Accounts.htm#IAccount">IAccount</a>) : <span id='identifier'>boolean</span>;<br>
+                  <br>
+                  <span id='comment'>// Examples:</span><br>
+                  <span id='bold'>with</span>&nbsp;<span id='identifier'>ExampleAcl</span>&nbsp;<span id='bold'>do</span>&nbsp;<span id='bold'>begin</span><br>
+                  &nbsp;&nbsp;<span id='identifier'>NewItem</span>(<a class="pascal" href="Accounts.htm#CurrentUser">CurrentUser</a>, <span id='number'>$B7</span>); &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>// add access for the current user ($B7 = all access in win9x)</span><br>
+                  &nbsp;&nbsp;<span id='identifier'>DeleteItems</span>(<a class="pascal" href="Accounts.htm#Account">Account</a>(<span id='string'>'SomeUser'</span>)); &nbsp;<span id='comment'>// delete all ACEs of SomeUser from this ACL</span><br>
+                  <span id='bold'>end</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IAcl.SetFileAccess"></a>
+    <a name="IAcl.SetPrintAccess"></a>
+    <p>The properties above like <a href="#IAcl.NewItem">IAcl.NewItem</a> and <a href="#IAcl.DeleteItems">IAcl.DeleteItems</a>
+       make it possible to form an ACL exactly like you want it to be. However,
+       it's a bit tedious work, because the access masks differ in win9x and winNT.
+       If you want to have it easier, you can use the following simplified methods.
+       They manipulate the ACL in a way, that the specified user has exactly read
+       or write access. The standard access masks for win9x and winNT are used. If
+       you want to have fancy access masks, please use the low level methods
+       mentioned above.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>procedure</span>&nbsp;<span id='identifier'>IAcl</span>.<img src="m.gif"><span id='identifier'>SetFileAccess</span>&nbsp;&nbsp;(<span id='bold'>const</span>&nbsp;<span id='identifier'>account</span>: <a class="pascal" href="Accounts.htm#IAccount">IAccount</a>; <span id='bold'>write</span>: <span id='identifier'>boolean</span>);<br>
+                  <span id='bold'>procedure</span>&nbsp;<span id='identifier'>IAcl</span>.<img src="m.gif"><span id='identifier'>SetPrintAccess</span>&nbsp;(<span id='bold'>const</span>&nbsp;<span id='identifier'>account</span>: <a class="pascal" href="Accounts.htm#IAccount">IAccount</a>; <span id='identifier'>admin</span>: <span id='identifier'>boolean</span>);<br>
+                  <br>
+                  <span id='comment'>// Example:</span><br>
+                  <span id='identifier'>ExampleAcl</span>.<span id='identifier'>SetFileAccess</span>(<a class="pascal" href="Accounts.htm#CurrentUser">CurrentUser</a>, <span id='identifier'>true</span>);
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IAcl.FindItem"></a>
+    <p>The method "FindItem" returns the first found <a href="ACEs.htm#IAce">IAce</a> that is installed
+       for the specified <a href="Accounts.htm#IAccount">IAccount</a>. The search begins at specified index.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>IAcl</span>.<img src="m.gif"><span id='identifier'>FindItem</span>&nbsp;(<span id='bold'>const</span>&nbsp;<span id='identifier'>account</span>&nbsp;&nbsp;&nbsp;&nbsp;: <a class="pascal" href="Accounts.htm#IAccount">IAccount</a>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="e.gif">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>firstSearchIndex</span>&nbsp;: <span id='identifier'>integer</span>&nbsp;= <span id='number'>0</span>) : <a class="pascal" href="ACEs.htm#IAce">IAce</a>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IAcl.IsDirty"></a>
+    <a name="IAcl.Flush"></a>
+    <p>The method "IsDirty" tells you whether there were changes in the current
+       ACL, that are not flushed yet. The method "Flush" realizes all changes.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>IAcl</span>.<img src="m.gif"><span id='identifier'>IsDirty</span>&nbsp;: <span id='identifier'>boolean</span>;<br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>IAcl</span>.<img src="m.gif"><span id='identifier'>Flush</span>&nbsp;&nbsp;&nbsp;: <span id='identifier'>boolean</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IAcl.PAcl"></a>
+    <a name="IAcl.Size"></a>
+    <a name="IAcl.UsedSize"></a>
+    <p>The following properties apply to the standard Windows ACL structure, which
+       is hold by the current "IAcl" object. "PAcl" gives you the address of the
+       structure, "Size" returns the allocated size, while "UsedSize" tells you how
+       much of the allocated size is actually used in the moment. In win9x you will
+       get nil/0/0.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IAcl</span>.<img src="r.gif"><span id='identifier'>PAcl</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>PAcl</span>;<br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IAcl</span>.<img src="r.gif"><span id='identifier'>Size</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>integer</span>;<br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IAcl</span>.<img src="r.gif"><span id='identifier'>UsedSize</span>&nbsp;: <span id='identifier'>integer</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IAcl.OwnerSecurityObject"></a>
+    <p>The property "OwnerSecurityObject" tells you to which security object the
+       current ACL belongs (if any).</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IAcl</span>.<img src="r.gif"><span id='identifier'>OwnerSecurityObject</span>&nbsp;: <a class="pascal" href="SecurityObjects.htm#ISecurityObject">ISecurityObject</a>; &nbsp;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </body>
+
+</html>

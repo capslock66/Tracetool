@@ -1,0 +1,84 @@
+<html>
+
+  <head>
+    <title>mad* Help...</title>
+    <meta name="description" content="mad* Help...">
+    <meta name="keywords" content="madshi, components, delphi">
+    <meta http-equiv="expires" content="900">
+    <link rel=stylesheet type="text/css" href="style.css">
+  </head>
+
+  <body background="bcklight.gif" bgcolor=#F8F8F8>
+    <a name="TMadExceptionHandler"></a>
+    <a name="TMadExceptionHandler.OnException"></a>
+    <a name="TMadExceptionHandler.OnExceptAction"></a>
+    <table border=0 cellpadding=0 callspacing=0><tr>
+      <td valign=bottom>
+        <table border=0 cellpadding=0 cellspacing=0><tr><td bgcolor=#D8D8D8>
+          <table cellpadding=3 border=0>
+            <tr><td bgcolor=#FFFFF0>
+              <div id="verySmall"><br></div>
+              <div id="bigTitle">&nbsp;madExceptVcl Unit&nbsp;</div>
+              <div id="verySmall"><br></div>
+              <div id="small">
+                <a class="small" href="Content.htm">Content</a> /
+                <a class="small" href="madExcept.htm">madExcept</a> /...
+              </div>
+            </td></tr>
+          </table>
+        </td></tr></table>
+      </td>
+      <td valign=bottom>
+        <table border=0 cellpadding=0 cellspacing=0><tr><td bgcolor=#D8D8D8>
+          <table cellpadding=7 border=0>
+            <tr><td bgcolor=#F4F4F8><a href="http://www.madshi.net">www.madshi.net</a></td></tr>
+          </table>
+        </td></tr></table>
+      </td>
+    </tr></table>
+    <p>This unit contains nothing but the one component "TMadExceptionHandler",
+       which is shown in the "madshi" tab in your component collection. The
+       component makes your life a bit easier by doing 2 things for you:</p>
+    <table>
+      </tr><tr>
+        <td valign=top>1.</td>
+        <td>It automatically enables madExcept for the current project.</td>
+      </tr><tr>
+        <td valign=top>2.</td>
+        <td>It encapsulates calls to <a href="madExceptUnit.htm#RegisterExceptionHandler">RegisterExceptionHandler</a> and
+            <a href="madExceptUnit.htm#RegisterExceptActionHandler">RegisterExceptActionHandler</a> for you. It's easier double clicking
+            in the object inspector to install an event handler than writing all
+            the code yourself, of course. However, please note that the event
+            handlers get installed in the moment when the form is created. If that
+            is too late for you, you should call <a href="madExceptUnit.htm#RegisterExceptionHandler">RegisterExceptionHandler</a> and
+            <a href="madExceptUnit.htm#RegisterExceptActionHandler">RegisterExceptActionHandler</a> manually, e.g. in a unit's
+            initialization section or directly in the project file.</td>
+      </tr>
+    </table>
+    <p>Please note that the exception handlers installed by this component are
+       always "synchronized". That means the event handler will always be called
+       in the context of the main thread (if possible). You have more choice when
+       calling the mentioned functions like <a href="madExceptUnit.htm#RegisterExceptionHandler">RegisterExceptionHandler</a>
+       yourself.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>type</span>&nbsp;<span id='identifier'>TMadExceptionHandler</span>&nbsp;= <span id='bold'>class</span>&nbsp;(<span id='identifier'>TComponent</span>)<br>
+                  <br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>TMadExceptionHandler</span>.<img src="w.gif"><span id='identifier'>OnException</span>&nbsp;&nbsp;&nbsp;&nbsp;: <a class="pascal" href="madExceptUnit.htm#TExceptEventOO">TExceptEventOO</a>;<br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>TMadExceptionHandler</span>.<img src="w.gif"><span id='identifier'>OnExceptAction</span>&nbsp;: <a class="pascal" href="madExceptUnit.htm#TExceptActionEventOO">TExceptActionEventOO</a>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </body>
+
+</html>

@@ -51,7 +51,7 @@ unit Preview;
 interface
 
 uses
-  Windows, WinSpool, Messages, Classes, Graphics, Controls, SysUtils, Forms,
+  system.types, Windows, WinSpool, Messages, Classes, Graphics, Controls, SysUtils, Forms,
   Dialogs, StdCtrls, ExtCtrls, ComCtrls, Menus, Printers;
 
 const

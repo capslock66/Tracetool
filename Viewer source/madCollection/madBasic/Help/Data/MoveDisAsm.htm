@@ -1,0 +1,97 @@
+<html>
+
+  <head>
+    <title>mad* Help...</title>
+    <meta name="description" content="mad* Help...">
+    <meta name="keywords" content="madshi, components, delphi">
+    <meta http-equiv="expires" content="900">
+    <link rel=stylesheet type="text/css" href="style.css">
+  </head>
+
+  <body background="bcklight.gif" bgcolor=#F8F8F8>
+    <table border=0 cellpadding=0 callspacing=0><tr>
+      <td valign=bottom>
+        <table border=0 cellpadding=0 cellspacing=0><tr><td bgcolor=#D8D8D8>
+          <table cellpadding=3 border=0>
+            <tr><td bgcolor=#FFFFF0>
+              <div id="verySmall"><br></div>
+              <div id="bigTitle">&nbsp;"Move" disassembly&nbsp;</div>
+              <div id="verySmall"><br></div>
+              <div id="small">
+                <a class="small" href="Content.htm">Content</a> /
+                <a class="small" href="madDisAsm.htm">madDisAsm</a> /...
+              </div>
+            </td></tr>
+          </table>
+        </td></tr></table>
+      </td>
+      <td valign=bottom>
+        <table border=0 cellpadding=0 cellspacing=0><tr><td bgcolor=#D8D8D8>
+          <table cellpadding=7 border=0>
+            <tr><td bgcolor=#F4F4F8><a href="http://www.madshi.net">www.madshi.net</a></td></tr>
+          </table>
+        </td></tr></table>
+      </td>
+    </tr></table>
+    <p>Delphi's "Move" basically uses "rep movsd/movsb", either forward or
+       backward, depending whether the source is before or after the destination:</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                  <span id='mono'>
+                    00402a18 public Move: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;; function entry point<br>
+                    00402a18 &nbsp;&nbsp;push &nbsp;&nbsp;&nbsp;esi<br>
+                    00402a19 &nbsp;&nbsp;push &nbsp;&nbsp;&nbsp;edi<br>
+                    00402a1a &nbsp;&nbsp;mov &nbsp;&nbsp;&nbsp;&nbsp;esi, eax<br>
+                    00402a1c &nbsp;&nbsp;mov &nbsp;&nbsp;&nbsp;&nbsp;edi, edx<br>
+                    00402a1e &nbsp;&nbsp;mov &nbsp;&nbsp;&nbsp;&nbsp;eax, ecx<br>
+                    00402a20 &nbsp;&nbsp;cmp &nbsp;&nbsp;&nbsp;&nbsp;edi, esi<br>
+                    00402a22 &nbsp;&nbsp;ja &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;loc_402a37<br>
+                    00402a22<br>
+                    00402a24 &nbsp;&nbsp;jz &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;loc_402a55<br>
+                    00402a24<br>
+                    00402a26 &nbsp;&nbsp;sar &nbsp;&nbsp;&nbsp;&nbsp;ecx, 2<br>
+                    00402a29 &nbsp;&nbsp;js &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;loc_402a55<br>
+                    00402a29<br>
+                    00402a2b &nbsp;&nbsp;rep movsd<br>
+                    00402a2d &nbsp;&nbsp;mov &nbsp;&nbsp;&nbsp;&nbsp;ecx, eax<br>
+                    00402a2f &nbsp;&nbsp;and &nbsp;&nbsp;&nbsp;&nbsp;ecx, 3<br>
+                    00402a32 &nbsp;&nbsp;rep movsb<br>
+                    00402a34 &nbsp;&nbsp;pop &nbsp;&nbsp;&nbsp;&nbsp;edi<br>
+                    00402a35 &nbsp;&nbsp;pop &nbsp;&nbsp;&nbsp;&nbsp;esi<br>
+                    00402a36 &nbsp;&nbsp;ret<br>
+                    00402a36<br>
+                    00402a36 ; ---------------------------------------------------------<br>
+                    00402a36<br>
+                    00402a37 loc_402a37:<br>
+                    00402a37 &nbsp;&nbsp;lea &nbsp;&nbsp;&nbsp;&nbsp;esi, [ecx+esi-4]<br>
+                    00402a3b &nbsp;&nbsp;lea &nbsp;&nbsp;&nbsp;&nbsp;edi, [ecx+edi-4]<br>
+                    00402a3f &nbsp;&nbsp;sar &nbsp;&nbsp;&nbsp;&nbsp;ecx, 2<br>
+                    00402a42 &nbsp;&nbsp;js &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;loc_402a55<br>
+                    00402a42<br>
+                    00402a44 &nbsp;&nbsp;std<br>
+                    00402a45 &nbsp;&nbsp;rep movsd<br>
+                    00402a47 &nbsp;&nbsp;mov &nbsp;&nbsp;&nbsp;&nbsp;ecx, eax<br>
+                    00402a49 &nbsp;&nbsp;and &nbsp;&nbsp;&nbsp;&nbsp;ecx, 3<br>
+                    00402a4c &nbsp;&nbsp;add &nbsp;&nbsp;&nbsp;&nbsp;esi, 3<br>
+                    00402a4f &nbsp;&nbsp;add &nbsp;&nbsp;&nbsp;&nbsp;edi, 3<br>
+                    00402a52 &nbsp;&nbsp;rep movsb<br>
+                    00402a54 &nbsp;&nbsp;cld<br>
+                    00402a55<br>
+                    00402a55 loc_402a55:<br>
+                    00402a55 &nbsp;&nbsp;pop &nbsp;&nbsp;&nbsp;&nbsp;edi<br>
+                    00402a56 &nbsp;&nbsp;pop &nbsp;&nbsp;&nbsp;&nbsp;esi<br>
+                    00402a57 &nbsp;&nbsp;ret<br>
+                           </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </body>
+
+</html>

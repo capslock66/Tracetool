@@ -1,0 +1,242 @@
+<html>
+
+  <head>
+    <title>mad* Help...</title>
+    <meta name="description" content="mad* Help...">
+    <meta name="keywords" content="madshi, components, delphi">
+    <meta http-equiv="expires" content="900">
+    <link rel=stylesheet type="text/css" href="style.css">
+  </head>
+
+  <body background="bcklight.gif" bgcolor=#F8F8F8>
+    <a name="IIDList"></a>
+    <table border=0 cellpadding=0 callspacing=0><tr>
+      <td valign=bottom>
+        <table border=0 cellpadding=0 cellspacing=0><tr><td bgcolor=#D8D8D8>
+          <table cellpadding=3 border=0>
+            <tr><td bgcolor=#FFFFF0>
+              <div id="verySmall"><br></div>
+              <div id="bigTitle">&nbsp;Shell ID Lists&nbsp;</div>
+              <div id="verySmall"><br></div>
+              <div id="small">
+                <a class="small" href="Content.htm">Content</a> /
+                <a class="small" href="madShell.htm">madShell</a> /...
+              </div>
+            </td></tr>
+          </table>
+        </td></tr></table>
+      </td>
+      <td valign=bottom>
+        <table border=0 cellpadding=0 cellspacing=0><tr><td bgcolor=#D8D8D8>
+          <table cellpadding=7 border=0>
+            <tr><td bgcolor=#F4F4F8><a href="http://www.madshi.net">www.madshi.net</a></td></tr>
+          </table>
+        </td></tr></table>
+      </td>
+    </tr></table>
+    <p>How does the file system path of the "Control Panel" look like? You have no
+       idea? Well, there is no file system path for the "Control Panel", this object
+       simply is not part of any file system. But what if one wants to create a
+       shell link that points to the "Control Panel", how can one do that? If we
+       can't identify the "Control Panel" with a file system path, we need another
+       way to do that. For this purpose Microsoft implemented so called "IDLists".
+       Each file system object and also each non file system shell object can be
+       represented by an IDList.</p>
+    <p>An IDList works basically similar to a file system path. A file system path
+       consists of a string with the format "X:\Folder1\Folder2\Item". Each of the
+       4 items of this example path is seperated by "\" characters. If we would
+       convert this exact path into an IDList, the IDList would also contain 4
+       items, but the 4 items would not be substrings of one string. Instead the
+       whole IDList would be an allocated buffer, where each item consumes any
+       amount of memory needed in this buffer. The exact content of the binary data
+       of each IDList item is not documented.</p>
+    <p>Unfortunately handling such IDLists is a quite annoying task, so I created
+       an "IIDList" interface, which implements the most important functionality
+       when dealing with IDLists. See also the <a href="IIDListRef.htm">IIDList Reference</a>.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>type</span>&nbsp;<span id='identifier'>IIDList</span>&nbsp;= <span id='bold'>interface</span>&nbsp;(<a class="pascal" href="IBasicBaseInterface.htm#IBasic">IBasic</a>) [<span id='string'>'{00BED960-C78D-11D3-A530-00005A180D69}'</span>];
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IDList"></a>
+    <p>Once you have a standard Windows IDList pointer (type PItemIDList), you can
+       simply convert it into an IIDList object by calling the function "IDList".
+       You can specify whether the standard Windows IDList gets copied (and so
+       keeps untouched), or whether you want to tie it to the IIDList object. In
+       the latter case the standard Windows IDList gets freed automatically when
+       the IIDList object gets freed.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>IDList</span>&nbsp;(<span id='identifier'>pidl</span>: <span id='identifier'>PItemIDList</span>; <span id='identifier'>copy</span>: <span id='identifier'>boolean</span>&nbsp;= <span id='identifier'>false</span>) : <span id='identifier'>IIDList</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IIDList.IsEqual"></a>
+    <p>The following method checks whether the IDList that is represented by the
+       current IIDList object is equal to another one.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>IIDList</span>.<img src="m.gif"><span id='identifier'>IsEqual</span>&nbsp;(<span id='bold'>const</span>&nbsp;<span id='identifier'>otherIDList</span>: <span id='identifier'>IIDList</span>) : <span id='identifier'>boolean</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IIDList.Clone"></a>
+    <a name="IIDList.Concat"></a>
+    <p>Both functions "Clone" and "Concat" copy the whole IDList, while keeping the
+       current IIDList untouched. "Clone" is done with coyping, "Concat" afterwards
+       appends the specified subitem(s) to the result.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>IIDList</span>.<img src="m.gif"><span id='identifier'>Clone</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>IIDList</span>;<br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>IIDList</span>.<img src="m.gif"><span id='identifier'>Concat</span>&nbsp;(<span id='bold'>const</span>&nbsp;<span id='identifier'>idList</span>: <span id='identifier'>IIDList</span>) : <span id='identifier'>IIDList</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IIDList.Name"></a>
+    <a name="IIDList.Path"></a>
+    <p>The properties "Name" and "Path" are similar to the file system functions
+       "ExtractFileName/Path". The current IIDList keeps unchanged.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IIDList</span>.<img src="r.gif"><span id='identifier'>Name</span>&nbsp;: <span id='identifier'>IIDList</span>;<br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IIDList</span>.<img src="r.gif"><span id='identifier'>Path</span>&nbsp;: <span id='identifier'>IIDList</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IIDList.ReadOnly"></a>
+    <p>The following property can copy protect an IIDList object. But please note:
+       You can't undo this copy protection!</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IIDList</span>.<img src="w.gif"><span id='identifier'>ReadOnly</span>&nbsp;: <span id='identifier'>boolean</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IIDList.SplitName"></a>
+    <p>The method "SplitName" splits the current IDList into 2 pieces. The 2 pieces
+       are similar to what you get from "ExtractFileName/Path". The path piece is
+       stored in the current IIDList object, the name piece is returned as a new
+       IIDList object. This method fails, if the current IIDList is in read only
+       mode.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>IIDList</span>.<img src="m.gif"><span id='identifier'>SplitName</span>&nbsp;: <span id='identifier'>IIDList</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IIDList.Append"></a>
+    <p>The "Append" method appends the specified subitem(s) to the current IDList.
+       This method fails, if the current IIDList is in read only mode.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>procedure</span>&nbsp;<span id='identifier'>IIDList</span>.<img src="m.gif"><span id='identifier'>Append</span>&nbsp;(<span id='bold'>const</span>&nbsp;<span id='identifier'>idList</span>: <span id='identifier'>IIDList</span>);
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IIDList.PIdl"></a>
+    <a name="IIDList.Size"></a>
+    <p>The following properties refer to the standard Windows IDList buffer that is
+       represented by the current IIDList object. "PIdl" returns the pointer to the
+       standard Windows IDList, while "Size" returns the used size (in bytes) of
+       it.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IIDList</span>.<img src="r.gif"><span id='identifier'>PIdl</span>&nbsp;: <span id='identifier'>PItemIDList</span>; &nbsp;<br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IIDList</span>.<img src="r.gif"><span id='identifier'>Size</span>&nbsp;: <span id='identifier'>integer</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </body>
+
+</html>

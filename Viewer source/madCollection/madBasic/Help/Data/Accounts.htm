@@ -1,0 +1,239 @@
+<html>
+
+  <head>
+    <title>mad* Help...</title>
+    <meta name="description" content="mad* Help...">
+    <meta name="keywords" content="madshi, components, delphi">
+    <meta http-equiv="expires" content="900">
+    <link rel=stylesheet type="text/css" href="style.css">
+  </head>
+
+  <body background="bcklight.gif" bgcolor=#F8F8F8>
+    <a name="IAccount"></a>
+    <table border=0 cellpadding=0 callspacing=0><tr>
+      <td valign=bottom>
+        <table border=0 cellpadding=0 cellspacing=0><tr><td bgcolor=#D8D8D8>
+          <table cellpadding=3 border=0>
+            <tr><td bgcolor=#FFFFF0>
+              <div id="verySmall"><br></div>
+              <div id="bigTitle">&nbsp;Accounts&nbsp;</div>
+              <div id="verySmall"><br></div>
+              <div id="small">
+                <a class="small" href="Content.htm">Content</a> /
+                <a class="small" href="madSecurity.htm">madSecurity</a> /...
+              </div>
+            </td></tr>
+          </table>
+        </td></tr></table>
+      </td>
+      <td valign=bottom>
+        <table border=0 cellpadding=0 cellspacing=0><tr><td bgcolor=#D8D8D8>
+          <table cellpadding=7 border=0>
+            <tr><td bgcolor=#F4F4F8><a href="http://www.madshi.net">www.madshi.net</a></td></tr>
+          </table>
+        </td></tr></table>
+      </td>
+    </tr></table>
+    <p>The interface "IAccount" represents a user or group account. It implements
+       those aspects of account functionality, which are needed for the other parts
+       of "madSecurity" like <a href="ACEs.htm">ACEs</a> and <a href="SecurityObjects.htm">Security Objects</a>. Some
+       properties only work in winNT/2k, because win9x doesn't support the
+       respective APIs. A list of methods and properties can be found in the
+       <a href="IAccountRef.htm">IAccount Reference</a>.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>type</span>&nbsp;<span id='identifier'>IAccount</span>&nbsp;= <span id='bold'>interface</span>&nbsp;(<a class="pascal" href="IBasicBaseInterface.htm#IBasic">IBasic</a>) [<span id='string'>'{28D27EC2-3A98-11D3-A52D-00005A180D69}'</span>];
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="Account"></a>
+    <a name="CurrentUser"></a>
+    <a name="Everyone"></a>
+    <a name="AuthenticatedUsers"></a>
+    <p>You can directly get an "IAccount" object for a specific account, if you
+       have the complete name of the account or its SID. You can enter the SID
+       as a PSid pointer or as a "S-1-x-x..." string. Furthermore you can directly
+       get an "IAccount" object for the current user or for some special
+       users/groups.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>Account</span>&nbsp;(<span id='identifier'>name</span>&nbsp;: <span id='bold'>string</span>; <span id='identifier'>group</span>: <span id='identifier'>TExtBool</span>&nbsp;= <span id='identifier'>other</span>) : <span id='identifier'>IAccount</span>; <span id='bold'>overload</span>;<br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>Account</span>&nbsp;(<span id='identifier'>sid</span>&nbsp;&nbsp;: <span id='identifier'>PSid</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;) : <span id='identifier'>IAccount</span>; <span id='bold'>overload</span>;<br>
+                  <br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>CurrentUser</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>IAccount</span>;<br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>Everyone</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>IAccount</span>;<br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>AuthenticatedUsers</span>&nbsp;: <span id='identifier'>IAccount</span>;<br>
+                  <br>
+                  <span id='comment'>// Example:</span><br>
+                  <span id='bold'>if</span>&nbsp;<span id='identifier'>Everyone</span>.<a class="pascal" href="#IAccount.IsEqual">IsEqual</a>(<span id='identifier'>Account</span>(<span id='string'>'S-1-1-0'</span>)) <span id='bold'>then</span><br>
+                  &nbsp;&nbsp;<span id='identifier'>ShowMessage</span>(<span id='string'>'madSecurity seems to be working correctly'</span>);
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IAccount.Name"></a>
+    <p>The property "Name" returns the name of the account:</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IAccount</span>.<img src="r.gif"><span id='identifier'>Name</span>&nbsp;: <span id='bold'>string</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IAccount.IsEqual"></a>
+    <p>The following method checks whether the account which is represented by the
+       current "IAccount" instance is identical to the specified account:</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>IAccount</span>.<img src="m.gif"><span id='identifier'>IsEqual</span>&nbsp;(<span id='bold'>const</span>&nbsp;<span id='identifier'>otherAccount</span>: <span id='identifier'>IAccount</span>) : <span id='identifier'>boolean</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IAccount.IsStillValid"></a>
+    <p>The method "IsStillValid" checks, whether the account is still valid, that
+       is whether it was not deleted in the meanwhile. This property always returns
+       "true" in win9x.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>IAccount</span>.<img src="m.gif"><span id='identifier'>IsStillValid</span>&nbsp;: <span id='identifier'>boolean</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="TAccountType"></a>
+    <a name="IAccount.Type_"></a>
+    <p>The following property returns the type of the account. In win9x you'll
+       always get "atUnknown".</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>type</span>&nbsp;<span id='identifier'>TAccountType</span>&nbsp;= (<span id='identifier'>atUnknown</span>, <span id='identifier'>atUser</span>, <span id='identifier'>atGroup</span>, <span id='identifier'>atDomain</span>, <span id='identifier'>atAlias</span>, <span id='identifier'>atWellKnownGroup</span>,<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>atDeletedAccount</span>, <span id='identifier'>atInvalid</span>, <span id='identifier'>atUnknown2</span>);<br>
+                  <br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IAccount</span>.<img src="r.gif"><span id='identifier'>Type_</span>&nbsp;: <span id='identifier'>TAccountType</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IAccount.Domain"></a>
+    <p>The property "Domain" tells you the name of the domain where the account is
+       maintained. In win9x you'll get an empty string.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IAccount</span>.<img src="r.gif"><span id='identifier'>Domain</span>&nbsp;: <span id='bold'>string</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IAccount.PSid"></a>
+    <a name="IAccount.SidSize"></a>
+    <a name="IAccount.SidStr"></a>
+    <p>The following properties return infos about the winNT SID structure, which
+       identifies the account. In win9x you'll get nil/0/''.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IAccount</span>.<img src="r.gif"><span id='identifier'>PSid</span>&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>PSid</span>;<br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IAccount</span>.<img src="r.gif"><span id='identifier'>SidSize</span>&nbsp;: <span id='identifier'>integer</span>;<br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IAccount</span>.<img src="r.gif"><span id='identifier'>SidStr</span>&nbsp;&nbsp;: <span id='bold'>string</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="AccountCache_Add"></a>
+    <a name="AccountCache_Clear"></a>
+    <p>All accounts are cached to get higher performance. You can clear the cache
+       at any time without any danger. You should do so after you've changed a
+       user. Otherwise the cache might hinder some actions.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>procedure</span>&nbsp;<span id='identifier'>AccountCache_Add</span>&nbsp;(<span id='bold'>const</span>&nbsp;<span id='identifier'>account</span>: <span id='identifier'>IAccount</span>);<br>
+                  <span id='bold'>procedure</span>&nbsp;<span id='identifier'>AccountCache_Clear</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </body>
+
+</html>

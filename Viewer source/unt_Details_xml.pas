@@ -3,15 +3,15 @@ unit unt_Details_xml;
 interface
 
 uses
-  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  system.Contnrs,Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, unt_Details_base, unt_TraceWin, ExtCtrls, StdCtrls, unt_tool,
   xmldom, XMLIntf, msxmldom, XMLDoc, SynEditHighlighter, SynHighlighterXML,
-  SynEdit, SynMemo;
+  SynEdit;
 
 
 type
   TFrame_XML = class(Tframe_BaseDetails)
-    SynMemo: TSynMemo;
+    SynMemo: TSynEdit;
     SynXMLSyn1: TSynXMLSyn;
     XMLDoc: TXMLDocument;
   private

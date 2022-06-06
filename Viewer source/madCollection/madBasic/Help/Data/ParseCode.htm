@@ -1,0 +1,77 @@
+<html>
+
+  <head>
+    <title>mad* Help...</title>
+    <meta name="description" content="mad* Help...">
+    <meta name="keywords" content="madshi, components, delphi">
+    <meta http-equiv="expires" content="900">
+    <link rel=stylesheet type="text/css" href="style.css">
+  </head>
+
+  <body background="bcklight.gif" bgcolor=#F8F8F8>
+    <a name="ParseCode"></a>
+    <a name="TCodeInfo"></a>
+    <table border=0 cellpadding=0 callspacing=0><tr>
+      <td valign=bottom>
+        <table border=0 cellpadding=0 cellspacing=0><tr><td bgcolor=#D8D8D8>
+          <table cellpadding=3 border=0>
+            <tr><td bgcolor=#FFFFF0>
+              <div id="verySmall"><br></div>
+              <div id="bigTitle">&nbsp;ParseCode&nbsp;</div>
+              <div id="verySmall"><br></div>
+              <div id="small">
+                <a class="small" href="Content.htm">Content</a> /
+                <a class="small" href="madDisAsm.htm">madDisAsm</a> /...
+              </div>
+            </td></tr>
+          </table>
+        </td></tr></table>
+      </td>
+      <td valign=bottom>
+        <table border=0 cellpadding=0 cellspacing=0><tr><td bgcolor=#D8D8D8>
+          <table cellpadding=7 border=0>
+            <tr><td bgcolor=#F4F4F8><a href="http://www.madshi.net">www.madshi.net</a></td></tr>
+          </table>
+        </td></tr></table>
+      </td>
+    </tr></table>
+    <p>The function "ParseCode" examines the x86 instruction beginning at the
+       specified address. A detailed analysis of the instruction is returned.
+       You can loop through code blocks by using "result.Next".</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>type</span><br>
+                  &nbsp;&nbsp;<span id='identifier'>TCodeInfo</span>&nbsp;= <span id='bold'>record</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>IsValid</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>boolean</span>; &nbsp;&nbsp;<span id='comment'>// was the specified code pointer valid?</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>Opcode</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>word</span>; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>// Opcode, one byte ($00xx) or two byte ($0fxx)</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>ModRm</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>byte</span>; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>// ModRm byte, if available, otherwise 0</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>Call</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>boolean</span>; &nbsp;&nbsp;<span id='comment'>// is this instruction a call?</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>Jmp</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>boolean</span>; &nbsp;&nbsp;<span id='comment'>// is this instruction a jmp?</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>RelTarget</span>&nbsp;&nbsp;&nbsp;: <span id='identifier'>boolean</span>; &nbsp;&nbsp;<span id='comment'>// is this target relative (or absolute)?</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>Target</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>pointer</span>; &nbsp;&nbsp;<span id='comment'>// absolute target address</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>PTarget</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>pointer</span>; &nbsp;&nbsp;<span id='comment'>// pointer to the target information in the code</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>PPTarget</span>&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>TPPointer</span>; <span id='comment'>// pointer to pointer to the target information</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>TargetSize</span>&nbsp;&nbsp;: <span id='identifier'>integer</span>; &nbsp;&nbsp;<span id='comment'>// size of the target information in bytes (1/2/4)</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>Enlargeable</span>&nbsp;: <span id='identifier'>boolean</span>; &nbsp;&nbsp;<span id='comment'>// can the target size of this opcode be extended?</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>This</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>pointer</span>; &nbsp;&nbsp;<span id='comment'>// where does this instruction begin?</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>Next</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>pointer</span>; &nbsp;&nbsp;<span id='comment'>// next code location</span><br>
+                  &nbsp;&nbsp;<span id='bold'>end</span>;<br>
+                  <br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>ParseCode</span>&nbsp;(<span id='identifier'>code</span>: <span id='identifier'>pointer</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;) : <span id='identifier'>TCodeInfo</span>; <span id='bold'>overload</span>;<br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>ParseCode</span>&nbsp;(<span id='identifier'>code</span>: <span id='identifier'>pointer</span>; <span id='bold'>var</span>&nbsp;<span id='identifier'>disAsm</span>: <span id='bold'>string</span>) : <span id='identifier'>TCodeInfo</span>; <span id='bold'>overload</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </body>
+
+</html>

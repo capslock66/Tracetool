@@ -33,7 +33,7 @@ unit ColorPickerButton;
 
 interface
 
-uses Windows, Messages, SysUtils, Classes, Controls, Forms, Graphics, StdCtrls,
+uses system.Types, Windows, Messages, SysUtils, Classes, Controls, Forms, Graphics, StdCtrls,
      ExtCtrls, CommCtrl;
 
 const // constants used in OnHint and internally to indicate a specific cell
@@ -950,11 +950,11 @@ begin
   end;
 
   // fixup the result variables
-  with GlyphPos do
-  begin
-    Inc(X, Client.Left + Offset.X);
-    Inc(Y, Client.Top + Offset.Y);
-  end;
+  //with GlyphPos do
+  //begin
+    Inc(GlyphPos.X, Client.Left + Offset.X);
+    Inc(GlyphPos.Y, Client.Top + Offset.Y);
+  //end;
   OffsetRect(TextBounds, TextPos.X + Client.Left + Offset.X, TextPos.Y + Client.Top + Offset.X);
 end;
 
@@ -3402,11 +3402,10 @@ end;
 //-----------------------------------------------------------------------------
 
 procedure TColorPickerButton.CMButtonPressed(var Message: TMessage);
-
-var Sender: TColorPickerButton;
-
+var
+   Sender: TColorPickerButton;
 begin
-  if Message.WParam = FGroupIndex then
+  if integer(Message.WParam) = FGroupIndex then
   begin
     Sender := TColorPickerButton(Message.LParam);
     if Sender <> Self then

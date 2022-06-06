@@ -1,0 +1,188 @@
+<html>
+
+  <head>
+    <title>mad* Help...</title>
+    <meta name="description" content="mad* Help...">
+    <meta name="keywords" content="madshi, components, delphi">
+    <meta http-equiv="expires" content="900">
+    <link rel=stylesheet type="text/css" href="style.css">
+  </head>
+
+  <body background="bcklight.gif" bgcolor=#F8F8F8>
+    <a name="ISecurityObject"></a>
+    <table border=0 cellpadding=0 callspacing=0><tr>
+      <td valign=bottom>
+        <table border=0 cellpadding=0 cellspacing=0><tr><td bgcolor=#D8D8D8>
+          <table cellpadding=3 border=0>
+            <tr><td bgcolor=#FFFFF0>
+              <div id="verySmall"><br></div>
+              <div id="bigTitle">&nbsp;Security Objects&nbsp;</div>
+              <div id="verySmall"><br></div>
+              <div id="small">
+                <a class="small" href="Content.htm">Content</a> /
+                <a class="small" href="madSecurity.htm">madSecurity</a> /...
+              </div>
+            </td></tr>
+          </table>
+        </td></tr></table>
+      </td>
+      <td valign=bottom>
+        <table border=0 cellpadding=0 cellspacing=0><tr><td bgcolor=#D8D8D8>
+          <table cellpadding=7 border=0>
+            <tr><td bgcolor=#F4F4F8><a href="http://www.madshi.net">www.madshi.net</a></td></tr>
+          </table>
+        </td></tr></table>
+      </td>
+    </tr></table>
+    <p>The interface "ISecurityObject" implements the most important functionality
+       you'll need when dealing with security objects. A security object is any
+       object which can be secured like shares, files, printers, and more. A list
+       of methods and properties is contained in the
+       <a href="ISecurityObjectRef.htm">ISecurityObject Reference</a>.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>type</span>&nbsp;<span id='identifier'>ISecurityObject</span>&nbsp;= <span id='bold'>interface</span>&nbsp;(<a class="pascal" href="IBasicBaseInterface.htm#IBasic">IBasic</a>) [<span id='string'>'{810A7100-4813-11D3-A52D-00005A180D69}'</span>];
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="PrinterSecurity"></a>
+    <a name="FileSecurity"></a>
+    <a name="ShareSecurity"></a>
+    <a name="RegistrySecurity"></a>
+    <a name="ServiceSecurity"></a>
+    <a name="WindowObjectSecurity"></a>
+    <a name="KernelObjectSecurity"></a>
+    <p>Getting a "ISecurityObject" instance is quite easy. Simply enter the
+       name/path or the handle of the object. In win9x only printer and file
+       security objects are supported. Furthermore in win9x the security stuff
+       takes effect only when used in combination with <a href="Shares.htm">Shares</a>. Supported
+       security objects in winNT/2000 are printers, files/folders, shares, registry
+       keys, services, window objects and kernel objects (e.g. processes).</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>PrinterSecurity</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span id='identifier'>nameOrUnc</span>&nbsp;: <span id='identifier'>wideString</span>) : <span id='identifier'>ISecurityObject</span>; <span id='bold'>overload</span>;<br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>PrinterSecurity</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span id='identifier'>handle</span>&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>cardinal</span>&nbsp;&nbsp;) : <span id='identifier'>ISecurityObject</span>; <span id='bold'>overload</span>;<br>
+                  <br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>FileSecurity</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span id='identifier'>pathOrUnc</span>&nbsp;: <span id='identifier'>wideString</span>) : <span id='identifier'>ISecurityObject</span>; <span id='bold'>overload</span>;<br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>FileSecurity</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span id='identifier'>handle</span>&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>cardinal</span>&nbsp;&nbsp;) : <span id='identifier'>ISecurityObject</span>; <span id='bold'>overload</span>;<br>
+                  <br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>ShareSecurity</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span id='identifier'>nameOrUnc</span>&nbsp;: <span id='identifier'>wideString</span>) : <span id='identifier'>ISecurityObject</span>;<br>
+                  <br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>RegistrySecurity</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span id='identifier'>pathOrUnc</span>&nbsp;: <span id='identifier'>wideString</span>) : <span id='identifier'>ISecurityObject</span>; <span id='bold'>overload</span>;<br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>RegistrySecurity</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span id='identifier'>key</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>HKEY</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;) : <span id='identifier'>ISecurityObject</span>; <span id='bold'>overload</span>;<br>
+                  <br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>ServiceSecurity</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span id='identifier'>nameOrUnc</span>&nbsp;: <span id='identifier'>wideString</span>) : <span id='identifier'>ISecurityObject</span>; <span id='bold'>overload</span>;<br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>ServiceSecurity</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span id='identifier'>handle</span>&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>cardinal</span>&nbsp;&nbsp;) : <span id='identifier'>ISecurityObject</span>; <span id='bold'>overload</span>;<br>
+                  <br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>WindowObjectSecurity</span>&nbsp;(<span id='identifier'>nameOrUnc</span>&nbsp;: <span id='identifier'>wideString</span>) : <span id='identifier'>ISecurityObject</span>; <span id='bold'>overload</span>;<br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>WindowObjectSecurity</span>&nbsp;(<span id='identifier'>handle</span>&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>cardinal</span>&nbsp;&nbsp;) : <span id='identifier'>ISecurityObject</span>; <span id='bold'>overload</span>;<br>
+                  <br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>KernelObjectSecurity</span>&nbsp;(<span id='identifier'>handle</span>&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>cardinal</span>&nbsp;&nbsp;) : <span id='identifier'>ISecurityObject</span>;<br>
+                  <br>
+                  <span id='comment'>// Example:</span><br>
+                  <span id='bold'>with</span>&nbsp;<span id='identifier'>FileSecurity</span>(<a class="pascal" href="SpecialFolders.htm#WinFolder">WinFolder</a>) <span id='bold'>do</span>&nbsp;...
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="TSecurityObjectType"></a>
+    <a name="ISecurityObject.Type_"></a>
+    <p>The following property returns the type of the security object:</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>type</span>&nbsp;<span id='identifier'>TSecurityObjectType</span>&nbsp;= (<span id='identifier'>seUnknown</span>, <span id='identifier'>seFile</span>, <span id='identifier'>seService</span>, <span id='identifier'>sePrinter</span>, <span id='identifier'>seRegistry</span>,<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>seShare</span>, <span id='identifier'>seKernelObject</span>, <span id='identifier'>seWindowObject</span>);<br>
+                  <br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>ISecurityObject</span>.<img src="r.gif"><span id='identifier'>Type_</span>&nbsp;: <span id='identifier'>TSecurityObjectType</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="ISecurityObject.Name"></a>
+    <a name="ISecurityObject.Handle"></a>
+    <p>The properties "Name" and "Handle" return whatever you gave in to create the
+       security object. Only the values you gave in are available. You can't enter
+       a handle and expect "Name" to return anything.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>ISecurityObject</span>.<img src="r.gif"><span id='identifier'>Name</span>&nbsp;&nbsp;&nbsp;: <span id='identifier'>wideString</span>;<br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>ISecurityObject</span>.<img src="r.gif"><span id='identifier'>Handle</span>&nbsp;: <span id='identifier'>cardinal</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="ISecurityObject.Owner"></a>
+    <a name="ISecurityObject.Group"></a>
+    <a name="ISecurityObject.DAcl"></a>
+    <a name="ISecurityObject.SAcl"></a>
+    <a name="ISecurityObject.ProtectedDAcl"></a>
+    <a name="ISecurityObject.ProtectedSAcl"></a>
+    <p>The following properties give you access to the security parameters of the
+       current security object, which are the owner of the object, the primary
+       group, to which the object belongs and the discretionary and system ACL of
+       the object.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>ISecurityObject</span>.<img src="w.gif"><span id='identifier'>Owner</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <a class="pascal" href="Accounts.htm#IAccount">IAccount</a>;<br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>ISecurityObject</span>.<img src="w.gif"><span id='identifier'>Group</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <a class="pascal" href="Accounts.htm#IAccount">IAccount</a>;<br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>ISecurityObject</span>.<img src="w.gif"><span id='identifier'>DAcl</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <a class="pascal" href="ACLs.htm#IAcl">IAcl</a>;<br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>ISecurityObject</span>.<img src="w.gif"><span id='identifier'>SAcl</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <a class="pascal" href="ACLs.htm#IAcl">IAcl</a>;<br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>ISecurityObject</span>.<img src="w.gif"><span id='identifier'>ProtectedDAcl</span>&nbsp;: <span id='identifier'>boolean</span>;<br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>ISecurityObject</span>.<img src="w.gif"><span id='identifier'>ProtectedSAcl</span>&nbsp;: <span id='identifier'>boolean</span>;<br>
+                  <br>
+                  <span id='comment'>// Examples:</span><br>
+                  <a class="pascal" href="#FileSecurity">FileSecurity</a>(<a class="pascal" href="SpecialFolders.htm#WinFolder">WinFolder</a>).<span id='identifier'>Owner</span>&nbsp;:= <a class="pascal" href="Accounts.htm#CurrentUser">CurrentUser</a>; &nbsp;<span id='comment'>// set the owner of the Windows folder</span><br>
+                  <a class="pascal" href="#RegistrySecurity">RegistrySecurity</a>(<span id='identifier'>aRegKey</span>).<span id='identifier'>DAcl</span>.<a class="pascal" href="ACLs.htm#IAcl.Deallocate">Deallocate</a>; &nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>// grant access for everyone to a registry key</span>
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </body>
+
+</html>

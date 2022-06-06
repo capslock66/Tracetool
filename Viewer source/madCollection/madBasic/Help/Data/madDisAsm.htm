@@ -1,0 +1,72 @@
+<html>
+
+  <head>
+    <title>mad* Help...</title>
+    <meta name="description" content="mad* Help...">
+    <meta name="keywords" content="madshi, components, delphi">
+    <meta http-equiv="expires" content="900">
+    <link rel=stylesheet type="text/css" href="style.css">
+  </head>
+
+  <body background="bcklight.gif" bgcolor=#F8F8F8>
+    <table border=0 cellpadding=0 callspacing=0><tr>
+      <td valign=bottom>
+        <table border=0 cellpadding=0 cellspacing=0><tr><td bgcolor=#D8D8D8>
+          <table cellpadding=3 border=0>
+            <tr><td bgcolor=#FFFFF0>
+              <div id="verySmall"><br></div>
+              <div id="bigTitle">&nbsp;madDisAsm&nbsp;</div>
+              <div id="verySmall"><br></div>
+              <div id="small">
+                <a class="small" href="Content.htm">Content</a> /...
+              </div>
+            </td></tr>
+          </table>
+        </td></tr></table>
+      </td>
+      <td valign=bottom>
+        <table border=0 cellpadding=0 cellspacing=0><tr><td bgcolor=#D8D8D8>
+          <table cellpadding=7 border=0>
+            <tr><td bgcolor=#F4F4F8><a href="http://www.madshi.net">www.madshi.net</a></td></tr>
+          </table>
+        </td></tr></table>
+      </td>
+    </tr></table>
+    <p>The package "madDisAsm" features a full x86 disassembler including MMX,
+       3dNow enhanced, SSE and SSE2 support. The disassembler can examine a single
+       x86 instruction (see <a href="ParseCode.htm">ParseCode</a>) or a full function (see
+       <a href="ParseFunction.htm">ParseFunction</a>) and either return a short analysis or a full text
+       disassembly. Register contents are watched/followed if possible, this
+       improves the analyses for jump/call targets. Case/switch jump tables are
+       automatically detected and handled correctly.</p>
+    <p>For several low level hacks such a disassembler is a very important piece of
+       the puzzle. So some of my other packages (<a href="madExcept.htm" href="madExceptUnit.htm">madExcept</a>, <a href="madRemote.htm">madRemote</a>,
+       <a href="madCodeHook.htm">madCodeHook</a> and <a href="madKernel.htm">madKernel</a>) need this package "madDisAsm". It
+       might be useful for some of your own purposes, too.</p>
+    <p>A reference of what is contained in "madDisAsm" can be found in the
+       <a href="madDisAsmRef.htm">madDisAsm Reference</a>.</p>
+    <table border=0 cellpadding=0 callspacing=0>
+      <tr><td bgcolor=#D8D8D8>
+        <table border=0 cellpadding=7>
+          <tr>
+            <td bgcolor=#6060B0><div id="smallTitle">Functions</div></td>
+            <td bgcolor=#F8F0F0><a href="ParseCode.htm">ParseCode</a></td>
+            <td bgcolor=#F4F4F8><a href="ParseFunction.htm">ParseFunction</a></td>
+          </tr>
+        </table>
+      </td></tr>
+    </table>
+    <p>Just for demonstration purposes I've added three disassemblies. Watch for
+       yourself, what madDisAsm makes of <a href="MoveDisAsm.htm">Move</a>,
+       <a href="TReaderDisAsm.htm">TReader.SkipValue</a> and
+       <a href="CreateFileADisAsm.htm">CreateFileA (XP)</a>. Please note that
+       madDisAsm can list the Delphi internal function names only if the
+       <a href="madMapFileUnit.htm">madMapFile unit</a> is part of the project. Without that madDisAsm can
+       only show the names of exported functions.</p>
+    <p>madDisAsm is free for non-commercial usage (only).</p>
+    <p>You can find more information including the full download at
+       <a href="http://madDisAsm.madshi.net">http://madDisAsm.madshi.net</a>.</p>
+    
+  </body>
+
+</html>

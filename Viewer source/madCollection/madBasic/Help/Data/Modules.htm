@@ -1,0 +1,442 @@
+<html>
+
+  <head>
+    <title>mad* Help...</title>
+    <meta name="description" content="mad* Help...">
+    <meta name="keywords" content="madshi, components, delphi">
+    <meta http-equiv="expires" content="900">
+    <link rel=stylesheet type="text/css" href="style.css">
+  </head>
+
+  <body background="bcklight.gif" bgcolor=#F8F8F8>
+    <a name="IModule"></a>
+    <a name="IModules"></a>
+    <table border=0 cellpadding=0 callspacing=0><tr>
+      <td valign=bottom>
+        <table border=0 cellpadding=0 cellspacing=0><tr><td bgcolor=#D8D8D8>
+          <table cellpadding=3 border=0>
+            <tr><td bgcolor=#FFFFF0>
+              <div id="verySmall"><br></div>
+              <div id="bigTitle">&nbsp;Modules&nbsp;</div>
+              <div id="verySmall"><br></div>
+              <div id="small">
+                <a class="small" href="Content.htm">Content</a> /
+                <a class="small" href="madKernel.htm">madKernel</a> /...
+              </div>
+            </td></tr>
+          </table>
+        </td></tr></table>
+      </td>
+      <td valign=bottom>
+        <table border=0 cellpadding=0 cellspacing=0><tr><td bgcolor=#D8D8D8>
+          <table cellpadding=7 border=0>
+            <tr><td bgcolor=#F4F4F8><a href="http://www.madshi.net">www.madshi.net</a></td></tr>
+          </table>
+        </td></tr></table>
+      </td>
+    </tr></table>
+    <p>Each process consists of a main module (*.exe most of the time) and some
+       secondary modules (*.dll most of the time). The secondardy modules can be
+       system dlls or application specific dlls. madKernel encapsulates one single
+       module in the "IModule" interface, and a list of modules in the "IModules"
+       interface. See also the <a href="IModuleRef.htm">IModule Reference</a> and the
+       <a href="IModulesRef.htm">IModules Reference</a>.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>type</span><br>
+                  &nbsp;&nbsp;<span id='identifier'>IModule</span>&nbsp;&nbsp;= <span id='bold'>interface</span>&nbsp;(<a class="pascal" href="IBasicBaseInterface.htm#IBasic">IBasic</a>) &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[<span id='string'>'{F84BE460-C13F-11D3-A530-00005A180D69}'</span>];<br>
+                  &nbsp;&nbsp;<span id='identifier'>IModules</span>&nbsp;= <span id='bold'>interface</span>&nbsp;(<a class="pascal" href="ICustomBasicListBaseInterface.htm#ICustomBasicList">ICustomBasicList</a>) [<span id='string'>'{F84BE461-C13F-11D3-A530-00005A180D69}'</span>];
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="LoadModule"></a>
+    <a name="CurrentModule"></a>
+    <a name="MainModule"></a>
+    <a name="Module"></a>
+    <a name="Modules"></a>
+    <p>You can get an <a href="#IModule">IModule</a> or an <a href="#IModules">IModules</a> instance either by
+       calling <a href="Processes.htm#IProcess.Modules">IProcess.Modules</a> or by using one of the following functions.
+       With "LoadModule" you can directly load a new module into your process (see
+       "LoadLibrary(Ex)" API). You can also work with the "CurrentModule" or with
+       the "MainModule". Furthermore you can convert a module dword handle into an
+       <a href="#IModule">IModule</a> instance or check which module is located at a specific
+       address. Or you can look for a module with a specific file name (in your
+       process). Finally you can enumerate all modules of your own process or all
+       modules of all processes system wide or all modules system wide with a
+       specific file name.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>LoadModule</span>&nbsp;(<span id='identifier'>fileName</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='bold'>string</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>autoClose</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>boolean</span>&nbsp;= <span id='identifier'>true</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>withoutReferences</span>&nbsp;: <span id='identifier'>boolean</span>&nbsp;= <span id='identifier'>false</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>onlyAsDataFile</span>&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>boolean</span>&nbsp;= <span id='identifier'>false</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>alteredSearchPath</span>&nbsp;: <span id='identifier'>boolean</span>&nbsp;= <span id='identifier'>false</span>) : <a class="pascal" href="#IModule">IModule</a>;<br>
+                  <br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>CurrentModule</span>&nbsp;: <a class="pascal" href="#IModule">IModule</a>;<br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>MainModule</span>&nbsp;&nbsp;&nbsp;&nbsp;: <a class="pascal" href="#IModule">IModule</a>;<br>
+                  <br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>Module</span>&nbsp;(<span id='identifier'>handle</span>&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>cardinal</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>autoClose</span>&nbsp;: <span id='identifier'>boolean</span>&nbsp;= <span id='identifier'>false</span>) : <a class="pascal" href="#IModule">IModule</a>; <span id='bold'>overload</span>;<br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>Module</span>&nbsp;(<span id='identifier'>memory</span>&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>pointer</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>autoClose</span>&nbsp;: <span id='identifier'>boolean</span>&nbsp;= <span id='identifier'>false</span>) : <a class="pascal" href="#IModule">IModule</a>; <span id='bold'>overload</span>;<br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>Module</span>&nbsp;(<span id='identifier'>fileName</span>&nbsp;&nbsp;: <span id='bold'>string</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>autoClose</span>&nbsp;: <span id='identifier'>boolean</span>&nbsp;= <span id='identifier'>false</span>) : <a class="pascal" href="#IModule">IModule</a>; <span id='bold'>overload</span>;<br>
+                  <br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>Modules</span>&nbsp;(<span id='identifier'>systemWide</span>&nbsp;: <span id='identifier'>boolean</span>&nbsp;= <span id='identifier'>false</span>) : <a class="pascal" href="#IModules">IModules</a>; <span id='bold'>overload</span>;<br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>Modules</span>&nbsp;(<span id='identifier'>fileName</span>&nbsp;&nbsp;&nbsp;: <span id='bold'>string</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;) : <a class="pascal" href="#IModules">IModules</a>; <span id='bold'>overload</span>;<br>
+                  <br>
+                  <span id='comment'>// Examples:</span><br>
+                  <span id='identifier'>LoadModule</span>(<span id='string'>'ourOwnPrivate.dll'</span>, <span id='identifier'>false</span>);<br>
+                  <span id='identifier'>MessageBox</span>(<span id='number'>0</span>, <span id='identifier'>pchar</span>(<span id='string'>'we have loaded '</span>&nbsp;+ <span id='identifier'>IntToStr</span>(<span id='identifier'>Modules</span>.<span id='identifier'>ItemCount</span>) + <span id='string'>'modules'</span>), <span id='string'>'info'</span>, <span id='number'>0</span>);<br>
+                  <span id='identifier'>Assert</span>(<span id='identifier'>MainModule</span>.<a id="mono" href="#IModule.IsMainModule">IsMainModule</a>);
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IModule.IsStillValid"></a>
+    <p>Is this module still loaded?</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>IModule</span>.<img src="m.gif"><span id='identifier'>IsStillValid</span>&nbsp;: <span id='identifier'>boolean</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IModule.OwnerProcess"></a>
+    <p>To which process does this module belong?</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IModule</span>.<img src="r.gif"><span id='identifier'>OwnerProcess</span>&nbsp;: <a class="pascal" href="Processes.htm#IProcess">IProcess</a>;<br>
+                  <br>
+                  <span id='comment'>// Example:</span><br>
+                  <span id='identifier'>Assert</span>(<a class="pascal" href="#CurrentModule">CurrentModule</a>.<span id='identifier'>OwnerProcess</span>&nbsp;= <a class="pascal" href="Processes.htm#CurrentProcess">CurrentProcess</a>);
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IModule.Handle"></a>
+    <a name="IModule.HInstance"></a>
+    <a name="IModule.Memory"></a>
+    <p>Get the module handle or the module's HInstance value or the memory location
+       where the module is loaded. All the 3 values are identical, btw.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IModule</span>.<img src="r.gif"><span id='identifier'>Handle</span>&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>cardinal</span>;<br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IModule</span>.<img src="r.gif"><span id='identifier'>HInstance</span>&nbsp;: <span id='identifier'>cardinal</span>;<br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IModule</span>.<img src="r.gif"><span id='identifier'>Memory</span>&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>pointer</span>;<br>
+                  <br>
+                  <span id='comment'>// Example:</span><br>
+                  <span id='identifier'>Assert</span>(<a class="pascal" href="#CurrentModule">CurrentModule</a>.<span id='identifier'>HInstance</span>&nbsp;= <span id='identifier'>HInstance</span>);
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IModule.FileName"></a>
+    <p>Which file name does this module have?</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IModule</span>.<img src="r.gif"><span id='identifier'>FileName</span>&nbsp;: <span id='bold'>string</span>;<br>
+                  <br>
+                  <span id='comment'>// Example:</span><br>
+                  <span id='identifier'>Assert</span>(<a class="pascal" href="StringCompare.htm#IsTextEqual">IsTextEqual</a>(<a class="pascal" href="#MainModule">MainModule</a>.<span id='identifier'>FileName</span>, <span id='identifier'>ParamStr</span>(<span id='number'>0</span>)));
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IModule.IsMainModule"></a>
+    <p>Is this the main module (*.exe most of the time)?</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>IModule</span>.<img src="m.gif"><span id='identifier'>IsMainModule</span>&nbsp;: <span id='identifier'>boolean</span>;<br>
+                  <br>
+                  <span id='comment'>// Example:</span><br>
+                  <span id='bold'>if</span>&nbsp;<a class="pascal" href="#CurrentModule">CurrentModule</a>.<span id='identifier'>IsMainModule</span>&nbsp;<span id='bold'>then</span><br>
+                  &nbsp;&nbsp;<span id='identifier'>MessageBox</span>(<span id='number'>0</span>, <span id='string'>'we are in the main module'</span>, <span id='string'>'info'</span>, <span id='number'>0</span>);
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IModule.EntryPoint"></a>
+    <p>Which address does the entry point function of this module have?</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IModule</span>.<img src="r.gif"><span id='identifier'>EntryPoint</span>&nbsp;: <span id='identifier'>pointer</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IModule.GetProcAddress"></a>
+    <a name="IModule.SetProcAddress"></a>
+    <p>The following methods can ask and even change (caution!) the address of this
+       module's exported functions. This is internally realized by parsing the
+       module's internal export tables. As a result IAT patching won't show effect
+       here. Also you can get the address of kernel32 APIs, which are only exported
+       by ordinal. The official API "GetProcAddress" doesn't allow that to make
+       hacking harder.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>IModule</span>.<img src="m.gif"><span id='identifier'>GetProcAddress</span>&nbsp;(<span id='identifier'>name</span>&nbsp;&nbsp;: <span id='bold'>string</span>&nbsp;) : <span id='identifier'>pointer</span>; <span id='bold'>overload</span>;<br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>IModule</span>.<img src="m.gif"><span id='identifier'>GetProcAddress</span>&nbsp;(<span id='bold'>index</span>&nbsp;: <span id='identifier'>integer</span>) : <span id='identifier'>pointer</span>; <span id='bold'>overload</span>;<br>
+                  <br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>IModule</span>.<img src="m.gif"><span id='identifier'>SetProcAddress</span>&nbsp;(<span id='identifier'>name</span>&nbsp;&nbsp;: <span id='bold'>string</span>; &nbsp;<span id='identifier'>newAddr</span>: <span id='identifier'>pointer</span>) : <span id='identifier'>boolean</span>; <span id='bold'>overload</span>;<br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>IModule</span>.<img src="m.gif"><span id='identifier'>SetProcAddress</span>&nbsp;(<span id='bold'>index</span>&nbsp;: <span id='identifier'>integer</span>; <span id='identifier'>newAddr</span>: <span id='identifier'>pointer</span>) : <span id='identifier'>boolean</span>; <span id='bold'>overload</span>;<br>
+                  <br>
+                  <span id='comment'>// Example:</span><br>
+                  <span id='identifier'>LoadLibrary16</span>&nbsp;:= <a class="pascal" href="#Module">Module</a>(<span id='identifier'>kernel32</span>).<span id='identifier'>GetProcAddress</span>(<span id='number'>35</span>); &nbsp;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IModule.ImportList"></a>
+    <a name="IModule.ExportList"></a>
+    <p>Get the full import/export list of this module:</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IModule</span>.<img src="r.gif"><span id='identifier'>ImportList</span>&nbsp;: <a class="pascal" href="#IXxportList">IXxportList</a>;<br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IModule</span>.<img src="r.gif"><span id='identifier'>ExportList</span>&nbsp;: <a class="pascal" href="#IXxportList">IXxportList</a>;<br>
+                  <br>
+                  <span id='comment'>// Example:</span><br>
+                  <span id='identifier'>MessageBox</span>(<span id='number'>0</span>, <span id='identifier'>pchar</span>(<span id='string'>'kernel exports '</span>&nbsp;+ <span id='identifier'>IntToStr</span>(<a class="pascal" href="#Module">Module</a>(<span id='identifier'>kernel32</span>).<span id='identifier'>ExportList</span>.<span id='identifier'>ItemCount</span>) + <span id='string'>' APIs'</span>), <span id='string'>'info'</span>, <span id='number'>0</span>);
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IModule.ImageNtHeaders"></a>
+    <a name="IModule.ImageImportDirectory"></a>
+    <a name="IModule.ImageExportDirectory"></a>
+    <p>The following methods return a pointer to some internal data structures of
+       this module:</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IModule</span>.<img src="r.gif"><span id='identifier'>ImageNtHeaders</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>PImageNtHeaders</span>;<br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IModule</span>.<img src="r.gif"><span id='identifier'>ImageImportDirectory</span>&nbsp;: <a class="pascal" href="ModuleStuff.htm#PImageImportDirectory">PImageImportDirectory</a>;<br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IModule</span>.<img src="r.gif"><span id='identifier'>ImageExportDirectory</span>&nbsp;: <a class="pascal" href="ModuleStuff.htm#PImageExportDirectory">PImageExportDirectory</a>;<br>
+                  <br>
+                  <span id='comment'>// Example:</span><br>
+                  <span id='identifier'>Assert</span>(<a class="pascal" href="#CurrentModule">CurrentModule</a>.<span id='identifier'>ImageNtHeaders</span>^.<span id='identifier'>Signature</span>&nbsp;= <span id='number'>$4550</span>);
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IModule.AutoClose"></a>
+    <p>Will this module be closed automatically, when the interface gets destroyed?</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IModule</span>.<img src="w.gif"><span id='identifier'>AutoClose</span>&nbsp;: <span id='identifier'>boolean</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IModules.Items"></a>
+    <a name="IModules.RefreshItems"></a>
+    <p>The <a href="#IModules">IModules</a> interfaces gives you easy access to it's "Items". Call
+       "RefreshItems" to look for new, deleted and changed modules.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IModules</span>.<img src="r.gif"><span id='identifier'>Items</span>&nbsp;[<span id='bold'>index</span>: <span id='identifier'>integer</span>] : <a class="pascal" href="#IModule">IModule</a>;<br>
+                  <br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>IModules</span>.<img src="m.gif"><span id='identifier'>RefreshItems</span>&nbsp;: <span id='identifier'>boolean</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IModules.OwnerProcess"></a>
+    <a name="IModules.FileName"></a>
+    <p>Does this <a href="#IModules">IModules</a> instance only enumerate modules of a specific
+       process or only modules with a specific file name?</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IModules</span>.<img src="r.gif"><span id='identifier'>OwnerProcess</span>&nbsp;: <a class="pascal" href="Processes.htm#IProcess">IProcess</a>;<br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IModules</span>.<img src="r.gif"><span id='identifier'>FileName</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='bold'>string</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IXxportList"></a>
+    <a name="IXxportList.ItemCount"></a>
+    <a name="IXxportList.Items"></a>
+    <a name="IXxportList.FindItem"></a>
+    <p>The "IXxportList" interface is needed for the <a href="#IModule.ImportList">IModule.ImportList</a> and
+       <a href="#IModule.ExportList">IModule.ExportList</a> properties. It holds a list of <a href="#IExportEntry">IExportEntry</a>
+       instances. You can access the contained "Items", or search for a specific
+       function address. See also the <a href="IXxportListRef.htm">IXxportList Reference</a>.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>type</span>&nbsp;<span id='identifier'>IXxportList</span>&nbsp;= <span id='bold'>interface</span>&nbsp;(<a class="pascal" href="ICustomBasicListBaseInterface.htm#ICustomBasicList">ICustomBasicList</a>) [<span id='string'>'{AF45CC02-1296-47C2-B6AE-727B3C82B820}'</span>];<br>
+                  <br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IXxportList</span>.<img src="r.gif"><span id='identifier'>Items</span>&nbsp;&nbsp;&nbsp;&nbsp;[<span id='bold'>index</span>&nbsp;: <span id='identifier'>integer</span>] : <a class="pascal" href="#IExportEntry">IExportEntry</a>;<br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>IXxportList</span>.<img src="m.gif"><span id='identifier'>FindItem</span>&nbsp;(<span id='identifier'>func</span>&nbsp;&nbsp;: <span id='identifier'>pointer</span>) : <a class="pascal" href="#IExportEntry">IExportEntry</a>; <span id='bold'>overload</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IExportEntry"></a>
+    <a name="IExportEntry.ExportModule"></a>
+    <a name="IExportEntry.Ordinal"></a>
+    <a name="IExportEntry.Name"></a>
+    <a name="IExportEntry.Address"></a>
+    <p>The "IExportEntry" interface wraps up a single exported function. It's used
+       in the <a href="#IXxportList">IXxportList</a> interface. See also the
+       <a href="IExportEntryRef.htm">IExportEntry Reference</a>. For each exported function you can ask from
+       which module is was exported under which "Ordinal" and under which "Name"
+       and what the "Address" of the function is.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>type</span>&nbsp;<span id='identifier'>IExportEntry</span>&nbsp;= <span id='bold'>interface</span>&nbsp;(<a class="pascal" href="IBasicBaseInterface.htm#IBasic">IBasic</a>) [<span id='string'>'{64B5B8D1-B4EA-4A13-9D48-CBACF2265882}'</span>];<br>
+                  <br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IExportEntry</span>.<img src="r.gif"><span id='identifier'>ExportModule</span>&nbsp;: <a class="pascal" href="#IModule">IModule</a>;<br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IExportEntry</span>.<img src="r.gif"><span id='identifier'>Ordinal</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>cardinal</span>;<br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IExportEntry</span>.<img src="r.gif"><span id='identifier'>Name</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='bold'>string</span>;<br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IExportEntry</span>.<img src="r.gif"><span id='identifier'>Address</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>pointer</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </body>
+
+</html>

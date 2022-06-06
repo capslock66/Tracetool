@@ -33,7 +33,7 @@ interface
 
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
-  ComCtrls, ExtCtrls, Menus, JclPeImage, ImgList;
+  ComCtrls, ExtCtrls, Menus, JclPeImage, ImgList, System.ImageList;
 
 type
   TFileViewerChild = class(TForm)

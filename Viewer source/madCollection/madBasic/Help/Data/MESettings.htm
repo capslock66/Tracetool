@@ -1,0 +1,781 @@
+<html>
+
+  <head>
+    <title>mad* Help...</title>
+    <meta name="description" content="mad* Help...">
+    <meta name="keywords" content="madshi, components, delphi">
+    <meta http-equiv="expires" content="900">
+    <link rel=stylesheet type="text/css" href="style.css">
+  </head>
+
+  <body background="bcklight.gif" bgcolor=#F8F8F8>
+    <a name="IMESettings"></a>
+    <a name="IMEModuleSettings"></a>
+    <table border=0 cellpadding=0 callspacing=0><tr>
+      <td valign=bottom>
+        <table border=0 cellpadding=0 cellspacing=0><tr><td bgcolor=#D8D8D8>
+          <table cellpadding=3 border=0>
+            <tr><td bgcolor=#FFFFF0>
+              <div id="verySmall"><br></div>
+              <div id="bigTitle">&nbsp;madExcept Settings (runtime)&nbsp;</div>
+              <div id="verySmall"><br></div>
+              <div id="small">
+                <a class="small" href="Content.htm">Content</a> /
+                <a class="small" href="madExcept.htm">madExcept</a> /
+                <a class="small" href="madExceptSettings.htm">madExcept Settings</a> /...
+              </div>
+            </td></tr>
+          </table>
+        </td></tr></table>
+      </td>
+      <td valign=bottom>
+        <table border=0 cellpadding=0 cellspacing=0><tr><td bgcolor=#D8D8D8>
+          <table cellpadding=7 border=0>
+            <tr><td bgcolor=#F4F4F8><a href="http://www.madshi.net">www.madshi.net</a></td></tr>
+          </table>
+        </td></tr></table>
+      </td>
+    </tr></table>
+    <p>Most <a href="madExceptSettings.htm">madExcept settings</a> can be configured at runtime, too. For that
+       purpose there are a number of interfaces available. The settings are
+       splitted into two main interfaces. The first one is named "IMESettings", the
+       second one "IMEModuleSettings". The latter is a descendant of the first one.
+       Why two interfaces instead of one? The reason is that you can adjust some
+       settings on a per exception case, while others can only be adjusted
+       globally. The exception interface <a href="madExceptUnit.htm#IMEException">IMEException</a> is a descendent of the
+       "IMESettings" interface. So all settings contained in the "IMESettings"
+       interface can be adjusted locally for one specific exception. The settings
+       which are only adjustable globally are contained in the "IMEModuleSettings"
+       interface.</p>
+    <p>There are two different ways to change settings. First of all if an
+       exception occurs, you can change settings for that exception simply by
+       accessing the settings properties of the <a href="madExceptUnit.htm#IMEException">IMEException</a> interface. The
+       other way is to grab the "IMEModuleSettings" interface of a specific module
+       (dll/exe/bpl). You can do that by using one of the overloaded "MESettings"
+       functions.</p>
+    <a name="MESettings"></a>
+    <a name="IMEModuleSettings.IsValid"></a>
+    <a name="IMEModuleSettings.Enabled"></a>
+    <a name="IMESettings.Module"></a>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>type</span><br>
+                  &nbsp;&nbsp;<span id='identifier'>IMESettings</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= <span id='bold'>interface</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[<span id='string'>'{27DBC590-890F-463E-8D05-32E33584119F}'</span>];<br>
+                  &nbsp;&nbsp;<span id='identifier'>IMEModuleSettings</span>&nbsp;= <span id='bold'>interface</span>&nbsp;(<span id='identifier'>IMESettings</span>) [<span id='string'>'{E2196B25-D73A-4F69-B79B-D65539763B31}'</span>];<br>
+                  <br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>MESettings</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>IMEModuleSettings</span>; <span id='bold'>overload</span>;<br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>MESettings</span>&nbsp;(<span id='identifier'>module</span>&nbsp;: <span id='identifier'>dword</span>&nbsp;&nbsp;) : <span id='identifier'>IMEModuleSettings</span>; <span id='bold'>overload</span>;<br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>MESettings</span>&nbsp;(<span id='identifier'>addr</span>&nbsp;&nbsp;&nbsp;: <span id='identifier'>pointer</span>) : <span id='identifier'>IMEModuleSettings</span>; <span id='bold'>overload</span>;<br>
+                  <br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>IMESettings</span>.<img src="m.gif"><span id='identifier'>Module</span>&nbsp;: <span id='identifier'>dword</span>;<br>
+                  <br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>IMEModuleSettings</span>.<img src="m.gif"><span id='identifier'>IsValid</span>&nbsp;: <span id='identifier'>boolean</span>;<br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>IMEModuleSettings</span>.<img src="m.gif"><span id='identifier'>Enabled</span>&nbsp;: <span id='identifier'>boolean</span>;<br>
+                  <br>
+                  <span id='comment'>// Example:</span><br>
+                  <span id='identifier'>MESettings</span>(<span id='identifier'>GetModuleHandle</span>(<span id='string'>'kernel32.dll'</span>)).<span id='identifier'>IsValid</span>&nbsp;-> <span id='identifier'>false</span>
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IMEModuleSettings.LinkInSettings"></a>
+    <a name="IMEModuleSettings.LinkInMapFile"></a>
+    <a name="IMEModuleSettings.CheckFileCrc"></a>
+    <a name="IMEModuleSettings.CheckForFreeze"></a>
+    <a name="IMEModuleSettings.FreezeTimeout"></a>
+    <a name="IMEModuleSettings.WindowsLogo"></a>
+    <a name="IMEModuleSettings.ReportLeaks"></a>
+    <a name="IMEModuleSettings.CrashOnOverrun"></a>
+    <a name="IMEModuleSettings.CrashOnUnderrun"></a>
+    <p>Let's go through the settings properties in the same way the 
+       <a href="madExceptSettings.htm">settings dialog</a>
+       is set up. The <a href="madExceptSettings1.htm">first tab</a> contains the
+       <a href="madExceptSettings1.htm">basic settings</a>. These can't be adjusted
+       at runtime through the settings interfaces. You can control the freeze check
+       behaviour by using some global <a href="madExcept.htm" href="madExceptUnit.htm">madExcept</a> functions, though. E.g. have
+       a look at <a href="madExceptUnit.htm#PauseFreezeCheck">PauseFreezeCheck</a>, <a href="madExceptUnit.htm#SetFreezeTimeout">SetFreezeTimeout</a> and
+       <a href="madExceptUnit.htm#ImNotFrozen">ImNotFrozen</a>.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='comment'>// BASIC SETTINGS</span><br>
+                  <br>
+                  <span id='comment'>// general options</span><br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>IMEModuleSettings</span>.<img src="m.gif"><span id='identifier'>LinkInSettings</span>&nbsp;&nbsp;: <span id='identifier'>boolean</span>; &nbsp;<span id='comment'>// link in madExcept settings</span><br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>IMEModuleSettings</span>.<img src="m.gif"><span id='identifier'>LinkInMapFile</span>&nbsp;&nbsp;&nbsp;: <span id='identifier'>boolean</span>; &nbsp;<span id='comment'>// link in function names and line numbers</span><br>
+                  <br>
+                  <span id='comment'>// runtime checks</span><br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>IMEModuleSettings</span>.<img src="m.gif"><span id='identifier'>CheckFileCrc</span>&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>boolean</span>; &nbsp;<span id='comment'>// check whether binary file is corrupt (via crc)</span><br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>IMEModuleSettings</span>.<img src="m.gif"><span id='identifier'>CheckForFreeze</span>&nbsp;&nbsp;: <span id='identifier'>boolean</span>; &nbsp;<span id='comment'>// check for frozen main thread</span><br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>IMEModuleSettings</span>.<img src="m.gif"><span id='identifier'>FreezeTimeout</span>&nbsp;&nbsp;&nbsp;: <span id='identifier'>dword</span>; &nbsp;&nbsp;&nbsp;<span id='comment'>// freeze timeout (sec)</span><br>
+                  <br>
+                  <span id='comment'>// windows logo program</span><br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IMEModuleSettings</span>.<img src="w.gif"><span id='identifier'>WindowsLogo</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>boolean</span>; &nbsp;<span id='comment'>// conform to "windows logo" requirements</span><br>
+                  <br>
+                  <span id='comment'>// active error search</span><br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>IMEModuleSettings</span>.<img src="m.gif"><span id='identifier'>ReportLeaks</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>boolean</span>; &nbsp;<span id='comment'>// report resource leaks</span><br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>IMEModuleSettings</span>.<img src="m.gif"><span id='identifier'>CrashOnOverrun</span>&nbsp;&nbsp;: <span id='identifier'>boolean</span>; &nbsp;<span id='comment'>// instantly crash on buffer overrun</span><br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>IMEModuleSettings</span>.<img src="m.gif"><span id='identifier'>CrashOnUnderrun</span>&nbsp;: <span id='identifier'>boolean</span>; &nbsp;<span id='comment'>// instantly crash on buffer underrun</span>
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IMESettings.AutoSave"></a>
+    <a name="IMESettings.AutoSaveIfNotSent"></a>
+    <a name="IMESettings.AutoSend"></a>
+    <a name="IMESettings.AutoSendPrgrBox"></a>
+    <a name="IMESettings.AutoClipboard"></a>
+    <a name="IMESettings.SuspendThreads"></a>
+    <a name="IMESettings.ShowPleaseWaitBox"></a>
+    <a name="IMESettings.AutoContinue"></a>
+    <a name="IMESettings.AutoRestart"></a>
+    <a name="IMESettings.AutoClose"></a>
+    <a name="IMESettings.AutoDelay"></a>
+    <p>Let's continue with the <a href="madExceptSettings2.htm">second tab</a> of
+       the <a href="madExceptSettings.htm">settings dialog</a>:</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='comment'>// ON EXCEPTION AUTO ACTIONS</span><br>
+                  <br>
+                  <span id='comment'>// various actions</span><br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IMESettings</span>.<img src="w.gif"><span id='identifier'>AutoSave</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>boolean</span>; &nbsp;<span id='comment'>// automatically save bug report</span><br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IMESettings</span>.<img src="w.gif"><span id='identifier'>AutoSaveIfNotSent</span>&nbsp;: <span id='identifier'>boolean</span>; &nbsp;<span id='comment'>// only if bug report doesn't get sent</span><br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IMESettings</span>.<img src="w.gif"><span id='identifier'>AutoSend</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>boolean</span>; &nbsp;<span id='comment'>// automatically send bug report</span><br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IMESettings</span>.<img src="w.gif"><span id='identifier'>AutoSendPrgrBox</span>&nbsp;&nbsp;&nbsp;: <span id='identifier'>boolean</span>; &nbsp;<span id='comment'>// show progress box during auto send</span><br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IMESettings</span>.<img src="w.gif"><span id='identifier'>AutoClipboard</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>boolean</span>; &nbsp;<span id='comment'>// copy bug report to clipboard</span><br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IMESettings</span>.<img src="w.gif"><span id='identifier'>SuspendThreads</span>&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>boolean</span>; &nbsp;<span id='comment'>// pause all running delphi/bcb threads</span><br>
+                  <br>
+                  <span id='comment'>// if madExcept is busy while no window is visible</span><br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IMESettings</span>.<img src="w.gif"><span id='identifier'>ShowPleaseWaitBox</span>&nbsp;: <span id='identifier'>boolean</span>; &nbsp;<span id='comment'>// show "please wait" box</span><br>
+                  <br>
+                  <span id='comment'>// application control </span><br>
+                  <span id='comment'>// 0 = off; 1 = at once; xxx = after 10 crashes in xxx seconds</span><br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IMESettings</span>.<img src="w.gif"><span id='identifier'>AutoContinue</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>boolean</span>; &nbsp;<span id='comment'>// automatically continue application</span><br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IMESettings</span>.<img src="w.gif"><span id='identifier'>AutoRestart</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>dword</span>; &nbsp;&nbsp;&nbsp;<span id='comment'>// automatically restart application</span><br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IMESettings</span>.<img src="w.gif"><span id='identifier'>AutoClose</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>dword</span>; &nbsp;&nbsp;&nbsp;<span id='comment'>// automatically close application</span><br>
+                  <br>
+                  <span id='comment'>// runtime only settings</span><br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IMESettings</span>.<img src="w.gif"><span id='identifier'>AutoDelay</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>dword</span>; &nbsp;&nbsp;&nbsp;<span id='comment'>// progress delay (in seconds)</span>
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IMEModuleSettings.Filter1Classes"></a>
+    <a name="IMEModuleSettings.Filter2Classes"></a>
+    <a name="IMEModuleSettings.Filter1NoBugReport"></a>
+    <a name="IMEModuleSettings.Filter2NoBugReport"></a>
+    <a name="IMEModuleSettings.GeneralNoBugReport"></a>
+    <a name="IMEModuleSettings.Filter1NoScreenShot"></a>
+    <a name="IMEModuleSettings.Filter2NoScreenShot"></a>
+    <a name="IMEModuleSettings.GeneralNoScreenShot"></a>
+    <a name="IMEModuleSettings.Filter1NoSuspend"></a>
+    <a name="IMEModuleSettings.Filter2NoSuspend"></a>
+    <a name="IMEModuleSettings.GeneralNoSuspend"></a>
+    <a name="IMEModuleSettings.Filter1NoHandlers"></a>
+    <a name="IMEModuleSettings.Filter2NoHandlers"></a>
+    <a name="IMEModuleSettings.GeneralNoHandlers"></a>
+    <a name="TMEShowSetting"></a>
+    <a name="IMEModuleSettings.Filter1ShowSetting"></a>
+    <a name="IMEModuleSettings.Filter2ShowSetting"></a>
+    <a name="IMEModuleSettings.GeneralShowSetting"></a>
+    <a name="IMEModuleSettings.Filter1Assistant"></a>
+    <a name="IMEModuleSettings.Filter2Assistant"></a>
+    <a name="IMEModuleSettings.GeneralAssistant"></a>
+    <p>Now let's have a look at the <a href="madExceptSettings3.htm">third tab</a>
+       of the <a href="madExceptSettings.htm">settings dialog</a>. The settings on
+       this tab are only adjustable globally.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='comment'>// EXCEPTION FILTER</span><br>
+                  <br>
+                  <span id='comment'>// classes </span><br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IMEModuleSettings</span>.<img src="w.gif"><span id='identifier'>Filter1Classes</span>&nbsp;: <span id='bold'>string</span>;<br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IMEModuleSettings</span>.<img src="w.gif"><span id='identifier'>Filter2Classes</span>&nbsp;: <span id='bold'>string</span>;<br>
+                  <br>
+                  <span id='comment'>// don't create a bug report </span><br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IMEModuleSettings</span>.<img src="w.gif"><span id='identifier'>Filter1NoBugReport</span>&nbsp;: <span id='identifier'>boolean</span>;<br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IMEModuleSettings</span>.<img src="w.gif"><span id='identifier'>Filter2NoBugReport</span>&nbsp;: <span id='identifier'>boolean</span>;<br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IMEModuleSettings</span>.<img src="w.gif"><span id='identifier'>GeneralNoBugReport</span>&nbsp;: <span id='identifier'>boolean</span>;<br>
+                  <span id='comment'>// don't create a screen shot </span><br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IMEModuleSettings</span>.<img src="w.gif"><span id='identifier'>Filter1NoScreenShot</span>&nbsp;: <span id='identifier'>boolean</span>;<br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IMEModuleSettings</span>.<img src="w.gif"><span id='identifier'>Filter2NoScreenShot</span>&nbsp;: <span id='identifier'>boolean</span>;<br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IMEModuleSettings</span>.<img src="w.gif"><span id='identifier'>GeneralNoScreenShot</span>&nbsp;: <span id='identifier'>boolean</span>;<br>
+                  <span id='comment'>// don't pause the running threads</span><br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IMEModuleSettings</span>.<img src="w.gif"><span id='identifier'>Filter1NoSuspend</span>&nbsp;: <span id='identifier'>boolean</span>;<br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IMEModuleSettings</span>.<img src="w.gif"><span id='identifier'>Filter2NoSuspend</span>&nbsp;: <span id='identifier'>boolean</span>;<br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IMEModuleSettings</span>.<img src="w.gif"><span id='identifier'>GeneralNoSuspend</span>&nbsp;: <span id='identifier'>boolean</span>;<br>
+                  <span id='comment'>// don't call the exception handlers </span><br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IMEModuleSettings</span>.<img src="w.gif"><span id='identifier'>Filter1NoHandlers</span>&nbsp;: <span id='identifier'>boolean</span>;<br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IMEModuleSettings</span>.<img src="w.gif"><span id='identifier'>Filter2NoHandlers</span>&nbsp;: <span id='identifier'>boolean</span>;<br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IMEModuleSettings</span>.<img src="w.gif"><span id='identifier'>GeneralNoHandlers</span>&nbsp;: <span id='identifier'>boolean</span>;<br>
+                  <br>
+                  <span id='bold'>type</span><br>
+                  &nbsp;&nbsp;<span id='identifier'>TMEShowSetting</span>&nbsp;= (<span id='identifier'>ssFullBox</span>, <span id='identifier'>ssAssistant</span>, <span id='identifier'>ssDetailBox</span>, <span id='identifier'>ssSimpleBox</span>, <span id='identifier'>ssNothing</span>);<br>
+                  <br>
+                  <span id='comment'>// show setting</span><br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IMEModuleSettings</span>.<img src="w.gif"><span id='identifier'>Filter1ShowSetting</span>&nbsp;: <span id='identifier'>TMEShowSetting</span>;<br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IMEModuleSettings</span>.<img src="w.gif"><span id='identifier'>Filter2ShowSetting</span>&nbsp;: <span id='identifier'>TMEShowSetting</span>;<br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IMEModuleSettings</span>.<img src="w.gif"><span id='identifier'>GeneralShowSetting</span>&nbsp;: <span id='identifier'>TMEShowSetting</span>;<br>
+                  <span id='comment'>// assistant</span><br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IMEModuleSettings</span>.<img src="w.gif"><span id='identifier'>Filter1Assistant</span>&nbsp;: <span id='bold'>string</span>;<br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IMEModuleSettings</span>.<img src="w.gif"><span id='identifier'>Filter2Assistant</span>&nbsp;: <span id='bold'>string</span>;<br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IMEModuleSettings</span>.<img src="w.gif"><span id='identifier'>GeneralAssistant</span>&nbsp;: <span id='bold'>string</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <p>Next we have the <a href="madExceptSettings4.htm">forth tab</a> of the
+       <a href="madExceptSettings.htm">settings dialog</a>.</p>
+    <a name="IMESettings.SendBtnVisible"></a>
+    <a name="IMESettings.SaveBtnVisible"></a>
+    <a name="IMESettings.PrintBtnVisible"></a>
+    <a name="IMESettings.ShowBtnVisible"></a>
+    <a name="IMESettings.ContinueBtnVisible"></a>
+    <a name="IMESettings.RestartBtnVisible"></a>
+    <a name="IMESettings.CloseBtnVisible"></a>
+    <a name="TMEButton"></a>
+    <a name="IMESettings.FocusedButton"></a>
+    <a name="IMESettings.SendAssistant"></a>
+    <a name="IMESettings.SaveAssistant"></a>
+    <a name="IMESettings.PrintAssistant"></a>
+    <a name="IMESettings.AutoShowBugReport"></a>
+    <a name="IMESettings.NoOwnerDrawButtons"></a>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='comment'>// EXCEPTION BOX SETTINGS</span><br>
+                  <br>
+                  <span id='comment'>// button configuration - visibility</span><br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IMESettings</span>.<img src="w.gif"><span id='identifier'>SendBtnVisible</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>boolean</span>;<br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IMESettings</span>.<img src="w.gif"><span id='identifier'>SaveBtnVisible</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>boolean</span>;<br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IMESettings</span>.<img src="w.gif"><span id='identifier'>PrintBtnVisible</span>&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>boolean</span>;<br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IMESettings</span>.<img src="w.gif"><span id='identifier'>ShowBtnVisible</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>boolean</span>;<br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IMESettings</span>.<img src="w.gif"><span id='identifier'>ContinueBtnVisible</span>&nbsp;: <span id='identifier'>boolean</span>;<br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IMESettings</span>.<img src="w.gif"><span id='identifier'>RestartBtnVisible</span>&nbsp;&nbsp;: <span id='identifier'>boolean</span>;<br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IMESettings</span>.<img src="w.gif"><span id='identifier'>CloseBtnVisible</span>&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>boolean</span>;<br>
+                  <br>
+                  <span id='bold'>type</span><br>
+                  &nbsp;&nbsp;<span id='identifier'>TMEButton</span>&nbsp;= (<span id='identifier'>bSendBugReport</span>, <span id='identifier'>bSaveBugReport</span>, <span id='identifier'>bPrintBugReport</span>, <span id='identifier'>bShowBugReport</span>,<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>bContinueApplication</span>, <span id='identifier'>bRestartApplication</span>, <span id='identifier'>bCloseApplication</span>);<br>
+                  <br>
+                  <span id='comment'>// button configuration - other options</span><br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IMESettings</span>.<img src="w.gif"><span id='identifier'>FocusedButton</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>TMEButton</span>; &nbsp;<span id='comment'>// button focus</span><br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IMESettings</span>.<img src="w.gif"><span id='identifier'>SendAssistant</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='bold'>string</span>; &nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>// send assistant</span><br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IMESettings</span>.<img src="w.gif"><span id='identifier'>SaveAssistant</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='bold'>string</span>; &nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>// save assistant</span><br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IMESettings</span>.<img src="w.gif"><span id='identifier'>PrintAssistant</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='bold'>string</span>; &nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>// print assistant</span><br>
+                  <br>
+                  <span id='comment'>// various options</span><br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IMESettings</span>.<img src="w.gif"><span id='identifier'>AutoShowBugReport</span>&nbsp;&nbsp;: <span id='identifier'>boolean</span>; &nbsp;&nbsp;&nbsp;<span id='comment'>// automatically show bug report</span><br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IMESettings</span>.<img src="w.gif"><span id='identifier'>NoOwnerDrawButtons</span>&nbsp;: <span id='identifier'>boolean</span>; &nbsp;&nbsp;&nbsp;<span id='comment'>// show standard buttons instead of fading owner draw buttons</span>
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IMESettings.SendInBackground"></a>
+    <a name="IMESettings.MailAddr"></a>
+    <a name="IMESettings.UploadToFogBugz"></a>
+    <a name="IMESettings.UploadToBugZilla"></a>
+    <a name="IMESettings.UploadToMantis"></a>
+    <a name="IMESettings.UploadToCustomScript"></a>
+    <a name="IMESettings.HttpServer"></a>
+    <a name="IMESettings.HttpSsl"></a>
+    <a name="IMESettings.HttpPort"></a>
+    <a name="IMESettings.HttpAccount"></a>
+    <a name="IMESettings.HttpPassword"></a>
+    <a name="IMESettings.BugTrackerAccount"></a>
+    <a name="IMESettings.BugTrackerPassword"></a>
+    <a name="IMESettings.BugTrackerProject"></a>
+    <a name="IMESettings.BugTrackerArea"></a>
+    <a name="IMESettings.BugTrackerAssignTo"></a>
+    <a name="IMESettings.MailAsSmtpServer"></a>
+    <a name="IMESettings.MailAsSmtpClient"></a>
+    <a name="IMESettings.SmtpServer"></a>
+    <a name="IMESettings.SmtpSsl"></a>
+    <a name="IMESettings.SmtpTls"></a>
+    <a name="IMESettings.SmtpPort"></a>
+    <a name="IMESettings.SmtpAccount"></a>
+    <a name="IMESettings.SmtpPassword"></a>
+    <a name="IMESettings.MailViaMapi"></a>
+    <a name="IMESettings.MailViaMailto"></a>
+    <a name="IMESettings.MailFrom"></a>
+    <a name="IMESettings.AdditionalFields"></a>
+    <p>Here comes the <a href="madExceptSettings5.htm">fifth tab</a>:</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='comment'>// EMAIL & UPLOAD SETTINGS</span><br>
+                  <br>
+                  <span id='comment'>// basic send settings</span><br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IMESettings</span>.<img src="w.gif"><span id='identifier'>SendInBackground</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>boolean</span>; &nbsp;&nbsp;&nbsp;<span id='comment'>// send bug report in background</span><br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IMESettings</span>.<img src="w.gif"><span id='identifier'>MailAddr</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='bold'>string</span>; &nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>// mail receiver(s)</span><br>
+                  <br>
+                  <span id='comment'>// upload to web server</span><br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IMESettings</span>.<img src="w.gif"><span id='identifier'>UploadToFogBugz</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>boolean</span>; &nbsp;&nbsp;&nbsp;<span id='comment'>// create FogBogz bug report</span><br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IMESettings</span>.<img src="w.gif"><span id='identifier'>UploadToBugZilla</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>boolean</span>; &nbsp;&nbsp;&nbsp;<span id='comment'>// create BugZilla bug report</span><br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IMESettings</span>.<img src="w.gif"><span id='identifier'>UploadToMantis</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>boolean</span>; &nbsp;&nbsp;&nbsp;<span id='comment'>// create Mantis bug report</span><br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IMESettings</span>.<img src="w.gif"><span id='identifier'>UploadToCustomScript</span>&nbsp;: <span id='identifier'>boolean</span>; &nbsp;&nbsp;&nbsp;<span id='comment'>// upload to HTTP custom script</span><br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IMESettings</span>.<img src="w.gif"><span id='identifier'>HttpServer</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='bold'>string</span>; &nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>// FogBugz/BugZilla/Mantis/script url</span><br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IMESettings</span>.<img src="w.gif"><span id='identifier'>HttpSsl</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>boolean</span>; &nbsp;&nbsp;&nbsp;<span id='comment'>// use SSL connection</span><br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IMESettings</span>.<img src="w.gif"><span id='identifier'>HttpPort</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>dword</span>; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>// connection port</span><br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IMESettings</span>.<img src="w.gif"><span id='identifier'>HttpAccount</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='bold'>string</span>; &nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>// http auth user name (optional)</span><br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IMESettings</span>.<img src="w.gif"><span id='identifier'>HttpPassword</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='bold'>string</span>; &nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>// http auth password &nbsp;(optional)</span><br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IMESettings</span>.<img src="w.gif"><span id='identifier'>BugTrackerAccount</span>&nbsp;&nbsp;&nbsp;&nbsp;: <span id='bold'>string</span>; &nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>// FogBugz/BugZilla/Mantis account</span><br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IMESettings</span>.<img src="w.gif"><span id='identifier'>BugTrackerPassword</span>&nbsp;&nbsp;&nbsp;: <span id='bold'>string</span>; &nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>// FogBugz/BugZilla/Mantis password</span><br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IMESettings</span>.<img src="w.gif"><span id='identifier'>BugTrackerProject</span>&nbsp;&nbsp;&nbsp;&nbsp;: <span id='bold'>string</span>; &nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>// FogBugz/BugZilla/Mantis project name</span><br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IMESettings</span>.<img src="w.gif"><span id='identifier'>BugTrackerArea</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='bold'>string</span>; &nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>// FogBugz/BugZilla/Mantis area name</span><br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IMESettings</span>.<img src="w.gif"><span id='identifier'>BugTrackerAssignTo</span>&nbsp;&nbsp;&nbsp;: <span id='bold'>string</span>; &nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>// FogBugz/BugZilla/Mantis assign to</span><br>
+                  <br>
+                  <span id='comment'>// send via SMTP</span><br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IMESettings</span>.<img src="w.gif"><span id='identifier'>MailAsSmtpServer</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>boolean</span>; &nbsp;&nbsp;&nbsp;<span id='comment'>// act as SMTP server</span><br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IMESettings</span>.<img src="w.gif"><span id='identifier'>MailAsSmtpClient</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>boolean</span>; &nbsp;&nbsp;&nbsp;<span id='comment'>// act as SMTP client</span><br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IMESettings</span>.<img src="w.gif"><span id='identifier'>SmtpServer</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='bold'>string</span>; &nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>// SMTP server url</span><br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IMESettings</span>.<img src="w.gif"><span id='identifier'>SmtpSsl</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>boolean</span>; &nbsp;&nbsp;&nbsp;<span id='comment'>// use SSL connection</span><br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IMESettings</span>.<img src="w.gif"><span id='identifier'>SmtpTls</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>boolean</span>; &nbsp;&nbsp;&nbsp;<span id='comment'>// use TLS connection</span><br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IMESettings</span>.<img src="w.gif"><span id='identifier'>SmtpPort</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>dword</span>; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>// connection port</span><br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IMESettings</span>.<img src="w.gif"><span id='identifier'>SmtpAccount</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='bold'>string</span>; &nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>// SMTP account</span><br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IMESettings</span>.<img src="w.gif"><span id='identifier'>SmtpPassword</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='bold'>string</span>; &nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>// SMTP password</span><br>
+                  <br>
+                  <span id='comment'>// use local mail client</span><br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IMESettings</span>.<img src="w.gif"><span id='identifier'>MailViaMapi</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>boolean</span>; &nbsp;&nbsp;&nbsp;<span id='comment'>// try to contact the mail client via MAPI</span><br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IMESettings</span>.<img src="w.gif"><span id='identifier'>MailViaMailto</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>boolean</span>; &nbsp;&nbsp;&nbsp;<span id='comment'>// try to contact the mail client via mailto</span><br>
+                  <br>
+                  <span id='comment'>// runtime only settings</span><br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IMESettings</span>.<img src="w.gif"><span id='identifier'>MailFrom</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='bold'>string</span>; &nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>// SMTP mail sender</span><br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IMESettings</span>.<img src="r.gif"><span id='identifier'>AdditionalFields</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <a class="pascal" href="#IMEFields">IMEFields</a>; &nbsp;<span id='comment'>// additional fields for http uploads</span>
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IMESettings.AttachBugReport"></a>
+    <a name="IMESettings.AttachBugReportFile"></a>
+    <a name="IMESettings.DeleteBugReportFile"></a>
+    <a name="IMESettings.BugReportSendAs"></a>
+    <a name="IMESettings.BugReportZip"></a>
+    <a name="IMESettings.ScreenShotDepth"></a>
+    <a name="IMESettings.ScreenShotAppOnly"></a>
+    <a name="IMESettings.ScreenShotSendAs"></a>
+    <a name="IMESettings.ScreenShotZip"></a>
+    <a name="IMESettings.AdditionalAttachments"></a>
+    <p>On to the <a href="madExceptSettings6.htm">sixth tab</a>:</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='comment'>// ATTACHMENTS SETTINGS</span><br>
+                  <br>
+                  <span id='comment'>// bug report & screen shot attachments </span><br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IMESettings</span>.<img src="w.gif"><span id='identifier'>AttachBugReport</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>boolean</span>; &nbsp;<span id='comment'>// attach bug report</span><br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IMESettings</span>.<img src="w.gif"><span id='identifier'>AttachBugReportFile</span>&nbsp;&nbsp;&nbsp;: <span id='identifier'>boolean</span>; &nbsp;<span id='comment'>// attach bug report file</span><br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IMESettings</span>.<img src="w.gif"><span id='identifier'>DeleteBugReportFile</span>&nbsp;&nbsp;&nbsp;: <span id='identifier'>boolean</span>; &nbsp;<span id='comment'>// empty bug report file afterwards</span><br>
+                  <br>
+                  <span id='comment'>// file names & zip configuration </span><br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IMESettings</span>.<img src="w.gif"><span id='identifier'>BugReportSendAs</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='bold'>string</span>; &nbsp;&nbsp;<span id='comment'>// bug report send as</span><br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IMESettings</span>.<img src="w.gif"><span id='identifier'>BugReportZip</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='bold'>string</span>; &nbsp;&nbsp;<span id='comment'>// bug report zip </span><br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IMESettings</span>.<img src="w.gif"><span id='identifier'>ScreenShotDepth</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>integer</span>; &nbsp;<span id='comment'>// 0=none; 4=16 grays; 8=256 cols; x*1024=keep size < x KB</span><br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IMESettings</span>.<img src="w.gif"><span id='identifier'>ScreenShotAppOnly</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>boolean</span>; &nbsp;<span id='comment'>// capture windows of the current application only</span><br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IMESettings</span>.<img src="w.gif"><span id='identifier'>ScreenShotSendAs</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='bold'>string</span>; &nbsp;&nbsp;<span id='comment'>// screen shot send as</span><br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IMESettings</span>.<img src="w.gif"><span id='identifier'>ScreenShotZip</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='bold'>string</span>; &nbsp;&nbsp;<span id='comment'>// screen shot zip</span><br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IMESettings</span>.<img src="r.gif"><span id='identifier'>AdditionalAttachments</span>&nbsp;: <a class="pascal" href="#IMEAttachments">IMEAttachments</a>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IMESettings.BugReportFile"></a>
+    <a name="IMESettings.AppendBugReports"></a>
+    <a name="IMESettings.BugReportFileSize"></a>
+    <a name="IMESettings.NoDupExcepts"></a>
+    <a name="IMESettings.NoDupFreezes"></a>
+    <a name="TMEDupDef"></a>
+    <a name="IMESettings.DupExceptDef"></a>
+    <a name="IMESettings.DupFreezeDef"></a>
+    <p>The next tab is the <a href="madExceptSettings7.htm">seventh</a>:</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='comment'>// SAVE SETTINGS</span><br>
+                  <br>
+                  <span id='comment'>// basic bug report file settings</span><br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IMESettings</span>.<img src="w.gif"><span id='identifier'>BugReportFile</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>UnicodeString</span>; &nbsp;<span id='comment'>// bug report file</span><br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IMESettings</span>.<img src="w.gif"><span id='identifier'>AppendBugReports</span>&nbsp;&nbsp;: <span id='identifier'>boolean</span>; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>// append bug reports</span><br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IMESettings</span>.<img src="w.gif"><span id='identifier'>BugReportFileSize</span>&nbsp;: <span id='identifier'>dword</span>; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>// bug report bug max file size (in bytes!)</span><br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IMESettings</span>.<img src="w.gif"><span id='identifier'>NoDupExcepts</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>boolean</span>; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>// don't save duplicate exceptions</span><br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IMESettings</span>.<img src="w.gif"><span id='identifier'>NoDupFreezes</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>boolean</span>; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>// don't save duplicate main thread freezings</span><br>
+                  <br>
+                  <span id='bold'>type</span><br>
+                  &nbsp;&nbsp;<span id='identifier'>TMEDupDef</span>&nbsp;= (<span id='identifier'>ddExceptAddrIdentical</span>, <span id='identifier'>ddCrashStackIdentical</span>, <span id='identifier'>ddAllStacksIdentical</span>);<br>
+                  <br>
+                  <span id='comment'>// duplicate definitions</span><br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IMESettings</span>.<img src="w.gif"><span id='identifier'>DupExceptDef</span>&nbsp;: <span id='identifier'>TMEDupDef</span>; &nbsp;<span id='comment'>// "duplicate exceptions" definition</span><br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IMESettings</span>.<img src="w.gif"><span id='identifier'>DupFreezeDef</span>&nbsp;: <span id='identifier'>TMEDupDef</span>; &nbsp;<span id='comment'>// "duplicate main thread freezings" definition</span>
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IMESettings.ListThreads"></a>
+    <a name="IMESettings.ShowCpuRegisters"></a>
+    <a name="IMESettings.ShowStackDump"></a>
+    <a name="IMESettings.ShowDisAsm"></a>
+    <a name="IMESettings.HideUglyItems"></a>
+    <a name="IMESettings.ShowRelativeAddrs"></a>
+    <a name="IMESettings.ShowRelativeLines"></a>
+    <a name="IMESettings.FormatDisassembly"></a>
+    <a name="IMESettings.LimitDisassembly"></a>
+    <a name="IMESettings.PluginEnabled"></a>
+    <a name="IMESettings.VersionVar"></a>
+    <p>Let's move on to the <a href="madExceptSettings8.htm">eighth tab</a>:</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='comment'>// BUG REPORT SETTINGS</span><br>
+                  <br>
+                  <span id='comment'>// what to you want to be contained in the bug report</span><br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IMESettings</span>.<img src="w.gif"><span id='identifier'>ListThreads</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>boolean</span>; &nbsp;<span id='comment'>// callstack of all running threads</span><br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IMESettings</span>.<img src="w.gif"><span id='identifier'>ShowCpuRegisters</span>&nbsp;&nbsp;: <span id='identifier'>boolean</span>; &nbsp;<span id='comment'>// cpu registers</span><br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IMESettings</span>.<img src="w.gif"><span id='identifier'>ShowStackDump</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>boolean</span>; &nbsp;<span id='comment'>// stack dump</span><br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IMESettings</span>.<img src="w.gif"><span id='identifier'>ShowDisAsm</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>boolean</span>; &nbsp;<span id='comment'>// exception location disassembly</span><br>
+                  <br>
+                  <span id='comment'>// callstack options</span><br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IMESettings</span>.<img src="w.gif"><span id='identifier'>HideUglyItems</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>boolean</span>; &nbsp;<span id='comment'>// hide callstack items which have no line number information</span><br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IMESettings</span>.<img src="w.gif"><span id='identifier'>ShowRelativeAddrs</span>&nbsp;: <span id='identifier'>boolean</span>; &nbsp;<span id='comment'>// show address offset to the beginning of the procedure</span><br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IMESettings</span>.<img src="w.gif"><span id='identifier'>ShowRelativeLines</span>&nbsp;: <span id='identifier'>boolean</span>; &nbsp;<span id='comment'>// show line number offset to the beginning of the procedure</span><br>
+                  <br>
+                  <span id='comment'>// disassembly fine tuning</span><br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IMESettings</span>.<img src="w.gif"><span id='identifier'>FormatDisassembly</span>&nbsp;: <span id='identifier'>boolean</span>; &nbsp;<span id='comment'>// format disassembly output</span><br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IMESettings</span>.<img src="w.gif"><span id='identifier'>LimitDisassembly</span>&nbsp;&nbsp;: <span id='identifier'>integer</span>; &nbsp;<span id='comment'>// limit number of asm instructions &nbsp;(above & below exceptAddr)</span><br>
+                  <br>
+                  <span id='comment'>// registered plugins</span><br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IMESettings</span>.<img src="w.gif"><span id='identifier'>PluginEnabled</span>&nbsp;[<span id='identifier'>plugin</span>: <span id='bold'>string</span>] : <span id='identifier'>boolean</span>;<br>
+                  <br>
+                  <span id='comment'>// runtime only settings</span><br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>IMESettings</span>.<img src="m.gif"><span id='identifier'>VersionVar</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='bold'>string</span>; &nbsp;&nbsp;<span id='comment'>// contents of the version variable</span>
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IMESettings.GetAssistant"></a>
+    <p>The <a href="madExceptSettings9.htm">assistant creator</a> tab is mainly
+       about design time configuration. At runtime the only thing you can do is
+       use the existing assistants.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='comment'>// ASSISTANT CREATOR</span><br>
+                  <br>
+                  <span id='comment'>// create an instance of the assistant with the specified name</span><br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>IMESettings</span>.<img src="m.gif"><span id='identifier'>GetAssistant</span>&nbsp;(<span id='identifier'>name</span>: <span id='bold'>string</span>) : <a class="pascal" href="madNVAssistantUnit.htm#INVAssistant">INVAssistant</a>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <p>Last but not least we have the <a href="madExceptSettings10.htm">tenth
+       tab</a>:</p>
+    
+    <a name="IMESettings.TitleBar"></a>
+    <a name="IMESettings.ExceptMsg"></a>
+    <a name="IMESettings.FrozenMsg"></a>
+    <a name="IMESettings.BitFaultMsg"></a>
+    <a name="IMESettings.SendBtnCaption"></a>
+    <a name="IMESettings.SaveBtnCaption"></a>
+    <a name="IMESettings.PrintBtnCaption"></a>
+    <a name="IMESettings.ShowBtnCaption"></a>
+    <a name="IMESettings.ContinueBtnCaption"></a>
+    <a name="IMESettings.RestartBtnCaption"></a>
+    <a name="IMESettings.CloseBtnCaption"></a>
+    <a name="IMESettings.OkBtnCaption"></a>
+    <a name="IMESettings.DetailsBtnCaption"></a>
+    <a name="IMESettings.PleaseWaitTitle"></a>
+    <a name="IMESettings.PleaseWaitText"></a>
+    <a name="IMESettings.BugTrackerTitle"></a>
+    <a name="IMESettings.BugTrackerDescription"></a>
+    <a name="IMESettings.MailSubject"></a>
+    <a name="IMESettings.MailBody"></a>
+    <a name="IMESettings.SendBoxTitle"></a>
+    <a name="IMESettings.PrepareAttachMsg"></a>
+    <a name="IMESettings.MxLookupMsg"></a>
+    <a name="IMESettings.ConnectMsg"></a>
+    <a name="IMESettings.SendMailMsg"></a>
+    <a name="IMESettings.FieldsMsg"></a>
+    <a name="IMESettings.SendAttachMsg"></a>
+    <a name="IMESettings.SendFinalizeMsg"></a>
+    <a name="IMESettings.SendFailureMsg"></a>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='comment'>// CUSTOM STRINGS</span><br>
+                  <br>
+                  <span id='comment'>// except box</span><br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IMESettings</span>.<img src="w.gif"><span id='identifier'>TitleBar</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='bold'>string</span>; &nbsp;<span id='comment'>// title bar</span><br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IMESettings</span>.<img src="w.gif"><span id='identifier'>ExceptMsg</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='bold'>string</span>; &nbsp;<span id='comment'>// exception message</span><br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IMESettings</span>.<img src="w.gif"><span id='identifier'>FrozenMsg</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='bold'>string</span>; &nbsp;<span id='comment'>// frozen message</span><br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IMESettings</span>.<img src="w.gif"><span id='identifier'>BitFaultMsg</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='bold'>string</span>; &nbsp;<span id='comment'>// bit fault message</span><br>
+                  <br>
+                  <span id='comment'>// except box - button captions</span><br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IMESettings</span>.<img src="w.gif"><span id='identifier'>SendBtnCaption</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='bold'>string</span>;<br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IMESettings</span>.<img src="w.gif"><span id='identifier'>SaveBtnCaption</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='bold'>string</span>;<br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IMESettings</span>.<img src="w.gif"><span id='identifier'>PrintBtnCaption</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='bold'>string</span>;<br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IMESettings</span>.<img src="w.gif"><span id='identifier'>ShowBtnCaption</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='bold'>string</span>;<br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IMESettings</span>.<img src="w.gif"><span id='identifier'>ContinueBtnCaption</span>&nbsp;&nbsp;&nbsp;&nbsp;: <span id='bold'>string</span>;<br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IMESettings</span>.<img src="w.gif"><span id='identifier'>RestartBtnCaption</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='bold'>string</span>;<br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IMESettings</span>.<img src="w.gif"><span id='identifier'>CloseBtnCaption</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='bold'>string</span>;<br>
+                  <br>
+                  <span id='comment'>// message box - button captions</span><br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IMESettings</span>.<img src="w.gif"><span id='identifier'>OkBtnCaption</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='bold'>string</span>;<br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IMESettings</span>.<img src="w.gif"><span id='identifier'>DetailsBtnCaption</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='bold'>string</span>;<br>
+                  <br>
+                  <span id='comment'>// please wait box - strings</span><br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IMESettings</span>.<img src="w.gif"><span id='identifier'>PleaseWaitTitle</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='bold'>string</span>;<br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IMESettings</span>.<img src="w.gif"><span id='identifier'>PleaseWaitText</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='bold'>string</span>;<br>
+                  <br>
+                  <span id='comment'>// send</span><br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IMESettings</span>.<img src="w.gif"><span id='identifier'>BugTrackerTitle</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='bold'>string</span>; &nbsp;<span id='comment'>// bug tracker title</span><br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IMESettings</span>.<img src="w.gif"><span id='identifier'>BugTrackerDescription</span>&nbsp;: <span id='bold'>string</span>; &nbsp;<span id='comment'>// bug tracker description</span><br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IMESettings</span>.<img src="w.gif"><span id='identifier'>MailSubject</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='bold'>string</span>; &nbsp;<span id='comment'>// mail subject</span><br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IMESettings</span>.<img src="w.gif"><span id='identifier'>MailBody</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='bold'>string</span>; &nbsp;<span id='comment'>// mail body</span><br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IMESettings</span>.<img src="w.gif"><span id='identifier'>SendBoxTitle</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='bold'>string</span>; &nbsp;<span id='comment'>// send box title</span><br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IMESettings</span>.<img src="w.gif"><span id='identifier'>PrepareAttachMsg</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='bold'>string</span>; &nbsp;<span id='comment'>// prepare attachments</span><br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IMESettings</span>.<img src="w.gif"><span id='identifier'>MxLookupMsg</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='bold'>string</span>; &nbsp;<span id='comment'>// mx lookup</span><br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IMESettings</span>.<img src="w.gif"><span id='identifier'>ConnectMsg</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='bold'>string</span>; &nbsp;<span id='comment'>// server connect</span><br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IMESettings</span>.<img src="w.gif"><span id='identifier'>SendMailMsg</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='bold'>string</span>; &nbsp;<span id='comment'>// send mail</span><br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IMESettings</span>.<img src="w.gif"><span id='identifier'>FieldsMsg</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='bold'>string</span>; &nbsp;<span id='comment'>// set http fields</span><br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IMESettings</span>.<img src="w.gif"><span id='identifier'>SendAttachMsg</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='bold'>string</span>; &nbsp;<span id='comment'>// sending attachments</span><br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IMESettings</span>.<img src="w.gif"><span id='identifier'>SendFinalizeMsg</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='bold'>string</span>; &nbsp;<span id='comment'>// finalization</span><br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IMESettings</span>.<img src="w.gif"><span id='identifier'>SendFailureMsg</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='bold'>string</span>; &nbsp;<span id='comment'>// failure message</span>
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IMEModuleSettings.Reload"></a>
+    <p>Sometimes when using 3rd party translation tools it makes sense to ask
+       madExcept to reload its settings at a specific point in time. You can do
+       so by calling the following method:</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='comment'>// reload the madExcept settings from the resource section</span><br>
+                  <span id='bold'>procedure</span>&nbsp;<span id='identifier'>IMEModuleSettings</span>.<img src="m.gif"><span id='identifier'>Reload</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IMEAttachments"></a>
+    <a name="IMEAttachments.Lock"></a>
+    <a name="IMEAttachments.Unlock"></a>
+    <a name="IMEAttachments.ItemCount"></a>
+    <a name="IMEAttachments.GetItem"></a>
+    <a name="IMEAttachments.Add"></a>
+    <a name="IMEAttachments.Delete"></a>
+    <a name="IMEAttachments.Clone"></a>
+    <a name="IMEAttachments.Clear"></a>
+    <p>When sending emails and when uploading via HTTP you can add custom
+       attachments, if you like. These attachments are managed through the
+       "IMEAttachments" interface:</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>type</span><br>
+                  &nbsp;&nbsp;<span id='identifier'>IMEAttachments</span>&nbsp;= <span id='bold'>interface</span>&nbsp;[<span id='string'>'{7DE1DA9C-28D7-4527-954F-F951B88BEE41}'</span>];<br>
+                  <br>
+                  <span id='comment'>// add an attachment</span><br>
+                  <span id='comment'>// originalFile &nbsp;&nbsp;: full file path of the file which you want to attach</span><br>
+                  <span id='comment'>// sendAsFileName : under which name do you want the file to be sent</span><br>
+                  <span id='comment'>// zipFile &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: do you want to zip the attachment? into which zip archive?</span><br>
+                  <span id='comment'>// fieldName &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: under which field name shall the file be sent?</span><br>
+                  <span id='bold'>procedure</span>&nbsp;<span id='identifier'>IMEAttachments</span>.<img src="m.gif"><span id='identifier'>Add</span>&nbsp;(<span id='identifier'>originalFile</span>&nbsp;&nbsp;&nbsp;: <span id='identifier'>UnicodeString</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="e.gif">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>sendAsFileName</span>&nbsp;: <span id='bold'>string</span>&nbsp;= <span id='string'>''</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="e.gif">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>zipFile</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='bold'>string</span>&nbsp;= <span id='string'>''</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="e.gif">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>fieldName</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='bold'>string</span>&nbsp;= <span id='string'>''</span>);<br>
+                  <br>
+                  <span id='comment'>// delete an attachment</span><br>
+                  <span id='bold'>function</span>&nbsp;&nbsp;<span id='identifier'>IMEAttachments</span>.<img src="m.gif"><span id='identifier'>Delete</span>&nbsp;(<span id='identifier'>originalFile</span>: <span id='bold'>string</span>) : <span id='identifier'>boolean</span>;<br>
+                  <span id='comment'>// delete all attachments</span><br>
+                  <span id='bold'>procedure</span>&nbsp;<span id='identifier'>IMEAttachments</span>.<img src="m.gif"><span id='identifier'>Clear</span>;<br>
+                  <br>
+                  <span id='comment'>// enumerating attachments</span><br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IMEAttachments</span>.<img src="r.gif"><span id='identifier'>ItemCount</span>&nbsp;: <span id='identifier'>integer</span>;<br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>IMEAttachments</span>.<img src="m.gif"><span id='identifier'>GetItem</span>&nbsp;(<span id='bold'>index</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>integer</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="e.gif">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='bold'>var</span>&nbsp;<span id='identifier'>originalFile</span>&nbsp;&nbsp;&nbsp;: <span id='identifier'>UnicodeString</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="e.gif">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='bold'>var</span>&nbsp;<span id='identifier'>sendAsFileName</span>&nbsp;: <span id='bold'>string</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="e.gif">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='bold'>var</span>&nbsp;<span id='identifier'>zipFile</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='bold'>string</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="e.gif">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='bold'>var</span>&nbsp;<span id='identifier'>fieldName</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='bold'>string</span>) : <span id='identifier'>boolean</span>;<br>
+                  <br>
+                  <span id='comment'>// for thread safe handling you can lock and unlock the interface</span><br>
+                  <span id='bold'>procedure</span>&nbsp;<span id='identifier'>IMEAttachments</span>.<img src="m.gif"><span id='identifier'>Lock</span>;<br>
+                  <span id='bold'>procedure</span>&nbsp;<span id='identifier'>IMEAttachments</span>.<img src="m.gif"><span id='identifier'>Unlock</span>;<br>
+                  <br>
+                  <span id='comment'>// cloning is used internally by madExcept, maybe you find it useful, too</span><br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>IMEAttachments</span>.<img src="m.gif"><span id='identifier'>Clone</span>&nbsp;: <span id='identifier'>IMEAttachments</span>;<br>
+                  <br>
+                  <span id='comment'>// Examples:</span><br>
+                  <a class="pascal" href="#MESettings">MESettings</a>.<span id='identifier'>AdditionalAttachments</span>.<span id='identifier'>Add</span>(<span id='string'>'c:\boot.ini'</span>);<br>
+                  <span id='identifier'>exceptIntf</span>.<span id='identifier'>AdditionalAttachments</span>.<span id='identifier'>Add</span>(<span id='identifier'>ParamStr</span>(<span id='number'>0</span>), <span id='string'>''</span>, <span id='string'>'crashingExe.zip'</span>);
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IMEFields"></a>
+    <a name="IMEFields.Lock"></a>
+    <a name="IMEFields.Unlock"></a>
+    <a name="IMEFields.ItemCount"></a>
+    <a name="IMEFields.Items"></a>
+    <a name="IMEFields.FindItem"></a>
+    <a name="IMEFields.Contents"></a>
+    <a name="IMEFields.Add"></a>
+    <a name="IMEFields.Insert"></a>
+    <a name="IMEFields.Delete"></a>
+    <a name="IMEFields.Delete"></a>
+    <a name="IMEFields.Clone"></a>
+    <p>When uploading a bug report via HTTP, you can add custom fields, if you
+       want. These custom fields are managed through the "IMEFields" interface.
+       The very same interface is also used for managing the bug report header and
+       the bug report sections.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>type</span><br>
+                  &nbsp;&nbsp;<span id='identifier'>IMEFields</span>&nbsp;= <span id='bold'>interface</span>&nbsp;[<span id='string'>'{AF0EA7A7-2B36-46FD-BF2E-245ABA2740E2}'</span>];<br>
+                  <br>
+                  <span id='comment'>// add an item</span><br>
+                  <span id='bold'>procedure</span>&nbsp;<span id='identifier'>IMEFields</span>.<img src="m.gif"><span id='identifier'>Add</span>&nbsp;&nbsp;&nbsp;&nbsp;( &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>item</span>, <span id='identifier'>content</span>: <span id='bold'>string</span>);<br>
+                  <span id='bold'>procedure</span>&nbsp;<span id='identifier'>IMEFields</span>.<img src="m.gif"><span id='identifier'>Insert</span>&nbsp;(<span id='bold'>index</span>: <span id='identifier'>integer</span>; <span id='identifier'>item</span>, <span id='identifier'>content</span>: <span id='bold'>string</span>);<br>
+                  <br>
+                  <span id='comment'>// delete an item</span><br>
+                  <span id='bold'>procedure</span>&nbsp;<span id='identifier'>IMEFields</span>.<img src="m.gif"><span id='identifier'>Delete</span>&nbsp;(<span id='bold'>index</span>: <span id='identifier'>integer</span>); <span id='bold'>overload</span>;<br>
+                  <span id='bold'>procedure</span>&nbsp;<span id='identifier'>IMEFields</span>.<img src="m.gif"><span id='identifier'>Delete</span>&nbsp;(<span id='identifier'>item</span>&nbsp;: <span id='bold'>string</span>&nbsp;); <span id='bold'>overload</span>;<br>
+                  <br>
+                  <span id='comment'>// access to existing items</span><br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IMEFields</span>.<img src="r.gif"><span id='identifier'>ItemCount</span>&nbsp;: <span id='identifier'>integer</span>;<br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IMEFields</span>.<img src="w.gif"><span id='identifier'>Items</span>&nbsp;&nbsp;&nbsp;&nbsp;[<span id='bold'>index</span>&nbsp;: <span id='identifier'>integer</span>] : <span id='bold'>string</span>;<br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IMEFields</span>.<img src="w.gif"><span id='identifier'>Contents</span>&nbsp;[<span id='identifier'>item</span>&nbsp;&nbsp;: <span id='bold'>string</span>&nbsp;] : <span id='bold'>string</span>; <span id='bold'>default</span>;<br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>IMEFields</span>.<img src="m.gif"><span id='identifier'>FindItem</span>&nbsp;(<span id='identifier'>item</span>&nbsp;&nbsp;: <span id='bold'>string</span>&nbsp;) : <span id='identifier'>integer</span>;<br>
+                  <br>
+                  <span id='comment'>// for thread safe handling you can lock and unlock the interface</span><br>
+                  <span id='bold'>procedure</span>&nbsp;<span id='identifier'>IMEFields</span>.<img src="m.gif"><span id='identifier'>Lock</span>;<br>
+                  <span id='bold'>procedure</span>&nbsp;<span id='identifier'>IMEFields</span>.<img src="m.gif"><span id='identifier'>Unlock</span>;<br>
+                  <br>
+                  <span id='comment'>// cloning is used internally by madExcept, maybe you find it useful, too</span><br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>IMEFields</span>.<img src="m.gif"><span id='identifier'>Clone</span>&nbsp;: <span id='identifier'>IMEFields</span>;<br>
+                  <br>
+                  <span id='comment'>// Examples:</span><br>
+                  <a class="pascal" href="#MESettings">MESettings</a>.<span id='identifier'>AdditionalFields</span>[<span id='string'>'SomeField'</span>] := <span id='string'>'SomeText'</span>;<br>
+                  <span id='identifier'>exceptIntf</span>.<span id='identifier'>BugReportHeader</span>[<span id='string'>'smiley'</span>] := <span id='string'>':-)'</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </body>
+
+</html>

@@ -13,7 +13,7 @@ unit unt_plugin;
 
 interface
 
-uses Classes , windows, SysUtils, controls, Contnrs , forms, Registry ;
+uses Classes , windows, AnsiStrings, SysUtils, controls, Contnrs , forms, Registry ;
 
 Type
   TPlugin = class ;
@@ -267,7 +267,7 @@ var
 begin
    for c := 0 to TraceConfig.PluginList.count-1 do begin
       result := TPlugin (TraceConfig.PluginList.Items[c]) ;
-      if stricomp (pAnsiChar(result.FileName), pAnsiChar(filename)) = 0 then
+      if System.AnsiStrings.stricomp (pAnsiChar(result.FileName), pAnsiChar(filename)) = 0 then
          exit ;
    end ;
    result := nil ;
@@ -284,10 +284,9 @@ begin
    exit ;
    for c := 0 to TraceConfig.PluginList.count-1 do begin
       result := TPlugin (TraceConfig.PluginList.Items[c]) ;
-      if stricomp (pAnsiChar(result.PlugName), pAnsiChar(name)) = 0 then
+      if System.AnsiStrings.stricomp (pAnsiChar(result.PlugName), pAnsiChar(name)) = 0 then
          exit ;
    end ;
-   result := nil ;
 end;
 
 //------------------------------------------------------------------------------
@@ -470,7 +469,7 @@ begin
       if assigned (getPlugName) then begin
          SetLength (szName,1200) ;
          pName := PAnsiString(szName) ;
-         strcopy (pansiChar(pName), '') ;
+         System.AnsiStrings.strcopy (pansiChar(pName), '') ;
          GetPlugName (pName) ;   // get ANSI plugin name
          //PlugName := ansistring(pAnsiString(pName)) ;      // pName is Ansi
          tempStringW := BufToString (pAnsichar(pName),pAnsichar(pName)+1000) ;  // convert null terminated ansiString to string
@@ -737,10 +736,10 @@ begin
       exit ;
 
    SetLength (szPlugName,2000) ;
-   strcopy (pAnsiChar(szPlugName) , '') ;
+   System.AnsiStrings.strcopy (pAnsiChar(szPlugName) , '') ;
 
    SetLength (szException,2000) ;
-   strcopy (pAnsiChar(szException) , '') ;
+   System.AnsiStrings.strcopy (pAnsiChar(szException) , '') ;
 
    try
       //if assigned(cpptest) then
@@ -776,7 +775,7 @@ begin
       exit ;
 
    SetLength (szException,2000) ;
-   strcopy (pAnsiChar(szException) , '') ;
+   System.AnsiStrings.strcopy (pAnsiChar(szException) , '') ;
 
    try
       //TWrapperStart = procedure (PlugId : integer ; Parameter : PAnsiString; StrException : PAnsiString) stdcall ;
@@ -803,7 +802,7 @@ begin
      exit ;
 
    SetLength (szException,2000) ;
-   strcopy (pAnsiChar(szException) , '') ;
+   System.AnsiStrings.strcopy (pAnsiChar(szException) , '') ;
 
    try
       Stop (Plug.PlugID ,pAnsiString(szException)) ;
@@ -830,7 +829,7 @@ begin
       exit ;
 
    SetLength (szException,2000) ;
-   strcopy (pAnsiChar(szException) , '') ;
+   System.AnsiStrings.strcopy (pAnsiChar(szException) , '') ;
 
    try
       OnTimer (Plug.PlugID ,pAnsiString(szException)) ;    // wrapper is unicode
@@ -857,7 +856,7 @@ begin
       exit ;
 
    SetLength (szException,2000) ;
-   strcopy (pAnsiChar(szException) , '') ;
+   System.AnsiStrings.strcopy (pAnsiChar(szException) , '') ;
 
    try
       result := OnAction (plug.PlugID, WinId , ButtonId, NodeId, pAnsiString(szException) ) ;
@@ -884,7 +883,7 @@ begin
       exit ;
 
    SetLength (szException,2000) ;
-   strcopy (pansiChar(szException), '') ;
+   System.AnsiStrings.strcopy (pansiChar(szException), '') ;
 
    try
       result := OnBeforeDelete (Plug.PlugID,WinId , NodeId, pAnsiString(szException)) ;
@@ -910,7 +909,7 @@ begin
       exit ;
 
    SetLength (szException,2000) ;
-   strcopy (pAnsiChar(szException) , '') ;
+   System.AnsiStrings.strcopy (pAnsiChar(szException) , '') ;
 
    try
       Unload (Plug.PlugID ,pAnsiString(szException)) ;   // wrapper is unicode

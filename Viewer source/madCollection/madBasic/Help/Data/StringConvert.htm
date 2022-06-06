@@ -1,0 +1,213 @@
+<html>
+
+  <head>
+    <title>mad* Help...</title>
+    <meta name="description" content="mad* Help...">
+    <meta name="keywords" content="madshi, components, delphi">
+    <meta http-equiv="expires" content="900">
+    <link rel=stylesheet type="text/css" href="style.css">
+  </head>
+
+  <body background="bcklight.gif" bgcolor=#F8F8F8>
+    <a name="IntToStrEx"></a>
+    <a name="IntToHexEx"></a>
+    <table border=0 cellpadding=0 callspacing=0><tr>
+      <td valign=bottom>
+        <table border=0 cellpadding=0 cellspacing=0><tr><td bgcolor=#D8D8D8>
+          <table cellpadding=3 border=0>
+            <tr><td bgcolor=#FFFFF0>
+              <div id="verySmall"><br></div>
+              <div id="bigTitle">&nbsp;String Converting&nbsp;</div>
+              <div id="verySmall"><br></div>
+              <div id="small">
+                <a class="small" href="Content.htm">Content</a> /
+                <a class="small" href="madBasic.htm">madBasic</a> /
+                <a class="small" href="madStringsUnit.htm">madStrings Unit</a> /...
+              </div>
+            </td></tr>
+          </table>
+        </td></tr></table>
+      </td>
+      <td valign=bottom>
+        <table border=0 cellpadding=0 cellspacing=0><tr><td bgcolor=#D8D8D8>
+          <table cellpadding=7 border=0>
+            <tr><td bgcolor=#F4F4F8><a href="http://www.madshi.net">www.madshi.net</a></td></tr>
+          </table>
+        </td></tr></table>
+      </td>
+    </tr></table>
+    <p>The following functions work exactly like "SysUtils.IntToStr/Hex", but with
+       extended functionality. You can specify how long the resulting string has
+       to be at least and which character is used as the fill character. If you set
+       "minLen" to be negative the fill characters are appended to the end of the
+       string, else they're inserted at the beginning. Besides, IntToHexEx always
+       adds a "$" to the string.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>IntToStrEx</span>&nbsp;(<span id='identifier'>value</span>&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>integer</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>minLen</span>&nbsp;&nbsp;&nbsp;: <span id='identifier'>integer</span>&nbsp;= <span id='number'>1</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>fillChar</span>&nbsp;: <span id='identifier'>char</span>&nbsp;&nbsp;&nbsp;&nbsp;= <span id='string'>'0'</span>) : <span id='bold'>string</span>; <span id='bold'>overload</span>;<br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>IntToStrEx</span>&nbsp;(<span id='identifier'>value</span>&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>cardinal</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>minLen</span>&nbsp;&nbsp;&nbsp;: <span id='identifier'>integer</span>&nbsp;= <span id='number'>1</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>fillChar</span>&nbsp;: <span id='identifier'>char</span>&nbsp;&nbsp;&nbsp;&nbsp;= <span id='string'>'0'</span>) : <span id='bold'>string</span>; <span id='bold'>overload</span>;<br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>IntToStrEx</span>&nbsp;(<span id='identifier'>value</span>&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>int64</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>minLen</span>&nbsp;&nbsp;&nbsp;: <span id='identifier'>integer</span>&nbsp;= <span id='number'>1</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>fillChar</span>&nbsp;: <span id='identifier'>char</span>&nbsp;&nbsp;&nbsp;&nbsp;= <span id='string'>'0'</span>) : <span id='bold'>string</span>; <span id='bold'>overload</span>;<br>
+                  <br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>IntToHexEx</span>&nbsp;(<span id='identifier'>value</span>&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>integer</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>minLen</span>&nbsp;&nbsp;&nbsp;: <span id='identifier'>integer</span>&nbsp;= <span id='number'>1</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>fillChar</span>&nbsp;: <span id='identifier'>char</span>&nbsp;&nbsp;&nbsp;&nbsp;= <span id='string'>'0'</span>) : <span id='bold'>string</span>; <span id='bold'>overload</span>;<br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>IntToHexEx</span>&nbsp;(<span id='identifier'>value</span>&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>cardinal</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>minLen</span>&nbsp;&nbsp;&nbsp;: <span id='identifier'>integer</span>&nbsp;= <span id='number'>1</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>fillChar</span>&nbsp;: <span id='identifier'>char</span>&nbsp;&nbsp;&nbsp;&nbsp;= <span id='string'>'0'</span>) : <span id='bold'>string</span>; <span id='bold'>overload</span>;<br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>IntToHexEx</span>&nbsp;(<span id='identifier'>value</span>&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>int64</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>minLen</span>&nbsp;&nbsp;&nbsp;: <span id='identifier'>integer</span>&nbsp;= <span id='number'>1</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>fillChar</span>&nbsp;: <span id='identifier'>char</span>&nbsp;&nbsp;&nbsp;&nbsp;= <span id='string'>'0'</span>) : <span id='bold'>string</span>; <span id='bold'>overload</span>;<br>
+                  <br>
+                  <span id='comment'>// Examples:</span><br>
+                  <span id='identifier'>IntToHexEx</span>(<span id='number'>$123</span>&nbsp;&nbsp;&nbsp;) &nbsp;-> &nbsp;&nbsp;&nbsp;<span id='string'>'$123'</span><br>
+                  <span id='identifier'>IntToStrEx</span>( <span id='number'>123</span>, <span id='number'>5</span>) &nbsp;-> &nbsp;&nbsp;<span id='string'>'00123'</span><br>
+                  <span id='identifier'>IntToHexEx</span>(<span id='number'>$123</span>, <span id='number'>5</span>) &nbsp;-> &nbsp;<span id='string'>'$00123'</span>
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="StrToIntEx"></a>
+    <p>The function "StrToIntEx" converts a decimal or hexadecimal string to an
+       integer. No exceptions are raised, an invalid string results in an invalid
+       result. This function is *very* fast.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>StrToIntEx</span>&nbsp;(<span id='identifier'>hex</span>&nbsp;: <span id='identifier'>boolean</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>str</span>&nbsp;: <span id='identifier'>pchar</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>len</span>&nbsp;: <span id='identifier'>integer</span>) : <span id='identifier'>integer</span>;<br>
+                  <br>
+                  <span id='comment'>// Examples:</span><br>
+                  <span id='identifier'>StrToIntEx</span>(<span id='identifier'>false</span>, <span id='string'>'12345678'</span>, <span id='number'>8</span>) &nbsp;-> &nbsp;&nbsp;<span id='number'>12345678</span><br>
+                  <span id='identifier'>StrToIntEx</span>(<span id='identifier'>true</span>, &nbsp;<span id='string'>'12345678'</span>, <span id='number'>8</span>) &nbsp;-> &nbsp;<span id='number'>$12345678</span><br>
+                  <span id='identifier'>StrToIntEx</span>(<span id='identifier'>true</span>, &nbsp;<span id='string'>'1234test'</span>, <span id='number'>8</span>) &nbsp;-> &nbsp;<span id='number'>$12340E00</span>&nbsp;&nbsp;(<span id='identifier'>invalid</span>&nbsp;<span id='identifier'>result</span>)
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="BooleanToChar"></a>
+    <p>The function "BooleanToChar" converts a boolean value into a '+' or '-'
+       string:</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>BooleanToChar</span>&nbsp;(<span id='identifier'>bool</span>: <span id='identifier'>boolean</span>) : <span id='bold'>string</span>;<br>
+                  <br>
+                  <span id='comment'>// Examples:</span><br>
+                  <span id='identifier'>BooleanToChar</span>(<span id='identifier'>false</span>) &nbsp;-> &nbsp;<span id='string'>'-'</span><br>
+                  <span id='identifier'>BooleanToChar</span>(<span id='identifier'>true</span>&nbsp;) &nbsp;-> &nbsp;<span id='string'>'+'</span>
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="SizeToStr"></a>
+    <p>The following function converts a size ordinal into a string:</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>SizeToStr</span>&nbsp;(<span id='identifier'>size</span>: <span id='identifier'>int64</span>) : <span id='bold'>string</span>;<br>
+                  <br>
+                  <span id='comment'>// Examples:</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='number'>500</span>&nbsp;&nbsp;-> &nbsp;<span id='string'>'500 Bytes'</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='number'>1024</span>&nbsp;&nbsp;-> &nbsp;&nbsp;&nbsp;<span id='string'>'1 KB'</span><br>
+                  <span id='number'>1024</span>*<span id='number'>1024</span>&nbsp;&nbsp;-> &nbsp;&nbsp;&nbsp;<span id='string'>'1 MB'</span>
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="MsToStr"></a>
+    <p>The function "MsToStr" converts a millisecond value to a time string:</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>MsToStr</span>&nbsp;(<span id='identifier'>time</span>: <span id='identifier'>cardinal</span>) : <span id='bold'>string</span>;<br>
+                  <br>
+                  <span id='comment'>// Examples:</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='number'>15</span>&nbsp;&nbsp;-> &nbsp;&nbsp;&nbsp;<span id='string'>'15 ms'</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='number'>1000</span>&nbsp;&nbsp;-> &nbsp;&nbsp;&nbsp;&nbsp;<span id='string'>'1 s'</span><br>
+                  &nbsp;&nbsp;&nbsp;<span id='number'>60</span>*<span id='number'>1000</span>&nbsp;&nbsp;-> &nbsp;&nbsp;&nbsp;&nbsp;<span id='string'>'1 min'</span><br>
+                  <span id='number'>60</span>*<span id='number'>60</span>*<span id='number'>1000</span>&nbsp;&nbsp;-> &nbsp;&nbsp;&nbsp;&nbsp;<span id='string'>'1 h'</span><br>
+                  <span id='number'>61</span>*<span id='number'>60</span>*<span id='number'>1000</span>&nbsp;&nbsp;-> &nbsp;<span id='string'>'1:01 h'</span>
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="ErrorCodeToStr"></a>
+    <p>The following function converts a Windows error code into a string. Basically
+       it works like "SysUtils.SysErrorMessage", but it can also convert network
+       error codes, what "SysErrorMessage" doesn't do. However, in order to do that
+       it needs the dll "NetMsg.dll". If it's not found, the network errors can't be
+       converted. The dll is included in every winNT and win2000 installation.
+       Furthermore you can copy it into your application's folder, the NT/2000 dll
+       works also in win9x. I'm not sure about whether you're allowed to do so,
+       though.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>ErrorCodeToStr</span>&nbsp;(<span id='identifier'>error</span>: <span id='identifier'>cardinal</span>) : <span id='bold'>string</span>;<br>
+                  <br>
+                  <span id='comment'>// Examples:</span><br>
+                  <span id='identifier'>ERROR_ACCESS_DENIED</span>&nbsp;&nbsp;&nbsp;-> &nbsp;<span id='string'>'Access denied'</span><br>
+                  <span id='identifier'>NERR_InvalidComputer</span>&nbsp;&nbsp;-> &nbsp;<span id='string'>'This computer name is invalid'</span>
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </body>
+
+</html>

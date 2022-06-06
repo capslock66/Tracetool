@@ -1,0 +1,191 @@
+<html>
+
+  <head>
+    <title>mad* Help...</title>
+    <meta name="description" content="mad* Help...">
+    <meta name="keywords" content="madshi, components, delphi">
+    <meta http-equiv="expires" content="900">
+    <link rel=stylesheet type="text/css" href="style.css">
+  </head>
+
+  <body background="bcklight.gif" bgcolor=#F8F8F8>
+    <table border=0 cellpadding=0 callspacing=0><tr>
+      <td valign=bottom>
+        <table border=0 cellpadding=0 cellspacing=0><tr><td bgcolor=#D8D8D8>
+          <table cellpadding=3 border=0>
+            <tr><td bgcolor=#FFFFF0>
+              <div id="verySmall"><br></div>
+              <div id="bigTitle">&nbsp;Upload PHP Script&nbsp;</div>
+              <div id="verySmall"><br></div>
+              <div id="small">
+                <a class="small" href="Content.htm">Content</a> /
+                <a class="small" href="madExcept.htm">madExcept</a> /
+                <a class="small" href="madExceptSettings.htm">madExcept Settings</a> /
+                <a class="small" href="madExceptSettings5a.htm">madExcept Settings (Tab 5)</a> /...
+              </div>
+            </td></tr>
+          </table>
+        </td></tr></table>
+      </td>
+      <td valign=bottom>
+        <table border=0 cellpadding=0 cellspacing=0><tr><td bgcolor=#D8D8D8>
+          <table cellpadding=7 border=0>
+            <tr><td bgcolor=#F4F4F8><a href="http://www.madshi.net">www.madshi.net</a></td></tr>
+          </table>
+        </td></tr></table>
+      </td>
+    </tr></table>
+    <p>This is a PHP script which allows madExcept to upload a bug report to your
+       web server. Your web server will then email the bug report to you. The
+       script supports "Digest" authentication, also it's hard coded to send bug
+       reports only to your email address, so it can't be misused for spamming
+       purposes.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <?<span id='identifier'>php</span><br>
+                  <br>
+                  <span id='comment'>// ***************************************************************</span><br>
+                  <span id='comment'>// &nbsp;bugRepMailer.php &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;version: &nbsp;1.2 &nbsp;&nbsp;· &nbsp;date: 2012-05-06</span><br>
+                  <span id='comment'>// &nbsp;-------------------------------------------------------------</span><br>
+                  <span id='comment'>// &nbsp;exception handling</span><br>
+                  <span id='comment'>// &nbsp;-------------------------------------------------------------</span><br>
+                  <span id='comment'>// &nbsp;Copyright (C) 1999 - 2012 www.madshi.net, All Rights Reserved</span><br>
+                  <span id='comment'>// ***************************************************************</span><br>
+                  <br>
+                  <span id='comment'>// 2012-05-06 1.2 &nbsp;(1) added "Basic" and "Digest" authentication scheme</span><br>
+                  <span id='comment'>// &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(2) added download link to recommended phpmailer version</span><br>
+                  <span id='comment'>// 2006-09-06 1.1 &nbsp;(1) added "MailFrom" field evaluation</span><br>
+                  <span id='comment'>// &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(2) added failure indication, if mailing failed</span><br>
+                  <span id='comment'>// 2006-09-02 1.0 &nbsp;initial version donated by David Perkins (thank you!)</span><br>
+                  <br>
+                  <span id='comment'>// CAUTION: this script needs the file "class.phpmailer.php"</span><br>
+                  <span id='comment'>// the recommended version is 1.73 which you can download here:</span><br>
+                  <span id='comment'>// http://sourceforge.net/projects/phpmailer/files/phpmailer for php4/1.73/</span><br>
+                  <br>
+                  <span id='comment'>// CAUTION: authentication can be troublesome, see here for tips:</span><br>
+                  <span id='comment'>// http://www.besthostratings.com/articles/http-auth-php-cgi.html</span><br>
+                  <br>
+                  <span id='comment'>// ***************************************************************</span><br>
+                  <br>
+                  <span id='comment'>// enter your email address here</span><br>
+                  <span id='comment'>// it's hard coded so the script can't be misused by anyone for spamming</span><br>
+                  <span id='identifier'>$send_to</span>&nbsp;= <span id='string'>'your@email.com'</span>;<br>
+                  <br>
+                  <span id='comment'>// choose the authentication user/password</span><br>
+                  <span id='identifier'>$user</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= <span id='string'>'user'</span>;<br>
+                  <span id='identifier'>$password</span>&nbsp;= <span id='string'>'password'</span>;<br>
+                  <br>
+                  <span id='comment'>// the following fields should be overwritten by madExcept</span><br>
+                  <span id='comment'>// but you can still initialize them, just in case</span><br>
+                  <span id='identifier'>$subject</span>&nbsp;&nbsp;&nbsp;&nbsp;= <span id='string'>'bug report'</span>;<br>
+                  <span id='identifier'>$body</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= <span id='string'>'please find the bug report attached'</span>;<br>
+                  <span id='identifier'>$from_email</span>&nbsp;= <span id='string'>'sender@email.com'</span>;<br>
+                  <span id='identifier'>$from_name</span>&nbsp;&nbsp;= <span id='string'>'sender name'</span>;<br>
+                  <br>
+                  <span id='comment'>// ***************************************************************</span><br>
+                  <br>
+                  <span id='identifier'>require</span>&nbsp;<span id='string'>'class.phpmailer.php'</span>;<br>
+                  <br>
+                  <span id='comment'>// ***************************************************************</span><br>
+                  <br>
+                  <span id='identifier'>$realm</span>&nbsp;= <span id='string'>'madExcept upload script'</span>;<br>
+                  <br>
+                  <span id='comment'>// ***************************************************************</span><br>
+                  <span id='comment'>// here comes the real script code</span><br>
+                  <br>
+                  <span id='bold'>if</span>&nbsp;((<span id='identifier'>$user</span>&nbsp;!= <span id='string'>''</span>) && ((<span id='identifier'>$_SERVER</span>[<span id='string'>'PHP_AUTH_USER'</span>] != <span id='identifier'>$user</span>) || (<span id='identifier'>$_SERVER</span>[<span id='string'>'PHP_AUTH_PW'</span>] != <span id='identifier'>$password</span>)))<br>
+                  <span id='comment'>{</span><br>
+                  &nbsp;&nbsp;<span id='comment'>// read the Digest response</span><br>
+                  &nbsp;&nbsp;<span id='comment'>$needed_parts</span>&nbsp;= <span id='comment'>array</span>(<span id='string'>'nonce'</span>=><span id='comment'>1</span>, <span id='string'>'nc'</span>=><span id='comment'>1</span>, <span id='string'>'cnonce'</span>=><span id='comment'>1</span>, <span id='string'>'qop'</span>=><span id='comment'>1</span>, <span id='string'>'username'</span>=><span id='comment'>1</span>, <span id='string'>'uri'</span>=><span id='comment'>1</span>, <span id='string'>'response'</span>=><span id='comment'>1</span>);<br>
+                  &nbsp;&nbsp;<span id='comment'>$data</span>&nbsp;= <span id='comment'>array</span>();<br>
+                  &nbsp;&nbsp;<span id='comment'>$keys</span>&nbsp;= <span id='comment'>implode</span>(<span id='string'>'|'</span>, <span id='comment'>array_keys</span>(<span id='comment'>$needed_parts</span>));<br>
+                  &nbsp;&nbsp;<span id='comment'>preg_match_all</span>(<span id='string'>'@('</span>.<span id='comment'>$keys</span>.<span id='string'>')=(?:([\'</span>"])([^\<span id='comment'>2</span>]+?)\<span id='comment'>2</span>|([^\<span id='comment'>s</span>,]+))@<span id='string'>', $_SERVER['</span><span id='comment'>PHP_AUTH_DIGEST</span><span id='string'>'], $matches, PREG_SET_ORDER);'</span><br>
+                  &nbsp;&nbsp;<span id='comment'>foreach</span>&nbsp;(<span id='comment'>$matches</span>&nbsp;<span id='comment'>as</span>&nbsp;<span id='comment'>$m</span>)<br>
+                  &nbsp;&nbsp;<span id='comment'>{</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>$data</span>[<span id='comment'>$m</span>[<span id='comment'>1</span>]] = <span id='comment'>$m</span>[<span id='comment'>3</span>] ? <span id='comment'>$m</span>[<span id='comment'>3</span>] : <span id='comment'>$m</span>[<span id='comment'>4</span>];<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>unset</span>(<span id='comment'>$needed_parts</span>[<span id='comment'>$m</span>[<span id='comment'>1</span>]]);<br>
+                  &nbsp;&nbsp;<span id='comment'>}</span><br>
+                  &nbsp;&nbsp;<span id='comment'>// generate the valid response</span><br>
+                  &nbsp;&nbsp;<span id='number'>$A1</span>&nbsp;= <span id='identifier'>md5</span>(<span id='identifier'>$user</span>.<span id='string'>':'</span>.<span id='identifier'>$realm</span>.<span id='string'>':'</span>.<span id='identifier'>$password</span>);<br>
+                  &nbsp;&nbsp;<span id='number'>$A2</span>&nbsp;= <span id='identifier'>md5</span>(<span id='identifier'>$_SERVER</span>[<span id='string'>'REQUEST_METHOD'</span>].<span id='string'>':'</span>.<span id='identifier'>$data</span>[<span id='string'>'uri'</span>]);<br>
+                  &nbsp;&nbsp;<span id='identifier'>$valid_response</span>&nbsp;= <span id='identifier'>md5</span>(<span id='number'>$A1</span>.<span id='string'>':'</span>.<span id='identifier'>$data</span>[<span id='string'>'nonce'</span>].<span id='string'>':'</span>.<span id='identifier'>$data</span>[<span id='string'>'nc'</span>].<span id='string'>':'</span>.<span id='identifier'>$data</span>[<span id='string'>'cnonce'</span>].<span id='string'>':'</span>.<span id='identifier'>$data</span>[<span id='string'>'qop'</span>].<span id='string'>':'</span>.<span id='number'>$A2</span>);<br>
+                  &nbsp;&nbsp;<span id='comment'>// compare the response</span><br>
+                  &nbsp;&nbsp;<span id='bold'>if</span>&nbsp;((<span id='identifier'>$needed_parts</span>) || (<span id='identifier'>$data</span>[<span id='string'>'username'</span>] != <span id='identifier'>$user</span>) || (<span id='identifier'>$data</span>[<span id='string'>'response'</span>] != <span id='identifier'>$valid_response</span>))<br>
+                  &nbsp;&nbsp;<span id='comment'>{</span><br>
+                  <span id='comment'>// &nbsp;&nbsp;&nbsp;header('WWW-Authenticate: Basic realm="'.$realm.'"');</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>header</span>(<span id='string'>'WWW-Authenticate: Digest realm="'</span>.<span id='comment'>$realm</span>.<span id='string'>'",qop="auth",nonce="'</span>.<span id='comment'>uniqid</span>().<span id='string'>'",opaque="'</span>.<span id='comment'>md5</span>(<span id='comment'>$realm</span>).<span id='string'>'"'</span>);<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>header</span>(<span id='string'>'HTTP/1.1 401 Unauthorized'</span>);<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>exit</span>;<br>
+                  &nbsp;&nbsp;<span id='comment'>}</span><br>
+                  <span id='identifier'>}</span><br>
+                  <br>
+                  <span id='comment'>// setup a new PHPMailer instance and fill all needed fields</span><br>
+                  <span id='identifier'>$mailer</span>&nbsp;= <span id='identifier'>new</span>&nbsp;<span id='identifier'>PHPMailer</span>();<br>
+                  <span id='identifier'>$mailer</span>-><span id='identifier'>AddAddress</span>(<span id='identifier'>$send_to</span>);<br>
+                  <span id='identifier'>$mailer</span>-><span id='identifier'>Subject</span>&nbsp;&nbsp;= <span id='identifier'>$subject</span>;<br>
+                  <span id='identifier'>$mailer</span>-><span id='identifier'>Body</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= <span id='identifier'>$body</span>;<br>
+                  <span id='identifier'>$mailer</span>-><span id='identifier'>From</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= <span id='identifier'>$from_email</span>;<br>
+                  <span id='identifier'>$mailer</span>-><span id='identifier'>FromName</span>&nbsp;= <span id='identifier'>$from_name</span>;<br>
+                  <span id='identifier'>$mailer</span>-><span id='identifier'>Mailer</span>&nbsp;&nbsp;&nbsp;= <span id='string'>'mail'</span>;<br>
+                  <br>
+                  <span id='bold'>if</span>&nbsp;(<span id='identifier'>isset</span>(<span id='identifier'>$_POST</span>[<span id='string'>'MailSubject'</span>]))<br>
+                  &nbsp;&nbsp;<span id='identifier'>$mailer</span>-><span id='identifier'>Subject</span>&nbsp;= <span id='identifier'>$_POST</span>[<span id='string'>'MailSubject'</span>];<br>
+                  <span id='bold'>if</span>&nbsp;(<span id='identifier'>isset</span>(<span id='identifier'>$_POST</span>[<span id='string'>'MailBody'</span>]))<br>
+                  &nbsp;&nbsp;<span id='identifier'>$mailer</span>-><span id='identifier'>Body</span>&nbsp;= <span id='identifier'>$_POST</span>[<span id='string'>'MailBody'</span>];<br>
+                  <br>
+                  <span id='comment'>// let's parse a couple of fields which madExcept should have set</span><br>
+                  <span id='bold'>if</span>&nbsp;(<span id='identifier'>isset</span>(<span id='identifier'>$_POST</span>[<span id='string'>'MailFrom'</span>]))<br>
+                  <span id='comment'>{</span><br>
+                  &nbsp;&nbsp;<span id='comment'>$mailFrom</span>&nbsp;= <span id='comment'>$_POST</span>[<span id='string'>'MailFrom'</span>];<br>
+                  &nbsp;&nbsp;<span id='comment'>$i1</span>&nbsp;= <span id='comment'>strpos</span>(<span id='comment'>$mailFrom</span>, <span id='string'>'<'</span>);<br>
+                  &nbsp;&nbsp;<span id='comment'>$i2</span>&nbsp;= <span id='comment'>strrpos</span>(<span id='comment'>$mailFrom</span>, <span id='string'>'>'</span>);<br>
+                  &nbsp;&nbsp;<span id='comment'>if</span>&nbsp;(!((<span id='comment'>$i1</span>&nbsp;=== <span id='comment'>false</span>) || (<span id='comment'>$i2</span>&nbsp;=== <span id='comment'>false</span>) || (<span id='comment'>$i1</span>&nbsp;>= <span id='comment'>$i2</span>)))<br>
+                  &nbsp;&nbsp;<span id='comment'>{</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>$mailer</span>-><span id='comment'>FromName</span>&nbsp;= <span id='comment'>trim</span>(<span id='comment'>substr</span>(<span id='comment'>$mailFrom</span>, <span id='comment'>0</span>, <span id='comment'>$i1</span>));<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>$mailer</span>-><span id='comment'>addReplyTo</span>(<span id='comment'>trim</span>(<span id='comment'>substr</span>(<span id='comment'>$mailFrom</span>, <span id='comment'>$i1</span>&nbsp;+ <span id='comment'>1</span>, <span id='comment'>$i2</span>&nbsp;- <span id='comment'>$i1</span>&nbsp;- <span id='comment'>1</span>)), <span id='comment'>$mailer</span>-><span id='comment'>FromName</span>);<br>
+                  &nbsp;&nbsp;<span id='comment'>}</span>&nbsp;<span id='bold'>else</span>&nbsp;<span id='comment'>{</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>// assume only address without name is passed (ME bug as of 4.0.15)</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>$mailer</span>-><span id='comment'>addReplyTo</span>(<span id='comment'>trim</span>(<span id='comment'>$mailFrom</span>));<br>
+                  &nbsp;&nbsp;<span id='comment'>}</span><br>
+                  <span id='identifier'>}</span><br>
+                  <br>
+                  <span id='comment'>// add all attachments to the mail</span><br>
+                  <span id='identifier'>$found</span>&nbsp;= <span id='identifier'>false</span>;<br>
+                  <span id='identifier'>foreach</span>&nbsp;(<span id='identifier'>$_FILES</span>&nbsp;<span id='identifier'>as</span>&nbsp;<span id='identifier'>$arr</span>)<br>
+                  <span id='comment'>{</span><br>
+                  &nbsp;&nbsp;<span id='comment'>$mailer</span>-><span id='comment'>AddAttachment</span>(<span id='comment'>$arr</span>[<span id='string'>'tmp_name'</span>], <span id='comment'>$arr</span>[<span id='string'>'name'</span>]);<br>
+                  &nbsp;&nbsp;<span id='comment'>$found</span>&nbsp;= <span id='comment'>true</span>;<br>
+                  <span id='comment'>}</span>;<br>
+                  <span id='bold'>if</span>&nbsp;(<span id='identifier'>$found</span>)<br>
+                  &nbsp;&nbsp;<span id='identifier'>$mailer</span>-><span id='identifier'>AttachAll</span>();<br>
+                  <br>
+                  <span id='bold'>if</span>&nbsp;((<span id='identifier'>$found</span>) || (<span id='identifier'>isset</span>(<span id='identifier'>$_POST</span>[<span id='string'>'MailSubject'</span>])) || (<span id='identifier'>isset</span>(<span id='identifier'>$_POST</span>[<span id='string'>'MailBody'</span>])))<br>
+                  <span id='comment'>{</span><br>
+                  &nbsp;&nbsp;<span id='comment'>// we've found an attachment, or at least the mail subject or body was set</span><br>
+                  &nbsp;&nbsp;<span id='comment'>// so we send the email</span><br>
+                  &nbsp;&nbsp;<span id='comment'>if</span>&nbsp;(!<span id='comment'>$mailer</span>-><span id='comment'>Send</span>())<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>header</span>(<span id='string'>'HTTP/1.0 500 Mailing failed'</span>);<br>
+                  <span id='comment'>}</span><br>
+                  <span id='bold'>else</span><br>
+                  &nbsp;&nbsp;<span id='bold'>if</span>&nbsp;(<span id='identifier'>$_SERVER</span>[<span id='string'>'REQUEST_METHOD'</span>] != <span id='string'>'POST'</span>)<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>header</span>(<span id='string'>'HTTP/1.0 500 Bad request method'</span>);<br>
+                  &nbsp;&nbsp;<span id='bold'>else</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>header</span>(<span id='string'>'HTTP/1.0 500 No report received'</span>);<br>
+                  <br>
+                  ?>
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </body>
+
+</html>

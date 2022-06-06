@@ -1,0 +1,224 @@
+<html>
+
+  <head>
+    <title>mad* Help...</title>
+    <meta name="description" content="mad* Help...">
+    <meta name="keywords" content="madshi, components, delphi">
+    <meta http-equiv="expires" content="900">
+    <link rel=stylesheet type="text/css" href="style.css">
+  </head>
+
+  <body background="bcklight.gif" bgcolor=#F8F8F8>
+    <a name="IAce"></a>
+    <table border=0 cellpadding=0 callspacing=0><tr>
+      <td valign=bottom>
+        <table border=0 cellpadding=0 cellspacing=0><tr><td bgcolor=#D8D8D8>
+          <table cellpadding=3 border=0>
+            <tr><td bgcolor=#FFFFF0>
+              <div id="verySmall"><br></div>
+              <div id="bigTitle">&nbsp;ACEs&nbsp;</div>
+              <div id="verySmall"><br></div>
+              <div id="small">
+                <a class="small" href="Content.htm">Content</a> /
+                <a class="small" href="madSecurity.htm">madSecurity</a> /...
+              </div>
+            </td></tr>
+          </table>
+        </td></tr></table>
+      </td>
+      <td valign=bottom>
+        <table border=0 cellpadding=0 cellspacing=0><tr><td bgcolor=#D8D8D8>
+          <table cellpadding=7 border=0>
+            <tr><td bgcolor=#F4F4F8><a href="http://www.madshi.net">www.madshi.net</a></td></tr>
+          </table>
+        </td></tr></table>
+      </td>
+    </tr></table>
+    <p>The interface "IAce" implements everything you need when dealing with ACEs.
+       ACEs ("Access-Control Entries") are the items of <a href="ACLs.htm">ACLs</a> ("Access-Control
+       Lists"). An ACE can grant or deny specific access rights for a specific
+       user/group account. In win9x "madSecurity" simulates ACEs and internally
+       maps their meaning to win9x' APIs. A list of properties and methods can be
+       found in the <a href="IAceRef.htm">IAce Reference</a>.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>type</span>&nbsp;<span id='identifier'>IAce</span>&nbsp;= <span id='bold'>interface</span>&nbsp;(<a class="pascal" href="IBasicBaseInterface.htm#IBasic">IBasic</a>) [<span id='string'>'{449EEF60-3AB3-11D3-A52D-00005A180D69}'</span>];
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="TAceType"></a>
+    <a name="TAceFlag"></a>
+    <a name="TAceFlags"></a>
+    <a name="NewAce"></a>
+    <p>You can create a new ACE by giving in (at least) an <a href="Accounts.htm#IAccount">IAccount</a> object
+       and an access mask. In winNT/2000 you can also specify an ACE type and some
+       ACE flags.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>type</span><br>
+                  &nbsp;&nbsp;<span id='identifier'>TAceType</span>&nbsp;&nbsp;= (<span id='identifier'>atAllowed</span>, <span id='identifier'>atDenied</span>, <span id='identifier'>atSystemAudit</span>, <span id='identifier'>atSystemAlarm</span>,<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>atAllowedCompound</span>,<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>atAllowedObject</span>, <span id='identifier'>atDeniedObject</span>, <span id='identifier'>atSystemAuditObject</span>, <span id='identifier'>atSystemAlarmObject</span>);<br>
+                  &nbsp;&nbsp;<span id='identifier'>TAceFlag</span>&nbsp;&nbsp;= (<span id='identifier'>afObjectInherit</span>, <span id='identifier'>afContainerInherit</span>, <span id='identifier'>afNoPropagateInherit</span>, <span id='identifier'>afInheritOnly</span>, <span id='identifier'>afInherited</span>,<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>af20</span>, <span id='identifier'>afSuccessfulAccess</span>, <span id='identifier'>afFailedAccess</span>);<br>
+                  &nbsp;&nbsp;<span id='identifier'>TAceFlags</span>&nbsp;= <span id='bold'>set</span>&nbsp;<span id='bold'>of</span>&nbsp;<span id='identifier'>TAceFlag</span>;<br>
+                  <br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>NewAce</span>&nbsp;(<span id='bold'>const</span>&nbsp;<span id='identifier'>account</span>&nbsp;: <a class="pascal" href="Accounts.htm#IAccount">IAccount</a>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>access</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>cardinal</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>type_</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>TAceType</span>&nbsp;&nbsp;= <span id='identifier'>atAllowed</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>flags</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>TAceFlags</span>&nbsp;= [] &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;) : <span id='identifier'>IAce</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IAce.Account"></a>
+    <p>The property "Account" tells you which <a href="Accounts.htm#IAccount">IAccount</a> this ACE
+       effects.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IAce</span>.<img src="r.gif"><span id='identifier'>Account</span>&nbsp;: <a class="pascal" href="Accounts.htm#IAccount">IAccount</a>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IAce.Access"></a>
+    <p>The property "Access" lets you get and set the access mask of this ACE. In
+       win9x only the lower two bytes are used.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IAce</span>.<img src="w.gif"><span id='identifier'>Access</span>&nbsp;: <span id='identifier'>cardinal</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IAce.Type_"></a>
+    <a name="IAce.Flags"></a>
+    <p>The following properties give you full access over the type of the ACE
+       (in win9x its always "atAllowed") and the flags of this ACE (in win9x flags
+       are not supported). However, you can't change the ACE from non object to
+       object or vice versa.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IAce</span>.<img src="w.gif"><span id='identifier'>Type_</span>&nbsp;: <a class="pascal" href="#TAceType">TAceType</a>;<br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IAce</span>.<img src="w.gif"><span id='identifier'>Flags</span>&nbsp;: <a class="pascal" href="#TAceFlags">TAceFlags</a>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IAce.PAce"></a>
+    <a name="IAce.Size"></a>
+    <p>The following properties apply to the Windows standard ACE structure, which
+       is represented by the current "IAce" object. "PAce" gives you the address of
+       the get Windows ACE structure, "Size" gives you the size of the structure.
+       In win9x you'll get nil/0.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IAce</span>.<img src="r.gif"><span id='identifier'>PAce</span>&nbsp;: <span id='identifier'>pointer</span>;<br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IAce</span>.<img src="r.gif"><span id='identifier'>Size</span>&nbsp;: <span id='identifier'>word</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IAce.OwnerAcl"></a>
+    <p>The property "OwnerAcl" tell you to which ACL this ACE belongs, if any.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IAce</span>.<img src="r.gif"><span id='identifier'>OwnerAcl</span>&nbsp;: <a class="pascal" href="ACLs.htm#IAcl">IAcl</a>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IObjAce"></a>
+    <a name="IObjAce.ObjFlags"></a>
+    <a name="IObjAce.ObjType"></a>
+    <a name="IObjAce.InheritedObjType"></a>
+    <p>The following interface is only supported in winNT. It's an extension to the
+       "IAce" interface, adding some additional properties for object ACEs. See
+       also the <a href="IObjAceRef.htm">IObjAce Reference</a>.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>type</span>&nbsp;<span id='identifier'>IObjAce</span>&nbsp;= <span id='bold'>interface</span>&nbsp;(<span id='identifier'>IAce</span>) [<span id='string'>'{CBF310E0-46AC-11D3-A52D-00005A180D69}'</span>];<br>
+                  <br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IObjAce</span>.<img src="w.gif"><span id='identifier'>ObjFlags</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>cardinal</span>;<br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IObjAce</span>.<img src="w.gif"><span id='identifier'>ObjType</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>TGuid</span>;<br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IObjAce</span>.<img src="w.gif"><span id='identifier'>InheritedObjType</span>&nbsp;: <span id='identifier'>TGuid</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </body>
+
+</html>

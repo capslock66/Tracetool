@@ -1,0 +1,75 @@
+<html>
+
+  <head>
+    <title>mad* Help...</title>
+    <meta name="description" content="mad* Help...">
+    <meta name="keywords" content="madshi, components, delphi">
+    <meta http-equiv="expires" content="900">
+    <link rel=stylesheet type="text/css" href="style.css">
+  </head>
+
+  <body background="bcklight.gif" bgcolor=#F8F8F8>
+    <table border=0 cellpadding=0 callspacing=0><tr>
+      <td valign=bottom>
+        <table border=0 cellpadding=0 cellspacing=0><tr><td bgcolor=#D8D8D8>
+          <table cellpadding=3 border=0>
+            <tr><td bgcolor=#FFFFF0>
+              <div id="verySmall"><br></div>
+              <div id="bigTitle">&nbsp;madExcept Settings (Tab 7)&nbsp;</div>
+              <div id="verySmall"><br></div>
+              <div id="small">
+                <a class="small" href="Content.htm">Content</a> /
+                <a class="small" href="madExcept.htm">madExcept</a> /
+                <a class="small" href="madExceptSettings.htm">madExcept Settings</a> /...
+              </div>
+            </td></tr>
+          </table>
+        </td></tr></table>
+      </td>
+      <td valign=bottom>
+        <table border=0 cellpadding=0 cellspacing=0><tr><td bgcolor=#D8D8D8>
+          <table cellpadding=7 border=0>
+            <tr><td bgcolor=#F4F4F8><a href="http://www.madshi.net">www.madshi.net</a></td></tr>
+          </table>
+        </td></tr></table>
+      </td>
+    </tr></table>
+    <map name="SettingsMap">
+    <area shape="rect" coords="14,72,135,113" href="madExceptSettings1.htm" onMouseover="document.images[0].src='mes-ss40.gif'" onMouseout="document.images[0].src='mes-ss46.gif'">
+    <area shape="rect" coords="14,114,135,155" href="madExceptSettings2.htm" onMouseover="document.images[0].src='mes-ss41.gif'" onMouseout="document.images[0].src='mes-ss46.gif'">
+    <area shape="rect" coords="14,156,135,197" href="madExceptSettings3.htm" onMouseover="document.images[0].src='mes-ss42.gif'" onMouseout="document.images[0].src='mes-ss46.gif'">
+    <area shape="rect" coords="14,198,135,239" href="madExceptSettings4.htm" onMouseover="document.images[0].src='mes-ss43.gif'" onMouseout="document.images[0].src='mes-ss46.gif'">
+    <area shape="rect" coords="14,240,135,281" href="madExceptSettings5a.htm" onMouseover="document.images[0].src='mes-ss44a.gif'" onMouseout="document.images[0].src='mes-ss46.gif'">
+    <area shape="rect" coords="14,282,135,323" href="madExceptSettings6.htm" onMouseover="document.images[0].src='mes-ss45.gif'" onMouseout="document.images[0].src='mes-ss46.gif'">
+    <area shape="rect" coords="14,366,135,407" href="madExceptSettings8.htm" onMouseover="document.images[0].src='mes-ss47.gif'" onMouseout="document.images[0].src='mes-ss46.gif'">
+    <area shape="rect" coords="14,408,135,449" href="madExceptSettings9.htm" onMouseover="document.images[0].src='mes-ss48.gif'" onMouseout="document.images[0].src='mes-ss46.gif'">
+    <area shape="rect" coords="14,450,135,489" href="madExceptSettings10.htm" onMouseover="document.images[0].src='mes-ss49.gif'" onMouseout="document.images[0].src='mes-ss46.gif'">
+    </map>
+    <p>You can click on the tabs in the left side of the image:</p>
+    <p><img src='mes-ss46.gif' border=0 usemap="#SettingsMap" align=left style="margin-right:10pt;margin-bottom:10pt"></p>
+    <h3>basic bug report file settings...</h3>
+    <p>You have two possibilities how a bug report can be saved: You can specify
+       only a file name or a full file path. If you only specify a file name and
+       the user then presses the "save bug report" button, <a href="madExcept.htm" href="madExceptUnit.htm">madExcept</a> opens a
+       "save as" box. If you only specify a file name and the bug report shall be
+       be saved automatically, it's saved into the same folder where the current
+       process' executable file is stored. If you specify a full path, no "save box"
+       is shown, even if the user presses on the "save bug report" button, instead
+       the bug report file is directly written to the specified path. You can
+       specify what you want to happen if the bug report file already exists. The
+       new bug report can overwrite the old file, or the bug report can be appended
+       to the old file. In the latter case you can specify how big the bug report
+       file may get. If it gets longer than that specified limit, some of the
+       oldest bug reports are deleted from the file.</p>
+    <h3>duplicate bug reports...</h3>
+    <p>By default <a href="madExcept.htm" href="madExceptUnit.htm">madExcept</a> doesn't save "duplicate" bug reports. That means
+       if the bug report file already contains a report about the exception which
+       just occurred, <a href="madExcept.htm" href="madExceptUnit.htm">madExcept</a> just increases the "count" header field of
+       the saved bug report. If you prefer having all reports fully saved, you can
+       turn the default behaviour off.</p>
+    <p>When are 2 exceptions identical? What if the exception location is identical
+       but the callstack is not? Do you see that as identical enough or not? Since
+       your mileage may vary, you can tell <a href="madExcept.htm" href="madExceptUnit.htm">madExcept</a> what your understanding
+       of "identical" is.  </body>
+
+</html>

@@ -1,0 +1,125 @@
+<html>
+
+  <head>
+    <title>mad* Help...</title>
+    <meta name="description" content="mad* Help...">
+    <meta name="keywords" content="madshi, components, delphi">
+    <meta http-equiv="expires" content="900">
+    <link rel=stylesheet type="text/css" href="style.css">
+  </head>
+
+  <body background="bcklight.gif" bgcolor=#F8F8F8>
+    <table border=0 cellpadding=0 callspacing=0><tr>
+      <td valign=bottom>
+        <table border=0 cellpadding=0 cellspacing=0><tr><td bgcolor=#D8D8D8>
+          <table cellpadding=3 border=0>
+            <tr><td bgcolor=#FFFFF0>
+              <div id="verySmall"><br></div>
+              <div id="bigTitle">&nbsp;Driver Signing&nbsp;</div>
+              <div id="verySmall"><br></div>
+              <div id="small">
+                <a class="small" href="Content.htm">Content</a> /
+                <a class="small" href="madCodeHook.htm">madCodeHook</a> /
+                <a class="small" href="mchInjDrv.htm">Injection Driver</a> /...
+              </div>
+            </td></tr>
+          </table>
+        </td></tr></table>
+      </td>
+      <td valign=bottom>
+        <table border=0 cellpadding=0 cellspacing=0><tr><td bgcolor=#D8D8D8>
+          <table cellpadding=7 border=0>
+            <tr><td bgcolor=#F4F4F8><a href="http://www.madshi.net">www.madshi.net</a></td></tr>
+          </table>
+        </td></tr></table>
+      </td>
+    </tr></table>
+    <h3>Introduction</h3>
+    <p>The madCodeHook injection drivers need to be 
+       <a href="mchDrvCfg.htm">configured</a> and signed. If you skip one of these
+       steps, the drivers won't work at all.</p>
+    <h3>How To Get A Code Signing Certificate</h3>
+    <p>For signing you need to have your own Microsoft Authenticode code signing
+       certificate. There are several so-called "Certificate Authorities" which
+       are offering such certificates. The best known Certificate Authority is
+       probably Verisign. Please be aware that some certificates support signing
+       drivers, while others don't. GlobalSign and Verisign definitely support it.
+       A good value option seems to be
+       <a href="http://www.globalsign.com/code-signing/">GlobalSign</a>. They offer
+       code signing certificates for relatively affordable 219 USD per year.</p>
+    <p>The Certificate Authority usually requires you to provide some legal
+       documentation that will validate your company name. If you lack such
+       documentation for whatever reason, you can register for a DUNS (Dun and
+       Bradstreet) number <a href="http://www.dnb.com">here</a>. Please note that
+       the whole DUNS registration process can take months. So if you may need such
+       a DUNS number at some time in the future, I'd suggest to go ahead and
+       register as soon as possible, as it's a free service, IIRC.</p>
+    <h3>Windows 10 SecureBoot compatability - EV certificates</h3>
+    <p>Sometimes I hate Microsoft. As if code signing wasn't already expensive and
+       complicated enough, now for Windows 10 SecureBoot compatability we need to
+       buy the more expensive EV certificates. Furthermore, you need to send your
+       EV signed drivers in to Microsoft to have them co-signed by them. Really ugly.
+       Alternatively ask your users to disable SecureBoot, then the conventional
+       certificates will still work fine.</p>
+    <h3>SHA1 vs SHA256</h3>
+    <p>Older OSs only support SHA1 certificates. Newer OSs require SHA256 certificates,
+       if you don't want to get nasty complaints in Microsoft Edge/IE. Probably the
+       only proper solution is to sign with both SHA1 and SHA256 certificates. Or
+       alternatively use SHA256, but some older OSs only support that after the user
+       applied a patch. Ouch.</p>
+    <h3>File Signing Preparations</h3>
+    <p>From your Certificate Authority you will get two files: The private key
+       ("privateKey.pvk") and the certificate ("certificate.spc"). In addition to
+       that you need a matching cross certificate from Microsoft ("msCross.cer"),
+       which you can download
+       <a href="http://www.microsoft.com/whdc/winlogo/drvsign/crosscert.mspx">here</a>.
+       You will also need two tools, both of which are part of the "Windows Driver
+       Kit", which you can download <a href="http://microsoft.com/wdk">here</a>.
+       The tools we need are "pvk2pfx.exe" and "signtool.exe".</p>
+    <p>The two files you got from your Certificate Authority are hard to work with.
+       Because of that we combine them into a more comfortable file format
+       ("combined.pfx") by using the following command:</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                  <span id='mono'>
+                    pvk2pfx -pvk privateKey.pvk -spc certificate.spc -pfx combined.pfx<br>
+                           </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <p>Now on your development PC right click on the "combined.pfx" file and choose
+       "install". Your development PC is now ready for signing.</p>
+    <h3>How To Sign A Driver</h3>
+    <p>In order to sign a file, you can now run the "signtool" on your development
+       PC. You need to feed it quite a long list of parameters. Also for the
+       timestamping to work correctly, your development PC must have internet
+       access. If you timestamp the driver, the signature will stay valid even 
+       after the certificate has expired. If you don't timestamp the driver, the
+       signature will get invalid in the moment when the certificate expires, which
+       is usually not the desired behaviour, so timestamping is recommended. Here
+       are the parameters I'm using myself:</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                  <span id='mono'>
+                    signtool sign /ph /v /n "Your Company Name" /ac msCross.cer /t http://timestamp.verisign.com/scripts/timestamp.dll /d "DriverFileDescription" /du "www.yourCompany.com" c:\whatever\driver.sys<br>
+                           </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </body>
+
+</html>

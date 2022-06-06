@@ -1,0 +1,460 @@
+<html>
+
+  <head>
+    <title>mad* Help...</title>
+    <meta name="description" content="mad* Help...">
+    <meta name="keywords" content="madshi, components, delphi">
+    <meta http-equiv="expires" content="900">
+    <link rel=stylesheet type="text/css" href="style.css">
+  </head>
+
+  <body background="bcklight.gif" bgcolor=#F8F8F8>
+    <a name="TKernelObjType"></a>
+    <table border=0 cellpadding=0 callspacing=0><tr>
+      <td valign=bottom>
+        <table border=0 cellpadding=0 cellspacing=0><tr><td bgcolor=#D8D8D8>
+          <table cellpadding=3 border=0>
+            <tr><td bgcolor=#FFFFF0>
+              <div id="verySmall"><br></div>
+              <div id="bigTitle">&nbsp;Kernel Objects&nbsp;</div>
+              <div id="verySmall"><br></div>
+              <div id="small">
+                <a class="small" href="Content.htm">Content</a> /
+                <a class="small" href="madKernel.htm">madKernel</a> /...
+              </div>
+            </td></tr>
+          </table>
+        </td></tr></table>
+      </td>
+      <td valign=bottom>
+        <table border=0 cellpadding=0 cellspacing=0><tr><td bgcolor=#D8D8D8>
+          <table cellpadding=7 border=0>
+            <tr><td bgcolor=#F4F4F8><a href="http://www.madshi.net">www.madshi.net</a></td></tr>
+          </table>
+        </td></tr></table>
+      </td>
+    </tr></table>
+    <p>The win32 kernel supports a range of some important object types. E.g. we
+       have <a href="Processes.htm">Processes</a>, <a href="Threads.htm">Threads</a> or <a href="EventsAndMutexes.htm">Events and Mutexes</a>. All
+       those objects are supported by APIs, which are exported from kernel32.dll.
+       First let's look at the full list of available kernel objects. Please note
+       that some objects are only available in either the win9x or winNT family:</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>type</span><br>
+                  &nbsp;&nbsp;<span id='identifier'>TKernelObjType</span>&nbsp;= (<span id='identifier'>otUnknown</span>,<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>otSemaphore</span>,<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>otEvent</span>,<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>otMutex</span>,<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>otProcess</span>,<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>otThread</span>,<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>otTimer</span>,<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>otFileMapping</span>,<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>otFile</span>,<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>otSnapshot</span>, &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>// in winNT -> otFileMapping</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>otNotification</span>, &nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>// in winNT -> otFile</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>otComPort</span>, &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>// in winNT -> otFile</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>otPipe</span>, &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>// in winNT -> otFile</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>otMailslot</span>, &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>// in winNT -> otFile</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>otSocket</span>, &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>// in winNT -> otFile</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>otVxd</span>, &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>// only win9x</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>otConsoleInput</span>, &nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>// only win9x</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>otConsoleOutput</span>, &nbsp;&nbsp;&nbsp;<span id='comment'>// only win9x</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>otDirectory</span>, &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>// only winNT</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>otSymbolicLink</span>, &nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>// only winNT</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>otToken</span>, &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>// only winNT</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>otWindowStation</span>, &nbsp;&nbsp;&nbsp;<span id='comment'>// only winNT</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>otDesktop</span>, &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>// only winNT</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>otKey</span>, &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>// only winNT</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>otPort</span>, &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>// only winNT</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>otIoCompletion</span>, &nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>// only winNT</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>otKeyedEvent</span>); &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>// only winXP</span>
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IKernelObj"></a>
+    <p>madKernel implements one base interface for all the listed kernel objects,
+       which is named "IKernelObj". See also the <a href="IKernelObjRef.htm">IKernelObj Reference</a>.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>type</span>&nbsp;<span id='identifier'>IKernelObj</span>&nbsp;= <span id='bold'>interface</span>&nbsp;(<a class="pascal" href="IBasicBaseInterface.htm#IBasic">IBasic</a>) [<span id='string'>'{72518460-8D63-11D3-A52E-00005A180D69}'</span>];
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IKernelObj.ObjType"></a>
+    <a name="IKernelObj.ObjTypeStr"></a>
+    <a name="IKernelObj.ObjAddr"></a>
+    <p>The following methods are supported for all kernel objects:</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IKernelObj</span>.<img src="r.gif"><span id='identifier'>ObjType</span>&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>TKernelObjType</span>; &nbsp;<span id='comment'>// object type</span><br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IKernelObj</span>.<img src="r.gif"><span id='identifier'>ObjTypeStr</span>&nbsp;: <span id='bold'>string</span>; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>// object type name</span><br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IKernelObj</span>.<img src="r.gif"><span id='identifier'>ObjAddr</span>&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>pointer</span>; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>// address of this object's internal data structure</span><br>
+                  <br>
+                  <span id='comment'>// Examples:</span><br>
+                  <a class="pascal" href="Processes.htm#CurrentProcess">CurrentProcess</a>.<span id='identifier'>ObjType</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-> &nbsp;<span id='identifier'>otProcess</span><br>
+                  <a class="pascal" href="Threads.htm#CurrentThread">CurrentThread</a>&nbsp;.<span id='identifier'>ObjTypeStr</span>&nbsp;&nbsp;-> &nbsp;<span id='string'>'Thread'</span>
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IKernelObj.ObjName"></a>
+    <p>In the winNT family we can find out the name of the object. What the name is
+       depends on that type of the object. E.g. for files this is the full file
+       path. Unfortunately this method doesn't work for the win9x family.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IKernelObj</span>.<img src="r.gif"><span id='identifier'>ObjName</span>&nbsp;: <span id='bold'>string</span>; &nbsp;<span id='comment'>// only winNT</span><br>
+                  <br>
+                  <span id='comment'>// Example:</span><br>
+                  <a class="pascal" href="Handles.htm#Handle">Handle</a>(<span id='identifier'>CreateMutex</span>(<span id='bold'>nil</span>, <span id='identifier'>false</span>, <span id='string'>'TestMutex'</span>)).<a id="mono" href="Handles.htm#IHandle.KernelObj">KernelObj</a>.<span id='identifier'>ObjName</span>&nbsp;&nbsp;-> &nbsp;<span id='string'>'\BaseNamedObjects\TestMutex'</span>
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IKernelObj.ID"></a>
+    <p>If we have a <a href="Threads.htm">thread</a> or
+       <a href="Processes.htm">process</a> kernel object, we can also ask the ID of
+       the object. Only <a href="Threads.htm">threads</a> and <a href="Processes.htm">processes</a> have an ID, all other
+       objects don't:</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IKernelObj</span>.<img src="r.gif"><span id='identifier'>ID</span>&nbsp;: <span id='identifier'>cardinal</span>;<br>
+                  <br>
+                  <span id='comment'>// Examples:</span><br>
+                  <a class="pascal" href="Processes.htm#CurrentProcess">CurrentProcess</a>.<span id='identifier'>ID</span>&nbsp;&nbsp;-> &nbsp;<span id='identifier'>GetCurrentProcessID</span><br>
+                  <a class="pascal" href="Threads.htm#CurrentThread">CurrentThread</a>&nbsp;.<span id='identifier'>ID</span>&nbsp;&nbsp;-> &nbsp;<span id='identifier'>GetCurrentThreadID</span><br>
+                  <a class="pascal" href="EventsAndMutexes.htm#NewMutex">NewMutex</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.<span id='identifier'>ID</span>&nbsp;&nbsp;-> &nbsp;<span id='number'>0</span>
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IKernelObj.IsAutoEvent"></a>
+    <p>If we have an <a href="EventsAndMutexes.htm">event</a> kernel object, we can
+       ask whether we have an auto event or a manual event. Obviously this method
+       only works for <a href="EventsAndMutexes.htm">event</a> kernel objects:</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>IKernelObj</span>.<img src="m.gif"><span id='identifier'>IsAutoEvent</span>&nbsp;: <span id='identifier'>boolean</span>;<br>
+                  <br>
+                  <span id='comment'>// Examples:</span><br>
+                  <a class="pascal" href="EventsAndMutexes.htm#NewEvent">NewEvent</a>(<span id='identifier'>false</span>).<span id='identifier'>IsAutoEvent</span>&nbsp;&nbsp;-> &nbsp;<span id='identifier'>false</span><br>
+                  <a class="pascal" href="Handles.htm#Handle">Handle</a>(<span id='identifier'>CreateEvent</span>(<span id='bold'>nil</span>, <span id='identifier'>false</span>, <span id='identifier'>true</span>, <span id='bold'>nil</span>)).<a id="mono" href="Handles.htm#IHandle.KernelObj">KernelObj</a>.<span id='identifier'>IsAutoEvent</span>&nbsp;&nbsp;-> &nbsp;<span id='identifier'>true</span>
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IKernelObj.Handle"></a>
+    <p>Most win32 APIs only accept kernel object <a href="Handles.htm">handles</a>, so with this
+       property you can get a handle to our kernel object. If no handle is
+       available yet, a new one is created, e.g. by using OpenProcess for a
+       <a href="Processes.htm">process</a> kernel object. The new handle will be
+       opened with full access rights, if possible.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IKernelObj</span>.<img src="r.gif"><span id='identifier'>Handle</span>&nbsp;: <span id='identifier'>IHandle</span>;<br>
+                  <br>
+                  <span id='comment'>// Example:</span><br>
+                  <span id='identifier'>TerminateProcess</span>(<a class="pascal" href="Processes.htm#CurrentProcess">CurrentProcess</a>.<span id='identifier'>Handle</span>.<a id="mono" href="Handles.htm#IHandle.Handle">Handle</a>, <span id='number'>0</span>);
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IKernelObj.Handles"></a>
+    <p>If you want, you can list all <a href="Handles.htm">handles</a> which the current process has
+       open for this specific kernel object:</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IKernelObj</span>.<img src="r.gif"><span id='identifier'>Handles</span>&nbsp;: <span id='identifier'>IHandles</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IWaitableObj"></a>
+    <a name="IWaitableObjs"></a>
+    <p>Some kernel objects can be waited for, e.g. <a href="EventsAndMutexes.htm">Events and Mutexes</a>, but
+       also <a href="Processes.htm">Processes</a> and <a href="Threads.htm">Threads</a>. So we have a second base interface,
+       which implements general waiting functionality for those kind of kernel
+       objects. This interface is called "IWaitableObj". See the
+       <a href="IWaitableObjRef.htm">IWaitableObj Reference</a>. Additionally we have another base interface,
+       which can hold a list of waitable objects. It's called "IWaitableObjs". See
+       also the <a href="IWaitableObjsRef.htm">IWaitableObjs Reference</a>.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>type</span><br>
+                  &nbsp;&nbsp;<span id='identifier'>IWaitableObj</span>&nbsp;&nbsp;= <span id='bold'>interface</span>&nbsp;(<a class="pascal" href="#IKernelObj">IKernelObj</a>) &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[<span id='string'>'{72518461-8D63-11D3-A52E-00005A180D69}'</span>];<br>
+                  &nbsp;&nbsp;<span id='identifier'>IWaitableObjs</span>&nbsp;= <span id='bold'>interface</span>&nbsp;(<a class="pascal" href="ICustomBasicListBaseInterface.htm#ICustomBasicList">ICustomBasicList</a>) [<span id='string'>'{A1DB3222-8EB8-11D3-A52E-00005A180D69}'</span>];
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="TWaitForMessage"></a>
+    <a name="TWaitForMessages"></a>
+    <a name="CWaitForAllEvents"></a>
+    <a name="CWaitForAllInput"></a>
+    <a name="CWaitForInput"></a>
+    <a name="CWaitForMouse"></a>
+    <p>Now let's first define some types and constants which are needed for the
+       following "WaitFor" methods/functions:</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>type</span><br>
+                  &nbsp;&nbsp;<span id='identifier'>TWaitForMessage</span>&nbsp;&nbsp;&nbsp;= (<span id='identifier'>wfKey</span>, <span id='identifier'>wfMouseMove</span>, <span id='identifier'>wfMouseButton</span>, <span id='identifier'>wfPostMessage</span>,<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>wfTimer</span>, <span id='identifier'>wfPaint</span>, <span id='identifier'>wfSendMessage</span>, <span id='identifier'>wfHotKey</span>, <span id='identifier'>wfAllPostMessage</span>);<br>
+                  &nbsp;&nbsp;<span id='identifier'>TWaitForMessages</span>&nbsp;&nbsp;= <span id='bold'>set</span>&nbsp;<span id='bold'>of</span>&nbsp;<span id='identifier'>TWaitForMessage</span>;<br>
+                  <br>
+                  <span id='bold'>const</span><br>
+                  &nbsp;&nbsp;<span id='identifier'>CWaitForAllEvents</span>&nbsp;: <span id='identifier'>TWaitForMessages</span>&nbsp;= [<span id='identifier'>wfKey</span>, <span id='identifier'>wfMouseMove</span>, <span id='identifier'>wfMouseButton</span>,<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>wfPostMessage</span>, <span id='identifier'>wfTimer</span>, <span id='identifier'>wfPaint</span>,<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>wfHotKey</span>];<br>
+                  &nbsp;&nbsp;<span id='identifier'>CWaitForAllInput</span>&nbsp;&nbsp;: <span id='identifier'>TWaitForMessages</span>&nbsp;= [<span id='identifier'>wfKey</span>, <span id='identifier'>wfMouseMove</span>, <span id='identifier'>wfMouseButton</span>,<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>wfPostMessage</span>, <span id='identifier'>wfTimer</span>, <span id='identifier'>wfPaint</span>,<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>wfSendMessage</span>, <span id='identifier'>wfHotKey</span>];<br>
+                  &nbsp;&nbsp;<span id='identifier'>CWaitForInput</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>TWaitForMessages</span>&nbsp;= [<span id='identifier'>wfKey</span>, <span id='identifier'>wfMouseMove</span>, <span id='identifier'>wfMouseButton</span>];<br>
+                  &nbsp;&nbsp;<span id='identifier'>CWaitForMouse</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>TWaitForMessages</span>&nbsp;= [ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>wfMouseMove</span>, <span id='identifier'>wfMouseButton</span>];
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IWaitableObj.WaitFor"></a>
+    <a name="IWaitableObjs.WaitFor"></a>
+    <a name="WaitFor"></a>
+    <p>There are several "WaitFor" methods/functions. You can wait for one
+       "IWaitableObj" kernel object or for multiple "IWaitableObjs" kernel objects.
+       "WaitFor" waits, until the specified objects enter "signaled state". E.g. a
+       process is in signaled state, if it is not running anymore. If you set
+       "waitAll&nbsp;=&nbsp;false", the wait is stopped as soon as one of the specified
+       objects is signaled. In that case the index of the signaled object is
+       returned.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>IWaitableObj</span>. <img src="m.gif"><span id='identifier'>WaitFor</span>&nbsp;(<span id='identifier'>milliseconds</span>&nbsp;&nbsp;&nbsp;: <span id='identifier'>cardinal</span>&nbsp;&nbsp;= <span id='identifier'>INFINITE</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="e.gif">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>handleMessages</span>&nbsp;: <span id='identifier'>boolean</span>&nbsp;&nbsp;&nbsp;= <span id='identifier'>true</span>&nbsp;&nbsp;&nbsp;&nbsp;) : <span id='identifier'>boolean</span>;<br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>IWaitableObjs</span>.<img src="m.gif"><span id='identifier'>WaitFor</span>&nbsp;(<span id='identifier'>waitAll</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>boolean</span>&nbsp;&nbsp;&nbsp;= <span id='identifier'>false</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="e.gif">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>milliseconds</span>&nbsp;&nbsp;&nbsp;: <span id='identifier'>cardinal</span>&nbsp;&nbsp;= <span id='identifier'>INFINITE</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="e.gif">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>handleMessages</span>&nbsp;: <span id='identifier'>boolean</span>&nbsp;&nbsp;&nbsp;= <span id='identifier'>true</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="e.gif">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='bold'>index</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <a class="pascal" href="SignedTypes.htm#TPInteger">TPInteger</a>&nbsp;= <span id='bold'>nil</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;) : <span id='identifier'>boolean</span>;<br>
+                  <br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>WaitFor</span>&nbsp;(<span id='bold'>const</span>&nbsp;<span id='identifier'>objects</span>&nbsp;&nbsp;: <span id='bold'>array</span>&nbsp;<span id='bold'>of</span>&nbsp;<a class="pascal" href="IBasicBaseInterface.htm#IBasic">IBasic</a>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>waitAll</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>boolean</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= <span id='identifier'>false</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>milliseconds</span>&nbsp;&nbsp;&nbsp;: <span id='identifier'>cardinal</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= <span id='identifier'>INFINITE</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>handleMessages</span>&nbsp;: <span id='identifier'>boolean</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= <span id='identifier'>true</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>msgs</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <a class="pascal" href="#TWaitForMessages">TWaitForMessages</a>&nbsp;= [];<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>alertable</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>boolean</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= <span id='identifier'>false</span>&nbsp;&nbsp;&nbsp;) : <span id='identifier'>integer</span>; <span id='bold'>overload</span>;<br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>WaitFor</span>&nbsp;(<span id='bold'>const</span>&nbsp;<span id='identifier'>objects</span>&nbsp;&nbsp;: <a class="pascal" href="ICustomBasicListBaseInterface.htm#ICustomBasicList">ICustomBasicList</a>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>waitAll</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>boolean</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= <span id='identifier'>false</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>milliseconds</span>&nbsp;&nbsp;&nbsp;: <span id='identifier'>cardinal</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= <span id='identifier'>INFINITE</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>handleMessages</span>&nbsp;: <span id='identifier'>boolean</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= <span id='identifier'>true</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>msgs</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <a class="pascal" href="#TWaitForMessages">TWaitForMessages</a>&nbsp;= [];<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>alertable</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>boolean</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= <span id='identifier'>false</span>&nbsp;&nbsp;&nbsp;) : <span id='identifier'>integer</span>; <span id='bold'>overload</span>;<br>
+                  <br>
+                  <span id='comment'>// Examples:</span><br>
+                  <a class="pascal" href="Processes.htm#NewProcess">NewProcess</a>(<span id='string'>'calc.exe'</span>).<span id='identifier'>WaitFor</span>;<br>
+                  <span id='identifier'>WaitFor</span>([<a class="pascal" href="Processes.htm#Process">Process</a>(<span id='string'>'calc.exe'</span>), <a class="pascal" href="Processes.htm#Process">Process</a>(<span id='string'>'notepad.exe'</span>)], <span id='identifier'>true</span>); &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IWaitableObj.Notify"></a>
+    <a name="IWaitableObjs.Notify"></a>
+    <a name="Notify"></a>
+    <p>The "Notify" methods/functions don't wait, they return at once. But the
+       specified kernel objects are watched for in the background. As soon as the
+       wanted state is reached, a notification message is sent to the specified
+       window:</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>IWaitableObj</span>. <img src="m.gif"><span id='identifier'>Notify</span>&nbsp;(<span id='identifier'>window</span>&nbsp;&nbsp;: <span id='identifier'>cardinal</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="e.gif">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>msg</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>cardinal</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;) : <span id='identifier'>boolean</span>;<br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>IWaitableObjs</span>.<img src="m.gif"><span id='identifier'>Notify</span>&nbsp;(<span id='identifier'>window</span>&nbsp;&nbsp;: <span id='identifier'>cardinal</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="e.gif">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>msg</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>cardinal</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="e.gif">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>waitAll</span>&nbsp;: <span id='identifier'>boolean</span>&nbsp;= <span id='identifier'>false</span>) : <span id='identifier'>boolean</span>;<br>
+                  <br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>Notify</span>&nbsp;(<span id='identifier'>window</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>cardinal</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>msg</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>cardinal</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='bold'>const</span>&nbsp;<span id='identifier'>objects</span>&nbsp;: <span id='bold'>array</span>&nbsp;<span id='bold'>of</span>&nbsp;<a class="pascal" href="IBasicBaseInterface.htm#IBasic">IBasic</a>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>waitAll</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>boolean</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>msgs</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <a class="pascal" href="#TWaitForMessages">TWaitForMessages</a>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>alertable</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>boolean</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;) : <span id='identifier'>boolean</span>; <span id='bold'>overload</span>;<br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>Notify</span>&nbsp;(<span id='identifier'>window</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>cardinal</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>msg</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>cardinal</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='bold'>const</span>&nbsp;<span id='identifier'>objects</span>&nbsp;: <a class="pascal" href="ICustomBasicListBaseInterface.htm#ICustomBasicList">ICustomBasicList</a>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>waitAll</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>boolean</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= <span id='identifier'>false</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>msgs</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <a class="pascal" href="#TWaitForMessages">TWaitForMessages</a>&nbsp;= [];<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>alertable</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>boolean</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= <span id='identifier'>false</span>) : <span id='identifier'>boolean</span>; <span id='bold'>overload</span>;<br>
+                  <br>
+                  <span id='comment'>// Example:</span><br>
+                  <span id='bold'>procedure</span>&nbsp;<span id='identifier'>ExplorerWasClosed</span>(<span id='identifier'>window</span>, <span id='identifier'>msg</span>: <span id='identifier'>cardinal</span>; <span id='identifier'>wParam</span>, <span id='identifier'>lParam</span>: <span id='identifier'>integer</span>; <span id='bold'>var</span>&nbsp;<span id='identifier'>result</span>: <span id='identifier'>integer</span>);<br>
+                  <span id='bold'>begin</span><br>
+                  &nbsp;&nbsp;<span id='identifier'>MessageBox</span>(<span id='number'>0</span>, <span id='string'>'Explorer was closed!'</span>, <span id='string'>'info'</span>, <span id='number'>0</span>);<br>
+                  <span id='bold'>end</span>;<br>
+                  <br>
+                  <span id='bold'>initialization</span><br>
+                  &nbsp;&nbsp;<a class="pascal" href="Processes.htm#Process">Process</a>(<span id='string'>'explorer.exe'</span>).<span id='identifier'>Notify</span>(<a class="pascal" href="MsgHandlerStuff.htm#MsgHandlerWindow">MsgHandlerWindow</a>, <a class="pascal" href="MsgHandlerStuff.htm#AddMsgHandler">AddMsgHandler</a>(<span id='identifier'>ExplorerWasClosed</span>));<br>
+                  <span id='bold'>end</span>.
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IWaitableObj.WouldWait"></a>
+    <a name="IWaitableObjs.WouldWait"></a>
+    <a name="WouldWait"></a>
+    <p>The "WouldWait" methods/functions test, whether we would have to wait for
+       the specified objects:</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>IWaitableObj</span>. <img src="m.gif"><span id='identifier'>WouldWait</span>&nbsp;: <span id='identifier'>boolean</span>;<br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>IWaitableObjs</span>.<img src="m.gif"><span id='identifier'>WouldWait</span>&nbsp;(<span id='identifier'>waitAll</span>: <span id='identifier'>boolean</span>) : <span id='identifier'>boolean</span>;<br>
+                  <br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>WouldWait</span>&nbsp;(<span id='bold'>const</span>&nbsp;<span id='identifier'>objects</span>&nbsp;: <span id='bold'>array</span>&nbsp;<span id='bold'>of</span>&nbsp;<a class="pascal" href="IBasicBaseInterface.htm#IBasic">IBasic</a>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>waitAll</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>boolean</span>&nbsp;= <span id='identifier'>false</span>&nbsp;) : <span id='identifier'>boolean</span>; <span id='bold'>overload</span>;<br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>WouldWait</span>&nbsp;(<span id='bold'>const</span>&nbsp;<span id='identifier'>objects</span>&nbsp;: <a class="pascal" href="ICustomBasicListBaseInterface.htm#ICustomBasicList">ICustomBasicList</a>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>waitAll</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>boolean</span>&nbsp;= <span id='identifier'>false</span>&nbsp;) : <span id='identifier'>boolean</span>; <span id='bold'>overload</span>;<br>
+                  <br>
+                  <span id='comment'>// Example:</span><br>
+                  <span id='identifier'>boolVar</span>&nbsp;:= <a class="pascal" href="EventsAndMutexes.htm#Mutex">Mutex</a>(<span id='identifier'>aMutexHandle</span>).<span id='identifier'>WouldWait</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IOtherKernelObj"></a>
+    <p>Finally we have an interface for all the kernel objects that have no own
+       interface (yet).</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>type</span>&nbsp;<span id='identifier'>IOtherKernelObj</span>&nbsp;= <span id='bold'>interface</span>&nbsp;(<span id='identifier'>IKernelObj</span>) [<span id='string'>'{4910FAC0-B61E-11D3-A530-00005A180D69}'</span>];
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </body>
+
+</html>

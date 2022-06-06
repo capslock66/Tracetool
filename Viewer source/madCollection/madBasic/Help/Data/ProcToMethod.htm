@@ -1,0 +1,191 @@
+<html>
+
+  <head>
+    <title>mad* Help...</title>
+    <meta name="description" content="mad* Help...">
+    <meta name="keywords" content="madshi, components, delphi">
+    <meta http-equiv="expires" content="900">
+    <link rel=stylesheet type="text/css" href="style.css">
+  </head>
+
+  <body background="bcklight.gif" bgcolor=#F8F8F8>
+    <table border=0 cellpadding=0 callspacing=0><tr>
+      <td valign=bottom>
+        <table border=0 cellpadding=0 cellspacing=0><tr><td bgcolor=#D8D8D8>
+          <table cellpadding=3 border=0>
+            <tr><td bgcolor=#FFFFF0>
+              <div id="verySmall"><br></div>
+              <div id="bigTitle">&nbsp;ProcedureToMethod&nbsp;</div>
+              <div id="verySmall"><br></div>
+              <div id="small">
+                <a class="small" href="Content.htm">Content</a> /
+                <a class="small" href="madBasic.htm">madBasic</a> /
+                <a class="small" href="madToolsUnit.htm">madTools Unit</a> /...
+              </div>
+            </td></tr>
+          </table>
+        </td></tr></table>
+      </td>
+      <td valign=bottom>
+        <table border=0 cellpadding=0 cellspacing=0><tr><td bgcolor=#D8D8D8>
+          <table cellpadding=7 border=0>
+            <tr><td bgcolor=#F4F4F8><a href="http://www.madshi.net">www.madshi.net</a></td></tr>
+          </table>
+        </td></tr></table>
+      </td>
+    </tr></table>
+    <p>Let's begin with a little example. Imagine you want to handle application
+       exceptions (see "TApplication.OnException") in a little unit, which you plan
+       to use in all your projects. Now it would seem logical to try something like
+       the following:</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>unit</span>&nbsp;<span id='identifier'>HandleApplicationExceptions</span>;<br>
+                  <br>
+                  <span id='bold'>interface</span><br>
+                  <br>
+                  <span id='bold'>implementation</span><br>
+                  <br>
+                  <span id='bold'>uses</span>&nbsp;<span id='identifier'>Forms</span>, <span id='identifier'>SysUtils</span>;<br>
+                  <br>
+                  <span id='bold'>procedure</span>&nbsp;<span id='identifier'>ApplicationException</span>(<span id='identifier'>Sender</span>: <span id='identifier'>TObject</span>; <span id='identifier'>E</span>: <span id='identifier'>Exception</span>);<br>
+                  <span id='bold'>begin</span><br>
+                  <span id='bold'>end</span>;<br>
+                  <br>
+                  <span id='bold'>initialization</span><br>
+                  &nbsp;&nbsp;<span id='identifier'>Application</span>.<span id='identifier'>OnException</span>&nbsp;:= <span id='identifier'>ApplicationException</span>;<br>
+                  <span id='bold'>end</span>.
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <p>But unfortunately Delphi complains in the last line, because it doesn't like
+       to assign "ApplicationException" to the "OnException" event. And the reason
+       is simple. Look at the event's type definition:</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>type</span>&nbsp;<span id='identifier'>TExceptionEvent</span>&nbsp;= <span id='bold'>procedure</span>&nbsp;(<span id='identifier'>Sender</span>: <span id='identifier'>TObject</span>; <span id='identifier'>E</span>: <span id='identifier'>Exception</span>) <span id='bold'>of</span>&nbsp;<span id='bold'>object</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <p>The decisive part is the "of object". This means that "OnException" wants to
+       have a method rather than a procedure. So normally you would have to do
+       something like this:</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>unit</span>&nbsp;<span id='identifier'>HandleApplicationExceptions</span>;<br>
+                  <br>
+                  <span id='bold'>interface</span><br>
+                  <br>
+                  <span id='bold'>implementation</span><br>
+                  <br>
+                  <span id='bold'>uses</span>&nbsp;<span id='identifier'>Forms</span>, <span id='identifier'>SysUtils</span>;<br>
+                  <br>
+                  <span id='bold'>type</span><br>
+                  &nbsp;&nbsp;<span id='identifier'>TDummyClass</span>&nbsp;= <span id='bold'>class</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='bold'>procedure</span>&nbsp;<span id='identifier'>ApplicationException</span>(<span id='identifier'>Sender</span>: <span id='identifier'>TObject</span>; <span id='identifier'>E</span>: <span id='identifier'>Exception</span>);<br>
+                  &nbsp;&nbsp;<span id='bold'>end</span>;<br>
+                  <br>
+                  <span id='bold'>procedure</span>&nbsp;<span id='identifier'>TDummyClass</span>.<span id='identifier'>ApplicationException</span>(<span id='identifier'>Sender</span>: <span id='identifier'>TObject</span>; <span id='identifier'>E</span>: <span id='identifier'>Exception</span>);<br>
+                  <span id='bold'>begin</span><br>
+                  <span id='bold'>end</span>;<br>
+                  <br>
+                  <span id='bold'>var</span>&nbsp;<span id='identifier'>dummyClass</span>&nbsp;: <span id='identifier'>TDummyClass</span>;<br>
+                  <br>
+                  <span id='bold'>initialization</span><br>
+                  &nbsp;&nbsp;<span id='identifier'>dummyClass</span>&nbsp;:= <span id='identifier'>TDummyClass</span>.<span id='identifier'>Create</span>;<br>
+                  &nbsp;&nbsp;<span id='identifier'>Application</span>.<span id='identifier'>OnException</span>&nbsp;:= <span id='identifier'>dummyClass</span>.<span id='identifier'>ApplicationException</span>;<br>
+                  <span id='bold'>finalization</span><br>
+                  &nbsp;&nbsp;<span id='identifier'>dummyClass</span>.<span id='identifier'>Free</span>;<br>
+                  <span id='bold'>end</span>.
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="ProcedureToMethod"></a>
+    <p>This compiles and works alright. But wait - isn't this a bit complicated?
+       Yes, it is. At least IMHO. So I've written a little function named
+       "ProcedureToMethod", which will make our life a bit easier:</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>ProcedureToMethod</span>&nbsp;(<span id='identifier'>self</span>: <span id='identifier'>TObject</span>; <span id='identifier'>procAddr</span>: <span id='identifier'>pointer</span>) : <span id='identifier'>TMethod</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <p>This function kind of converts a procedure to a method. But please note, that
+       your procedure must have an additional "Self" parameter at the first
+       position. This parameter will receive whatever you enter into
+       ProcedureToMethod. In our example it's "nil", because we don't need it:</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>unit</span>&nbsp;<span id='identifier'>HandleApplicationExceptions</span>;<br>
+                  <br>
+                  <span id='bold'>interface</span><br>
+                  <br>
+                  <span id='bold'>implementation</span><br>
+                  <br>
+                  <span id='bold'>uses</span>&nbsp;<span id='identifier'>Forms</span>, <span id='identifier'>SysUtils</span>, <span id='identifier'>madTools</span>;<br>
+                  <br>
+                  <span id='bold'>procedure</span>&nbsp;<span id='identifier'>ApplicationException</span>(<span id='identifier'>Self</span>, <span id='identifier'>Sender</span>: <span id='identifier'>TObject</span>; <span id='identifier'>E</span>: <span id='identifier'>Exception</span>);<br>
+                  <span id='bold'>begin</span><br>
+                  <span id='bold'>end</span>;<br>
+                  <br>
+                  <span id='bold'>initialization</span><br>
+                  &nbsp;&nbsp;<span id='identifier'>Application</span>.<span id='identifier'>OnException</span>&nbsp;:= <span id='identifier'>TExceptionEvent</span>(<span id='identifier'>ProcedureToMethod</span>(<span id='bold'>nil</span>, @<span id='identifier'>ApplicationException</span>));<br>
+                  <span id='bold'>end</span>.
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <p>Well, this looks better (shorter), doesn't it? And it's faster, too, because
+       you don't need to create and free a dummy class.</p>
+  </body>
+
+</html>

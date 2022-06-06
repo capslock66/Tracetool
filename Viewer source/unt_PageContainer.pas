@@ -13,8 +13,9 @@ unit unt_PageContainer;
 interface
 
 uses
-  types, Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,VirtualTrees ,
-  Dialogs, ComCtrls, ToolWin, ActnList, ImgList, ExtCtrls, Menus, CommCtrl,pscMenu;
+  system.Contnrs, types, Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,VirtualTrees ,
+  Dialogs, ComCtrls, ToolWin, ActnList, ImgList, ExtCtrls, Menus, CommCtrl,pscMenu,
+  System.Actions;
 
 type
   TDockingPagecontrol = class ;

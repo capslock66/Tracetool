@@ -308,7 +308,22 @@ begin
 
             IconOffset := 0 ;
             if assigned (treeview.OnGetImageIndex) then begin
-               treeview.OnGetImageIndex(treeview , Node , {Kind} ikNormal , Col.Index , Ghosted, ImageIndex);
+               //TVTGetImageEvent = procedure(
+               //   Sender: TBaseVirtualTree;
+               //   Node: PVirtualNode;
+               //   Kind: TVTImageKind;
+               //   Column: TColumnIndex;
+               //   var Ghosted: Boolean;
+               //   var ImageIndex: TImageIndex) of object;
+
+               treeview.OnGetImageIndex(
+                 treeview ,
+                 Node ,
+                 {Kind} ikNormal ,
+                 TColumnIndex(Col.Index) ,
+                 Ghosted,
+                 TImageIndex(ImageIndex));
+
                if ImageIndex <> -1 then begin
                   // write first the icon to a bitmap
                   TempImage.Picture := nil; // clear before paint

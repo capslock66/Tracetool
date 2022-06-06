@@ -1,0 +1,122 @@
+<html>
+
+  <head>
+    <title>mad* Help...</title>
+    <meta name="description" content="mad* Help...">
+    <meta name="keywords" content="madshi, components, delphi">
+    <meta http-equiv="expires" content="900">
+    <link rel=stylesheet type="text/css" href="style.css">
+  </head>
+
+  <body background="bcklight.gif" bgcolor=#F8F8F8>
+    <a name="GetLongFileName"></a>
+    <a name="GetShortFileName"></a>
+    <table border=0 cellpadding=0 callspacing=0><tr>
+      <td valign=bottom>
+        <table border=0 cellpadding=0 cellspacing=0><tr><td bgcolor=#D8D8D8>
+          <table cellpadding=3 border=0>
+            <tr><td bgcolor=#FFFFF0>
+              <div id="verySmall"><br></div>
+              <div id="bigTitle">&nbsp;File Stuff&nbsp;</div>
+              <div id="verySmall"><br></div>
+              <div id="small">
+                <a class="small" href="Content.htm">Content</a> /
+                <a class="small" href="madBasic.htm">madBasic</a> /
+                <a class="small" href="madToolsUnit.htm">madTools Unit</a> /...
+              </div>
+            </td></tr>
+          </table>
+        </td></tr></table>
+      </td>
+      <td valign=bottom>
+        <table border=0 cellpadding=0 cellspacing=0><tr><td bgcolor=#D8D8D8>
+          <table cellpadding=7 border=0>
+            <tr><td bgcolor=#F4F4F8><a href="http://www.madshi.net">www.madshi.net</a></td></tr>
+          </table>
+        </td></tr></table>
+      </td>
+    </tr></table>
+    <p>Sometimes you get a short file name (including short path) from somewhere,
+       e.g. from "ParamStr". Or you get a file name, and you just want to make
+       sure that it is really completely in long format. Now you might want to say:
+       Why not using that "GetFullPathName" API, it looks promising! It really does,
+       but if you tried it, you'll know that it doesn't work as expected. In win98
+       and win2000 you can use the brand new API "GetLongPathName", but you surely
+       want your programs to run under win95 and winNT4, too. So forget it again.
+       The solution is explained
+       <a href="http://support.microsoft.com/support/kb/articles/q154/8/22.asp?FR=0">here</a>
+       and realized (and made better) in my function "GetLongFileName".</p>
+    <p>At other times you need to convert a long file name (including path) to a
+       short one (8.3 format). E.g. if you want to call CreateProcess to start a
+       16-bit program together with a file that is saved in a location, which is not
+       8.3-compatible. In such a case you can use my function "GetShortFileName",
+       which converts the file name and the full path to 8.3 format.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>GetLongFileName</span>&nbsp;&nbsp;(<span id='identifier'>fileName</span>: <span id='bold'>string</span>) : <span id='bold'>string</span>;<br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>GetShortFileName</span>&nbsp;(<span id='identifier'>fileName</span>: <span id='bold'>string</span>) : <span id='bold'>string</span>;<br>
+                  <br>
+                  <span id='comment'>// Examples:</span><br>
+                  <span id='identifier'>GetShortFileName</span>(<span id='string'>'C:\Program Files\Example File.txt'</span>) &nbsp;-> &nbsp;<span id='string'>'C:\Progra~1\Exampl~1.txt'</span><br>
+                  <span id='identifier'>GetLongFileName</span>&nbsp;(<span id='string'>'C:\Progra~1\Exampl~1.txt'</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;) &nbsp;-> &nbsp;<span id='string'>'C:\Program Files\Example File.txt'</span>
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="GetFileVersion"></a>
+    <a name="GetFileVersionStr"></a>
+    <a name="FileVersionToStr"></a>
+    <p>Most *.dll and some *.exe files offer file version information. This info is
+       quite useful, if you want to know which file is newer, because sometimes the
+       file time stamp is the time when you installed the dll on your harddisk
+       instead of the time, when the dll was compiled.</p>
+    <p>The function "GetFileVersion" gives you the file version information as an
+       int64. This is very comfortable for direct comparisons. If you want to have
+       the version information in form of a nice display string, just call
+       "FileVersionToStr", giving in the int64 value that you got from
+       "GetFileVersion".</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>GetFileVersion</span>&nbsp;&nbsp;&nbsp;&nbsp;(<span id='identifier'>file_</span>&nbsp;&nbsp;&nbsp;: <span id='bold'>string</span>) : <span id='identifier'>int64</span>;<br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>GetFileVersionStr</span>&nbsp;(<span id='identifier'>file_</span>&nbsp;&nbsp;&nbsp;: <span id='bold'>string</span>) : <span id='bold'>string</span>;<br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>FileVersionToStr</span>&nbsp;&nbsp;(<span id='identifier'>version</span>&nbsp;: <span id='identifier'>int64</span>&nbsp;) : <span id='bold'>string</span>;<br>
+                  <br>
+                  <span id='comment'>// Example:</span><br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>CheckDllUpdate</span>&nbsp;: <span id='identifier'>boolean</span>;<br>
+                  <span id='bold'>var</span>&nbsp;<span id='identifier'>version1</span>, <span id='identifier'>version2</span>&nbsp;: <span id='identifier'>int64</span>;<br>
+                  <span id='bold'>begin</span><br>
+                  &nbsp;&nbsp;<span id='identifier'>DownloadFile</span>(<span id='string'>'www.yourSite.com/example.dll'</span>, <span id='string'>'c:\yourProgram\download\'</span>);<br>
+                  &nbsp;&nbsp;<span id='identifier'>version1</span>&nbsp;:= <span id='identifier'>GetFileVersion</span>(<span id='string'>'c:\yourProgram\example.dll'</span>);<br>
+                  &nbsp;&nbsp;<span id='identifier'>version2</span>&nbsp;:= <span id='identifier'>GetFileVersion</span>(<span id='string'>'c:\yourProgram\download\example.dll'</span>);<br>
+                  &nbsp;&nbsp;<span id='identifier'>result</span>&nbsp;:= <span id='identifier'>version2</span>&nbsp;> <span id='identifier'>version1</span>;<br>
+                  &nbsp;&nbsp;<span id='bold'>if</span>&nbsp;<span id='identifier'>result</span>&nbsp;<span id='bold'>then</span>&nbsp;<span id='bold'>begin</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>CopyFile</span>(<span id='string'>'c:\yourProgram\download\example.dll'</span>, <span id='string'>'c:\yourProgram\example.dll'</span>, <span id='identifier'>false</span>);<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>ShowMessage</span>(<span id='string'>'The file example.dll was renewed, the new version is '</span>&nbsp;+<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>FileVersionToStr</span>(<span id='identifier'>version2</span>) + <span id='string'>'.'</span>);<br>
+                  &nbsp;&nbsp;<span id='bold'>end</span>;<br>
+                  <span id='bold'>end</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </body>
+
+</html>

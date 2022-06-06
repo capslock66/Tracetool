@@ -1,0 +1,140 @@
+<html>
+
+  <head>
+    <title>mad* Help...</title>
+    <meta name="description" content="mad* Help...">
+    <meta name="keywords" content="madshi, components, delphi">
+    <meta http-equiv="expires" content="900">
+    <link rel=stylesheet type="text/css" href="style.css">
+  </head>
+
+  <body background="bcklight.gif" bgcolor=#F8F8F8>
+    <a name="SubStrCount"></a>
+    <table border=0 cellpadding=0 callspacing=0><tr>
+      <td valign=bottom>
+        <table border=0 cellpadding=0 cellspacing=0><tr><td bgcolor=#D8D8D8>
+          <table cellpadding=3 border=0>
+            <tr><td bgcolor=#FFFFF0>
+              <div id="verySmall"><br></div>
+              <div id="bigTitle">&nbsp;Sub String Stuff&nbsp;</div>
+              <div id="verySmall"><br></div>
+              <div id="small">
+                <a class="small" href="Content.htm">Content</a> /
+                <a class="small" href="madBasic.htm">madBasic</a> /
+                <a class="small" href="madStringsUnit.htm">madStrings Unit</a> /...
+              </div>
+            </td></tr>
+          </table>
+        </td></tr></table>
+      </td>
+      <td valign=bottom>
+        <table border=0 cellpadding=0 cellspacing=0><tr><td bgcolor=#D8D8D8>
+          <table cellpadding=7 border=0>
+            <tr><td bgcolor=#F4F4F8><a href="http://www.madshi.net">www.madshi.net</a></td></tr>
+          </table>
+        </td></tr></table>
+      </td>
+    </tr></table>
+    <p>To check how many sub strings a string contains, you can use the following
+       function:</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>SubStrCount</span>&nbsp;(<span id='identifier'>str</span>: <span id='bold'>string</span>; <span id='identifier'>delimiter</span>: <span id='identifier'>char</span>&nbsp;= <span id='string'>'|'</span>) : <span id='identifier'>integer</span>;<br>
+                  <br>
+                  <span id='comment'>// Examples:</span><br>
+                  <span id='identifier'>SubStrCount</span>(<span id='string'>''</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;) &nbsp;-> &nbsp;<span id='number'>0</span><br>
+                  <span id='identifier'>SubStrCount</span>(<span id='string'>' '</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;) &nbsp;-> &nbsp;<span id='number'>1</span><br>
+                  <span id='identifier'>SubStrCount</span>(<span id='string'>'1|2|3'</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;) &nbsp;-> &nbsp;<span id='number'>3</span><br>
+                  <span id='identifier'>SubStrCount</span>(<span id='string'>'1,2,3'</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;) &nbsp;-> &nbsp;<span id='number'>1</span><br>
+                  <span id='identifier'>SubStrCount</span>(<span id='string'>'1,2,3'</span>, <span id='string'>','</span>) &nbsp;-> &nbsp;<span id='number'>3</span>
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="SubStr"></a>
+    <p>The function "SubStr" returns the specified sub string. The first sub string
+       has the index 1.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>SubStr</span>&nbsp;(<span id='identifier'>str</span>: <span id='bold'>string</span>; <span id='bold'>index</span>: <span id='identifier'>cardinal</span>; <span id='identifier'>delimiter</span>: <span id='identifier'>char</span>&nbsp;= <span id='string'>'|'</span>) : <span id='bold'>string</span>;<br>
+                  <br>
+                  <span id='comment'>// Examples:</span><br>
+                  <span id='identifier'>SubStr</span>(<span id='string'>'1|2|3'</span>, <span id='number'>1</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;) &nbsp;-> &nbsp;<span id='string'>'1'</span><br>
+                  <span id='identifier'>SubStr</span>(<span id='string'>'1,2,3'</span>, <span id='number'>1</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;) &nbsp;-> &nbsp;<span id='string'>'1,2,3'</span><br>
+                  <span id='identifier'>SubStr</span>(<span id='string'>'1,2,3'</span>, <span id='number'>2</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;) &nbsp;-> &nbsp;<span id='string'>''</span><br>
+                  <span id='identifier'>SubStr</span>(<span id='string'>'1,2,3'</span>, <span id='number'>3</span>, <span id='string'>','</span>) &nbsp;-> &nbsp;<span id='string'>'3'</span>
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="SubStrExists"></a>
+    <a name="SubTextExists"></a>
+    <p>The following functions check whether a specified sub string exists.
+       "SubStrExists" checks that case sensitively, "SubTextExists" checks case
+       insensitively.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>SubStrExists</span>&nbsp;&nbsp;(<span id='identifier'>str</span>: <span id='bold'>string</span>; <span id='identifier'>subStr</span>&nbsp;: <span id='bold'>string</span>; <span id='identifier'>delimiter</span>: <span id='identifier'>char</span>&nbsp;= <span id='string'>'|'</span>) : <span id='identifier'>boolean</span>;<br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>SubTextExists</span>&nbsp;(<span id='identifier'>str</span>: <span id='bold'>string</span>; <span id='identifier'>subText</span>: <span id='bold'>string</span>; <span id='identifier'>delimiter</span>: <span id='identifier'>char</span>&nbsp;= <span id='string'>'|'</span>) : <span id='identifier'>boolean</span>;<br>
+                  <br>
+                  <span id='comment'>// Examples:</span><br>
+                  <span id='identifier'>SubStrExsts</span>&nbsp;(<span id='string'>'Dog;Cat;Mouse'</span>, <span id='string'>'Dog'</span>, <span id='string'>';'</span>) &nbsp;-> &nbsp;<span id='identifier'>true</span><br>
+                  <span id='identifier'>SubStrExsts</span>&nbsp;(<span id='string'>'Dog;Cat;Mouse'</span>, <span id='string'>'dog'</span>, <span id='string'>';'</span>) &nbsp;-> &nbsp;<span id='identifier'>false</span><br>
+                  <span id='identifier'>SubTextExsts</span>(<span id='string'>'Dog;Cat;Mouse'</span>, <span id='string'>'dog'</span>, <span id='string'>';'</span>) &nbsp;-> &nbsp;<span id='identifier'>true</span>
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="FormatSubStrs"></a>
+    <p>The function "FormatSubStrs" deletes all leading and trailing control
+       characters and spaces from each sub string and then removes all empty sub
+       strings:</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>procedure</span>&nbsp;<span id='identifier'>FormatSubStrs</span>&nbsp;(<span id='bold'>var</span>&nbsp;<span id='identifier'>str</span>: <span id='bold'>string</span>; <span id='identifier'>delimiter</span>: <span id='identifier'>char</span>&nbsp;= <span id='string'>'|'</span>);<br>
+                  <br>
+                  <span id='comment'>// Examples:</span><br>
+                  <span id='identifier'>FormatSubStr</span>(<span id='string'>'|||  |1||2|  '</span>) &nbsp;-> &nbsp;<span id='string'>'1|2'</span>
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </body>
+
+</html>

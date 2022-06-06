@@ -1,0 +1,81 @@
+<html>
+
+  <head>
+    <title>mad* Help...</title>
+    <meta name="description" content="mad* Help...">
+    <meta name="keywords" content="madshi, components, delphi">
+    <meta http-equiv="expires" content="900">
+    <link rel=stylesheet type="text/css" href="style.css">
+  </head>
+
+  <body background="bcklight.gif" bgcolor=#F8F8F8>
+    <table border=0 cellpadding=0 callspacing=0><tr>
+      <td valign=bottom>
+        <table border=0 cellpadding=0 cellspacing=0><tr><td bgcolor=#D8D8D8>
+          <table cellpadding=3 border=0>
+            <tr><td bgcolor=#FFFFF0>
+              <div id="verySmall"><br></div>
+              <div id="bigTitle">&nbsp;Requirements & Limitations&nbsp;</div>
+              <div id="verySmall"><br></div>
+              <div id="small">
+                <a class="small" href="Content.htm">Content</a> /
+                <a class="small" href="madCodeHook.htm">madCodeHook</a> /...
+              </div>
+            </td></tr>
+          </table>
+        </td></tr></table>
+      </td>
+      <td valign=bottom>
+        <table border=0 cellpadding=0 cellspacing=0><tr><td bgcolor=#D8D8D8>
+          <table cellpadding=7 border=0>
+            <tr><td bgcolor=#F4F4F8><a href="http://www.madshi.net">www.madshi.net</a></td></tr>
+          </table>
+        </td></tr></table>
+      </td>
+    </tr></table>
+    <h3>Requirements & Limitations</h3>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <table>
+                
+                <tr><td>&bull;&nbsp;</td><td><b>
+                madCodeHook 3.0
+                </b></td></tr><tr><td></td><td style="padding-bottom:8pt;">
+                For feature complete 64bit support you need madCodeHook 3.0. When using
+                madCodeHook 2.x, system wide DLL injection doesn't work in 64bit OSs. Most
+                other functionalities of madCodeHook 2.x do work on 64bit OSs, though.
+                </td></tr>
+                
+                <tr><td>&bull;&nbsp;</td><td><b>
+                MSVC++ 2005 Professional (or newer)
+                </b></td></tr><tr><td></td><td style="padding-bottom:8pt;">
+                If you want to hook 64bit processes, too, you need MSVC++, because Delphi does
+                not yet have a native 64bit compiler. If you are only interested in hooking
+                32bit processes, you can get along with Delphi only.
+                </td></tr>
+                
+                <tr><td>&bull;&nbsp;</td><td><b>
+                code signing certificate (e.g. Verisign), capable of signing 64bit drivers
+                </b></td></tr><tr><td></td><td style="padding-bottom:8pt;">
+                The DLL injection drivers shipping with madCodeHook 3.0 do not work without
+                being properly configured and then signed with a code signing certificate.
+                Be cautious when buying a certificate because some support signing of 64bit
+                drivers while others don't. With madCodeHook 2.x a code signing certificate was
+                not needed, but then madCodeHook 2.x didn't have a 64bit OS compatible driver.
+                </td></tr>
+                
+                </table>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </body>
+
+</html>
