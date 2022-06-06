@@ -6,7 +6,7 @@
         <Projects Include="..\ActiveX\Delphi ActiveX Demo\TraceToolActivexDemo_10.dproj">
             <Dependencies/>
         </Projects>
-        <Projects Include="TraceTool_10.dproj">
+        <Projects Include="TraceTool.dproj">
             <Dependencies/>
         </Projects>
         <Projects Include="..\Delphi\Demo 2009\DelphiDemo_10.dproj">
@@ -35,14 +35,14 @@
     <Target Name="TraceToolActivexDemo_10:Make">
         <MSBuild Projects="..\ActiveX\Delphi ActiveX Demo\TraceToolActivexDemo_10.dproj" Targets="Make"/>
     </Target>
-    <Target Name="TraceTool_10">
-        <MSBuild Projects="TraceTool_10.dproj"/>
+    <Target Name="TraceTool">
+        <MSBuild Projects="TraceTool.dproj"/>
     </Target>
-    <Target Name="TraceTool_10:Clean">
-        <MSBuild Projects="TraceTool_10.dproj" Targets="Clean"/>
+    <Target Name="TraceTool:Clean">
+        <MSBuild Projects="TraceTool.dproj" Targets="Clean"/>
     </Target>
-    <Target Name="TraceTool_10:Make">
-        <MSBuild Projects="TraceTool_10.dproj" Targets="Make"/>
+    <Target Name="TraceTool:Make">
+        <MSBuild Projects="TraceTool.dproj" Targets="Make"/>
     </Target>
     <Target Name="DelphiDemo_10">
         <MSBuild Projects="..\Delphi\Demo 2009\DelphiDemo_10.dproj"/>

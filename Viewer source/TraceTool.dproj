@@ -1,217 +1,275 @@
-﻿	<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-		<PropertyGroup>
-			<ProjectGuid>{DDE1B30F-3590-4AE9-953D-1919A1B24350}</ProjectGuid>
-			<MainSource>TraceTool.dpr</MainSource>
-			<Config Condition="'$(Config)'==''">Release</Config>
-			<DCC_DCCCompiler>DCC32</DCC_DCCCompiler>
-			<ProjectVersion>12.2</ProjectVersion>
-			<Base>True</Base>
-			<Platform>Win32</Platform>
-			<AppType>Application</AppType>
-			<FrameworkType>VCL</FrameworkType>
-		</PropertyGroup>
-		<PropertyGroup Condition="'$(Config)'=='Base' or '$(Base)'!=''">
-			<Base>true</Base>
-		</PropertyGroup>
-		<PropertyGroup Condition="'$(Config)'=='Release' or '$(Cfg_1)'!=''">
-			<Cfg_1>true</Cfg_1>
-			<CfgParent>Base</CfgParent>
-			<Base>true</Base>
-		</PropertyGroup>
-		<PropertyGroup Condition="'$(Config)'=='Debug' or '$(Cfg_2)'!=''">
-			<Cfg_2>true</Cfg_2>
-			<CfgParent>Base</CfgParent>
-			<Base>true</Base>
-		</PropertyGroup>
-		<PropertyGroup Condition="'$(Base)'!=''">
-			<DCC_ExeOutput>d:\GitHub\Tracetool\Viewer\</DCC_ExeOutput>
-			<DCC_ImageBase>00400000</DCC_ImageBase>
-			<DCC_UsePackage>vcl;rtl;dbrtl;adortl;vcldb;vclx;bdertl;vcldbx;ibxpress;dsnap;cds;bdecds;qrpt;teeui;teedb;tee;dss;teeqr;visualclx;visualdbclx;dsnapcrba;dsnapcon;VclSmp;vclshlctrls;vclie;xmlrtl;inet;inetdbbde;inetdbxpress;inetdb;nmfast;webdsnap;websnap;soaprtl;dbexpress;dbxcds;indy;dclOffice2k;DJCL;RxCtl6;RxDB6;RxBDE6;ZipMasterPack6</DCC_UsePackage>
-			<DCC_GenerateStackFrames>true</DCC_GenerateStackFrames>
-			<DCC_UnitAlias>WinTypes=Windows;WinProcs=Windows;DbiTypes=BDE;DbiProcs=BDE;DbiErrs=BDE;$(DCC_UnitAlias)</DCC_UnitAlias>
-			<DCC_Platform>x86</DCC_Platform>
-			<DCC_DependencyCheckOutputName>C:\TraceTool\viewer 2010\TraceTool.exe</DCC_DependencyCheckOutputName>
-			<DCC_K>false</DCC_K>
-			<DCC_N>true</DCC_N>
-			<DCC_S>false</DCC_S>
-			<DCC_SymbolReferenceInfo>1</DCC_SymbolReferenceInfo>
-			<DCC_E>false</DCC_E>
-			<DCC_F>false</DCC_F>
-		</PropertyGroup>
-		<PropertyGroup Condition="'$(Cfg_1)'!=''">
-			<DCC_ExeOutput>..\Viewer\</DCC_ExeOutput>
-			<DCC_MapFile>3</DCC_MapFile>
-			<DCC_Define>RELEASE;madExcept;$(DCC_Define)</DCC_Define>
-			<DCC_SymbolReferenceInfo>0</DCC_SymbolReferenceInfo>
-		</PropertyGroup>
-		<PropertyGroup Condition="'$(Cfg_2)'!=''">
-			<DCC_ExeOutput>..\Viewer\</DCC_ExeOutput>
-			<DCC_DebugInformation>true</DCC_DebugInformation>
-			<DCC_Optimize>false</DCC_Optimize>
-			<DCC_MapFile>3</DCC_MapFile>
-			<DCC_Define>DEBUG;madExcept;$(DCC_Define)</DCC_Define>
-		</PropertyGroup>
-		<ItemGroup>
-			<DelphiCompile Include="TraceTool.dpr">
-				<MainSource>MainSource</MainSource>
-			</DelphiCompile>
-			<DCCReference Include="unt_TraceWin.pas">
-				<Form>Frm_Trace</Form>
-			</DCCReference>
-			<DCCReference Include="Unt_receiver.pas">
-				<Form>FormReceiver</Form>
-			</DCCReference>
-			<DCCReference Include="DebugOptions.pas">
-				<Form>frmDebugOptions</Form>
-			</DCCReference>
-			<DCCReference Include="unt_about.pas">
-				<Form>FrmAbout</Form>
-			</DCCReference>
-			<DCCReference Include="DirMon.pas"/>
-			<DCCReference Include="unt_Tail.pas">
-				<Form>FrmTail</Form>
-			</DCCReference>
-			<DCCReference Include="Unt_linkedList.pas"/>
-			<DCCReference Include="unt_ODS.pas">
-				<Form>Frm_ODS</Form>
-			</DCCReference>
-			<DCCReference Include="unt_base.pas">
-				<Form>FrmBase</Form>
-			</DCCReference>
-			<DCCReference Include="Unt_Tool.pas">
-				<Form>Frm_Tool</Form>
-			</DCCReference>
-			<DCCReference Include="unt_utility.pas"/>
-			<DCCReference Include="unt_selectEvent.pas">
-				<Form>FrmSelectEvent</Form>
-			</DCCReference>
-			<DCCReference Include="unt_eventLog.pas">
-				<Form>FrmEventLog</Form>
-			</DCCReference>
-			<DCCReference Include="Eventlog.pas"/>
-			<DCCReference Include="unt_saveDlg.pas">
-				<Form>FrmSave</Form>
-			</DCCReference>
-			<DCCReference Include="unt_SelectTail.pas">
-				<Form>FrmSelectTail</Form>
-			</DCCReference>
-			<DCCReference Include="unt_traceWinProperty.pas">
-				<Form>FrmTraceWinProp</Form>
-			</DCCReference>
-			<DCCReference Include="unt_plugin.pas"/>
-			<DCCReference Include="unt_FrmPlugin.pas">
-				<Form>frmPlugin</Form>
-				<DesignClass>TFrame</DesignClass>
-			</DCCReference>
-			<DCCReference Include="Unt_TailProgress.pas">
-				<Form>FrmTailProgress</Form>
-			</DCCReference>
-			<DCCReference Include="unt_PageContainer.pas">
-				<Form>FrmPageContainer</Form>
-			</DCCReference>
-			<DCCReference Include="unt_search.pas">
-				<Form>FrmSearch</Form>
-			</DCCReference>
-			<DCCReference Include="VstSort.pas"/>
-			<DCCReference Include="unt_Parse.pas"/>
-			<DCCReference Include="unt_filter.pas">
-				<Form>FrmFilter</Form>
-			</DCCReference>
-			<DCCReference Include="unt_editor.pas"/>
-			<DCCReference Include="unt_Details_base.pas">
-				<Form>frame_BaseDetails</Form>
-				<DesignClass>TFrame</DesignClass>
-			</DCCReference>
-			<DCCReference Include="unt_Details_bitmap.pas">
-				<Form>frame_BitmapDetails</Form>
-				<DesignClass>TFrame</DesignClass>
-			</DCCReference>
-			<DCCReference Include="unt_Details_xml.pas">
-				<Form>Frame_XML</Form>
-				<DesignClass>TFrame</DesignClass>
-			</DCCReference>
-			<DCCReference Include="unt_Details_Classic.pas">
-				<Form>frame_Classic</Form>
-				<DesignClass>TFrame</DesignClass>
-			</DCCReference>
-			<DCCReference Include="unt_Details_table.pas">
-				<Form>frame_Table</Form>
-				<DesignClass>TFrame</DesignClass>
-			</DCCReference>
-			<DCCReference Include="untPrintPreview.pas">
-				<Form>FrmPrintPreview</Form>
-			</DCCReference>
-			<DCCReference Include="Application6.pas"/>
-			<DCCReference Include="Preview\Preview.pas"/>
-			<DCCReference Include="Config.pas"/>
-			<DCCReference Include="unt_TraceConfig.pas"/>
-			<None Include="FastMM4Options.inc">
-				<ContainerId>File</ContainerId>
-			</None>
-			<BuildConfiguration Include="Debug">
-				<Key>Cfg_2</Key>
-				<CfgParent>Base</CfgParent>
-			</BuildConfiguration>
-			<BuildConfiguration Include="Base">
-				<Key>Base</Key>
-			</BuildConfiguration>
-			<BuildConfiguration Include="Release">
-				<Key>Cfg_1</Key>
-				<CfgParent>Base</CfgParent>
-			</BuildConfiguration>
-		</ItemGroup>
-		<Import Condition="Exists('$(BDS)\Bin\CodeGear.Delphi.Targets')" Project="$(BDS)\Bin\CodeGear.Delphi.Targets"/>
-		<Import Condition="Exists('$(APPDATA)\Embarcadero\$(BDSAPPDATABASEDIR)\8.0\UserTools.proj')" Project="$(APPDATA)\Embarcadero\$(BDSAPPDATABASEDIR)\8.0\UserTools.proj"/>
-		<ProjectExtensions>
-			<Borland.Personality>Delphi.Personality.12</Borland.Personality>
-			<Borland.ProjectType>VCLApplication</Borland.ProjectType>
-			<BorlandProject>
-				<Delphi.Personality>
-					<Source>
-						<Source Name="MainSource">TraceTool.dpr</Source>
-					</Source>
-					<Parameters>
-						<Parameters Name="RunParams">/NoDebug</Parameters>
-					</Parameters>
-					<VersionInfo>
-						<VersionInfo Name="IncludeVerInfo">True</VersionInfo>
-						<VersionInfo Name="AutoIncBuild">True</VersionInfo>
-						<VersionInfo Name="MajorVer">13</VersionInfo>
-						<VersionInfo Name="MinorVer">0</VersionInfo>
-						<VersionInfo Name="Release">0</VersionInfo>
-						<VersionInfo Name="Build">558</VersionInfo>
-						<VersionInfo Name="Debug">False</VersionInfo>
-						<VersionInfo Name="PreRelease">False</VersionInfo>
-						<VersionInfo Name="Special">False</VersionInfo>
-						<VersionInfo Name="Private">False</VersionInfo>
-						<VersionInfo Name="DLL">False</VersionInfo>
-						<VersionInfo Name="Locale">2060</VersionInfo>
-						<VersionInfo Name="CodePage">1252</VersionInfo>
-					</VersionInfo>
-					<VersionInfoKeys>
-						<VersionInfoKeys Name="CompanyName">Thierry Parent</VersionInfoKeys>
-						<VersionInfoKeys Name="FileDescription">TraceTool utility</VersionInfoKeys>
-						<VersionInfoKeys Name="FileVersion">13.0.0.558</VersionInfoKeys>
-						<VersionInfoKeys Name="InternalName">TraceTool</VersionInfoKeys>
-						<VersionInfoKeys Name="LegalCopyright">Thierry Parent</VersionInfoKeys>
-						<VersionInfoKeys Name="LegalTrademarks">Thierry Parent</VersionInfoKeys>
-						<VersionInfoKeys Name="OriginalFilename">none</VersionInfoKeys>
-						<VersionInfoKeys Name="ProductName">TraceTool</VersionInfoKeys>
-						<VersionInfoKeys Name="ProductVersion">13.0</VersionInfoKeys>
-						<VersionInfoKeys Name="Comments">Freeware Trace utility for  Dot Net, Javascript, Java, Delphi,  C++ and Python</VersionInfoKeys>
-					</VersionInfoKeys>
-					<Excluded_Packages>
-						<Excluded_Packages Name="$(BDSBIN)\bcboffice2k150.bpl">Embarcadero C++Builder Office 2000 Servers Package</Excluded_Packages>
-						<Excluded_Packages Name="$(BDSBIN)\bcbofficexp150.bpl">Embarcadero C++Builder Office XP Servers Package</Excluded_Packages>
-						<Excluded_Packages Name="$(BDSBIN)\dcloffice2k150.bpl">Microsoft Office 2000 Sample Automation Server Wrapper Components</Excluded_Packages>
-						<Excluded_Packages Name="$(BDSBIN)\dclofficexp150.bpl">Microsoft Office XP Sample Automation Server Wrapper Components</Excluded_Packages>
-					</Excluded_Packages>
-				</Delphi.Personality>
-				<ModelSupport>False</ModelSupport>
-				<Platforms>
-					<Platform value="Win32">True</Platform>
-				</Platforms>
-			</BorlandProject>
-			<ProjectFileVersion>12</ProjectFileVersion>
-		</ProjectExtensions>
-	</Project>
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <PropertyGroup>
+        <ProjectGuid>{DDE1B30F-3590-4AE9-953D-1919A1B24350}</ProjectGuid>
+        <MainSource>TraceTool.dpr</MainSource>
+        <Config Condition="'$(Config)'==''">Release</Config>
+        <DCC_DCCCompiler>DCC32</DCC_DCCCompiler>
+        <ProjectVersion>19.2</ProjectVersion>
+        <Base>True</Base>
+        <AppType>Application</AppType>
+        <FrameworkType>VCL</FrameworkType>
+        <Platform Condition="'$(Platform)'==''">Win32</Platform>
+        <TargetedPlatforms>1</TargetedPlatforms>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Config)'=='Base' or '$(Base)'!=''">
+        <Base>true</Base>
+    </PropertyGroup>
+    <PropertyGroup Condition="('$(Platform)'=='Win32' and '$(Base)'=='true') or '$(Base_Win32)'!=''">
+        <Base_Win32>true</Base_Win32>
+        <CfgParent>Base</CfgParent>
+        <Base>true</Base>
+    </PropertyGroup>
+    <PropertyGroup Condition="('$(Platform)'=='Win64' and '$(Base)'=='true') or '$(Base_Win64)'!=''">
+        <Base_Win64>true</Base_Win64>
+        <CfgParent>Base</CfgParent>
+        <Base>true</Base>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Config)'=='Release' or '$(Cfg_1)'!=''">
+        <Cfg_1>true</Cfg_1>
+        <CfgParent>Base</CfgParent>
+        <Base>true</Base>
+    </PropertyGroup>
+    <PropertyGroup Condition="('$(Platform)'=='Win32' and '$(Cfg_1)'=='true') or '$(Cfg_1_Win32)'!=''">
+        <Cfg_1_Win32>true</Cfg_1_Win32>
+        <CfgParent>Cfg_1</CfgParent>
+        <Cfg_1>true</Cfg_1>
+        <Base>true</Base>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Config)'=='Debug' or '$(Cfg_2)'!=''">
+        <Cfg_2>true</Cfg_2>
+        <CfgParent>Base</CfgParent>
+        <Base>true</Base>
+    </PropertyGroup>
+    <PropertyGroup Condition="('$(Platform)'=='Win32' and '$(Cfg_2)'=='true') or '$(Cfg_2_Win32)'!=''">
+        <Cfg_2_Win32>true</Cfg_2_Win32>
+        <CfgParent>Cfg_2</CfgParent>
+        <Cfg_2>true</Cfg_2>
+        <Base>true</Base>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Base)'!=''">
+        <DCC_ExeOutput>d:\GitHub\Tracetool\Viewer\</DCC_ExeOutput>
+        <DCC_ImageBase>00400000</DCC_ImageBase>
+        <DCC_UsePackage>vcl;rtl;dbrtl;adortl;vcldb;vclx;bdertl;vcldbx;ibxpress;dsnap;cds;bdecds;qrpt;teeui;teedb;tee;dss;teeqr;visualclx;visualdbclx;dsnapcrba;dsnapcon;VclSmp;vclshlctrls;vclie;xmlrtl;inet;inetdbbde;inetdbxpress;inetdb;nmfast;webdsnap;websnap;soaprtl;dbexpress;dbxcds;indy;dclOffice2k;DJCL;RxCtl6;RxDB6;RxBDE6;ZipMasterPack6;$(DCC_UsePackage)</DCC_UsePackage>
+        <DCC_GenerateStackFrames>true</DCC_GenerateStackFrames>
+        <DCC_Platform>x86</DCC_Platform>
+        <DCC_DependencyCheckOutputName>C:\TraceTool\viewer 2010\TraceTool.exe</DCC_DependencyCheckOutputName>
+        <DCC_K>false</DCC_K>
+        <DCC_N>true</DCC_N>
+        <DCC_S>false</DCC_S>
+        <DCC_SymbolReferenceInfo>1</DCC_SymbolReferenceInfo>
+        <DCC_E>false</DCC_E>
+        <DCC_F>false</DCC_F>
+        <SanitizedProjectName>TraceTool</SanitizedProjectName>
+        <DCC_Namespace>Vcl;Vcl.Imaging;Vcl.Touch;Vcl.Samples;Vcl.Shell;System;Xml;Data;Datasnap;Web;Soap;Winapi;System.Win;Xml.Win;$(DCC_Namespace)</DCC_Namespace>
+        <VerInfo_IncludeVerInfo>true</VerInfo_IncludeVerInfo>
+        <VerInfo_AutoGenVersion>true</VerInfo_AutoGenVersion>
+        <VerInfo_MajorVer>13</VerInfo_MajorVer>
+        <VerInfo_Build>558</VerInfo_Build>
+        <VerInfo_Locale>2060</VerInfo_Locale>
+        <VerInfo_Keys>CompanyName=Thierry Parent;FileDescription=TraceTool utility;FileVersion=13.0.0.558;InternalName=TraceTool;LegalCopyright=Thierry Parent;LegalTrademarks=Thierry Parent;OriginalFilename=none;ProductName=TraceTool;ProductVersion=13.0;Comments=Freeware Trace utility for  Dot Net, Javascript, Java, Delphi,  C++ and Python</VerInfo_Keys>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Base_Win32)'!=''">
+        <DCC_Namespace>Data.Win;Datasnap.Win;Web.Win;Soap.Win;Bde;$(DCC_Namespace)</DCC_Namespace>
+        <BT_BuildType>Debug</BT_BuildType>
+        <VerInfo_IncludeVerInfo>true</VerInfo_IncludeVerInfo>
+        <VerInfo_Keys>CompanyName=;FileDescription=$(MSBuildProjectName);FileVersion=1.0.0.0;InternalName=;LegalCopyright=;LegalTrademarks=;OriginalFilename=;ProductName=$(MSBuildProjectName);ProductVersion=1.0.0.0;Comments=;ProgramID=com.embarcadero.$(MSBuildProjectName)</VerInfo_Keys>
+        <VerInfo_Locale>1033</VerInfo_Locale>
+        <Manifest_File>$(BDS)\bin\default_app.manifest</Manifest_File>
+        <Debugger_RunParams>/NoDebug</Debugger_RunParams>
+        <Icon_MainIcon>TraceTool_Icon2.ico</Icon_MainIcon>
+        <AppEnableRuntimeThemes>true</AppEnableRuntimeThemes>
+        <UWP_DelphiLogo44>$(BDS)\bin\Artwork\Windows\UWP\delphi_UwpDefault_44.png</UWP_DelphiLogo44>
+        <UWP_DelphiLogo150>$(BDS)\bin\Artwork\Windows\UWP\delphi_UwpDefault_150.png</UWP_DelphiLogo150>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Base_Win64)'!=''">
+        <Icon_MainIcon>TraceTool_Icon2.ico</Icon_MainIcon>
+        <UWP_DelphiLogo44>$(BDS)\bin\Artwork\Windows\UWP\delphi_UwpDefault_44.png</UWP_DelphiLogo44>
+        <UWP_DelphiLogo150>$(BDS)\bin\Artwork\Windows\UWP\delphi_UwpDefault_150.png</UWP_DelphiLogo150>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Cfg_1)'!=''">
+        <DCC_ExeOutput>..\Viewer\</DCC_ExeOutput>
+        <DCC_MapFile>3</DCC_MapFile>
+        <DCC_Define>RELEASE;madExcept;$(DCC_Define)</DCC_Define>
+        <DCC_SymbolReferenceInfo>0</DCC_SymbolReferenceInfo>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Cfg_1_Win32)'!=''">
+        <AppEnableRuntimeThemes>true</AppEnableRuntimeThemes>
+        <AppDPIAwarenessMode>PerMonitorV2</AppDPIAwarenessMode>
+        <Debugger_RunParams>/Debug</Debugger_RunParams>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Cfg_2)'!=''">
+        <DCC_ExeOutput>..\Viewer\</DCC_ExeOutput>
+        <DCC_DebugInformation>true</DCC_DebugInformation>
+        <DCC_Optimize>false</DCC_Optimize>
+        <DCC_MapFile>3</DCC_MapFile>
+        <DCC_Define>DEBUG;madExcept;$(DCC_Define)</DCC_Define>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Cfg_2_Win32)'!=''">
+        <AppEnableRuntimeThemes>true</AppEnableRuntimeThemes>
+        <AppDPIAwarenessMode>PerMonitorV2</AppDPIAwarenessMode>
+    </PropertyGroup>
+    <ItemGroup>
+        <DelphiCompile Include="$(MainSource)">
+            <MainSource>MainSource</MainSource>
+        </DelphiCompile>
+        <DCCReference Include="unt_TraceWin.pas">
+            <Form>Frm_Trace</Form>
+        </DCCReference>
+        <DCCReference Include="Unt_receiver.pas">
+            <Form>FormReceiver</Form>
+        </DCCReference>
+        <DCCReference Include="DebugOptions.pas">
+            <Form>frmDebugOptions</Form>
+        </DCCReference>
+        <DCCReference Include="unt_about.pas">
+            <Form>FrmAbout</Form>
+        </DCCReference>
+        <DCCReference Include="DirMon.pas"/>
+        <DCCReference Include="unt_Tail.pas">
+            <Form>FrmTail</Form>
+        </DCCReference>
+        <DCCReference Include="Unt_linkedList.pas"/>
+        <DCCReference Include="unt_ODS.pas">
+            <Form>Frm_ODS</Form>
+        </DCCReference>
+        <DCCReference Include="unt_base.pas">
+            <Form>FrmBase</Form>
+        </DCCReference>
+        <DCCReference Include="Unt_Tool.pas">
+            <Form>Frm_Tool</Form>
+        </DCCReference>
+        <DCCReference Include="unt_utility.pas"/>
+        <DCCReference Include="unt_selectEvent.pas">
+            <Form>FrmSelectEvent</Form>
+        </DCCReference>
+        <DCCReference Include="unt_eventLog.pas">
+            <Form>FrmEventLog</Form>
+        </DCCReference>
+        <DCCReference Include="Eventlog.pas"/>
+        <DCCReference Include="unt_saveDlg.pas">
+            <Form>FrmSave</Form>
+        </DCCReference>
+        <DCCReference Include="unt_SelectTail.pas">
+            <Form>FrmSelectTail</Form>
+        </DCCReference>
+        <DCCReference Include="unt_traceWinProperty.pas">
+            <Form>FrmTraceWinProp</Form>
+        </DCCReference>
+        <DCCReference Include="unt_plugin.pas"/>
+        <DCCReference Include="unt_FrmPlugin.pas">
+            <Form>frmPlugin</Form>
+            <DesignClass>TFrame</DesignClass>
+        </DCCReference>
+        <DCCReference Include="Unt_TailProgress.pas">
+            <Form>FrmTailProgress</Form>
+        </DCCReference>
+        <DCCReference Include="unt_PageContainer.pas">
+            <Form>FrmPageContainer</Form>
+        </DCCReference>
+        <DCCReference Include="unt_search.pas">
+            <Form>FrmSearch</Form>
+        </DCCReference>
+        <DCCReference Include="VstSort.pas"/>
+        <DCCReference Include="unt_Parse.pas"/>
+        <DCCReference Include="unt_filter.pas">
+            <Form>FrmFilter</Form>
+        </DCCReference>
+        <DCCReference Include="unt_editor.pas"/>
+        <DCCReference Include="unt_Details_base.pas">
+            <Form>frame_BaseDetails</Form>
+            <DesignClass>TFrame</DesignClass>
+        </DCCReference>
+        <DCCReference Include="unt_Details_bitmap.pas">
+            <Form>frame_BitmapDetails</Form>
+            <DesignClass>TFrame</DesignClass>
+        </DCCReference>
+        <DCCReference Include="unt_Details_xml.pas">
+            <Form>Frame_XML</Form>
+            <DesignClass>TFrame</DesignClass>
+        </DCCReference>
+        <DCCReference Include="unt_Details_Classic.pas">
+            <Form>frame_Classic</Form>
+            <DesignClass>TFrame</DesignClass>
+        </DCCReference>
+        <DCCReference Include="unt_Details_table.pas">
+            <Form>frame_Table</Form>
+            <DesignClass>TFrame</DesignClass>
+        </DCCReference>
+        <DCCReference Include="untPrintPreview.pas">
+            <Form>FrmPrintPreview</Form>
+        </DCCReference>
+        <DCCReference Include="Application6.pas"/>
+        <DCCReference Include="Preview\Preview.pas"/>
+        <DCCReference Include="Config.pas"/>
+        <DCCReference Include="unt_TraceConfig.pas"/>
+        <None Include="FastMM4Options.inc">
+            <ContainerId>File</ContainerId>
+        </None>
+        <BuildConfiguration Include="Debug">
+            <Key>Cfg_2</Key>
+            <CfgParent>Base</CfgParent>
+        </BuildConfiguration>
+        <BuildConfiguration Include="Base">
+            <Key>Base</Key>
+        </BuildConfiguration>
+        <BuildConfiguration Include="Release">
+            <Key>Cfg_1</Key>
+            <CfgParent>Base</CfgParent>
+        </BuildConfiguration>
+    </ItemGroup>
+    <Import Condition="Exists('$(BDS)\Bin\CodeGear.Delphi.Targets')" Project="$(BDS)\Bin\CodeGear.Delphi.Targets"/>
+    <ProjectExtensions>
+        <Borland.Personality>Delphi.Personality.12</Borland.Personality>
+        <Borland.ProjectType>VCLApplication</Borland.ProjectType>
+        <BorlandProject>
+            <Delphi.Personality>
+                <Source>
+                    <Source Name="MainSource">TraceTool.dpr</Source>
+                </Source>
+                <Parameters>
+                    <Parameters Name="RunParams">/NoDebug</Parameters>
+                </Parameters>
+                <VersionInfo>
+                    <VersionInfo Name="IncludeVerInfo">True</VersionInfo>
+                    <VersionInfo Name="AutoIncBuild">True</VersionInfo>
+                    <VersionInfo Name="MajorVer">13</VersionInfo>
+                    <VersionInfo Name="MinorVer">0</VersionInfo>
+                    <VersionInfo Name="Release">0</VersionInfo>
+                    <VersionInfo Name="Build">558</VersionInfo>
+                    <VersionInfo Name="Debug">False</VersionInfo>
+                    <VersionInfo Name="PreRelease">False</VersionInfo>
+                    <VersionInfo Name="Special">False</VersionInfo>
+                    <VersionInfo Name="Private">False</VersionInfo>
+                    <VersionInfo Name="DLL">False</VersionInfo>
+                    <VersionInfo Name="Locale">2060</VersionInfo>
+                    <VersionInfo Name="CodePage">1252</VersionInfo>
+                </VersionInfo>
+                <VersionInfoKeys>
+                    <VersionInfoKeys Name="CompanyName">Thierry Parent</VersionInfoKeys>
+                    <VersionInfoKeys Name="FileDescription">TraceTool utility</VersionInfoKeys>
+                    <VersionInfoKeys Name="FileVersion">13.0.0.558</VersionInfoKeys>
+                    <VersionInfoKeys Name="InternalName">TraceTool</VersionInfoKeys>
+                    <VersionInfoKeys Name="LegalCopyright">Thierry Parent</VersionInfoKeys>
+                    <VersionInfoKeys Name="LegalTrademarks">Thierry Parent</VersionInfoKeys>
+                    <VersionInfoKeys Name="OriginalFilename">none</VersionInfoKeys>
+                    <VersionInfoKeys Name="ProductName">TraceTool</VersionInfoKeys>
+                    <VersionInfoKeys Name="ProductVersion">13.0</VersionInfoKeys>
+                    <VersionInfoKeys Name="Comments">Freeware Trace utility for  Dot Net, Javascript, Java, Delphi,  C++ and Python</VersionInfoKeys>
+                </VersionInfoKeys>
+                <Excluded_Packages>
+                    <Excluded_Packages Name="$(BDSBIN)\bcboffice2k150.bpl">Embarcadero C++Builder Office 2000 Servers Package</Excluded_Packages>
+                    <Excluded_Packages Name="$(BDSBIN)\bcbofficexp150.bpl">Embarcadero C++Builder Office XP Servers Package</Excluded_Packages>
+                    <Excluded_Packages Name="$(BDSBIN)\dcloffice2k150.bpl">Microsoft Office 2000 Sample Automation Server Wrapper Components</Excluded_Packages>
+                    <Excluded_Packages Name="$(BDSBIN)\dclofficexp150.bpl">Microsoft Office XP Sample Automation Server Wrapper Components</Excluded_Packages>
+                </Excluded_Packages>
+            </Delphi.Personality>
+            <ModelSupport>False</ModelSupport>
+            <Platforms>
+                <Platform value="Win32">True</Platform>
+                <Platform value="Win64">False</Platform>
+            </Platforms>
+        </BorlandProject>
+        <ProjectFileVersion>12</ProjectFileVersion>
+    </ProjectExtensions>
+    <Import Project="$(APPDATA)\Embarcadero\$(BDSAPPDATABASEDIR)\$(PRODUCTVERSION)\UserTools.proj" Condition="Exists('$(APPDATA)\Embarcadero\$(BDSAPPDATABASEDIR)\$(PRODUCTVERSION)\UserTools.proj')"/>
+</Project>

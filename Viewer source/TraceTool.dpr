@@ -10,7 +10,7 @@ program TraceTool;
 
 
 uses
-  fastmm4,
+  fastmm5,
   madExcept,
   madLinkDisAsm,
   madListHardware,
@@ -52,6 +52,7 @@ uses
   untPrintPreview in 'untPrintPreview.pas' {FrmPrintPreview},
   Application6 in 'Application6.pas',
   Preview in 'Preview\Preview.pas',
+  //FileViewer in 'dependencyviewer\FileViewer.pas',
   Config in 'Config.pas',
   unt_TraceConfig in 'unt_TraceConfig.pas';
 
@@ -59,6 +60,13 @@ uses
 
 begin
    //ResetLowTrace() ;  // delete internal lowtrace file
+
+  //ReportMemoryLeaksOnShutdown := false;  // when true, force include mmetUnexpectedMemoryLeakSummary in FastMM_MessageBoxEvents in
+
+  FastMM_SetEventLogFilename('c:\temp\tracetool.log');
+  FastMM_DeleteEventLogFile();
+  FastMM_LogToFileEvents := FastMM_LogToFileEvents + [mmetUnexpectedMemoryLeakDetail, mmetUnexpectedMemoryLeakSummary];
+  FastMM_MessageBoxEvents := [];
 
    //LowTrace ('traceTool started') ;
    SetLastError(NO_ERROR);
