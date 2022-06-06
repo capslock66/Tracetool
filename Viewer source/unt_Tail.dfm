@@ -74,6 +74,7 @@ object FrmTail: TFrmTail
       OnDblClick = VstTailDblClick
       OnEditCancelled = VstTailEditCancelled
       OnEdited = VstTailEdited
+      OnEditing = VstTailEditing
       OnFreeNode = VstTailFreeNode
       OnGetText = VstTailGetText
       OnPaintText = VstTailPaintText

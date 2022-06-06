@@ -130,6 +130,8 @@ type
     procedure VstDetailBeforeCellPaint(Sender: TBaseVirtualTree;
       TargetCanvas: TCanvas; Node: PVirtualNode; Column: TColumnIndex;
       CellPaintMode: TVTCellPaintMode; CellRect: TRect; var ContentRect: TRect);
+    procedure VstTailEditing(Sender: TBaseVirtualTree; Node: PVirtualNode;
+      Column: TColumnIndex; var Allowed: Boolean);
   private
     Sorter : TVstSort ;
     LastChildOrder : cardinal ;     // Order of the last child, used to insert sub nodes and unsort them
@@ -2194,6 +2196,12 @@ procedure TFrmTail.VstTailEdited(Sender: TBaseVirtualTree;
   Node: PVirtualNode; Column: TColumnIndex);
 begin
    VstTail.TreeOptions.MiscOptions := VstTail.TreeOptions.MiscOptions - [toEditable] ;
+end;
+
+procedure TFrmTail.VstTailEditing(Sender: TBaseVirtualTree; Node: PVirtualNode;
+  Column: TColumnIndex; var Allowed: Boolean);
+begin
+   Allowed := true;
 end;
 
 //------------------------------------------------------------------------------

@@ -136,6 +136,8 @@ type
     procedure VstDetailBeforeCellPaint(Sender: TBaseVirtualTree;
       TargetCanvas: TCanvas; Node: PVirtualNode; Column: TColumnIndex;
       CellPaintMode: TVTCellPaintMode; CellRect: TRect; var ContentRect: TRect);
+    procedure VstDebugStringEditing(Sender: TBaseVirtualTree;
+      Node: PVirtualNode; Column: TColumnIndex; var Allowed: Boolean);
 
   private
     Sorter : TVstSort ;
@@ -1165,6 +1167,12 @@ procedure TFrm_ODS.VstDebugStringEdited(Sender: TBaseVirtualTree;
   Node: PVirtualNode; Column: TColumnIndex);
 begin
    VstDebugString.TreeOptions.MiscOptions := VstDebugString.TreeOptions.MiscOptions - [toEditable] ;
+end;
+
+procedure TFrm_ODS.VstDebugStringEditing(Sender: TBaseVirtualTree;
+  Node: PVirtualNode; Column: TColumnIndex; var Allowed: Boolean);
+begin
+   Allowed := true;
 end;
 
 //------------------------------------------------------------------------------

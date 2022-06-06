@@ -42,6 +42,7 @@ inherited frame_Classic: Tframe_Classic
     OnDblClick = VstDetailDblClick
     OnEditCancelled = VstDetailEditCancelled
     OnEdited = VstDetailEdited
+    OnEditing = VstDetailEditing
     OnFreeNode = VstDetailFreeNode
     OnGetText = VstDetailGetText
     OnPaintText = VstDetailPaintText

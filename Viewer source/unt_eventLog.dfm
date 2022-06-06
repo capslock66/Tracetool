@@ -69,6 +69,7 @@ inherited FrmEventLog: TFrmEventLog
       OnDblClick = VstEventDblClick
       OnEditCancelled = VstEventEditCancelled
       OnEdited = VstEventEdited
+      OnEditing = VstEventEditing
       OnFreeNode = VstEventFreeNode
       OnGetText = VstEventGetText
       OnPaintText = VstEventPaintText
@@ -151,6 +152,7 @@ inherited FrmEventLog: TFrmEventLog
         OnChange = VstDetailChange
         OnCreateEditor = VstDetailCreateEditor
         OnDblClick = VstDetailDblClick
+        OnEditing = VstDetailEditing
         OnFreeNode = VstDetailFreeNode
         OnGetText = VstDetailGetText
         OnPaintText = VstDetailPaintText

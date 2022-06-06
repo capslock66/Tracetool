@@ -114,7 +114,7 @@ object FrmSearch: TFrmSearch
     Height = 25
     Anchors = [akTop, akRight]
     Caption = '&Highlight all'
-    ModalResult = 10
+    ModalResult = 14
     TabOrder = 4
   end
   object butCancel: TButton

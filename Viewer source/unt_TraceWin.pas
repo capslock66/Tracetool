@@ -1589,7 +1589,6 @@ uses
       if SelectedNode <> MouseNode then
          exit;
 
-      lowTrace('toEditable');
       vstTrace.TreeOptions.MiscOptions := vstTrace.TreeOptions.MiscOptions +  [toEditable];
 
       // We want to start editing the currently selected node. However it might well happen that this change event
@@ -1598,7 +1597,6 @@ uses
       // in the message handler we then can start editing the new node. This works because the posted message
       // is first executed *after* this event and the message, which triggered it is finished.
       PostMessage(self.Handle, WM_STARTEDITING_TRACE, Integer(SelectedNode), 0);
-
    end;
 
 
