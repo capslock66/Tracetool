@@ -5,7 +5,7 @@ interface
 Uses
   Classes, SysUtils, Graphics;
 
-function Decode(data: pAnsiChar; len: integer) : AnsiString; overload;
+function Decode(data: pointer; len: integer) : AnsiString; overload;
 function Decode(data: AnsiString) : AnsiString; overload;
 function HTMLToDelphiColor(S: String): TColor;
 Function SubStrCount(Substr, MainStr: String): Integer;
@@ -34,10 +34,10 @@ Begin
 End;
 
 // decode functions from MadCrypt
-function Decode(data: pAnsichar; len: integer) : AnsiString;
+function Decode(data: pointer; len: integer) : AnsiString; overload;
 var i1, i2 : integer;
     pi, po : TPAByte;
-    ch1    : char;
+    ch1    : AnsiChar;
     c1     : dword;
 begin
   if (len > 0) and (len mod 4 = 0) then begin
@@ -49,7 +49,7 @@ begin
       c1 := 0;
       i2 := 0;
       while true do begin
-        ch1 := char(pi^[i2]);
+        ch1 := AnsiChar(pi^[i2]);
         case ch1 of
           'A'..'Z' : c1 := c1 or (dword(ch1) - byte('A')     );
           'a'..'z' : c1 := c1 or (dword(ch1) - byte('a') + 26);
@@ -76,8 +76,8 @@ begin
       po^[0] := c1 shr 16;
       po^[1] := byte(c1 shr 8);
       po^[2] := byte(c1);
-      inc(dword(pi), 4);
-      inc(dword(po), 3);
+      inc(NativeUInt(pi), 4);
+      inc(NativeUInt(po), 3);
     end;
   end else
     result := '';
