@@ -810,6 +810,9 @@ var
    obj : tObject ;
    plugin : TPlugin ;
 begin
+   if (Kind = ikOverlay) or (Kind = ikState) then
+      exit; // Return a defined overlay here
+
    Obj := TObject (Sender.GetNodeData(Node)^) ;
    ImageIndex := -1 ;
    if Obj is TPlugin then begin
