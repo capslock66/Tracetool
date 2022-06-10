@@ -282,7 +282,7 @@ uses
    , unt_ODS
    , unt_traceWinProperty
    , unt_plugin
-   , unt_decode
+   //, unt_decode
    , unt_Details_base
    , unt_Details_bitmap
    , unt_Details_xml

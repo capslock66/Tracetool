@@ -382,10 +382,8 @@ type
     FShowSysColors: Boolean;
 
     // custom color picking
-    FCombSize,
-    FLevels: Integer;
-    FBWCombs,
-    FColorCombs: TCombArray;
+    FCombSize, FLevels: Integer;
+    FBWCombs, FColorCombs: TCombArray;
     FCombCorners: array[0..5] of TFloatPoint;
     FCenterColor: TRGB;
     FCenterIntensity: Single; // scale factor for the center color
@@ -421,7 +419,7 @@ type
     procedure WMPaint(var Message: TWMPaint); message WM_PAINT;
     function SelectionFromPoint(P: TPoint): Integer;
     procedure DrawCombControls;
-    procedure DrawComb(Canvas: TCanvas; X, Y, Size: Integer);
+    procedure DrawComb(Canvas: TCanvas; X, Y: integer; Size: Integer);
     function HandleBWArea(const Message: TWMMouse): Boolean;
     function HandleColorComb(const Message: TWMMouse): Boolean;
     function HandleSlider(const Message: TWMMouse): Boolean;
@@ -1485,8 +1483,7 @@ end;
 procedure TColorPopup.DrawCombControls;
 
 var I, Index: Integer;
-    XOffs, YOffs,
-    Count: Integer;
+    XOffs, YOffs, Count: Integer;
     dColor: Single;
     OffScreen: TBitmap;
     {$ifdef DEBUG}
@@ -1536,16 +1533,17 @@ begin
       // draw white-to-black combs
       XOffs := FColorCombRect.Left;
       YOffs := FColorCombRect.Bottom - FColorCombRect.Top - 4;
+
       // brush is automatically reset to bsSolid
       for I := 0 to High(FBWCombs) do
       begin
         Brush.Color := FBWCombs[I].Color;
-        if I in [0, High(FBWCombs)]
-          then DrawComb(OffScreen.Canvas, FBWCombs[I].Position.X + XOffs, FBWCombs[I].Position.Y + YOffs, 2 * FCombSize)
-          else DrawComb(OffScreen.Canvas, FBWCombs[I].Position.X + XOffs, FBWCombs[I].Position.Y + YOffs, FCombSize);
+        if (I = 0) or (I = High(FBWCombs))
+           then DrawComb(OffScreen.Canvas, FBWCombs[I].Position.X + XOffs, FBWCombs[I].Position.Y + YOffs,2 * FCombSize)
+           else DrawComb(OffScreen.Canvas, FBWCombs[I].Position.X + XOffs, FBWCombs[I].Position.Y + YOffs, FCombSize);
       end;
 
-      // mark selected comb 
+      // mark selected comb
       if FCustomIndex < 0 then
       begin
         Index := -(FCustomIndex + 1);
@@ -1554,9 +1552,10 @@ begin
         Pen.Color := clWhite;
         Pen.Width := 2;
         Brush.Style := bsClear;
-        if Index in [0, High(FBWCombs)]
-          then DrawComb(OffScreen.Canvas, FBWCombs[Index].Position.X + XOffs, FBWCombs[Index].Position.Y + YOffs, 2 * FCombSize)
+        if (Index =0) or (Index = High(FBWCombs))
+          then DrawComb(OffScreen.Canvas, FBWCombs[Index].Position.X + XOffs, FBWCombs[Index].Position.Y + YOffs,2 * FCombSize)
           else DrawComb(OffScreen.Canvas, FBWCombs[Index].Position.X + XOffs, FBWCombs[Index].Position.Y + YOffs, FCombSize);
+
         Pen.Style := psClear;
         Pen.Mode := pmCopy;
         Pen.Width := 1;
@@ -1761,14 +1760,15 @@ var I: Integer;
     Pt: TPoint;
     Scale: Integer;
 
+
 begin
   Result := -1;
   Pt := Point(X - FBWCombRect.Left, Y - FBWCombRect.Top);
-
   for I := 0 to High(FBWCombs) do
   begin
-    if I in [0, High(FBWCombs)] then Scale := FCombSize
-                                else Scale := FCombSize div 2;
+    if (I =0) or (I = High(FBWCombs))
+    then Scale := FCombSize
+    else Scale := FCombSize div 2;
     if PtInComb(FBWCombs[I], Pt, Scale) then
     begin
       Result := I;

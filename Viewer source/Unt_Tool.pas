@@ -346,7 +346,6 @@ var
    MessageString: string;
    CDS: TCopyDataStruct;
    resetDebugMode : boolean ;
-   c : integer ;
    EnterDebugMode : boolean;
    LeaveDebugMode : boolean ;
 begin
