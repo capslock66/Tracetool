@@ -1,0 +1,148 @@
+<html>
+
+  <head>
+    <title>mad* Help...</title>
+    <meta name="description" content="mad* Help...">
+    <meta name="keywords" content="madshi, components, delphi">
+    <meta http-equiv="expires" content="900">
+    <link rel=stylesheet type="text/css" href="style.css">
+  </head>
+
+  <body background="bcklight.gif" bgcolor=#F8F8F8>
+    <a name="ICriticalSection"></a>
+    <table border=0 cellpadding=0 callspacing=0><tr>
+      <td valign=bottom>
+        <table border=0 cellpadding=0 cellspacing=0><tr><td bgcolor=#D8D8D8>
+          <table cellpadding=3 border=0>
+            <tr><td bgcolor=#FFFFF0>
+              <div id="verySmall"><br></div>
+              <div id="bigTitle">&nbsp;Critical Sections&nbsp;</div>
+              <div id="verySmall"><br></div>
+              <div id="small">
+                <a class="small" href="Content.htm">Content</a> /
+                <a class="small" href="madBasic.htm">madBasic</a> /
+                <a class="small" href="madBasicUnit.htm">madBasic Unit</a> /...
+              </div>
+            </td></tr>
+          </table>
+        </td></tr></table>
+      </td>
+      <td valign=bottom>
+        <table border=0 cellpadding=0 cellspacing=0><tr><td bgcolor=#D8D8D8>
+          <table cellpadding=7 border=0>
+            <tr><td bgcolor=#F4F4F8><a href="http://www.madshi.net">www.madshi.net</a></td></tr>
+          </table>
+        </td></tr></table>
+      </td>
+    </tr></table>
+    <p>The interface "ICriticalSection" encapsulates the critical section APIs,
+       which are mostly used to protect resources in a multi threaded application.
+       To see a full list of the methods look at the <a href="ICriticalSectionRef.htm">ICriticalSection Reference</a>.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>type</span>&nbsp;<span id='identifier'>ICriticalSection</span>&nbsp;= <span id='bold'>interface</span>&nbsp;(<a class="pascal" href="IBasicBaseInterface.htm#IBasic">IBasic</a>) [<span id='string'>'{82546200-8D73-11D3-A52E-00005A180D69}'</span>];
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="NewCriticalSection"></a>
+    <p>Creating a new critical section is easy:</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>NewCriticalSection</span>&nbsp;: <span id='identifier'>ICriticalSection</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="ICriticalSection.Enter"></a>
+    <a name="ICriticalSection.TryEnter"></a>
+    <a name="ICriticalSection.Leave"></a>
+    <p>Use the methods "Enter/Leave" to enter/leave a critical section (see APIs
+       "Enter/LeaveCriticalSection"). If the critical section is already locked by
+       another thread, entering the section means that your thread will go in a
+       wait state until the other thread leaves the section. You can also use the
+       method "TryEnter" (see API "TryEnterCriticalSection"), which is however not
+       available in win95.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>procedure</span>&nbsp;<span id='identifier'>ICriticalSection</span>.<img src="m.gif"><span id='identifier'>Enter</span>;<br>
+                  <span id='bold'>function</span>&nbsp;&nbsp;<span id='identifier'>ICriticalSection</span>.<img src="m.gif"><span id='identifier'>TryEnter</span>&nbsp;: <span id='identifier'>boolean</span>;<br>
+                  <br>
+                  <span id='bold'>function</span>&nbsp;&nbsp;<span id='identifier'>ICriticalSection</span>.<img src="m.gif"><span id='identifier'>Leave</span>&nbsp;: <span id='identifier'>boolean</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="ICriticalSection.IsOwnedByCurrentThread"></a>
+    <p>The following method returns whether this section is owned by the current
+       thread:</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>ICriticalSection</span>.<img src="m.gif"><span id='identifier'>IsOwnedByCurrentThread</span>&nbsp;: <span id='identifier'>boolean</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="ICriticalSection.OwnerThread"></a>
+    <a name="ICriticalSection.LockCount"></a>
+    <p>The method "OwnerThread" returns the ID of the thread that currently owns
+       this critical section. The method "LockCount" returns how often the owning
+       thread has entered the session in the moment. If the critical section is not
+       by the current thread, these informations can change at any time, namely
+       in that moment when another thread enters or leaves the critical section.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>ICriticalSection</span>.<img src="m.gif"><span id='identifier'>OwnerThread</span>&nbsp;: <span id='identifier'>cardinal</span>;<br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>ICriticalSection</span>.<img src="m.gif"><span id='identifier'>LockCount</span>&nbsp;&nbsp;&nbsp;: <span id='identifier'>integer</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </body>
+
+</html>

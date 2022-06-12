@@ -1,0 +1,149 @@
+<html>
+
+  <head>
+    <title>mad* Help...</title>
+    <meta name="description" content="mad* Help...">
+    <meta name="keywords" content="madshi, components, delphi">
+    <meta http-equiv="expires" content="900">
+    <link rel=stylesheet type="text/css" href="style.css">
+  </head>
+
+  <body background="bcklight.gif" bgcolor=#F8F8F8>
+    <a name="ICustomBasicList"></a>
+    <table border=0 cellpadding=0 callspacing=0><tr>
+      <td valign=bottom>
+        <table border=0 cellpadding=0 cellspacing=0><tr><td bgcolor=#D8D8D8>
+          <table cellpadding=3 border=0>
+            <tr><td bgcolor=#FFFFF0>
+              <div id="verySmall"><br></div>
+              <div id="bigTitle">&nbsp;ICustomBasicList Base Interface&nbsp;</div>
+              <div id="verySmall"><br></div>
+              <div id="small">
+                <a class="small" href="Content.htm">Content</a> /
+                <a class="small" href="madBasic.htm">madBasic</a> /
+                <a class="small" href="madBasicUnit.htm">madBasic Unit</a> /...
+              </div>
+            </td></tr>
+          </table>
+        </td></tr></table>
+      </td>
+      <td valign=bottom>
+        <table border=0 cellpadding=0 cellspacing=0><tr><td bgcolor=#D8D8D8>
+          <table cellpadding=7 border=0>
+            <tr><td bgcolor=#F4F4F8><a href="http://www.madshi.net">www.madshi.net</a></td></tr>
+          </table>
+        </td></tr></table>
+      </td>
+    </tr></table>
+    <p>The interface "ICustomBasicList" is the base interface for all those lists
+       whose items are <a href="IBasicBaseInterface.htm#IBasic">IBasic</a> objects. That are the very most of all list
+       interfaces you'll find in the mad* packages. For a full list of the
+       properties and methods look at the <a href="ICustomBasicListRef.htm">ICustomBasicList Reference</a>.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>type</span>&nbsp;<span id='identifier'>ICustomBasicList</span>&nbsp;= <span id='bold'>interface</span>&nbsp;(<a class="pascal" href="IListBaseInterface.htm#IList">IList</a>) [<span id='string'>'{EE6D35A0-5F85-11D3-A52D-00005A180D69}'</span>];
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="ICustomBasicList.Items"></a>
+    <p>The following property gives you read access to all the items that our list
+       object currently contains:</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>ICustomBasicList</span>.<img src="r.gif"><span id='identifier'>Items</span>&nbsp;[<span id='bold'>index</span>: <span id='identifier'>integer</span>] : <a class="pascal" href="IBasicBaseInterface.htm#IBasic">IBasic</a>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="TCompareBasic"></a>
+    <a name="ICustomBasicList.SortProc"></a>
+    <a name="ICustomBasicList.GetSortParams"></a>
+    <a name="ICustomBasicList.SetSortParams"></a>
+    <p>Some parts of the sorting functionality were already introduced with the
+       properties <a href="IListBaseInterface.htm#IList.SortDown">IList.SortDown</a> and <a href="IListBaseInterface.htm#IList.SortInfo">IList.SortInfo</a>. Here is the 3rd
+       missing member, namely "SortProc", which wants to have a function that you
+       have to define yourself. This "TCompareBasic" function gets 2 items and must
+       return which one should be placed before or after the other one. Additionally
+       you can use the methods "GetSortParams" or "SetSortParams" to access all 3
+       sort properties at the same time.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>type</span>&nbsp;<span id='identifier'>TCompareBasic</span>&nbsp;= <span id='bold'>function</span>&nbsp;(<span id='bold'>const</span>&nbsp;<span id='identifier'>list</span>: <a class="pascal" href="IListBaseInterface.htm#IList">IList</a>; <span id='bold'>const</span>&nbsp;<span id='identifier'>item1</span>, <span id='identifier'>item2</span>: <a class="pascal" href="IBasicBaseInterface.htm#IBasic">IBasic</a>; <span id='identifier'>info</span>: <span id='identifier'>integer</span>) : <span id='identifier'>integer</span>;<br>
+                  <br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>ICustomBasicList</span>.<img src="w.gif"><span id='identifier'>SortProc</span>&nbsp;: <span id='identifier'>TCompareBasic</span>;<br>
+                  <br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>ICustomBasicList</span>.<img src="m.gif"><span id='identifier'>GetSortParams</span>&nbsp;(<span id='bold'>var</span>&nbsp;<span id='identifier'>func</span>: <span id='identifier'>TCompareBasic</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="e.gif">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='bold'>var</span>&nbsp;<span id='identifier'>down</span>: <span id='identifier'>boolean</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="e.gif">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='bold'>var</span>&nbsp;<span id='identifier'>info</span>: <span id='identifier'>integer</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;) : <span id='identifier'>boolean</span>;<br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>ICustomBasicList</span>.<img src="m.gif"><span id='identifier'>SetSortParams</span>&nbsp;( &nbsp;&nbsp;&nbsp;<span id='identifier'>func</span>: <span id='identifier'>TCompareBasic</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="e.gif">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>down</span>: <span id='identifier'>boolean</span>&nbsp;= <span id='identifier'>true</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="e.gif">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>info</span>: <span id='identifier'>integer</span>&nbsp;= <span id='number'>0</span>&nbsp;&nbsp;&nbsp;) : <span id='identifier'>boolean</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="TIListChangeEvent"></a>
+    <a name="TIListChangeEventOO"></a>
+    <a name="ICustomBasicList.RegisterChangeEvent"></a>
+    <a name="ICustomBasicList.UnregisterChangeEvent"></a>
+    <p>You can register an event handler which then gets called whenever an item
+       changes or gets deleted or whenever a new item is added. The event handler
+       can either be a procedure or a method.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>type</span><br>
+                  &nbsp;&nbsp;<span id='identifier'>TIListChangeEvent</span>&nbsp;&nbsp;&nbsp;= <span id='bold'>procedure</span>&nbsp;(<span id='bold'>const</span>&nbsp;<span id='identifier'>list</span>: <span id='identifier'>ICustomBasicList</span>; <span id='bold'>const</span>&nbsp;<span id='identifier'>item</span>: <a class="pascal" href="IBasicBaseInterface.htm#IBasic">IBasic</a>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>beforeChange</span>: <span id='identifier'>boolean</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>changeType</span>: <a class="pascal" href="IBasicBaseInterface.htm#TChangeType">TChangeType</a>; <span id='identifier'>oldIndex</span>, <span id='bold'>index</span>: <span id='identifier'>integer</span>);<br>
+                  &nbsp;&nbsp;<span id='identifier'>TIListChangeEventOO</span>&nbsp;= <span id='bold'>procedure</span>&nbsp;(<span id='bold'>const</span>&nbsp;<span id='identifier'>list</span>: <span id='identifier'>ICustomBasicList</span>; <span id='bold'>const</span>&nbsp;<span id='identifier'>item</span>: <a class="pascal" href="IBasicBaseInterface.htm#IBasic">IBasic</a>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>beforeChange</span>: <span id='identifier'>boolean</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>changeType</span>: <a class="pascal" href="IBasicBaseInterface.htm#TChangeType">TChangeType</a>; <span id='identifier'>oldIndex</span>, <span id='bold'>index</span>: <span id='identifier'>integer</span>) <span id='bold'>of</span>&nbsp;<span id='bold'>object</span>;<br>
+                  <br>
+                  <span id='bold'>procedure</span>&nbsp;<span id='identifier'>ICustomBasicList</span>.<img src="m.gif">&nbsp;&nbsp;<span id='identifier'>RegisterChangeEvent</span>&nbsp;(<span id='identifier'>changeEvent</span>: <span id='identifier'>TIListChangeEvent</span>&nbsp;&nbsp;); <span id='bold'>overload</span>;<br>
+                  <span id='bold'>procedure</span>&nbsp;<span id='identifier'>ICustomBasicList</span>.<img src="m.gif">&nbsp;&nbsp;<span id='identifier'>RegisterChangeEvent</span>&nbsp;(<span id='identifier'>changeEvent</span>: <span id='identifier'>TIListChangeEventOO</span>); <span id='bold'>overload</span>;<br>
+                  <span id='bold'>function</span>&nbsp;&nbsp;<span id='identifier'>ICustomBasicList</span>.<img src="m.gif"><span id='identifier'>UnregisterChangeEvent</span>&nbsp;(<span id='identifier'>changeEvent</span>: <span id='identifier'>TIListChangeEvent</span>&nbsp;&nbsp;) : <span id='identifier'>boolean</span>; <span id='bold'>overload</span>;<br>
+                  <span id='bold'>function</span>&nbsp;&nbsp;<span id='identifier'>ICustomBasicList</span>.<img src="m.gif"><span id='identifier'>UnregisterChangeEvent</span>&nbsp;(<span id='identifier'>changeEvent</span>: <span id='identifier'>TIListChangeEventOO</span>) : <span id='identifier'>boolean</span>; <span id='bold'>overload</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </body>
+
+</html>

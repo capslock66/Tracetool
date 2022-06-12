@@ -13,7 +13,7 @@ unit Unt_receiver;
 interface
 
 uses
-  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  system.Contnrs, system.SyncObjs, Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, VirtualTrees; 
 
 {$Include TraceConst.Inc}

@@ -32,13 +32,13 @@ addMessage({msgId:msgId,msg:part,partNum:'Last'});partNum++;}}else{addMessage({m
 {objMessage.command=objMessage.command||"WMD";toSend.push(objMessage);if(toSend.length===1)
 setTimeout(worker,0);};function worker()
 {var objMessage;if(toSend.length!==0)
-{objMessage=toSend.shift();var hostUrl="http://"+host+"/"+objMessage.command+"?msgId="+objMessage.msgId+"&msg="+encodeURI(objMessage.msg);if(objMessage.partNum!=="")
+{objMessage=toSend.shift();var hostUrl="http://"+host+"/"+objMessage.command+"?msgId="+objMessage.msgId+"&msg="+encodeURIComponent(objMessage.msg);if(objMessage.partNum!=="")
 hostUrl=hostUrl+"&partNum="+objMessage.partNum;nbDone++;if(isNodeJs)
 sendToClientUsingRequest(hostUrl);else if(isBrowser)
 sendToClientUsingScript(hostUrl);else
 sendToClientUsingXmlHttpRequest(hostUrl);}}
 function sendToClientUsingScript(hostUrl)
-{var script=document.createElement("script");script.type="text/javascript";script.setAttribute("id","ttraceScript");script.setAttribute("name","ttraceScript");script.src=hostUrl;script.timeSend=new Date();ttraceScript=script;headId.appendChild(script);setTimeout(Worker,20000);}
+{var script=document.createElement("script");script.type="text/javascript";script.setAttribute("id","ttraceScript");script.setAttribute("name","ttraceScript");script.src=hostUrl;script.timeSend=new Date();ttraceScript=script;headId.appendChild(script);setTimeout(worker,20000);}
 function afterRun()
 {if(ttraceScript===null)
 return;headId.removeChild(ttraceScript);ttraceScript=null;setTimeout(worker,0);};function sendToClientUsingXmlHttpRequest(hostUrl)

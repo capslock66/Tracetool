@@ -1,0 +1,246 @@
+<html>
+
+  <head>
+    <title>mad* Help...</title>
+    <meta name="description" content="mad* Help...">
+    <meta name="keywords" content="madshi, components, delphi">
+    <meta http-equiv="expires" content="900">
+    <link rel=stylesheet type="text/css" href="style.css">
+  </head>
+
+  <body background="bcklight.gif" bgcolor=#F8F8F8>
+    <a name="IInterfaceList"></a>
+    <table border=0 cellpadding=0 callspacing=0><tr>
+      <td valign=bottom>
+        <table border=0 cellpadding=0 cellspacing=0><tr><td bgcolor=#D8D8D8>
+          <table cellpadding=3 border=0>
+            <tr><td bgcolor=#FFFFF0>
+              <div id="verySmall"><br></div>
+              <div id="bigTitle">&nbsp;Interface Lists&nbsp;</div>
+              <div id="verySmall"><br></div>
+              <div id="small">
+                <a class="small" href="Content.htm">Content</a> /
+                <a class="small" href="madBasic.htm">madBasic</a> /
+                <a class="small" href="madListsUnit.htm">madLists Unit</a> /...
+              </div>
+            </td></tr>
+          </table>
+        </td></tr></table>
+      </td>
+      <td valign=bottom>
+        <table border=0 cellpadding=0 cellspacing=0><tr><td bgcolor=#D8D8D8>
+          <table cellpadding=7 border=0>
+            <tr><td bgcolor=#F4F4F8><a href="http://www.madshi.net">www.madshi.net</a></td></tr>
+          </table>
+        </td></tr></table>
+      </td>
+    </tr></table>
+    <p>The "IInterfaceList" can store any interface or COM object. So it can also
+       store all my interfaces. However, if you need a list only for my interfaces,
+       you should rather use the <a href="IBasicLists.htm#IBasicList">IBasicList</a>, which will save you some type
+       castings. For a full list of methods and properties look at the
+       <a href="IInterfaceListRef.htm">IInterfaceList Reference</a>.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>type</span>&nbsp;<span id='identifier'>IInterfaceList</span>&nbsp;= <span id='bold'>interface</span>&nbsp;(<a class="pascal" href="IListBaseInterface.htm#IList">IList</a>) [<span id='string'>'{8C780300-4E4D-11D3-A52D-00005A180D69}'</span>];
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="NewInterfaceList"></a>
+    <p>When creating a new "InterfaceList", you can either create it emptily, or you
+       can right away fill it with some items:</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>NewInterfaceList</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>IInterfaceList</span>; <span id='bold'>overload</span>;<br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>NewInterfaceList</span>&nbsp;(<span id='bold'>const</span>&nbsp;<span id='identifier'>items</span>: <span id='bold'>array</span>&nbsp;<span id='bold'>of</span>&nbsp;<span id='identifier'>IUnknown</span>) : <span id='identifier'>IInterfaceList</span>; <span id='bold'>overload</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IInterfaceList.Items"></a>
+    <p>The "Items" property gives you read and write access to the items of the list:</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IInterfaceList</span>.<img src="w.gif"><span id='identifier'>Items</span>&nbsp;[<span id='bold'>index</span>: <span id='identifier'>integer</span>] : <span id='identifier'>IUnknown</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IInterfaceList.Capacity"></a>
+    <p>With the following property you can get and even directly set the size of
+       the array which holds the items. That means when you set the array to a size
+       which is smaller then <a href="IListBaseInterface.htm#IList.ItemCount">IList.ItemCount</a> you're deleting items from the
+       list. Setting the "Capacity" to zero consequently deletes all items from the
+       list.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IInterfaceList</span>.<img src="w.gif"><span id='identifier'>Capacity</span>&nbsp;: <span id='identifier'>integer</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IInterfaceList.AddItem"></a>
+    <a name="IInterfaceList.AddItems"></a>
+    <a name="IInterfaceList.InsertItem"></a>
+    <p>Use the methods "AddItem(s)" to add one or more items to our list. The
+       method "InsertItem" inserts the specified item at the specified position.
+       This makes sense only for a non sorted list, of course. The result of all 3
+       methods is the new index of the (first) added item.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>IInterfaceList</span>.<img src="m.gif"><span id='identifier'>AddItem</span>&nbsp;&nbsp;&nbsp;&nbsp;(<span id='bold'>const</span>&nbsp;<span id='identifier'>item</span>&nbsp;: <span id='identifier'>IUnknown</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;) : <span id='identifier'>integer</span>;<br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>IInterfaceList</span>.<img src="m.gif"><span id='identifier'>AddItems</span>&nbsp;&nbsp;&nbsp;(<span id='bold'>const</span>&nbsp;<span id='identifier'>items</span>: <span id='bold'>array</span>&nbsp;<span id='bold'>of</span>&nbsp;<span id='identifier'>IUnknown</span>) : <span id='identifier'>integer</span>;<br>
+                  <br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>IInterfaceList</span>.<img src="m.gif"><span id='identifier'>InsertItem</span>&nbsp;(<span id='bold'>const</span>&nbsp;<span id='identifier'>item</span>&nbsp;: <span id='identifier'>IUnknown</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="e.gif">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='bold'>index</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>integer</span>&nbsp;= <span id='number'>0</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;) : <span id='identifier'>integer</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IInterfaceList.DeleteItem"></a>
+    <a name="IInterfaceList.Clear"></a>
+    <p>You can either delete an item from the list by giving in it's index or by
+       giving in the item itself. With the method "Clear" you can delete all items
+       at once.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>function</span>&nbsp;&nbsp;<span id='identifier'>IInterfaceList</span>.<img src="m.gif"><span id='identifier'>DeleteItem</span>&nbsp;( &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='bold'>index</span>&nbsp;: <span id='identifier'>integer</span>&nbsp;) : <span id='identifier'>boolean</span>; <span id='bold'>overload</span>;<br>
+                  <span id='bold'>function</span>&nbsp;&nbsp;<span id='identifier'>IInterfaceList</span>.<img src="m.gif"><span id='identifier'>DeleteItem</span>&nbsp;(<span id='bold'>const</span>&nbsp;<span id='identifier'>item</span>&nbsp;&nbsp;: <span id='identifier'>IUnknown</span>) : <span id='identifier'>boolean</span>; <span id='bold'>overload</span>;<br>
+                  <br>
+                  <span id='bold'>procedure</span>&nbsp;<span id='identifier'>IInterfaceList</span>.<img src="m.gif"><span id='identifier'>Clear</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IInterfaceList.FindItem"></a>
+    <p>The method "FindItem" returns the index of the "item". If it is not contained
+       in this list, the result value is "-1".</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>IInterfaceList</span>.<img src="m.gif"><span id='identifier'>FindItem</span>&nbsp;(<span id='bold'>const</span>&nbsp;<span id='identifier'>item</span>: <span id='identifier'>IUnknown</span>) : <span id='identifier'>integer</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="TCompareInterface"></a>
+    <a name="IInterfaceList.SortProc"></a>
+    <a name="IInterfaceList.GetSortParams"></a>
+    <a name="IInterfaceList.SetSortParams"></a>
+    <p>Some parts of the sorting functionality were already introduced with the
+       properties <a href="IListBaseInterface.htm#IList.SortDown">IList.SortDown</a> and <a href="IListBaseInterface.htm#IList.SortInfo">IList.SortInfo</a>. Here is the 3rd
+       missing member, namely "SortProc", which wants to have a function that you
+       have to define yourself. This "TCompareInterface" function gets 2 items and
+       must return which one should be placed before or after the other one.
+       Additionally you can use the methods "GetSortParams" or "SetSortParams" to
+       access all 3 sort properties at the same time.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>type</span>&nbsp;<span id='identifier'>TCompareInterface</span>&nbsp;= <span id='bold'>function</span>&nbsp;(<span id='bold'>const</span>&nbsp;<span id='identifier'>list</span>: <a class="pascal" href="IListBaseInterface.htm#IList">IList</a>; <span id='bold'>const</span>&nbsp;<span id='identifier'>item1</span>, <span id='identifier'>item2</span>: <span id='identifier'>IUnknown</span>; <span id='identifier'>info</span>: <span id='identifier'>integer</span>) : <span id='identifier'>integer</span>;<br>
+                  <br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IInterfaceList</span>.<img src="w.gif"><span id='identifier'>SortProc</span>&nbsp;: <span id='identifier'>TCompareInterface</span>;<br>
+                  <br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>IInterfaceList</span>.<img src="m.gif"><span id='identifier'>GetSortParams</span>&nbsp;(<span id='bold'>var</span>&nbsp;<span id='identifier'>func</span>: <span id='identifier'>TCompareInterface</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="e.gif">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='bold'>var</span>&nbsp;<span id='identifier'>down</span>: <span id='identifier'>boolean</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="e.gif">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='bold'>var</span>&nbsp;<span id='identifier'>info</span>: <span id='identifier'>integer</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;) : <span id='identifier'>boolean</span>;<br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>IInterfaceList</span>.<img src="m.gif"><span id='identifier'>SetSortParams</span>&nbsp;( &nbsp;&nbsp;&nbsp;<span id='identifier'>func</span>: <span id='identifier'>TCompareInterface</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="e.gif">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>down</span>: <span id='identifier'>boolean</span>&nbsp;= <span id='identifier'>true</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="e.gif">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>info</span>: <span id='identifier'>integer</span>&nbsp;= <span id='number'>0</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;) : <span id='identifier'>boolean</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IInterfaceList.Swap"></a>
+    <p>The following method simply swaps the position of two items in the list. This
+       makes sense only for non sorted lists, or course.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>IInterfaceList</span>.<img src="m.gif"><span id='identifier'>Swap</span>&nbsp;(<span id='identifier'>index1</span>, <span id='identifier'>index2</span>: <span id='identifier'>integer</span>) : <span id='identifier'>boolean</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </body>
+
+</html>

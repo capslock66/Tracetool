@@ -7,7 +7,6 @@ inherited frame_Classic: Tframe_Classic
     Align = alClient
     BevelInner = bvNone
     BevelOuter = bvNone
-    CheckImageKind = ckDarkCheck
     Color = 16117479
     Colors.BorderColor = clWindowText
     Colors.HotColor = clBlack
@@ -20,15 +19,9 @@ inherited frame_Classic: Tframe_Classic
     Font.Style = []
     Header.AutoSizeIndex = -1
     Header.DefaultHeight = 17
-    Header.Font.Charset = DEFAULT_CHARSET
-    Header.Font.Color = clWindowText
-    Header.Font.Height = -11
-    Header.Font.Name = 'MS Sans Serif'
-    Header.Font.Style = []
     Header.Height = 17
     Header.MainColumn = 1
     Header.Options = [hoAutoResize, hoColumnResize, hoDrag, hoVisible]
-    HintAnimation = hatNone
     HintMode = hmTooltip
     Indent = 15
     Margin = 0
@@ -49,11 +42,14 @@ inherited frame_Classic: Tframe_Classic
     OnDblClick = VstDetailDblClick
     OnEditCancelled = VstDetailEditCancelled
     OnEdited = VstDetailEdited
+    OnEditing = VstDetailEditing
     OnFreeNode = VstDetailFreeNode
     OnGetText = VstDetailGetText
     OnPaintText = VstDetailPaintText
     OnKeyAction = VstDetailKeyAction
     OnMeasureItem = VstDetailMeasureItem
+    Touch.InteractiveGestures = [igPan, igPressAndTap]
+    Touch.InteractiveGestureOptions = [igoPanSingleFingerHorizontal, igoPanSingleFingerVertical, igoPanInertia, igoPanGutter, igoParentPassthrough]
     Columns = <
       item
         Color = 16117479

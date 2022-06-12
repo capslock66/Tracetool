@@ -2,7 +2,7 @@
 """
 tracetool API for python
 
-@version: 12.4
+@version: 12.5
 @contact: http://www.codeproject.com/KB/trace/tracetool.aspx
 @Author: Thierry Parent
 @copyright: Copyright (C) 2010 Thierry Parent
@@ -20,7 +20,6 @@ __all__ = ["TraceNodeBase","FontDetail","TMemberNode","TraceToSend","TraceToSend
 
 from socket import socket, AF_INET, SOCK_STREAM  #, error
 import threading
-from time import clock #, sleep
 from datetime import datetime
 import random
 from collections import namedtuple
@@ -2911,7 +2910,7 @@ class TTrace(object):
             else:
                 uid = 1
                 setattr(TTrace, "_lastUuid", 2)
-            return str(uid) + str(clock()) + str(random.randrange(0, 9999))
+            return str(uid) + str(random.randrange(0, 9999))
         
         #-----------------------------------------------------------------------------
 

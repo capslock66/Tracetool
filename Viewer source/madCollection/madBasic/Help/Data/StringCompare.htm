@@ -1,0 +1,156 @@
+<html>
+
+  <head>
+    <title>mad* Help...</title>
+    <meta name="description" content="mad* Help...">
+    <meta name="keywords" content="madshi, components, delphi">
+    <meta http-equiv="expires" content="900">
+    <link rel=stylesheet type="text/css" href="style.css">
+  </head>
+
+  <body background="bcklight.gif" bgcolor=#F8F8F8>
+    <a name="IsTextEqual"></a>
+    <table border=0 cellpadding=0 callspacing=0><tr>
+      <td valign=bottom>
+        <table border=0 cellpadding=0 cellspacing=0><tr><td bgcolor=#D8D8D8>
+          <table cellpadding=3 border=0>
+            <tr><td bgcolor=#FFFFF0>
+              <div id="verySmall"><br></div>
+              <div id="bigTitle">&nbsp;String Comparing&nbsp;</div>
+              <div id="verySmall"><br></div>
+              <div id="small">
+                <a class="small" href="Content.htm">Content</a> /
+                <a class="small" href="madBasic.htm">madBasic</a> /
+                <a class="small" href="madStringsUnit.htm">madStrings Unit</a> /...
+              </div>
+            </td></tr>
+          </table>
+        </td></tr></table>
+      </td>
+      <td valign=bottom>
+        <table border=0 cellpadding=0 cellspacing=0><tr><td bgcolor=#D8D8D8>
+          <table cellpadding=7 border=0>
+            <tr><td bgcolor=#F4F4F8><a href="http://www.madshi.net">www.madshi.net</a></td></tr>
+          </table>
+        </td></tr></table>
+      </td>
+    </tr></table>
+    <p>If you want to test whether 2 strings are identical (but case insensitive),
+       you can either use the well known "SysUtils.CompareText" or you can use the
+       following function, which is *way* faster than misusing "CompareText"
+       for this purpose:</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>IsTextEqual</span>&nbsp;(<span id='bold'>const</span>&nbsp;<span id='identifier'>s1</span>, <span id='identifier'>s2</span>: <span id='bold'>string</span>) : <span id='identifier'>boolean</span>;<br>
+                  <br>
+                  <span id='comment'>// Examples:</span><br>
+                  <span id='identifier'>IsTextEqual</span>(<span id='string'>'test123abc'</span>, <span id='string'>'test123'</span>&nbsp;&nbsp;&nbsp;) &nbsp;-> &nbsp;<span id='identifier'>false</span><br>
+                  <span id='identifier'>IsTextEqual</span>(<span id='string'>'test123abc'</span>, <span id='string'>'Test123ABC'</span>) &nbsp;-> &nbsp;<span id='identifier'>true</span>
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="CompareStr"></a>
+    <a name="CompareText"></a>
+    <p>The problem of "SysUtils.CompareText" is, that special characters like
+       umlauts or french characters are not handled correctly. Of course you can
+       use "AnsiCompareText", but that function is quite slow in comparison. My
+       "CompareText" has none of those problems.</p>
+    <p>My "CompareStr" is basically identical to "SysUtils.CompareStr", but I've
+       left it there nevertheless, because importing "SysUtils" in small programs
+       is generally a bad idea.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>CompareStr</span>&nbsp;&nbsp;(<span id='bold'>const</span>&nbsp;<span id='identifier'>s1</span>, <span id='identifier'>s2</span>: <span id='bold'>string</span>) : <span id='identifier'>integer</span>;<br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>CompareText</span>&nbsp;(<span id='bold'>const</span>&nbsp;<span id='identifier'>s1</span>, <span id='identifier'>s2</span>: <span id='bold'>string</span>) : <span id='identifier'>integer</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="StrMatch"></a>
+    <a name="TextMatch"></a>
+    <a name="FileMatch"></a>
+    <p>Sometimes you want to match 2 strings, of which one may contain wildcard
+       characters. With "Str/TextMatch" you can do such a check easily, and with
+       quite high speed. "StrMatch" checks case sensitively, while "TextMatch"
+       checks case insensitively. "FileMatch" works similar to "TextMatch", but
+       is able to handle the "fileName.ext" logic correctly.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>function</span>&nbsp;&nbsp;<span id='identifier'>StrMatch</span>&nbsp;(<span id='identifier'>str</span>, &nbsp;&nbsp;<span id='identifier'>mask</span>: <span id='bold'>string</span>) : <span id='identifier'>boolean</span>;<br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>TextMatch</span>&nbsp;(<span id='identifier'>str</span>, &nbsp;&nbsp;<span id='identifier'>mask</span>: <span id='bold'>string</span>) : <span id='identifier'>boolean</span>;<br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>FileMatch</span>&nbsp;(<span id='identifier'>file_</span>, <span id='identifier'>mask</span>: <span id='bold'>string</span>) : <span id='identifier'>boolean</span>;<br>
+                  <br>
+                  <span id='comment'>// Examples:</span><br>
+                  <span id='identifier'>StrMatch</span>&nbsp;&nbsp;(<span id='string'>'test123abc'</span>,<span id='string'>'test???abc'</span>) &nbsp;-> &nbsp;<span id='identifier'>true</span><br>
+                  <span id='identifier'>StrMatch</span>&nbsp;&nbsp;(<span id='string'>'test123abc'</span>,<span id='string'>'test?abc'</span>&nbsp;&nbsp;) &nbsp;-> &nbsp;<span id='identifier'>false</span><br>
+                  <span id='identifier'>StrMatch</span>&nbsp;&nbsp;(<span id='string'>'test123abc'</span>,<span id='string'>'test*abc'</span>&nbsp;&nbsp;) &nbsp;-> &nbsp;<span id='identifier'>true</span><br>
+                  <span id='identifier'>StrMatch</span>&nbsp;&nbsp;(<span id='string'>'test123abc'</span>,<span id='string'>'TEST*abc'</span>&nbsp;&nbsp;) &nbsp;-> &nbsp;<span id='identifier'>false</span><br>
+                  <span id='identifier'>TextMatch</span>&nbsp;(<span id='string'>'test123abc'</span>,<span id='string'>'TEST*abc'</span>&nbsp;&nbsp;) &nbsp;-> &nbsp;<span id='identifier'>true</span><br>
+                  <span id='identifier'>TextMatch</span>&nbsp;(<span id='string'>'test123abc'</span>,<span id='string'>'*.*'</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;) &nbsp;-> &nbsp;<span id='identifier'>false</span><br>
+                  <span id='identifier'>FileMatch</span>&nbsp;(<span id='string'>'test123abc'</span>,<span id='string'>'*.*'</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;) &nbsp;-> &nbsp;<span id='identifier'>true</span>
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="StrMatchEx"></a>
+    <a name="TextMatchEx"></a>
+    <p>If the capabilities of "Str/TextMatch" are not good enough for you, here are
+       extended versions of them, which additionally support the syntax
+       <nobr>"[!Length:0,1,2,4..7]"</nobr>. It's a bit difficult to explain this
+       syntax, so please have a look at the examples. I hope they are good enough
+       to show you how it works.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>function</span>&nbsp;&nbsp;<span id='identifier'>StrMatchEx</span>&nbsp;(<span id='identifier'>str</span>, <span id='identifier'>mask</span>: <span id='bold'>string</span>) : <span id='identifier'>boolean</span>;<br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>TextMatchEx</span>&nbsp;(<span id='identifier'>str</span>, <span id='identifier'>mask</span>: <span id='bold'>string</span>) : <span id='identifier'>boolean</span>;<br>
+                  <br>
+                  <span id='comment'>// Examples:</span><br>
+                  <span id='identifier'>StrMatchEx</span>&nbsp;&nbsp;(<span id='string'>'test123abc'</span>,<span id='string'>'test[3:0..9]abc'</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;) &nbsp;-> &nbsp;<span id='identifier'>true</span><br>
+                  <span id='identifier'>StrMatchEx</span>&nbsp;&nbsp;(<span id='string'>'test123abc'</span>,<span id='string'>'test[3:a..z,A..Z]abc'</span>&nbsp;) &nbsp;-> &nbsp;<span id='identifier'>false</span><br>
+                  <span id='identifier'>StrMatchEx</span>&nbsp;&nbsp;(<span id='string'>'test123abc'</span>,<span id='string'>'test[!3:a..z,A..Z]abc'</span>) &nbsp;-> &nbsp;<span id='identifier'>true</span><br>
+                  <span id='identifier'>StrMatchEx</span>&nbsp;&nbsp;(<span id='string'>'test123abc'</span>,<span id='string'>'test123[3:A,b,C]'</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;) &nbsp;-> &nbsp;<span id='identifier'>false</span><br>
+                  <span id='identifier'>TextMatchEx</span>&nbsp;(<span id='string'>'test123abc'</span>,<span id='string'>'test123[3:A,b,C]'</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;) &nbsp;-> &nbsp;<span id='identifier'>true</span>
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </body>
+
+</html>

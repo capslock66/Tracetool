@@ -1,0 +1,89 @@
+<html>
+
+  <head>
+    <title>mad* Help...</title>
+    <meta name="description" content="mad* Help...">
+    <meta name="keywords" content="madshi, components, delphi">
+    <meta http-equiv="expires" content="900">
+    <link rel=stylesheet type="text/css" href="style.css">
+  </head>
+
+  <body background="bcklight.gif" bgcolor=#F8F8F8>
+    <table border=0 cellpadding=0 callspacing=0><tr>
+      <td valign=bottom>
+        <table border=0 cellpadding=0 cellspacing=0><tr><td bgcolor=#D8D8D8>
+          <table cellpadding=3 border=0>
+            <tr><td bgcolor=#FFFFF0>
+              <div id="verySmall"><br></div>
+              <div id="bigTitle">&nbsp;madTypes Unit&nbsp;</div>
+              <div id="verySmall"><br></div>
+              <div id="small">
+                <a class="small" href="Content.htm">Content</a> /
+                <a class="small" href="madBasic.htm">madBasic</a> /...
+              </div>
+            </td></tr>
+          </table>
+        </td></tr></table>
+      </td>
+      <td valign=bottom>
+        <table border=0 cellpadding=0 cellspacing=0><tr><td bgcolor=#D8D8D8>
+          <table cellpadding=7 border=0>
+            <tr><td bgcolor=#F4F4F8><a href="http://www.madshi.net">www.madshi.net</a></td></tr>
+          </table>
+        </td></tr></table>
+      </td>
+    </tr></table>
+    <p>You surely know these situations where you create a new function, which needs
+       e.g. a "^whatever" type. But the only such predefined type (I know of) is
+       windows.PInt, which is "^integer". So if you need any other type, you have to
+       define it yourself. And that in every unit over and over again. Being tired
+       of that I decided to make a collection of the most useful type variations.
+       The unit "madTypes" consists of nothing but such standard type definitions.</p>
+    <p>The <a href="madTypesRef.htm">madTypes Reference</a> contains a list of all types I've defined.</p>
+    <p>The names of the types follow a specific logic, which is:</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>type</span><br>
+                  &nbsp;&nbsp;<span id='identifier'>TPWhatever</span>&nbsp;&nbsp;&nbsp;= ^<span id='identifier'>whatever</span>;<br>
+                  <br>
+                  &nbsp;&nbsp;<span id='identifier'>TSWhatever</span>&nbsp;&nbsp;&nbsp;= <span id='bold'>set</span>&nbsp;<span id='bold'>of</span>&nbsp;<span id='identifier'>whatever</span>;<br>
+                  &nbsp;&nbsp;<span id='identifier'>TPSWhatever</span>&nbsp;&nbsp;= ^<span id='identifier'>TSWhatever</span>;<br>
+                  <br>
+                  &nbsp;&nbsp;<span id='identifier'>TAWhatever</span>&nbsp;&nbsp;&nbsp;= <span id='bold'>array</span>&nbsp;[<span id='number'>0</span>..<span id='identifier'>highestPossibleIndex</span>] <span id='bold'>of</span>&nbsp;<span id='identifier'>whatever</span>;<br>
+                  &nbsp;&nbsp;<span id='identifier'>TPAWhatever</span>&nbsp;&nbsp;= ^<span id='identifier'>TAWhatever</span>;<br>
+                  <br>
+                  &nbsp;&nbsp;<span id='identifier'>TDAWhatever</span>&nbsp;&nbsp;= <span id='bold'>array</span>&nbsp;<span id='bold'>of</span>&nbsp;<span id='identifier'>whatever</span>;<br>
+                  &nbsp;&nbsp;<span id='identifier'>TPDAWhatever</span>&nbsp;= ^<span id='identifier'>TDAWhatever</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <p>I've sorted the types into the following categories:</p>
+    <table border=0 cellpadding=0 callspacing=0>
+      <tr><td bgcolor=#D8D8D8>
+        <table border=0 cellpadding=7>
+          <tr>
+            <td bgcolor=#6060B0><div id="smallTitle">Categories</div></td>
+            <td bgcolor=#F8F0F0><a href="BooleanTypes.htm">Boolean</a></td>
+            <td bgcolor=#F4F4F8><a href="CharTypes.htm">Char</a></td>
+            <td bgcolor=#F8F0F0><a href="UnsignedTypes.htm">Unsigned Ordinal</a></td>
+            <td bgcolor=#F4F4F8><a href="SignedTypes.htm">Signed Ordinal</a></td>
+            <td bgcolor=#F8F0F0><a href="PointerTypes.htm">Pointer</a></td>
+            <td bgcolor=#F4F4F8><a href="StringTypes.htm">String</a></td>
+            <td bgcolor=#F8F0F0><a href="IUnknownTypes.htm">IUnknown</a></td>
+          </tr>
+        </table>
+      </td></tr>
+    </table>
+  </body>
+
+</html>

@@ -1,0 +1,135 @@
+<html>
+
+  <head>
+    <title>mad* Help...</title>
+    <meta name="description" content="mad* Help...">
+    <meta name="keywords" content="madshi, components, delphi">
+    <meta http-equiv="expires" content="900">
+    <link rel=stylesheet type="text/css" href="style.css">
+  </head>
+
+  <body background="bcklight.gif" bgcolor=#F8F8F8>
+    <table border=0 cellpadding=0 callspacing=0><tr>
+      <td valign=bottom>
+        <table border=0 cellpadding=0 cellspacing=0><tr><td bgcolor=#D8D8D8>
+          <table cellpadding=3 border=0>
+            <tr><td bgcolor=#FFFFF0>
+              <div id="verySmall"><br></div>
+              <div id="bigTitle">&nbsp;"Hooking Notepad" Example&nbsp;</div>
+              <div id="verySmall"><br></div>
+              <div id="small">...
+              </div>
+            </td></tr>
+          </table>
+        </td></tr></table>
+      </td>
+      <td valign=bottom>
+        <table border=0 cellpadding=0 cellspacing=0><tr><td bgcolor=#D8D8D8>
+          <table cellpadding=7 border=0>
+            <tr><td bgcolor=#F4F4F8><a href="http://www.madshi.net">www.madshi.net</a></td></tr>
+          </table>
+        </td></tr></table>
+      </td>
+    </tr></table>
+    <p>The following projects can also be found in the "Demo" folder. Here comes
+       the application's source code:</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='comment'>// demonstrate how to use madCodeHook to hook into another process</span><br>
+                  <br>
+                  <span id='comment'>// this application does nothing but start notepad with our hook dll</span><br>
+                  <br>
+                  <span id='bold'>program</span>&nbsp;<span id='identifier'>StartNotepad</span>;<br>
+                  <br>
+                  <span id='bold'>uses</span>&nbsp;<span id='identifier'>Windows</span>, <span id='identifier'>madCodeHook</span>;<br>
+                  <br>
+                  <span id='bold'>var</span>&nbsp;<span id='identifier'>si</span>&nbsp;: <span id='identifier'>TStartupInfo</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>pi</span>&nbsp;: <span id='identifier'>TProcessInformation</span>;<br>
+                  <span id='bold'>begin</span><br>
+                  &nbsp;&nbsp;<span id='identifier'>ZeroMemory</span>(@<span id='identifier'>si</span>, <span id='identifier'>sizeOf</span>(<span id='identifier'>si</span>));<br>
+                  &nbsp;&nbsp;<span id='comment'>// the following call works exactly like "CreateProcess(A)"</span><br>
+                  &nbsp;&nbsp;<span id='comment'>// the only difference is that "CreateProcessEx" does more than starting notepad</span><br>
+                  &nbsp;&nbsp;<span id='comment'>// it also injects the specified dll into the newly started process</span><br>
+                  &nbsp;&nbsp;<span id='comment'>// that's all we need to do in this application, the rest is up to the dll</span><br>
+                  &nbsp;&nbsp;<a class="pascal" href="DllInjecting.htm#CreateProcessEx">CreateProcessEx</a>(<span id='bold'>nil</span>, <span id='string'>'notepad.exe'</span>, <span id='bold'>nil</span>, <span id='bold'>nil</span>, <span id='identifier'>false</span>, <span id='number'>0</span>, <span id='bold'>nil</span>, <span id='bold'>nil</span>, <span id='identifier'>si</span>, <span id='identifier'>pi</span>, <span id='string'>'hookNotepad.dll'</span>);<br>
+                  <span id='bold'>end</span>.
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <p>And here is the DLL's source code:</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='comment'>// demonstrate how to use madCodeHook to hook into another process</span><br>
+                  <br>
+                  <span id='comment'>// this DLL hooks into the message handling of the current process</span><br>
+                  <span id='comment'>// by hooking the official Windows API TranslateMessage</span><br>
+                  <span id='comment'>// only characters that occur in the name "madshi" are allowed to be entered</span><br>
+                  <span id='comment'>// such characters are upper cased, other characters are killed</span><br>
+                  <br>
+                  <span id='bold'>library</span>&nbsp;<span id='identifier'>hookNotepad</span>;<br>
+                  <br>
+                  <span id='bold'>uses</span>&nbsp;<span id='identifier'>Windows</span>, <span id='identifier'>Messages</span>, <span id='identifier'>madCodeHook</span>;<br>
+                  <br>
+                  <span id='comment'>// variable for the "next hook", which we then call in the callback function</span><br>
+                  <span id='comment'>// it must have *exactly* the same parameters and calling convention as the</span><br>
+                  <span id='comment'>// original function</span><br>
+                  <span id='comment'>// besides, it's also the parameter that you need to undo the code hook again</span><br>
+                  <span id='bold'>var</span>&nbsp;<span id='identifier'>TranslateMessageNextHook</span>&nbsp;: <span id='bold'>function</span>&nbsp;(<span id='bold'>var</span>&nbsp;<span id='identifier'>msg</span>: <span id='identifier'>TMsg</span>) : <span id='identifier'>longBool</span>; <span id='bold'>stdcall</span>;<br>
+                  <br>
+                  <span id='comment'>// this function is our hook callback function, which will receive</span><br>
+                  <span id='comment'>// all calls to the original TranslateMessage API, as soon as we've hooked it</span><br>
+                  <span id='comment'>// the hook function must have *exactly* the same parameters and calling</span><br>
+                  <span id='comment'>// convention as the original API</span><br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>TranslateMessageCallbackProc</span>(<span id='bold'>var</span>&nbsp;<span id='identifier'>msg</span>: <span id='identifier'>TMsg</span>) : <span id='identifier'>longBool</span>; <span id='bold'>stdcall</span>;<br>
+                  <span id='bold'>begin</span><br>
+                  &nbsp;&nbsp;<span id='comment'>// first of all call the original function to let the message be translated</span><br>
+                  &nbsp;&nbsp;<span id='identifier'>result</span>&nbsp;:= <span id='identifier'>TranslateMessageNextHook</span>(<span id='identifier'>msg</span>);<br>
+                  &nbsp;&nbsp;<span id='comment'>// now check whether we have a WM_CHAR message</span><br>
+                  &nbsp;&nbsp;<span id='bold'>if</span>&nbsp;<span id='identifier'>msg</span>.<span id='bold'>message</span>&nbsp;= <span id='identifier'>WM_CHAR</span>&nbsp;<span id='bold'>then</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>// we have...</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='bold'>case</span>&nbsp;<span id='identifier'>char</span>(<span id='identifier'>msg</span>.<span id='identifier'>wParam</span>) <span id='bold'>of</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>// control keys are accepted</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='string'>#00</span>..<span id='string'>#31</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: ;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>// also upper case "madshi" characters</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='string'>'M'</span>, <span id='string'>'A'</span>, <span id='string'>'D'</span>, <span id='string'>'S'</span>, <span id='string'>'H'</span>, <span id='string'>'I'</span>&nbsp;: ;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>// lower case "madshi" characters are made upper case</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='string'>'m'</span>, <span id='string'>'a'</span>, <span id='string'>'d'</span>, <span id='string'>'s'</span>, <span id='string'>'h'</span>, <span id='string'>'i'</span>&nbsp;: <span id='identifier'>msg</span>.<span id='identifier'>wParam</span>&nbsp;&nbsp;:= <span id='identifier'>msg</span>.<span id='identifier'>wParam</span>&nbsp;- <span id='identifier'>ord</span>(<span id='string'>'a'</span>) + <span id='identifier'>ord</span>(<span id='string'>'A'</span>);<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>// everything else is simply killed</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='bold'>else</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>msg</span>.<span id='bold'>message</span>&nbsp;:= <span id='identifier'>WM_NULL</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='bold'>end</span>;<br>
+                  <span id='bold'>end</span>;<br>
+                  <br>
+                  <span id='bold'>begin</span><br>
+                  &nbsp;&nbsp;<span id='comment'>// we install our hook on the API...</span><br>
+                  &nbsp;&nbsp;<span id='comment'>// alternatively to the call below you can also use one of the following:</span><br>
+                  &nbsp;&nbsp;<span id='comment'>// - HookAPI(user32, 'TranslateMessage', @TranslateMessageHookProc, @TranslateMessageNextHook);</span><br>
+                  &nbsp;&nbsp;<span id='comment'>// - HookAPI(GetProcAddress(GetModuleHandle(user32), 'TranslateMessage'),</span><br>
+                  &nbsp;&nbsp;<span id='comment'>// &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;@TranslateMessageHookProc, @TranslateMessageNextHook);</span><br>
+                  &nbsp;&nbsp;<a class="pascal" href="ApiCodeHooking.htm#HookCode">HookCode</a>(@<span id='identifier'>TranslateMessage</span>, @<span id='identifier'>TranslateMessageCallbackProc</span>, @<span id='identifier'>TranslateMessageNextHook</span>);<br>
+                  <span id='bold'>end</span>.
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </body>
+
+</html>

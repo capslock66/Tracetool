@@ -1,0 +1,208 @@
+<html>
+
+  <head>
+    <title>mad* Help...</title>
+    <meta name="description" content="mad* Help...">
+    <meta name="keywords" content="madshi, components, delphi">
+    <meta http-equiv="expires" content="900">
+    <link rel=stylesheet type="text/css" href="style.css">
+  </head>
+
+  <body background="bcklight.gif" bgcolor=#F8F8F8>
+    <table border=0 cellpadding=0 callspacing=0><tr>
+      <td valign=bottom>
+        <table border=0 cellpadding=0 cellspacing=0><tr><td bgcolor=#D8D8D8>
+          <table cellpadding=3 border=0>
+            <tr><td bgcolor=#FFFFF0>
+              <div id="verySmall"><br></div>
+              <div id="bigTitle">&nbsp;madZip Unit&nbsp;</div>
+              <div id="verySmall"><br></div>
+              <div id="small">
+                <a class="small" href="Content.htm">Content</a> /
+                <a class="small" href="madBasic.htm">madBasic</a> /...
+              </div>
+            </td></tr>
+          </table>
+        </td></tr></table>
+      </td>
+      <td valign=bottom>
+        <table border=0 cellpadding=0 cellspacing=0><tr><td bgcolor=#D8D8D8>
+          <table cellpadding=7 border=0>
+            <tr><td bgcolor=#F4F4F8><a href="http://www.madshi.net">www.madshi.net</a></td></tr>
+          </table>
+        </td></tr></table>
+      </td>
+    </tr></table>
+    <p>There are a whole lot of situations where compression is useful. But often
+       compression components are either complicated to use or cost money or both.
+       So I've built my own little unit, which is based on the well known "zlib"
+       routines. I've thrown out a lot of stuff, though, reduced it all to the
+       absolutely necessary. E.g. I've chosen the compression factor which had for
+       my taste the best overall relation between compression speed, compression
+       size and code size - and removed all other compression factors. The
+       functions offered by madZip are as easy to use as they can be. But on the
+       other hand this unit does not offer fancy solutions. Not even the official
+       zip format is supported. Just plain data compression and uncompression. For
+       a quick overview of contained functions just look at the
+       <a href="madZipRef.htm">madZip Reference</a>.</p>
+    <a name="Compress"></a>
+    <a name="Uncompress"></a>
+    <p>Delphi strings are quite nice to use even for binary data, so my number one
+       compression wish was to have straight string (un)compression. The "Compress"
+       function has one predefined parameter: If you set "failIfGrow" to true, the
+       "Compress" function will return an empty string, if the compressed string is
+       longer than the original data.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>function</span>&nbsp;&nbsp;&nbsp;<span id='identifier'>Compress</span>&nbsp;(<span id='identifier'>data</span>: <span id='bold'>string</span>; <span id='identifier'>failIfGrow</span>: <span id='identifier'>boolean</span>&nbsp;= <span id='identifier'>false</span>) : <span id='bold'>string</span>; <span id='bold'>overload</span>;<br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>Uncompress</span>&nbsp;(<span id='identifier'>data</span>: <span id='bold'>string</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;) : <span id='bold'>string</span>; <span id='bold'>overload</span>;<br>
+                  <br>
+                  <span id='comment'>// Example:</span><br>
+                  <span id='identifier'>strVar</span>&nbsp;:= <span id='identifier'>Compress</span>(<span id='string'>'Does compressing this text really save much space??'</span>);<br>
+                  <span id='identifier'>ShowMessage</span>(<span id='identifier'>Uncompress</span>(<span id='identifier'>strVar</span>));
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <p>Sometimes you deal with plain pointers or buffers instead of with Delphi
+       strings. Of course there are functions for that purpose, too. Please note,
+       that the destination buffer should be 10% plus 12 bytes bigger than the
+       source buffer to make sure that the compression can fully run through.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>function</span>&nbsp;&nbsp;&nbsp;<span id='identifier'>Compress</span>&nbsp;(<span id='identifier'>src</span>, <span id='identifier'>dst</span>: <span id='identifier'>pointer</span>; <span id='identifier'>srcLen</span>, <span id='identifier'>dstLen</span>: <span id='identifier'>integer</span>) : <span id='identifier'>integer</span>; <span id='bold'>overload</span>;<br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>Uncompress</span>&nbsp;(<span id='identifier'>src</span>, <span id='identifier'>dst</span>: <span id='identifier'>pointer</span>; <span id='identifier'>srcLen</span>, <span id='identifier'>dstLen</span>: <span id='identifier'>integer</span>) : <span id='identifier'>integer</span>; <span id='bold'>overload</span>;<br>
+                  <br>
+                  <span id='comment'>// Example:</span><br>
+                  <span id='bold'>procedure</span>&nbsp;<span id='identifier'>CompressBufIntoStream</span>(<span id='identifier'>buf</span>: <span id='identifier'>pointer</span>; <span id='identifier'>len</span>: <span id='identifier'>integer</span>; <span id='identifier'>stream</span>: <span id='identifier'>TStream</span>);<br>
+                  <span id='bold'>var</span>&nbsp;<span id='identifier'>temp</span>&nbsp;: <span id='identifier'>pointer</span>;<br>
+                  <span id='bold'>begin</span><br>
+                  &nbsp;&nbsp;<span id='identifier'>GetMem</span>(<span id='identifier'>temp</span>, <span id='identifier'>len</span>&nbsp;* <span id='number'>11</span>&nbsp;<span id='bold'>div</span>&nbsp;<span id='number'>10</span>&nbsp;+ <span id='number'>12</span>);<br>
+                  &nbsp;&nbsp;<span id='bold'>try</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>len</span>&nbsp;:= <span id='identifier'>Compress</span>(<span id='identifier'>buf</span>, <span id='identifier'>temp</span>, <span id='identifier'>len</span>, <span id='identifier'>len</span>&nbsp;* <span id='number'>11</span>&nbsp;<span id='bold'>div</span>&nbsp;<span id='number'>10</span>&nbsp;+ <span id='number'>12</span>);<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>stream</span>.<span id='identifier'>WriteBuffer</span>(<span id='identifier'>temp</span>^, <span id='identifier'>len</span>);<br>
+                  &nbsp;&nbsp;<span id='bold'>finally</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>FreeMem</span>(<span id='identifier'>temp</span>);<br>
+                  &nbsp;&nbsp;<span id='bold'>end</span>;<br>
+                  <span id='bold'>end</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <p>Finally there are direct file compression/uncompression routines. Please
+       note, though, that the compressed file does *not* have the official zip
+       format. Instead it has no real format at all. It contains just the
+       compressed data (with a mini mini header).</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>function</span>&nbsp;&nbsp;&nbsp;<span id='identifier'>Compress</span>&nbsp;(<span id='identifier'>srcFile</span>, <span id='identifier'>dstFile</span>: <span id='bold'>string</span>; <span id='identifier'>failIfGrow</span>&nbsp;&nbsp;&nbsp;: <span id='identifier'>boolean</span>&nbsp;= <span id='identifier'>false</span>) : <span id='identifier'>boolean</span>; <span id='bold'>overload</span>;<br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>Uncompress</span>&nbsp;(<span id='identifier'>srcFile</span>, <span id='identifier'>dstFile</span>: <span id='bold'>string</span>; <span id='identifier'>lastWriteTime</span>: <span id='identifier'>int64</span>&nbsp;&nbsp;&nbsp;= <span id='number'>0</span>&nbsp;&nbsp;&nbsp;&nbsp;) : <span id='identifier'>boolean</span>; <span id='bold'>overload</span>;<br>
+                  <br>
+                  <span id='comment'>// Example:</span><br>
+                  <span id='identifier'>Compress</span>(<span id='string'>'c:\autoexec.bat'</span>, <span id='string'>'c:\autoexec.$$$'</span>);
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IsCompressedFileEqual"></a>
+    <p>If you want to find out whether a compressed file is identical to another
+       uncompressed file, you can use the following function. It only compares the
+       (uncompressed) file sizes of the two files and the crc32 value. If this
+       function returns true, it is *probable* that the two files are identical,
+       but if you want to be 100% sure you will have to uncompress the compressed
+       file and compare them byte by byte.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>IsCompressedFileEqual</span>&nbsp;(<span id='identifier'>uncomprFile</span>, <span id='identifier'>comprFile</span>: <span id='bold'>string</span>) : <span id='identifier'>boolean</span>;<br>
+                  <br>
+                  <span id='comment'>// Example:</span><br>
+                  <span id='bold'>if</span>&nbsp;<span id='bold'>not</span>&nbsp;<span id='identifier'>IsCompressedFileEqual</span>(<span id='string'>'c:\autoexec.bat'</span>, <span id='string'>'c:\autoexec.$$$'</span>) <span id='bold'>then</span><br>
+                  &nbsp;&nbsp;<span id='identifier'>Compress</span>(<span id='string'>'c:\autoexec.bat'</span>, <span id='string'>'c:\autoexec.$$$'</span>);
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="UpdateCrc32"></a>
+    <p>Since madZip internally needs a function which can calculate a crc32 value,
+       madZip can also export it for your personal use.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>UpdateCrc32</span>&nbsp;(<span id='identifier'>crc32</span>: <span id='identifier'>cardinal</span>; <span id='bold'>const</span>&nbsp;<span id='identifier'>inBuf</span>; <span id='identifier'>inLen</span>: <span id='identifier'>integer</span>) : <span id='identifier'>cardinal</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="Zip"></a>
+    <p>You can create a "zip" compatible archive by calling the "Zip" function. The
+       first parameter is the full file path of the new zip archive. The second
+       parameter must be an array of the files you want to have zipped into the
+       archive (full file path again, please). The third array (only file names,
+       please) allows you to store the files into the zip under a different name.
+       Generally the resulting zip archive will not contain any directory
+       structure. All zipped files are directly stored in the archive's root.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>Zip</span>&nbsp;(<span id='identifier'>zip</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='bold'>string</span>; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>// full path </span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='bold'>const</span>&nbsp;<span id='identifier'>files</span>&nbsp;: <span id='bold'>array</span>&nbsp;<span id='bold'>of</span>&nbsp;<span id='bold'>string</span>; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>// full path</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='bold'>const</span>&nbsp;<span id='identifier'>zipAs</span>&nbsp;: <span id='identifier'>TDAString</span>&nbsp;= <span id='bold'>nil</span>) : <span id='identifier'>boolean</span>; &nbsp;<span id='comment'>// only name, no path</span>
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </body>
+
+</html>

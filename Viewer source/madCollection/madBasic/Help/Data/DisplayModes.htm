@@ -1,0 +1,216 @@
+<html>
+
+  <head>
+    <title>mad* Help...</title>
+    <meta name="description" content="mad* Help...">
+    <meta name="keywords" content="madshi, components, delphi">
+    <meta http-equiv="expires" content="900">
+    <link rel=stylesheet type="text/css" href="style.css">
+  </head>
+
+  <body background="bcklight.gif" bgcolor=#F8F8F8>
+    <a name="IDisplayModes"></a>
+    <a name="DisplayModes"></a>
+    <a name="IDisplayModes.Items"></a>
+    <a name="IDisplayModes.Item"></a>
+    <table border=0 cellpadding=0 callspacing=0><tr>
+      <td valign=bottom>
+        <table border=0 cellpadding=0 cellspacing=0><tr><td bgcolor=#D8D8D8>
+          <table cellpadding=3 border=0>
+            <tr><td bgcolor=#FFFFF0>
+              <div id="verySmall"><br></div>
+              <div id="bigTitle">&nbsp;Display Modes&nbsp;</div>
+              <div id="verySmall"><br></div>
+              <div id="small">
+                <a class="small" href="Content.htm">Content</a> /
+                <a class="small" href="madShell.htm">madShell</a> /...
+              </div>
+            </td></tr>
+          </table>
+        </td></tr></table>
+      </td>
+      <td valign=bottom>
+        <table border=0 cellpadding=0 cellspacing=0><tr><td bgcolor=#D8D8D8>
+          <table cellpadding=7 border=0>
+            <tr><td bgcolor=#F4F4F8><a href="http://www.madshi.net">www.madshi.net</a></td></tr>
+          </table>
+        </td></tr></table>
+      </td>
+    </tr></table>
+    <p>The function "DisplayModes" enumerates all display modes that your current
+       graphics card/driver supports and returns the results collected in an
+       "IDisplayModes" object. This interface has only the own property "Items",
+       with which you can access all list items, and the own method "Item", with
+       which you can look for a specific display mode. See also the
+       <a href="IDisplayModesRef.htm">IDisplayModes Reference</a>.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>type</span>&nbsp;<span id='identifier'>IDisplayModes</span>&nbsp;= <span id='bold'>interface</span>&nbsp;(<a class="pascal" href="ICustomBasicListBaseInterface.htm#ICustomBasicList">ICustomBasicList</a>) [<span id='string'>'{00BED965-C78D-11D3-A530-00005A180D69}'</span>];<br>
+                  <br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>DisplayModes</span>&nbsp;: <span id='identifier'>IDisplayModes</span>;<br>
+                  <br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IDisplayModes</span>.<img src="r.gif"><span id='identifier'>Items</span>&nbsp;[<span id='bold'>index</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>integer</span>] : <a class="pascal" href="#IDisplayMode">IDisplayMode</a>; &nbsp;<br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>IDisplayModes</span>.<img src="m.gif"><span id='identifier'>Item</span>&nbsp;&nbsp;(<span id='identifier'>width</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>integer</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="e.gif">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>height</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>integer</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="e.gif">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>bitsPerPixel</span>&nbsp;: <span id='identifier'>integer</span>) : <a class="pascal" href="#IDisplayMode">IDisplayMode</a>;<br>
+                  <br>
+                  <span id='comment'>// Example:</span><br>
+                  <span id='identifier'>ShowMessage</span>(<span id='string'>'The graphics card supports '</span>&nbsp;+ <span id='identifier'>IntToStr</span>(<span id='identifier'>DisplayModes</span>.<a class="pascal" href="IListBaseInterface.htm#IList.ItemCount">ItemCount</a>) + <span id='string'>' modes.'</span>);
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IDisplayMode"></a>
+    <a name="DisplayMode"></a>
+    <a name="CurrentDisplayMode"></a>
+    <p>Then we have the interface "IDisplayMode" (see also the
+       <a href="IDisplayModeRef.htm">IDisplayMode Reference</a>). You can get an instance of this interface
+       through the <a href="#IDisplayModes">IDisplayModes</a> enumeration object, or by calling the
+       function "DisplayMode", which directly looks for a specific display mode.
+       Finally you can also ask for the current display mode.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>type</span>&nbsp;<span id='identifier'>IDisplayMode</span>&nbsp;= <span id='bold'>interface</span>&nbsp;(<a class="pascal" href="IBasicBaseInterface.htm#IBasic">IBasic</a>) [<span id='string'>'{00BED964-C78D-11D3-A530-00005A180D69}'</span>];<br>
+                  <br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>DisplayMode</span>&nbsp;(<span id='identifier'>width</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>integer</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>height</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>integer</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>bitsPerPixel</span>&nbsp;: <span id='identifier'>integer</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>refreshRate</span>&nbsp;&nbsp;: <span id='identifier'>integer</span>&nbsp;= <span id='number'>0</span>) : <span id='identifier'>IDisplayMode</span>;<br>
+                  <br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>CurrentDisplayMode</span>&nbsp;: <span id='identifier'>IDisplayMode</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IDisplayMode.Width"></a>
+    <a name="IDisplayMode.Height"></a>
+    <a name="IDisplayMode.BitsPerPixel"></a>
+    <a name="IDisplayMode.NoOfColors"></a>
+    <p>The 3 properties "Width", "Height" and "BitsPerPixel" are the parameters,
+       which define a display mode. The property "NoOfColors" is only a different
+       presentation of the "BitsPerPixel" value.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IDisplayMode</span>.<img src="r.gif"><span id='identifier'>Width</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>integer</span>;<br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IDisplayMode</span>.<img src="r.gif"><span id='identifier'>Height</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>integer</span>;<br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IDisplayMode</span>.<img src="r.gif"><span id='identifier'>BitsPerPixel</span>&nbsp;: <span id='identifier'>integer</span>;<br>
+                  <br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IDisplayMode</span>.<img src="r.gif"><span id='identifier'>NoOfColors</span>&nbsp;&nbsp;&nbsp;: <span id='identifier'>integer</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IDisplayMode.RefreshRate"></a>
+    <a name="IDisplayMode.IsInterlaced"></a>
+    <a name="IDisplayMode.IsGrayScale"></a>
+    <p>A display mode can also have some additional informations. But most drivers
+       don't support (fill) these parameters:</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IDisplayMode</span>.<img src="r.gif"><span id='identifier'>RefreshRate</span>&nbsp;&nbsp;: <span id='identifier'>integer</span>;<br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>IDisplayMode</span>.<img src="m.gif"><span id='identifier'>IsInterlaced</span>&nbsp;: <span id='identifier'>boolean</span>;<br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>IDisplayMode</span>.<img src="m.gif"><span id='identifier'>IsGrayScale</span>&nbsp;&nbsp;: <span id='identifier'>boolean</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IDisplayMode.IsRestartNecessary"></a>
+    <a name="TDisplayModeInstallResult"></a>
+    <a name="IDisplayMode.Install"></a>
+    <p>The "Install" method installs the display mode, which is represented by the
+       current "IDisplayMode" object. There are several flags that you can set.
+       Some behave differently with different graphics cards/drivers, so you have
+       to try a bit, until you find the best combination for your purposes. The
+       "updateRegistry" parameter determines, whether the newly installed display
+       mode should survive system reboot.</p>
+    <p>Some display modes on some graphics cards/drivers can only be installed
+       with a reboot of the system. You can ask this information with the
+       "IsRestartNecessary" method.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>IDisplayMode</span>.<img src="m.gif"><span id='identifier'>IsRestartNecessary</span>&nbsp;: <span id='identifier'>boolean</span>;<br>
+                  <br>
+                  <span id='bold'>type</span>&nbsp;<span id='identifier'>TDisplayModeInstallResult</span>&nbsp;= (<span id='identifier'>dmOk</span>, <span id='identifier'>dmRestart</span>, <span id='identifier'>dmError</span>);<br>
+                  <br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>IDisplayMode</span>.<img src="m.gif"><span id='identifier'>Install</span>&nbsp;(<span id='identifier'>failIfRestartNecessary</span>&nbsp;: <span id='identifier'>boolean</span>&nbsp;= <span id='identifier'>true</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="e.gif">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>fullScreen</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>boolean</span>&nbsp;= <span id='identifier'>true</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="e.gif">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>updateRegistry</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>boolean</span>&nbsp;= <span id='identifier'>false</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="e.gif">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>forAllUsers</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>boolean</span>&nbsp;= <span id='identifier'>false</span>) : <span id='identifier'>TDisplayModeInstallResult</span>;<br>
+                  <br>
+                  <span id='comment'>// Example:</span><br>
+                  <a class="pascal" href="#DisplayMode">DisplayMode</a>(<span id='number'>800</span>, <span id='number'>600</span>, <span id='number'>16</span>).<span id='identifier'>Install</span>; &nbsp;<span id='comment'>// Installs 800x600 / 16-bit-color</span>
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="RestoreDisplayMode"></a>
+    <p>The following function restores the display mode, which is stored in the
+       registry. This works only, if you installed the display mode without the
+       flag "updateRegistry", and even then it does not work on all graphics
+       cards/drivers. So if you want to go the secure way, you should better ask
+       the old display mode and store it in a private registry key yourself before
+       installing a new one. This way you can go back manually.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>RestoreDisplayMode</span>&nbsp;(<span id='identifier'>dontResizeOtherWindows</span>&nbsp;: <span id='identifier'>boolean</span>&nbsp;= <span id='identifier'>false</span>) : <span id='identifier'>TDisplayModeInstallResult</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </body>
+
+</html>

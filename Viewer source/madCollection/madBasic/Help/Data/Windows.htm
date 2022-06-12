@@ -1,0 +1,791 @@
+<html>
+
+  <head>
+    <title>mad* Help...</title>
+    <meta name="description" content="mad* Help...">
+    <meta name="keywords" content="madshi, components, delphi">
+    <meta http-equiv="expires" content="900">
+    <link rel=stylesheet type="text/css" href="style.css">
+  </head>
+
+  <body background="bcklight.gif" bgcolor=#F8F8F8>
+    <a name="IWindow"></a>
+    <a name="IWindows"></a>
+    <table border=0 cellpadding=0 callspacing=0><tr>
+      <td valign=bottom>
+        <table border=0 cellpadding=0 cellspacing=0><tr><td bgcolor=#D8D8D8>
+          <table cellpadding=3 border=0>
+            <tr><td bgcolor=#FFFFF0>
+              <div id="verySmall"><br></div>
+              <div id="bigTitle">&nbsp;Windows&nbsp;</div>
+              <div id="verySmall"><br></div>
+              <div id="small">
+                <a class="small" href="Content.htm">Content</a> /
+                <a class="small" href="madKernel.htm">madKernel</a> /...
+              </div>
+            </td></tr>
+          </table>
+        </td></tr></table>
+      </td>
+      <td valign=bottom>
+        <table border=0 cellpadding=0 cellspacing=0><tr><td bgcolor=#D8D8D8>
+          <table cellpadding=7 border=0>
+            <tr><td bgcolor=#F4F4F8><a href="http://www.madshi.net">www.madshi.net</a></td></tr>
+          </table>
+        </td></tr></table>
+      </td>
+    </tr></table>
+    <p>Not really a "kernel" handle, but not less important are "Window" handles.
+       So madKernel encapsulates those, too. A single window is wrapped up in the
+       "IWindow" interface, while a list of windows is managed by "IWindows". See
+       also the <a href="IWindowRef.htm">IWindow Reference</a> and the <a href="IWindowsRef.htm">IWindows Reference</a>.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>type</span><br>
+                  &nbsp;&nbsp;<span id='identifier'>IWindow</span>&nbsp;&nbsp;= <span id='bold'>interface</span>&nbsp;(<a class="pascal" href="IBasicBaseInterface.htm#IBasic">IBasic</a>) &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[<span id='string'>'{F70A8420-C1D6-11D3-A530-00005A180D69}'</span>];<br>
+                  &nbsp;&nbsp;<span id='identifier'>IWindows</span>&nbsp;= <span id='bold'>interface</span>&nbsp;(<a class="pascal" href="ICustomBasicListBaseInterface.htm#ICustomBasicList">ICustomBasicList</a>) [<span id='string'>'{58831900-C282-11D3-A530-00005A180D69}'</span>];
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="ClockWindow"></a>
+    <a name="DesktopListView"></a>
+    <a name="DesktopWindow"></a>
+    <a name="FocusedWindow"></a>
+    <a name="ForegroundWindow"></a>
+    <a name="StartButton"></a>
+    <a name="TaskbarWindows"></a>
+    <a name="Taskbar"></a>
+    <a name="TaskButtonWindow"></a>
+    <a name="TrayWindow"></a>
+    <a name="Windows_"></a>
+    <a name="Window"></a>
+    <p>There are tons of ways to get an IWindow or an IWindows instance. You can
+       use <a href="Processes.htm#IProcess.Windows_">IProcess.Windows_</a>, <a href="Processes.htm#IProcess.TaskbarWindows">IProcess.TaskbarWindows</a>,
+       <a href="Threads.htm#IThread.Windows_">IThread.Windows_</a>, <a href="Threads.htm#IThread.TaskbarWindows">IThread.TaskbarWindows</a>,
+       <a href="TrayIcons.htm#ITrayIcon.Window">ITrayIcon.Window</a> or one of the following functions. There are
+       functions for getting the common explorer shell windows like the "Taskbar"
+       and "DesktopWindow". Then you can get the currently "FocusedWindow" and
+       "ForegroundWindow". Also you can convert a win32 window handle dword value
+       into an <a href="#IWindow">IWindow</a> instance or search for a specific window. Finally you
+       can call the function "Windows_" to enumerate all windows of your process or
+       all windows system wide. And with "TaskbarWindows" you can enumerate all
+       windows which are visible in the taskbar. You see, lots of possibilities...</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>Taskbar</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <a class="pascal" href="#IWindow">IWindow</a>;<br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>StartButton</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <a class="pascal" href="#IWindow">IWindow</a>;<br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>TaskButtonWindow</span>&nbsp;: <a class="pascal" href="#IWindow">IWindow</a>;<br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>TrayWindow</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <a class="pascal" href="#IWindow">IWindow</a>;<br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>ClockWindow</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <a class="pascal" href="#IWindow">IWindow</a>;<br>
+                  <br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>DesktopWindow</span>&nbsp;&nbsp;&nbsp;&nbsp;: <a class="pascal" href="#IWindow">IWindow</a>;<br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>DesktopListView</span>&nbsp;&nbsp;: <a class="pascal" href="#IWindow">IWindow</a>;<br>
+                  <br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>FocusedWindow</span>&nbsp;&nbsp;&nbsp;&nbsp;: <a class="pascal" href="#IWindow">IWindow</a>;<br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>ForegroundWindow</span>&nbsp;: <a class="pascal" href="#IWindow">IWindow</a>;<br>
+                  <br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>Window</span>&nbsp;(<span id='identifier'>handle</span>&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>cardinal</span>&nbsp;&nbsp;&nbsp;&nbsp;) : <a class="pascal" href="#IWindow">IWindow</a>; <span id='bold'>overload</span>;<br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>Window</span>&nbsp;(<span id='identifier'>className</span>&nbsp;: <span id='bold'>string</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>caption</span>&nbsp;&nbsp;&nbsp;: <span id='bold'>string</span>&nbsp;= <span id='string'>'*'</span>) : <a class="pascal" href="#IWindow">IWindow</a>; <span id='bold'>overload</span>;<br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>Window</span>&nbsp;(<span id='identifier'>pos</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>TPoint</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;) : <a class="pascal" href="#IWindow">IWindow</a>; <span id='bold'>overload</span>;<br>
+                  <br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>Windows_</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span id='identifier'>systemWide</span>: <span id='identifier'>boolean</span>&nbsp;= <span id='identifier'>false</span>) : <a class="pascal" href="#IWindows">IWindows</a>;<br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>TaskbarWindows</span>&nbsp;(<span id='identifier'>systemWide</span>: <span id='identifier'>boolean</span>&nbsp;= <span id='identifier'>true</span>&nbsp;) : <a class="pascal" href="#IWindows">IWindows</a>;<br>
+                  <br>
+                  <span id='comment'>// Examples:</span><br>
+                  <span id='identifier'>ClockWindow</span>.<a id="mono" href="#IWindow.Close">Close</a>);<br>
+                  <span id='identifier'>MessageBox</span>(<span id='number'>0</span>, <span id='identifier'>pchar</span>(<span id='string'>'we have '</span>&nbsp;+ <span id='identifier'>IntToStr</span>(<span id='identifier'>TaskbarWindows</span>.<span id='identifier'>ItemCount</span>) + <span id='string'>' taskbar windows'</span>), <span id='string'>'info'</span>, <span id='number'>0</span>);<br>
+                  <span id='bold'>if</span>&nbsp;<span id='identifier'>Taskbar</span>.<span id='identifier'>IsValid</span>&nbsp;<span id='bold'>then</span>&nbsp;...
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IWindow.IsStillValid"></a>
+    <p>Check whether this window still exists:</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>IWindow</span>.<img src="m.gif"><span id='identifier'>IsStillValid</span>&nbsp;: <span id='identifier'>boolean</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IWindow.Handle"></a>
+    <p>The property "Handle" returns the window handle of this window. Caution,
+       this is no kernel handle, it's a window handle.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IWindow</span>.<img src="r.gif"><span id='identifier'>Handle</span>&nbsp;: <span id='identifier'>cardinal</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IWindow.Text"></a>
+    <p>With the following property you can access the text of the window. This is
+       e.g. the caption of a main window or the content of an edit box.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IWindow</span>.<img src="w.gif"><span id='identifier'>Text</span>&nbsp;: <span id='bold'>string</span>;<br>
+                  <br>
+                  <span id='comment'>// Example:</span><br>
+                  <span id='identifier'>StartButton</span>.<span id='identifier'>Text</span>&nbsp;:= <span id='string'>'Oops'</span>; &nbsp;<span id='comment'>// this example works only in XP </span>
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IWindow.Visible"></a>
+    <a name="IWindow.Hide"></a>
+    <a name="IWindow.Show"></a>
+    <p>With the following methods/property you can show/hide this window or ask
+       whether it is currently visible:</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>property</span>&nbsp;&nbsp;<span id='identifier'>IWindow</span>.<img src="w.gif"><span id='identifier'>Visible</span>&nbsp;: <span id='identifier'>boolean</span>;<br>
+                  <span id='bold'>procedure</span>&nbsp;<span id='identifier'>IWindow</span>.<img src="m.gif"><span id='identifier'>Hide</span>;<br>
+                  <span id='bold'>procedure</span>&nbsp;<span id='identifier'>IWindow</span>.<img src="m.gif"><span id='identifier'>Show</span>&nbsp;(<span id='identifier'>activate</span>&nbsp;: <span id='identifier'>boolean</span>&nbsp;= <span id='identifier'>true</span>);<br>
+                  <br>
+                  <span id='comment'>// Example:</span><br>
+                  <span id='bold'>if</span>&nbsp;<span id='identifier'>StartButton</span>.<span id='identifier'>Visible</span>&nbsp;<span id='bold'>then</span><br>
+                  &nbsp;&nbsp;<span id='identifier'>MessageBox</span>(<span id='number'>0</span>, <span id='string'>'start button is visible'</span>, <span id='string'>'info'</span>, <span id='number'>0</span>);
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IWindow.Enabled"></a>
+    <p>Is this window enabled?</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IWindow</span>.<img src="w.gif"><span id='identifier'>Enabled</span>&nbsp;: <span id='identifier'>boolean</span>;<br>
+                  <br>
+                  <span id='comment'>// Example:</span><br>
+                  <span id='identifier'>StartButton</span>.<span id='identifier'>Enabled</span>&nbsp;:= <span id='identifier'>false</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IWindow.InTaskbar"></a>
+    <p>Does this window show up in the taskbar?</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IWindow</span>.<img src="r.gif"><span id='identifier'>InTaskbar</span>&nbsp;: <span id='identifier'>boolean</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IWindow.OwnerWindow"></a>
+    <a name="IWindow.ParentWindow"></a>
+    <p>Which window is the owner/parent of this window? If there is no owner/parent
+       the result is an invalid <a href="#IWindow">IWindow</a> instance.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IWindow</span>.<img src="r.gif"><span id='identifier'>OwnerWindow</span>&nbsp;&nbsp;: <a class="pascal" href="#IWindow">IWindow</a>;<br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IWindow</span>.<img src="w.gif"><span id='identifier'>ParentWindow</span>&nbsp;: <a class="pascal" href="#IWindow">IWindow</a>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IWindow.OwnerThread"></a>
+    <a name="IWindow.OwnerProcess"></a>
+    <p>Which thread/process is the owner of this window? If there is no owner
+       thread/process result is an invalid <a href="Threads.htm#IThread">IThread</a>/<a href="Processes.htm#IProcess">IProcess</a>
+       instance.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IWindow</span>.<img src="r.gif"><span id='identifier'>OwnerThread</span>&nbsp;&nbsp;: <a class="pascal" href="Threads.htm#IThread">IThread</a>;<br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IWindow</span>.<img src="r.gif"><span id='identifier'>OwnerProcess</span>&nbsp;: <a class="pascal" href="Processes.htm#IProcess">IProcess</a>;<br>
+                  <br>
+                  <span id='comment'>// Example:</span><br>
+                  <span id='identifier'>Assert</span>(<a class="pascal" href="StringSearch.htm#PosText">PosText</a>(<span id='string'>'explorer.exe'</span>, <a class="pascal" href="#Taskbar">Taskbar</a>.<span id='identifier'>OwnerProcess</span>.<a id="mono" href="Processes.htm#IProcess.ExeFile">ExeFile</a>) > <span id='number'>0</span>);
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IWindow.Rect"></a>
+    <a name="IWindow.ClientRect"></a>
+    <a name="IWindow.SetRectEx"></a>
+    <a name="IWindow.SetClientRectEx"></a>
+    <p>With the following methods you can access the size and position of this
+       window:</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IWindow</span>.<img src="w.gif"><span id='identifier'>Rect</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>TRect</span>;<br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IWindow</span>.<img src="w.gif"><span id='identifier'>ClientRect</span>&nbsp;: <span id='identifier'>TRect</span>;<br>
+                  <br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>IWindow</span>.<img src="m.gif"><span id='identifier'>SetRectEx</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span id='identifier'>rect</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>TRect</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="e.gif">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>copyBits</span>&nbsp;: <span id='identifier'>boolean</span>&nbsp;= <span id='identifier'>true</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="e.gif">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>redraw</span>&nbsp;&nbsp;&nbsp;: <span id='identifier'>boolean</span>&nbsp;= <span id='identifier'>true</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="e.gif">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>activate</span>&nbsp;: <span id='identifier'>boolean</span>&nbsp;= <span id='identifier'>true</span>) : <span id='identifier'>boolean</span>;<br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>IWindow</span>.<img src="m.gif"><span id='identifier'>SetClientRectEx</span>&nbsp;(<span id='identifier'>rect</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>TRect</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="e.gif">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>copyBits</span>&nbsp;: <span id='identifier'>boolean</span>&nbsp;= <span id='identifier'>true</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="e.gif">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>redraw</span>&nbsp;&nbsp;&nbsp;: <span id='identifier'>boolean</span>&nbsp;= <span id='identifier'>true</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="e.gif">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>activate</span>&nbsp;: <span id='identifier'>boolean</span>&nbsp;= <span id='identifier'>true</span>) : <span id='identifier'>boolean</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IWindow.Minimized"></a>
+    <a name="IWindow.Maximized"></a>
+    <a name="IWindow.Restored"></a>
+    <a name="IWindow.Minimize"></a>
+    <a name="IWindow.Maximize"></a>
+    <a name="IWindow.Restore"></a>
+    <p>In order to minimize, maximize or restore this window, you can use:</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IWindow</span>.<img src="w.gif"><span id='identifier'>Minimized</span>&nbsp;: <span id='identifier'>boolean</span>;<br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IWindow</span>.<img src="w.gif"><span id='identifier'>Maximized</span>&nbsp;: <span id='identifier'>boolean</span>;<br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IWindow</span>.<img src="w.gif"><span id='identifier'>Restored</span>&nbsp;&nbsp;: <span id='identifier'>boolean</span>;<br>
+                  <br>
+                  <span id='bold'>procedure</span>&nbsp;<span id='identifier'>IWindow</span>.<img src="m.gif"><span id='identifier'>Minimize</span>&nbsp;(<span id='identifier'>activate</span>: <span id='identifier'>boolean</span>&nbsp;= <span id='identifier'>false</span>);<br>
+                  <span id='bold'>procedure</span>&nbsp;<span id='identifier'>IWindow</span>.<img src="m.gif"><span id='identifier'>Maximize</span>&nbsp;(<span id='identifier'>activate</span>: <span id='identifier'>boolean</span>&nbsp;= <span id='identifier'>true</span>&nbsp;);<br>
+                  <span id='bold'>procedure</span>&nbsp;<span id='identifier'>IWindow</span>.<img src="m.gif"><span id='identifier'>Restore</span>&nbsp;&nbsp;(<span id='identifier'>activate</span>: <span id='identifier'>boolean</span>&nbsp;= <span id='identifier'>true</span>&nbsp;);
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IWindow.MinimizePos"></a>
+    <a name="IWindow.MaximizePos"></a>
+    <a name="IWindow.NormalPos"></a>
+    <p>Accesses the minimal/maximal/normal window size:</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IWindow</span>.<img src="w.gif"><span id='identifier'>MinimizePos</span>&nbsp;: <span id='identifier'>TPoint</span>;<br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IWindow</span>.<img src="w.gif"><span id='identifier'>MaximizePos</span>&nbsp;: <span id='identifier'>TPoint</span>;<br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IWindow</span>.<img src="w.gif"><span id='identifier'>NormalPos</span>&nbsp;&nbsp;&nbsp;: <span id='identifier'>TRect</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IWindow.BringToTop"></a>
+    <p>If you want to bring this window to the top of the application wide Z order
+       you can call "IWindow.BringToTop":</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>IWindow</span>.<img src="m.gif"><span id='identifier'>BringToTop</span>&nbsp;(<span id='identifier'>copyBits</span>&nbsp;: <span id='identifier'>boolean</span>&nbsp;= <span id='identifier'>true</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="e.gif">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>redraw</span>&nbsp;&nbsp;&nbsp;: <span id='identifier'>boolean</span>&nbsp;= <span id='identifier'>true</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="e.gif">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>activate</span>&nbsp;: <span id='identifier'>boolean</span>&nbsp;= <span id='identifier'>true</span>) : <span id='identifier'>boolean</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IWindow.BringToForeground"></a>
+    <p>You can bring this window together with the whole application to the
+       foreground (system wide) and give it input focus by calling the method
+       "BringToForeground". In winME, win2k and newer OSs this often doesn't work
+       when calling the pure win32 API "SetForegroundWindow", instead the window
+       often only blinks. When you set the parameter "noBlink" to "true", the
+       blinking effect is gone and the window comes really always to front.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>IWindow</span>.<img src="m.gif"><span id='identifier'>BringToForeground</span>&nbsp;(<span id='identifier'>noBlink</span>: <span id='identifier'>boolean</span>&nbsp;= <span id='identifier'>true</span>) : <span id='identifier'>boolean</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IWindow.StayOnTop"></a>
+    <a name="IWindow.SetStayOnTopEx"></a>
+    <p>In order to access the stay on top state of this window you can use:</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IWindow</span>.<img src="w.gif"><span id='identifier'>StayOnTop</span>&nbsp;: <span id='identifier'>boolean</span>;<br>
+                  <br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>IWindow</span>.<img src="m.gif"><span id='identifier'>SetStayOnTopEx</span>&nbsp;(<span id='identifier'>onTop</span>&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>boolean</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="e.gif">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>copyBits</span>&nbsp;: <span id='identifier'>boolean</span>&nbsp;= <span id='identifier'>true</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="e.gif">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>redraw</span>&nbsp;&nbsp;&nbsp;: <span id='identifier'>boolean</span>&nbsp;= <span id='identifier'>true</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="e.gif">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>activate</span>&nbsp;: <span id='identifier'>boolean</span>&nbsp;= <span id='identifier'>true</span>) : <span id='identifier'>boolean</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IWindow.Param"></a>
+    <a name="IWindow.Style"></a>
+    <a name="IWindow.ExStyle"></a>
+    <p>With the following methods you can ask and change several parameters of the
+       window, including the style and the extended style. See the documentation of
+       the win32 API "GetWindowLong" for more information. But while the win32 API
+       "SetWindowLong" only works on windows of your own process, the following
+       properties also work on windows of other processes.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IWindow</span>.<img src="w.gif"><span id='identifier'>Param</span>&nbsp;&nbsp;&nbsp;[<span id='bold'>index</span>: <span id='identifier'>integer</span>] : <span id='identifier'>integer</span>;<br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IWindow</span>.<img src="w.gif"><span id='identifier'>Style</span>&nbsp;&nbsp;&nbsp;: <span id='identifier'>integer</span>;<br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IWindow</span>.<img src="w.gif"><span id='identifier'>ExStyle</span>&nbsp;: <span id='identifier'>integer</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IWindow.ShowOwnedPopups"></a>
+    <p>Show/hide all owned popup windows of this window (see API "ShowOwnedPopups"):</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>IWindow</span>.<img src="m.gif"><span id='identifier'>ShowOwnedPopups</span>&nbsp;(<span id='identifier'>show</span>: <span id='identifier'>boolean</span>&nbsp;= <span id='identifier'>true</span>) : <span id='identifier'>boolean</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="TSkipWindows"></a>
+    <a name="TSSkipWindows"></a>
+    <a name="IWindow.ChildWindow"></a>
+    <a name="IWindow.TopChildWindow"></a>
+    <p>If you want to find a specific child window, look here:</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>type</span><br>
+                  &nbsp;&nbsp;<span id='identifier'>TSkipWindows</span>&nbsp;&nbsp;= (<span id='identifier'>swInvisible</span>, <span id='identifier'>swDisabled</span>, <span id='identifier'>swTransparent</span>);<br>
+                  &nbsp;&nbsp;<span id='identifier'>TSSkipWindows</span>&nbsp;= <span id='bold'>set</span>&nbsp;<span id='bold'>of</span>&nbsp;<span id='identifier'>TSkipWindows</span>;<br>
+                  <br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>IWindow</span>.<img src="m.gif"><span id='identifier'>ChildWindow</span>&nbsp;(<span id='identifier'>pos</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>TPoint</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="e.gif">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>skip</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>TSSkipWindows</span>&nbsp;= [] ) : <a class="pascal" href="#IWindow">IWindow</a>; <span id='bold'>overload</span>;<br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>IWindow</span>.<img src="m.gif"><span id='identifier'>ChildWindow</span>&nbsp;(<span id='identifier'>className</span>&nbsp;: <span id='bold'>string</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="e.gif">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>caption</span>&nbsp;&nbsp;&nbsp;: <span id='bold'>string</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= <span id='string'>'*'</span>) : <a class="pascal" href="#IWindow">IWindow</a>; <span id='bold'>overload</span>;<br>
+                  <br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IWindow</span>.<img src="r.gif"><span id='identifier'>TopChildWindow</span>&nbsp;: <a class="pascal" href="#IWindow">IWindow</a>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IWindow.Prop"></a>
+    <a name="IWindow.DeleteProp"></a>
+    <p>You can ask, set, change or delete a window property by using:</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IWindow</span>.<img src="w.gif"><span id='identifier'>Prop</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[<span id='identifier'>name</span>: <span id='bold'>string</span>] : <span id='identifier'>cardinal</span>;<br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>IWindow</span>.<img src="m.gif"><span id='identifier'>DeleteProp</span>&nbsp;(<span id='identifier'>name</span>: <span id='bold'>string</span>) : <span id='identifier'>boolean</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IWindow.IsUnicode"></a>
+    <p>Is this a native Unicode window?</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>IWindow</span>.<img src="m.gif"><span id='identifier'>IsUnicode</span>&nbsp;: <span id='identifier'>boolean</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IWindow.SelfAsTWinControl"></a>
+    <p>The result value of the following method is only valid, if the window was
+       created by a Delphi TWinControl object:</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>IWindow</span>.<img src="m.gif"><span id='identifier'>SelfAsTWinControl</span>&nbsp;: <span id='identifier'>TObject</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="TWndProc"></a>
+    <a name="IWindow.WndProc"></a>
+    <p>You can set the window procedure of this window by using the property
+       "WndProc". But be cautious: If you set the window procedure of a window that
+       belongs to another process the code of this new window procedure MUST be
+       accessible inside of the context of the other process!</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>type</span><br>
+                  &nbsp;&nbsp;<span id='identifier'>TWndProc</span>&nbsp;= <span id='bold'>function</span>&nbsp;(<span id='identifier'>window</span>&nbsp;: <span id='identifier'>cardinal</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>msg</span>&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>cardinal</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>wParam</span>&nbsp;: <span id='identifier'>integer</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>lParam</span>&nbsp;: <span id='identifier'>integer</span>&nbsp;) : <span id='identifier'>integer</span>; <span id='bold'>stdcall</span>;<br>
+                  <br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IWindow</span>.<img src="w.gif"><span id='identifier'>WndProc</span>&nbsp;: <span id='identifier'>TWndProc</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="TSendAsyncProc"></a>
+    <a name="IWindow.PostMessage"></a>
+    <a name="IWindow.SendMessage"></a>
+    <p>Post/send a message to this window:</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>type</span><br>
+                  &nbsp;&nbsp;<span id='identifier'>TSendAsyncProc</span>&nbsp;= <span id='bold'>procedure</span>&nbsp;(<span id='identifier'>window</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>cardinal</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>msg</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>cardinal</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>callbackInfo</span>&nbsp;: <span id='identifier'>cardinal</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>result</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>integer</span>&nbsp;);<br>
+                  <br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>IWindow</span>.<img src="m.gif"><span id='identifier'>PostMessage</span>&nbsp;(<span id='identifier'>msg</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>cardinal</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="e.gif">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>wParam</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>integer</span>&nbsp;&nbsp;= <span id='number'>0</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="e.gif">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>lParam</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>integer</span>&nbsp;&nbsp;= <span id='number'>0</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;) : <span id='identifier'>boolean</span>;<br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>IWindow</span>.<img src="m.gif"><span id='identifier'>SendMessage</span>&nbsp;(<span id='identifier'>msg</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>cardinal</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="e.gif">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>wParam</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>integer</span>&nbsp;&nbsp;= <span id='number'>0</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="e.gif">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>lParam</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>integer</span>&nbsp;&nbsp;= <span id='number'>0</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="e.gif">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>timeOut</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>cardinal</span>&nbsp;= <span id='identifier'>INFINITE</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="e.gif">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>abortIfHung</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>boolean</span>&nbsp;&nbsp;= <span id='identifier'>false</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="e.gif">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>blockThread</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>boolean</span>&nbsp;&nbsp;= <span id='identifier'>false</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="e.gif">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>noTimeOutWhenNotHung</span>&nbsp;: <span id='identifier'>boolean</span>&nbsp;&nbsp;= <span id='identifier'>false</span>&nbsp;&nbsp;&nbsp;) : <span id='identifier'>integer</span>; <span id='bold'>overload</span>;<br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>IWindow</span>.<img src="m.gif"><span id='identifier'>SendMessage</span>&nbsp;(<span id='identifier'>msg</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>cardinal</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="e.gif">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>wParam</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>integer</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="e.gif">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>lParam</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>integer</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="e.gif">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>callbackProc</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>TSendAsyncProc</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="e.gif">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>callbackInfo</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>cardinal</span>&nbsp;= <span id='number'>0</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;) : <span id='identifier'>boolean</span>; <span id='bold'>overload</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IWindow.Close"></a>
+    <a name="IWindow.Destroy"></a>
+    <p>You can "Close" or "Destroy" this window. Destroying only works if this
+       window belongs to the current thread. "Close" works on all windows, it
+       simply posts a WM_CLOSE message to the window.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>IWindow</span>.<img src="m.gif"><span id='identifier'>Close</span>&nbsp;&nbsp;&nbsp;: <span id='identifier'>boolean</span>;<br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>IWindow</span>.<img src="m.gif"><span id='identifier'>Destroy</span>&nbsp;: <span id='identifier'>boolean</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IWindow.ClassName"></a>
+    <a name="IWindow.BackgroundBrush"></a>
+    <a name="IWindow.Cursor"></a>
+    <a name="IWindow.Icon"></a>
+    <a name="IWindow.SmallIcon"></a>
+    <p>The following properties give you some infos about the window class to which
+       this window belongs:</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IWindow</span>.<img src="r.gif"><span id='identifier'>ClassName</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='bold'>string</span>;<br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IWindow</span>.<img src="w.gif"><span id='identifier'>BackgroundBrush</span>&nbsp;: <span id='identifier'>cardinal</span>;<br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IWindow</span>.<img src="w.gif"><span id='identifier'>Cursor</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>cardinal</span>;<br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IWindow</span>.<img src="w.gif"><span id='identifier'>Icon</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>cardinal</span>;<br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IWindow</span>.<img src="w.gif"><span id='identifier'>SmallIcon</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>cardinal</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IWindows.Items"></a>
+    <a name="IWindows.RefreshItems"></a>
+    <p>The <a href="#IWindows">IWindows</a> interface gives you easy access to it's items. With the
+       method "RefreshItems" you can refresh the window list, if you like (that is
+       look for new, deleted and changed windows).</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IWindows</span>.<img src="r.gif"><span id='identifier'>Items</span>&nbsp;[<span id='bold'>index</span>: <span id='identifier'>integer</span>] : <a class="pascal" href="#IWindow">IWindow</a>;<br>
+                  <br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>IWindows</span>.<img src="m.gif"><span id='identifier'>RefreshItems</span>&nbsp;: <span id='identifier'>boolean</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IWindows.Hide"></a>
+    <a name="IWindows.Show"></a>
+    <a name="IWindows.SetEnabled"></a>
+    <a name="IWindows.Minimize"></a>
+    <a name="IWindows.Maximize"></a>
+    <a name="IWindows.Restore"></a>
+    <a name="IWindows.SetStayOnTop"></a>
+    <a name="IWindows.ShowOwnedPopups"></a>
+    <a name="IWindows.PostMessage"></a>
+    <a name="IWindows.Close"></a>
+    <a name="IWindows.Destroy"></a>
+    <p>The following <a href="#IWindows">IWindows</a> methods are more or less identical to the
+       <a href="#IWindow">IWindow</a> methods with the same name. It's just that if you call the
+       <a href="#IWindows">IWindows</a> methods, they are called for all windows in the list.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>procedure</span>&nbsp;<span id='identifier'>IWindows</span>.<img src="m.gif"><span id='identifier'>Hide</span>;<br>
+                  <span id='bold'>procedure</span>&nbsp;<span id='identifier'>IWindows</span>.<img src="m.gif"><span id='identifier'>Show</span>&nbsp;(<span id='identifier'>activate</span>: <span id='identifier'>boolean</span>&nbsp;= <span id='identifier'>true</span>);<br>
+                  <br>
+                  <span id='bold'>procedure</span>&nbsp;<span id='identifier'>IWindows</span>.<img src="m.gif"><span id='identifier'>SetEnabled</span>&nbsp;(<span id='identifier'>value</span>: <span id='identifier'>boolean</span>);<br>
+                  <br>
+                  <span id='bold'>procedure</span>&nbsp;<span id='identifier'>IWindows</span>.<img src="m.gif"><span id='identifier'>Minimize</span>&nbsp;(<span id='identifier'>activate</span>: <span id='identifier'>boolean</span>&nbsp;= <span id='identifier'>false</span>);<br>
+                  <span id='bold'>procedure</span>&nbsp;<span id='identifier'>IWindows</span>.<img src="m.gif"><span id='identifier'>Maximize</span>&nbsp;(<span id='identifier'>activate</span>: <span id='identifier'>boolean</span>&nbsp;= <span id='identifier'>true</span>&nbsp;);<br>
+                  <span id='bold'>procedure</span>&nbsp;<span id='identifier'>IWindows</span>.<img src="m.gif"><span id='identifier'>Restore</span>&nbsp;&nbsp;(<span id='identifier'>activate</span>: <span id='identifier'>boolean</span>&nbsp;= <span id='identifier'>true</span>&nbsp;);<br>
+                  <br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>IWindows</span>.<img src="m.gif"><span id='identifier'>SetStayOnTop</span>&nbsp;(<span id='identifier'>onTop</span>&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>boolean</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="e.gif">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>copyBits</span>&nbsp;: <span id='identifier'>boolean</span>&nbsp;= <span id='identifier'>true</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="e.gif">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>redraw</span>&nbsp;&nbsp;&nbsp;: <span id='identifier'>boolean</span>&nbsp;= <span id='identifier'>true</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="e.gif">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>activate</span>&nbsp;: <span id='identifier'>boolean</span>&nbsp;= <span id='identifier'>true</span>) : <span id='identifier'>boolean</span>;<br>
+                  <br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>IWindows</span>.<img src="m.gif"><span id='identifier'>ShowOwnedPopups</span>&nbsp;(<span id='identifier'>show</span>: <span id='identifier'>boolean</span>&nbsp;= <span id='identifier'>true</span>) : <span id='identifier'>boolean</span>;<br>
+                  <br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>IWindows</span>.<img src="m.gif"><span id='identifier'>PostMessage</span>&nbsp;(<span id='identifier'>msg</span>&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>cardinal</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="e.gif">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>wParam</span>&nbsp;: <span id='identifier'>integer</span>&nbsp;= <span id='number'>0</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="e.gif">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>lParam</span>&nbsp;: <span id='identifier'>integer</span>&nbsp;= <span id='number'>0</span>) : <span id='identifier'>boolean</span>;<br>
+                  <br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>IWindows</span>.<img src="m.gif"><span id='identifier'>Close</span>&nbsp;&nbsp;&nbsp;: <span id='identifier'>boolean</span>;<br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>IWindows</span>.<img src="m.gif"><span id='identifier'>Destroy</span>&nbsp;: <span id='identifier'>boolean</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IWindows.OwnerThread"></a>
+    <a name="IWindows.OwnerProcess"></a>
+    <a name="IWindows.InTaskbar"></a>
+    <p>Does this <a href="#IWindows">IWindows</a> instance only enumerate windows that belong to a
+       specific thread/process or that are visible in the taskbar?</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IWindows</span>.<img src="r.gif"><span id='identifier'>OwnerThread</span>&nbsp;&nbsp;: <a class="pascal" href="Threads.htm#IThread">IThread</a>;<br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IWindows</span>.<img src="r.gif"><span id='identifier'>OwnerProcess</span>&nbsp;: <a class="pascal" href="Processes.htm#IProcess">IProcess</a>;<br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IWindows</span>.<img src="r.gif"><span id='identifier'>InTaskbar</span>&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>boolean</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </body>
+
+</html>

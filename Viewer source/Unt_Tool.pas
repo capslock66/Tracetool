@@ -25,14 +25,16 @@ uses
   IdBaseComponent, IdComponent, IdSocketHandle, IdTCPServer, IdExceptionCore,
   MSXML2_TLB, IdCustomHTTPServer, IdCookie,
   IdThread, idGlobal, IdException, idstack, IdTCPConnection ,  idContext , unt_PageContainer,
-  fastmm4,pscMenu, madExceptVcl,
+  pscMenu, madExceptVcl,
   IdHTTPServer,
-  FileViewer,
+  //FileViewer,
   IdCustomTCPServer, IdRawBase, IdRawClient, IdURI,
   IdUDPBase
   , IdUDPServer //, IdCustomTCPServer;
-  , Config ;
+  , Config, System.Actions, System.ImageList, system.UITypes ;
 
+// ensure the path the viewer is on the Options/delphi/library/Library Path
+// c:\GitHub\Tracetool\Delphi\Delphi Library\
 {$Include TraceTool.Inc}
 
 const
@@ -89,13 +91,14 @@ type
     UtilityImages: TImageList;
     MadExceptionHandler1: TMadExceptionHandler;
     IdHTTPServer: TIdHTTPServer;
-    actDepends: TMenuItem;
     OpenFileDialog: TOpenDialog;
     MadExceptionHandler2: TMadExceptionHandler;
     TCPServer2: TIdTCPServer;
     SocketPolicyServer: TIdTCPServer;
     UDPServer1: TIdUDPServer;
     UDPServer2: TIdUDPServer;
+    Showat001: TMenuItem;
+    actShowOnMain: TAction;
     
     procedure FormCreate(Sender: TObject);
     procedure actShowExecute(Sender: TObject);
@@ -137,6 +140,7 @@ type
       AException: Exception);
     procedure SocketPolicyServerAfterBind(Sender: TObject);
     procedure FormShow(Sender: TObject);
+    procedure actShowOnMainExecute(Sender: TObject);
 
   private
 
@@ -156,8 +160,7 @@ type
       ARequestInfo: TIdHTTPRequestInfo;
       AResponseInfo: TIdHTTPResponseInfo);
 
-    procedure UDPServer1UDPRead(AThread: TIdUDPListenerThread; AData: TBytes;
-      ABinding: TIdSocketHandle);
+    procedure UDPServerUDPRead(AThread: TIdUDPListenerThread; const AData: TIdBytes; ABinding: TIdSocketHandle);
 
    public
     property StayOnTop: Boolean read FStayOnTop write SetStayOnTop;
@@ -345,7 +348,6 @@ var
    MessageString: string;
    CDS: TCopyDataStruct;
    resetDebugMode : boolean ;
-   c : integer ;
    EnterDebugMode : boolean;
    LeaveDebugMode : boolean ;
 begin
@@ -413,8 +415,8 @@ begin
 
    //LowTrace('Apply config') ;
 
-   UDPServer1.OnUDPRead :=  UDPServer1UDPRead ;
-   UDPServer2.OnUDPRead :=  UDPServer1UDPRead ;
+   UDPServer1.OnUDPRead :=  UDPServerUDPRead ;
+   UDPServer2.OnUDPRead :=  UDPServerUDPRead ;
 
    TCPServer.DefaultPort     := TraceConfig.General_SocketPort ;
    TCPServer2.DefaultPort    := TraceConfig.General_SocketPort2 ;
@@ -886,7 +888,7 @@ begin
       Reg.RootKey := HKEY_LOCAL_MACHINE;
       Reg.OpenKey('Software\TraceTool',true);
       GetModuleFileName(HINSTANCE, Buf, SizeOf(Buf)-1);
-      Reg.WriteString('FilePath', StrPas(Buf));
+      Reg.WriteString('FilePath', StrPas(Buf));          // ERegistryException : failed to set data for 'FilePath'
       except
          on e: exception do begin
             //LowTrace('WriteString : ' + e.Message );
@@ -1687,7 +1689,6 @@ begin
    actShow.Execute;
 end;
 
-
 //------------------------------------------------------------------------------
 
 // TaskBar / Show or double click (TrayIconDblClick) or ParseTraceMsg
@@ -1698,6 +1699,22 @@ begin
    Application.ShowMainForm := true ;
    TaskBarButton(true) ;
    Application.Restore ;
+   Show;
+   BringToFront;
+   Application.BringToFront;
+end;
+
+//------------------------------------------------------------------------------
+
+procedure TFrm_Tool.actShowOnMainExecute(Sender: TObject);
+begin
+   if TraceConfig.AppDisplay_HideViewer = true then
+      exit ;
+   Application.ShowMainForm := true ;
+   TaskBarButton(true) ;
+   Application.Restore ;
+   Left := 0;
+   Top := 0;
    Show;
    BringToFront;
    Application.BringToFront;
@@ -2505,6 +2522,7 @@ end ;
 
 //------------------------------------------------------------------------------
 
+
 procedure TFrm_Tool.ShowParsedForm(TraceForm : TForm) ;
 begin
    if LastParsedTreeRec = nil then
@@ -2693,7 +2711,7 @@ begin
       str := requestInfoParameters[c] ;
       decoded := TIdURI.URLDecode(str) ;     // ,TIdTextEncoding.ASCII
       if decoded = '' then begin
-         decoded := TIdURI.URLDecode(str,TIdTextEncoding.ASCII);  // use ascii decoding if default decoding don't work. 
+         decoded := TIdURI.URLDecode(str,IndyTextEncoding_ASCII); //IIdTextEncoding.ASCII);  // use ascii decoding if default decoding don't work.
       end ;   
 
       str_len := length(decoded) ;  // get all bytes
@@ -2860,26 +2878,26 @@ end ;
 //------------------------------------------------------------------------------
 
 procedure TFrm_Tool.actDependsClick(Sender: TObject);
-var
-   i : integer ;
-   FileName: string ;
+//var
+//   i : integer ;
+//   FileName: string ;
 begin
-   Screen.Cursor := crHourGlass;
-   try
-      OpenFileDialog.FileName := '';
-      if OpenFileDialog.Execute = false then
-         exit ;
-
-      for I := 0 to OpenFileDialog.Files.Count - 1 do begin
-         FileName := OpenFileDialog.Files[I] ;
-         try
-            TFileViewerChild.Create(Self).FileName := FileName;
-         finally
-         end;
-      end;
-   finally
-      Screen.Cursor := crDefault;
-   end ;
+//   Screen.Cursor := crHourGlass;
+//   try
+//      OpenFileDialog.FileName := '';
+//      if OpenFileDialog.Execute = false then
+//         exit ;
+//
+//      for I := 0 to OpenFileDialog.Files.Count - 1 do begin
+//         FileName := OpenFileDialog.Files[I] ;
+//         try
+//            TFileViewerChild.Create(Self).FileName := FileName;
+//         finally
+//         end;
+//      end;
+//   finally
+//      Screen.Cursor := crDefault;
+//   end ;
 
 //   DependsMainForm := TDependsMainForm.Create(self);
 //   DependsMainForm.Show ;
@@ -2887,7 +2905,9 @@ end;
 
 //------------------------------------------------------------------------------
 
-procedure TFrm_Tool.UDPServer1UDPRead(AThread: TIdUDPListenerThread;  AData: TBytes; ABinding: TIdSocketHandle);
+// procedure TFrm_Tool.UDPServer1UDPRead(AThread: TIdUDPListenerThread;  const AData: TIdBytes; ABinding: TIdSocketHandle);
+
+procedure TFrm_Tool.UDPServerUDPRead(AThread: TIdUDPListenerThread; const AData: TIdBytes; ABinding: TIdSocketHandle);
 var
    AnsiPtr : PAnsiChar ;      // pointer to the buffer (as ansiString)
    pWordLength : pDword ;     // pointer to a DWORD containing the message length
@@ -2975,8 +2995,8 @@ initialization
 
 finalization
    // register 'intentional' Indy 10 memory leak.
-   RegisterExpectedMemoryLeak (GThreadCount) ;           // register a pointer
-   RegisterExpectedMemoryLeak (TIdCriticalSection,2) ;   // register a type (2 instances)
+   //RegisterExpectedMemoryLeak (GThreadCount) ;           // register a pointer
+   //RegisterExpectedMemoryLeak (TIdCriticalSection) ; //,2) ;   // register a type (2 instances)
 
    // it's possible that some messages are still in the message queue while the application is shuting down
    while MessageStack.Count <> 0 do begin  // MessageStack is not owner

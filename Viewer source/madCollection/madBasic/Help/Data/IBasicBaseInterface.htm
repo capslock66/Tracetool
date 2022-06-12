@@ -1,0 +1,283 @@
+<html>
+
+  <head>
+    <title>mad* Help...</title>
+    <meta name="description" content="mad* Help...">
+    <meta name="keywords" content="madshi, components, delphi">
+    <meta http-equiv="expires" content="900">
+    <link rel=stylesheet type="text/css" href="style.css">
+  </head>
+
+  <body background="bcklight.gif" bgcolor=#F8F8F8>
+    <a name="IBasic"></a>
+    <table border=0 cellpadding=0 callspacing=0><tr>
+      <td valign=bottom>
+        <table border=0 cellpadding=0 cellspacing=0><tr><td bgcolor=#D8D8D8>
+          <table cellpadding=3 border=0>
+            <tr><td bgcolor=#FFFFF0>
+              <div id="verySmall"><br></div>
+              <div id="bigTitle">&nbsp;IBasic Base Interface&nbsp;</div>
+              <div id="verySmall"><br></div>
+              <div id="small">
+                <a class="small" href="Content.htm">Content</a> /
+                <a class="small" href="madBasic.htm">madBasic</a> /
+                <a class="small" href="madBasicUnit.htm">madBasic Unit</a> /...
+              </div>
+            </td></tr>
+          </table>
+        </td></tr></table>
+      </td>
+      <td valign=bottom>
+        <table border=0 cellpadding=0 cellspacing=0><tr><td bgcolor=#D8D8D8>
+          <table cellpadding=7 border=0>
+            <tr><td bgcolor=#F4F4F8><a href="http://www.madshi.net">www.madshi.net</a></td></tr>
+          </table>
+        </td></tr></table>
+      </td>
+    </tr></table>
+    <p>The interface "IBasic" is the very base interface for all other interfaces
+       that I'm using anywhere. It's properties and methods (see also the
+       <a href="IBasicRef.htm">IBasic Reference</a>) are very important, because they're directly
+       available in every interface you'll ever come across when using mad*
+       packages.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>type</span>&nbsp;<span id='identifier'>IBasic</span>&nbsp;= <span id='bold'>interface</span>&nbsp;[<span id='string'>'{53F8CE42-2C8A-11D3-A52D-00005A180D69}'</span>];
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IBasic.Supports"></a>
+    <a name="IBasic.GetInterface"></a>
+    <p>The following 2 methods check whether the interface "IID" is supported by
+       the implementing object. "Supports" only does the check, while "GetInterface"
+       also returns the specified interface, if it's supported.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>IBasic</span>.<img src="m.gif"><span id='identifier'>Supports</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span id='bold'>const</span>&nbsp;<span id='identifier'>IID</span>: <span id='identifier'>TGuid</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;) : <span id='identifier'>boolean</span>;<br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>IBasic</span>.<img src="m.gif"><span id='identifier'>GetInterface</span>&nbsp;(<span id='bold'>const</span>&nbsp;<span id='identifier'>IID</span>: <span id='identifier'>TGuid</span>; <span id='bold'>out</span>&nbsp;<span id='identifier'>obj</span>) : <span id='identifier'>boolean</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IBasic.SelfAsTObject"></a>
+    <p>The method "SelfAsTObject" returns the object instance that implements the
+       IBasic interface. Generally you can't do much with this TObject pointer,
+       since the implementing classes are private to their units. So this method
+       is mainly useful when writing your own IBasic descendents.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>IBasic</span>.<img src="m.gif"><span id='identifier'>SelfAsTObject</span>&nbsp;: <span id='identifier'>TObject</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IBasic.IsValid"></a>
+    <p>There are several situations where you will encounter invalid interface
+       instances. Sometimes a valid object gets invalid, because whatever was
+       represented by the object got deleted. But the main reason why you'll have
+       to deal with invalid interface instances is that all the mad* functions which
+       are to return an interface instance never return "nil", even when they fail.
+       They also do not raise an exception. Instead they're returning an invalid
+       interface instance. "Invalid" means here that the property "IsValid" is
+       false. You can handle invalid objects in the same way as valid objects.
+       You can call all methods, you can use all properties, but they'll all simply
+       do nothing, if the object is invalid.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>IBasic</span>.<img src="m.gif"><span id='identifier'>IsValid</span>&nbsp;: <span id='identifier'>boolean</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IBasic.Success"></a>
+    <p>When calling methods you often get a direct boolean result, which tells you
+       whether the call succeeded or not. But how can you check whether a property
+       assignment has succeeded? The usual behaviour would be to raise an exception
+       if an assignment did not succeed, but I don't like that behaviour very much.
+       So my properties don't react this way. But how can you then know whether a
+       property assignment was successful or not? You can right after the assignment
+       ask the following method, it will tell you the result of the last action:</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>IBasic</span>.<img src="m.gif"><span id='identifier'>Success</span>&nbsp;: <span id='identifier'>boolean</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IBasic.LastErrorNo"></a>
+    <a name="IBasic.LastErrorStr"></a>
+    <a name="IBasic.SetLastError"></a>
+    <p>When an error occurs, my interfaces almost never raise an exception, instead
+       you'll get a function result which is indicating the error, or you can check
+       the <a href="#IBasic.Success">IBasic.Success</a> method. After you found out that an error occured, you
+       can ask the "LastErrorNo" and "LastErrorStr" properties about the reason. You
+       can also set error codes and strings yourself.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>property</span>&nbsp;&nbsp;<span id='identifier'>IBasic</span>.<img src="w.gif"><span id='identifier'>LastErrorNo</span>&nbsp;&nbsp;: <span id='identifier'>cardinal</span>;<br>
+                  <span id='bold'>property</span>&nbsp;&nbsp;<span id='identifier'>IBasic</span>.<img src="w.gif"><span id='identifier'>LastErrorStr</span>&nbsp;: <span id='bold'>string</span>;<br>
+                  <span id='bold'>procedure</span>&nbsp;<span id='identifier'>IBasic</span>.<img src="m.gif"><span id='identifier'>SetLastError</span>&nbsp;(<span id='identifier'>no</span>: <span id='identifier'>cardinal</span>; <span id='identifier'>str</span>: <span id='bold'>string</span>&nbsp;= <span id='string'>''</span>);
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IBasic.StrBuf"></a>
+    <a name="IBasic.StrBufA"></a>
+    <a name="IBasic.StrBufW"></a>
+    <a name="IBasic.GetStrBuf"></a>
+    <a name="IBasic.SetStrBuf"></a>
+    <a name="IBasic.Data"></a>
+    <a name="IBasic.SetData"></a>
+    <a name="TDataDestroyProc"></a>
+    <a name="TDataDestroyProcOO"></a>
+    <p>Each "IBasic" descendent has 2 multi purpose properties, namely "StrBuf" and
+       "Data", one being a string and one a pointer. For the "Data" pointer you can
+       also define a function which is called when the interface instance is freed.
+       In this situation you should then free the Data pointer.</p>
+    <p>Both multi purpose properties are not used by any object internally. That
+       means you can freely do with them whatever you like, just like with the well
+       known "tag" property that exists in a lot of VCL objects.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IBasic</span>.<img src="w.gif"><span id='identifier'>StrBuf</span>&nbsp;: <span id='bold'>string</span>;<br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IBasic</span>.<img src="w.gif"><span id='identifier'>Data</span>&nbsp;&nbsp;&nbsp;: <span id='identifier'>pointer</span>;<br>
+                  <br>
+                  <span id='bold'>type</span><br>
+                  &nbsp;&nbsp;<span id='identifier'>TDataDestroyProc</span>&nbsp;&nbsp;&nbsp;= <span id='bold'>procedure</span>&nbsp;(<span id='bold'>var</span>&nbsp;<span id='identifier'>data</span>: <span id='identifier'>pointer</span>);<br>
+                  &nbsp;&nbsp;<span id='identifier'>TDataDestroyProcOO</span>&nbsp;= <span id='bold'>procedure</span>&nbsp;(<span id='bold'>var</span>&nbsp;<span id='identifier'>data</span>: <span id='identifier'>pointer</span>) <span id='bold'>of</span>&nbsp;<span id='bold'>object</span>;<br>
+                  <br>
+                  <span id='bold'>procedure</span>&nbsp;<span id='identifier'>IBasic</span>.<img src="m.gif"><span id='identifier'>SetData</span>&nbsp;(<span id='identifier'>data</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>pointer</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="e.gif">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>dataDestroyProc</span>&nbsp;: <span id='identifier'>TDataDestroyProc</span>&nbsp;&nbsp;); <span id='bold'>overload</span>;<br>
+                  <span id='bold'>procedure</span>&nbsp;<span id='identifier'>IBasic</span>.<img src="m.gif"><span id='identifier'>SetData</span>&nbsp;(<span id='identifier'>data</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>pointer</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="e.gif">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>dataDestroyProc</span>&nbsp;: <span id='identifier'>TDataDestroyProcOO</span>); <span id='bold'>overload</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IBasic.Index"></a>
+    <a name="IBasic.OldIndex"></a>
+    <a name="TChangeType"></a>
+    <a name="IBasic.LastChangeType"></a>
+    <a name="IBasic.Selected"></a>
+    <a name="IBasic.Focused"></a>
+    <a name="IBasic.Checked"></a>
+    <p>The following properties only have a meaning if our object is an item of one
+       or more <a href="ICustomBasicListBaseInterface.htm#ICustomBasicList">ICustomBasicList</a> descendents. Each of the following properties
+       correspond exactly to one parent list.</p>
+    <p>The property "Index" tells you at which position in the parent's item list
+       our object is stored in the moment. The properties "OldIndex" and
+       "LastChange" are useful when the parent list fires a <a href="ICustomBasicListBaseInterface.htm#TIListChangeEvent">TIListChangeEvent</a>.
+       You can in such a situation then ask what exactly has changed and what value
+       the index had before the change.</p>
+    <p>The properties "Selected", "Focused" and "Checked" are useful e.g. when a
+       parent <a href="ICustomBasicListBaseInterface.htm#ICustomBasicList">ICustomBasicList</a> shows it's items in a TListView.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>type</span>&nbsp;<span id='identifier'>TChangeType</span>&nbsp;= (<span id='identifier'>lctUnchanged</span>, <span id='identifier'>lctChanged</span>, <span id='identifier'>lctNew</span>, <span id='identifier'>lctDeleted</span>);<br>
+                  <br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IBasic</span>.<img src="r.gif"><span id='bold'>Index</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[<span id='bold'>const</span>&nbsp;<span id='identifier'>parent</span>: <a class="pascal" href="ICustomBasicListBaseInterface.htm#ICustomBasicList">ICustomBasicList</a>] : <span id='identifier'>integer</span>;<br>
+                  <br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IBasic</span>.<img src="r.gif"><span id='identifier'>OldIndex</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[<span id='bold'>const</span>&nbsp;<span id='identifier'>parent</span>: <a class="pascal" href="ICustomBasicListBaseInterface.htm#ICustomBasicList">ICustomBasicList</a>] : <span id='identifier'>integer</span>;<br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IBasic</span>.<img src="r.gif"><span id='identifier'>LastChangeType</span>&nbsp;[<span id='bold'>const</span>&nbsp;<span id='identifier'>parent</span>: <a class="pascal" href="ICustomBasicListBaseInterface.htm#ICustomBasicList">ICustomBasicList</a>] : <span id='identifier'>TChangeType</span>;<br>
+                  <br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IBasic</span>.<img src="w.gif"><span id='identifier'>Selected</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[<span id='bold'>const</span>&nbsp;<span id='identifier'>parent</span>: <a class="pascal" href="ICustomBasicListBaseInterface.htm#ICustomBasicList">ICustomBasicList</a>] : <span id='identifier'>boolean</span>;<br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IBasic</span>.<img src="w.gif"><span id='identifier'>Focused</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[<span id='bold'>const</span>&nbsp;<span id='identifier'>parent</span>: <a class="pascal" href="ICustomBasicListBaseInterface.htm#ICustomBasicList">ICustomBasicList</a>] : <span id='identifier'>boolean</span>;<br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IBasic</span>.<img src="w.gif"><span id='identifier'>Checked</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[<span id='bold'>const</span>&nbsp;<span id='identifier'>parent</span>: <a class="pascal" href="ICustomBasicListBaseInterface.htm#ICustomBasicList">ICustomBasicList</a>] : <a class="pascal" href="BooleanTypes.htm#TExtBool">TExtBool</a>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="TDABasic"></a>
+    <p>A little extension to the <a href="madTypesUnit.htm">madTypes</a> unit:</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>type</span>&nbsp;<span id='identifier'>TDABasic</span>&nbsp;= <span id='bold'>array</span>&nbsp;<span id='bold'>of</span>&nbsp;<span id='identifier'>IBasic</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </body>
+
+</html>

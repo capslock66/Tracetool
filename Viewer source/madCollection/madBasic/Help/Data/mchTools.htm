@@ -1,0 +1,314 @@
+<html>
+
+  <head>
+    <title>mad* Help...</title>
+    <meta name="description" content="mad* Help...">
+    <meta name="keywords" content="madshi, components, delphi">
+    <meta http-equiv="expires" content="900">
+    <link rel=stylesheet type="text/css" href="style.css">
+  </head>
+
+  <body background="bcklight.gif" bgcolor=#F8F8F8>
+    <a name="TUninjectCallback"></a>
+    <a name="RegisterUninjectCallback"></a>
+    <table border=0 cellpadding=0 callspacing=0><tr>
+      <td valign=bottom>
+        <table border=0 cellpadding=0 cellspacing=0><tr><td bgcolor=#D8D8D8>
+          <table cellpadding=3 border=0>
+            <tr><td bgcolor=#FFFFF0>
+              <div id="verySmall"><br></div>
+              <div id="bigTitle">&nbsp;Tool Functions&nbsp;</div>
+              <div id="verySmall"><br></div>
+              <div id="small">
+                <a class="small" href="Content.htm">Content</a> /
+                <a class="small" href="madCodeHook.htm">madCodeHook</a> /...
+              </div>
+            </td></tr>
+          </table>
+        </td></tr></table>
+      </td>
+      <td valign=bottom>
+        <table border=0 cellpadding=0 cellspacing=0><tr><td bgcolor=#D8D8D8>
+          <table cellpadding=7 border=0>
+            <tr><td bgcolor=#F4F4F8><a href="http://www.madshi.net">www.madshi.net</a></td></tr>
+          </table>
+        </td></tr></table>
+      </td>
+    </tr></table>
+    <p>Usually a hook DLL frees its resources in DllMain(DLL_PROCESS_DETACH).
+       However, this can be dangerous because of the loader lock. For example,
+       you can't wait for secondary threads to finish because they're usually
+       blocked from running while you're in DllMain.</p>
+    <p>madCodeHook itself unhooks all of your API hooks automatically, in the
+       moment when you uninject your hook DLL - and it's doing that outside of
+       DllMain. In order to allow you to also cleanup your stuff outside of
+       DllMain, you can call "RegisterUninjectCallback()". Your callback function
+       will then be called after madCodeHook has uninstalled your API hooks, and
+       right before FreeLibrary is called on your hook DLL.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='comment'>// When your DLL gets uninjected, your "uninject callback" will be called</span><br>
+                  <span id='comment'>// right before FreeLibrary(yourHook.dll) is executed, so your callback runs</span><br>
+                  <span id='comment'>// outside of DllMain.</span><br>
+                  <span id='comment'>// If your DLL gets unloaded by other means than uninjection, your callback</span><br>
+                  <span id='comment'>// will *not* be called at all.</span><br>
+                  <br>
+                  <span id='bold'>type</span>&nbsp;<span id='identifier'>TUninjectCallback</span>&nbsp;= <span id='bold'>procedure</span>&nbsp;(<span id='identifier'>context</span>: <span id='identifier'>pointer</span>); <span id='bold'>stdcall</span>;<br>
+                  <br>
+                  <span id='bold'>procedure</span>&nbsp;<span id='identifier'>RegisterUninjectCallback</span>&nbsp;(<span id='identifier'>callback</span>: <span id='identifier'>TUninjectCallback</span>; <span id='identifier'>context</span>: <span id='identifier'>pointer</span>); <span id='bold'>stdcall</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="AmSystemProcess"></a>
+    <a name="AmUsingInputDesktop"></a>
+    <p>A DLL which gets <a href="DllInjecting.htm">injected</a> into multiple
+       processes often needs to find out in what kind of process it is running and
+       how the environment is like. "AmSystemProcess" tells you, whether you're
+       running in a system/service process or in a normal application. The function
+       "AmUsingInputDesktop" is especially important, because only if the current
+       process is using the input desktop, you should show messages boxes
+       or other GUI stuff. If you show a message box in a non interactive
+       system/service process, you can even crash the whole OS. Please note, that
+       with XP fast user switching "AmUsingInputDesktop" may return true, although
+       the current session is currently not visible. XP fast user switching is
+       implemented by using terminal server logic, so each fast user session has
+       its own window station and input desktop.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='comment'>// is the current process a service/system process? &nbsp;(win9x -> always false)</span><br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>AmSystemProcess</span>&nbsp;: <span id='identifier'>bool</span>; <span id='bold'>stdcall</span>;<br>
+                  <br>
+                  <span id='comment'>// is the current thread's desktop the input desktop? &nbsp;(win9x -> always true)</span><br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>AmUsingInputDesktop</span>&nbsp;: <span id='identifier'>bool</span>; <span id='bold'>stdcall</span>;<br>
+                  <br>
+                  <span id='comment'>// Example:</span><br>
+                  <span id='bold'>if</span>&nbsp;<span id='identifier'>AmUsingInputDesktop</span>&nbsp;<span id='bold'>then</span><br>
+                  &nbsp;&nbsp;<span id='identifier'>ShowMessage</span>(<span id='number'>0</span>, <span id='string'>'the current process may use GUI stuff'</span>, <span id='string'>'info'</span>, <span id='number'>0</span>);
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="Is64bitOS"></a>
+    <a name="Is64bitProcess"></a>
+    <p>When running in a 64bit OS, you may need to do some things differently.
+       So here are two 64bit related helper functions:</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='comment'>// is the current OS a native 64bit OS?</span><br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>Is64bitOS</span>&nbsp;: <span id='identifier'>bool</span>; <span id='bold'>stdcall</span>;<br>
+                  <br>
+                  <span id='comment'>// is the specified process a native 64bit process?</span><br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>Is64bitProcess</span>&nbsp;(<span id='identifier'>processHandle</span>: <span id='identifier'>dword</span>) : <span id='identifier'>bool</span>; <span id='bold'>stdcall</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="GetCurrentSessionId"></a>
+    <a name="GetInputSessionId"></a>
+    <p>In terminal server and in XP fast user switching situations there can be
+       multiple sessions, where each session has its own ID. The function
+       "GetCurrentSessionId" returns the ID of the session to which the current
+       process belongs. The function "GetInputSessionId" returns the ID of the
+       session, which is currently shown on the physical screen.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='comment'>// to which session does the current process belong?</span><br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>GetCurrentSessionId</span>&nbsp;: <span id='identifier'>dword</span>; <span id='bold'>stdcall</span>;<br>
+                  <br>
+                  <span id='comment'>// which session is currently shown on the physical screen?</span><br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>GetInputSessionId</span>&nbsp;: <span id='identifier'>dword</span>; <span id='bold'>stdcall</span>;<br>
+                  <br>
+                  <span id='comment'>// Example:</span><br>
+                  <span id='bold'>if</span>&nbsp;<span id='identifier'>GetCurrentSessionId</span>&nbsp;= <span id='identifier'>GetInputSessionId</span>&nbsp;<span id='bold'>then</span><br>
+                  &nbsp;&nbsp;<span id='identifier'>MessageBox</span>(<span id='number'>0</span>, <span id='string'>'our session is the currently active one'</span>, <span id='string'>'info'</span>, <span id='number'>0</span>);
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="GetCallingModule"></a>
+    <p>Sometimes one needs to know which module has called the current function.
+       E.g. a hook callback function might want to behave differently, depending
+       on which module has called the hooked API. "GetCallingModule" returns this
+       information, but it works only if your function has a stack frame. If you
+       are using Delphi XE2 (or newer) it is recommended to call
+       "GetCallingModule(ReturnAddress)" to improve performance and reliability.
+       MSVC++ users please call "GetCallingModule(_ReturnAddress())".</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>GetCallingModule</span>&nbsp;(<span id='identifier'>returnAddress</span>: <span id='identifier'>pointer</span>&nbsp;= <span id='bold'>nil</span>) : <span id='identifier'>HMODULE</span>; <span id='bold'>stdcall</span>;<br>
+                  <br>
+                  <span id='comment'>// Example:</span><br>
+                  <span id='bold'>procedure</span>&nbsp;<span id='identifier'>TerminateProcessCallback</span>(<span id='identifier'>process</span>, <span id='identifier'>exitCode</span>: <span id='identifier'>dword</span>) : <span id='identifier'>bool</span>; <span id='bold'>stdcall</span>;<br>
+                  <span id='bold'>begin</span><br>
+                  &nbsp;&nbsp;<span id='bold'>if</span>&nbsp;<span id='identifier'>GetCallingModule</span>&nbsp;<> <span id='identifier'>GetModuleHandle</span>(<span id='string'>'kernel32.dll'</span>) <span id='bold'>then</span>&nbsp;<span id='bold'>begin</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>// for some strange reason this hook callback function allows</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>// TerminateProcess to be called only from inside the kernel32.dll &nbsp;</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>result</span>&nbsp;:= <span id='identifier'>false</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>SetLastError</span>(<span id='identifier'>ERROR_ACCESS_DENIED</span>);<br>
+                  &nbsp;&nbsp;<span id='bold'>end</span>&nbsp;<span id='bold'>else</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>result</span>&nbsp;:= <span id='identifier'>TerminateProcessNext</span>(<span id='identifier'>process</span>, <span id='identifier'>exitCode</span>);<br>
+                  <span id='bold'>end</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="ProcessIdToFileName"></a>
+    <a name="ProcessIdToFileNameA"></a>
+    <a name="ProcessIdToFileNameW"></a>
+    <p>The following function gives you the path/name of the specified process.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='comment'>// You get the full path in all OSs, provided you have enough privileges</span><br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>ProcessIdToFileNameW</span>&nbsp;(<span id='identifier'>processId</span>: <span id='identifier'>dword</span>; <span id='identifier'>fileName</span>: <span id='identifier'>PWideChar</span>; <span id='identifier'>bufLenInChars</span>: <span id='identifier'>word</span>) : <span id='identifier'>bool</span>; <span id='bold'>stdcall</span>;<br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>ProcessIdToFileNameA</span>&nbsp;(<span id='identifier'>processId</span>: <span id='identifier'>dword</span>; <span id='identifier'>fileName</span>: <span id='identifier'>PAnsiChar</span>; <span id='identifier'>bufLenInChars</span>: <span id='identifier'>word</span>) : <span id='identifier'>bool</span>; <span id='bold'>stdcall</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="CreateGlobalMutex"></a>
+    <a name="OpenGlobalMutex"></a>
+    <a name="CreateGlobalEvent"></a>
+    <a name="OpenGlobalEvent"></a>
+    <a name="CreateGlobalFileMapping"></a>
+    <a name="OpenGlobalFileMapping"></a>
+    <p>When doing system wide stuff, there are two problems with named objects
+       (like events, mutexes and file mappings). The first problem is that by
+       default the objects are created session specific. That means, even if you
+       enter exact the same name, each session will have its own set of objects.
+       Internally Windows adds the session number to the object names. The second
+       problem is that if you create an object inside of a system/service process
+       without specifying appropriate security attributes, this object will not be
+       accessible by normal applications. The following functions get rid of both
+       problems. Objects created/opened by the following functions are terminal
+       server and XP fast user switching session independent and can be opened from
+       any process.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>CreateGlobalMutex</span>&nbsp;(<span id='identifier'>name</span>: <span id='identifier'>pchar</span>) : <span id='identifier'>dword</span>; <span id='bold'>stdcall</span>;<br>
+                  <span id='bold'>function</span>&nbsp;&nbsp;&nbsp;<span id='identifier'>OpenGlobalMutex</span>&nbsp;(<span id='identifier'>name</span>: <span id='identifier'>pchar</span>) : <span id='identifier'>dword</span>; <span id='bold'>stdcall</span>;<br>
+                  <br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>CreateGlobalEvent</span>&nbsp;(<span id='identifier'>name</span>: <span id='identifier'>pchar</span>; <span id='identifier'>manual</span>, <span id='identifier'>initialState</span>: <span id='identifier'>bool</span>) : <span id='identifier'>dword</span>; <span id='bold'>stdcall</span>;<br>
+                  <span id='bold'>function</span>&nbsp;&nbsp;&nbsp;<span id='identifier'>OpenGlobalEvent</span>&nbsp;(<span id='identifier'>name</span>: <span id='identifier'>pchar</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;) : <span id='identifier'>dword</span>; <span id='bold'>stdcall</span>;<br>
+                  <br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>CreateGlobalFileMapping</span>&nbsp;(<span id='identifier'>name</span>: <span id='identifier'>pchar</span>; <span id='identifier'>size</span>: <span id='identifier'>dword</span>) : <span id='identifier'>dword</span>; <span id='bold'>stdcall</span>;<br>
+                  <span id='bold'>function</span>&nbsp;&nbsp;&nbsp;<span id='identifier'>OpenGlobalFileMapping</span>&nbsp;(<span id='identifier'>name</span>: <span id='identifier'>pchar</span>; <span id='bold'>write</span>: <span id='identifier'>bool</span>) : <span id='identifier'>dword</span>; <span id='bold'>stdcall</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="WideToAnsi"></a>
+    <a name="AnsiToWide"></a>
+    <p>In API hook callbacks of wide functions (e.g. GetModuleFileNameW or
+       CreateFileW) you should avoid to use ansi functions and you should also
+       avoid any wide <-> ansi string conversions being done by the OS. Both can
+       result in invalid string parameters and/or crashes. If you need to convert
+       wide <-> ansi strings, you can use the following functions, which do not
+       risk stability. The result buffer of both functions must be big enough to
+       hold the result string including the terminating null character.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>procedure</span>&nbsp;<span id='identifier'>WideToAnsi</span>&nbsp;(<span id='identifier'>wide</span>: <span id='identifier'>pwidechar</span>; <span id='identifier'>ansi</span>: <span id='identifier'>pchar</span>&nbsp;&nbsp;&nbsp;&nbsp;); <span id='bold'>stdcall</span>;<br>
+                  <span id='bold'>procedure</span>&nbsp;<span id='identifier'>AnsiToWide</span>&nbsp;(<span id='identifier'>ansi</span>: <span id='identifier'>pchar</span>; &nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>wide</span>: <span id='identifier'>pwidechar</span>); <span id='bold'>stdcall</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="AddAccessForEveryone"></a>
+    <p>Sometimes when writing a service you want to give every user (restricted or
+       not) the access rights to e.g. start your service. The following function
+       adds the specified access rights to the specified process or service for
+       "Everyone". The first parameter can either be a process handle or a service
+       handle.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>AddAccessForEveryone</span>&nbsp;(<span id='identifier'>processOrService</span>, <span id='identifier'>access</span>: <span id='identifier'>dword</span>) : <span id='identifier'>bool</span>; <span id='bold'>stdcall</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    
+  </body>
+
+</html>

@@ -1,0 +1,116 @@
+<html>
+
+  <head>
+    <title>mad* Help...</title>
+    <meta name="description" content="mad* Help...">
+    <meta name="keywords" content="madshi, components, delphi">
+    <meta http-equiv="expires" content="900">
+    <link rel=stylesheet type="text/css" href="style.css">
+  </head>
+
+  <body background="bcklight.gif" bgcolor=#F8F8F8>
+    <table border=0 cellpadding=0 callspacing=0><tr>
+      <td valign=bottom>
+        <table border=0 cellpadding=0 cellspacing=0><tr><td bgcolor=#D8D8D8>
+          <table cellpadding=3 border=0>
+            <tr><td bgcolor=#FFFFF0>
+              <div id="verySmall"><br></div>
+              <div id="bigTitle">&nbsp;Hooking Rules&nbsp;</div>
+              <div id="verySmall"><br></div>
+              <div id="small">
+                <a class="small" href="Content.htm">Content</a> /
+                <a class="small" href="madCodeHook.htm">madCodeHook</a> /...
+              </div>
+            </td></tr>
+          </table>
+        </td></tr></table>
+      </td>
+      <td valign=bottom>
+        <table border=0 cellpadding=0 cellspacing=0><tr><td bgcolor=#D8D8D8>
+          <table cellpadding=7 border=0>
+            <tr><td bgcolor=#F4F4F8><a href="http://www.madshi.net">www.madshi.net</a></td></tr>
+          </table>
+        </td></tr></table>
+      </td>
+    </tr></table>
+    <p>When doing API hooking you need to follow some basic rules. If you don't
+       follow them, your API hooks might make things unstable. Here's a list of the
+       most important rules:</p>
+    <table>
+      <tr><td align=right valign=top>1.</td>
+          <td>Always use *exactly* the same parameters, the same result type and
+              the same calling convention for the original API, your callback
+              function and for the "NextHook" function variable.</td></tr>
+      <tr><td align=right valign=top>2.</td>
+          <td>In a hook DLL only do what is absolutely necessary. Try to keep
+              things as short and simple as possible. In Delphi avoid the VCL. In
+              MSVC++ avoid MFC/ATL.</td></tr>
+      <tr><td align=right valign=top>3.</td>
+          <td>Be careful what you do in your hook DLL, if you plan to inject it
+              into system/service processes. You're not allowed to do any GUI
+              stuff (e.g. FindWindow, PostMessage, MessageBox, etc) inside of a
+              non-interactive system process. If you do nevertheless, things like
+              sudden OS reboots can happen. Check out madCodeHook's
+              <a href="mchTools.htm">Tool Functions</a>. They can tell you in what kind of process your
+              DLL is currently running. If you need to do inter process
+              communication, please use madCodeHook's <a href="IPC.htm">IPC</a> functions instead
+              of FindWindow/PostMessage.</td></tr>
+      <tr><td align=right valign=top>4.</td>
+          <td>In your hook DLL link to as few DLLs as possible. Avoid linking to
+              RasApi32.dll, because in older OSs 16-bit processes will otherwise tend to
+              crash when being started the first time.</td></tr>
+      <tr><td align=right valign=top>5.</td>
+          <td>Make sure that your hook callback function does not accidently alter
+              the Get/SetLastError value. You may alter it, if you want to signal
+              a failure. But if you are calling the next hook and don't want to
+              impact the flow of things, please make sure that neither you nor any
+              of the functions/APIs you're calling messes around with the last
+              error value. Some APIs like CreateMutex do change this value. So if
+              you call CreateMutex inside of your hook callback function, please
+              save the last error value and restore it afterwards. The
+              madCodeHook <a href="mchTools.htm">Tool Functions</a> are last error neutral.</td></tr>
+      <tr><td align=right valign=top>6.</td>
+          <td>Each API hook needs its own callback function and its own "NextHook"
+              variable. Don't try to save code by using callback functions and/or
+              NextHook variables twice.</td></tr>
+      <tr><td align=right valign=top>7.</td>
+          <td>In hook callback function of wide APIs (like e.g.
+              GetModuleFileNameWCallback or CreateFileWCallback) don't do anything
+              which results in the OS trying to convert ansi <-> wide strings.
+              Don't let Delphi automatically convert ansi <-> wide strings for you.
+              Don't ask Windows to convert strings for you. Don't call any ansi
+              APIs (this internally results in ansi <-> wide conversion again).
+              Instead use the madCodeHook <a href="mchTools.htm">Tool Functions</a> to convert strings.
+              This rule doesn't apply to ansi hook callback functions.</td></tr>
+      <tr><td align=right valign=top>8.</td>
+          <td>In the initialization of your DLL avoid to directly or indirectly
+              call VirtualAlloc, because otherwise in older OSs 16-bit processes will
+              tend to crash.</td></tr>
+      <tr><td align=right valign=top>9.</td>
+          <td>Avoid creating threads and windows in a hook dll.</td></tr>
+    </table>
+    <p>This all might sound complicated and difficult. But hey, after all API
+       hooking *is* a difficult thing. madCodeHook tries to free you from all
+       problems as far as is possible. But the rules mentioned above can not be
+       controlled by madCodeHook. Those are general hooking rules which are valid
+       regardless of which API hooking method or package you're using and I can't
+       change that.</p>
+    <p>You have to understand what happens when you hook an API: You are violently
+       breaking into the flow of a program, which someone else has written. This
+       other programmer has not intended that you do that, nor has he even
+       calculated with that. That means you have to be very careful that you don't
+       break his code. You have to try to not change anything which could bring
+       the original program into problems. Try to change only what is necessary,
+       not one bit more.</p>
+    <p>You can violate some of the rules without big impact, if you're only hooking
+       one specific process. You should then test things deeply, but if no problems
+       arise, it's okay. However, when doing program independent system wide API
+       hooking, things are different. It's totally impossible to check your hooking
+       stuff against all existing programs in the world, there are just too many to
+       check them all. So you can just follow the rules and hope that your hooks
+       don't break anything. But hey, if you are careful, thing are looking quite
+       positive. So don't worry too much about these things. Just make sure that
+       you follow the rules.</p>
+  </body>
+
+</html>

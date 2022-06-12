@@ -1,0 +1,157 @@
+<html>
+
+  <head>
+    <title>mad* Help...</title>
+    <meta name="description" content="mad* Help...">
+    <meta name="keywords" content="madshi, components, delphi">
+    <meta http-equiv="expires" content="900">
+    <link rel=stylesheet type="text/css" href="style.css">
+  </head>
+
+  <body background="bcklight.gif" bgcolor=#F8F8F8>
+    <table border=0 cellpadding=0 callspacing=0><tr>
+      <td valign=bottom>
+        <table border=0 cellpadding=0 cellspacing=0><tr><td bgcolor=#D8D8D8>
+          <table cellpadding=3 border=0>
+            <tr><td bgcolor=#FFFFF0>
+              <div id="verySmall"><br></div>
+              <div id="bigTitle">&nbsp;How To Use madExcept&nbsp;</div>
+              <div id="verySmall"><br></div>
+              <div id="small">
+                <a class="small" href="Content.htm">Content</a> /
+                <a class="small" href="madExcept.htm">madExcept</a> /...
+              </div>
+            </td></tr>
+          </table>
+        </td></tr></table>
+      </td>
+      <td valign=bottom>
+        <table border=0 cellpadding=0 cellspacing=0><tr><td bgcolor=#D8D8D8>
+          <table cellpadding=7 border=0>
+            <tr><td bgcolor=#F4F4F8><a href="http://www.madshi.net">www.madshi.net</a></td></tr>
+          </table>
+        </td></tr></table>
+      </td>
+    </tr></table>
+    <h3>Integrating madExcept into your projects...</h3>
+    <p>In order to integrate madExcept into a project please open the project in
+       Delphi. Then in Delphi's "Project" menu enter the
+       <a href="madExceptSettings.htm">madExcept settings</a> and enable madExcept
+       there. Now the only thing left is to recompile your project. After the
+       successful recompile madExcept is fully integrated into your project.</p>
+    <p>If you want your dlls to handle their own exceptions, you should put a
+       "try [..] except" around each exported function and message handler. But
+       normally you don't need to. If your dll raises an exception and doesn't
+       handle it, the application does.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>procedure</span>&nbsp;<span id='identifier'>DllExportedFunction</span>;<br>
+                  <span id='comment'>// you only need to do this, if the application (which uses your dll)</span><br>
+                  <span id='comment'>// is not compiled with madExcept</span><br>
+                  <span id='bold'>begin</span><br>
+                  &nbsp;&nbsp;<span id='bold'>try</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>// real code here</span><br>
+                  &nbsp;&nbsp;<span id='bold'>except</span>&nbsp;<a class="pascal" href="madExceptUnit.htm#HandleException">HandleException</a>&nbsp;<span id='bold'>end</span>;<br>
+                  <span id='bold'>end</span>;<br>
+                  <br>
+                  <span id='bold'>exports</span>&nbsp;<span id='identifier'>DllExportedFunction</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <h3>Customizing madExcept...</h3>
+    <p>You don't need to, but you can customize the behaviour of <a href="madExcept.htm" href="madExceptUnit.htm">madExcept</a>.
+       Please look at the <a href="madExceptSettings.htm">madExcept settings</a> dialog to see all the
+       possibilities you have. One thing you should customize is the email address
+       in the <a href="madExceptSettings5.htm">madExcept settings</a>. If
+       you do that, your customers can send you bug reports directly from the
+       exception box.</p>
+    <h3>Main thread freeze checking...</h3>
+    <p>If the <a href="madExceptSettings1.htm">settings</a>
+       say so, <a href="madExcept.htm" href="madExceptUnit.htm">madExcept</a> checks periodically, whether your main thread is
+       not frozen yet, that is, whether it is still responding to messages.
+       Sometimes such a check makes no sense. E.g. console applications often don't
+       handle messages at all. In such a case please do not enable the freeze
+       checking option in the
+       <a href="madExceptSettings1.htm">madExcept settings</a>.</p>
+    <p>Sometimes your application's main thread normally responds to messages, but
+       stops doing that in special situations for a specific period of time, e.g.
+       when printing or something like that. In that case you should temporarily
+       disable the freeze checking by calling <a href="madExceptUnit.htm#PauseFreezeCheck">PauseFreezeCheck</a> to avoid
+       false alarms. Also you can call <a href="madExceptUnit.htm#ImNotFrozen">ImNotFrozen</a> at any time to reset the
+       freeze check timer.</p>
+    <h3>Multi threaded projects...</h3>
+    <p>In case your project uses multiple threads, sometimes the bug reports look a
+       bit confusing. The main thread is named "main thread", but other threads can
+       sometimes be hard to identify. You can make your bug reports better
+       readable/understandable by giving names to your secondary threads. Please
+       call <a href="madExceptUnit.htm#NameThread">NameThread</a> for that purpose.</p>
+    <h3>Command line compiling/linking...</h3>
+    <p>If you're using Delphi's command line tools to build your projects, please
+       have a look at the tool "madExceptPatch.exe", which you can find in the
+       "tools" directory. This tool does all the necessary patching to give
+       madExcept its full power. When building your projects inside of the IDE,
+       madExcept's IDE wizard does the necessary patches automatically in the
+       background. But when compiling through command line the wizard isn't running,
+       of course. So in that case please let "madExceptPatch.exe" do its work after
+       your project is linked.</p>
+    <p>The tool "madExceptPatch.exe" needs a detailed map file for your project
+       (in BCB it needs a full "tds" debug information file instead). So please
+       tell the command line compiler to produce the needed information. A detailed
+       map file can be forced by using the "-gd" switch.</p>
+    <h3>Custom exception handlers...</h3>
+    <p>Maybe you want to install your own exception handler. The usual exception
+       handlers ("ErrorProc" and "TApplication.OnException") won't work anymore,
+       when using <a href="madExcept.htm" href="madExceptUnit.htm">madExcept</a>. Instead you can either use the
+       <a href="madExceptVclUnit.htm#TMadExceptionHandler.OnException">TMadExceptionHandler.OnException</a> event or directly call
+       <a href="madExceptUnit.htm#RegisterExceptionHandler">RegisterExceptionHandler</a>.</p>
+    <p>The following example is a little unit, which you can add to any of your
+       projects. The unit registers an exception handler, which does nothing but
+       remove the header field "command line" from the bug report. If you use this
+       little unit, the exception box is shown, nevertheless. If you don't want
+       that, set the variable "handled" to true. In that case no other exception
+       handler is called anymore, and no exception box is shown, either...</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>unit</span>&nbsp;<span id='identifier'>RemoveCmdLine</span>;<br>
+                  <br>
+                  <span id='bold'>interface</span><br>
+                  <br>
+                  <span id='bold'>implementation</span><br>
+                  <br>
+                  <span id='bold'>uses</span>&nbsp;<a class="pascal" href="madExcept.htm" class="pascal" href="madExceptUnit.htm">madExcept</a>;<br>
+                  <br>
+                  <span id='bold'>procedure</span>&nbsp;<span id='identifier'>RemoveCommandLineHeaderInfo</span>(<span id='bold'>const</span>&nbsp;<span id='identifier'>exceptIntf</span>&nbsp;: <a class="pascal" href="madExceptUnit.htm#IMEException">IMEException</a>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='bold'>var</span>&nbsp;<span id='identifier'>handled</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>boolean</span>);<br>
+                  <span id='bold'>begin</span><br>
+                  &nbsp;&nbsp;<span id='identifier'>exceptIntf</span>.<span id='identifier'>BugReportHeader</span>[<span id='string'>'command line'</span>] := <span id='string'>''</span>;<br>
+                  <span id='bold'>end</span>;<br>
+                  <br>
+                  <span id='bold'>initialization</span><br>
+                  &nbsp;&nbsp;<a class="pascal" href="madExceptUnit.htm#RegisterExceptionHandler">RegisterExceptionHandler</a>(<span id='identifier'>RemoveCommandLineHeaderInfo</span>, <span id='identifier'>stDontSync</span>);<br>
+                  <span id='bold'>end</span>.
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </body>
+
+</html>

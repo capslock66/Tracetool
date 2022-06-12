@@ -1,0 +1,242 @@
+<html>
+
+  <head>
+    <title>mad* Help...</title>
+    <meta name="description" content="mad* Help...">
+    <meta name="keywords" content="madshi, components, delphi">
+    <meta http-equiv="expires" content="900">
+    <link rel=stylesheet type="text/css" href="style.css">
+  </head>
+
+  <body background="bcklight.gif" bgcolor=#F8F8F8>
+    <table border=0 cellpadding=0 callspacing=0><tr>
+      <td valign=bottom>
+        <table border=0 cellpadding=0 cellspacing=0><tr><td bgcolor=#D8D8D8>
+          <table cellpadding=3 border=0>
+            <tr><td bgcolor=#FFFFF0>
+              <div id="verySmall"><br></div>
+              <div id="bigTitle">&nbsp;How To Use madCodeHook&nbsp;</div>
+              <div id="verySmall"><br></div>
+              <div id="small">
+                <a class="small" href="Content.htm">Content</a> /
+                <a class="small" href="madCodeHook.htm">madCodeHook</a> /...
+              </div>
+            </td></tr>
+          </table>
+        </td></tr></table>
+      </td>
+      <td valign=bottom>
+        <table border=0 cellpadding=0 cellspacing=0><tr><td bgcolor=#D8D8D8>
+          <table cellpadding=7 border=0>
+            <tr><td bgcolor=#F4F4F8><a href="http://www.madshi.net">www.madshi.net</a></td></tr>
+          </table>
+        </td></tr></table>
+      </td>
+    </tr></table>
+    <p>On this page we'll work out together how to write a project which hooks an
+       API system wide in both win9x and winNT families. Which API shall we hook?
+       Hmmmm... Let's take a very system API, "TerminateProcess". We'll install a
+       hook which protects our process from being terminated.</p>
+    <p>Before beginning with the work, let me say it loud and clear: I don't want
+       madCodeHook to be used for illegal purposes! If you want to write a virus or
+       a backdoor or whatever, please use something else. madCodeHook is used by
+       several people for serious work and I don't want their work to be impacted
+       negatively in any way. If you spread viruses which uses madCodeHook, some
+       anti virus programs will condemn every single product, which uses
+       madCodeHook. I don't want that to happen, so please use it only for serious
+       and legal purpose. Thank you!</p>
+    <p>Okay, let's begin with the API hooking code. When hooking an API, we need to
+       write some kind of hook callback function, which will later get called
+       everytime someone tries to call the to-be-hooked API. Then we may need some
+       way to call the original API from within our hook callback function. The
+       most simple way to do so is to use a function variable. So let's have a look
+       at a first easy chunk of code:</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>var</span>&nbsp;<span id='identifier'>OriginalTerminateProcess</span>&nbsp;: <span id='bold'>function</span>&nbsp;(<span id='identifier'>processHandle</span>, <span id='identifier'>exitCode</span>: <span id='identifier'>dword</span>) : <span id='identifier'>bool</span>; <span id='bold'>stdcall</span>;<br>
+                  <br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>TerminateProcessCallback</span>(<span id='identifier'>processHandle</span>, <span id='identifier'>exitCode</span>: <span id='identifier'>dword</span>) : <span id='identifier'>bool</span>; <span id='bold'>stdcall</span>;<br>
+                  <span id='bold'>begin</span><br>
+                  &nbsp;&nbsp;<span id='identifier'>result</span>&nbsp;:= <span id='identifier'>OriginalTerminateProcess</span>(<span id='identifier'>processHandle</span>, <span id='identifier'>exitCode</span>);<br>
+                  <span id='bold'>end</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <p>Does that look alright to you? The "TerminateProcessCallback" function shall
+       be our hook callback function. Inside the first version of our callback, we
+       do nothing but call the original API. In order to enable us to handle all
+       parameters as well as the result of the API correctly, we must use *exactly*
+       the same function definition everywhere, which is also used by the original
+       API - including the calling convention.</p>
+    <p>Now that we have a callback function and a "OriginalAPI" function variable,
+       all we need to do is to install the hook. We do so by calling madCodeHook's
+       <a href="ApiCodeHooking.htm#HookAPI">HookAPI</a>. But before doing that let's slightly rename our function
+       variable. madCodeHook automatically builds up a full hooking queue. So in
+       fact what we thought would be the original API function might just be
+       another hook callback function. So let's rename "OriginalTerminateProcess"
+       to "TerminateProcessNext".</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>var</span>&nbsp;<span id='identifier'>TerminateProcessNext</span>&nbsp;: <span id='bold'>function</span>&nbsp;(<span id='identifier'>processHandle</span>, <span id='identifier'>exitCode</span>: <span id='identifier'>dword</span>) : <span id='identifier'>bool</span>; <span id='bold'>stdcall</span>;<br>
+                  <br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>TerminateProcessCallback</span>(<span id='identifier'>processHandle</span>, <span id='identifier'>exitCode</span>: <span id='identifier'>dword</span>) : <span id='identifier'>bool</span>; <span id='bold'>stdcall</span>;<br>
+                  <span id='bold'>begin</span><br>
+                  &nbsp;&nbsp;<span id='identifier'>result</span>&nbsp;:= <span id='identifier'>TerminateProcessNext</span>(<span id='identifier'>processHandle</span>, <span id='identifier'>exitCode</span>);<br>
+                  <span id='bold'>end</span>;<br>
+                  <br>
+                  <span id='bold'>initialization</span><br>
+                  &nbsp;&nbsp;<a class="pascal" href="ApiCodeHooking.htm#HookAPI">HookAPI</a>(<span id='string'>'kernel32.dll'</span>, <span id='string'>'TerminateProcess'</span>, @<span id='identifier'>TerminateProcessCallback</span>, @<span id='identifier'>TerminateProcessNext</span>);<br>
+                  <span id='bold'>end</span>.
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <p>Okay, that should already work. Now let's fill our callback function, so
+       that it actually does something. We want our own process to be protected
+       from being terminated. So the first thing we have to do in our callback
+       function is to check out which process is about to be terminated. Hmmmmm,
+       the parameters give us a process handle. But which process hides behind that
+       handle? Fortunately, madCodeHook exports two useful functions. With
+       <a href="ProcessHandleToId.htm">ProcessHandleToId</a> we can convert the process handle to an ID, and
+       with <a href="mchTools.htm#ProcessIdToFileName">ProcessIdToFileName</a> we can get the process' file name. If the
+       file name is identical to our application's file name, we have to prevent
+       the TerminateProcess call! Otherwise we let it pass:</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>ThisIsOurProcess</span>(<span id='identifier'>processHandle</span>: <span id='identifier'>dword</span>) : <span id='identifier'>boolean</span>;<br>
+                  <span id='bold'>var</span>&nbsp;<span id='identifier'>pid</span>&nbsp;&nbsp;&nbsp;: <span id='identifier'>dword</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>arrCh</span>&nbsp;: <span id='bold'>array</span>&nbsp;[<span id='number'>0</span>..<span id='identifier'>MAX_PATH</span>] <span id='bold'>of</span>&nbsp;<span id='identifier'>char</span>;<br>
+                  <span id='bold'>begin</span><br>
+                  &nbsp;&nbsp;<span id='identifier'>pid</span>&nbsp;:= <a class="pascal" href="ProcessHandleToId.htm">ProcessHandleToId</a>(<span id='identifier'>processHandle</span>);<br>
+                  &nbsp;&nbsp;<span id='identifier'>result</span>&nbsp;:= (<span id='identifier'>pid</span>&nbsp;<> <span id='number'>0</span>) <span id='bold'>and</span>&nbsp;<a class="pascal" href="mchTools.htm#ProcessIdToFileNameA">ProcessIdToFileNameA</a>(<span id='identifier'>pid</span>, <span id='identifier'>arrCh</span>, <span id='identifier'>MAX_PATH</span>) <span id='bold'>and</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<a class="pascal" href="StringSearch.htm#PosText">PosText</a>(<span id='string'>'OurApplication.exe'</span>, <span id='identifier'>arrCh</span>) > <span id='number'>0</span>);<br>
+                  <span id='bold'>end</span>;<br>
+                  <br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>TerminateProcessCallback</span>(<span id='identifier'>processHandle</span>, <span id='identifier'>exitCode</span>: <span id='identifier'>dword</span>) : <span id='identifier'>bool</span>; <span id='bold'>stdcall</span>;<br>
+                  <span id='bold'>begin</span><br>
+                  &nbsp;&nbsp;<span id='bold'>if</span>&nbsp;(<span id='identifier'>integer</span>(<span id='identifier'>processHandle</span>) > <span id='number'>0</span>) <span id='bold'>and</span>&nbsp;<span id='identifier'>ThisIsOurProcess</span>(<span id='identifier'>processHandle</span>) <span id='bold'>then</span>&nbsp;<span id='bold'>begin</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>result</span>&nbsp;:= <span id='identifier'>false</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>SetLastError</span>(<span id='identifier'>ERROR_ACCESS_DENIED</span>);<br>
+                  &nbsp;&nbsp;<span id='bold'>end</span>&nbsp;<span id='bold'>else</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>result</span>&nbsp;:= <span id='identifier'>TerminateProcessNext</span>(<span id='identifier'>processHandle</span>, <span id='identifier'>exitCode</span>);<br>
+                  <span id='bold'>end</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <p>This should actually work quite nicely. However, madCodeHook API hooks
+       normally show effect only in the current process. That means, if another
+       process calls TerminateProcess, we're lost. But the solution is quite easy.
+       First, let's put all of our code into a little DLL like this:</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>library</span>&nbsp;<span id='identifier'>TPHook</span>;<br>
+                  <br>
+                  <span id='bold'>uses</span>&nbsp;<span id='identifier'>Windows</span>, <a class="pascal" href="madRemote.htm">madRemote</a>, <a class="pascal" href="madCodeHook.htm">madCodeHook</a>, <a class="pascal" href="madStringsUnit.htm">madStrings</a>;<br>
+                  <br>
+                  <span id='bold'>var</span>&nbsp;<span id='identifier'>TerminateProcessNext</span>&nbsp;: <span id='bold'>function</span>&nbsp;(<span id='identifier'>processHandle</span>, <span id='identifier'>exitCode</span>: <span id='identifier'>dword</span>) : <span id='identifier'>bool</span>; <span id='bold'>stdcall</span>;<br>
+                  <br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>ThisIsOurProcess</span>(<span id='identifier'>processHandle</span>: <span id='identifier'>dword</span>) : <span id='identifier'>boolean</span>;<br>
+                  <span id='bold'>var</span>&nbsp;<span id='identifier'>pid</span>&nbsp;&nbsp;&nbsp;: <span id='identifier'>dword</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>arrCh</span>&nbsp;: <span id='bold'>array</span>&nbsp;[<span id='number'>0</span>..<span id='identifier'>MAX_PATH</span>] <span id='bold'>of</span>&nbsp;<span id='identifier'>char</span>;<br>
+                  <span id='bold'>begin</span><br>
+                  &nbsp;&nbsp;<span id='identifier'>pid</span>&nbsp;:= <a class="pascal" href="ProcessHandleToId.htm">ProcessHandleToId</a>(<span id='identifier'>processHandle</span>);<br>
+                  &nbsp;&nbsp;<span id='identifier'>result</span>&nbsp;:= (<span id='identifier'>pid</span>&nbsp;<> <span id='number'>0</span>) <span id='bold'>and</span>&nbsp;<a class="pascal" href="mchTools.htm#ProcessIdToFileNameA">ProcessIdToFileNameA</a>(<span id='identifier'>pid</span>, <span id='identifier'>arrCh</span>, <span id='identifier'>MAX_PATH</span>) <span id='bold'>and</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<a class="pascal" href="StringSearch.htm#PosText">PosText</a>(<span id='string'>'OurApplication.exe'</span>, <span id='identifier'>arrCh</span>) > <span id='number'>0</span>);<br>
+                  <span id='bold'>end</span>;<br>
+                  <br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>TerminateProcessCallback</span>(<span id='identifier'>processHandle</span>, <span id='identifier'>exitCode</span>: <span id='identifier'>dword</span>) : <span id='identifier'>bool</span>; <span id='bold'>stdcall</span>;<br>
+                  <span id='bold'>begin</span><br>
+                  &nbsp;&nbsp;<span id='bold'>if</span>&nbsp;(<span id='identifier'>integer</span>(<span id='identifier'>processHandle</span>) > <span id='number'>0</span>) <span id='bold'>and</span>&nbsp;<span id='identifier'>ThisIsOurProcess</span>(<span id='identifier'>processHandle</span>) <span id='bold'>then</span>&nbsp;<span id='bold'>begin</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>result</span>&nbsp;:= <span id='identifier'>false</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>SetLastError</span>(<span id='identifier'>ERROR_ACCESS_DENIED</span>);<br>
+                  &nbsp;&nbsp;<span id='bold'>end</span>&nbsp;<span id='bold'>else</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>result</span>&nbsp;:= <span id='identifier'>TerminateProcessNext</span>(<span id='identifier'>processHandle</span>, <span id='identifier'>exitCode</span>);<br>
+                  <span id='bold'>end</span>;<br>
+                  <br>
+                  <span id='bold'>begin</span><br>
+                  &nbsp;&nbsp;<a class="pascal" href="ApiCodeHooking.htm#HookAPI">HookAPI</a>(<span id='string'>'kernel32.dll'</span>, <span id='string'>'TerminateProcess'</span>, @<span id='identifier'>TerminateProcessCallback</span>, @<span id='identifier'>TerminateProcessNext</span>);<br>
+                  <span id='bold'>end</span>.
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <p>And now in our application let's just inject this DLL into all processes
+       system wide. That's very easy by using madCodeHook again.</p>
+    <p>After you have built the hook dll, you need to <a href="mchDrvCfg.htm">configure</a> and then
+       <a href="mchDrvSign.htm">sign</a> the <a href="mchInjDrv.htm">drivers</a>
+       to make them work. More information about the 
+       <a href="mchInjDrv.htm">injection drivers</a> can be found
+       <a href="mchInjDrv.htm">here</a>.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>program</span>&nbsp;<span id='identifier'>OurApplication</span>;<br>
+                  <br>
+                  <span id='bold'>uses</span>&nbsp;<span id='identifier'>Windows</span>, <a class="pascal" href="madCodeHook.htm">madCodeHook</a>;<br>
+                  <br>
+                  <span id='bold'>begin</span><br>
+                  &nbsp;&nbsp;<span id='comment'>// load injection driver for 32bit and 64bit OSs</span><br>
+                  &nbsp;&nbsp;<a class="pascal" href="DllInjecting.htm#LoadInjectionDriver">LoadInjectionDriver</a>(<span id='string'>'TPDemoDriver'</span>, <span id='string'>'tpdemo32.sys'</span>, <span id='string'>'tpdemo64.sys'</span>);<br>
+                  &nbsp;&nbsp;<span id='comment'>// inject dll into all running processes</span><br>
+                  &nbsp;&nbsp;<a class="pascal" href="DllInjecting.htm#ALL_SESSIONS">InjectLibrary</a>(<span id='string'>'TPDemoDriver'</span>, <span id='string'>'TPHook.dll'</span>, <span id='identifier'>ALL_SESSIONS</span>, <span id='identifier'>true</span>);<br>
+                  <br>
+                  &nbsp;&nbsp;<span id='identifier'>MessageBox</span>(<span id='number'>0</span>, <span id='string'>'You can'</span><span id='string'>'t call TerminateProcess on me!'</span>, <span id='string'>'Boasting...'</span>, <span id='identifier'>MB_ICONINFORMATION</span>);<br>
+                  <br>
+                  &nbsp;&nbsp;<span id='comment'>// uninject dll from all running processes</span><br>
+                  &nbsp;&nbsp;<a class="pascal" href="DllInjecting.htm#ALL_SESSIONS">UninjectLibrary</a>(<span id='string'>'TPDemoDriver'</span>, <span id='string'>'TPHook.dll'</span>, <span id='identifier'>ALL_SESSIONS</span>, <span id='identifier'>true</span>);<br>
+                  &nbsp;&nbsp;<span id='comment'>// stop injection driver (this completely removes the driver)</span><br>
+                  &nbsp;&nbsp;<a class="pascal" href="DllInjecting.htm#StopInjectionDriver">StopInjectionDriver</a>(<span id='string'>'TPDemoDriver'</span>);<br>
+                  <span id='bold'>end</span>.
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </body>
+
+</html>

@@ -36,7 +36,6 @@ object FrmTail: TFrmTail
       Height = 214
       Align = alClient
       BevelInner = bvNone
-      CheckImageKind = ckDarkCheck
       Colors.BorderColor = clWindowText
       Colors.HotColor = clBlack
       Colors.UnfocusedSelectionColor = clHighlight
@@ -49,14 +48,8 @@ object FrmTail: TFrmTail
       Font.Style = []
       Header.AutoSizeIndex = -1
       Header.DefaultHeight = 17
-      Header.Font.Charset = DEFAULT_CHARSET
-      Header.Font.Color = clWindowText
-      Header.Font.Height = -11
-      Header.Font.Name = 'MS Sans Serif'
-      Header.Font.Style = []
       Header.Height = 17
       Header.Options = [hoColumnResize, hoDblClickResize, hoDrag, hoVisible]
-      HintAnimation = hatNone
       HintMode = hmTooltip
       Indent = 15
       Margin = 0
@@ -81,26 +74,29 @@ object FrmTail: TFrmTail
       OnDblClick = VstTailDblClick
       OnEditCancelled = VstTailEditCancelled
       OnEdited = VstTailEdited
+      OnEditing = VstTailEditing
       OnFreeNode = VstTailFreeNode
       OnGetText = VstTailGetText
       OnPaintText = VstTailPaintText
       OnHeaderDragged = VstTailHeaderDragged
       OnKeyAction = VstTailKeyAction
       OnMeasureItem = VstTailMeasureItem
+      Touch.InteractiveGestures = [igPan, igPressAndTap]
+      Touch.InteractiveGestureOptions = [igoPanSingleFingerHorizontal, igoPanSingleFingerVertical, igoPanInertia, igoPanGutter, igoParentPassthrough]
       Columns = <
         item
           Options = [coAllowClick, coDraggable, coEnabled, coParentBidiMode, coParentColor, coResizable, coShowDropMark, coVisible]
           Position = 0
+          Text = 'Approx. Time'
           Width = 75
-          WideText = 'Approx. Time'
         end
         item
           Color = 16705515
           MinWidth = 3000
           Options = [coAllowClick, coEnabled, coParentBidiMode, coResizable, coShowDropMark, coVisible, coAllowFocus]
           Position = 1
+          Text = 'Lines'
           Width = 3000
-          WideText = 'Lines'
         end>
     end
     object PanelTraceInfo: TPanel
@@ -120,7 +116,6 @@ object FrmTail: TFrmTail
         Height = 212
         Align = alClient
         BevelOuter = bvNone
-        CheckImageKind = ckDarkCheck
         Color = 16117479
         Colors.BorderColor = clWindowText
         Colors.HotColor = clBlack
@@ -133,14 +128,8 @@ object FrmTail: TFrmTail
         Font.Style = []
         Header.AutoSizeIndex = -1
         Header.DefaultHeight = 17
-        Header.Font.Charset = DEFAULT_CHARSET
-        Header.Font.Color = clWindowText
-        Header.Font.Height = -11
-        Header.Font.Name = 'MS Sans Serif'
-        Header.Font.Style = []
         Header.Height = 17
         Header.Options = [hoAutoResize, hoColumnResize, hoDrag, hoVisible]
-        HintAnimation = hatNone
         HintMode = hmTooltip
         Indent = 15
         Margin = 0
@@ -163,6 +152,8 @@ object FrmTail: TFrmTail
         OnGetText = VstDetailGetText
         OnPaintText = VstDetailPaintText
         OnMeasureItem = VstDetailMeasureItem
+        Touch.InteractiveGestures = [igPan, igPressAndTap]
+        Touch.InteractiveGestureOptions = [igoPanSingleFingerHorizontal, igoPanSingleFingerVertical, igoPanInertia, igoPanGutter, igoParentPassthrough]
         Columns = <
           item
             Color = 16117479
@@ -204,7 +195,6 @@ object FrmTail: TFrmTail
         Width = 22
         Height = 20
         Anchors = [akTop, akRight]
-        DoubleBuffered = True
         Glyph.Data = {
           36030000424D3603000000000000360000002800000010000000100000000100
           1800000000000003000000000000000000000000000000000000FF00FFFF00FF
@@ -232,7 +222,6 @@ object FrmTail: TFrmTail
           FF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00
           FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF
           00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FF}
-        ParentDoubleBuffered = False
         TabOrder = 0
         OnClick = butCloseClick
       end
@@ -243,8 +232,6 @@ object FrmTail: TFrmTail
         Height = 20
         Anchors = [akTop, akRight]
         Caption = 'Reload'
-        DoubleBuffered = True
-        ParentDoubleBuffered = False
         TabOrder = 1
         OnClick = butReloadClick
       end
@@ -255,8 +242,6 @@ object FrmTail: TFrmTail
         Height = 20
         Anchors = [akTop, akRight]
         Caption = 'Clear File Content'
-        DoubleBuffered = True
-        ParentDoubleBuffered = False
         TabOrder = 2
         OnClick = butClearContentClick
       end

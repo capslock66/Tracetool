@@ -1,0 +1,319 @@
+<html>
+
+  <head>
+    <title>mad* Help...</title>
+    <meta name="description" content="mad* Help...">
+    <meta name="keywords" content="madshi, components, delphi">
+    <meta http-equiv="expires" content="900">
+    <link rel=stylesheet type="text/css" href="style.css">
+  </head>
+
+  <body background="bcklight.gif" bgcolor=#F8F8F8>
+    <a name="TMapFile"></a>
+    <table border=0 cellpadding=0 callspacing=0><tr>
+      <td valign=bottom>
+        <table border=0 cellpadding=0 cellspacing=0><tr><td bgcolor=#D8D8D8>
+          <table cellpadding=3 border=0>
+            <tr><td bgcolor=#FFFFF0>
+              <div id="verySmall"><br></div>
+              <div id="bigTitle">&nbsp;madMapFile Unit&nbsp;</div>
+              <div id="verySmall"><br></div>
+              <div id="small">
+                <a class="small" href="Content.htm">Content</a> /
+                <a class="small" href="madExcept.htm">madExcept</a> /...
+              </div>
+            </td></tr>
+          </table>
+        </td></tr></table>
+      </td>
+      <td valign=bottom>
+        <table border=0 cellpadding=0 cellspacing=0><tr><td bgcolor=#D8D8D8>
+          <table cellpadding=7 border=0>
+            <tr><td bgcolor=#F4F4F8><a href="http://www.madshi.net">www.madshi.net</a></td></tr>
+          </table>
+        </td></tr></table>
+      </td>
+    </tr></table>
+    <p>Borland's linker optionally creates a *.map file every time it links a
+       project (a little <a href="ExampleMapFile.htm">example map file</a> can be found
+       <a href="ExampleMapFile.htm">here</a>). Such a map file contains a lot of
+       useful information. The unit "madMapFile" features functionality to parse
+       those map files, search through the information and export the most
+       important bits of information to (and import from) a compressed and encrypted
+       string stream. A full list of what is contained in this unit can be found
+       in the <a href="madMapFileRef.htm">madMapFile Reference</a>.</p>
+    <p>The class "TMapFile" handles the most important pieces of information of a
+       map file:</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>type</span>&nbsp;<span id='identifier'>TMapFile</span>&nbsp;= <span id='bold'>class</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="FindMapFile"></a>
+    <p>There are several ways to get a <a href="#TMapFile">TMapFile</a> instance. The function
+       "FindMapFile" lets you find the map file that belongs to a specific address.
+       This address can be a code address, a data address or a HInstance value. If
+       you just want to get the map file of the current module (application or
+       dll), simply don't enter anything.</p>
+    <p>"FindMapFile" first checks in which module the specified address is located.
+       Then it checks whether that module file has an appended map file. If not, it
+       looks for a seperate map file with the same name as the module file. The
+       seperate file can either be a compressed and encrypted ".mad" file or the
+       uncompressed plain text ".map" file.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>FindMapFile</span>&nbsp;(<span id='identifier'>addr</span>: <span id='identifier'>pointer</span>&nbsp;= <span id='bold'>nil</span>) : <a class="pascal" href="#TMapFile">TMapFile</a>;<br>
+                  <br>
+                  <span id='comment'>// Examples:</span><br>
+                  <span id='identifier'>mf</span>&nbsp;:= <span id='identifier'>FindMapFile</span>; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>// map file of the current module</span><br>
+                  <span id='identifier'>mf</span>&nbsp;:= <span id='identifier'>FindMapFile</span>(<span id='identifier'>pointer</span>(<span id='identifier'>GetModuleHandle</span>(<span id='string'>'your.dll'</span>&nbsp;&nbsp;))); &nbsp;<span id='comment'>// map file of "your.dll"</span><br>
+                  <span id='identifier'>mf</span>&nbsp;:= <span id='identifier'>FindMapFile</span>(<span id='identifier'>pointer</span>(<span id='identifier'>GetModuleHandle</span>(<span id='string'>'user32.dll'</span>))); &nbsp;<span id='comment'>// no map file will be found... &nbsp;:-)</span>
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="LoadMapFile"></a>
+    <p>The function "LoadMapFile" loads and parses the specified external map
+       file. The map file can either be a compressed and encrypted ".mad" file or
+       the uncompressed plain text ".map" file.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>LoadMapFile</span>&nbsp;(<span id='identifier'>mapFile</span>: <span id='bold'>string</span>) : <a class="pascal" href="#TMapFile">TMapFile</a>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="TMapFile.IsValid"></a>
+    <p>The functions <a href="#FindMapFile">FindMapFile</a> and <a href="#LoadMapFile">LoadMapFile</a> can succeed or fail,
+       of course. If they succeed, you get a valid TMapFile instance back. Please
+       do *not* destroy it, it's internally cached to speed things up. madMapFile
+       automatically frees it when your module (exe/dll) is unloaded. If the
+       functions mentioned above fail, you nevertheless get a map file instance
+       back, but this time it's invalid and you are supposed to free it again. You
+       can check the following property to find out whether the returned TMapFile
+       instance is valid or not:</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>TMapFile</span>.<img src="r.gif"><span id='identifier'>IsValid</span>&nbsp;: <span id='identifier'>boolean</span>;<br>
+                  <br>
+                  <span id='comment'>// Example:</span><br>
+                  <span id='bold'>var</span>&nbsp;<span id='identifier'>mf</span>&nbsp;: <span id='identifier'>TMapFile</span>;<br>
+                  <span id='bold'>begin</span><br>
+                  &nbsp;&nbsp;<span id='identifier'>mf</span>&nbsp;:= <span id='identifier'>FindMapFile</span>;<br>
+                  &nbsp;&nbsp;<span id='bold'>if</span>&nbsp;<span id='identifier'>mf</span>.<span id='identifier'>IsValid</span>&nbsp;<span id='bold'>then</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>ShowMessage</span>(<span id='string'>'map file found, do not free it!'</span>)<br>
+                  &nbsp;&nbsp;<span id='bold'>else</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>mf</span>.<span id='identifier'>Free</span>; &nbsp;<span id='comment'>// invalid, so we free it</span>
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="TMfSegment"></a>
+    <a name="TMfPublic"></a>
+    <a name="TMapFile.FindSegment"></a>
+    <a name="TMapFile.FindPublic"></a>
+    <a name="TMapFile.FindLine"></a>
+    <a name="TMapFile.EntryPoint"></a>
+    <p>Given a specific address, you can search for all the information that is
+       available for this address. First we have "segments". Each unit can have one
+       or more segments. A segment is either a code segment or a data segment. Then
+       we have "publics", which are variable and function names. Finally we have
+       line number information and the entry point.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='comment'>// 0001:00000000 00004DBC C=CODE &nbsp;&nbsp;&nbsp;&nbsp;S=.text &nbsp;&nbsp;&nbsp;G=(none) &nbsp;&nbsp;M=System &nbsp;&nbsp;ACBP=A9</span><br>
+                  <span id='comment'>// 0001:00004DBC 00000174 C=CODE &nbsp;&nbsp;&nbsp;&nbsp;S=.text &nbsp;&nbsp;&nbsp;G=(none) &nbsp;&nbsp;M=SysInit &nbsp;ACBP=A9</span><br>
+                  <span id='comment'>// 0001:00004F30 00000A0C C=CODE &nbsp;&nbsp;&nbsp;&nbsp;S=.text &nbsp;&nbsp;&nbsp;G=(none) &nbsp;&nbsp;M=Windows &nbsp;ACBP=A9</span><br>
+                  <br>
+                  <span id='bold'>type</span><br>
+                  &nbsp;&nbsp;<span id='identifier'>TMfSegment</span>&nbsp;= <span id='bold'>record</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>// Example: see last line from the map file extract above</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>IsValid</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>boolean</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>Code</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>boolean</span>; &nbsp;&nbsp;<span id='comment'>// true &nbsp;(0001 -> Code)</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>StartAddress</span>&nbsp;: <span id='identifier'>pointer</span>; &nbsp;&nbsp;<span id='comment'>// $00004F30 + BeginOfCode + HInstance</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>Length</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>dword</span>; &nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>// $00000A0C</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>Unit_</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='bold'>string</span>; &nbsp;&nbsp;&nbsp;<span id='comment'>// 'Windows'</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>LineNumbers</span>&nbsp;&nbsp;: <span id='identifier'>boolean</span>; &nbsp;&nbsp;<span id='comment'>// does this segment contain line numbers?</span><br>
+                  &nbsp;&nbsp;<span id='bold'>end</span>;<br>
+                  <br>
+                  <span id='comment'>// &nbsp;Address &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Publics by Name</span><br>
+                  <span id='comment'>// 0001:000334DC &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AllocateHWnd</span><br>
+                  <span id='comment'>// 0001:0000679C &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AllocMem</span><br>
+                  <span id='comment'>// 0002:00001420 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AllocMemCount</span><br>
+                  <br>
+                  <span id='bold'>type</span><br>
+                  &nbsp;&nbsp;<span id='identifier'>TMfPublic</span>&nbsp;= <span id='bold'>record</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>// Example: see last line from the map file extract above</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>IsValid</span>&nbsp;: <span id='identifier'>boolean</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>Code</span>&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>boolean</span>; &nbsp;&nbsp;<span id='comment'>// false &nbsp;(0002 -> Data)</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>Name</span>&nbsp;&nbsp;&nbsp;&nbsp;: <span id='bold'>string</span>; &nbsp;&nbsp;&nbsp;<span id='comment'>// 'AllocMemCount'</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>Address</span>&nbsp;: <span id='identifier'>pointer</span>; &nbsp;&nbsp;<span id='comment'>// $00001420 + BeginOfData + HInstance</span><br>
+                  &nbsp;&nbsp;<span id='bold'>end</span>;<br>
+                  <br>
+                  <span id='comment'>// Line numbers for Project1(C:\Example\Project1.dpr) segment .text</span><br>
+                  <span id='comment'>// &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;9 0001:0003D4B8 &nbsp;&nbsp;&nbsp;10 0001:0003D4C8 &nbsp;&nbsp;&nbsp;11 0001:0003D4D4 &nbsp;&nbsp;&nbsp;12 0001:0003D4EC</span><br>
+                  <span id='comment'>// &nbsp;&nbsp;&nbsp;&nbsp;13 0001:0003D4F8</span><br>
+                  <br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>TMapFile</span>.<img src="m.gif"><span id='identifier'>FindSegment</span>&nbsp;(<span id='identifier'>code</span>: <span id='identifier'>boolean</span>; <span id='identifier'>address</span>: <span id='identifier'>pointer</span>) : <span id='identifier'>TMfSegment</span>;<br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>TMapFile</span>.<img src="m.gif"><span id='identifier'>FindPublic</span>&nbsp;&nbsp;( &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>address</span>: <span id='identifier'>pointer</span>) : <span id='identifier'>TMfPublic</span>;<br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>TMapFile</span>.<img src="m.gif"><span id='identifier'>FindLine</span>&nbsp;&nbsp;&nbsp;&nbsp;( &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>address</span>: <span id='identifier'>pointer</span>) : <span id='identifier'>integer</span>;<br>
+                  <br>
+                  <span id='comment'>// Program entry point at 0001:0003D4B8</span><br>
+                  <br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>TMapFile</span>.<img src="r.gif"><span id='identifier'>EntryPoint</span>&nbsp;: <span id='identifier'>pointer</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="TMapFile.Export"></a>
+    <p>If you need to save the map file in a compressed version to save space, you
+       can use the method "Export". The map file stream coming from the "Export"
+       function is zipped and encrypted. Beginning with madExcept 2.7h you can
+       choose between exporting the map file in a "new" or in an "old" format. The
+       old format is that which was and still is used in all madExcept 2.x builds.
+       The new format is used by madExcept 3.x. If you export with the new format,
+       you can optionally decide to only export minimal debug information. That
+       means, no function names are exported and no line numbers, either.</p>
+    <p>The parameter "hideUglyItems" lets you specify whether you want
+       functions/methods to be stored even if there's no line number information
+       available for them. Set the parameter to "true" to exclude such
+       functions/methods from being exported.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>TMapFile</span>.<img src="m.gif"><span id='identifier'>Export</span>&nbsp;(<span id='identifier'>newFormat</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>boolean</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>minDebugInfoOnly</span>&nbsp;: <span id='identifier'>boolean</span>; <br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>hideUglyItems</span>&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>boolean</span>&nbsp;= <span id='identifier'>false</span>) : <span id='bold'>string</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="TMapFile.BaseOfCode"></a>
+    <a name="TMapFile.TopOfCode"></a>
+    <a name="TMapFile.ModuleFileName"></a>
+    <a name="TMapFile.MapFileName"></a>
+    <p>Some properties to get more informations about the map file, respectively
+       about the module, to which the map file belongs:</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>TMapFile</span>.<img src="r.gif"><span id='identifier'>BaseOfCode</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>dword</span>; &nbsp;&nbsp;<span id='comment'>// start of the code block</span><br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>TMapFile</span>.<img src="r.gif"><span id='identifier'>TopOfCode</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>dword</span>; &nbsp;&nbsp;<span id='comment'>// end &nbsp;&nbsp;of the code block</span><br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>TMapFile</span>.<img src="r.gif"><span id='identifier'>ModuleFileName</span>&nbsp;: <span id='bold'>string</span>;<br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>TMapFile</span>.<img src="r.gif"><span id='identifier'>MapFileName</span>&nbsp;&nbsp;&nbsp;&nbsp;: <span id='bold'>string</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="GetMapFileInfos"></a>
+    <p>In order to make your life a bit easier, I've added the function
+       "GetMapFileInfos", which will return all important pieces of information
+       about a specific code address. You could collect the same information by
+       using the TMapFile class, but it would be quite a bit more work.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>GetMapFileInfos</span>&nbsp;(<span id='identifier'>address</span>&nbsp;: <span id='identifier'>pointer</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='bold'>var</span>&nbsp;<span id='identifier'>moduleName</span>&nbsp;: <span id='bold'>string</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='bold'>var</span>&nbsp;<span id='identifier'>unitName</span>&nbsp;&nbsp;&nbsp;: <span id='bold'>string</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='bold'>var</span>&nbsp;<span id='identifier'>publicName</span>&nbsp;: <span id='bold'>string</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='bold'>var</span>&nbsp;<span id='identifier'>publicAddr</span>&nbsp;: <span id='identifier'>pointer</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='bold'>var</span>&nbsp;<span id='identifier'>line</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>integer</span>) : <span id='identifier'>boolean</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="GetMyProcName"></a>
+    <p>If you want to get information about the current function, simply call
+       "GetMyProcName":</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>GetMyProcName</span>&nbsp;(<span id='identifier'>includeLineNumber</span>&nbsp;: <span id='identifier'>boolean</span>&nbsp;= <span id='identifier'>false</span>) : <span id='bold'>string</span>;<br>
+                  <br>
+                  <span id='comment'>// Example:</span><br>
+                  <span id='identifier'>GetMyProcName</span>&nbsp;-> <span id='string'>'yourUnit.yourFunction (105)'</span>
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </body>
+
+</html>

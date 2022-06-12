@@ -335,3 +335,5 @@ NodeJs/Sample/typings/
 
 !Viewer/*
 !viewer/WebSock/*.*
+Viewer/TraceTool.drc
+Viewer/TraceTool.map

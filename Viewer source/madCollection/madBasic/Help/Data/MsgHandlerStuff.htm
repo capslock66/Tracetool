@@ -1,0 +1,222 @@
+<html>
+
+  <head>
+    <title>mad* Help...</title>
+    <meta name="description" content="mad* Help...">
+    <meta name="keywords" content="madshi, components, delphi">
+    <meta http-equiv="expires" content="900">
+    <link rel=stylesheet type="text/css" href="style.css">
+  </head>
+
+  <body background="bcklight.gif" bgcolor=#F8F8F8>
+    <table border=0 cellpadding=0 callspacing=0><tr>
+      <td valign=bottom>
+        <table border=0 cellpadding=0 cellspacing=0><tr><td bgcolor=#D8D8D8>
+          <table cellpadding=3 border=0>
+            <tr><td bgcolor=#FFFFF0>
+              <div id="verySmall"><br></div>
+              <div id="bigTitle">&nbsp;MsgHandler Stuff&nbsp;</div>
+              <div id="verySmall"><br></div>
+              <div id="small">
+                <a class="small" href="Content.htm">Content</a> /
+                <a class="small" href="madBasic.htm">madBasic</a> /
+                <a class="small" href="madToolsUnit.htm">madTools Unit</a> /...
+              </div>
+            </td></tr>
+          </table>
+        </td></tr></table>
+      </td>
+      <td valign=bottom>
+        <table border=0 cellpadding=0 cellspacing=0><tr><td bgcolor=#D8D8D8>
+          <table cellpadding=7 border=0>
+            <tr><td bgcolor=#F4F4F8><a href="http://www.madshi.net">www.madshi.net</a></td></tr>
+          </table>
+        </td></tr></table>
+      </td>
+    </tr></table>
+    <p>There are several situations where you need to create an unvisible window
+       for communicating or notifying purposes. If you e.g. want to handle display
+       mode changes in it's own unit, you need to create a window that then can
+       handle the WM_DEVICECHANGE messages. Or if you're writing a multi threaded
+       application, the threads need to communicate, which is often solved by using
+       unvisible windows.</p>
+    <p>The usual solution is to use the undocumented function "AllocateHWnd",
+       which is implemented in "Forms.pas" and used in several VCL components. But
+       this function has some disadvantages: You have to enter a method, so you
+       can't use a normal procedure as the window procedure. Another (even more
+       important) disadvantage is that you have to allocate one window for each
+       purpose. In winNt that's no big problem (apart from that window enumerations
+       get long). But in win9x window handles are limited to 16k. So you're
+       consuming precious system resources.</p>
+    <p>The "MsgHandler" stuff described here is similar to "AllocateHWnd" regarding
+       the fact that it is also based on unvisible windows internally, but there are
+       a lot of differences, especially in the usage area. E.g. when using
+       "AllocateHWnd" you need to enter a full self written method, which handles
+       all messages. What this method does exactly is up to you. That means you have
+       the full power, but that also means that you have to do a lot, even if you
+       just need one message to be handled.</p>
+    <a name="TMsgHandler"></a>
+    <a name="TMsgHandlerOO"></a>
+    <p>In contrast to that, all you need to do when using the "MsgHandler" stuff is
+       adding and deleting message handlers as you like. A message handler is a
+       procedure or a method (both is possible) which gets called when our message
+       handler window receives a specified message. Here are the message handler
+       definitions:</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>type</span><br>
+                  &nbsp;&nbsp;<span id='identifier'>TMsgHandler</span>&nbsp;&nbsp;&nbsp;= <span id='bold'>procedure</span>&nbsp;(<span id='identifier'>window</span>, <span id='identifier'>msg</span>: <span id='identifier'>cardinal</span>; <span id='identifier'>wParam</span>, <span id='identifier'>lParam</span>: <span id='identifier'>integer</span>; <span id='bold'>var</span>&nbsp;<span id='identifier'>result</span>: <span id='identifier'>integer</span>);<br>
+                  &nbsp;&nbsp;<span id='identifier'>TMsgHandlerOO</span>&nbsp;= <span id='bold'>procedure</span>&nbsp;(<span id='identifier'>window</span>, <span id='identifier'>msg</span>: <span id='identifier'>cardinal</span>; <span id='identifier'>wParam</span>, <span id='identifier'>lParam</span>: <span id='identifier'>integer</span>; <span id='bold'>var</span>&nbsp;<span id='identifier'>result</span>: <span id='identifier'>integer</span>) <span id='bold'>of</span>&nbsp;<span id='bold'>object</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="AddMsgHandler"></a>
+    <a name="DelMsgHandler"></a>
+    <p>When adding a message handler, you can choose whether you want to use a
+       specific message value, or whether you just want to use a free one. If you
+       want to have the power, you can force e.g. the message "WM_USER + 777" to be
+       used. If you don't need it that strict, you can simply enter a "0" as the
+       desired message. In this case a free message is used and returned.</p>
+    <p>Deleting message handlers is as easy. Simply enter the message handler
+       you want to delete together with the message you chose (or that was
+       returned). If you don't enter which message was used, then all message
+       handlers, that were registered with the specified "handler" procedure/method,
+       are deleted.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>AddMsgHandler</span>&nbsp;(<span id='identifier'>handler</span>: <a class="pascal" href="#TMsgHandler">TMsgHandler</a>; &nbsp;&nbsp;<span id='identifier'>msg</span>: <span id='identifier'>cardinal</span>&nbsp;= <span id='number'>0</span>; <span id='identifier'>threadID</span>: <span id='identifier'>cardinal</span>&nbsp;= <span id='number'>0</span>) : <span id='identifier'>cardinal</span>; <span id='bold'>overload</span>;<br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>AddMsgHandler</span>&nbsp;(<span id='identifier'>handler</span>: <a class="pascal" href="#TMsgHandlerOO">TMsgHandlerOO</a>; <span id='identifier'>msg</span>: <span id='identifier'>cardinal</span>&nbsp;= <span id='number'>0</span>; <span id='identifier'>threadID</span>: <span id='identifier'>cardinal</span>&nbsp;= <span id='number'>0</span>) : <span id='identifier'>cardinal</span>; <span id='bold'>overload</span>;<br>
+                  <br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>DelMsgHandler</span>&nbsp;(<span id='identifier'>handler</span>: <a class="pascal" href="#TMsgHandler">TMsgHandler</a>; &nbsp;&nbsp;<span id='identifier'>msg</span>: <span id='identifier'>cardinal</span>&nbsp;= <span id='number'>0</span>; <span id='identifier'>threadID</span>: <span id='identifier'>cardinal</span>&nbsp;= <span id='number'>0</span>) : <span id='identifier'>boolean</span>; &nbsp;<span id='bold'>overload</span>;<br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>DelMsgHandler</span>&nbsp;(<span id='identifier'>handler</span>: <a class="pascal" href="#TMsgHandlerOO">TMsgHandlerOO</a>; <span id='identifier'>msg</span>: <span id='identifier'>cardinal</span>&nbsp;= <span id='number'>0</span>; <span id='identifier'>threadID</span>: <span id='identifier'>cardinal</span>&nbsp;= <span id='number'>0</span>) : <span id='identifier'>boolean</span>; &nbsp;<span id='bold'>overload</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="MsgHandlerWindow"></a>
+    <p>Perhaps you're wondering what happended with the message handler window(s).
+       I've mentioned them, but I've not described them yet. The reason is that you
+       normally don't need to care about them. In the moment when you add the first
+       message handler, a message handler window for the current thread is created.
+       There is always only one message handler window per thread. That saves
+       resources and that furthermore makes it possible to ask for the one message
+       handler window of another thread. When you delete all message handlers in one
+       thread, the message handler window of that thread is freed automatically.</p>
+    <p>The function "MsgHandlerWindow" returns the message handler window of the
+       specified thread (you can enter a "0" for the current thread). If no such
+       window exists yet and if you're asking for the current thread's window, the
+       message handler window is created. If you're asking for another thread's
+       message handler window which does not exist yet, the result is "0".</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>MsgHandlerWindow</span>&nbsp;(<span id='identifier'>threadID</span>: <span id='identifier'>cardinal</span>&nbsp;= <span id='number'>0</span>) : <span id='identifier'>cardinal</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <p>Now let me write a little demo program, which does nothing but wait for the
+       next display mode change and then stops. First I'll write this program with
+       using "AllocateHWnd":</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>program</span>&nbsp;<span id='identifier'>WaitUntilDisplayModeChanged</span>;<br>
+                  <br>
+                  <span id='bold'>uses</span>&nbsp;<span id='identifier'>Forms</span>, <span id='identifier'>Windows</span>, <span id='identifier'>Messages</span>;<br>
+                  <br>
+                  <span id='bold'>procedure</span>&nbsp;<span id='identifier'>MessageLoop</span>; [...]<br>
+                  <br>
+                  <span id='bold'>var</span>&nbsp;<span id='identifier'>window</span>&nbsp;: <span id='identifier'>dword</span>;<br>
+                  <br>
+                  <span id='bold'>type</span><br>
+                  &nbsp;&nbsp;<span id='identifier'>TDummyClass</span>&nbsp;= <span id='bold'>class</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='bold'>procedure</span>&nbsp;<span id='identifier'>WndMethod</span>&nbsp;(<span id='bold'>var</span>&nbsp;<span id='bold'>Message</span>: <span id='identifier'>TMessage</span>);<br>
+                  &nbsp;&nbsp;<span id='bold'>end</span>;<br>
+                  <br>
+                  <span id='bold'>procedure</span>&nbsp;<span id='identifier'>TDummyClass</span>.<span id='identifier'>WndMethod</span>(<span id='bold'>var</span>&nbsp;<span id='bold'>Message</span>: <span id='identifier'>TMessage</span>);<br>
+                  <span id='bold'>begin</span><br>
+                  &nbsp;&nbsp;<span id='bold'>if</span>&nbsp;<span id='bold'>Message</span>.<span id='identifier'>Msg</span>&nbsp;= <span id='identifier'>WM_DISPLAYCHANGE</span>&nbsp;<span id='bold'>then</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>ExitProcess</span>(<span id='number'>0</span>);<br>
+                  &nbsp;&nbsp;<span id='bold'>Message</span>.<span id='identifier'>result</span>&nbsp;:= <span id='identifier'>DefWindowProc</span>(<span id='identifier'>window</span>, <span id='bold'>Message</span>.<span id='identifier'>Msg</span>, <span id='bold'>Message</span>.<span id='identifier'>wParam</span>, <span id='bold'>Message</span>.<span id='identifier'>lParam</span>);<br>
+                  <span id='bold'>end</span>;<br>
+                  <br>
+                  <span id='bold'>begin</span><br>
+                  &nbsp;&nbsp;<span id='identifier'>window</span>&nbsp;:= <span id='identifier'>AllocateHWnd</span>(<span id='identifier'>TDummyClass</span>.<span id='identifier'>Create</span>.<span id='identifier'>WndMethod</span>);<br>
+                  &nbsp;&nbsp;<span id='identifier'>MessageLoop</span>;<br>
+                  <span id='bold'>end</span>.
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <p>And here comes the version of the same program with the "MsgHandler" stuff.
+       It's much nicer and shorter - and it doesn't need "Forms.pas", which results
+       in a *much* smaller executable:</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>program</span>&nbsp;<span id='identifier'>WaitUntilDisplayModeChanged</span>;<br>
+                  <br>
+                  <span id='bold'>uses</span>&nbsp;<span id='identifier'>Windows</span>, <span id='identifier'>Messages</span>, <span id='identifier'>madTools</span>;<br>
+                  <br>
+                  <span id='bold'>procedure</span>&nbsp;<span id='identifier'>MessageLoop</span>; [...]<br>
+                  <br>
+                  <span id='bold'>procedure</span>&nbsp;<span id='identifier'>DisplayModeChanged</span>(<span id='identifier'>window</span>, <span id='identifier'>msg</span>: <span id='identifier'>cardinal</span>; <span id='identifier'>lParam</span>, <span id='identifier'>wParam</span>: <span id='identifier'>integer</span>; <span id='bold'>var</span>&nbsp;<span id='identifier'>result</span>: <span id='identifier'>integer</span>);<br>
+                  <span id='bold'>begin</span><br>
+                  &nbsp;&nbsp;<span id='identifier'>ExitProcess</span>(<span id='number'>0</span>);<br>
+                  <span id='bold'>end</span>;<br>
+                  <br>
+                  <span id='bold'>begin</span><br>
+                  &nbsp;&nbsp;<a class="pascal" href="#AddMsgHandler">AddMsgHandler</a>(<span id='identifier'>DisplayModeChanged</span>, <span id='identifier'>WM_DISPLAYCHANGE</span>);<br>
+                  &nbsp;&nbsp;<span id='identifier'>MessageLoop</span>;<br>
+                  <span id='bold'>end</span>.
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </body>
+
+</html>

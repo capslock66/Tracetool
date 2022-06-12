@@ -67,7 +67,7 @@ type
       var CellText: String);
     procedure VstEventGetImageIndex(Sender: TBaseVirtualTree;
       Node: PVirtualNode; Kind: TVTImageKind; Column: TColumnIndex;
-      var Ghosted: Boolean; var ImageIndex: Integer);
+      var Ghosted: Boolean; var ImageIndex: TImageIndex);
     procedure butGetAllClick(Sender: TObject);
     procedure butReloadClick(Sender: TObject);
     procedure butCloseClick(Sender: TObject);
@@ -113,6 +113,10 @@ type
     procedure VstDetailBeforeCellPaint(Sender: TBaseVirtualTree;
       TargetCanvas: TCanvas; Node: PVirtualNode; Column: TColumnIndex;
       CellPaintMode: TVTCellPaintMode; CellRect: TRect; var ContentRect: TRect);
+    procedure VstDetailEditing(Sender: TBaseVirtualTree; Node: PVirtualNode;
+      Column: TColumnIndex; var Allowed: Boolean);
+    procedure VstEventEditing(Sender: TBaseVirtualTree; Node: PVirtualNode;
+      Column: TColumnIndex; var Allowed: Boolean);
 
   private
     fLogName : string ;
@@ -622,7 +626,7 @@ end;
 
 procedure TFrmEventLog.VstEventGetImageIndex(Sender: TBaseVirtualTree;
   Node: PVirtualNode; Kind: TVTImageKind; Column: TColumnIndex;
-  var Ghosted: Boolean; var ImageIndex: Integer);
+  var Ghosted: Boolean; var ImageIndex: TImageIndex);
 var
    EvntLogRec : PEvntLogRec ;
 begin
@@ -1215,6 +1219,12 @@ begin
    PostMessage(Self.Handle, WM_STARTEDITING_MEMBER, Integer(SelectedNode), 0);
 end;
 
+procedure TFrmEventLog.VstDetailEditing(Sender: TBaseVirtualTree;
+  Node: PVirtualNode; Column: TColumnIndex; var Allowed: Boolean);
+begin
+   Allowed := true;
+end;
+
 //------------------------------------------------------------------------------
 
 procedure TFrmEventLog.WMStartEditingMember(var Message: TMessage);
@@ -1301,6 +1311,12 @@ procedure TFrmEventLog.VstEventEdited(Sender: TBaseVirtualTree;
   Node: PVirtualNode; Column: TColumnIndex);
 begin
    VstEvent.TreeOptions.MiscOptions := VstEvent.TreeOptions.MiscOptions - [toEditable] ;
+end;
+
+procedure TFrmEventLog.VstEventEditing(Sender: TBaseVirtualTree;
+  Node: PVirtualNode; Column: TColumnIndex; var Allowed: Boolean);
+begin
+   Allowed := true;
 end;
 
 //------------------------------------------------------------------------------
@@ -1542,7 +1558,7 @@ begin
       exit ;
 
    EvntLogRec := VstEvent.GetNodeData(Node) ;
-   if (unt_search.SearchInAllPages = false) and (ActiveTracePage = self) then
+   if (unt_search.SearchInAllPages) or (ActiveTracePage = self) then
       if CheckSearchRecord (EvntLogRec) then     // check if the node or one of his child match the search text
          DrawHighlight (TargetCanvas, CellRect,false) ;
 end;

@@ -243,11 +243,18 @@ end;
 procedure TWaitThread.Execute;
 var
   numBytes: DWORD;
-  CompletionKey: DWORD;
+  CompletionKey: ULONG_PTR;
 begin
   while not Terminated do
   begin
-    GetQueuedCompletionStatus( FParent.FCompletionPort, numBytes, CompletionKey, FParent.FPOverlapped, INFINITE);
+
+    GetQueuedCompletionStatus(    //function GetQueuedCompletionStatus(
+       FParent.FCompletionPort,   //   CompletionPort: THandle;
+       numBytes,                  //   var lpNumberOfBytesTransferred: DWORD;
+       CompletionKey,             //   var lpCompletionKey: ULONG_PTR;
+       FParent.FPOverlapped,      //   var lpOverlapped: POverlapped;
+       INFINITE);                 //   dwMilliseconds: DWORD): BOOL; stdcall;
+
     if CompletionKey <> 0 then
     begin
       Synchronize(HandleEvent);
@@ -345,7 +352,7 @@ begin
      exit;
   end;
   FWatchThread := TWaitThread.Create(self); // The Thread is the Monitorig Thred
-  TWaitThread(FWatchThread).Resume;
+  TWaitThread(FWatchThread).Start;
   FActive := True;
 end;
 

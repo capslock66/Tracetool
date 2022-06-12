@@ -2,9 +2,11 @@
 # for the majority of traces, you can import only "TTrace" or the "ttrace" synonym
 from tracetool import *  #IGNORE:W0401
 from tracetool import _Internals 
-from inspect import classify_class_attrs as SampleList
-from Tkinter import *    #IGNORE:W0401  
+
 from threading import enumerate as threadEnum
+from inspect import classify_class_attrs as SampleList
+
+from tkinter import *
 import platform
 
 import sys
@@ -40,7 +42,8 @@ class sampleClass1:
 class PageControl:
     def __init__(self, parent):
         #PageControls vars
-        self.choice = IntVar(0)
+        self.choice = IntVar()
+        self.choice.set(0)
         self.count = 0
         self.activeFrame = None
         #create page control
@@ -91,8 +94,8 @@ class Demo():
         self.useThread=BooleanVar()
 
         self.sendFunctions.set(TTrace.options.sendFunctions)
-        self.sendClassInfo .set(TTrace.options.sendClassInfo)
-        self.sendPrivate .set(TTrace.options.sendPrivate)
+        self.sendClassInfo.set(TTrace.options.sendClassInfo)
+        self.sendPrivate.set(TTrace.options.sendPrivate)
         self.objectTreeDepth.set(TTrace.options.objectTreeDepth)
         self.sendDoc.set(TTrace.options.sendDoc)
         self.sendThreadName.set(TTrace.options.sendThreadName)
@@ -297,7 +300,6 @@ class Demo():
         ttrace.debug.send ("Platform.system(): ", platform )    # 'Windows' or 'cli'
         ttrace.debug.send ("sys.version : "     , sys.version)               # CPython
 
-
         # send traces with special font style (bold and Italic), color font size and font name
         # use System.Drawing.Color.ToArgb() (not supported in Silverlight) or (int)Helper.ToArgb(System.Windows.Media.Color) to specify Argb color
         node = TTrace.debug.send("Special font", "Symbol 12") 
@@ -388,13 +390,13 @@ class Demo():
   
     def sendValue(self):
         testobj = TTrace.debug
-        listObjToSend = SampleList(type(testobj))  # inspect.classify_class_attrs
+        listObjToSend = SampleList(type(testobj)) 
         lst = [TTrace.winTrace,TMemberNode(),TTrace]
         
         TTrace.debug.sendValue("sendValue : classify_class_attrs ", listObjToSend, True, 3, "debug node")    
         TTrace.debug.sendValue("sendValue : list", lst, True, 3, "title")
         TTrace.debug.sendValue("integer 5", 5)
-        TTrace.debug.sendValue("long 5", 5L)
+        #TTrace.debug.sendValue("long 5", 5L)   # 5L generate an invalid syntaxe in python 3.1
         
     
     # -----------------------------------------------------------------------------------------
@@ -402,8 +404,8 @@ class Demo():
     def sendTable(self):
         # array of object (same types)
         testobj = TTrace.debug # create an object and print some of it's attributes
-        TTrace.debug.sendTable("sendTable : classify_class_attrs ", 
-                SampleList(type(testobj))   # inspect.classify_class_attrs
+        TTrace.debug.sendTable("sendTable : classify_class_attrs list",
+                SampleList(type(testobj))
                 )    
         
         # array of object of different types (no sense : not well displayed)
@@ -434,6 +436,7 @@ class Demo():
                 ("hello","world"),
                 (True, "hello", TTrace , TTrace.debug, TTrace.debug),
                 ])        
+
         # map
         TTrace.debug.sendTable("map"  ,{
                 "k1": (1,2,3),
@@ -441,9 +444,9 @@ class Demo():
                 "k3": "123"
                 })
         
-        # range() , xrange() and enumerate()
-        TTrace.debug.sendTable("xrange(10) ", xrange(10))
-        TTrace.debug.sendTable("xrange(5,10) ", xrange(5,10))
+        # range() and enumerate()
+        TTrace.debug.sendTable("range(10) ", range(10))
+        TTrace.debug.sendTable("range(5,10) ", range(5,10))
         TTrace.debug.sendTable("enumerate(['a','b','c']) ", enumerate(['a','b','c']))
         
         TTrace.debug.sendTable("threads",  threadEnum())  # threading.enumerate()

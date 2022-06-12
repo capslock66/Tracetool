@@ -1,0 +1,181 @@
+<html>
+
+  <head>
+    <title>mad* Help...</title>
+    <meta name="description" content="mad* Help...">
+    <meta name="keywords" content="madshi, components, delphi">
+    <meta http-equiv="expires" content="900">
+    <link rel=stylesheet type="text/css" href="style.css">
+  </head>
+
+  <body background="bcklight.gif" bgcolor=#F8F8F8>
+    <a name="PosStr"></a>
+    <a name="PosText"></a>
+    <table border=0 cellpadding=0 callspacing=0><tr>
+      <td valign=bottom>
+        <table border=0 cellpadding=0 cellspacing=0><tr><td bgcolor=#D8D8D8>
+          <table cellpadding=3 border=0>
+            <tr><td bgcolor=#FFFFF0>
+              <div id="verySmall"><br></div>
+              <div id="bigTitle">&nbsp;String Searching&nbsp;</div>
+              <div id="verySmall"><br></div>
+              <div id="small">
+                <a class="small" href="Content.htm">Content</a> /
+                <a class="small" href="madBasic.htm">madBasic</a> /
+                <a class="small" href="madStringsUnit.htm">madStrings Unit</a> /...
+              </div>
+            </td></tr>
+          </table>
+        </td></tr></table>
+      </td>
+      <td valign=bottom>
+        <table border=0 cellpadding=0 cellspacing=0><tr><td bgcolor=#D8D8D8>
+          <table cellpadding=7 border=0>
+            <tr><td bgcolor=#F4F4F8><a href="http://www.madshi.net">www.madshi.net</a></td></tr>
+          </table>
+        </td></tr></table>
+      </td>
+    </tr></table>
+    <p>When searching for string fragments in a big string you often see limits in
+       the "SysUtils.Pos" function. You can only search case sensitively, you can't
+       begin searching at a specified position and you can't search backwards,
+       either.</p>
+    <p>I've addressed all those issues in the functions "PosStr" and "PosText". The
+       first one searches case sensitively, the second one case insensitively. Both
+       functions can search a specified subrange of the string or the whole string.
+       If you define "fromPos" to be bigger than "toPos", both functions even
+       search backwards.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>PosStr</span>&nbsp;&nbsp;(<span id='bold'>const</span>&nbsp;<span id='identifier'>subStr</span>&nbsp;: <span id='bold'>string</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='bold'>const</span>&nbsp;<span id='identifier'>str</span>&nbsp;&nbsp;&nbsp;&nbsp;: <span id='bold'>string</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>fromPos</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>cardinal</span>&nbsp;= <span id='number'>1</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>toPos</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>cardinal</span>&nbsp;= <span id='identifier'>maxCard</span>) : <span id='identifier'>integer</span>;<br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>PosText</span>&nbsp;(<span id='bold'>const</span>&nbsp;<span id='identifier'>subStr</span>&nbsp;: <span id='bold'>string</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='bold'>const</span>&nbsp;<span id='identifier'>str</span>&nbsp;&nbsp;&nbsp;&nbsp;: <span id='bold'>string</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>fromPos</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>cardinal</span>&nbsp;= <span id='number'>1</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>toPos</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>cardinal</span>&nbsp;= <span id='identifier'>maxCard</span>) : <span id='identifier'>integer</span>;<br>
+                  <br>
+                  <span id='comment'>// Examples:</span><br>
+                  <span id='identifier'>PosStr</span>&nbsp;(<span id='string'>'test'</span>, <span id='string'>'This test is a little test.'</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;) &nbsp;-> &nbsp;<span id='number'>6</span><br>
+                  <span id='identifier'>PosStr</span>&nbsp;(<span id='string'>'test'</span>, <span id='string'>'This test is a little test.'</span>, <span id='number'>7</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;) &nbsp;-> &nbsp;<span id='number'>23</span><br>
+                  <span id='identifier'>PosStr</span>&nbsp;(<span id='string'>'TEST'</span>, <span id='string'>'This test is a little test.'</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;) &nbsp;-> &nbsp;<span id='number'>0</span><br>
+                  <span id='identifier'>PosText</span>(<span id='string'>'TEST'</span>, <span id='string'>'This test is a little test.'</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;) &nbsp;-> &nbsp;<span id='number'>6</span><br>
+                  <span id='identifier'>PosText</span>(<span id='string'>'TEST'</span>, <span id='string'>'This test is a little test.'</span>, <span id='identifier'>maxCard</span>, <span id='number'>1</span>) &nbsp;-> &nbsp;<span id='number'>23</span><br>
+                  <span id='identifier'>PosText</span>(<span id='string'>'TEST'</span>, <span id='string'>'This test is a little test.'</span>, <span id='number'>22</span>, &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='number'>1</span>) &nbsp;-> &nbsp;<span id='number'>6</span>
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="PosPChar"></a>
+    <p>In some situations (e.g. when dealing with memory mapped files) you want to
+       have the functionality of the above functions, but for a buffer/pchar instead
+       of a string. For this purpose I've added the following function, which
+       basically works exactly like "PosStr/Text", except that it wants to have
+       pchar parameters and seperate length cardinals instead of just strings. If
+       you leave the length cardinals at "0", the length of the pchars is determined
+       internally by calling "StrLen". If you're dealing with binary files, which
+       also contain #0 characters, you should enter the correct buffer size, then
+       the searching does not stop at the first #0 character.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>PosPChar</span>&nbsp;(<span id='identifier'>subStr</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>pchar</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>str</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>pchar</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>subStrLen</span>&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>cardinal</span>&nbsp;= <span id='number'>0</span>; &nbsp;&nbsp;<span id='comment'>// 0 -> StrLen is called internally</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>strLen</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>cardinal</span>&nbsp;= <span id='number'>0</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>ignoreCase</span>&nbsp;&nbsp;&nbsp;: <span id='identifier'>boolean</span>&nbsp;&nbsp;= <span id='identifier'>false</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>fromPos</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>cardinal</span>&nbsp;= <span id='number'>0</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>toPos</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>cardinal</span>&nbsp;= <span id='identifier'>maxCard</span>) : <span id='identifier'>integer</span>;<br>
+                  <br>
+                  <span id='comment'>// Examples:</span><br>
+                  <span id='identifier'>PosPChar</span>(<span id='string'>'test'</span>, <span id='string'>'This test is a little test.'</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;) &nbsp;-> &nbsp;<span id='number'>5</span><br>
+                  <span id='identifier'>PosPChar</span>(<span id='string'>'test'</span>, <span id='string'>'This test is a little test.'</span>, <span id='number'>0</span>, <span id='number'>0</span>, <span id='identifier'>false</span>, <span id='number'>6</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;) &nbsp;-> &nbsp;<span id='number'>22</span><br>
+                  <span id='identifier'>PosPChar</span>(<span id='string'>'TEST'</span>, <span id='string'>'This test is a little test.'</span>, <span id='number'>0</span>, <span id='number'>0</span>, <span id='identifier'>false</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;) &nbsp;-> &nbsp;-<span id='number'>1</span><br>
+                  <span id='identifier'>PosPChar</span>(<span id='string'>'TEST'</span>, <span id='string'>'This test is a little test.'</span>, <span id='number'>0</span>, <span id='number'>0</span>, <span id='identifier'>true</span>, &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;) &nbsp;-> &nbsp;<span id='number'>5</span><br>
+                  <span id='identifier'>PosPChar</span>(<span id='string'>'TEST'</span>, <span id='string'>'This test is a little test.'</span>, <span id='number'>0</span>, <span id='number'>0</span>, <span id='identifier'>true</span>, &nbsp;<span id='identifier'>maxCard</span>, <span id='number'>0</span>) &nbsp;-> &nbsp;<span id='number'>22</span><br>
+                  <span id='identifier'>PosPChar</span>(<span id='string'>'TEST'</span>, <span id='string'>'This test is a little test.'</span>, <span id='number'>0</span>, <span id='number'>0</span>, <span id='identifier'>true</span>, &nbsp;<span id='number'>21</span>, &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='number'>0</span>) &nbsp;-> &nbsp;<span id='number'>5</span>
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="PosStrIs1"></a>
+    <a name="PosTextIs1"></a>
+    <p>Sometimes perhaps you're asking "if PosStr/Text(...) = 1". That's possible
+       and senseful, but not very fast. The following functions do the same, but
+       are easier to call and faster:</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>PosStrIs1</span>&nbsp;&nbsp;(<span id='bold'>const</span>&nbsp;<span id='identifier'>subStr</span>&nbsp;: <span id='bold'>string</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='bold'>const</span>&nbsp;<span id='identifier'>str</span>&nbsp;&nbsp;&nbsp;&nbsp;: <span id='bold'>string</span>) : <span id='identifier'>boolean</span>;<br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>PosTextIs1</span>&nbsp;(<span id='bold'>const</span>&nbsp;<span id='identifier'>subStr</span>&nbsp;: <span id='bold'>string</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='bold'>const</span>&nbsp;<span id='identifier'>str</span>&nbsp;&nbsp;&nbsp;&nbsp;: <span id='bold'>string</span>) : <span id='identifier'>boolean</span>;<br>
+                  <br>
+                  <span id='comment'>// Examples:</span><br>
+                  <span id='identifier'>PosStrIs1</span>&nbsp;(<span id='string'>'test'</span>, <span id='string'>'This is a test.'</span>) &nbsp;-> &nbsp;<span id='identifier'>false</span><br>
+                  <span id='identifier'>PosStrIs1</span>&nbsp;(<span id='string'>'This'</span>, <span id='string'>'This is a test.'</span>) &nbsp;-> &nbsp;<span id='identifier'>true</span><br>
+                  <span id='identifier'>PosStrIs1</span>&nbsp;(<span id='string'>'this'</span>, <span id='string'>'This is a test.'</span>) &nbsp;-> &nbsp;<span id='identifier'>false</span><br>
+                  <span id='identifier'>PosTextIs1</span>(<span id='string'>'this'</span>, <span id='string'>'This is a test.'</span>) &nbsp;-> &nbsp;<span id='identifier'>true</span>
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="PosChars"></a>
+    <p>The following function searches for several characters at the same time and
+       returns the first position where one of those characters occurs. You can
+       search a specified subrange of the string or the whole string. If you define
+       "fromPos" to be bigger than "toPos", the function even searches backwards.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>PosChars</span>&nbsp;(<span id='bold'>const</span>&nbsp;<span id='identifier'>ch</span>&nbsp;&nbsp;: <span id='identifier'>TSChar</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='bold'>const</span>&nbsp;<span id='identifier'>str</span>&nbsp;: <span id='bold'>string</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>fromPos</span>&nbsp;&nbsp;&nbsp;: <span id='identifier'>cardinal</span>&nbsp;= <span id='number'>1</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>toPos</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>cardinal</span>&nbsp;= <span id='identifier'>maxCard</span>) : <span id='identifier'>integer</span>;<br>
+                  <br>
+                  <span id='comment'>// Examples:</span><br>
+                  <span id='identifier'>PosChars</span>([<span id='string'>'a'</span>, <span id='string'>'e'</span>, <span id='string'>'1'</span>], <span id='string'>'This is a little test 123.'</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;) &nbsp;-> &nbsp;<span id='number'>9</span><br>
+                  <span id='identifier'>PosChars</span>([<span id='string'>'a'</span>, <span id='string'>'e'</span>, <span id='string'>'1'</span>], <span id='string'>'This is a little test 123.'</span>, <span id='number'>10</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;) &nbsp;-> &nbsp;<span id='number'>16</span><br>
+                  <span id='identifier'>PosChars</span>([<span id='string'>'a'</span>, <span id='string'>'e'</span>, <span id='string'>'1'</span>], <span id='string'>'This is a little test 123.'</span>, <span id='identifier'>maxCard</span>, <span id='number'>1</span>) &nbsp;-> &nbsp;<span id='number'>23</span><br>
+                  <span id='identifier'>PosChars</span>([<span id='string'>'a'</span>, <span id='string'>'e'</span>, <span id='string'>'1'</span>], <span id='string'>'This is a little test 123.'</span>, <span id='number'>22</span>, &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='number'>1</span>) &nbsp;-> &nbsp;<span id='number'>19</span>
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </body>
+
+</html>

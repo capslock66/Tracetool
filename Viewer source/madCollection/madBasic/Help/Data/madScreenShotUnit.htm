@@ -1,0 +1,82 @@
+<html>
+
+  <head>
+    <title>mad* Help...</title>
+    <meta name="description" content="mad* Help...">
+    <meta name="keywords" content="madshi, freeware, shareware, sources, components, tips, delphi, windows">
+    <link rel=stylesheet type="text/css" href="style.css">
+  </head>
+
+  <body background="bcklight.gif" bgcolor=#F8F8F8>
+    <a name="TScreenShotType"></a>
+    <a name="CreateScreenShotPng"></a>
+    <table border=0 cellpadding=0 callspacing=0><tr>
+      <td valign=bottom>
+        <table border=0 cellpadding=0 cellspacing=0><tr><td bgcolor=#D8D8D8>
+          <table cellpadding=3 border=0>
+            <tr><td bgcolor=#FFFFF0>
+              <div id="verySmall"><br></div>
+              <div id="bigTitle">&nbsp;madScreenShot Unit&nbsp;</div>
+              <div id="verySmall"><br></div>
+              <div id="small">
+                <a class="small" href="Content.htm">Content</a> /
+                <a class="small" href="madExcept.htm">madExcept</a> /...
+              </div>
+            </td></tr>
+          </table>
+        </td></tr></table>
+      </td>
+      <td valign=bottom>
+        <table border=0 cellpadding=0 cellspacing=0><tr><td bgcolor=#D8D8D8>
+          <table cellpadding=7 border=0>
+            <tr><td bgcolor=#F4F4F8><a href="http://www.madshi.net">www.madshi.net</a></td></tr>
+          </table>
+        </td></tr></table>
+      </td>
+    </tr></table>
+    <p>This little unit offers the functionality to create a screen shot of the
+       current screen. The screen shot is created as a compressed PNG file with
+       either 256 colors or with 16 gray scales. Of course using the gray scale
+       mode looks not as good, but the resulting image file size is usually
+       smaller.</p>
+    <p>The screen shot is taken in true color and then reduced to either 256 colors
+       or to 16 gray scales. In order to reduce the image to 256 colors a heavily
+       optimized algorythm is used which makes sure that all important colors are
+       contained in the resulting image. In most cases the resulting image
+       virtually looks exactly like the original true color image. The reduction to
+       gray scales uses Floyd-Steinberg dithering to get a good result.</p>
+    <p>The function "CreateScreenShotPng" does all the work. It returns a binary
+       string, which you can directly save into a PNG file. You can tell the
+       function to either create a 256 colored or gray scale image. Alternatively
+       you can also tell it to try to keep the image size under a specific
+       threshold. In that case 256 colors are used if the resulting image stays
+       under the specified size limit. Otherwise a gray scale image is returned.
+       The reason for this option is that screen shots of full screen apps often
+       can be reduced that well that there's no difference between 256 colors and
+       gray scales. But when huge bitmaps are contained in the screen shot the
+       colored image takes more space than the gray scale image. By specifying a
+       image file size threshold you can get nice colored images whenever the
+       compression works well and small gray scale images, when colored images
+       would take too much space.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>type</span><br>
+                  &nbsp;&nbsp;<span id='identifier'>TScreenShotType</span>&nbsp;= (<span id='identifier'>st256Colors</span>, <span id='identifier'>st16Grays</span>, <span id='identifier'>st50kb</span>, <span id='identifier'>st100kb</span>, <span id='identifier'>st200kb</span>, <span id='identifier'>st300kb</span>);<br>
+                  <br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>CreateScreenShotPng</span>&nbsp;(<span id='identifier'>screenShotType</span>: <span id='identifier'>TScreenShotType</span>) : <span id='bold'>string</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </body>
+
+</html>

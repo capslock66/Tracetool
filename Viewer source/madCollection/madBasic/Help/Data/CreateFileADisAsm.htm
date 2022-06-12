@@ -1,0 +1,81 @@
+<html>
+
+  <head>
+    <title>mad* Help...</title>
+    <meta name="description" content="mad* Help...">
+    <meta name="keywords" content="madshi, components, delphi">
+    <meta http-equiv="expires" content="900">
+    <link rel=stylesheet type="text/css" href="style.css">
+  </head>
+
+  <body background="bcklight.gif" bgcolor=#F8F8F8>
+    <table border=0 cellpadding=0 callspacing=0><tr>
+      <td valign=bottom>
+        <table border=0 cellpadding=0 cellspacing=0><tr><td bgcolor=#D8D8D8>
+          <table cellpadding=3 border=0>
+            <tr><td bgcolor=#FFFFF0>
+              <div id="verySmall"><br></div>
+              <div id="bigTitle">&nbsp;"CreateFileA" (XP) disassembly&nbsp;</div>
+              <div id="verySmall"><br></div>
+              <div id="small">
+                <a class="small" href="Content.htm">Content</a> /
+                <a class="small" href="madDisAsm.htm">madDisAsm</a> /...
+              </div>
+            </td></tr>
+          </table>
+        </td></tr></table>
+      </td>
+      <td valign=bottom>
+        <table border=0 cellpadding=0 cellspacing=0><tr><td bgcolor=#D8D8D8>
+          <table cellpadding=7 border=0>
+            <tr><td bgcolor=#F4F4F8><a href="http://www.madshi.net">www.madshi.net</a></td></tr>
+          </table>
+        </td></tr></table>
+      </td>
+    </tr></table>
+    <p>"CreateFileA" in NT based systems is nothing but a little wrapper around
+       "CreateFileW". So it's fairly short:</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                  <span id='mono'>
+                    77e5b476 public CreateFileA: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;; function entry point<br>
+                    77e5b476 &nbsp;&nbsp;push &nbsp;&nbsp;&nbsp;ebp<br>
+                    77e5b477 &nbsp;&nbsp;mov &nbsp;&nbsp;&nbsp;&nbsp;ebp, esp<br>
+                    77e5b479 &nbsp;&nbsp;push &nbsp;&nbsp;&nbsp;dword ptr [ebp+8]<br>
+                    77e5b47c &nbsp;&nbsp;call &nbsp;&nbsp;&nbsp;-$ef ($77e5b392)<br>
+                    77e5b47c<br>
+                    77e5b481 &nbsp;&nbsp;test &nbsp;&nbsp;&nbsp;eax, eax<br>
+                    77e5b483 &nbsp;&nbsp;jz &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;loc_77e7b42c<br>
+                    77e5b483<br>
+                    77e5b489 &nbsp;&nbsp;push &nbsp;&nbsp;&nbsp;dword ptr [ebp+$20]<br>
+                    77e5b48c &nbsp;&nbsp;push &nbsp;&nbsp;&nbsp;dword ptr [ebp+$1c]<br>
+                    77e5b48f &nbsp;&nbsp;push &nbsp;&nbsp;&nbsp;dword ptr [ebp+$18]<br>
+                    77e5b492 &nbsp;&nbsp;push &nbsp;&nbsp;&nbsp;dword ptr [ebp+$14]<br>
+                    77e5b495 &nbsp;&nbsp;push &nbsp;&nbsp;&nbsp;dword ptr [ebp+$10]<br>
+                    77e5b498 &nbsp;&nbsp;push &nbsp;&nbsp;&nbsp;dword ptr [ebp+$c]<br>
+                    77e5b49b &nbsp;&nbsp;push &nbsp;&nbsp;&nbsp;dword ptr [eax+4]<br>
+                    77e5b49e &nbsp;&nbsp;call &nbsp;&nbsp;&nbsp;-$412 ($77e5b091) &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;; CreateFileW (kernel32.dll)<br>
+                    77e5b49e<br>
+                    77e5b4a3 loc_77e5b4a3:<br>
+                    77e5b4a3 &nbsp;&nbsp;pop &nbsp;&nbsp;&nbsp;&nbsp;ebp<br>
+                    77e5b4a4 &nbsp;&nbsp;ret &nbsp;&nbsp;&nbsp;&nbsp;$1c<br>
+                    77e5b4a4<br>
+                    77e5b4a4 ; ---------------------------------------------------------<br>
+                    77e5b4a4<br>
+                    77e7b42c loc_77e7b42c:<br>
+                    77e7b42c &nbsp;&nbsp;or &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;eax, -1<br>
+                    77e7b42f &nbsp;&nbsp;jmp &nbsp;&nbsp;&nbsp;&nbsp;loc_77e5b4a3<br>
+                           </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </body>
+
+</html>

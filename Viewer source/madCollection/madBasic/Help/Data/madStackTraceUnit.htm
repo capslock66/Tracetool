@@ -1,0 +1,169 @@
+<html>
+
+  <head>
+    <title>mad* Help...</title>
+    <meta name="description" content="mad* Help...">
+    <meta name="keywords" content="madshi, components, delphi">
+    <meta http-equiv="expires" content="900">
+    <link rel=stylesheet type="text/css" href="style.css">
+  </head>
+
+  <body background="bcklight.gif" bgcolor=#F8F8F8>
+    <table border=0 cellpadding=0 callspacing=0><tr>
+      <td valign=bottom>
+        <table border=0 cellpadding=0 cellspacing=0><tr><td bgcolor=#D8D8D8>
+          <table cellpadding=3 border=0>
+            <tr><td bgcolor=#FFFFF0>
+              <div id="verySmall"><br></div>
+              <div id="bigTitle">&nbsp;madStackTrace Unit&nbsp;</div>
+              <div id="verySmall"><br></div>
+              <div id="small">
+                <a class="small" href="Content.htm">Content</a> /
+                <a class="small" href="madExcept.htm">madExcept</a> /...
+              </div>
+            </td></tr>
+          </table>
+        </td></tr></table>
+      </td>
+      <td valign=bottom>
+        <table border=0 cellpadding=0 cellspacing=0><tr><td bgcolor=#D8D8D8>
+          <table cellpadding=7 border=0>
+            <tr><td bgcolor=#F4F4F8><a href="http://www.madshi.net">www.madshi.net</a></td></tr>
+          </table>
+        </td></tr></table>
+      </td>
+    </tr></table>
+    <p>Sometimes a function would like to know by whom it was called. And by whom
+       this "who" was called again. In other words: Sometimes you want to have the
+       full current call stack. Now there is no official API to get this
+       information. A function is nothing but binary asm code that tells the CPU
+       what to do. So the CPU does all the jumping and calling according to the
+       binary asm code of the current module. Windows is not involved there, so
+       Windows doesn't know the current call stack either.</p>
+    <p>Fortunately, every time when calling a function, the x86 CPU pushes the
+       return address on the stack. So theoretically we only need to browse through
+       the stack to get all the return addresses. However, the stack does not only
+       contain valid return addresses, but also LOTS of other stuff like data
+       pointers, random values and so on. So we have to build a filter than scans
+       through the stack and gives us only the valid return addresses. That is
+       easier said than done. Most of the time you'll get 1 valid return address
+       and 10 additional invalid return addresses, which *look* like being valid.
+       To solve this problem madStackTrace uses a disassembler and some more tricks
+       and finally we have a good result. Well, we have no guarantee, that the call
+       stack is 100% accurate, but in a lot of cases it actually is. In some cases
+       one or the other invalid stack item is shown, but normally by following the
+       call stack in your sources you can easily filter them out by yourself.</p>
+    <p>The most important case where you want to have the current call stack is
+       when an exception has occured. That's also the main duty of "madStackTrace",
+       it's internally used by <a href="madExcept.htm" href="madExceptUnit.htm">madExcept</a> to get the call stack for the
+       detailed exception box <a href="madExcept.htm" href="madExceptUnit.htm">madExcept</a> wants to show. For a list of what's
+       contained in "madStackTrace" please look at the
+       <a href="madStackTraceRef.htm">madStackTrace Reference</a>.</p>
+    <a name="StackTrace"></a>
+    <a name="TPStackTrace"></a>
+    <p>The interface of this unit is as easy as it can be: There's just one
+       function which does all the work and returns a formatted plain text string,
+       containing the whole callstack of the specified thread.</p>
+    <p>You can ignore most of the parameters of this function, they're for fine
+       tuning and are internally used by <a href="madExcept.htm" href="madExceptUnit.htm">madExcept</a>. However, the first three
+       parameters "hideUglyItems", "showRelativeAddrs" and "showRelativeLines"
+       might be interesting for you, too. With the first one you can tell the stack
+       tracer to hide all those stack items, for which no line number information
+       is available. The end result most of the time is a dramatically shorter
+       stack trace. The second and third options will add relative (to the 
+       beginning of the function) address/line information to the callstack.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>type</span><br>
+                  &nbsp;&nbsp;<span id='comment'>// types needed for the "StackTrace" function</span><br>
+                  &nbsp;&nbsp;<span id='identifier'>TStackItem</span>&nbsp;= <span id='bold'>record</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>Addr</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>pointer</span>; &nbsp;&nbsp;<span id='comment'>// code address</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>relAddr</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>dword</span>; &nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>// relative address to function entry point</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>ModuleName</span>&nbsp;&nbsp;&nbsp;: <span id='bold'>string</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>UnitName</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='bold'>string</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>Line</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>integer</span>; &nbsp;&nbsp;<span id='comment'>// line number (0 = unknown)</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>relLine</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>integer</span>; &nbsp;&nbsp;<span id='comment'>// relative line number to function entry point</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>FunctionName</span>&nbsp;: <span id='bold'>string</span>; &nbsp;&nbsp;&nbsp;<span id='comment'>// function/method name</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='bold'>end</span>;<br>
+                  &nbsp;&nbsp;<span id='identifier'>TStackTrace</span>&nbsp;= <span id='bold'>array</span>&nbsp;<span id='bold'>of</span>&nbsp;<span id='identifier'>TStackItem</span>;<br>
+                  &nbsp;&nbsp;<span id='identifier'>TPStackTrace</span>&nbsp;= ^<span id='identifier'>TStackTrace</span>;<br>
+                  <br>
+                  <span id='comment'>// traces the current stack</span><br>
+                  <span id='comment'>// example:</span><br>
+                  <span id='comment'>// 00461185 project1.exe unit1 &nbsp;&nbsp;&nbsp;124 FaultProc</span><br>
+                  <span id='comment'>// 0040A84B project1.exe unit1 &nbsp;&nbsp;&nbsp;137 Button1Click</span><br>
+                  <span id='comment'>// 00418E55 project1.exe project1 &nbsp;80 project1</span><br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>StackTrace</span>&nbsp;(<span id='identifier'>hideUglyItems</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>boolean</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= <span id='identifier'>false</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>showRelativeAddrs</span>&nbsp;: <span id='identifier'>boolean</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= <span id='identifier'>false</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>showRelativeLines</span>&nbsp;: <span id='identifier'>boolean</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= <span id='identifier'>false</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>stackTrace</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>TPStackTrace</span>&nbsp;&nbsp;&nbsp;= <span id='bold'>nil</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>currentAddr</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>pointer</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= <span id='bold'>nil</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>isException</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>boolean</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= <span id='identifier'>false</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>extException</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>boolean</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= <span id='identifier'>false</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>stackBottom</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>dword</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= <span id='number'>0</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>stackTop</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>dword</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= <span id='number'>0</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>creator</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>pointer</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= <span id='bold'>nil</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>exceptAddr</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>TPPointer</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= <span id='bold'>nil</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>exceptFunc</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>TPPointer</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= <span id='bold'>nil</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>exceptFuncAddr</span>&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>TPPointer</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= <span id='bold'>nil</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>progressAlert</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>IProgressAlert</span>&nbsp;= <span id='bold'>nil</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>ebp</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>dword</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= <span id='number'>0</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>dumbTrace</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>boolean</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= <span id='identifier'>false</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>bcbTermination</span>&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>boolean</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= <span id='identifier'>false</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>preparedStack</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>pointer</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= <span id='bold'>nil</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>pAbort</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>TPBoolean</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= <span id='bold'>nil</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>pCrc1</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>TPCardinal</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= <span id='bold'>nil</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>pCrc2</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>TPCardinal</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= <span id='bold'>nil</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>pDelphiThread</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>TPBoolean</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= <span id='bold'>nil</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>pMinDebugInfos</span>&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>TPDAString</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= <span id='bold'>nil</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>dontAddTopItem</span>&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>boolean</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= <span id='identifier'>false</span>) : <span id='bold'>string</span>;<br>
+                  <br>
+                  <span id='comment'>// example:</span><br>
+                  <span id='identifier'>0036d58c</span>&nbsp;+<span id='number'>004</span>&nbsp;<span id='identifier'>crashDll</span>.<span id='identifier'>dll</span>&nbsp;<span id='identifier'>CrashDll</span>&nbsp;&nbsp;&nbsp;<span id='number'>9</span>&nbsp;+<span id='number'>0</span>&nbsp;<span id='identifier'>CrashDllProc</span><br>
+                  <span id='identifier'>00491d40</span>&nbsp;+<span id='number'>000</span>&nbsp;<span id='identifier'>CrashApp</span>.<span id='identifier'>exe</span>&nbsp;<span id='identifier'>CrashUnit</span>&nbsp;<span id='number'>30</span>&nbsp;+<span id='number'>0</span>&nbsp;<span id='identifier'>CrashProc</span><br>
+                  <span id='identifier'>00491d48</span>&nbsp;+<span id='number'>000</span>&nbsp;<span id='identifier'>CrashApp</span>.<span id='identifier'>exe</span>&nbsp;<span id='identifier'>CrashUnit</span>&nbsp;<span id='number'>35</span>&nbsp;+<span id='number'>0</span>&nbsp;<span id='identifier'>TCrashForm</span>.<span id='identifier'>CrashButtonClick</span><br>
+                  <span id='identifier'>004727c0</span>&nbsp;+<span id='number'>064</span>&nbsp;<span id='identifier'>CrashApp</span>.<span id='identifier'>exe</span>&nbsp;<span id='identifier'>Controls</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>TControl</span>.<span id='identifier'>Click</span><br>
+                  <span id='identifier'>0046b048</span>&nbsp;+<span id='identifier'>01c</span>&nbsp;<span id='identifier'>CrashApp</span>.<span id='identifier'>exe</span>&nbsp;<span id='identifier'>StdCtrls</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>TButton</span>.<span id='identifier'>Click</span><br>
+                  <span id='identifier'>0046b13c</span>&nbsp;+<span id='identifier'>00c</span>&nbsp;<span id='identifier'>CrashApp</span>.<span id='identifier'>exe</span>&nbsp;<span id='identifier'>StdCtrls</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>TButton</span>.<span id='identifier'>CNCommand</span><br>
+                  <span id='number'>00472628</span>&nbsp;+<span id='number'>188</span>&nbsp;<span id='identifier'>CrashApp</span>.<span id='identifier'>exe</span>&nbsp;<span id='identifier'>Controls</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>TControl</span>.<span id='identifier'>WndProc</span><br>
+                  <span id='number'>00475533</span>&nbsp;+<span id='number'>157</span>&nbsp;<span id='identifier'>CrashApp</span>.<span id='identifier'>exe</span>&nbsp;<span id='identifier'>Controls</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>TWinControl</span>.<span id='identifier'>WndProc</span><br>
+                  <span id='identifier'>0046af0c</span>&nbsp;+<span id='identifier'>06c</span>&nbsp;<span id='identifier'>CrashApp</span>.<span id='identifier'>exe</span>&nbsp;<span id='identifier'>StdCtrls</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>TButtonControl</span>.<span id='identifier'>WndProc</span><br>
+                  <span id='identifier'>004723f8</span>&nbsp;+<span id='number'>024</span>&nbsp;<span id='identifier'>CrashApp</span>.<span id='identifier'>exe</span>&nbsp;<span id='identifier'>Controls</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>TControl</span>.<span id='identifier'>Perform</span><br>
+                  <span id='identifier'>0047566b</span>&nbsp;+<span id='number'>023</span>&nbsp;<span id='identifier'>CrashApp</span>.<span id='identifier'>exe</span>&nbsp;<span id='identifier'>Controls</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>DoControlMsg</span><br>
+                  <span id='identifier'>00475cc3</span>&nbsp;+<span id='identifier'>00b</span>&nbsp;<span id='identifier'>CrashApp</span>.<span id='identifier'>exe</span>&nbsp;<span id='identifier'>Controls</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>TWinControl</span>.<span id='identifier'>WMCommand</span><br>
+                  <span id='identifier'>0048c16c</span>&nbsp;+<span id='identifier'>02c</span>&nbsp;<span id='identifier'>CrashApp</span>.<span id='identifier'>exe</span>&nbsp;<span id='identifier'>Forms</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>TCustomForm</span>.<span id='identifier'>WMCommand</span><br>
+                  <span id='number'>00472628</span>&nbsp;+<span id='number'>188</span>&nbsp;<span id='identifier'>CrashApp</span>.<span id='identifier'>exe</span>&nbsp;<span id='identifier'>Controls</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>TControl</span>.<span id='identifier'>WndProc</span><br>
+                  <span id='number'>00475533</span>&nbsp;+<span id='number'>157</span>&nbsp;<span id='identifier'>CrashApp</span>.<span id='identifier'>exe</span>&nbsp;<span id='identifier'>Controls</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>TWinControl</span>.<span id='identifier'>WndProc</span><br>
+                  <span id='identifier'>0048a1c5</span>&nbsp;+<span id='number'>421</span>&nbsp;<span id='identifier'>CrashApp</span>.<span id='identifier'>exe</span>&nbsp;<span id='identifier'>Forms</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>TCustomForm</span>.<span id='identifier'>WndProc</span><br>
+                  <span id='identifier'>004751b0</span>&nbsp;+<span id='identifier'>02c</span>&nbsp;<span id='identifier'>CrashApp</span>.<span id='identifier'>exe</span>&nbsp;<span id='identifier'>Controls</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>TWinControl</span>.<span id='identifier'>MainWndProc</span><br>
+                  <span id='identifier'>0045e564</span>&nbsp;+<span id='number'>014</span>&nbsp;<span id='identifier'>CrashApp</span>.<span id='identifier'>exe</span>&nbsp;<span id='identifier'>Classes</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>StdWndProc</span><br>
+                  <span id='identifier'>77d1b8fe</span>&nbsp;+<span id='number'>044</span>&nbsp;<span id='identifier'>user32</span>.<span id='identifier'>dll</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>SendMessageW</span><br>
+                  <span id='identifier'>77d1e900</span>&nbsp;+<span id='number'>016</span>&nbsp;<span id='identifier'>user32</span>.<span id='identifier'>dll</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>CallWindowProcA</span><br>
+                  <span id='number'>00475617</span>&nbsp;+<span id='identifier'>0d7</span>&nbsp;<span id='identifier'>CrashApp</span>.<span id='identifier'>exe</span>&nbsp;<span id='identifier'>Controls</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>TWinControl</span>.<span id='identifier'>DefaultHandler</span><br>
+                  <span id='number'>00476985</span>&nbsp;+<span id='number'>019</span>&nbsp;<span id='identifier'>CrashApp</span>.<span id='identifier'>exe</span>&nbsp;<span id='identifier'>Controls</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>TWinControl</span>.<span id='identifier'>WMKeyUp</span><br>
+                  <span id='number'>00472628</span>&nbsp;+<span id='number'>188</span>&nbsp;<span id='identifier'>CrashApp</span>.<span id='identifier'>exe</span>&nbsp;<span id='identifier'>Controls</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>TControl</span>.<span id='identifier'>WndProc</span><br>
+                  <span id='number'>00475533</span>&nbsp;+<span id='number'>157</span>&nbsp;<span id='identifier'>CrashApp</span>.<span id='identifier'>exe</span>&nbsp;<span id='identifier'>Controls</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>TWinControl</span>.<span id='identifier'>WndProc</span><br>
+                  <span id='identifier'>0046af0c</span>&nbsp;+<span id='identifier'>06c</span>&nbsp;<span id='identifier'>CrashApp</span>.<span id='identifier'>exe</span>&nbsp;<span id='identifier'>StdCtrls</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>TButtonControl</span>.<span id='identifier'>WndProc</span><br>
+                  <span id='identifier'>004751b0</span>&nbsp;+<span id='identifier'>02c</span>&nbsp;<span id='identifier'>CrashApp</span>.<span id='identifier'>exe</span>&nbsp;<span id='identifier'>Controls</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>TWinControl</span>.<span id='identifier'>MainWndProc</span><br>
+                  <span id='identifier'>0045e564</span>&nbsp;+<span id='number'>014</span>&nbsp;<span id='identifier'>CrashApp</span>.<span id='identifier'>exe</span>&nbsp;<span id='identifier'>Classes</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>StdWndProc</span><br>
+                  <span id='identifier'>77d196c2</span>&nbsp;+<span id='identifier'>00a</span>&nbsp;<span id='identifier'>user32</span>.<span id='identifier'>dll</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>DispatchMessageA</span><br>
+                  <span id='identifier'>004904db</span>&nbsp;+<span id='number'>083</span>&nbsp;<span id='identifier'>CrashApp</span>.<span id='identifier'>exe</span>&nbsp;<span id='identifier'>Forms</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>TApplication</span>.<span id='identifier'>ProcessMessage</span><br>
+                  <span id='identifier'>004904fa</span>&nbsp;+<span id='identifier'>00a</span>&nbsp;<span id='identifier'>CrashApp</span>.<span id='identifier'>exe</span>&nbsp;<span id='identifier'>Forms</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>TApplication</span>.<span id='identifier'>HandleMessage</span><br>
+                  <span id='identifier'>0049071a</span>&nbsp;+<span id='number'>096</span>&nbsp;<span id='identifier'>CrashApp</span>.<span id='identifier'>exe</span>&nbsp;<span id='identifier'>Forms</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>TApplication</span>.<span id='identifier'>Run</span><br>
+                  <span id='identifier'>0049203b</span>&nbsp;+<span id='identifier'>03b</span>&nbsp;<span id='identifier'>CrashApp</span>.<span id='identifier'>exe</span>&nbsp;<span id='identifier'>CrashApp</span>&nbsp;&nbsp;<span id='number'>14</span>&nbsp;+<span id='number'>3</span>&nbsp;<span id='bold'>initialization</span>
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </body>
+
+</html>

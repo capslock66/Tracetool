@@ -1606,11 +1606,6 @@ object frmDebugOptions: TfrmDebugOptions
       Align = alLeft
       Header.AutoSizeIndex = 0
       Header.DefaultHeight = 17
-      Header.Font.Charset = DEFAULT_CHARSET
-      Header.Font.Color = clWindowText
-      Header.Font.Height = -12
-      Header.Font.Name = 'MS Sans Serif'
-      Header.Font.Style = []
       Header.Height = 17
       Header.MainColumn = -1
       Header.Options = [hoColumnResize, hoDrag]
@@ -1622,6 +1617,8 @@ object frmDebugOptions: TfrmDebugOptions
       OnChange = VSTOptionsChange
       OnGetText = VSTOptionsGetText
       OnGetImageIndex = VSTOptionsGetImageIndex
+      Touch.InteractiveGestures = [igPan, igPressAndTap]
+      Touch.InteractiveGestureOptions = [igoPanSingleFingerHorizontal, igoPanSingleFingerVertical, igoPanInertia, igoPanGutter, igoParentPassthrough]
       Columns = <>
     end
   end

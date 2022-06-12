@@ -1,0 +1,192 @@
+<html>
+
+  <head>
+    <title>mad* Help...</title>
+    <meta name="description" content="mad* Help...">
+    <meta name="keywords" content="madshi, components, delphi">
+    <meta http-equiv="expires" content="900">
+    <link rel=stylesheet type="text/css" href="style.css">
+  </head>
+
+  <body background="bcklight.gif" bgcolor=#F8F8F8>
+    <a name="IList"></a>
+    <table border=0 cellpadding=0 callspacing=0><tr>
+      <td valign=bottom>
+        <table border=0 cellpadding=0 cellspacing=0><tr><td bgcolor=#D8D8D8>
+          <table cellpadding=3 border=0>
+            <tr><td bgcolor=#FFFFF0>
+              <div id="verySmall"><br></div>
+              <div id="bigTitle">&nbsp;IList Base Interface&nbsp;</div>
+              <div id="verySmall"><br></div>
+              <div id="small">
+                <a class="small" href="Content.htm">Content</a> /
+                <a class="small" href="madBasic.htm">madBasic</a> /
+                <a class="small" href="madBasicUnit.htm">madBasic Unit</a> /...
+              </div>
+            </td></tr>
+          </table>
+        </td></tr></table>
+      </td>
+      <td valign=bottom>
+        <table border=0 cellpadding=0 cellspacing=0><tr><td bgcolor=#D8D8D8>
+          <table cellpadding=7 border=0>
+            <tr><td bgcolor=#F4F4F8><a href="http://www.madshi.net">www.madshi.net</a></td></tr>
+          </table>
+        </td></tr></table>
+      </td>
+    </tr></table>
+    <p>Being a descendent of <a href="IBasicBaseInterface.htm#IBasic">IBasic</a> the interface "IList" is the base
+       interface for all kinds of list interfaces. Only the properties that apply
+       to all list interfaces are introduced here. If you want to have a good
+       overview you might want to look at the <a href="IListRef.htm">IList Reference</a>.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>type</span>&nbsp;<span id='identifier'>IList</span>&nbsp;= <span id='bold'>interface</span>&nbsp;(<a class="pascal" href="IBasicBaseInterface.htm#IBasic">IBasic</a>) [<span id='string'>'{F6B8D483-40DB-11D3-A52D-00005A180D69}'</span>];
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IList.ItemCount"></a>
+    <p>The most important property of a list is probably, how many items it
+       contains:</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IList</span>.<img src="r.gif"><span id='identifier'>ItemCount</span>&nbsp;: <span id='identifier'>integer</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IList.Capacity"></a>
+    <p>Then we have the "Capacity" property, which tells us how many items our list
+       can hold without being forced to reallocate. Generally this property should
+       not be very interesting for you. It's important only if you build your own
+       descendents from IList.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IList</span>.<img src="r.gif"><span id='identifier'>Capacity</span>&nbsp;: <span id='identifier'>integer</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IList.Pack"></a>
+    <p>Some lists may happen to have "nil" items, some may not. Anyway, the
+       following method removes all "nil" items, if any:</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>procedure</span>&nbsp;<span id='identifier'>IList</span>.<img src="m.gif"><span id='identifier'>Pack</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IList.SortDown"></a>
+    <a name="IList.SortInfo"></a>
+    <p>One important feature of lists is sorting. However, sorting is quite
+       dependent of the list type. So in our base interface we can only introduce
+       some parts of sorting mechanism. The property "SortDown" says whether the
+       list is sorted normally or upside down. The property "SortInfo" has no
+       special meaning. It can be set and then later asked by the custom sorting
+       procedure.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IList</span>.<img src="w.gif"><span id='identifier'>SortDown</span>&nbsp;: <span id='identifier'>boolean</span>;<br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IList</span>.<img src="w.gif"><span id='identifier'>SortInfo</span>&nbsp;: <span id='identifier'>integer</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IList.Lock"></a>
+    <a name="IList.Unlock"></a>
+    <p>If you're using the same list object in more than one thread at the same
+       time, you need to synchronize access to it. For this purpose you can use the
+       both built in functions "Lock" and "Unlock". They're realized internally
+       by a <a href="CriticalSections.htm#ICriticalSection">ICriticalSection</a> object.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>procedure</span>&nbsp;<span id='identifier'>IList</span>.<img src="m.gif"><span id='identifier'>Lock</span>;<br>
+                  <span id='bold'>function</span>&nbsp;&nbsp;<span id='identifier'>IList</span>.<img src="m.gif"><span id='identifier'>Unlock</span>&nbsp;: <span id='identifier'>boolean</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IList.SelectedCount"></a>
+    <a name="IList.FocusedItem"></a>
+    <a name="IList.LastFocusedItem"></a>
+    <p>The following properties are useful mainly when you show the list's items in
+       a TListView. "SelectedCount" tells you how many items are selected in the
+       TListView component. "FocusedItem" tells you which of the items is currently
+       focused. And "LastFocusedItem" is needed for multiple selections.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IList</span>.<img src="r.gif"><span id='identifier'>SelectedCount</span>&nbsp;&nbsp;&nbsp;: <span id='identifier'>integer</span>; &nbsp;<br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IList</span>.<img src="r.gif"><span id='identifier'>FocusedItem</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <a class="pascal" href="IBasicBaseInterface.htm#IBasic">IBasic</a>;<br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IList</span>.<img src="w.gif"><span id='identifier'>LastFocusedItem</span>&nbsp;: <a class="pascal" href="IBasicBaseInterface.htm#IBasic">IBasic</a>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </body>
+
+</html>

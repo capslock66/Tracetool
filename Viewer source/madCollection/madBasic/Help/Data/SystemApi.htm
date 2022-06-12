@@ -1,0 +1,162 @@
+<html>
+
+  <head>
+    <title>mad* Help...</title>
+    <meta name="description" content="mad* Help...">
+    <meta name="keywords" content="madshi, components, delphi">
+    <meta http-equiv="expires" content="900">
+    <link rel=stylesheet type="text/css" href="style.css">
+  </head>
+
+  <body background="bcklight.gif" bgcolor=#F8F8F8>
+    <table border=0 cellpadding=0 callspacing=0><tr>
+      <td valign=bottom>
+        <table border=0 cellpadding=0 cellspacing=0><tr><td bgcolor=#D8D8D8>
+          <table cellpadding=3 border=0>
+            <tr><td bgcolor=#FFFFF0>
+              <div id="verySmall"><br></div>
+              <div id="bigTitle">&nbsp;"SystemAPI" Example&nbsp;</div>
+              <div id="verySmall"><br></div>
+              <div id="small">
+                <a class="small" href="Content.htm">Content</a> /
+                <a class="small" href="madCodeHook.htm">madCodeHook</a> /
+                <a class="small" href="SystemWideApiHooking.htm">System Wide API Hooking</a> /...
+              </div>
+            </td></tr>
+          </table>
+        </td></tr></table>
+      </td>
+      <td valign=bottom>
+        <table border=0 cellpadding=0 cellspacing=0><tr><td bgcolor=#D8D8D8>
+          <table cellpadding=7 border=0>
+            <tr><td bgcolor=#F4F4F8><a href="http://www.madshi.net">www.madshi.net</a></td></tr>
+          </table>
+        </td></tr></table>
+      </td>
+    </tr></table>
+    <p>The following project can also be found in the "Demo" folder:</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='comment'>// ***************************************************************</span><br>
+                  <span id='comment'>// &nbsp;SystemAPI &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;version: &nbsp;1.0 &nbsp;&nbsp;· &nbsp;date: 2003-06-15</span><br>
+                  <span id='comment'>// &nbsp;-------------------------------------------------------------</span><br>
+                  <span id='comment'>// &nbsp;demo to show a special mode (9x only) system wide API hooking</span><br>
+                  <span id='comment'>// &nbsp;-------------------------------------------------------------</span><br>
+                  <span id='comment'>// &nbsp;Copyright (C) 1999 - 2003 www.madshi.net, All Rights Reserved</span><br>
+                  <span id='comment'>// ***************************************************************</span><br>
+                  <br>
+                  <span id='comment'>// 2003-06-15 1.0 &nbsp;initial release</span><br>
+                  <br>
+                  <span id='bold'>program</span>&nbsp;<span id='identifier'>SystemAPI</span>;<br>
+                  <br>
+                  <span id='comment'>{$R</span>&nbsp;..\<span id='comment'>mad</span>.<span id='comment'>res}</span><br>
+                  <br>
+                  <span id='bold'>uses</span>&nbsp;<span id='identifier'>Windows</span>, <a class="pascal" href="madCodeHook.htm">madCodeHook</a>;<br>
+                  <br>
+                  <span id='comment'>// ***************************************************************</span><br>
+                  <br>
+                  <span id='comment'>// variable for the "next hook", which we then call in the callback function</span><br>
+                  <span id='comment'>// it must have *exactly* the same parameters and calling convention as the</span><br>
+                  <span id='comment'>// original function</span><br>
+                  <span id='comment'>// besides, it's also the parameter that you need to undo the code hook again</span><br>
+                  <span id='bold'>var</span>&nbsp;<span id='identifier'>CreateProcessNextHook</span>&nbsp;: <span id='bold'>function</span>&nbsp;(<span id='identifier'>applicationName</span>&nbsp;&nbsp;&nbsp;: <span id='identifier'>pchar</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>commandLine</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>pchar</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>processAttr</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>PSecurityAttributes</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>threadAttr</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>PSecurityAttributes</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>inheritHandles</span>&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>bool</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>creationFlags</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>dword</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>environment</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>pointer</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>currentDirectory</span>&nbsp;&nbsp;: <span id='identifier'>pchar</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='bold'>const</span>&nbsp;<span id='identifier'>startupInfo</span>&nbsp;: <span id='identifier'>TStartupInfo</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='bold'>var</span>&nbsp;<span id='identifier'>processInfo</span>&nbsp;&nbsp;&nbsp;: <span id='identifier'>TProcessInformation</span>) : <span id='identifier'>bool</span>; <span id='bold'>stdcall</span>;<br>
+                  <br>
+                  <span id='comment'>// this function is our hook callback function, which will (system wide!) receive</span><br>
+                  <span id='comment'>// all calls to the original CreateProcess API, as soon as we've hooked it</span><br>
+                  <span id='comment'>// the hook function must have *exactly* the same parameters and calling</span><br>
+                  <span id='comment'>// convention as the original API</span><br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>CreateProcessHookProc</span>(<span id='identifier'>applicationName</span>&nbsp;&nbsp;&nbsp;: <span id='identifier'>pchar</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>commandLine</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>pchar</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>processAttr</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>PSecurityAttributes</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>threadAttr</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>PSecurityAttributes</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>inheritHandles</span>&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>bool</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>creationFlags</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>dword</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>environment</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>pointer</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>currentDirectory</span>&nbsp;&nbsp;: <span id='identifier'>pchar</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='bold'>const</span>&nbsp;<span id='identifier'>startupInfo</span>&nbsp;: <span id='identifier'>TStartupInfo</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='bold'>var</span>&nbsp;<span id='identifier'>processInfo</span>&nbsp;&nbsp;&nbsp;: <span id='identifier'>TProcessInformation</span>) : <span id='identifier'>bool</span>; <span id='bold'>stdcall</span>;<br>
+                  <span id='bold'>var</span>&nbsp;<span id='identifier'>arrCh</span>&nbsp;: <span id='bold'>array</span>&nbsp;[<span id='number'>0</span>..<span id='number'>8</span>] <span id='bold'>of</span>&nbsp;<span id='identifier'>char</span>;<br>
+                  <span id='bold'>begin</span><br>
+                  &nbsp;&nbsp;<span id='comment'>// this function will be called from several processes, so we can't use</span><br>
+                  &nbsp;&nbsp;<span id='comment'>// any vars, functions or consts that are only accessible in our own process</span><br>
+                  &nbsp;&nbsp;<span id='comment'>// so we have to set up strings manually, painful...</span><br>
+                  &nbsp;&nbsp;<span id='identifier'>arrCh</span>[<span id='number'>0</span>] := <span id='string'>'E'</span>;<br>
+                  &nbsp;&nbsp;<span id='identifier'>arrCh</span>[<span id='number'>1</span>] := <span id='string'>'x'</span>;<br>
+                  &nbsp;&nbsp;<span id='identifier'>arrCh</span>[<span id='number'>2</span>] := <span id='string'>'e'</span>;<br>
+                  &nbsp;&nbsp;<span id='identifier'>arrCh</span>[<span id='number'>3</span>] := <span id='string'>'c'</span>;<br>
+                  &nbsp;&nbsp;<span id='identifier'>arrCh</span>[<span id='number'>4</span>] := <span id='string'>'u'</span>;<br>
+                  &nbsp;&nbsp;<span id='identifier'>arrCh</span>[<span id='number'>5</span>] := <span id='string'>'t'</span>;<br>
+                  &nbsp;&nbsp;<span id='identifier'>arrCh</span>[<span id='number'>6</span>] := <span id='string'>'e'</span>;<br>
+                  &nbsp;&nbsp;<span id='identifier'>arrCh</span>[<span id='number'>7</span>] := <span id='string'>'?'</span>;<br>
+                  &nbsp;&nbsp;<span id='identifier'>arrCh</span>[<span id='number'>8</span>] := <span id='string'>#0</span>;<br>
+                  &nbsp;&nbsp;<span id='comment'>// CAUTION!!</span><br>
+                  &nbsp;&nbsp;<span id='comment'>// this function will be called from every process that calls CreateProcess</span><br>
+                  &nbsp;&nbsp;<span id='comment'>// some processes might have imported kernel32.dll, but NOT user32.dll</span><br>
+                  &nbsp;&nbsp;<span id='comment'>// and in such a process we can't call MessageBox, because it's in user32.dll</span><br>
+                  &nbsp;&nbsp;<span id='comment'>// as a result that means, you should only call APIs of kernel32.dll in your</span><br>
+                  &nbsp;&nbsp;<span id='comment'>// callback function, because only this dll is loaded in really every process</span><br>
+                  &nbsp;&nbsp;<span id='comment'>// but for our demo we are ignorant and do what we should not do namely call</span><br>
+                  &nbsp;&nbsp;<span id='comment'>// a non-kernel32.dll API in our system wide hook callback function</span><br>
+                  &nbsp;&nbsp;<span id='bold'>if</span>&nbsp;<span id='identifier'>MessageBox</span>(<span id='number'>0</span>, <span id='identifier'>commandLine</span>, <span id='identifier'>arrCh</span>, <span id='identifier'>MB_YESNO</span>&nbsp;<span id='bold'>or</span>&nbsp;<span id='identifier'>MB_ICONQUESTION</span>) <> <span id='identifier'>IDYES</span>&nbsp;<span id='bold'>then</span>&nbsp;<span id='bold'>begin</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>// well, the user decided that the CreateProcess call should not be executed</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>// so we need to set up a correct LastError value</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>SetLastError</span>(<span id='identifier'>ERROR_ACCESS_DENIED</span>);<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>result</span>&nbsp;:= <span id='identifier'>false</span>;<br>
+                  &nbsp;&nbsp;<span id='bold'>end</span>&nbsp;<span id='bold'>else</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>// the user decided to let the CreateProcess call happen, so we do it</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>// if we would call CreateProcess here, we would end up calling ourselves again</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>// so we call "CreateProcessNextHook" of course</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>result</span>&nbsp;:= <span id='identifier'>CreateProcessNextHook</span>(<span id='identifier'>applicationNAme</span>, <span id='identifier'>commandLine</span>,<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>processAttr</span>, <span id='identifier'>threadAttr</span>,<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>inheritHandles</span>, <span id='identifier'>creationFlags</span>,<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>environment</span>, <span id='identifier'>currentDirectory</span>,<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>startupInfo</span>, <span id='identifier'>processInfo</span>);<br>
+                  <span id='bold'>end</span>;<br>
+                  <br>
+                  <span id='bold'>begin</span><br>
+                  &nbsp;&nbsp;<span id='bold'>if</span>&nbsp;<span id='identifier'>GetVersion</span>&nbsp;<span id='bold'>and</span>&nbsp;<span id='number'>$80000000</span>&nbsp;<> <span id='number'>0</span>&nbsp;<span id='bold'>then</span>&nbsp;<span id='bold'>begin</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>// we install our API hook with a special flag (SYSTEM_WIDE_9X)</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>// this works only in win9x and only for "shared APIs"</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>// that are all exported APIs of dlls whose module handle is >= $80000000</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<a class="pascal" href="ApiCodeHooking.htm#HookAPI">HookAPI</a>(<span id='string'>'kernel32.dll'</span>, <span id='string'>'CreateProcessA'</span>, @<span id='identifier'>CreateProcessHookProc</span>, @<span id='identifier'>CreateProcessNextHook</span>, <span id='identifier'>SYSTEM_WIDE_9X</span>);<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>// now let's show a message box</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>// while this message box is shown, you can start programs from the shell</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>// to check whether our system wide hook is *really* system wide</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>MessageBox</span>(<span id='number'>0</span>, <span id='string'>'the hook is installed'</span>&nbsp;+ <span id='string'>#$D#$A</span>&nbsp;+ <span id='string'>#$D#$A</span>&nbsp;+<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='string'>'please start a program now to check'</span>&nbsp;+ <span id='string'>#$D#$A</span>&nbsp;+<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='string'>'whether the hook works as intended'</span>&nbsp;+ <span id='string'>#$D#$A</span>&nbsp;+ <span id='string'>#$D#$A</span>&nbsp;+<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='string'>'press "ok" to uninstall the hook again'</span>,<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='string'>'information...'</span>, <span id='number'>0</span>);<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>// now we can decide: either we unhook again or not</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>// if we don't, the hook remains installed (and keeps working!!) even after</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>// our program has terminated</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>// but in this demo we want to unhook again, so let's do it</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<a class="pascal" href="ApiCodeHooking.htm#UnhookAPI">UnhookAPI</a>(@<span id='identifier'>CreateProcessNextHook</span>);<br>
+                  &nbsp;&nbsp;<span id='bold'>end</span>&nbsp;<span id='bold'>else</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>MessageBox</span>(<span id='number'>0</span>, <span id='string'>'this demo works in win9x only'</span>, <span id='string'>'information...'</span>, <span id='number'>0</span>);<br>
+                  <span id='bold'>end</span>.
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </body>
+
+</html>

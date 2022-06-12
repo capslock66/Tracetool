@@ -1,0 +1,107 @@
+<html>
+
+  <head>
+    <title>mad* Help...</title>
+    <meta name="description" content="mad* Help...">
+    <meta name="keywords" content="madshi, components, delphi">
+    <meta http-equiv="expires" content="900">
+    <link rel=stylesheet type="text/css" href="style.css">
+  </head>
+
+  <body background="bcklight.gif" bgcolor=#F8F8F8>
+    <table border=0 cellpadding=0 callspacing=0><tr>
+      <td valign=bottom>
+        <table border=0 cellpadding=0 cellspacing=0><tr><td bgcolor=#D8D8D8>
+          <table cellpadding=3 border=0>
+            <tr><td bgcolor=#FFFFF0>
+              <div id="verySmall"><br></div>
+              <div id="bigTitle">&nbsp;madExcept Settings (Tab 2)&nbsp;</div>
+              <div id="verySmall"><br></div>
+              <div id="small">
+                <a class="small" href="Content.htm">Content</a> /
+                <a class="small" href="madExcept.htm">madExcept</a> /
+                <a class="small" href="madExceptSettings.htm">madExcept Settings</a> /...
+              </div>
+            </td></tr>
+          </table>
+        </td></tr></table>
+      </td>
+      <td valign=bottom>
+        <table border=0 cellpadding=0 cellspacing=0><tr><td bgcolor=#D8D8D8>
+          <table cellpadding=7 border=0>
+            <tr><td bgcolor=#F4F4F8><a href="http://www.madshi.net">www.madshi.net</a></td></tr>
+          </table>
+        </td></tr></table>
+      </td>
+    </tr></table>
+    <map name="SettingsMap">
+    <area shape="rect" coords="14,72,135,113" href="madExceptSettings1.htm" onMouseover="document.images[0].src='mes-ss40.gif'" onMouseout="document.images[0].src='mes-ss41.gif'">
+    <area shape="rect" coords="14,156,135,197" href="madExceptSettings3.htm" onMouseover="document.images[0].src='mes-ss42.gif'" onMouseout="document.images[0].src='mes-ss41.gif'">
+    <area shape="rect" coords="14,198,135,239" href="madExceptSettings4.htm" onMouseover="document.images[0].src='mes-ss43.gif'" onMouseout="document.images[0].src='mes-ss41.gif'">
+    <area shape="rect" coords="14,240,135,281" href="madExceptSettings5a.htm" onMouseover="document.images[0].src='mes-ss44a.gif'" onMouseout="document.images[0].src='mes-ss41.gif'">
+    <area shape="rect" coords="14,282,135,323" href="madExceptSettings6.htm" onMouseover="document.images[0].src='mes-ss45.gif'" onMouseout="document.images[0].src='mes-ss41.gif'">
+    <area shape="rect" coords="14,324,135,365" href="madExceptSettings7.htm" onMouseover="document.images[0].src='mes-ss46.gif'" onMouseout="document.images[0].src='mes-ss41.gif'">
+    <area shape="rect" coords="14,366,135,407" href="madExceptSettings8.htm" onMouseover="document.images[0].src='mes-ss47.gif'" onMouseout="document.images[0].src='mes-ss41.gif'">
+    <area shape="rect" coords="14,408,135,449" href="madExceptSettings9.htm" onMouseover="document.images[0].src='mes-ss48.gif'" onMouseout="document.images[0].src='mes-ss41.gif'">
+    <area shape="rect" coords="14,450,135,489" href="madExceptSettings10.htm" onMouseover="document.images[0].src='mes-ss49.gif'" onMouseout="document.images[0].src='mes-ss41.gif'">
+    </map>
+    <p>You can click on the tabs in the left side of the image:</p>
+    <p><img src='mes-ss41.gif' border=0 usemap="#SettingsMap" align=left style="margin-right:10pt;margin-bottom:10pt"></p>
+    <h3>various actions...</h3>
+    <p>By default <a href="madExcept.htm" href="madExceptUnit.htm">madExcept</a> <b>automatically saves the bug report</b>,
+       but <b>only if the bug report didn't get sent</b>. The sense of this
+       logic is that if the bug report got sent to you, there's no reason to save
+       it. But if it didn't get sent to you, probably you want to collect all bug
+       reports until the end user finally decides to contact you.</p>
+    <p>If you want you can tell <a href="madExcept.htm" href="madExceptUnit.htm">madExcept</a> to <b>automatically send the bug
+       report</b> to you. Furthermore you can choose whether you want the sending
+       to happen silently/secretly, or whether you want to <b>show an 
+       email&nbsp;/&nbsp;upload progress box</b>. Please make sure that your end
+       users won't be annoyed by you sending information without asking them!</p>
+    <p>Optionally you can tell <a href="madExcept.htm" href="madExceptUnit.htm">madExcept</a> to <b>copy the bug report to the
+       clipboard</b>. This feature is turned off by default, because turning it on
+       can mean, that aborting the exception box won't work without a slight
+       delay. The reason for this delay a bit complicated: The exception box is
+       usually already shown before the bug report is fully rendered. Now if
+       the user aborts the exception box, the rendering of the bug report is 
+       aborted, too. Of course if you activated this option, <a href="madExcept.htm" href="madExceptUnit.htm">madExcept</a> can't
+       abort the rendering, cause it still has to copy the final bug report to the
+       clipboard. Well, most of the time it all doesn't really matter, because
+       rendering the bug report takes usually less than a second and most end users
+       won't abort the exception box so fast...</p>
+    <p>The option <b>pause all running delphi/bcb threads</b> tells <a href="madExcept.htm" href="madExceptUnit.htm">madExcept</a>
+       what it shall do with the process' threads, once an exception occurs. If the
+       option is turned on, madExcept pauses all threads (i.e. the whole process),
+       in order to avoid follow up exceptions. Otherwise madExcept leaves all
+       threads running, even while the exception box is shown. This option is
+       turned off by default because pausing all threads can sometimes (very rarely)
+       result in deadlocks. Furthermore when the main thread is paused, the
+       application may appear to be frozen, because the forms won't redraw. On the
+       other hand pausing all threads does make sense. So it's up to you, whether
+       you want to enable this option or not. If you do enable it, please also have
+       a look at the function <a href="madExceptUnit.htm#PauseMeEventually">PauseMeEventually</a>.</p>
+    <h3>if madExcept is busy while no window is visible...</h3>
+    <p>There may be situations where <a href="madExcept.htm" href="madExceptUnit.htm">madExcept</a> is busy rendering a bug
+       report while no exception box is visible. This can happen e.g. if you turned
+       the exception box off, or if the user aborted the exception box before the
+       bug report was fully rendered (and if the bug report is needed for some
+       reason). It can also happen, if exceptions occur in the initialization or
+       finalization section of a DLL. If for any of the mentioned reasons
+       <a href="madExcept.htm" href="madExceptUnit.htm">madExcept</a> is busy without a window being visible, do you want to
+       <b>show a "please wait" box</b>? Generally this is recommended, because
+       otherwise the end user might be confused, if the program doesn't react
+       without any visible reason. However, in some situations you might want to
+       avoid any boxes to show up (e.g. for server applications).</p>
+    <h3>application control...</h3>
+    <p>You can configure <a href="madExcept.htm" href="madExceptUnit.htm">madExcept</a> so that the exception box is closed after
+       one minute, if the user doesn't do anything. Depending on in what period the
+       last 10 exceptions occurred, madExcept will then either <b>automatically
+       continue the application</b> or <b>automatically restart the
+       application</b> or <b>automatically close the application</b>. The button
+       which is going to be automatically pressed by madExcept after the one minute
+       delay gets focused and painted in the form of a progress bar. If you told
+       <a href="madExcept.htm" href="madExceptUnit.htm">madExcept</a> to not show the exception box, madExcept won't wait that
+       minute, but continue/restart/close your application at once.</p>
+  </body>
+
+</html>

@@ -1,0 +1,385 @@
+<html>
+
+  <head>
+    <title>mad* Help...</title>
+    <meta name="description" content="mad* Help...">
+    <meta name="keywords" content="madshi, components, delphi">
+    <meta http-equiv="expires" content="900">
+    <link rel=stylesheet type="text/css" href="style.css">
+  </head>
+
+  <body background="bcklight.gif" bgcolor=#F8F8F8>
+    <a name="IShellObj"></a>
+    <table border=0 cellpadding=0 callspacing=0><tr>
+      <td valign=bottom>
+        <table border=0 cellpadding=0 cellspacing=0><tr><td bgcolor=#D8D8D8>
+          <table cellpadding=3 border=0>
+            <tr><td bgcolor=#FFFFF0>
+              <div id="verySmall"><br></div>
+              <div id="bigTitle">&nbsp;Shell Objects&nbsp;</div>
+              <div id="verySmall"><br></div>
+              <div id="small">
+                <a class="small" href="Content.htm">Content</a> /
+                <a class="small" href="madShell.htm">madShell</a> /...
+              </div>
+            </td></tr>
+          </table>
+        </td></tr></table>
+      </td>
+      <td valign=bottom>
+        <table border=0 cellpadding=0 cellspacing=0><tr><td bgcolor=#D8D8D8>
+          <table cellpadding=7 border=0>
+            <tr><td bgcolor=#F4F4F8><a href="http://www.madshi.net">www.madshi.net</a></td></tr>
+          </table>
+        </td></tr></table>
+      </td>
+    </tr></table>
+    <p>The interface "IShellObj" described in this section implements functionality
+       around shell objects, with which browseable objects of any kind are meant
+       (drives, files, folders, special folders, non file system objects).
+       Everything that you can browse through in the Windows Explorer can be
+       represented by and handled with an IShellObj interface. See also the
+       <a href="IShellObjRef.htm">IShellObj Reference</a>.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>type</span>&nbsp;<span id='identifier'>IShellObj</span>&nbsp;= <span id='bold'>interface</span>&nbsp;(<a class="pascal" href="ICustomBasicListBaseInterface.htm#ICustomBasicList">ICustomBasicList</a>) [<span id='string'>'{00BED961-C78D-11D3-A530-00005A180D69}'</span>];
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="ShellObj"></a>
+    <p>There are multiple ways to get an IShellObj instance:</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>ShellObj</span>&nbsp;(<span id='identifier'>path</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='bold'>string</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;) : <span id='identifier'>IShellObj</span>; <span id='bold'>overload</span>;<br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>ShellObj</span>&nbsp;(<span id='identifier'>sf</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <a class="pascal" href="SpecialFolders.htm#TSpecialFolder">TSpecialFolder</a>) : <span id='identifier'>IShellObj</span>; <span id='bold'>overload</span>;<br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>ShellObj</span>&nbsp;(<span id='bold'>const</span>&nbsp;<span id='identifier'>idList</span>&nbsp;: <a class="pascal" href="IDLists.htm#IIDList">IIDList</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;) : <span id='identifier'>IShellObj</span>; <span id='bold'>overload</span>;<br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>ShellObj</span>&nbsp;(<span id='bold'>const</span>&nbsp;<span id='identifier'>sfi</span>&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>IShellFolder</span>&nbsp;&nbsp;) : <span id='identifier'>IShellObj</span>; <span id='bold'>overload</span>;<br>
+                  <br>
+                  <span id='comment'>// Examples:</span><br>
+                  <span id='bold'>with</span>&nbsp;<span id='identifier'>ShellObj</span>(<span id='string'>'C:\'</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;) <span id='bold'>do</span>&nbsp;[...]<br>
+                  <span id='bold'>with</span>&nbsp;<span id='identifier'>ShellObj</span>(<span id='string'>'D:\Folder\ReadMe.txt'</span>) <span id='bold'>do</span>&nbsp;[...]<br>
+                  <span id='bold'>with</span>&nbsp;<span id='identifier'>ShellObj</span>(<span id='identifier'>sfControlPanel</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;) <span id='bold'>do</span>&nbsp;[...]
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="Desktop"></a>
+    <p>Calling "Desktop" is the same as calling "ShellObj(sfDesktopRoot)". It's a
+       very special shell object: The child items of the Desktop shell object are
+       the only ones where the properties <a href="#IShellObj.Position">IShellObj.Position</a> and
+       <a href="#IShellObj.State">IShellObj.State</a> are supported.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>Desktop</span>&nbsp;: <span id='identifier'>IShellObj</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IShellObj.Parent"></a>
+    <p>Each shell object - except the Desktop shell object - has a parent:</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IShellObj</span>.<img src="r.gif"><span id='identifier'>Parent</span>&nbsp;: <span id='identifier'>IShellObj</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IShellObj.IsFolder"></a>
+    <a name="IShellObj.Items"></a>
+    <a name="IShellObj.RefreshItems"></a>
+    <a name="IShellObj.Item"></a>
+    <p>Some shell objects are folder objects (so you can browse into them), others
+       are not. If the current shell object is a folder object, it may have child
+       items (see also <a href="IListBaseInterface.htm#IList.ItemCount">IList.ItemCount</a>). With "RefreshItems" you can refresh
+       the child items, that is look for new/deleted/changed items. Last but not
+       least you can search for specific child items.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>IShellObj</span>.<img src="m.gif"><span id='identifier'>IsFolder</span>&nbsp;: <span id='identifier'>boolean</span>;<br>
+                  <br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IShellObj</span>.<img src="r.gif"><span id='identifier'>Items</span>&nbsp;[<span id='bold'>index</span>: <span id='identifier'>integer</span>] : <span id='identifier'>IShellObj</span>;<br>
+                  <br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>IShellObj</span>.<img src="m.gif"><span id='identifier'>RefreshItems</span>&nbsp;: <span id='identifier'>boolean</span>;<br>
+                  <br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>IShellObj</span>.<img src="m.gif"><span id='identifier'>Item</span>&nbsp;(<span id='identifier'>name</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='bold'>string</span>&nbsp;) : <span id='identifier'>IShellObj</span>; <span id='bold'>overload</span>;<br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>IShellObj</span>.<img src="m.gif"><span id='identifier'>Item</span>&nbsp;(<span id='bold'>const</span>&nbsp;<span id='identifier'>name</span>&nbsp;: <span id='identifier'>TGuid</span>&nbsp;&nbsp;) : <span id='identifier'>IShellObj</span>; <span id='bold'>overload</span>;<br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>IShellObj</span>.<img src="m.gif"><span id='identifier'>Item</span>&nbsp;(<span id='bold'>const</span>&nbsp;<span id='identifier'>name</span>&nbsp;: <a class="pascal" href="IDLists.htm#IIDList">IIDList</a>) : <span id='identifier'>IShellObj</span>; <span id='bold'>overload</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IShellObj.IDList"></a>
+    <p>Each shell object is identified by a unique IDList:</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IShellObj</span>.<img src="r.gif"><span id='identifier'>IDList</span>&nbsp;: <a class="pascal" href="IDLists.htm#IIDList">IIDList</a>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IShellObj.Description"></a>
+    <a name="IShellObj.DescrInFolder"></a>
+    <a name="IShellObj.Name"></a>
+    <a name="IShellObj.Path"></a>
+    <p>The property "Path" returns the full path of the current shell object as a
+       string. If the shell object is a non file system object, the path consists
+       of GUID strings. The other 3 properties don't return the path of the shell
+       object, but instead only the name. They often bring the same results, but
+       sometimes they differ. "Name" simply returns the last part of the "Path"
+       string, "Description" and "DescrInFolder" are 2 slightly different variants
+       that return the display string, which is shown in the Windows Explorer when
+       browsing.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IShellObj</span>.<img src="r.gif"><span id='identifier'>Path</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='bold'>string</span>;<br>
+                  <br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IShellObj</span>.<img src="w.gif"><span id='identifier'>Name</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='bold'>string</span>;<br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IShellObj</span>.<img src="r.gif"><span id='identifier'>Description</span>&nbsp;&nbsp;&nbsp;: <span id='bold'>string</span>;<br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IShellObj</span>.<img src="r.gif"><span id='identifier'>DescrInFolder</span>&nbsp;: <span id='bold'>string</span>;<br>
+                  <br>
+                  <span id='comment'>// Examples:</span><br>
+                  <span id='identifier'>ShellObj</span>(<span id='identifier'>sfMyComputer</span>).<span id='identifier'>Path</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-> &nbsp;<span id='string'>'::{20D04FE0-3AEA-1069-A2D8-08002B30309D}'</span><br>
+                  <span id='identifier'>ShellObj</span>(<span id='identifier'>sfMyComputer</span>).<span id='identifier'>Name</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-> &nbsp;<span id='string'>'::{20D04FE0-3AEA-1069-A2D8-08002B30309D}'</span><br>
+                  <span id='identifier'>ShellObj</span>(<span id='identifier'>sfMyComputer</span>).<span id='identifier'>Description</span>&nbsp;&nbsp;&nbsp;&nbsp;-> &nbsp;<span id='string'>'My Computer'</span><br>
+                  <span id='identifier'>ShellObj</span>(<span id='identifier'>sfMyComputer</span>).<span id='identifier'>DescrInFolder</span>&nbsp;&nbsp;-> &nbsp;<span id='string'>'My Computer'</span>
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IShellObj.Position"></a>
+    <a name="IShellObj.State"></a>
+    <p>The following 2 properties are only valid for the child items of the
+       <a href="#Desktop">Desktop</a> shell object. You can ask the position and the state of such
+       objects, furthermore you can also set the position.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IShellObj</span>.<img src="w.gif"><span id='identifier'>Position</span>&nbsp;: <span id='identifier'>TPoint</span>;<br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IShellObj</span>.<img src="r.gif"><span id='identifier'>State</span>&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>cardinal</span>;<br>
+                  <br>
+                  <span id='comment'>// Example:</span><br>
+                  <span id='bold'>with</span>&nbsp;<a class="pascal" href="#Desktop">Desktop</a>.<a class="pascal" href="ShellObjs.htm#IShellObj.Item">Item</a>(<a class="pascal" href="#ShellObj">ShellObj</a>(<span id='identifier'>sfMyComputer</span>).<a class="pascal" href="ShellObjs.htm#IShellObj.IDList">IDList</a>) <span id='bold'>do</span><br>
+                  &nbsp;&nbsp;<span id='identifier'>ShowMessage</span>(<span id='string'>'My Computer position: '</span>&nbsp;+ <span id='identifier'>IntToStr</span>(<span id='identifier'>Position</span>.<span id='identifier'>X</span>) + <span id='string'>'/'</span>&nbsp;+ <span id='identifier'>IntToStr</span>(<span id='identifier'>Position</span>.<span id='identifier'>Y</span>));
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IShellObj.GetIcon"></a>
+    <a name="TIconFlags"></a>
+    <p>When you need an icon for a shell object, just call "GetIcon". You can
+       specify, how big the icon shall be. Also you can specify some additional
+       parameters:</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>type</span><br>
+                  &nbsp;&nbsp;<span id='identifier'>TIconFlags</span>&nbsp;= <span id='bold'>set</span>&nbsp;<span id='bold'>of</span>&nbsp;(<span id='identifier'>ifForShell</span>, &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>// the icon is for shell browsing</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>ifForShortcut</span>, &nbsp;&nbsp;&nbsp;<span id='comment'>// the icon is for a shortcut</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>ifOpenState</span>&nbsp;&nbsp;); &nbsp;&nbsp;<span id='comment'>// get the "open" state of the icon</span><br>
+                  <br>
+                  <span id='comment'>// askAgain = &nbsp;nil -> correct icon will be returned even if it takes a while</span><br>
+                  <span id='comment'>// askAgain <> nil -> GetIcon will fill the parameter "askAgain" with</span><br>
+                  <span id='comment'>// &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;false : correct icon was available quite fast</span><br>
+                  <span id='comment'>// &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;true &nbsp;: simplified icon is returned, ask again later</span><br>
+                  <span id='comment'>// &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;without specifiying "askAgain" to get the</span><br>
+                  <span id='comment'>// &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;correct icon -> this may be time consuming</span><br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>IShellObj</span>.<img src="m.gif"><span id='identifier'>GetIcon</span>&nbsp;(<span id='identifier'>size</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>cardinal</span>&nbsp;&nbsp;&nbsp;= <span id='number'>32</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="e.gif">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>flags</span>&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>TIconFlags</span>&nbsp;= [];<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="e.gif">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>askAgain</span>&nbsp;: <span id='identifier'>TPBoolean</span>&nbsp;&nbsp;= <span id='bold'>nil</span>) : <span id='identifier'>cardinal</span>;<br>
+                  <br>
+                  <span id='comment'>// Example:</span><br>
+                  <span id='identifier'>Image1</span>.<span id='identifier'>Picture</span>.<span id='identifier'>Icon</span>.<span id='identifier'>Handle</span>&nbsp;:= <span id='identifier'>ShellObj</span>(<span id='identifier'>sfMyComputer</span>).<span id='identifier'>GetIcon</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IShellObj.Attributes"></a>
+    <a name="IShellObj.Guid"></a>
+    <a name="IShellObj.IShellFolder_"></a>
+    <p>The following properties return additional infos about our shell object. You
+       can ask the attributes, the GUID (in case the object has one) and you can
+       also ask for a IShellFolder instance of this shell object (in case this
+       object supports it).</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IShellObj</span>.<img src="r.gif"><span id='identifier'>Attributes</span>&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>cardinal</span>;<br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IShellObj</span>.<img src="r.gif"><span id='identifier'>Guid</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>TGuid</span>;<br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IShellObj</span>.<img src="r.gif"><span id='identifier'>IShellFolder_</span>&nbsp;: <span id='identifier'>IShellFolder</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="TContextAlign"></a>
+    <a name="IShellObj.ShowContextMenu"></a>
+    <a name="IShellObj.ExecContextItem"></a>
+    <p>Almost every shell object has a context menu (which pops up when you right
+       click on the shell object in the Windows Explorer). The following methods
+       can show this context menu or alternatively execute a specific menu item of
+       the context menu without showing it. In order to execute the default menu
+       item you can enter an empty "item" string.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>type</span>&nbsp;<span id='identifier'>TContextAlign</span>&nbsp;= (<span id='identifier'>caLeftTop</span>, &nbsp;&nbsp;<span id='identifier'>caLeftCenter</span>, &nbsp;<span id='identifier'>caLeftBottom</span>,<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>caCenterTop</span>, <span id='identifier'>caCenter</span>, &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>caCenterBottom</span>,<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>caRightTop</span>, &nbsp;<span id='identifier'>caRightCenter</span>, <span id='identifier'>caRightBottom</span>);<br>
+                  <br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>IShellObj</span>.<img src="m.gif"><span id='identifier'>ShowContextMenu</span>&nbsp;(<span id='identifier'>parentWnd</span>&nbsp;: <span id='identifier'>cardinal</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="e.gif">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>x</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>integer</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= -<span id='number'>1</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="e.gif">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>y</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>integer</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= -<span id='number'>1</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="e.gif">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>align</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>TContextAlign</span>&nbsp;= <span id='identifier'>caLeftTop</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="e.gif">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>explore</span>&nbsp;&nbsp;&nbsp;: <span id='identifier'>boolean</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= <span id='identifier'>false</span>&nbsp;&nbsp;&nbsp;&nbsp;) : <span id='identifier'>boolean</span>;<br>
+                  <br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>IShellObj</span>.<img src="m.gif"><span id='identifier'>ExecContextItem</span>&nbsp;(<span id='identifier'>parentWnd</span>&nbsp;: <span id='identifier'>cardinal</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="e.gif">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>item</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='bold'>string</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= <span id='string'>''</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;) : <span id='identifier'>boolean</span>;<br>
+                  <br>
+                  <span id='comment'>// Examples:</span><br>
+                  <span id='bold'>with</span>&nbsp;<a class="pascal" href="#ShellObj">ShellObj</a>(<span id='identifier'>sfControlPanel</span>) <span id='bold'>do</span>&nbsp;<span id='bold'>begin</span><br>
+                  &nbsp;&nbsp;<span id='identifier'>ShowContextMenu</span>(<span id='identifier'>Application</span>.<span id='identifier'>Handle</span>); &nbsp;<span id='comment'>// shows the context menu of the control panel</span><br>
+                  &nbsp;&nbsp;<span id='identifier'>ExecContextItem</span>(<span id='identifier'>Application</span>.<span id='identifier'>Handle</span>); &nbsp;<span id='comment'>// opens the control panel in the Explorer</span><br>
+                  <span id='bold'>end</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IShellObj.NewShortCut"></a>
+    <p>If you want to create a new shortCut/shellLink, which links to the current
+       shell object, simply call the method "NewShortCut". You can enter a file
+       name for the new shortCut/shellLink right away, or later when calling
+       <a href="ShortCuts.htm#IShortCut.Save">IShortCut.Save</a>.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>IShellObj</span>.<img src="m.gif"><span id='identifier'>NewShortCut</span>&nbsp;(<span id='identifier'>shortCutFileName</span>: <span id='bold'>string</span>&nbsp;= <span id='string'>''</span>) : <a class="pascal" href="ShortCuts.htm#IShortCut">IShortCut</a>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IShellObj.LoadShortCut"></a>
+    <p>If the current shell object is a shortCut/shellLink (*.lnk or *.pif) file,
+       you can use the method "LoadShortCut" to load it into a new <a href="ShortCuts.htm#IShortCut">IShortCut</a>
+       object.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>IShellObj</span>.<img src="m.gif"><span id='identifier'>LoadShortCut</span>&nbsp;: <a class="pascal" href="ShortCuts.htm#IShortCut">IShortCut</a>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </body>
+
+</html>

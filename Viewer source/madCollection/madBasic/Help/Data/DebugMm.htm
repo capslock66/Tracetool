@@ -1,0 +1,247 @@
+<html>
+
+  <head>
+    <title>mad* Help...</title>
+    <meta name="description" content="mad* Help...">
+    <meta name="keywords" content="madshi, components, delphi">
+    <meta http-equiv="expires" content="900">
+    <link rel=stylesheet type="text/css" href="style.css">
+  </head>
+
+  <body background="bcklight.gif" bgcolor=#F8F8F8>
+    <table border=0 cellpadding=0 callspacing=0><tr>
+      <td valign=bottom>
+        <table border=0 cellpadding=0 cellspacing=0><tr><td bgcolor=#D8D8D8>
+          <table cellpadding=3 border=0>
+            <tr><td bgcolor=#FFFFF0>
+              <div id="verySmall"><br></div>
+              <div id="bigTitle">&nbsp;Debug Memory Manager&nbsp;</div>
+              <div id="verySmall"><br></div>
+              <div id="small">
+                <a class="small" href="Content.htm">Content</a> /
+                <a class="small" href="madExcept.htm">madExcept</a> /
+                <a class="small" href="madExceptSettings.htm">madExcept Settings</a> /
+                <a class="small" href="madExceptSettings1.htm">madExcept Settings (Tab 1)</a> /...
+              </div>
+            </td></tr>
+          </table>
+        </td></tr></table>
+      </td>
+      <td valign=bottom>
+        <table border=0 cellpadding=0 cellspacing=0><tr><td bgcolor=#D8D8D8>
+          <table cellpadding=7 border=0>
+            <tr><td bgcolor=#F4F4F8><a href="http://www.madshi.net">www.madshi.net</a></td></tr>
+          </table>
+        </td></tr></table>
+      </td>
+    </tr></table>
+    <h3>Introduction...</h3>
+    <p>The madExcept debug memory manager replaces the Delphi memory manager in
+    your exe/dll file, if you activate the "instantly crash on buffer over/underrun"
+    option. The debug memory manager has the purpose of raising exceptions
+    whenever your code does something really bad, like overrun oder underrun a
+    buffer, or accessing memory which was already freed. With a normal memory
+    manager, doing such things often has no direct consequence. Instead such bugs
+    in your code just modify random memory. Minutes or even hours later this
+    can result in wild crashes in a totally different part of your code, maybe even
+    in a different thread. Such wild crashes are extremely hard to fix because
+    even with the best information available about the wild crash, in the best case
+    all you can just find out is that some memory didn't have the content it was
+    supposed to have. That won't help you one bit finding out how the memory got
+    the wrong content. Having your code crash at once when a buffer
+    overrun/underrun is performed, or when your code accesses freed memory, helps a
+    lot here because the crash information will directly lead you to the buggy
+    code.</p>
+    <h3>Buffer overruns...</h3>
+    <p>First let's look at a couple of typical buffer overruns:</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>procedure</span>&nbsp;<span id='identifier'>OverrunExample1</span>;<br>
+                  <span id='bold'>var</span>&nbsp;<span id='identifier'>pc1</span>&nbsp;: <span id='identifier'>PAnsiChar</span>;<br>
+                  <span id='bold'>begin</span><br>
+                  &nbsp;&nbsp;<span id='identifier'>pc1</span>&nbsp;:= <span id='identifier'>AllocMem</span>(<span id='number'>4</span>);<br>
+                  &nbsp;&nbsp;<span id='identifier'>pc1</span>[<span id='number'>0</span>] := <span id='string'>'1'</span>;<br>
+                  &nbsp;&nbsp;<span id='identifier'>pc1</span>[<span id='number'>1</span>] := <span id='string'>'2'</span>;<br>
+                  &nbsp;&nbsp;<span id='identifier'>pc1</span>[<span id='number'>2</span>] := <span id='string'>'3'</span>;<br>
+                  &nbsp;&nbsp;<span id='identifier'>pc1</span>[<span id='number'>3</span>] := <span id='string'>'4'</span>;<br>
+                  &nbsp;&nbsp;<span id='identifier'>strlen</span>(<span id='identifier'>pc1</span>); &nbsp;<span id='comment'>// <- buffer overrun (read access)</span><br>
+                  &nbsp;&nbsp;[...]<br>
+                  <span id='bold'>end</span>;<br>
+                  <br>
+                  <span id='bold'>procedure</span>&nbsp;<span id='identifier'>OverrunExample2</span>;<br>
+                  <span id='bold'>var</span>&nbsp;<span id='identifier'>buf</span>&nbsp;: <span id='identifier'>PWideChar</span>;<br>
+                  <span id='bold'>begin</span><br>
+                  &nbsp;&nbsp;<span id='identifier'>GetMem</span>(<span id='identifier'>buf</span>, <span id='identifier'>MAX_PATH</span>); &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>// this should have been MAX_PATH * sizeOf(WideChar)</span><br>
+                  &nbsp;&nbsp;<span id='identifier'>GetModuleFileNameW</span>(<span id='number'>0</span>, <span id='identifier'>buf</span>, <span id='identifier'>MAX_PATH</span>); &nbsp;<span id='comment'>// <- buffer overrun (write access)</span><br>
+                  &nbsp;&nbsp;[...]<br>
+                  <span id='bold'>end</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <p>So what happens if you activate the "instantly crash on buffer overrun"
+    feature with code like the above? You'll get an access violation in the moment
+    when the first byte outside of the allocated buffer is read or written. The
+    crash stack trace will lead you directly to the code which needs to be fixed.
+    With a normal memory manager, there's a good chance all of the code above
+    would run through "fine", which would result in random memory being
+    overwritten.</p>
+    <h3>Buffer underruns...</h3>
+    <p>Buffer underruns are a lot rarer than overruns, but they do occur, too.
+    Here's how it could happen:</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>procedure</span>&nbsp;<span id='identifier'>UnderrunExample</span>(<span id='identifier'>str</span>: <span id='identifier'>PAnsiChar</span>; <span id='bold'>index</span>: <span id='identifier'>integer</span>); &nbsp;<span id='comment'>// index = -1</span><br>
+                  <span id='bold'>begin</span><br>
+                  &nbsp;&nbsp;<span id='identifier'>str</span>[<span id='bold'>index</span>] := <span id='string'>#0</span>; &nbsp;<span id='comment'>// <- buffer underrun (write access)</span><br>
+                  <span id='bold'>end</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <p>The madExcept debug memory manager cannot detect buffer overruns *and*
+    underruns at the same time, for technical reasons. You have to choose whether
+    you want exceptions to be raised for overruns or underruns.</p>
+    <h3>Accessing freed memory...</h3>
+    <p>Another dangerous thing to do is accessing memory which was already freed.
+    With a normal memory manager, the freed memory will usually still be
+    accessible because it's going to be reused for a future allocation. Modifying
+    already freed memory does not necessarily have to result in problems, depending
+    on whether the memory is already in use again by another allocation or not. If
+    the freed memory isn't reused yet, modifying its content won't harm. But if
+    the freed memory is already in use again by some other part of your code,
+    writing to it could destroy important data. Let's look at an example:</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>procedure</span>&nbsp;<span id='identifier'>AccessingFreedMemoryExample</span>;<br>
+                  <span id='bold'>var</span>&nbsp;<span id='identifier'>obj</span>&nbsp;: <span id='identifier'>TSomeObject</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>str</span>&nbsp;: <span id='bold'>string</span>;<br>
+                  <span id='bold'>begin</span><br>
+                  &nbsp;&nbsp;<span id='identifier'>obj</span>&nbsp;:= <span id='identifier'>TSomeObject</span>.<span id='identifier'>Create</span>;<br>
+                  &nbsp;&nbsp;<span id='identifier'>obj</span>.<span id='identifier'>SomeProperty</span>&nbsp;:= <span id='number'>100</span>;<br>
+                  &nbsp;&nbsp;<span id='identifier'>obj</span>.<span id='identifier'>Free</span>; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>// "obj" got freed here</span><br>
+                  &nbsp;&nbsp;<span id='identifier'>str</span>&nbsp;:= <span id='identifier'>IntToStr</span>(<span id='identifier'>something</span>); &nbsp;&nbsp;<span id='comment'>// the released memory might already be reused for the string allocation here</span><br>
+                  &nbsp;&nbsp;<span id='identifier'>obj</span>.<span id='identifier'>SomeProperty</span>&nbsp;:= <span id='number'>200</span>; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>// this might destroy the contents of the string</span><br>
+                  <span id='bold'>end</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <p>The debug memory manager will make sure that freed memory stays unaccessible
+    for a certain time. It will only be reused with a certain delay. So as a result
+    if you access a buffer/object/whatever which was already freed, you will get
+    an instant crash. The crash information is a bit more difficult to interpret,
+    compared to the buffer overruns/underruns, but it's still much better having
+    a crash point to "obj.SomeProperty := 200" than having that code overwrite
+    random memory, which could result in unpredictable behaviour of your program
+    some minutes later.</p>
+    <h3>Is this Access Violation a buffer overrun/underrun?</h3>
+    <p>In order to get an understanding of how the debug memory manager works,
+    let's first look at where buffers are typically allocated by the debug memory
+    manager. For overrun detection, buffers are allocated at the very end of a
+    memory page, but aligned to 4 bytes. For underrun detection, buffers are always
+    allocated at the very start of a memory page:</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='comment'>// with "instantly crash on buffer *overrun* activated":</span><br>
+                  <br>
+                  <span id='identifier'>GetMem</span>(<span id='number'>1</span>) &nbsp;&nbsp;&nbsp;-> &nbsp;<span id='identifier'>xxxxxFFC</span><br>
+                  <span id='identifier'>GetMem</span>(<span id='number'>4</span>) &nbsp;&nbsp;&nbsp;-> &nbsp;<span id='identifier'>xxxxxFFC</span><br>
+                  <span id='identifier'>GetMem</span>(<span id='number'>5</span>) &nbsp;&nbsp;&nbsp;-> &nbsp;<span id='identifier'>xxxxxFF8</span><br>
+                  <span id='identifier'>GetMem</span>(<span id='number'>$80</span>) &nbsp;-> &nbsp;<span id='identifier'>xxxxxF80</span><br>
+                  <br>
+                  <span id='comment'>// with "instantly crash on buffer *underrun* activated":</span><br>
+                  <br>
+                  <span id='identifier'>GetMem</span>(<span id='number'>1</span>) &nbsp;&nbsp;&nbsp;-> &nbsp;<span id='identifier'>xxxxx000</span><br>
+                  <span id='identifier'>GetMem</span>(<span id='number'>4</span>) &nbsp;&nbsp;&nbsp;-> &nbsp;<span id='identifier'>xxxxx000</span><br>
+                  <span id='identifier'>GetMem</span>(<span id='number'>5</span>) &nbsp;&nbsp;&nbsp;-> &nbsp;<span id='identifier'>xxxxx000</span><br>
+                  <span id='identifier'>GetMem</span>(<span id='number'>$80</span>) &nbsp;-> &nbsp;<span id='identifier'>xxxxx000</span>
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <p>Now let's look at a few AV messages and how to interpret them, when using
+    the debug memory manager:</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='string'>'Access violation at address xxxxxxxx in module "some.exe". Write of address xxxxx???'</span><br>
+                  <br>
+                  <span id='comment'>// with "instantly crash on buffer *overrun* activated":</span><br>
+                  <br>
+                  <span id='identifier'>xxxxx000</span>&nbsp;&nbsp;-> <span id='identifier'>probably</span>&nbsp;<span id='identifier'>a</span>&nbsp;<span id='identifier'>buffer</span>&nbsp;<span id='identifier'>overrun</span><br>
+                  <span id='identifier'>xxxxx004</span>&nbsp;&nbsp;-> <span id='identifier'>probably</span>&nbsp;<span id='identifier'>a</span>&nbsp;<span id='identifier'>buffer</span>&nbsp;<span id='identifier'>overrun</span><br>
+                  <span id='identifier'>xxxxxFF4</span>&nbsp;&nbsp;-> <span id='identifier'>probably</span>&nbsp;<span id='identifier'>accessing</span>&nbsp;<span id='identifier'>freed</span>&nbsp;<span id='identifier'>memory</span>; <span id='identifier'>buffer</span>&nbsp;<span id='identifier'>size</span>&nbsp;>= <span id='number'>$00C</span>&nbsp;<span id='identifier'>bytes</span><br>
+                  <span id='identifier'>xxxxxF80</span>&nbsp;&nbsp;-> <span id='identifier'>probably</span>&nbsp;<span id='identifier'>accessing</span>&nbsp;<span id='identifier'>freed</span>&nbsp;<span id='identifier'>memory</span>; <span id='identifier'>buffer</span>&nbsp;<span id='identifier'>size</span>&nbsp;>= <span id='number'>$080</span>&nbsp;<span id='identifier'>bytes</span><br>
+                  <span id='identifier'>xxxxx810</span>&nbsp;&nbsp;-> <span id='identifier'>probably</span>&nbsp;<span id='identifier'>accessing</span>&nbsp;<span id='identifier'>freed</span>&nbsp;<span id='identifier'>memory</span>; <span id='identifier'>buffer</span>&nbsp;<span id='identifier'>size</span>&nbsp;>= <span id='number'>$7F0</span>&nbsp;<span id='identifier'>bytes</span><br>
+                  <br>
+                  <span id='comment'>// with "instantly crash on buffer *underrun* activated":</span><br>
+                  <br>
+                  <span id='identifier'>xxxxxFFF</span>&nbsp;&nbsp;-> <span id='identifier'>probably</span>&nbsp;<span id='identifier'>a</span>&nbsp;<span id='identifier'>buffer</span>&nbsp;<span id='identifier'>underrun</span><br>
+                  <span id='identifier'>xxxxxFFC</span>&nbsp;&nbsp;-> <span id='identifier'>probably</span>&nbsp;<span id='identifier'>a</span>&nbsp;<span id='identifier'>buffer</span>&nbsp;<span id='identifier'>underrun</span><br>
+                  <span id='identifier'>xxxxx000</span>&nbsp;&nbsp;-> <span id='identifier'>probably</span>&nbsp;<span id='identifier'>accessing</span>&nbsp;<span id='identifier'>freed</span>&nbsp;<span id='identifier'>memory</span>; <span id='identifier'>buffer</span>&nbsp;<span id='identifier'>size</span>&nbsp;<span id='identifier'>unknown</span><br>
+                  <span id='identifier'>xxxxx040</span>&nbsp;&nbsp;-> <span id='identifier'>probably</span>&nbsp;<span id='identifier'>accessing</span>&nbsp;<span id='identifier'>freed</span>&nbsp;<span id='identifier'>memory</span>; <span id='identifier'>buffer</span>&nbsp;<span id='identifier'>size</span>&nbsp;> <span id='number'>$040</span>&nbsp;<span id='identifier'>bytes</span><br>
+                  <span id='identifier'>xxxxx138</span>&nbsp;&nbsp;-> <span id='identifier'>probably</span>&nbsp;<span id='identifier'>accessing</span>&nbsp;<span id='identifier'>freed</span>&nbsp;<span id='identifier'>memory</span>; <span id='identifier'>buffer</span>&nbsp;<span id='identifier'>size</span>&nbsp;> <span id='number'>$138</span>&nbsp;<span id='identifier'>bytes</span>
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <p>The debug memory manager has one significant shortcoming: Due to the way it
+    is designed, every allocation consumes at least one memory page (that is 4KB)
+    of RAM. Additionally, another memory page needs to be reserved (but not
+    allocated) for every allocation, so that buffer overruns/underruns really
+    produce a crash instead of accessing a different allocation. The reserved pages
+    don't consume RAM, but they do cost address space in your process.</p>
+    <p>So e.g. an "AllocMem(1)" call will consume 4KB of RAM and 8KB of address
+    space. The consumed RAM is actually less critical than the consumed memory
+    address space. If your application does a lot of allocations, you might sooner
+    or later run out of address space, no matter how much physical RAM your PC has
+    or how large your pagefile is. The debug memory manager will in that case
+    raise an "Out of memory" exception.</p>
+  </body>
+
+</html>

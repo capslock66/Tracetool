@@ -72,7 +72,7 @@ Hit ctrl - Alt - X to close it.
 
 # Client Api
 
-You can chose how to send trace to the viewer.
+You can chose how to send traces to the viewer.
 
 * Windows message (same computer). Don't work with Java, javascript / TypeScript, node and python
 * Socket connection (localhost or remote). Don't work with javascript / TypeSCript, node

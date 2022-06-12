@@ -1,0 +1,177 @@
+<html>
+
+  <head>
+    <title>mad* Help...</title>
+    <meta name="description" content="mad* Help...">
+    <meta name="keywords" content="madshi, components, delphi">
+    <meta http-equiv="expires" content="900">
+    <link rel=stylesheet type="text/css" href="style.css">
+  </head>
+
+  <body background="bcklight.gif" bgcolor=#F8F8F8>
+    <table border=0 cellpadding=0 callspacing=0><tr>
+      <td valign=bottom>
+        <table border=0 cellpadding=0 cellspacing=0><tr><td bgcolor=#D8D8D8>
+          <table cellpadding=3 border=0>
+            <tr><td bgcolor=#FFFFF0>
+              <div id="verySmall"><br></div>
+              <div id="bigTitle">&nbsp;madNVBitmap Unit&nbsp;</div>
+              <div id="verySmall"><br></div>
+              <div id="small">
+                <a class="small" href="Content.htm">Content</a> /
+                <a class="small" href="madExcept.htm">madExcept</a> /...
+              </div>
+            </td></tr>
+          </table>
+        </td></tr></table>
+      </td>
+      <td valign=bottom>
+        <table border=0 cellpadding=0 cellspacing=0><tr><td bgcolor=#D8D8D8>
+          <table cellpadding=7 border=0>
+            <tr><td bgcolor=#F4F4F8><a href="http://www.madshi.net">www.madshi.net</a></td></tr>
+          </table>
+        </td></tr></table>
+      </td>
+    </tr></table>
+    <p>Usually when dealing with bitmaps you're using "Graphics.pas".
+       <a href="madExcept.htm" href="madExceptUnit.htm">madExcept</a> doesn't use that, because that would mean linking all the
+       VCL stuff in. Furthermore "Graphics" doesn't support all the features which
+       <a href="madExcept.htm" href="madExceptUnit.htm">madExcept</a> needs. So I've decided to create a whole new unit which
+       implements exactly that part of functionality which I need for
+       <a href="madExcept.htm" href="madExceptUnit.htm">madExcept</a> without using any VCL units. The resulting unit is named
+       "madNVBitmap" ("NV" stands for "non VCL"). For a list of what's contained
+       in this unit please look at the <a href="madNVBitmapRef.htm">madNVBitmap Reference</a>.</p>
+    <a name="INVBitmap"></a>
+    <a name="LoadBitmap"></a>
+    <a name="ScreenShot"></a>
+    <p>All the functionality is available through the "INVBitmap" interface. There
+       are two ways to get an instance of this interface: You can either load a
+       bitmap from harddisk, or you can ask madNVBitmap to capture the current
+       screen content. Both "LoadBitmap" and "ScreenShot" return "nil", if they
+       fail.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>type</span><br>
+                  &nbsp;&nbsp;<span id='identifier'>INVBitmap</span>&nbsp;= <span id='bold'>interface</span>&nbsp;[<span id='string'>'{3EE757B5-CC56-4610-A917-E8731737D5BE}'</span>];<br>
+                  <br>
+                  <span id='comment'>// load a *.bmp file from harddisk</span><br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>LoadBitmap</span>&nbsp;(<span id='identifier'>bmpFile</span>: <span id='bold'>string</span>) : <span id='identifier'>INVBitmap</span>;<br>
+                  <br>
+                  <span id='comment'>// capture the current screen content</span><br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>ScreenShot</span>&nbsp;(<span id='identifier'>thisAppOnly</span>: <span id='identifier'>boolean</span>&nbsp;= <span id='identifier'>false</span>) : <span id='identifier'>INVBitmap</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="INVBitmap.Width"></a>
+    <a name="INVBitmap.Height"></a>
+    <p>Once you have a valid <a href="#INVBitmap">INVBitmap</a> instance, you can ask the width and
+       height of the encapsulated bitmap. The color depth is always "true color".</p>
+    <p></p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>INVBitmap</span>.<img src="r.gif"><span id='identifier'>Width</span>&nbsp;&nbsp;: <span id='identifier'>integer</span>;<br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>INVBitmap</span>.<img src="r.gif"><span id='identifier'>Height</span>&nbsp;: <span id='identifier'>integer</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="INVBitmap.Draw"></a>
+    <p>What is the main purpose of a bitmap? Of course to show/draw it somewhere:</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>INVBitmap</span>.<img src="m.gif"><span id='identifier'>Draw</span>&nbsp;(<span id='identifier'>dc</span>: <span id='identifier'>dword</span>; <span id='identifier'>x</span>, <span id='identifier'>y</span>: <span id='identifier'>integer</span>) : <span id='identifier'>boolean</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="INVBitmap.Zoom"></a>
+    <p>One nice functionality offered by madNVBitmap is smooth scaling of the
+       bitmap. The scaling uses the high quality "Mitchell" filter. Resizing is
+       always done in a way that doesn't change the aspect ratio of the original
+       bitmap. E.g. if you call "Zoom(32, 32)" on a 800x600 bitmap, then the
+       resulting bitmap will have a size of 32x24. Calling "Zoom" does not change
+       the current bitmap, instead is creates and returns a new <a href="#INVBitmap">INVBitmap</a>
+       instance for the resized bitmap.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>INVBitmap</span>.<img src="m.gif"><span id='identifier'>Zoom</span>&nbsp;(<span id='identifier'>width</span>, <span id='identifier'>height</span>: <span id='identifier'>integer</span>) : <span id='identifier'>INVBitmap</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="TPngFormat"></a>
+    <a name="INVBitmap.AsBmpStr"></a>
+    <a name="INVBitmap.AsPngStr"></a>
+    <a name="INVBitmap.SaveBmp"></a>
+    <a name="INVBitmap.SavePng"></a>
+    <p>Finally we can save our bitmap in either "bmp" or "png" format. When saving
+       in "png" format you can choose between some compression modes. Generally
+       you can either save in 16 gray shades or in 256 colors, or you can let
+       madNVBitmap decide for itself which mode to use, depending on how big the
+       resulting "png" file would get in either mode.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>type</span><br>
+                  &nbsp;&nbsp;<span id='identifier'>TPngFormat</span>&nbsp;= (<span id='identifier'>pf256Colors</span>, <span id='identifier'>pf16Grays</span>, <span id='identifier'>pf50kb</span>, <span id='identifier'>pf100kb</span>, <span id='identifier'>pf200kb</span>, <span id='identifier'>pf300kb</span>);<br>
+                  <br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>INVBitmap</span>.<img src="m.gif"><span id='identifier'>AsBmpStr</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='bold'>string</span>;<br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>INVBitmap</span>.<img src="m.gif"><span id='identifier'>AsPngStr</span>&nbsp;(<span id='identifier'>format</span>: <span id='identifier'>TPngFormat</span>&nbsp;= <span id='identifier'>pf256Colors</span>) : <span id='bold'>string</span>;<br>
+                  <br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>INVBitmap</span>.<img src="m.gif"><span id='identifier'>SaveBmp</span>&nbsp;(<span id='identifier'>bmpFile</span>: <span id='identifier'>UnicodeString</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;) : <span id='identifier'>boolean</span>;<br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>INVBitmap</span>.<img src="m.gif"><span id='identifier'>SavePng</span>&nbsp;(<span id='identifier'>pngFile</span>: <span id='identifier'>UnicodeString</span>; <span id='identifier'>format</span>: <span id='identifier'>TPngFormat</span>&nbsp;= <span id='identifier'>pf256Colors</span>) : <span id='identifier'>boolean</span>;<br>
+                  <br>
+                  <span id='comment'>// Example:</span><br>
+                  <span id='identifier'>ScreenShot</span>.<span id='identifier'>SavePng</span>(<span id='string'>'C:\ScreenShot.png'</span>);
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </body>
+
+</html>

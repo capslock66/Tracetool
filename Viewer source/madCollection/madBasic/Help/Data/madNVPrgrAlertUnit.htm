@@ -1,0 +1,222 @@
+<html>
+
+  <head>
+    <title>mad* Help...</title>
+    <meta name="description" content="mad* Help...">
+    <meta name="keywords" content="madshi, components, delphi">
+    <meta http-equiv="expires" content="900">
+    <link rel=stylesheet type="text/css" href="style.css">
+  </head>
+
+  <body background="bcklight.gif" bgcolor=#F8F8F8>
+    <table border=0 cellpadding=0 callspacing=0><tr>
+      <td valign=bottom>
+        <table border=0 cellpadding=0 cellspacing=0><tr><td bgcolor=#D8D8D8>
+          <table cellpadding=3 border=0>
+            <tr><td bgcolor=#FFFFF0>
+              <div id="verySmall"><br></div>
+              <div id="bigTitle">&nbsp;madNVPrgrAlert Unit&nbsp;</div>
+              <div id="verySmall"><br></div>
+              <div id="small">
+                <a class="small" href="Content.htm">Content</a> /
+                <a class="small" href="madExcept.htm">madExcept</a> /...
+              </div>
+            </td></tr>
+          </table>
+        </td></tr></table>
+      </td>
+      <td valign=bottom>
+        <table border=0 cellpadding=0 cellspacing=0><tr><td bgcolor=#D8D8D8>
+          <table cellpadding=7 border=0>
+            <tr><td bgcolor=#F4F4F8><a href="http://www.madshi.net">www.madshi.net</a></td></tr>
+          </table>
+        </td></tr></table>
+      </td>
+    </tr></table>
+    <p>In some situations <a href="madExcept.htm" href="madExceptUnit.htm">madExcept</a> needs to show a progress bar. Since that
+       often happens to be in the context of secondary threads, the progress bar
+       window has to be thread safe. The unit "madNVPrgrAlert" simply implements a
+       nice little thread safe progress bar window.</p>
+    <a name="IProgressAlert"></a>
+    <a name="NewProgressAlert"></a>
+    <p>The progress bar window is represented by an interface named
+       "IProgressAlert". You can create a new progress bar by calling
+       "NewProgressAlert", which returns an instance of the mentioned interface.
+       Optionally you can specify a module handle and resource name for a 32x32
+       sized bitmap (must have a color depth of 32 bits per pixel including an
+       8 bit alpha channel), which will then be shown in the progress window.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>type</span><br>
+                  &nbsp;&nbsp;<span id='identifier'>IProgressAlert</span>&nbsp;= <span id='bold'>interface</span>&nbsp;[<span id='string'>'{45B8448C-47B8-4F1C-886E-95ED5FD41E5F}'</span>];<br>
+                  <br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>NewProgressAlert</span>&nbsp;(<span id='identifier'>title</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='bold'>string</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>bmpModule</span>&nbsp;: <span id='identifier'>dword</span>&nbsp;&nbsp;= <span id='number'>0</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>bmpName</span>&nbsp;&nbsp;&nbsp;: <span id='bold'>string</span>&nbsp;= <span id='string'>''</span>) : <span id='identifier'>IProgressAlert</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IProgressAlert.AddArea"></a>
+    <p>Before really using the progress alert you should set up the progress bar
+       properties. This works by specifying the progress areas which you plan to
+       run through later. E.g. if you want to copy 10 files, you could set up one
+       progress area for each file. Generally please set up all progress areas,
+       before you even show the window. That makes sure that the size of the
+       window is correctly set up, so that all area texts can be written in it
+       without needing a resize.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='comment'>// step 1: setup all progress areas</span><br>
+                  <span id='bold'>procedure</span>&nbsp;<span id='identifier'>IProgressAlert</span>.<img src="m.gif"><span id='identifier'>AddArea</span>&nbsp;(<span id='identifier'>weight</span>: <span id='identifier'>int64</span>; <span id='identifier'>text</span>: <span id='bold'>string</span>&nbsp;= <span id='string'>''</span>);
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IProgressAlert.Show"></a>
+    <p>When the progress areas are all setup correctly, you can finally show the
+       progress bar window:</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='comment'>// step 2: show the progress alert</span><br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>IProgressAlert</span>.<img src="m.gif"><span id='identifier'>Show</span>&nbsp;(<span id='identifier'>parentWindow</span>: <span id='identifier'>dword</span>&nbsp;= <span id='number'>0</span>; <span id='identifier'>activate</span>: <span id='identifier'>boolean</span>&nbsp;= <span id='identifier'>true</span>) : <span id='identifier'>boolean</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IProgressAlert.Position"></a>
+    <a name="IProgressAlert.AreaDone"></a>
+    <a name="IProgressAlert.ProcessMessages"></a>
+    <p>Each area always goes from 0 to 1000. So let's say the first file which you
+       want to copy is 10000 bytes long. In that case you should move the progress
+       bar by 1 every 10 bytes you've copied. If you're doing time consuming stuff,
+       you might want to call the "ProcessMessages" method from time to time, so
+       that the progress bar window still redraws correctly. After each progress
+       area is through, call "AreaDone" to enter the next area.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='comment'>// step 3: update the progress bar position & loop through the progress areas</span><br>
+                  <span id='bold'>property</span>&nbsp;&nbsp;<span id='identifier'>IProgressAlert</span>.<img src="w.gif"><span id='identifier'>Position</span>&nbsp;: <span id='identifier'>integer</span>;<br>
+                  <span id='bold'>procedure</span>&nbsp;<span id='identifier'>IProgressAlert</span>.<img src="m.gif"><span id='identifier'>ProcessMessages</span>;<br>
+                  <span id='bold'>procedure</span>&nbsp;<span id='identifier'>IProgressAlert</span>.<img src="m.gif"><span id='identifier'>AreaDone</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IProgressAlert.Close"></a>
+    <p>When everything is done, you can close the progress bar window. This is
+       automatically done when the "IProgressAlert" interface is destroyed.
+       However, if you don't want to rely on Delphi's interface reference counting
+       mechanism, you can manually close the window.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='comment'>// step 4: closing the progress bar window</span><br>
+                  <span id='bold'>procedure</span>&nbsp;<span id='identifier'>IProgressAlert</span>.<img src="m.gif"><span id='identifier'>Close</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IProgressAlert.Title"></a>
+    <a name="IProgressAlert.CurrentArea"></a>
+    <a name="IProgressAlert.ClearAreas"></a>
+    <p>There are some more properties and methods, which you can use, if you like.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>property</span>&nbsp;&nbsp;<span id='identifier'>IProgressAlert</span>.<img src="w.gif"><span id='identifier'>Title</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='bold'>string</span>; &nbsp;&nbsp;<span id='comment'>// progress bar window title</span><br>
+                  <span id='bold'>property</span>&nbsp;&nbsp;<span id='identifier'>IProgressAlert</span>.<img src="w.gif"><span id='identifier'>CurrentArea</span>&nbsp;: <span id='identifier'>integer</span>; &nbsp;<span id='comment'>// which progress area are we currently in?</span><br>
+                  <span id='bold'>procedure</span>&nbsp;<span id='identifier'>IProgressAlert</span>.<img src="m.gif"><span id='identifier'>ClearAreas</span>; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>// delete all progress areas</span>
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <p>To make things more clear, here's a full little example for you:</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='comment'>// Example:</span><br>
+                  <br>
+                  <span id='bold'>var</span>&nbsp;<span id='identifier'>i1</span>, <span id='identifier'>i2</span>&nbsp;: <span id='identifier'>integer</span>;<br>
+                  <span id='bold'>begin</span><br>
+                  &nbsp;&nbsp;<span id='bold'>with</span>&nbsp;<span id='identifier'>NewProgressAlert</span>(<span id='string'>'Progress window title...'</span>) <span id='bold'>do</span>&nbsp;<span id='bold'>begin</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>AddArea</span>(<span id='number'>1000</span>, <span id='string'>'This is the first progress area.'</span>);<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>AddArea</span>(<span id='number'>2000</span>, <span id='string'>'The 2nd area is more time consuming...'</span>);<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>Show</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='bold'>for</span>&nbsp;<span id='identifier'>i1</span>&nbsp;:= <span id='number'>1</span>&nbsp;<span id='bold'>to</span>&nbsp;<span id='number'>2</span>&nbsp;<span id='bold'>do</span>&nbsp;<span id='bold'>begin</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='bold'>for</span>&nbsp;<span id='identifier'>i2</span>&nbsp;:= <span id='number'>1</span>&nbsp;<span id='bold'>to</span>&nbsp;<span id='number'>100</span>&nbsp;<span id='bold'>do</span>&nbsp;<span id='bold'>begin</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>Sleep</span>(<span id='number'>10</span>&nbsp;* <span id='identifier'>i1</span>);<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>Position</span>&nbsp;:= <span id='identifier'>i2</span>&nbsp;* <span id='number'>10</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>ProcessMessages</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='bold'>end</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>AreaDone</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='bold'>end</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>Close</span>;<br>
+                  &nbsp;&nbsp;<span id='bold'>end</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </body>
+
+</html>

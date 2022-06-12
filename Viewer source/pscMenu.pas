@@ -10,7 +10,7 @@ unit PSCMenu;
 interface
 
 uses
-  Windows, Messages, SysUtils, Classes, Graphics, Controls, ComCtrls,  Forms,
+  system.UITypes, Windows, Messages, SysUtils, Classes, Graphics, Controls, ComCtrls,  Forms,
   Menus,  StdCtrls, Commctrl  ;
 
 type

@@ -124,6 +124,8 @@ object Frm_Tool: TFrm_Tool
   end
   object MainMenu: TMainMenu
     Images = ilActions
+    Left = 16
+    Top = 8
     object mnuFile: TMenuItem
       Caption = '&File'
       object N1: TMenuItem
@@ -165,10 +167,6 @@ object Frm_Tool: TFrm_Tool
       object StayonTop1: TMenuItem
         Action = actViewStayOnTop
       end
-      object actDepends: TMenuItem
-        Caption = 'Dependency'
-        OnClick = actDependsClick
-      end
       object Options1: TMenuItem
         Action = actOptions
       end
@@ -181,10 +179,10 @@ object Frm_Tool: TFrm_Tool
     end
   end
   object ilActions: TImageList
-    Left = 176
-    Top = 104
+    Left = 160
+    Top = 8
     Bitmap = {
-      494C01012A002C00300010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
+      494C01012A002C00040010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
       000000000000360000002800000040000000B0000000010020000000000000B0
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
@@ -1645,8 +1643,8 @@ object Frm_Tool: TFrm_Tool
   end
   object Actions: TActionList
     Images = ilActions
-    Left = 96
-    Top = 104
+    Left = 80
+    Top = 8
     object actViewMainTraces: TAction
       Category = 'Win'
       Caption = '&Show Main Traces'
@@ -1694,6 +1692,12 @@ object Frm_Tool: TFrm_Tool
       ImageIndex = 13
       OnExecute = actShowExecute
     end
+    object actShowOnMain: TAction
+      Category = 'Win'
+      Caption = '&Show on main screen'
+      ImageIndex = 13
+      OnExecute = actShowOnMainExecute
+    end
     object actHide: TAction
       Category = 'File'
       Caption = '&Hide Application'
@@ -1739,8 +1743,13 @@ object Frm_Tool: TFrm_Tool
       Left = 539
       Top = 303
     end
+    object Showat001: TMenuItem
+      Action = actShowOnMain
+    end
     object mitTrayShutdown: TMenuItem
       Action = actShutdown
+      Caption = '&Exit Tracetool'
+      Hint = 'Exit Tracetool'
       Left = 519
       Top = 283
     end
@@ -1751,7 +1760,7 @@ object Frm_Tool: TFrm_Tool
     Left = 24
     Top = 168
     Bitmap = {
-      494C010119001B00300010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
+      494C010119001B00240010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000400000007000000001002000000000000070
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
@@ -2722,7 +2731,7 @@ object Frm_Tool: TFrm_Tool
     Left = 96
     Top = 232
     Bitmap = {
-      494C01010D000F00300010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
+      494C01010D000F00040010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000400000004000000001002000000000000040
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000

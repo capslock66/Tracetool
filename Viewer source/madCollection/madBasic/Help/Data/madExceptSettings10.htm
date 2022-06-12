@@ -1,0 +1,137 @@
+<html>
+
+  <head>
+    <title>mad* Help...</title>
+    <meta name="description" content="mad* Help...">
+    <meta name="keywords" content="madshi, components, delphi">
+    <meta http-equiv="expires" content="900">
+    <link rel=stylesheet type="text/css" href="style.css">
+  </head>
+
+  <body background="bcklight.gif" bgcolor=#F8F8F8>
+    <table border=0 cellpadding=0 callspacing=0><tr>
+      <td valign=bottom>
+        <table border=0 cellpadding=0 cellspacing=0><tr><td bgcolor=#D8D8D8>
+          <table cellpadding=3 border=0>
+            <tr><td bgcolor=#FFFFF0>
+              <div id="verySmall"><br></div>
+              <div id="bigTitle">&nbsp;madExcept Settings (Tab 10)&nbsp;</div>
+              <div id="verySmall"><br></div>
+              <div id="small">
+                <a class="small" href="Content.htm">Content</a> /
+                <a class="small" href="madExcept.htm">madExcept</a> /
+                <a class="small" href="madExceptSettings.htm">madExcept Settings</a> /...
+              </div>
+            </td></tr>
+          </table>
+        </td></tr></table>
+      </td>
+      <td valign=bottom>
+        <table border=0 cellpadding=0 cellspacing=0><tr><td bgcolor=#D8D8D8>
+          <table cellpadding=7 border=0>
+            <tr><td bgcolor=#F4F4F8><a href="http://www.madshi.net">www.madshi.net</a></td></tr>
+          </table>
+        </td></tr></table>
+      </td>
+    </tr></table>
+    <map name="SettingsMap">
+    <area shape="rect" coords="14,72,135,113" href="madExceptSettings1.htm" onMouseover="document.images[0].src='mes-ss40.gif'" onMouseout="document.images[0].src='mes-ss49.gif'">
+    <area shape="rect" coords="14,114,135,155" href="madExceptSettings2.htm" onMouseover="document.images[0].src='mes-ss41.gif'" onMouseout="document.images[0].src='mes-ss49.gif'">
+    <area shape="rect" coords="14,156,135,197" href="madExceptSettings3.htm" onMouseover="document.images[0].src='mes-ss42.gif'" onMouseout="document.images[0].src='mes-ss49.gif'">
+    <area shape="rect" coords="14,198,135,239" href="madExceptSettings4.htm" onMouseover="document.images[0].src='mes-ss43.gif'" onMouseout="document.images[0].src='mes-ss49.gif'">
+    <area shape="rect" coords="14,240,135,281" href="madExceptSettings5a.htm" onMouseover="document.images[0].src='mes-ss44a.gif'" onMouseout="document.images[0].src='mes-ss49.gif'">
+    <area shape="rect" coords="14,282,135,323" href="madExceptSettings6.htm" onMouseover="document.images[0].src='mes-ss45.gif'" onMouseout="document.images[0].src='mes-ss49.gif'">
+    <area shape="rect" coords="14,324,135,365" href="madExceptSettings7.htm" onMouseover="document.images[0].src='mes-ss46.gif'" onMouseout="document.images[0].src='mes-ss49.gif'">
+    <area shape="rect" coords="14,366,135,407" href="madExceptSettings8.htm" onMouseover="document.images[0].src='mes-ss47.gif'" onMouseout="document.images[0].src='mes-ss49.gif'">
+    <area shape="rect" coords="14,408,135,449" href="madExceptSettings9.htm" onMouseover="document.images[0].src='mes-ss48.gif'" onMouseout="document.images[0].src='mes-ss49.gif'">
+    </map>
+    <p>You can click on the tabs in the left side of the image:</p>
+    <p><img src='mes-ss49.gif' border=0 usemap="#SettingsMap" align=left style="margin-right:10pt;margin-bottom:10pt"></p>
+    <h3>custom strings...</h3>
+    <p>All those strings which <a href="madExcept.htm" href="madExceptUnit.htm">madExcept</a> might show to the end user at one
+       time or the other can be adjusted on this settings page. Line breaks are
+       basically allowed, although in some cases they are not appropriate (e.g. for
+       the mail subject line).</p>
+    <p>The strings are saved into your executable file. If you're using translation
+       components/tools to compile your project for multiple languages, that
+       translation tool should be able to automatically translate the
+       <a href="madExcept.htm" href="madExceptUnit.htm">madExcept</a> strings for you.</p>
+    <p>There are several special variables supported, which you can use in the
+       strings, and which will automatically be replaced at runtime by
+       <a href="madExcept.htm" href="madExceptUnit.htm">madExcept</a>. Here's a list of the currently supported variables:</p>
+    <table border="0"><tr><td>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=7 border=0>
+            <tr bgcolor=#6060B0>
+              <td id='linkTitle' align=left><nobr>variable</nobr></td>
+              <td id='linkTitle' align=left width=100%>example</td>
+            </tr>
+            <tr align=center>
+              <td valign=top align=left bgcolor=#F8F0F0><nobr>%appname%</nobr></td>
+              <td valign=top align=left bgcolor=#F4F4F8 width=100%>"Project1.exe"</td>
+            </tr>
+            <tr align=center>
+              <td valign=top align=left bgcolor=#F4F4F8><nobr>%modname%</nobr></td>
+              <td valign=top align=left bgcolor=#F8F0F0 width=100%>"Project2.dll"</td>
+            </tr>
+            <tr align=center>
+              <td valign=top align=left bgcolor=#F8F0F0><nobr>%appversion%</nobr></td>
+              <td valign=top align=left bgcolor=#F4F4F8 width=100%>"1.5.2.2"</td>
+            </tr>
+            <tr align=center>
+              <td valign=top align=left bgcolor=#F4F4F8><nobr>%modversion%</nobr></td>
+              <td valign=top align=left bgcolor=#F8F0F0 width=100%>"1.1.0.0"</td>
+            </tr>
+            <tr align=center>
+              <td valign=top align=left bgcolor=#F8F0F0><nobr>%exceptClass%</nobr></td>
+              <td valign=top align=left bgcolor=#F4F4F8 width=100%>"EInvalidPointer"</td>
+            </tr>
+            <tr align=center>
+              <td valign=top align=left bgcolor=#F4F4F8><nobr>%exceptMsg%</nobr></td>
+              <td valign=top align=left bgcolor=#F8F0F0 width=100%>"Invalid pointer operation."</td>
+            </tr>
+            <tr align=center>
+              <td valign=top align=left bgcolor=#F8F0F0><nobr>%bugReport%</nobr></td>
+              <td valign=top align=left bgcolor=#F4F4F8 width=100%>(full bug report text)</td>
+            </tr>
+            <tr align=center>
+              <td valign=top align=left bgcolor=#F4F4F8><nobr>%errorDetails%</nobr></td>
+              <td valign=top align=left bgcolor=#F8F0F0 width=100%>(user entered data from DetailsForm)</td>
+            </tr>
+            <tr align=center>
+              <td valign=top align=left bgcolor=#F8F0F0><nobr>%lf%</nobr></td>
+              <td valign=top align=left bgcolor=#F4F4F8 width=100%>(line break)</td>
+            </tr>
+            <tr align=center>
+              <td valign=top align=left bgcolor=#F4F4F8><nobr>%date%</nobr></td>
+              <td valign=top align=left bgcolor=#F8F0F0 width=100%>"2008-01-10"</td>
+            </tr>
+            <tr align=center>
+              <td valign=top align=left bgcolor=#F8F0F0><nobr>%time%</nobr></td>
+              <td valign=top align=left bgcolor=#F4F4F8 width=100%>"12:01:59, 100ms"</td>
+            </tr>
+            <tr align=center>
+              <td valign=top align=left bgcolor=#F4F4F8><nobr>%datetime%</nobr></td>
+              <td valign=top align=left bgcolor=#F8F0F0 width=100%>"2008-01-10, 12:01:59, 100ms"</td>
+            </tr>
+            <tr align=center>
+              <td valign=top align=left bgcolor=#F8F0F0><nobr>%userappdata%</nobr></td>
+              <td valign=top align=left bgcolor=#F4F4F8 width=100%>"C:\Documents and Settings\Current User\Application Data"</td>
+            </tr>
+            <tr align=center>
+              <td valign=top align=left bgcolor=#F4F4F8><nobr>%commonappdata%</nobr></td>
+              <td valign=top align=left bgcolor=#F8F0F0 width=100%>"C:\Documents and Settings\All Users\Application Data"</td>
+            </tr>
+            <tr align=center>
+              <td valign=top align=left bgcolor=#F8F0F0><nobr>%desktop%</nobr></td>
+              <td valign=top align=left bgcolor=#F4F4F8 width=100%>"C:\Users\User Name\Desktop"</td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    </td></tr></ta  </body>
+
+</html>

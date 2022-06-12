@@ -2,7 +2,6 @@ object FileViewerChild: TFileViewerChild
   Left = 552
   Top = 323
   ActiveControl = DependencyTreeView
-  AutoScroll = False
   Caption = 'FileViewerChild'
   ClientHeight = 354
   ClientWidth = 576

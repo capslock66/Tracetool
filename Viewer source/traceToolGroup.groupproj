@@ -1,60 +1,84 @@
-﻿	<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-		<PropertyGroup>
-			<ProjectGuid>{1266F99F-AAB3-4C7C-9739-D95B52C32146}</ProjectGuid>
-		</PropertyGroup>
-		<ItemGroup>
-			<Projects Include="..\ActiveX\Delphi ActiveX Demo\TraceToolActivexDemo.dproj">
-				<Dependencies/>
-			</Projects>
-			<Projects Include="TraceTool.dproj">
-				<Dependencies/>
-			</Projects>
-			<Projects Include="..\Delphi\Demo 2009\DelphiDemo.dproj">
-				<Dependencies/>
-			</Projects>
-		</ItemGroup>
-		<ProjectExtensions>
-			<Borland.Personality>Default.Personality.12</Borland.Personality>
-			<Borland.ProjectType/>
-			<BorlandProject>
-				<Default.Personality/>
-			</BorlandProject>
-		</ProjectExtensions>
-		<Target Name="TraceToolActivexDemo">
-			<MSBuild Projects="..\ActiveX\Delphi ActiveX Demo\TraceToolActivexDemo.dproj"/>
-		</Target>
-		<Target Name="TraceToolActivexDemo:Clean">
-			<MSBuild Projects="..\ActiveX\Delphi ActiveX Demo\TraceToolActivexDemo.dproj" Targets="Clean"/>
-		</Target>
-		<Target Name="TraceToolActivexDemo:Make">
-			<MSBuild Projects="..\ActiveX\Delphi ActiveX Demo\TraceToolActivexDemo.dproj" Targets="Make"/>
-		</Target>
-		<Target Name="TraceTool">
-			<MSBuild Projects="TraceTool.dproj"/>
-		</Target>
-		<Target Name="TraceTool:Clean">
-			<MSBuild Projects="TraceTool.dproj" Targets="Clean"/>
-		</Target>
-		<Target Name="TraceTool:Make">
-			<MSBuild Projects="TraceTool.dproj" Targets="Make"/>
-		</Target>
-		<Target Name="DelphiDemo">
-			<MSBuild Projects="..\Delphi\Demo 2009\DelphiDemo.dproj"/>
-		</Target>
-		<Target Name="DelphiDemo:Clean">
-			<MSBuild Projects="..\Delphi\Demo 2009\DelphiDemo.dproj" Targets="Clean"/>
-		</Target>
-		<Target Name="DelphiDemo:Make">
-			<MSBuild Projects="..\Delphi\Demo 2009\DelphiDemo.dproj" Targets="Make"/>
-		</Target>
-		<Target Name="Build">
-			<CallTarget Targets="TraceToolActivexDemo;TraceTool;DelphiDemo"/>
-		</Target>
-		<Target Name="Clean">
-			<CallTarget Targets="TraceToolActivexDemo:Clean;TraceTool:Clean;DelphiDemo:Clean"/>
-		</Target>
-		<Target Name="Make">
-			<CallTarget Targets="TraceToolActivexDemo:Make;TraceTool:Make;DelphiDemo:Make"/>
-		</Target>
-		<Import Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')" Project="$(BDS)\Bin\CodeGear.Group.Targets"/>
-	</Project>
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <PropertyGroup>
+        <ProjectGuid>{1266F99F-AAB3-4C7C-9739-D95B52C32146}</ProjectGuid>
+    </PropertyGroup>
+    <ItemGroup>
+        <Projects Include="..\ActiveX\Delphi ActiveX Demo\TraceToolActivexDemo_10.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="TraceTool.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="..\Delphi\Demo 2009\DelphiDemo_10.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="FastMM5\Demos\Memory Manager Sharing\Statically Linked DLL\TestLibrary.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="FastMM5\Demos\Memory Manager Sharing\Statically Linked DLL\TestApp.dproj">
+            <Dependencies/>
+        </Projects>
+    </ItemGroup>
+    <ProjectExtensions>
+        <Borland.Personality>Default.Personality.12</Borland.Personality>
+        <Borland.ProjectType/>
+        <BorlandProject>
+            <Default.Personality/>
+        </BorlandProject>
+    </ProjectExtensions>
+    <Target Name="TraceToolActivexDemo_10">
+        <MSBuild Projects="..\ActiveX\Delphi ActiveX Demo\TraceToolActivexDemo_10.dproj"/>
+    </Target>
+    <Target Name="TraceToolActivexDemo_10:Clean">
+        <MSBuild Projects="..\ActiveX\Delphi ActiveX Demo\TraceToolActivexDemo_10.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="TraceToolActivexDemo_10:Make">
+        <MSBuild Projects="..\ActiveX\Delphi ActiveX Demo\TraceToolActivexDemo_10.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="TraceTool">
+        <MSBuild Projects="TraceTool.dproj"/>
+    </Target>
+    <Target Name="TraceTool:Clean">
+        <MSBuild Projects="TraceTool.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="TraceTool:Make">
+        <MSBuild Projects="TraceTool.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="DelphiDemo_10">
+        <MSBuild Projects="..\Delphi\Demo 2009\DelphiDemo_10.dproj"/>
+    </Target>
+    <Target Name="DelphiDemo_10:Clean">
+        <MSBuild Projects="..\Delphi\Demo 2009\DelphiDemo_10.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="DelphiDemo_10:Make">
+        <MSBuild Projects="..\Delphi\Demo 2009\DelphiDemo_10.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="TestLibrary">
+        <MSBuild Projects="FastMM5\Demos\Memory Manager Sharing\Statically Linked DLL\TestLibrary.dproj"/>
+    </Target>
+    <Target Name="TestLibrary:Clean">
+        <MSBuild Projects="FastMM5\Demos\Memory Manager Sharing\Statically Linked DLL\TestLibrary.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="TestLibrary:Make">
+        <MSBuild Projects="FastMM5\Demos\Memory Manager Sharing\Statically Linked DLL\TestLibrary.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="TestApp">
+        <MSBuild Projects="FastMM5\Demos\Memory Manager Sharing\Statically Linked DLL\TestApp.dproj"/>
+    </Target>
+    <Target Name="TestApp:Clean">
+        <MSBuild Projects="FastMM5\Demos\Memory Manager Sharing\Statically Linked DLL\TestApp.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="TestApp:Make">
+        <MSBuild Projects="FastMM5\Demos\Memory Manager Sharing\Statically Linked DLL\TestApp.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="Build">
+        <CallTarget Targets="TraceToolActivexDemo_10;TraceTool_10;DelphiDemo_10;TestLibrary;TestApp"/>
+    </Target>
+    <Target Name="Clean">
+        <CallTarget Targets="TraceToolActivexDemo_10:Clean;TraceTool_10:Clean;DelphiDemo_10:Clean;TestLibrary:Clean;TestApp:Clean"/>
+    </Target>
+    <Target Name="Make">
+        <CallTarget Targets="TraceToolActivexDemo_10:Make;TraceTool_10:Make;DelphiDemo_10:Make;TestLibrary:Make;TestApp:Make"/>
+    </Target>
+    <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
+</Project>

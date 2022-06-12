@@ -45,6 +45,8 @@ type
     procedure VstDetailBeforeCellPaint(Sender: TBaseVirtualTree;
       TargetCanvas: TCanvas; Node: PVirtualNode; Column: TColumnIndex;
       CellPaintMode: TVTCellPaintMode; CellRect: TRect; var ContentRect: TRect);
+    procedure VstDetailEditing(Sender: TBaseVirtualTree; Node: PVirtualNode;
+      Column: TColumnIndex; var Allowed: Boolean);
   private
     procedure WMStartEditingMember(var Message: TMessage); message WM_STARTEDITING_MEMBER;
   public
@@ -191,6 +193,12 @@ end;
 procedure Tframe_Classic.VstDetailEdited(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex);
 begin
    VstDetail.TreeOptions.MiscOptions := VstDetail.TreeOptions.MiscOptions - [toEditable] ;
+end;
+
+procedure Tframe_Classic.VstDetailEditing(Sender: TBaseVirtualTree;
+  Node: PVirtualNode; Column: TColumnIndex; var Allowed: Boolean);
+begin
+   allowed := true;
 end;
 
 //------------------------------------------------------------------------------

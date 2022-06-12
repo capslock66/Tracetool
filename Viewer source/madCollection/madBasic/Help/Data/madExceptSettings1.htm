@@ -1,0 +1,148 @@
+<html>
+
+  <head>
+    <title>mad* Help...</title>
+    <meta name="description" content="mad* Help...">
+    <meta name="keywords" content="madshi, components, delphi">
+    <meta http-equiv="expires" content="900">
+    <link rel=stylesheet type="text/css" href="style.css">
+  </head>
+
+  <body background="bcklight.gif" bgcolor=#F8F8F8>
+    <table border=0 cellpadding=0 callspacing=0><tr>
+      <td valign=bottom>
+        <table border=0 cellpadding=0 cellspacing=0><tr><td bgcolor=#D8D8D8>
+          <table cellpadding=3 border=0>
+            <tr><td bgcolor=#FFFFF0>
+              <div id="verySmall"><br></div>
+              <div id="bigTitle">&nbsp;madExcept Settings (Tab 1)&nbsp;</div>
+              <div id="verySmall"><br></div>
+              <div id="small">
+                <a class="small" href="Content.htm">Content</a> /
+                <a class="small" href="madExcept.htm">madExcept</a> /
+                <a class="small" href="madExceptSettings.htm">madExcept Settings</a> /...
+              </div>
+            </td></tr>
+          </table>
+        </td></tr></table>
+      </td>
+      <td valign=bottom>
+        <table border=0 cellpadding=0 cellspacing=0><tr><td bgcolor=#D8D8D8>
+          <table cellpadding=7 border=0>
+            <tr><td bgcolor=#F4F4F8><a href="http://www.madshi.net">www.madshi.net</a></td></tr>
+          </table>
+        </td></tr></table>
+      </td>
+    </tr></table>
+    <map name="SettingsMap">
+    <area shape="rect" coords="14,114,135,155" href="madExceptSettings2.htm" onMouseover="document.images[0].src='mes-ss41.gif'" onMouseout="document.images[0].src='mes-ss40.gif'">
+    <area shape="rect" coords="14,156,135,197" href="madExceptSettings3.htm" onMouseover="document.images[0].src='mes-ss42.gif'" onMouseout="document.images[0].src='mes-ss40.gif'">
+    <area shape="rect" coords="14,198,135,239" href="madExceptSettings4.htm" onMouseover="document.images[0].src='mes-ss43.gif'" onMouseout="document.images[0].src='mes-ss40.gif'">
+    <area shape="rect" coords="14,240,135,281" href="madExceptSettings5a.htm" onMouseover="document.images[0].src='mes-ss44a.gif'" onMouseout="document.images[0].src='mes-ss40.gif'">
+    <area shape="rect" coords="14,282,135,323" href="madExceptSettings6.htm" onMouseover="document.images[0].src='mes-ss45.gif'" onMouseout="document.images[0].src='mes-ss40.gif'">
+    <area shape="rect" coords="14,324,135,365" href="madExceptSettings7.htm" onMouseover="document.images[0].src='mes-ss46.gif'" onMouseout="document.images[0].src='mes-ss40.gif'">
+    <area shape="rect" coords="14,366,135,407" href="madExceptSettings8.htm" onMouseover="document.images[0].src='mes-ss47.gif'" onMouseout="document.images[0].src='mes-ss40.gif'">
+    <area shape="rect" coords="14,408,135,449" href="madExceptSettings9.htm" onMouseover="document.images[0].src='mes-ss48.gif'" onMouseout="document.images[0].src='mes-ss40.gif'">
+    <area shape="rect" coords="14,450,135,489" href="madExceptSettings10.htm" onMouseover="document.images[0].src='mes-ss49.gif'" onMouseout="document.images[0].src='mes-ss40.gif'">
+    </map>
+    <p>You can click on the tabs in the left side of the image:</p>
+    <p><img src='mes-ss40.gif' border=0 usemap="#SettingsMap" align=left style="margin-right:10pt;margin-bottom:10pt"></p>
+    <h3>linker options...</h3>
+    <p>The first option <b>link in madExcept code</b> defines whether madExcept is
+       trying to get its code linked into your exe/dll/bpl file. Normally this is
+       the recommend thing to do. madExcept will then consequently add itself to
+       your project's uses clause. There are situations where it can make sense to
+       turn this option off. E.g. if you have a package which doesn't directly call
+       any madExcept functions, this package doesn't necessarily have to link to
+       madExcept. If the exe file already links to madExcept, that is good enough
+       to protect all runtime packages from exceptions, too.</p>
+    <p>If your exe is compiled with madExcept, and if you have a bunch of dlls or
+       packages, then it can make sense to define which files get their own
+       madExcept settings and which don't. One reasonable configuration would be to
+       store madExcept settings in the exe file, only. As a result all dlls and
+       packages would then share the exe's madExcept settings. You can realize this
+       configuration by activating the option <b>link in madExcept settings</b> in
+       your exe project, and by deactivating it in all your dll and package
+       projects. A different and of course also valid approach would be to configure
+       some (or all) dlls and packages to have their own separate madExcept
+       settings, too. That would allow you to e.g. specify different bug report
+       email receivers for different dlls or things like that.</p>
+    <p>If you disable the option <b>link in function names and line numbers</b>,
+       madExcept will only store the function addresses into your exe/dll file, but
+       no unit names, function names and line numbers. The one and only motivation
+       for doing this would be protection from reverse engineering. Without function
+       names and line numbers reverse engineers have no advantage from the fact that
+       you're using <a href="madExcept.htm" href="madExceptUnit.htm">madExcept</a>. However, *you* have a disadvantage: The bug
+       reports you'll get from your customers will miss function names and line
+       numbers, obviously. You can "compile" such bug reports to full bug reports
+       by using the tool "madCompileBugReport". This tool needs access to the "mad"
+       file which <a href="madExcept.htm" href="madExceptUnit.htm">madExcept</a> created when your binary file got compiled &
+       linked. So if you want to use madExcept this way, it is your responsibility
+       to store the "mad" file for every release build of your software.</p>
+    <h3>runtime checks...</h3>
+    <p>By default <a href="madExcept.htm" href="madExceptUnit.htm">madExcept</a> checks whether your binary file seems to have bit
+       faults or not. This is done by calculating a checksum and comparing it to
+       the checksum stored in your binary file's PE header. If the checksum is
+       found to be incorrect, <a href="madExcept.htm" href="madExceptUnit.htm">madExcept</a> will complain. If your binary file
+       is the executable, <a href="madExcept.htm" href="madExceptUnit.htm">madExcept</a> will show a warning box and then close
+       your application. If your binary file is a dll or package, <a href="madExcept.htm" href="madExceptUnit.htm">madExcept</a>
+       will raise an exception.</p>
+    <p>If you turn the <b>check for frozen main thread</b> option on,
+       <a href="madExcept.htm" href="madExceptUnit.htm">madExcept</a> periodically checks at runtime whether your main thread
+       still reacts to messages. If it does not react for the specified time
+       (default 60 seconds), an exception is raised. This functionality should
+       help you finding and locating infinite loops and dead locks. Since each bug
+       report contains the callstack of all threads of the current process, you can
+       often quite easily see, what each thread was doing and who possibly waited
+       on whom and why.</p>
+    <h3>windows logo program...</h3>
+    <p>If you want to get the "Windows Client Software Logo", you will have to meet
+       a couple of funny requirements specified by Microsoft. One rule is that your
+       application is not allowed to handle critical exceptions on its own. Instead
+       you have to let the OS handle the exception. IMHO this is a pretty stupid
+       rule, but that's just the way it is. The "Windows 7 Client Software Logo"
+       PDF (<a href="http://www.microsoft.com/en-us/download/details.aspx?id=3859">download</a>)
+       reads: "Some applications may be designed to handle crash data internally
+       due to sensitive user information or digital rights issues. To be eligible
+       for the Windows 7 logo in such a case, ISVs must send an e-mail to:
+       swlogo@microsoft.com with technical justification outlining why the
+       application must process unhandled exceptions internally". So you can try to
+       contact Microsoft to get around this stupid rule. But if for whatever reason
+       Microsoft declines, you can activate the madExcept option <b>conform to
+       "windows logo" requirements</b>, which will force madExcept to pass access
+       violations to the OS instead of handling them itself. The disadvantage is
+       that you no longer get a madExcept report about access violations. So this
+       is definitely not recommended.</p>
+    <h3>active error search...</h3>
+    <p>Before releasing a new version of your software, you may want to do some
+       extra testing to make sure your software is as stable as possible. The
+       options in the "active error search" category allow you to test your
+       software for hidden bugs like memory leaks, resource leaks, buffer overruns
+       etc.</p>
+    <p>The madExcept code which is responsible for finding these bugs is not
+       compiled into your exe/dll file. Instead it's located in "madExcept32.dll".
+       If you activate any of the "active error search" options, your exe/dll will
+       then during madExcept initialization locate and load the "madExcept32.dll".
+       On your development PC this will happen automatically. If you want to use
+       the "active error search" functionality on other PCs, you should copy the
+       "madExcept32.dll" file to your exe/dll folder. Currently, the "active error
+       search" functionality only supports 32bit processes.</p>
+    <p>The option <b>report resource leaks</b> will tell madExcept to carefully
+       analyze the behaviour of your software and find and report leaks of any
+       kind. Supported leak types are all kinds of memory allocations (both by the
+       Delphi memory manager and by win32 allocation APIs), kernel handle leaks,
+       GDI handle leaks, user handle leaks, shell handle leaks etc etc. Leaks are
+       reported when your exe/dll is closed/unloaded.</p>
+    <p>The option <b>instantly crash on buffer overrun/underrun</b> replaces the
+       Delphi memory manager with a different one which is optimized to find bugs,
+       on the cost of memory consumption and performance. With this option
+       activated, any buffer overrun (or underrun) will directly result in a crash,
+       which will then result in a proper madExcept crash report, allowing to you
+       easily find the buggy source code. Normally, buffer overruns are often
+       undetected and only result in crashes much later in the life of the process.
+       The madExcept <a href="DebugMm.htm">debug memory manager</a> will also
+       produce an instant crash whenever you try to access a freed buffer. You can
+       find more information about these features <a href="DebugMm.htm">here</a>.</p>
+  </body>
+
+</html>

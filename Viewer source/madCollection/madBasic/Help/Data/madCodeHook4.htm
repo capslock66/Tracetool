@@ -1,0 +1,135 @@
+<html>
+
+  <head>
+    <title>mad* Help...</title>
+    <meta name="description" content="mad* Help...">
+    <meta name="keywords" content="madshi, components, delphi">
+    <meta http-equiv="expires" content="900">
+    <link rel=stylesheet type="text/css" href="style.css">
+  </head>
+
+  <body background="bcklight.gif" bgcolor=#F8F8F8>
+    <table border=0 cellpadding=0 callspacing=0><tr>
+      <td valign=bottom>
+        <table border=0 cellpadding=0 cellspacing=0><tr><td bgcolor=#D8D8D8>
+          <table cellpadding=3 border=0>
+            <tr><td bgcolor=#FFFFF0>
+              <div id="verySmall"><br></div>
+              <div id="bigTitle">&nbsp;v4.0 Information&nbsp;</div>
+              <div id="verySmall"><br></div>
+              <div id="small">
+                <a class="small" href="Content.htm">Content</a> /
+                <a class="small" href="madCodeHook.htm">madCodeHook</a> /...
+              </div>
+            </td></tr>
+          </table>
+        </td></tr></table>
+      </td>
+      <td valign=bottom>
+        <table border=0 cellpadding=0 cellspacing=0><tr><td bgcolor=#D8D8D8>
+          <table cellpadding=7 border=0>
+            <tr><td bgcolor=#F4F4F8><a href="http://www.madshi.net">www.madshi.net</a></td></tr>
+          </table>
+        </td></tr></table>
+      </td>
+    </tr></table>
+    <h3>What Is New In madCodeHook 4.0</h3>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <table>
+                
+                <tr><td>&bull;&nbsp;</td><td><b>
+                new "permanent" dll injection option survives reboots
+                </b></td></tr><tr><td></td><td style="padding-bottom:8pt;">
+                You can now "install" your injection driver and then issue "permanent"
+                dll injection requests. The driver will store such permanent requests
+                and re-apply them automatically, every time the OS reboots. As a result
+                you no longer need a service or application to restart the whole dll
+                injection, when the user rebooted the OS.
+                </td></tr>
+                
+                <tr><td>&bull;&nbsp;</td><td><b>
+                verification of hook dll's code signing signatures
+                </b></td></tr><tr><td></td><td style="padding-bottom:8pt;">
+                When using madCodeHook 3.x, you had to make all hook dlls known to the
+                injection driver, or else the driver would refuse to inject the hook dlls.
+                Furthermore, every time you touched the hook dlls, the injection driver
+                needed to be updated, too. This whole solution was very safe, but also
+                quite uncomfortable. Which is now all the more true, when trying to achieve
+                SecureBoot compatability in Windows 10, where your drivers need to be sent
+                in to Microsoft to get co-signed. madCodeHook 4.0 now checks the hook dll's code
+                siging signature. If it's valid, and if it was signed
+                with the same certificate as the driver file, then the hook dll is automatically
+                considered "trusted". This should still be a very secure solution, but it's
+                now also completely comfortable. As long as you sign your hook dlls with the
+                same certificate you sign your drivers with, you only need to configure and
+                sign the driver once now.
+                </td></tr>
+                
+                <tr><td>&bull;&nbsp;</td><td><b>
+                API hooks can now optionally record the caller's "thread state"
+                </b></td></tr><tr><td></td><td style="padding-bottom:8pt;">
+                When trying to detect malware attacks, it's very useful for security
+                applications to know the exact contents of the registers and the exact
+                parameters on the stack of the caller of the hooked API. When using
+                madCodeHook 3.x, it was only possible to get that kind of information by
+                using hand written assembler callback routines. With madCodeHook 4.0
+                you can now activate this functionality with a simple flag and then
+                in your hook callback function simply access all the information through
+                a comfortable structure.
+                </td></tr>
+                
+                <tr><td>&bull;&nbsp;</td><td><b>
+                stable cleanup of your hook dll resources
+                </b></td></tr><tr><td></td><td style="padding-bottom:8pt;">
+                Usually a hook DLL frees its resources in DllMain(DLL_PROCESS_DETACH). However,
+                this can be dangerous because of the loader lock. For example, you can't wait
+                for secondary threads to finish because they're usually blocked from running
+                while you're in DllMain. madCodeHook itself unhooks all of your API hooks automatically, in the moment
+                when you uninject your hook DLL - and it's doing that outside of DllMain. In
+                order to allow you to also cleanup your stuff outside of DllMain, you can call
+                "RegisterUninjectCallback()". Your callback function will then be called after
+                madCodeHook has uninstalled your API hooks, and right before FreeLibrary is
+                called on your hook DLL.
+                </td></tr>
+                
+                <tr><td>&bull;&nbsp;</td><td><b>
+                new optional dll injection technique (for newly created processes)
+                </b></td></tr><tr><td></td><td style="padding-bottom:8pt;">
+                Although the madCodeHook 3.x injection technique (for newly created processes)
+                has proven to be very stable and reliable, a new technique was added, which you
+                can use as an option. The new technique has the advantage that your hook DLL
+                will be loaded and initialized very early, when a new process starts up,
+                before all other DLLs that are statically linked to by the EXE. It also has a
+                disadvantage, though: Since your hook DLL will be considered as statically linked
+                to by the EXE, the OS will refuse to unload your hook DLL from newly created
+                process, which makes uninjection impossible.
+                </td></tr>
+                
+                <tr><td>&bull;&nbsp;</td><td><b>
+                improved compatability with other hooking libraries
+                </b></td></tr><tr><td></td><td style="padding-bottom:8pt;">
+                madCodeHook 3.x used a 6-byte absolute JMP instruction to hook APIs,
+                while most other hooking libraries are using a 5-byte relative JMP.
+                Although both approaches are perfectly legit, and madCodeHook's solution
+                was very stable on its own, sometimes there were compatability problems.
+                That's especially true if "the other" hooking library was of inferior
+                quality and didn't know how to properly handle madCodeHook's 6-byte JMP. In order
+                to improve compatability, I've now also switched to using a 5-byte JMP in madCodeHook 4.0.
+                </td></tr>
+                
+                </table>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </body>
+
+</html>

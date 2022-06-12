@@ -1,0 +1,128 @@
+<html>
+
+  <head>
+    <title>mad* Help...</title>
+    <meta name="description" content="mad* Help...">
+    <meta name="keywords" content="madshi, components, delphi">
+    <meta http-equiv="expires" content="900">
+    <link rel=stylesheet type="text/css" href="style.css">
+  </head>
+
+  <body background="bcklight.gif" bgcolor=#F8F8F8>
+    <a name="UpChar"></a>
+    <a name="UpStr"></a>
+    <a name="LowChar"></a>
+    <a name="LowStr"></a>
+    <table border=0 cellpadding=0 callspacing=0><tr>
+      <td valign=bottom>
+        <table border=0 cellpadding=0 cellspacing=0><tr><td bgcolor=#D8D8D8>
+          <table cellpadding=3 border=0>
+            <tr><td bgcolor=#FFFFF0>
+              <div id="verySmall"><br></div>
+              <div id="bigTitle">&nbsp;String Manipulation&nbsp;</div>
+              <div id="verySmall"><br></div>
+              <div id="small">
+                <a class="small" href="Content.htm">Content</a> /
+                <a class="small" href="madBasic.htm">madBasic</a> /
+                <a class="small" href="madStringsUnit.htm">madStrings Unit</a> /...
+              </div>
+            </td></tr>
+          </table>
+        </td></tr></table>
+      </td>
+      <td valign=bottom>
+        <table border=0 cellpadding=0 cellspacing=0><tr><td bgcolor=#D8D8D8>
+          <table cellpadding=7 border=0>
+            <tr><td bgcolor=#F4F4F8><a href="http://www.madshi.net">www.madshi.net</a></td></tr>
+          </table>
+        </td></tr></table>
+      </td>
+    </tr></table>
+    <p>The following functions work exactly like "AnsiUpperCase/AnsiLowerCase", but
+       they're much faster:</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>UpChar</span>&nbsp;&nbsp;(<span id='bold'>const</span>&nbsp;<span id='identifier'>c</span>: <span id='identifier'>char</span>&nbsp;&nbsp;) : <span id='identifier'>char</span>;<br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>UpStr</span>&nbsp;&nbsp;&nbsp;(<span id='bold'>const</span>&nbsp;<span id='identifier'>s</span>: <span id='bold'>string</span>) : <span id='bold'>string</span>;<br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>LowChar</span>&nbsp;(<span id='bold'>const</span>&nbsp;<span id='identifier'>c</span>: <span id='identifier'>char</span>&nbsp;&nbsp;) : <span id='identifier'>char</span>;<br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>LowStr</span>&nbsp;&nbsp;(<span id='bold'>const</span>&nbsp;<span id='identifier'>s</span>: <span id='bold'>string</span>) : <span id='bold'>string</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="FillStr"></a>
+    <p>The function "FillStr" makes sure that a string has at least the length
+       "minLen". If necessary, the string is filled up with the "fillChar". If
+       "minLen" is negative, the string is filled at the end, otherwise at the
+       beginning.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>FillStr</span>&nbsp;(<span id='identifier'>str</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='bold'>string</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>minLen</span>&nbsp;&nbsp;&nbsp;: <span id='identifier'>integer</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>fillChar</span>&nbsp;: <span id='identifier'>char</span>&nbsp;= <span id='string'>' '</span>) : <span id='bold'>string</span>;<br>
+                  <br>
+                  <span id='comment'>// Examples:</span><br>
+                  <span id='identifier'>FillStr</span>(<span id='string'>'127'</span>, &nbsp;<span id='number'>10</span>, <span id='string'>'0'</span>) &nbsp;-> &nbsp;<span id='string'>'0000000127'</span><br>
+                  <span id='identifier'>FillStr</span>(<span id='string'>'0.5'</span>, -<span id='number'>10</span>, <span id='string'>'0'</span>) &nbsp;-> &nbsp;<span id='string'>'0.50000000'</span>
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="ReplaceStr"></a>
+    <a name="ReplaceText"></a>
+    <p>The following functions search through the whole "str" and replace the
+       fragment "replaceThis" every time it occurs "withThis". The replacement can
+       be done recursively, if you wish. That means, that the replaced string
+       fragments are checked again. "ReplaceStr" searches case sensitively, while
+       "ReplaceText" searches case insensitively.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>ReplaceStr</span>&nbsp;&nbsp;(<span id='bold'>var</span>&nbsp;<span id='identifier'>str</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='bold'>string</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>replaceThis</span>&nbsp;: <span id='bold'>string</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>withThis</span>&nbsp;&nbsp;&nbsp;&nbsp;: <span id='bold'>string</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>replaceSelf</span>&nbsp;: <span id='identifier'>boolean</span>&nbsp;= <span id='identifier'>false</span>) : <span id='identifier'>boolean</span>;<br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>ReplaceText</span>&nbsp;(<span id='bold'>var</span>&nbsp;<span id='identifier'>str</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='bold'>string</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>replaceThis</span>&nbsp;: <span id='bold'>string</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>withThis</span>&nbsp;&nbsp;&nbsp;&nbsp;: <span id='bold'>string</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>replaceSelf</span>&nbsp;: <span id='identifier'>boolean</span>&nbsp;= <span id='identifier'>false</span>) : <span id='identifier'>boolean</span>;<br>
+                  <br>
+                  <span id='comment'>// Examples:</span><br>
+                  <span id='identifier'>ReplaceStr</span>(<span id='string'>'Funnyny.'</span>, <span id='string'>'Vunny'</span>, <span id='string'>'Fun'</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;) &nbsp;-> &nbsp;<span id='string'>'Funnyny.'</span>&nbsp;/ <span id='identifier'>false</span><br>
+                  <span id='identifier'>ReplaceStr</span>(<span id='string'>'Funnyny.'</span>, <span id='string'>'Funny'</span>, <span id='string'>'Fun'</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;) &nbsp;-> &nbsp;<span id='string'>'Funny.'</span>&nbsp;&nbsp;&nbsp;/ <span id='identifier'>true</span><br>
+                  <span id='identifier'>ReplaceStr</span>(<span id='string'>'Funnyny.'</span>, <span id='string'>'Funny'</span>, <span id='string'>'Fun'</span>, &nbsp;&nbsp;<span id='identifier'>true</span>) &nbsp;-> &nbsp;<span id='string'>'Fun.'</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/ <span id='identifier'>true</span><br>
+                  <span id='identifier'>ReplaceStr</span>(<span id='string'>'Fun.'</span>, &nbsp;&nbsp;&nbsp;&nbsp;<span id='string'>'Fun'</span>, &nbsp;&nbsp;<span id='string'>'Funny'</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;) &nbsp;-> &nbsp;<span id='string'>'Funny.'</span>&nbsp;&nbsp;&nbsp;/ <span id='identifier'>true</span><br>
+                  <span id='identifier'>ReplaceStr</span>(<span id='string'>'Fun.'</span>, &nbsp;&nbsp;&nbsp;&nbsp;<span id='string'>'Fun'</span>, &nbsp;&nbsp;<span id='string'>'Funny'</span>, <span id='identifier'>true</span>) &nbsp;-> &nbsp;<span id='identifier'>endless</span>&nbsp;<span id='identifier'>loop</span>
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </body>
+
+</html>

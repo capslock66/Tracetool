@@ -1,0 +1,165 @@
+<html>
+
+  <head>
+    <title>mad* Help...</title>
+    <meta name="description" content="mad* Help...">
+    <meta name="keywords" content="madshi, components, delphi">
+    <meta http-equiv="expires" content="900">
+    <link rel=stylesheet type="text/css" href="style.css">
+  </head>
+
+  <body background="bcklight.gif" bgcolor=#F8F8F8>
+    <a name="TPByte"></a>
+    <a name="TSByte"></a>
+    <a name="TPSByte"></a>
+    <a name="TAByte"></a>
+    <a name="TPAByte"></a>
+    <a name="TDAByte"></a>
+    <a name="TPDAByte"></a>
+    <table border=0 cellpadding=0 callspacing=0><tr>
+      <td valign=bottom>
+        <table border=0 cellpadding=0 cellspacing=0><tr><td bgcolor=#D8D8D8>
+          <table cellpadding=3 border=0>
+            <tr><td bgcolor=#FFFFF0>
+              <div id="verySmall"><br></div>
+              <div id="bigTitle">&nbsp;Unsigned Types&nbsp;</div>
+              <div id="verySmall"><br></div>
+              <div id="small">
+                <a class="small" href="Content.htm">Content</a> /
+                <a class="small" href="madBasic.htm">madBasic</a> /
+                <a class="small" href="madTypesUnit.htm">madTypes Unit</a> /...
+              </div>
+            </td></tr>
+          </table>
+        </td></tr></table>
+      </td>
+      <td valign=bottom>
+        <table border=0 cellpadding=0 cellspacing=0><tr><td bgcolor=#D8D8D8>
+          <table cellpadding=7 border=0>
+            <tr><td bgcolor=#F4F4F8><a href="http://www.madshi.net">www.madshi.net</a></td></tr>
+          </table>
+        </td></tr></table>
+      </td>
+    </tr></table>
+    <p>Here's everything around Delphi's 1-byte unsigned ordinal type named "byte":</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>type</span><br>
+                  &nbsp;&nbsp;<span id='identifier'>TPByte</span>&nbsp;&nbsp;&nbsp;= ^<span id='identifier'>byte</span>;<br>
+                  <br>
+                  &nbsp;&nbsp;<span id='identifier'>TSByte</span>&nbsp;&nbsp;&nbsp;= <span id='bold'>set</span>&nbsp;<span id='bold'>of</span>&nbsp;<span id='identifier'>byte</span>;<br>
+                  &nbsp;&nbsp;<span id='identifier'>TPSByte</span>&nbsp;&nbsp;= ^<span id='identifier'>TSByte</span>;<br>
+                  <br>
+                  &nbsp;&nbsp;<span id='identifier'>TAByte</span>&nbsp;&nbsp;&nbsp;= <span id='bold'>array</span>&nbsp;[<span id='number'>0</span>..<span id='identifier'>maxInt</span>-<span id='number'>1</span>] <span id='bold'>of</span>&nbsp;<span id='identifier'>byte</span>;<br>
+                  &nbsp;&nbsp;<span id='identifier'>TPAByte</span>&nbsp;&nbsp;= ^<span id='identifier'>TAByte</span>;<br>
+                  <br>
+                  &nbsp;&nbsp;<span id='identifier'>TDAByte</span>&nbsp;&nbsp;= <span id='bold'>array</span>&nbsp;<span id='bold'>of</span>&nbsp;<span id='identifier'>byte</span>;<br>
+                  &nbsp;&nbsp;<span id='identifier'>TPDAByte</span>&nbsp;= ^<span id='identifier'>TDAByte</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="TPWord"></a>
+    <a name="TAWord"></a>
+    <a name="TPAWord"></a>
+    <a name="TDAWord"></a>
+    <a name="TPDAWord"></a>
+    <p>Then there is the "word" type, which is a 2-byte unsigned ordinal:</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>type</span><br>
+                  &nbsp;&nbsp;<span id='identifier'>TPWord</span>&nbsp;&nbsp;&nbsp;= ^<span id='identifier'>word</span>;<br>
+                  <br>
+                  &nbsp;&nbsp;<span id='identifier'>TAWord</span>&nbsp;&nbsp;&nbsp;= <span id='bold'>array</span>&nbsp;[<span id='number'>0</span>..<span id='identifier'>maxInt</span>&nbsp;<span id='bold'>shr</span>&nbsp;<span id='number'>1</span>-<span id='number'>1</span>] <span id='bold'>of</span>&nbsp;<span id='identifier'>word</span>;<br>
+                  &nbsp;&nbsp;<span id='identifier'>TPAWord</span>&nbsp;&nbsp;= ^<span id='identifier'>TAWord</span>;<br>
+                  <br>
+                  &nbsp;&nbsp;<span id='identifier'>TDAWord</span>&nbsp;&nbsp;= <span id='bold'>array</span>&nbsp;<span id='bold'>of</span>&nbsp;<span id='identifier'>word</span>;<br>
+                  &nbsp;&nbsp;<span id='identifier'>TPDAWord</span>&nbsp;= ^<span id='identifier'>TDAWord</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="TPCardinal"></a>
+    <a name="TACardinal"></a>
+    <a name="TPACardinal"></a>
+    <a name="TDACardinal"></a>
+    <a name="TPDACardinal"></a>
+    <p>Finally we have the 4-byte unsigned ordinal type "cardinal":</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>type</span><br>
+                  &nbsp;&nbsp;<span id='identifier'>TPCardinal</span>&nbsp;&nbsp;&nbsp;= ^<span id='identifier'>cardinal</span>;<br>
+                  <br>
+                  &nbsp;&nbsp;<span id='identifier'>TACardinal</span>&nbsp;&nbsp;&nbsp;= <span id='bold'>array</span>&nbsp;[<span id='number'>0</span>..<span id='identifier'>maxInt</span>&nbsp;<span id='bold'>shr</span>&nbsp;<span id='number'>2</span>-<span id='number'>1</span>] <span id='bold'>of</span>&nbsp;<span id='identifier'>cardinal</span>;<br>
+                  &nbsp;&nbsp;<span id='identifier'>TPACardinal</span>&nbsp;&nbsp;= ^<span id='identifier'>TACardinal</span>;<br>
+                  <br>
+                  &nbsp;&nbsp;<span id='identifier'>TDACardinal</span>&nbsp;&nbsp;= <span id='bold'>array</span>&nbsp;<span id='bold'>of</span>&nbsp;<span id='identifier'>cardinal</span>;<br>
+                  &nbsp;&nbsp;<span id='identifier'>TPDACardinal</span>&nbsp;= ^<span id='identifier'>TDACardinal</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="NativeUInt"></a>
+    <a name="TPNativeUInt"></a>
+    <a name="TANativeUInt"></a>
+    <a name="TPANativeUInt"></a>
+    <a name="TDANativeUInt"></a>
+    <a name="TPDANativeUInt"></a>
+    <p>Finally we have the 4-byte unsigned ordinal type "NativeUInt":</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>type</span><br>
+                  &nbsp;&nbsp;<span id='comment'>{$ifndef</span>&nbsp;<span id='comment'>xe2}</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>NativeUInt</span>&nbsp;&nbsp;&nbsp;= <span id='identifier'>cardinal</span>;<br>
+                  &nbsp;&nbsp;<span id='comment'>{$endif}</span><br>
+                  <br>
+                  &nbsp;&nbsp;<span id='identifier'>TPNativeUInt</span>&nbsp;&nbsp;&nbsp;= ^<span id='identifier'>NativeUInt</span>;<br>
+                  <br>
+                  &nbsp;&nbsp;<span id='identifier'>TANativeUInt</span>&nbsp;&nbsp;&nbsp;= <span id='bold'>array</span>&nbsp;[<span id='number'>0</span>..<span id='identifier'>maxInt</span>&nbsp;<span id='bold'>shr</span>&nbsp;<span id='number'>2</span>-<span id='number'>1</span>] <span id='bold'>of</span>&nbsp;<span id='identifier'>NativeUInt</span>;<br>
+                  &nbsp;&nbsp;<span id='identifier'>TPANativeUInt</span>&nbsp;&nbsp;= ^<span id='identifier'>TANativeUInt</span>;<br>
+                  <br>
+                  &nbsp;&nbsp;<span id='identifier'>TDANativeUInt</span>&nbsp;&nbsp;= <span id='bold'>array</span>&nbsp;<span id='bold'>of</span>&nbsp;<span id='identifier'>NativeUInt</span>;<br>
+                  &nbsp;&nbsp;<span id='identifier'>TPDANativeUInt</span>&nbsp;= ^<span id='identifier'>TDANativeUInt</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </body>
+
+</html>

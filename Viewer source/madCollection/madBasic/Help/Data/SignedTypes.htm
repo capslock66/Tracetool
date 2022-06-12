@@ -1,0 +1,189 @@
+<html>
+
+  <head>
+    <title>mad* Help...</title>
+    <meta name="description" content="mad* Help...">
+    <meta name="keywords" content="madshi, components, delphi">
+    <meta http-equiv="expires" content="900">
+    <link rel=stylesheet type="text/css" href="style.css">
+  </head>
+
+  <body background="bcklight.gif" bgcolor=#F8F8F8>
+    <a name="TPShortInt"></a>
+    <a name="TAShortInt"></a>
+    <a name="TPAShortInt"></a>
+    <a name="TDAShortInt"></a>
+    <a name="TPDAShortInt"></a>
+    <table border=0 cellpadding=0 callspacing=0><tr>
+      <td valign=bottom>
+        <table border=0 cellpadding=0 cellspacing=0><tr><td bgcolor=#D8D8D8>
+          <table cellpadding=3 border=0>
+            <tr><td bgcolor=#FFFFF0>
+              <div id="verySmall"><br></div>
+              <div id="bigTitle">&nbsp;Signed Types&nbsp;</div>
+              <div id="verySmall"><br></div>
+              <div id="small">
+                <a class="small" href="Content.htm">Content</a> /
+                <a class="small" href="madBasic.htm">madBasic</a> /
+                <a class="small" href="madTypesUnit.htm">madTypes Unit</a> /...
+              </div>
+            </td></tr>
+          </table>
+        </td></tr></table>
+      </td>
+      <td valign=bottom>
+        <table border=0 cellpadding=0 cellspacing=0><tr><td bgcolor=#D8D8D8>
+          <table cellpadding=7 border=0>
+            <tr><td bgcolor=#F4F4F8><a href="http://www.madshi.net">www.madshi.net</a></td></tr>
+          </table>
+        </td></tr></table>
+      </td>
+    </tr></table>
+    <p>Here are some definitions around the 1-byte signed ordinal type "shortInt":</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>type</span><br>
+                  &nbsp;&nbsp;<span id='identifier'>TPShortInt</span>&nbsp;&nbsp;&nbsp;= ^<span id='identifier'>shortInt</span>;<br>
+                  <br>
+                  &nbsp;&nbsp;<span id='identifier'>TAShortInt</span>&nbsp;&nbsp;&nbsp;= <span id='bold'>array</span>&nbsp;[<span id='number'>0</span>..<span id='identifier'>maxInt</span>-<span id='number'>1</span>] <span id='bold'>of</span>&nbsp;<span id='identifier'>shortInt</span>;<br>
+                  &nbsp;&nbsp;<span id='identifier'>TPAShortInt</span>&nbsp;&nbsp;= ^<span id='identifier'>TAShortInt</span>;<br>
+                  <br>
+                  &nbsp;&nbsp;<span id='identifier'>TDAShortInt</span>&nbsp;&nbsp;= <span id='bold'>array</span>&nbsp;<span id='bold'>of</span>&nbsp;<span id='identifier'>shortInt</span>;<br>
+                  &nbsp;&nbsp;<span id='identifier'>TPDAShortInt</span>&nbsp;= ^<span id='identifier'>TDAShortInt</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="TPSmallInt"></a>
+    <a name="TASmallInt"></a>
+    <a name="TPASmallInt"></a>
+    <a name="TDASmallInt"></a>
+    <a name="TPDASmallInt"></a>
+    <p>Here we have the 2-byte signed ordinal type named "smallInt":</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>type</span><br>
+                  &nbsp;&nbsp;<span id='identifier'>TPSmallInt</span>&nbsp;&nbsp;&nbsp;= ^<span id='identifier'>smallInt</span>;<br>
+                  <br>
+                  &nbsp;&nbsp;<span id='identifier'>TASmallInt</span>&nbsp;&nbsp;&nbsp;= <span id='bold'>array</span>&nbsp;[<span id='number'>0</span>..<span id='identifier'>maxInt</span>&nbsp;<span id='bold'>shr</span>&nbsp;<span id='number'>1</span>-<span id='number'>1</span>] <span id='bold'>of</span>&nbsp;<span id='identifier'>smallInt</span>;<br>
+                  &nbsp;&nbsp;<span id='identifier'>TPASmallInt</span>&nbsp;&nbsp;= ^<span id='identifier'>TASmallInt</span>;<br>
+                  <br>
+                  &nbsp;&nbsp;<span id='identifier'>TDASmallInt</span>&nbsp;&nbsp;= <span id='bold'>array</span>&nbsp;<span id='bold'>of</span>&nbsp;<span id='identifier'>smallInt</span>;<br>
+                  &nbsp;&nbsp;<span id='identifier'>TPDASmallInt</span>&nbsp;= ^<span id='identifier'>TDASmallInt</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="TPInteger"></a>
+    <a name="TAInteger"></a>
+    <a name="TPAInteger"></a>
+    <a name="TDAInteger"></a>
+    <a name="TPDAInteger"></a>
+    <p>Then there is the 4-byte signed ordinal type "integer":</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>type</span><br>
+                  &nbsp;&nbsp;<span id='identifier'>TPInteger</span>&nbsp;&nbsp;&nbsp;= ^<span id='identifier'>integer</span>;<br>
+                  <br>
+                  &nbsp;&nbsp;<span id='identifier'>TAInteger</span>&nbsp;&nbsp;&nbsp;= <span id='bold'>array</span>&nbsp;[<span id='number'>0</span>..<span id='identifier'>maxInt</span>&nbsp;<span id='bold'>shr</span>&nbsp;<span id='number'>2</span>-<span id='number'>1</span>] <span id='bold'>of</span>&nbsp;<span id='identifier'>integer</span>;<br>
+                  &nbsp;&nbsp;<span id='identifier'>TPAInteger</span>&nbsp;&nbsp;= ^<span id='identifier'>TAInteger</span>;<br>
+                  <br>
+                  &nbsp;&nbsp;<span id='identifier'>TDAInteger</span>&nbsp;&nbsp;= <span id='bold'>array</span>&nbsp;<span id='bold'>of</span>&nbsp;<span id='identifier'>integer</span>;<br>
+                  &nbsp;&nbsp;<span id='identifier'>TPDAInteger</span>&nbsp;= ^<span id='identifier'>TDAInteger</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="NativeInt"></a>
+    <a name="TPNativeInt"></a>
+    <a name="TANativeInt"></a>
+    <a name="TPANativeInt"></a>
+    <a name="TDANativeInt"></a>
+    <a name="TPDANativeInt"></a>
+    <p>Then there is the 4-byte signed ordinal type "NativeInt":</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>type</span><br>
+                  &nbsp;&nbsp;<span id='comment'>{$ifndef</span>&nbsp;<span id='comment'>xe2}</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>NativeInt</span>&nbsp;&nbsp;&nbsp;= <span id='identifier'>integer</span>;<br>
+                  &nbsp;&nbsp;<span id='comment'>{$endif}</span><br>
+                  <br>
+                  &nbsp;&nbsp;<span id='identifier'>TPNativeInt</span>&nbsp;&nbsp;&nbsp;= ^<span id='identifier'>NativeInt</span>;<br>
+                  <br>
+                  &nbsp;&nbsp;<span id='identifier'>TANativeInt</span>&nbsp;&nbsp;&nbsp;= <span id='bold'>array</span>&nbsp;[<span id='number'>0</span>..<span id='identifier'>maxInt</span>&nbsp;<span id='bold'>shr</span>&nbsp;<span id='number'>2</span>-<span id='number'>1</span>] <span id='bold'>of</span>&nbsp;<span id='identifier'>NativeInt</span>;<br>
+                  &nbsp;&nbsp;<span id='identifier'>TPANativeInt</span>&nbsp;&nbsp;= ^<span id='identifier'>TANativeInt</span>;<br>
+                  <br>
+                  &nbsp;&nbsp;<span id='identifier'>TDANativeInt</span>&nbsp;&nbsp;= <span id='bold'>array</span>&nbsp;<span id='bold'>of</span>&nbsp;<span id='identifier'>NativeInt</span>;<br>
+                  &nbsp;&nbsp;<span id='identifier'>TPDANativeInt</span>&nbsp;= ^<span id='identifier'>TDANativeInt</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="TPInt64"></a>
+    <a name="TAInt64"></a>
+    <a name="TPAInt64"></a>
+    <a name="TDAInt64"></a>
+    <a name="TPDAInt64"></a>
+    <p>Finally we have the "int64" type, which is an 8-byte signed ordinal:</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>type</span><br>
+                  &nbsp;&nbsp;<span id='identifier'>TPInt64</span>&nbsp;&nbsp;&nbsp;= ^<span id='identifier'>int64</span>;<br>
+                  <br>
+                  &nbsp;&nbsp;<span id='identifier'>TAInt64</span>&nbsp;&nbsp;&nbsp;= <span id='bold'>array</span>&nbsp;[<span id='number'>0</span>..<span id='identifier'>maxInt</span>&nbsp;<span id='bold'>shr</span>&nbsp;<span id='number'>3</span>-<span id='number'>1</span>] <span id='bold'>of</span>&nbsp;<span id='identifier'>int64</span>;<br>
+                  &nbsp;&nbsp;<span id='identifier'>TPAInt64</span>&nbsp;&nbsp;= ^<span id='identifier'>TAInt64</span>;<br>
+                  <br>
+                  &nbsp;&nbsp;<span id='identifier'>TDAInt64</span>&nbsp;&nbsp;= <span id='bold'>array</span>&nbsp;<span id='bold'>of</span>&nbsp;<span id='identifier'>int64</span>;<br>
+                  &nbsp;&nbsp;<span id='identifier'>TPDAInt64</span>&nbsp;= ^<span id='identifier'>TDAInt64</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </body>
+
+</html>

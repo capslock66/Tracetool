@@ -1,0 +1,97 @@
+<html>
+
+  <head>
+    <title>mad* Help...</title>
+    <meta name="description" content="mad* Help...">
+    <meta name="keywords" content="madshi, components, delphi">
+    <meta http-equiv="expires" content="900">
+    <link rel=stylesheet type="text/css" href="style.css">
+  </head>
+
+  <body background="bcklight.gif" bgcolor=#F8F8F8>
+    <table border=0 cellpadding=0 callspacing=0><tr>
+      <td valign=bottom>
+        <table border=0 cellpadding=0 cellspacing=0><tr><td bgcolor=#D8D8D8>
+          <table cellpadding=3 border=0>
+            <tr><td bgcolor=#FFFFF0>
+              <div id="verySmall"><br></div>
+              <div id="bigTitle">&nbsp;madExcept Settings (Tab 5)&nbsp;</div>
+              <div id="verySmall"><br></div>
+              <div id="small">
+                <a class="small" href="Content.htm">Content</a> /
+                <a class="small" href="madExcept.htm">madExcept</a> /
+                <a class="small" href="madExceptSettings.htm">madExcept Settings</a> /...
+              </div>
+            </td></tr>
+          </table>
+        </td></tr></table>
+      </td>
+      <td valign=bottom>
+        <table border=0 cellpadding=0 cellspacing=0><tr><td bgcolor=#D8D8D8>
+          <table cellpadding=7 border=0>
+            <tr><td bgcolor=#F4F4F8><a href="http://www.madshi.net">www.madshi.net</a></td></tr>
+          </table>
+        </td></tr></table>
+      </td>
+    </tr></table>
+    <map name="SettingsMap">
+    <area shape="rect" coords="14,72,135,113" href="madExceptSettings1.htm" onMouseover="document.images[0].src='mes-ss40.gif'" onMouseout="document.images[0].src='mes-ss44a.gif'">
+    <area shape="rect" coords="14,114,135,155" href="madExceptSettings2.htm" onMouseover="document.images[0].src='mes-ss41.gif'" onMouseout="document.images[0].src='mes-ss44a.gif'">
+    <area shape="rect" coords="14,156,135,197" href="madExceptSettings3.htm" onMouseover="document.images[0].src='mes-ss42.gif'" onMouseout="document.images[0].src='mes-ss44a.gif'">
+    <area shape="rect" coords="14,198,135,239" href="madExceptSettings4.htm" onMouseover="document.images[0].src='mes-ss43.gif'" onMouseout="document.images[0].src='mes-ss44a.gif'">
+    <area shape="rect" coords="14,282,135,323" href="madExceptSettings6.htm" onMouseover="document.images[0].src='mes-ss45.gif'" onMouseout="document.images[0].src='mes-ss44a.gif'">
+    <area shape="rect" coords="14,324,135,365" href="madExceptSettings7.htm" onMouseover="document.images[0].src='mes-ss46.gif'" onMouseout="document.images[0].src='mes-ss44a.gif'">
+    <area shape="rect" coords="14,366,135,407" href="madExceptSettings8.htm" onMouseover="document.images[0].src='mes-ss47.gif'" onMouseout="document.images[0].src='mes-ss44a.gif'">
+    <area shape="rect" coords="14,408,135,449" href="madExceptSettings9.htm" onMouseover="document.images[0].src='mes-ss48.gif'" onMouseout="document.images[0].src='mes-ss44a.gif'">
+    <area shape="rect" coords="14,450,135,489" href="madExceptSettings10.htm" onMouseover="document.images[0].src='mes-ss49.gif'" onMouseout="document.images[0].src='mes-ss44a.gif'">
+    <area shape="rect" coords="149,192,260,209" href="madExceptSettings5a.htm" onMouseover="document.images[0].src='mes-ss44a.gif'" onMouseout="document.images[0].src='mes-ss44b.gif'">
+    <area shape="rect" coords="346,192,445,209" href="madExceptSettings5c.htm" onMouseover="document.images[0].src='mes-ss44c.gif'" onMouseout="document.images[0].src='mes-ss44b.gif'">
+    </map>
+    <p>You can click on the tabs in the left side of the image:</p>
+    <p><img src='mes-ss44b.gif' border=0 usemap="#SettingsMap" align=left style="margin-right:10pt;margin-bottom:10pt"></p>
+    <p>You can click on the 3 tabs "upload to web server", "send via SMTP" and
+       "use local mail client" to get more detailed help.</p>
+    <h3>send settings...</h3>
+    <p>First of all you need to decide which method your program should use to send
+       bug reports to you. There are 3 basic options. The most reliable option is
+       <b>upload to web server</b>. This is so reliable because the data is
+       transferred via HTTP and most firewalls let that pass just fine. However,
+       this method requires you to setup a web server. The second best option is
+       <b>send via SMTP</b>. This method is easy to setup, but some firewalls might
+       block it. The easiest method to setup is "use local mail client". This way
+       madExcept will try to use the mail client software which is installed on the
+       end user's PC to send the bug report to you. Unfortunately doing so is not
+       very reliable because many end users don't have a mail client software
+       installed at all. You can also activate multiple send methods. This way if
+       one method fails, madExcept will try another one.</p>
+    <p>You can let <a href="madExcept.htm" href="madExceptUnit.htm">madExcept</a> <b>send the bug report in a background</b> 
+       thread or in the current user interface thread. If you decide to use the
+       background variant, the progress window is shown in the bottom right of the
+       screen, so that the end user can continue working right away. Otherwise the
+       progress bar is shown in the middle of the screen in modal state. Background
+       sending is not possible (automatically turned off) during dll initialization
+       & finalization.</p>
+    <h3>send via SMTP...</h3>
+    <p>You can enter one or multiple <b>mail receiver(s)</b>, seperated by a
+       comma.</p>
+    <p>SMTP mailing is available in either "client" or "server" variations. The
+       <b>act as SMTP client</b> variant behaves just like any mail client does.
+       You have to enter which email server you want to contact to and the type of
+       encryption (none, SSL or TLS). Additionally, depending on your mail server,
+       you probably also have to enter your account and password data. Please note
+       that your password will be stored in your exe file, and although madExcept
+       encrypts it, it is not 100% crack safe. So you should not use your main SMTP
+       account. Instead I'd suggest to setup a dedicated SMTP account just for bug
+       reporting. Alternatively you can of course also ask the end user for his
+       SMTP server and account information and feed that into <a href="madExcept.htm" href="madExceptUnit.htm">madExcept</a> at
+       runtime.</p>
+    <p>The <b>act as SMTP server</b> approach behaves just like an internet SMTP
+       server does. Usually that works without authentication. However, some mail
+       servers don't accept mails from dialup connections. So the SMTP server
+       variant won't always work for all users. In fact, due to the global spam
+       problem, more and more servers decline mails from dialog connections. So if
+       you want to use this solution please make sure that your server is setup to
+       accept emails from dialog connections.</p>
+  </body>
+
+</html>

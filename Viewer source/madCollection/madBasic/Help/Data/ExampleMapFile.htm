@@ -1,0 +1,115 @@
+<html>
+
+  <head>
+    <title>mad* Help...</title>
+    <meta name="description" content="mad* Help...">
+    <meta name="keywords" content="madshi, components, delphi">
+    <meta http-equiv="expires" content="900">
+    <link rel=stylesheet type="text/css" href="style.css">
+  </head>
+
+  <body background="bcklight.gif" bgcolor=#F8F8F8>
+    <table border=0 cellpadding=0 callspacing=0><tr>
+      <td valign=bottom>
+        <table border=0 cellpadding=0 cellspacing=0><tr><td bgcolor=#D8D8D8>
+          <table cellpadding=3 border=0>
+            <tr><td bgcolor=#FFFFF0>
+              <div id="verySmall"><br></div>
+              <div id="bigTitle">&nbsp;Example Map File&nbsp;</div>
+              <div id="verySmall"><br></div>
+              <div id="small">
+                <a class="small" href="Content.htm">Content</a> /
+                <a class="small" href="madExcept.htm">madExcept</a> /
+                <a class="small" href="madMapFileUnit.htm">madMapFile Unit</a> /...
+              </div>
+            </td></tr>
+          </table>
+        </td></tr></table>
+      </td>
+      <td valign=bottom>
+        <table border=0 cellpadding=0 cellspacing=0><tr><td bgcolor=#D8D8D8>
+          <table cellpadding=7 border=0>
+            <tr><td bgcolor=#F4F4F8><a href="http://www.madshi.net">www.madshi.net</a></td></tr>
+          </table>
+        </td></tr></table>
+      </td>
+    </tr></table>
+    <p>Here are is the detailed map file of an empty new application:</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                  <span id='mono'>
+                    &nbsp;Start &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Length &nbsp;&nbsp;&nbsp;&nbsp;Name &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Class<br>
+                    &nbsp;0001:00000000 0003D500H .text &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CODE<br>
+                    &nbsp;0002:00000000 00000CF8H .data &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DATA<br>
+                    &nbsp;0002:00000CF8 00000821H .bss &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;BSS<br>
+                    <br>
+                    Detailed map of segments<br>
+                    <br>
+                    &nbsp;0001:00000000 00004DBC C=CODE &nbsp;&nbsp;&nbsp;&nbsp;S=.text &nbsp;&nbsp;&nbsp;G=(none) &nbsp;&nbsp;M=System &nbsp;&nbsp;ACBP=A9<br>
+                    &nbsp;0001:00004DBC 00000174 C=CODE &nbsp;&nbsp;&nbsp;&nbsp;S=.text &nbsp;&nbsp;&nbsp;G=(none) &nbsp;&nbsp;M=SysInit &nbsp;ACBP=A9<br>
+                    &nbsp;[...]<br>
+                    &nbsp;0002:00000000 000000A2 C=DATA &nbsp;&nbsp;&nbsp;&nbsp;S=.data &nbsp;&nbsp;&nbsp;G=DGROUP &nbsp;&nbsp;M=System &nbsp;&nbsp;ACBP=A9<br>
+                    &nbsp;0002:000000A4 00000018 C=DATA &nbsp;&nbsp;&nbsp;&nbsp;S=.data &nbsp;&nbsp;&nbsp;G=DGROUP &nbsp;&nbsp;M=SysInit &nbsp;ACBP=A9<br>
+                    &nbsp;[...]<br>
+                    &nbsp;0002:00001000 000004CC C=BSS &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;S=.bss &nbsp;&nbsp;&nbsp;&nbsp;G=DGROUP &nbsp;&nbsp;M=System &nbsp;&nbsp;ACBP=A9<br>
+                    &nbsp;0002:000014CC 00000018 C=BSS &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;S=.bss &nbsp;&nbsp;&nbsp;&nbsp;G=DGROUP &nbsp;&nbsp;M=SysInit &nbsp;ACBP=A9<br>
+                    &nbsp;[...]<br>
+                    <br>
+                    &nbsp;&nbsp;Address &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Publics by Name<br>
+                    <br>
+                    &nbsp;0001:000334DC &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AllocateHWnd<br>
+                    &nbsp;0001:0000679C &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AllocMem<br>
+                    &nbsp;0002:00001420 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AllocMemCount<br>
+                    &nbsp;0002:00001424 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AllocMemSize<br>
+                    &nbsp;0001:00018764 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AllocPatternBitmap<br>
+                    &nbsp;[...]<br>
+                    &nbsp;0001:0003C890 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TApplication.ActivateHint<br>
+                    &nbsp;0001:0003B75C &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TApplication.BringToFront<br>
+                    &nbsp;0001:0003C6B0 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TApplication.CancelHint<br>
+                    &nbsp;0001:0003AE3C &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TApplication.CheckIniChange<br>
+                    &nbsp;0001:0003AC18 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TApplication.ControlDestroyed<br>
+                    &nbsp;0001:0003A800 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TApplication.Create<br>
+                    &nbsp;[...]<br>
+                    <br>
+                    &nbsp;&nbsp;Address &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Publics by Value<br>
+                    <br>
+                    &nbsp;0001:000001C4 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CloseHandle<br>
+                    &nbsp;0001:000001CC &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CreateFileA<br>
+                    &nbsp;0001:000001D4 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;GetFileType<br>
+                    &nbsp;0001:000001DC &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;GetFileSize<br>
+                    &nbsp;0001:000001E4 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;GetStdHandle<br>
+                    &nbsp;0001:000001EC &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RaiseException<br>
+                    &nbsp;0001:000001F4 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ReadFile<br>
+                    &nbsp;[...]<br>
+                    <br>
+                    Line numbers for Unit1(Unit1.pas) segment .text<br>
+                    <br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;23 0001:0003D350 &nbsp;&nbsp;&nbsp;23 0001:0003D357<br>
+                    <br>
+                    Line numbers for Project1(C:\Example\Project1.dpr) segment .text<br>
+                    <br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;9 0001:0003D4B8 &nbsp;&nbsp;&nbsp;10 0001:0003D4C8 &nbsp;&nbsp;&nbsp;11 0001:0003D4D4 &nbsp;&nbsp;&nbsp;12 0001:0003D4EC<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;13 0001:0003D4F8<br>
+                    <br>
+                    Bound resource files<br>
+                    <br>
+                    d:\delphi\delphi 7\Lib\CONTROLS.RES<br>
+                    Unit1.DFM<br>
+                    Project1.RES<br>
+                    Project1.drf<br>
+                    <br>
+                    Program entry point at 0001:0003D4B8<br>
+                           </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </body>
+
+</html>

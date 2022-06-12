@@ -1,0 +1,75 @@
+<html>
+
+  <head>
+    <title>mad* Help...</title>
+    <meta name="description" content="mad* Help...">
+    <meta name="keywords" content="madshi, components, delphi">
+    <meta http-equiv="expires" content="900">
+    <link rel=stylesheet type="text/css" href="style.css">
+  </head>
+
+  <body background="bcklight.gif" bgcolor=#F8F8F8>
+    <a name="ProcessHandleToId"></a>
+    <a name="ThreadHandleToId"></a>
+    <table border=0 cellpadding=0 callspacing=0><tr>
+      <td valign=bottom>
+        <table border=0 cellpadding=0 cellspacing=0><tr><td bgcolor=#D8D8D8>
+          <table cellpadding=3 border=0>
+            <tr><td bgcolor=#FFFFF0>
+              <div id="verySmall"><br></div>
+              <div id="bigTitle">&nbsp;ProcessHandleToId&nbsp;</div>
+              <div id="verySmall"><br></div>
+              <div id="small">
+                <a class="small" href="Content.htm">Content</a> /
+                <a class="small" href="madRemote.htm">madRemote</a> /...
+              </div>
+            </td></tr>
+          </table>
+        </td></tr></table>
+      </td>
+      <td valign=bottom>
+        <table border=0 cellpadding=0 cellspacing=0><tr><td bgcolor=#D8D8D8>
+          <table cellpadding=7 border=0>
+            <tr><td bgcolor=#F4F4F8><a href="http://www.madshi.net">www.madshi.net</a></td></tr>
+          </table>
+        </td></tr></table>
+      </td>
+    </tr></table>
+    <p>The function "ProcessHandleToId" tells you which process ID hides behind a
+       specific process handle. This function is based on undocumented calls, but
+       it works fine in all windows 32 bit systems.</p>
+    <p>The function is useful mostly for API hooks. E.g. if you install a hook on
+       APIs like TerminateProcess or OpenProcess or something similar, you often
+       need to know which process you're dealing with. The win32 APIs don't offer
+       any way to get this kind of information, so I had to implement it myself.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>ProcessHandleToId</span>&nbsp;(<span id='identifier'>processHandle</span>: <span id='identifier'>dword</span>) : <span id='identifier'>dword</span>; <span id='bold'>stdcall</span>;<br>
+                  <span id='bold'>function</span>&nbsp;&nbsp;<span id='identifier'>ThreadHandleToId</span>&nbsp;( <span id='identifier'>threadHandle</span>: <span id='identifier'>dword</span>) : <span id='identifier'>dword</span>; <span id='bold'>stdcall</span>;<br>
+                  <br>
+                  <span id='comment'>// Example:</span><br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>OpenProcessCallback</span>(<span id='identifier'>access</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>dword</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>inheritHandles</span>&nbsp;: <span id='identifier'>bool</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>processHandle</span>&nbsp;&nbsp;: <span id='identifier'>dword</span>) : <span id='identifier'>dword</span>; <span id='bold'>stdcall</span>;<br>
+                  <span id='bold'>var</span>&nbsp;<span id='identifier'>pid</span>&nbsp;: <span id='identifier'>dword</span>;<br>
+                  <span id='bold'>begin</span><br>
+                  &nbsp;&nbsp;<span id='identifier'>pid</span>&nbsp;:= <span id='identifier'>ProcessHandleToId</span>(<span id='identifier'>processHandle</span>);<br>
+                  &nbsp;&nbsp;<span id='bold'>if</span>&nbsp;<span id='identifier'>pid</span>&nbsp;= <span id='identifier'>GetCurrentProcessID</span>&nbsp;<span id='bold'>then</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>// someone wants to open itself, strange thing...</span><br>
+                  <span id='bold'>end</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </body>
+
+</html>

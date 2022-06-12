@@ -16,7 +16,7 @@ unit unt_TraceWin;
 interface
 
    uses
-      Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls,
+      system.types, system.UITypes,Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls,
       Forms, registry,
       Dialogs, StdCtrls, ExtCtrls, VirtualTrees, Menus, XMLDoc, XMLIntf,
       pscMenu, math, printers,
@@ -106,7 +106,7 @@ interface
             Node: PVirtualNode);
          procedure vstTraceGetImageIndex(Sender: TBaseVirtualTree;
             Node: PVirtualNode; Kind: TVTImageKind; Column: TColumnIndex;
-            var Ghosted: boolean; var ImageIndex: Integer);
+            var Ghosted: Boolean; var ImageIndex: System.UITypes.TImageIndex);
          procedure butCloseClick(Sender: TObject);
          procedure vstTraceGetHint(Sender: TBaseVirtualTree;
             Node: PVirtualNode; Column: TColumnIndex;
@@ -146,6 +146,8 @@ interface
             TargetCanvas: TCanvas; Node: PVirtualNode; Column: TColumnIndex;
             CellPaintMode: TVTCellPaintMode; CellRect: TRect;
             var ContentRect: TRect);
+    procedure vstTraceEditing(Sender: TBaseVirtualTree; Node: PVirtualNode;
+      Column: TColumnIndex; var Allowed: Boolean);
 
       private
          procedure WMStartEditingMember(var Message: TMessage);
@@ -280,7 +282,7 @@ uses
    , unt_ODS
    , unt_traceWinProperty
    , unt_plugin
-   , unt_decode
+   //, unt_decode
    , unt_Details_base
    , unt_Details_bitmap
    , unt_Details_xml
@@ -1044,11 +1046,12 @@ uses
       // LineBreakStyle := hlbForceMultiLine ;
    end;
 
-   // ------------------------------------------------------------------------------
+
+// ------------------------------------------------------------------------------
 
    procedure TFrm_Trace.vstTraceGetImageIndex(Sender: TBaseVirtualTree;
       Node: PVirtualNode; Kind: TVTImageKind; Column: TColumnIndex;
-      var Ghosted: boolean; var ImageIndex: Integer);
+      var Ghosted: boolean; var ImageIndex: System.UITypes.TImageIndex);
    var
       TreeRec: PTreeRec;
       c: Integer;
@@ -1056,7 +1059,14 @@ uses
    begin
       ImageIndex := -1;
 
-      if Kind = ikOverlay then
+      //TVTImageKind = (
+      //   ikNormal,
+      //   ikSelected,
+      //   ikState,
+      //   ikOverlay
+      //);
+
+      if (Kind = ikOverlay) or (Kind = ikState) then
          exit; // Return a defined overlay here
 
       if IsMultiColTree then
@@ -1579,8 +1589,7 @@ uses
       if SelectedNode <> MouseNode then
          exit;
 
-      vstTrace.TreeOptions.MiscOptions := vstTrace.TreeOptions.MiscOptions +
-         [toEditable];
+      vstTrace.TreeOptions.MiscOptions := vstTrace.TreeOptions.MiscOptions +  [toEditable];
 
       // We want to start editing the currently selected node. However it might well happen that this change event
       // here is caused by the node editor if another node is currently being edited. It causes trouble
@@ -1588,7 +1597,6 @@ uses
       // in the message handler we then can start editing the new node. This works because the posted message
       // is first executed *after* this event and the message, which triggered it is finished.
       PostMessage(self.Handle, WM_STARTEDITING_TRACE, Integer(SelectedNode), 0);
-
    end;
 
 
@@ -1615,7 +1623,14 @@ uses
          [toEditable];
    end;
 
-   // ------------------------------------------------------------------------------
+   procedure TFrm_Trace.vstTraceEditing(Sender: TBaseVirtualTree;
+     Node: PVirtualNode; Column: TColumnIndex; var Allowed: Boolean);
+  begin
+    inherited;
+      Allowed := true;
+  end;
+
+// ------------------------------------------------------------------------------
 
    // After node is edited, reset the toEditable flag to not allow editing on simple click
    procedure TFrm_Trace.vstTraceEditCancelled(Sender: TBaseVirtualTree;
@@ -4782,8 +4797,11 @@ uses
       TreeRec := Sender.GetNodeData(Node);
       // force font
       ChangeFontDetail(
-         { IsTrace } true, TargetCanvas, Column, TreeRec.FontDetails,
-         (vsSelected in Node.States));
+         {IsTrace}      true,
+         {TargetCanvas} TargetCanvas,
+         {Column}       Column,
+         {FontDetails}  TreeRec.FontDetails,
+         {selected}     (vsSelected in Node.States));
    end;
 
 

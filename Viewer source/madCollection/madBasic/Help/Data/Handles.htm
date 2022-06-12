@@ -1,0 +1,332 @@
+<html>
+
+  <head>
+    <title>mad* Help...</title>
+    <meta name="description" content="mad* Help...">
+    <meta name="keywords" content="madshi, components, delphi">
+    <meta http-equiv="expires" content="900">
+    <link rel=stylesheet type="text/css" href="style.css">
+  </head>
+
+  <body background="bcklight.gif" bgcolor=#F8F8F8>
+    <table border=0 cellpadding=0 callspacing=0><tr>
+      <td valign=bottom>
+        <table border=0 cellpadding=0 cellspacing=0><tr><td bgcolor=#D8D8D8>
+          <table cellpadding=3 border=0>
+            <tr><td bgcolor=#FFFFF0>
+              <div id="verySmall"><br></div>
+              <div id="bigTitle">&nbsp;Handles&nbsp;</div>
+              <div id="verySmall"><br></div>
+              <div id="small">
+                <a class="small" href="Content.htm">Content</a> /
+                <a class="small" href="madKernel.htm">madKernel</a> /...
+              </div>
+            </td></tr>
+          </table>
+        </td></tr></table>
+      </td>
+      <td valign=bottom>
+        <table border=0 cellpadding=0 cellspacing=0><tr><td bgcolor=#D8D8D8>
+          <table cellpadding=7 border=0>
+            <tr><td bgcolor=#F4F4F8><a href="http://www.madshi.net">www.madshi.net</a></td></tr>
+          </table>
+        </td></tr></table>
+      </td>
+    </tr></table>
+    <p>In Windows we have different kind of handles. There are kernel object
+       handles, GDI handles and Window handles, to name the most important types of
+       handles. The "handle" functionality in madKernel is about kernel object
+       handles. In short we're talking about those handles which can be closed with
+       the kernel32 API "CloseHandle".</p>
+    <a name="IHandle"></a>
+    <a name="IHandles"></a>
+    <p>What exactly is a kernel object handle? Internally it consists of two
+       elements, namely an access mask and a pointer to a kernel object. That's it.
+       A kernel handle gives you access to a specific kernel object with specific
+       access rights. Now madKernel encapsulates a lot of handle functionality in
+       an interface with the name (you won't believe it) "IHandle". See also the
+       <a href="IHandleRef.htm">IHandle Reference</a>. Furthermore there is also an interface for a list
+       of handles. See the <a href="IHandlesRef.htm">IHandles Reference</a>.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>type</span><br>
+                  &nbsp;&nbsp;<span id='identifier'>IHandle</span>&nbsp;&nbsp;= <span id='bold'>interface</span>&nbsp;(<a class="pascal" href="IBasicBaseInterface.htm#IBasic">IBasic</a>) &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[<span id='string'>'{86522220-8323-11D3-A52D-00005A180D69}'</span>];<br>
+                  &nbsp;&nbsp;<span id='identifier'>IHandles</span>&nbsp;= <span id='bold'>interface</span>&nbsp;(<a class="pascal" href="ICustomBasicListBaseInterface.htm#ICustomBasicList">ICustomBasicList</a>) [<span id='string'>'{B3017220-8338-11D3-A52D-00005A180D69}'</span>];
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="Handle"></a>
+    <a name="Handles"></a>
+    <p>There are several ways to get a valid IHandle instance. You can use the
+       property <a href="KernelObjects.htm#IKernelObj.Handle">IKernelObj.Handle</a> to get a handle to a specific kernel
+       object, or you can use <a href="Processes.htm#IProcess.Handles">IProcess.Handles</a> to get a list of handles
+       that a specific process has open. Or you can use one of the following two
+       functions. The function "Handle" accepts a typical win32 handle dword value.
+       If you set "autoClose" to "true", the handle is kind of eaten by the
+       interface. That means, if the interface is freed, the win32 handle is
+       automatically closed. The function "Handles" enumerates all handles which
+       are opened by the current process or by all processes system wide.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>Handle</span>&nbsp;(<span id='identifier'>handle</span>&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>cardinal</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>autoClose</span>&nbsp;: <span id='identifier'>boolean</span>&nbsp;= <span id='identifier'>true</span>) : <a class="pascal" href="#IHandle">IHandle</a>; <span id='bold'>overload</span>;<br>
+                  <br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>Handles</span>&nbsp;(<span id='identifier'>systemWide</span>: <span id='identifier'>boolean</span>&nbsp;= <span id='identifier'>false</span>) : <a class="pascal" href="#IHandles">IHandles</a>;<br>
+                  <br>
+                  <span id='comment'>// Examples:</span><br>
+                  <span id='identifier'>Handle</span>(<span id='identifier'>CreateMutex</span>(<span id='bold'>nil</span>, <span id='identifier'>false</span>, <span id='bold'>nil</span>)).<span id='identifier'>KernelObj</span>.<a id="mono" href="KernelObjects.htm#IKernelObj.ObjTypeStr">ObjTypeStr</a>&nbsp;&nbsp;-> &nbsp;<span id='string'>'Mutant'</span><br>
+                  <span id='identifier'>MessageBox</span>(<span id='number'>0</span>, <span id='identifier'>pchar</span>(<span id='string'>'We have '</span>&nbsp;+ <span id='identifier'>IntToStr</span>(<span id='identifier'>Handles</span>.<span id='identifier'>ItemCount</span>) + <span id='string'>' open kernel handles.'</span>), <span id='string'>'info'</span>, <span id='number'>0</span>);
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IHandle.Handle"></a>
+    <a name="IHandle.Access"></a>
+    <a name="IHandle.ObjType"></a>
+    <a name="IHandle.KernelObj"></a>
+    <p>Now let's look at the basic properties of the "IHandle" interface. We can
+       ask the win32 handle value, the access mask of this handle and the type of
+       the referenced kernel object. Finally we can also get an interface instance
+       of the kernel object which is represented by this handle:</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IHandle</span>.<img src="r.gif"><span id='identifier'>Handle</span>&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>cardinal</span>; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>// win32 handle dword value</span><br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IHandle</span>.<img src="r.gif"><span id='identifier'>Access</span>&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>cardinal</span>; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>// object type specific access mask</span><br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IHandle</span>.<img src="r.gif"><span id='identifier'>ObjType</span>&nbsp;&nbsp;&nbsp;: <a class="pascal" href="KernelObjects.htm#TKernelObjType">TKernelObjType</a>;<br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IHandle</span>.<img src="r.gif"><span id='identifier'>KernelObj</span>&nbsp;: <a class="pascal" href="KernelObjects.htm#IKernelObj">IKernelObj</a>;<br>
+                  <br>
+                  <span id='comment'>// Example:</span><br>
+                  <span id='bold'>var</span>&nbsp;<span id='identifier'>hnd</span>&nbsp;: <a class="pascal" href="#IHandle">IHandle</a>;<br>
+                  <span id='bold'>begin</span><br>
+                  &nbsp;&nbsp;<span id='identifier'>hnd</span>&nbsp;:= <span id='identifier'>Handle</span>(<span id='identifier'>CreateMutex</span>(<span id='bold'>nil</span>, <span id='identifier'>false</span>, <span id='bold'>nil</span>));<br>
+                  &nbsp;&nbsp;<span id='identifier'>MessageBox</span>(<span id='number'>0</span>, <span id='identifier'>pchar</span>(<span id='string'>'New mutex access: '</span>&nbsp;+ <span id='identifier'>IntToHex</span>(<span id='identifier'>hnd</span>.<span id='identifier'>Access</span>, <span id='number'>1</span>)), <span id='string'>'info'</span>, <span id='number'>0</span>);<br>
+                  <span id='bold'>end</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IHandle.AutoClose"></a>
+    <p>If you set the "AutoClose" property to "true", the win32 handle dword value
+       (which is encapsulated by the IHandle instance) gets closed as soon as the
+       IHandle instance gets freed. If the "AutoClose" property is set to "false",
+       the win32 handle survives the IHandle instance. In this case you eventually
+       have to close the win32 handle manually by calling "CloseHandle".</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IHandle</span>.<img src="w.gif"><span id='identifier'>AutoClose</span>&nbsp;: <span id='identifier'>boolean</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IHandle.IsStillValid"></a>
+    <p>Sometimes it might be possible, that the win32 handle is closed behind our
+       back. So with the property "IsStillValid" we can check, whether our IHandle
+       instance still makes sense.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>IHandle</span>.<img src="m.gif"><span id='identifier'>IsStillValid</span>&nbsp;: <span id='identifier'>boolean</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IHandle.Duplicate"></a>
+    <p>Sometimes you need to duplicate a handle. With the methods "Duplicate" you
+       can easily do so. You can duplicate a handle into your own process or in any
+       target process (if you have enough privileges). "targetProcess&nbsp;=&nbsp;0"
+       stands for the current process.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>IHandle</span>.<img src="m.gif"><span id='identifier'>Duplicate</span>&nbsp;(<span id='identifier'>autoClose</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>boolean</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="e.gif">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>access</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>cardinal</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="e.gif">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>inheritHandles</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>boolean</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="e.gif">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='bold'>const</span>&nbsp;<span id='identifier'>targetProcess</span>&nbsp;: <a class="pascal" href="Processes.htm#IProcess">IProcess</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;) : <span id='identifier'>IHandle</span>; <span id='bold'>overload</span>;<br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>IHandle</span>.<img src="m.gif"><span id='identifier'>Duplicate</span>&nbsp;(<span id='identifier'>autoClose</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>boolean</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="e.gif">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>access</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>cardinal</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="e.gif">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>inheritHandles</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>boolean</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="e.gif">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='bold'>const</span>&nbsp;<span id='identifier'>targetProcess</span>&nbsp;: <a class="pascal" href="#IHandle">IHandle</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;) : <span id='identifier'>IHandle</span>; <span id='bold'>overload</span>;<br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>IHandle</span>.<img src="m.gif"><span id='identifier'>Duplicate</span>&nbsp;(<span id='identifier'>autoClose</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>boolean</span>&nbsp;&nbsp;= <span id='identifier'>true</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="e.gif">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>access</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>cardinal</span>&nbsp;= <span id='number'>0</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="e.gif">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>inheritHandles</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>boolean</span>&nbsp;&nbsp;= <span id='identifier'>true</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="e.gif">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>targetProcess</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>cardinal</span>&nbsp;= <span id='number'>0</span>&nbsp;&nbsp;&nbsp;) : <span id='identifier'>IHandle</span>; <span id='bold'>overload</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IHandle.WaitFor"></a>
+    <a name="IHandles.WaitFor"></a>
+    <p>You can wait for one or for multiple handles. If you set "waitAll" to "false",
+       the wait is over, if one handle (or rather the object represented by the
+       handle) is signaled. In that case the index of the signaled handle (object)
+       is returned.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>IHandle</span>. <img src="m.gif"><span id='identifier'>WaitFor</span>&nbsp;(<span id='identifier'>milliseconds</span>&nbsp;&nbsp;&nbsp;: <span id='identifier'>cardinal</span>&nbsp;&nbsp;= <span id='identifier'>INFINITE</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="e.gif">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>handleMessages</span>&nbsp;: <span id='identifier'>boolean</span>&nbsp;&nbsp;&nbsp;= <span id='identifier'>true</span>&nbsp;&nbsp;&nbsp;&nbsp;) : <span id='identifier'>boolean</span>;<br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>IHandles</span>.<img src="m.gif"><span id='identifier'>WaitFor</span>&nbsp;(<span id='identifier'>waitAll</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>boolean</span>&nbsp;&nbsp;&nbsp;= <span id='identifier'>false</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="e.gif">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>milliseconds</span>&nbsp;&nbsp;&nbsp;: <span id='identifier'>cardinal</span>&nbsp;&nbsp;= <span id='identifier'>INFINITE</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="e.gif">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>handleMessages</span>&nbsp;: <span id='identifier'>boolean</span>&nbsp;&nbsp;&nbsp;= <span id='identifier'>true</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="e.gif">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='bold'>index</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <a class="pascal" href="SignedTypes.htm#TPInteger">TPInteger</a>&nbsp;= <span id='bold'>nil</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;) : <span id='identifier'>boolean</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IHandle.Notify"></a>
+    <a name="IHandles.Notify"></a>
+    <p>The "Notify" methods don't wait, they return at once. But the specified
+       handles (respectively the represented kernel objects) are watched for in the
+       background. As soon as the wanted state is reached, a notification message
+       is sent to the specified window:</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>IHandle</span>. <img src="m.gif"><span id='identifier'>Notify</span>&nbsp;(<span id='identifier'>window</span>&nbsp;&nbsp;: <span id='identifier'>cardinal</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="e.gif">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>msg</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>cardinal</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;) : <span id='identifier'>boolean</span>;<br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>IHandles</span>.<img src="m.gif"><span id='identifier'>Notify</span>&nbsp;(<span id='identifier'>window</span>&nbsp;&nbsp;: <span id='identifier'>cardinal</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="e.gif">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>msg</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>cardinal</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="e.gif">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>waitAll</span>&nbsp;: <span id='identifier'>boolean</span>&nbsp;= <span id='identifier'>false</span>) : <span id='identifier'>boolean</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IHandle.WouldWait"></a>
+    <a name="IHandles.WouldWait"></a>
+    <p>The "WouldWait" methods test, whether we would have to wait for the
+       specified handles (kernel objects):</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>IHandle</span>. <img src="m.gif"><span id='identifier'>WouldWait</span>&nbsp;: <span id='identifier'>boolean</span>;<br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>IHandles</span>.<img src="m.gif"><span id='identifier'>WouldWait</span>&nbsp;(<span id='identifier'>waitAll</span>: <span id='identifier'>boolean</span>) : <span id='identifier'>boolean</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IHandles.Items"></a>
+    <a name="IHandles.RefreshItems"></a>
+    <p>Of course the IHandles interfaces has properties/methods to get easy access
+       to the items. Also you can easily refresh the handle list, that is you can
+       look for new, deleted or changed handles.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IHandles</span>.<img src="r.gif"><span id='identifier'>Items</span>&nbsp;[<span id='bold'>index</span>: <span id='identifier'>integer</span>] : <a class="pascal" href="#IHandle">IHandle</a>;<br>
+                  <br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>IHandles</span>.<img src="m.gif"><span id='identifier'>RefreshItems</span>&nbsp;: <span id='identifier'>boolean</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IHandle.OwnerProcess"></a>
+    <a name="IHandles.OwnerProcess"></a>
+    <a name="IHandles.KernelObj"></a>
+    <p>If this IHandle(s) instance resulted from an enumeration, we can ask the
+       enumeration parameters.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IHandle</span>. <img src="r.gif"><span id='identifier'>OwnerProcess</span>&nbsp;: <a class="pascal" href="Processes.htm#IProcess">IProcess</a>;<br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IHandles</span>.<img src="r.gif"><span id='identifier'>OwnerProcess</span>&nbsp;: <a class="pascal" href="Processes.htm#IProcess">IProcess</a>;<br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IHandles</span>.<img src="r.gif"><span id='identifier'>KernelObj</span>&nbsp;&nbsp;&nbsp;&nbsp;: <a class="pascal" href="KernelObjects.htm#IKernelObj">IKernelObj</a>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </body>
+
+</html>

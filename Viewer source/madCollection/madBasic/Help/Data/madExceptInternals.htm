@@ -1,0 +1,129 @@
+<html>
+
+  <head>
+    <title>mad* Help...</title>
+    <meta name="description" content="mad* Help...">
+    <meta name="keywords" content="madshi, components, delphi">
+    <meta http-equiv="expires" content="900">
+    <link rel=stylesheet type="text/css" href="style.css">
+  </head>
+
+  <body background="bcklight.gif" bgcolor=#F8F8F8>
+    <table border=0 cellpadding=0 callspacing=0><tr>
+      <td valign=bottom>
+        <table border=0 cellpadding=0 cellspacing=0><tr><td bgcolor=#D8D8D8>
+          <table cellpadding=3 border=0>
+            <tr><td bgcolor=#FFFFF0>
+              <div id="verySmall"><br></div>
+              <div id="bigTitle">&nbsp;madExcept Internals&nbsp;</div>
+              <div id="verySmall"><br></div>
+              <div id="small">
+                <a class="small" href="Content.htm">Content</a> /
+                <a class="small" href="madExcept.htm">madExcept</a> /...
+              </div>
+            </td></tr>
+          </table>
+        </td></tr></table>
+      </td>
+      <td valign=bottom>
+        <table border=0 cellpadding=0 cellspacing=0><tr><td bgcolor=#D8D8D8>
+          <table cellpadding=7 border=0>
+            <tr><td bgcolor=#F4F4F8><a href="http://www.madshi.net">www.madshi.net</a></td></tr>
+          </table>
+        </td></tr></table>
+      </td>
+    </tr></table>
+    <p>When talking about the internals of <a href="madExcept.htm" href="madExceptUnit.htm">madExcept</a>, we should split it all
+       into 3 pieces, which are:</p>
+    <table>
+      <tr><td align=right valign=top>1.</td>
+          <td>Your just linked binary gets patched by <a href="madExcept.htm" href="madExceptUnit.htm">madExcept</a>.</td></tr>
+      <tr><td align=right valign=top>2.</td>
+          <td>When your module (application or dll) initializes, <a href="madExcept.htm" href="madExceptUnit.htm">madExcept</a>
+              hacks into Delphi's exception logic.</td></tr>
+      <tr><td align=right valign=top>3.</td>
+          <td>When an exception occurs, <a href="madExcept.htm" href="madExceptUnit.htm">madExcept</a> creates an extensive bug
+              report and notifies all registered exception handlers.</td></tr>
+    </table>
+    <p>Now let's look at those 3 pieces in detail:</p>
+    <h3>Inside of the IDE...</h3>
+    <p>One part of <a href="madExcept.htm" href="madExceptUnit.htm">madExcept</a> is a little wizard (named "madExceptWizard"),
+       which integrates itself into the Delphi IDE in several aspects:</p>
+    <table>
+      <tr><td align=right valign=top>1.</td>
+          <td>The menu item "madExcept settings..." is added to the "Project" menu.
+              This menu item opens a <a href="madExceptSettings.htm">settings
+              dialog</a> with which you can configure madExcept's settings for the
+              current project, including the layout of the exception box, your
+              email address and much more. The settings are saved per project in
+              the text file "projectName.mes" in the project's root folder.</td></tr>
+      <tr><td align=right valign=top>2.</td>
+          <td>The menu item "madExcept configuration..." is added to the "Tools"
+              menu. This menu item opens <a href="madExceptConfiguration.htm">just
+              another settings dialog</a>. The settings
+              in this dialog are project independent. E.g. you can configure
+              whether you want madExcept to catch Delphi/BCB IDE exceptions, or
+              whether madExcept may modify your projects according to its own needs.
+              These global settings are stored in the registry.</td></tr>
+      <tr><td align=right valign=top>3.</td>
+          <td>Whenever you open, close or save a project, <a href="madExcept.htm" href="madExceptUnit.htm">madExcept</a>'s Delphi
+              wizard gets notified and then automatically also opens, closes or
+              saves the madExcept settings for the current project.</td></tr>
+      <tr><td align=right valign=top>4.</td>
+          <td>If you enable/disable <a href="madExcept.htm" href="madExceptUnit.htm">madExcept</a> support for your project,
+              the wizard automatically adds/deletes the unit "madExcept" (and maybe
+              more units, depending of your settings) to/from your project's uses
+              clause.</td></tr>
+      <tr><td align=right valign=top>5.</td>
+          <td>Finally, the wizard gets notified, when a project was just being
+              linked. In that very moment the wizard opens the fresh binary and
+              patches it. The <a href="madExceptSettings.htm">madExcept settings</a> (like button captions etc)
+              are written into the binary. Furthermore the map file is compressed,
+              encrypted and then attached to the binary as a resource.</td></tr>
+    </table>
+    <p>If you're not using the Delphi IDE to build your projects, but the command
+       line tools instead, you should look at the tool "madExceptPatch.exe", that
+       is shipped with the <a href="madExcept.htm" href="madExceptUnit.htm">madExcept</a> package. This tool can do the same
+       things as the IDE wizard.</p>
+    <h3>When initializing...</h3>
+    <p>When your application gets started or when your DLL gets loaded,
+       <a href="madExcept.htm" href="madExceptUnit.htm">madExcept</a> hooks deep into Delphi's system
+       units including "System.pas" and "SysUtils.pas". The usual exception
+       event handlers ("TApplication.OnException" and "System.ErrorProc") are
+       hacked, you can set them to any value without effect. Furthermore several
+       additional functions are intercepted. "SysUtils.ShowException",
+       "TApplication.ShowException" and "TApplication.HandleException" are all
+       diverted to <a href="madExcept.htm" href="madExceptUnit.htm">madExcept</a>'s internal exception handling.</p>
+    <p>Normally when an exception occurs during the initialization part of any unit,
+       you will not see a senseful exception box, but instead something like
+       "runtime error 216". Furthermore such initialization errors normally don't
+       run through any of the exception handling callbacks. With <a href="madExcept.htm" href="madExceptUnit.htm">madExcept</a>
+       the initialization errors behave exactly like other exceptions, also the
+       cryptic messages should no longer appear.</p>
+    <p>At the end of the initialization <a href="madExcept.htm" href="madExceptUnit.htm">madExcept</a> creates two threads, one
+       is responsible for regularly checking whether the main thread is frozen. The
+       other one sleeps. It will later do all the work when an exception occurs.</p>
+    <h3>Handling exceptions...</h3>
+    <p>In the moment when an exception is to be handled, <a href="madExcept.htm" href="madExceptUnit.htm">madExcept</a> notifies
+       the exception handling thread, which was created during the initialization
+       (see above). The exception handling thread takes over control. It collects
+       some basic information about the currently running system like OS information,
+       consumed resources and so on.</p>
+    <p>Now it is time to call all registered event handlers (see
+       <a href="madExceptUnit.htm#RegisterExceptionHandler">RegisterExceptionHandler</a>). If a handler is meant to be "synchronized",
+       the event handler is called in the context of the main thread. Otherwise the
+       main thread is left alone and the handler is called directly in the context
+       of the exception handling thread.</p>
+    <p>All registered exception handlers are called in a row, until one handler
+       sets the flag <a href="madExceptUnit.htm#TExceptEvent">handled</a> to true.
+       In that case the whole exception handling is aborted and the exception
+       handling thread goes back to sleep, waiting for the next exception.</p>
+    <p>If no handler sets the mentioned flag, the exception handling thread shows
+       the exception box, while in another newly created helper thread some time
+       consuming tasks are done like
+       analyzing the exception, calculating all threads' callstacks etc. As the
+       helper thread finishes to calculate all wanted information, the exception
+       box is updated to show the latest information.</p>
+  </body>
+
+</html>

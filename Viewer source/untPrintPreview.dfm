@@ -234,7 +234,6 @@ object FrmPrintPreview: TFrmPrintPreview
           Width = 97
           Height = 22
           Style = csDropDownList
-          ItemHeight = 14
           TabOrder = 0
           OnChange = ZoomComboBoxChange
           Items.Strings = (

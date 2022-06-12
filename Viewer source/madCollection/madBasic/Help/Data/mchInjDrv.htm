@@ -1,0 +1,126 @@
+<html>
+
+  <head>
+    <title>mad* Help...</title>
+    <meta name="description" content="mad* Help...">
+    <meta name="keywords" content="madshi, components, delphi">
+    <meta http-equiv="expires" content="900">
+    <link rel=stylesheet type="text/css" href="style.css">
+  </head>
+
+  <body background="bcklight.gif" bgcolor=#F8F8F8>
+    <table border=0 cellpadding=0 callspacing=0><tr>
+      <td valign=bottom>
+        <table border=0 cellpadding=0 cellspacing=0><tr><td bgcolor=#D8D8D8>
+          <table cellpadding=3 border=0>
+            <tr><td bgcolor=#FFFFF0>
+              <div id="verySmall"><br></div>
+              <div id="bigTitle">&nbsp;Injection Driver&nbsp;</div>
+              <div id="verySmall"><br></div>
+              <div id="small">
+                <a class="small" href="Content.htm">Content</a> /
+                <a class="small" href="madCodeHook.htm">madCodeHook</a> /...
+              </div>
+            </td></tr>
+          </table>
+        </td></tr></table>
+      </td>
+      <td valign=bottom>
+        <table border=0 cellpadding=0 cellspacing=0><tr><td bgcolor=#D8D8D8>
+          <table cellpadding=7 border=0>
+            <tr><td bgcolor=#F4F4F8><a href="http://www.madshi.net">www.madshi.net</a></td></tr>
+          </table>
+        </td></tr></table>
+      </td>
+    </tr></table>
+    <h3>Introduction</h3>
+    <p>System wide DLL injection in madCodeHook is split into two
+       separate parts:</p>
+    <p>(1) Injection into already running processes.<br>
+       (2) Automatic injection into newly created processes.</p>
+    <p>Part (1) is done with user land code, while (2) is done by a little
+       kernel mode driver, which is shipping with madCodeHook. Or actually it's 2
+       drivers, a 32bit and a 64bit one. These drivers are shipping in fully compiled form (*.sys),
+       but they will not work, until they are properly <a href="mchDrvCfg.htm">configured</a>
+       and afterwards <a href="mchDrvSign.htm">signed</a> with a code signing certificate
+       (e.g. GlobalSign or Verisign).</p>
+    <p>By <a href="mchDrvCfg.htm">configuring</a> the driver file, it gets a unique name.
+       Furthermore you can make a selection of dlls known to the driver, to make sure
+       that the driver will trust these dlls and will inject them without hesitation.
+       The <a href="mchDrvSign.htm">signing process</a> is necessary to make the driver
+       load in newer OSs (especially in x64 OSs). The signing also makes sure that the configuration
+       can not be modified, anymore, because doing so would invalidate the signature.
+       A <a href="mchDrvCfg.htm">configured</a> & <a href="mchDrvSign.htm">signed</a>
+       driver is only willing to inject those hook dlls which are known to it, or which
+       were signed with the same code signing certificate as the driver itself. Injection
+       of untrusted hook dlls is always refused.</p>
+    <p>The injection driver must be manually loaded or installed by using the
+       <a href="DllInjecting.htm#LoadInjectionDriver">driver control API</a>.</p>
+    
+    <h3>How does the driver control API work?</h3>
+    <p>First of all your custom driver needs to be loaded/installed. There are two
+       different options:</p>
+    <p>(1) The normal way is to install the driver permanently,
+       just like a service. If you do that, the driver will be visible to the end
+       user (it's listed in the device manager, if you activate certain options).
+       Furthermore the driver survives reboots. The advantage of this solution is
+       that the driver doesn't play "hide and seek", so it should look less
+       dangerous to security applications. The disadvantage is that your software
+       needs both an installation and deinstallation logic.</p>
+    <p>(2) Instead of permanently installing the driver, you can also simply load
+       it dynamically. If you do that, the driver will stay loaded until you either
+       stop it, or until the end user reboots the OS. The advantage of this
+       solution is that you don't need to provide an installation/deinstallation
+       logic. The disadvantage is that dynamically loading a driver might look
+       slightly more suspicious to security applications, because a dynamically
+       loaded driver is mostly invisible to the end user.</p>
+    <p>madCodeHook contains
+       <a href="DllInjecting.htm#LoadInjectionDriver">APIs</a> for both approaches
+       described above. There are also
+       <a href="DllInjecting.htm#StopInjectionDriver">APIs</a> available for
+       stopping and restarting the driver. See <a href="DllInjecting.htm">here</a>
+       for a detailed description of all available injection APIs.</p>
+    
+    <h3>Anti malware misuse tricks</h3>
+    <p>In order to stop malware programmers from misusing madCodeHook, there are
+       several layers of protection:</p>
+    <p>(1) You need to <a href="mchDrvSign.htm">sign</a> the kernel mode drivers
+       yourself. Most malware programmers will probably lack a valid code signing
+       certificate. And even if they have such a certificate, it can be revoked if
+       it's used to create malware. And it can also be easily used as a search
+       criterion for security applications.</p>
+    <p>(2) The driver strictly refuses to inject any dlls which were not made known
+       to the driver at build/<a href="mchDrvCfg.htm">configuration</a> time (unless
+       the dlls are signed with the same certificate as the driver). This
+       makes sure that a malware programmer can not misuse your driver to inject
+       his own dlls.</p>
+    <p>(3) When your application tells the driver to inject a specific dll, the
+       driver calculates a hash of your exe file and stores that together with the
+       injection request information. The driver later only accepts a "stop
+       injection" request from a process if the exe file has the same hash as the
+       one which started the injection (or if the exe was signed with the same
+       certificate as the driver). This makes sure that a malware process can
+       not simply hack into the application/driver communication to stop your dll
+       from being injected.</p>
+    <p>(4) Even if you configure your driver to support being stopped (safely), a
+       stopping request is only accepted by the driver if it was issued by the
+       driver injection API. Stopping the driver through the normal service/driver
+       OS APIs is blocked. Furthermore the driver accepts a stop request only if no
+       dll injection requests are active. This should make sure that a malware
+       process can not simply stop your driver behind your back.</p>
+    
+    <table border=0 cellpadding=0 callspacing=0>
+      <tr><td bgcolor=#D8D8D8>
+        <table border=0 cellpadding=7>
+          <tr>
+            <td bgcolor=#6060B0><div id="smallTitle">Related Topics</div></td>
+            <td bgcolor=#F8F0F0><a href="mchDrvCfg.htm">Driver Configuration</a></td>
+            <td bgcolor=#F4F4F8><a href="mchDrvSign.htm">Driver Signing</a></td>
+            <td bgcolor=#F8F0F0><a href="DllInjecting.htm#LoadInjectionDriver">Driver Injection APIs</a></td>
+          </tr>
+        </table>
+      </td></tr>
+    </table>
+  </body>
+
+</html>

@@ -1,0 +1,84 @@
+<html>
+
+  <head>
+    <title>mad* Help...</title>
+    <meta name="description" content="mad* Help...">
+    <meta name="keywords" content="madshi, components, delphi">
+    <meta http-equiv="expires" content="900">
+    <link rel=stylesheet type="text/css" href="style.css">
+  </head>
+
+  <body background="bcklight.gif" bgcolor=#F8F8F8>
+    <a name="TRemoteExecuteFunction"></a>
+    <a name="RemoteExecute"></a>
+    <table border=0 cellpadding=0 callspacing=0><tr>
+      <td valign=bottom>
+        <table border=0 cellpadding=0 cellspacing=0><tr><td bgcolor=#D8D8D8>
+          <table cellpadding=3 border=0>
+            <tr><td bgcolor=#FFFFF0>
+              <div id="verySmall"><br></div>
+              <div id="bigTitle">&nbsp;RemoteExecute&nbsp;</div>
+              <div id="verySmall"><br></div>
+              <div id="small">
+                <a class="small" href="Content.htm">Content</a> /
+                <a class="small" href="madRemote.htm">madRemote</a> /...
+              </div>
+            </td></tr>
+          </table>
+        </td></tr></table>
+      </td>
+      <td valign=bottom>
+        <table border=0 cellpadding=0 cellspacing=0><tr><td bgcolor=#D8D8D8>
+          <table cellpadding=7 border=0>
+            <tr><td bgcolor=#F4F4F8><a href="http://www.madshi.net">www.madshi.net</a></td></tr>
+          </table>
+        </td></tr></table>
+      </td>
+    </tr></table>
+    <p>Sometimes you need to execute code in the context of another process. The
+       usual way to do this is to put your code into a little DLL and somehow load
+       your DLL into the target process. The function "RemoteExecute" however gives
+       you a more direct way to solve the problem. You can directly execute a
+       function in the context of another process.</p>
+    <p>In order to make this work, RemoteExecute internally copies your function
+       to the target process by using <a href="CopyFunction.htm">CopyFunction</a>. Then it copies the
+       parameters to the target process, as well, by using <a href="AllocFreeMemEx.htm#AllocMemEx">AllocMemEx</a> and
+       "WriteProcessMemory". Finally it executes the function in the context of the
+       target process by using <a href="CreateRemoteThread.htm">CreateRemoteThreadEx</a>.</p>
+    <p>The function which you want to have executed in the other process needs to
+       follow some rules. Please read the documentation of <a href="CopyFunction.htm">CopyFunction</a> to
+       learn more about those rules.</p>
+    <p>If you enter the "size" of the parameter block, "RemoteExecute" copies the
+       parameter block to the other process before executing the function there.
+       And after the function was fully executed, the parameter block is read back,
+       so you can get detailed results from the function execution.</p>
+    <p>If you don't specify the "size" of the parameter block, the "params" 32bit
+       pointer value is directly passed to the function, when it is executed in
+       the other process.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='comment'>// this is how your remote function must look like</span><br>
+                  <span id='bold'>type</span>&nbsp;<span id='identifier'>TRemoteExecuteFunction</span>&nbsp;= <span id='bold'>function</span>&nbsp;(<span id='identifier'>params</span>: <span id='identifier'>pointer</span>) : <span id='identifier'>dword</span>; <span id='bold'>stdcall</span>;<br>
+                  <br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>RemoteExecute</span>&nbsp;(<span id='identifier'>processHandle</span>&nbsp;&nbsp;: <span id='identifier'>dword</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>func</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>TRemoteExecuteFunction</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='bold'>var</span>&nbsp;<span id='identifier'>funcResult</span>&nbsp;: <span id='identifier'>dword</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>params</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>pointer</span>&nbsp;= <span id='bold'>nil</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>size</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>dword</span>&nbsp;&nbsp;&nbsp;= <span id='number'>0</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;) : <span id='identifier'>bool</span>; <span id='bold'>stdcall</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <p>Please also have a look at the <a href="RemoteCmdLine.htm">"RemoteCmdLine" Example</a>.</p>
+  </body>
+
+</html>

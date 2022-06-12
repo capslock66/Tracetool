@@ -1,0 +1,446 @@
+<html>
+
+  <head>
+    <title>mad* Help...</title>
+    <meta name="description" content="mad* Help...">
+    <meta name="keywords" content="madshi, components, delphi">
+    <meta http-equiv="expires" content="900">
+    <link rel=stylesheet type="text/css" href="style.css">
+  </head>
+
+  <body background="bcklight.gif" bgcolor=#F8F8F8>
+    <a name="IShares"></a>
+    <table border=0 cellpadding=0 callspacing=0><tr>
+      <td valign=bottom>
+        <table border=0 cellpadding=0 cellspacing=0><tr><td bgcolor=#D8D8D8>
+          <table cellpadding=3 border=0>
+            <tr><td bgcolor=#FFFFF0>
+              <div id="verySmall"><br></div>
+              <div id="bigTitle">&nbsp;Shares&nbsp;</div>
+              <div id="verySmall"><br></div>
+              <div id="small">
+                <a class="small" href="Content.htm">Content</a> /
+                <a class="small" href="madSecurity.htm">madSecurity</a> /...
+              </div>
+            </td></tr>
+          </table>
+        </td></tr></table>
+      </td>
+      <td valign=bottom>
+        <table border=0 cellpadding=0 cellspacing=0><tr><td bgcolor=#D8D8D8>
+          <table cellpadding=7 border=0>
+            <tr><td bgcolor=#F4F4F8><a href="http://www.madshi.net">www.madshi.net</a></td></tr>
+          </table>
+        </td></tr></table>
+      </td>
+    </tr></table>
+    <p>The interface "IShares" implements a collection of some specific
+       <a href="#IShare">IShare</a> objects. A list of methods and properties is contained in the
+       <a href="ISharesRef.htm">IShares Reference</a>.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>type</span>&nbsp;<span id='identifier'>IShares</span>&nbsp;= <span id='bold'>interface</span>&nbsp;(<a class="pascal" href="ICustomBasicListBaseInterface.htm#ICustomBasicList">ICustomBasicList</a>) [<span id='string'>'{0E2E3601-4C3A-11D3-A52D-00005A180D69}'</span>];
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="TShareType"></a>
+    <a name="TShareTypeSet"></a>
+    <a name="Shares"></a>
+    <p>The function "Shares" lists all shares which have the specified properties:</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>type</span>&nbsp;<span id='identifier'>TShareType</span>&nbsp;&nbsp;&nbsp;&nbsp;= (<span id='identifier'>stDisk</span>, <span id='identifier'>stPrinter</span>, <span id='identifier'>stDevice</span>, <span id='identifier'>stIpc</span>);<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>TShareTypeSet</span>&nbsp;= <span id='bold'>set</span>&nbsp;<span id='bold'>of</span>&nbsp;<span id='identifier'>TShareType</span>;<br>
+                  <br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>Shares</span>&nbsp;(<span id='identifier'>types</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>TShareTypeSet</span>&nbsp;= [<span id='identifier'>low</span>(<span id='identifier'>TShareType</span>)..<span id='identifier'>high</span>(<span id='identifier'>TShareType</span>)];<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>path</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='bold'>string</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= <span id='string'>'*'</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>serverName</span>&nbsp;: <span id='bold'>string</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= <span id='string'>''</span>&nbsp;) : <span id='identifier'>IShares</span>;<br>
+                  <br>
+                  <span id='comment'>// Examples:</span><br>
+                  <span id='bold'>with</span>&nbsp;<span id='identifier'>Shares</span>([<span id='identifier'>stPrinter</span>] &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;) <span id='bold'>do</span>&nbsp;... &nbsp;&nbsp;<span id='comment'>// list all printer shares</span><br>
+                  <span id='bold'>with</span>&nbsp;<span id='identifier'>Shares</span>([<span id='identifier'>stDisk</span>&nbsp;&nbsp;&nbsp;], <a class="pascal" href="SpecialFolders.htm#WinFolder">WinFolder</a>) <span id='bold'>do</span>&nbsp;... &nbsp;&nbsp;<span id='comment'>// list all shares on our Windows folder</span>
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IShares.Types"></a>
+    <a name="IShares.Path"></a>
+    <a name="IShares.ServerName"></a>
+    <p>The following properties return, what you gave in as parameters when
+       creating the "IShares" list:</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IShares</span>.<img src="r.gif"><span id='identifier'>Types</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <a class="pascal" href="#TShareTypeSet">TShareTypeSet</a>;<br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IShares</span>.<img src="r.gif"><span id='identifier'>Path</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='bold'>string</span>;<br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IShares</span>.<img src="r.gif"><span id='identifier'>ServerName</span>&nbsp;: <span id='bold'>string</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IShares.Items"></a>
+    <a name="IShares.RefreshItems"></a>
+    <p>The items of a "IShares" list are <a href="#IShare">IShare</a> objects. The method
+       "RefreshItems" looks for new/changed/deleted items, that have the specified
+       properties.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IShares</span>.<img src="r.gif"><span id='identifier'>Items</span>&nbsp;[<span id='bold'>index</span>: <span id='identifier'>integer</span>] : <a class="pascal" href="#IShare">IShare</a>;<br>
+                  <br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>IShares</span>.<img src="m.gif"><span id='identifier'>RefreshItems</span>&nbsp;: <span id='identifier'>boolean</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IShares.Delete"></a>
+    <p>The following method deletes all listed shares at once:</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>IShares</span>.<img src="m.gif"><span id='identifier'>Delete</span>&nbsp;: <span id='identifier'>boolean</span>;<br>
+                  <br>
+                  <span id='comment'>// Example:</span><br>
+                  <a class="pascal" href="#Shares">Shares</a>.<span id='identifier'>Delete</span>; &nbsp;<span id='comment'>// delete every single share that is installed on our PC</span>
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IShare"></a>
+    <p>The interface "IShare" implements everything you need when dealing with a
+       single share. A list of functions and properties can be found in the
+       <a href="IShareRef.htm">IShare Reference</a>.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>type</span>&nbsp;<span id='identifier'>IShare</span>&nbsp;= <span id='bold'>interface</span>&nbsp;(<a class="pascal" href="IBasicBaseInterface.htm#IBasic">IBasic</a>) [<span id='string'>'{0E2E3600-4C3A-11D3-A52D-00005A180D69}'</span>];
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="TShareAccess"></a>
+    <a name="TShareAccessSet"></a>
+    <a name="Share"></a>
+    <a name="NewShare"></a>
+    <p>You can either get an "IShare" instance for an existing share or you can
+       create a totally new share with the specified attributes. The attributes
+       "access", "password", "rwPassword", "persist", "system" and "maxUses" are
+       not always available.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>type</span>&nbsp;<span id='identifier'>TShareAccess</span>&nbsp;&nbsp;&nbsp;&nbsp;= (<span id='identifier'>aRead</span>, <span id='identifier'>aWrite</span>, <span id='identifier'>aCreate</span>, <span id='identifier'>aExec</span>, <span id='identifier'>aDelete</span>, <span id='identifier'>aAtrib</span>, <span id='identifier'>aPerm</span>, <span id='identifier'>aFindFirst</span>);<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>TShareAccessSet</span>&nbsp;= <span id='bold'>set</span>&nbsp;<span id='bold'>of</span>&nbsp;<span id='identifier'>TShareAccess</span>;<br>
+                  <br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>Share</span>&nbsp;&nbsp;&nbsp;&nbsp;(<span id='identifier'>netName</span>&nbsp;&nbsp;&nbsp;&nbsp;: <span id='bold'>string</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>serverName</span>&nbsp;: <span id='bold'>string</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= <span id='string'>''</span>&nbsp;&nbsp;&nbsp;) : <span id='identifier'>IShare</span>;<br>
+                  <br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>NewShare</span>&nbsp;(<span id='identifier'>path</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='bold'>string</span>;<br>
+                  <span id='comment'>{</span>&nbsp;<span id='comment'>only</span>&nbsp;<span id='comment'>valid</span>&nbsp;<span id='comment'>in</span>&nbsp;<span id='comment'>}</span>&nbsp;&nbsp;<span id='identifier'>netName</span>&nbsp;&nbsp;&nbsp;&nbsp;: <span id='bold'>string</span>;<br>
+                  <span id='comment'>{</span>&nbsp;------------- <span id='comment'>}</span>&nbsp;&nbsp;<span id='identifier'>remark</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='bold'>string</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= <span id='string'>''</span>;<br>
+                  <span id='comment'>{</span>&nbsp;<span id='comment'>share</span>-<span id='comment'>level</span>&nbsp;&nbsp;&nbsp;<span id='comment'>}</span>&nbsp;&nbsp;<span id='identifier'>access</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>TShareAccessSet</span>&nbsp;= [<span id='identifier'>low</span>(<span id='identifier'>TShareAccess</span>)..<span id='identifier'>high</span>(<span id='identifier'>TShareAccess</span>)];<br>
+                  <span id='comment'>{</span>&nbsp;<span id='comment'>share</span>-<span id='comment'>level</span>&nbsp;&nbsp;&nbsp;<span id='comment'>}</span>&nbsp;&nbsp;<span id='identifier'>password</span>&nbsp;&nbsp;&nbsp;: <span id='bold'>string</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= <span id='string'>''</span>;<br>
+                  <span id='comment'>{</span>&nbsp;<span id='comment'>share</span>-<span id='comment'>l</span>. + <span id='comment'>9x</span>&nbsp;<span id='comment'>}</span>&nbsp;&nbsp;<span id='identifier'>rwPassword</span>&nbsp;: <span id='bold'>string</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= <span id='string'>''</span>;<br>
+                  <span id='comment'>{</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>win9x</span>&nbsp;<span id='comment'>}</span>&nbsp;&nbsp;<span id='identifier'>persist</span>&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>boolean</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= <span id='identifier'>true</span>;<br>
+                  <span id='comment'>{</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>win9x</span>&nbsp;<span id='comment'>}</span>&nbsp;&nbsp;<span id='identifier'>system</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>boolean</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= <span id='identifier'>false</span>;<br>
+                  <span id='comment'>{</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>winNT</span>&nbsp;<span id='comment'>}</span>&nbsp;&nbsp;<span id='identifier'>maxUses</span>&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>integer</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= -<span id='number'>1</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>serverName</span>&nbsp;: <span id='bold'>string</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= <span id='string'>''</span>&nbsp;&nbsp;&nbsp;) : <span id='identifier'>IShare</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IShare.Type_"></a>
+    <a name="IShare.ServerName"></a>
+    <p>The following properties are valid for every share on every OS. They can't
+       be changed. The property "ServerName" returns on which server this share is
+       installed.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IShare</span>.<img src="r.gif"><span id='identifier'>Type_</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <a class="pascal" href="#TShareType">TShareType</a>;<br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IShare</span>.<img src="r.gif"><span id='identifier'>ServerName</span>&nbsp;: <span id='bold'>string</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IShare.Path"></a>
+    <a name="IShare.NetName"></a>
+    <a name="IShare.Remark"></a>
+    <p>The following properties are valid for every share on every OS. You can ask
+       and also change them. However, changing the path or the netname of a share
+       results in that the share internally gets deleted and recreated. In win9x
+       the netname is limited to 12 characters.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IShare</span>.<img src="w.gif"><span id='identifier'>Path</span>&nbsp;&nbsp;&nbsp;&nbsp;: <span id='bold'>string</span>;<br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IShare</span>.<img src="w.gif"><span id='identifier'>NetName</span>&nbsp;: <span id='bold'>string</span>;<br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IShare</span>.<img src="w.gif"><span id='identifier'>Remark</span>&nbsp;&nbsp;: <span id='bold'>string</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IShare.Access"></a>
+    <a name="IShare.Password"></a>
+    <a name="IShare.ReadWritePassword"></a>
+    <p>The following properties are only valid, when the server is running with
+       share-level security. The ReadWritePassword furthermore is only valid in
+       win9x.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IShare</span>.<img src="w.gif"><span id='identifier'>Access</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <a class="pascal" href="#TShareAccessSet">TShareAccessSet</a>;<br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IShare</span>.<img src="w.gif"><span id='identifier'>Password</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='bold'>string</span>;<br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IShare</span>.<img src="w.gif"><span id='identifier'>ReadWritePassword</span>&nbsp;: <span id='bold'>string</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IShare.Persist"></a>
+    <a name="IShare.System"></a>
+    <p>The following properties are only valid in win9x. "Persist" determines,
+       whether the share will survive system reboot. "System" determines, whether
+       the share is visible in the Explorer.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IShare</span>.<img src="w.gif"><span id='identifier'>Persist</span>&nbsp;: <span id='identifier'>boolean</span>;<br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IShare</span>.<img src="w.gif"><span id='identifier'>System</span>&nbsp;&nbsp;: <span id='identifier'>boolean</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IShare.CurrentUses"></a>
+    <a name="IShare.MaxUses"></a>
+    <p>The following properties are only valid in winNT. "CurrentUses" returns, how
+       often the share is currently used. "MaxUses" determines how often the share
+       may be used at the same time.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IShare</span>.<img src="r.gif"><span id='identifier'>CurrentUses</span>&nbsp;: <span id='identifier'>integer</span>;<br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IShare</span>.<img src="w.gif"><span id='identifier'>MaxUses</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>integer</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IShare.Refresh"></a>
+    <p>The property "Refresh" reloads all share properties.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>IShare</span>.<img src="m.gif"><span id='identifier'>Refresh</span>&nbsp;: <span id='identifier'>boolean</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IShare.IsDirty"></a>
+    <a name="IShare.Flush"></a>
+    <p>The method "IsDirty" tells you whether there were changes in the current
+       share, that are not flushed yet. The method "Flush" realizes all changes.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>IShare</span>.<img src="m.gif"><span id='identifier'>IsDirty</span>&nbsp;: <span id='identifier'>boolean</span>;<br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>IShare</span>.<img src="m.gif"><span id='identifier'>Flush</span>&nbsp;&nbsp;&nbsp;: <span id='identifier'>boolean</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IShare.SecurityObject"></a>
+    <a name="IShare.Acl"></a>
+    <p>The following methods/properties deal with the security aspects of the
+       current share. You can work with the <a href="SecurityObjects.htm#ISecurityObject">ISecurityObject</a> of the share or
+       directly with the <a href="ACLs.htm#IAcl">IAcl</a> of the share.</p>
+    <p>There's one thing you should know: In winNT each disk share has it's own
+       security. Plus the share's target (e.g. a directory) has also it's own
+       security. The security of the share's target has no effect on the share.
+       In contrast printer shares in winNT and also every kind of shares in win9x
+       have NO own security. Instead they use the security of the share's target.
+       The "SecurityObject" method returns the <a href="SecurityObjects.htm#ISecurityObject">ISecurityObject</a> that really
+       matters, that is the share's security object for winNT disk shares and the
+       target's security object for winNT printer shares and for all win9x
+       shares. The "Acl" property also gives access to the right <a href="ACLs.htm#IAcl">IAcl</a> object,
+       of course.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>IShare</span>.<img src="m.gif"><span id='identifier'>SecurityObject</span>&nbsp;: <a class="pascal" href="SecurityObjects.htm#ISecurityObject">ISecurityObject</a>;<br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IShare</span>.<img src="w.gif"><span id='identifier'>Acl</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <a class="pascal" href="ACLs.htm#IAcl">IAcl</a>;<br>
+                  <br>
+                  <span id='comment'>// Example:</span><br>
+                  <a class="pascal" href="#NewShare">NewShare</a>(<a class="pascal" href="SpecialFolders.htm#WinFolder">WinFolder</a>, <span id='string'>'WinFolder'</span>).<span id='identifier'>Acl</span>.<a class="pascal" href="ACLS.htm#IAcl.SetFileAccess">SetFileAccess</a>(<a class="pascal" href="Accounts.htm#CurrentUser">CurrentUser</a>, <span id='identifier'>true</span>);
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IShare.Delete"></a>
+    <p>The following method deletes the current share.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>IShare</span>.<img src="m.gif"><span id='identifier'>Delete</span>&nbsp;: <span id='identifier'>boolean</span>;<br>
+                  <br>
+                  <span id='comment'>// Example:</span><br>
+                  <a class="pascal" href="#Share">Share</a>(<span id='string'>'WinFolder'</span>).<span id='identifier'>Delete</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="ClearShareName"></a>
+    <p>The procedure "ClearShareName" shorts "str" (if necessary) in the way so that
+       "str" contains a valid share netname.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>procedure</span>&nbsp;<span id='identifier'>ClearShareName</span>&nbsp;(<span id='bold'>var</span>&nbsp;<span id='identifier'>str</span>: <span id='bold'>string</span>);<br>
+                  <br>
+                  <span id='comment'>// Examples:</span><br>
+                  <span id='identifier'>ClearShareName</span>( &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='string'>'Dämlich, Gunfried'</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;) &nbsp;-> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='string'>'DÄMLICH· GUN'</span><br>
+                  <span id='identifier'>ClearShareName</span>(<span id='string'>'\\server\Dämlich, Gunfried\test.exe'</span>) &nbsp;-> &nbsp;<span id='string'>'\\server\DÄMLICH· GUN\test.exe'</span>
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </body>
+
+</html>

@@ -16,9 +16,9 @@
 	<AppDisplay>
 		<SmallBut Value="true"/>
 		<ApplicationTitle Value="socket: 8090 / 4502,  Http : 85, WebSocket:8091"/>
-		<Left Value="130"/>
-		<Top Value="130"/>
-		<Width Value="693"/>
+		<Left Value="1016"/>
+		<Top Value="293"/>
+		<Width Value="924"/>
 		<Height Value="635"/>
 		<StayOnTop Value="false"/>
 		<ShowOnstartup Value="true"/>
@@ -33,7 +33,7 @@
 		<ToolbarBookmark Value="true"/>
 		<ToolbarFilter Value="true"/>
 		<HideViewer Value="false"/>
-		<DisableInternalLog Value="true"/>
+		<DisableInternalLog Value="false"/>
 	</AppDisplay>
 	<Framework>
 		<ShowMembers Value="true"/>
@@ -91,7 +91,7 @@
 		</Info>
 	</EventLog>
 	<Tail>
-		<LastPath Value="\\192.168.1.15\pi\Log\"/>
+		<LastPath Value=""/>
 		<AutoClear Value="false"/>
 		<MaxNode Value="25000"/>
 		<MinNode Value="20000"/>
@@ -105,7 +105,7 @@
 		<OpenFromFavorites Value="true"/>
 		<VisibleMenu Value="true"/>
 		<Favorites>
-			<FileName>C:\log.txt</FileName><FileName>C:\Temp\WCESCOMM.LOG</FileName><FileName>D:\TraceTool\TempTraces\CacheODBC_cand.log</FileName><FileName>C:\INSTALL.LOG</FileName><FileName>D:\TraceTool\TempTraces\TracetoolInternalLog.txt</FileName><FileName>D:\TraceTool\TempTraces\test.txt</FileName><FileName>C:\TracetoolInternalLog.txt</FileName><FileName>C:\Windows\System32\LogFiles\Firewall\pfirewall.log</FileName><FileName>\\192.168.1.15\pi\Log\Error.log</FileName><FileName>\\192.168.1.15\pi\Log\Info.log</FileName></Favorites>
+			<FileName>C:\log.txt</FileName><FileName>C:\Temp\WCESCOMM.LOG</FileName><FileName>D:\TraceTool\TempTraces\CacheODBC_cand.log</FileName><FileName>C:\INSTALL.LOG</FileName><FileName>D:\TraceTool\TempTraces\TracetoolInternalLog.txt</FileName><FileName>D:\TraceTool\TempTraces\test.txt</FileName><FileName>C:\TracetoolInternalLog.txt</FileName><FileName>C:\Windows\System32\LogFiles\Firewall\pfirewall.log</FileName><FileName>\\192.168.1.15\pi\Log\Error.log</FileName><FileName>\\192.168.1.15\pi\Log\Info.log</FileName><FileName>C:\temp\TracetoolInternalLog.txt</FileName></Favorites>
 		<Trace>
 			<FontName Value="MS Sans Serif"/>
 			<FontSize Value="8"/>
@@ -130,7 +130,7 @@
 	<Plugins>
 		<Plugin><Kind>DotNet</Kind><Enabled Value="true"/><FileName>WebSock\WebsockPlugin.dll</FileName><Param>WebSocketHost = 0.0.0.0, WebSocketPort = 8091, ViewerSocketHost = 127.0.0.1, ViewerSocketPort = 8090</Param></Plugin></Plugins>
 	<Watches>
-		<Enabled Value="true"/>
+		<Enabled Value="false"/>
 		<VisibleMenu Value="true"/>
 		<MainWatchesTitle Value="Watches"/>
 		<Trace>

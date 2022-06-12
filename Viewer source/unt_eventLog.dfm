@@ -5,8 +5,8 @@ inherited FrmEventLog: TFrmEventLog
   ClientHeight = 171
   ClientWidth = 569
   OldCreateOrder = True
-  ExplicitWidth = 577
-  ExplicitHeight = 205
+  ExplicitWidth = 585
+  ExplicitHeight = 210
   PixelsPerInch = 96
   TextHeight = 13
   object GroupPanel: TPanel
@@ -31,7 +31,6 @@ inherited FrmEventLog: TFrmEventLog
       Height = 149
       Align = alClient
       BevelInner = bvNone
-      CheckImageKind = ckDarkCheck
       Colors.BorderColor = clWindowText
       Colors.HotColor = clBlack
       Colors.UnfocusedSelectionColor = clHighlight
@@ -44,14 +43,8 @@ inherited FrmEventLog: TFrmEventLog
       Font.Style = []
       Header.AutoSizeIndex = -1
       Header.DefaultHeight = 17
-      Header.Font.Charset = DEFAULT_CHARSET
-      Header.Font.Color = clWindowText
-      Header.Font.Height = -11
-      Header.Font.Name = 'MS Sans Serif'
-      Header.Font.Style = []
       Header.Height = 17
       Header.Options = [hoAutoResize, hoColumnResize, hoDrag, hoVisible]
-      HintAnimation = hatNone
       HintMode = hmTooltip
       Images = Frm_Tool.ImageList1
       Indent = 15
@@ -76,6 +69,7 @@ inherited FrmEventLog: TFrmEventLog
       OnDblClick = VstEventDblClick
       OnEditCancelled = VstEventEditCancelled
       OnEdited = VstEventEdited
+      OnEditing = VstEventEditing
       OnFreeNode = VstEventFreeNode
       OnGetText = VstEventGetText
       OnPaintText = VstEventPaintText
@@ -83,6 +77,8 @@ inherited FrmEventLog: TFrmEventLog
       OnHeaderDragged = VstEventHeaderDragged
       OnKeyAction = VstEventKeyAction
       OnMeasureItem = VstEventMeasureItem
+      Touch.InteractiveGestures = [igPan, igPressAndTap]
+      Touch.InteractiveGestureOptions = [igoPanSingleFingerHorizontal, igoPanSingleFingerVertical, igoPanInertia, igoPanGutter, igoParentPassthrough]
       Columns = <
         item
           Position = 0
@@ -90,22 +86,22 @@ inherited FrmEventLog: TFrmEventLog
         end
         item
           Position = 1
+          Text = 'Time'
           Width = 115
-          WideText = 'Time'
         end
         item
           MaxWidth = 1000
           Position = 2
+          Text = 'Source'
           Width = 150
-          WideText = 'Source'
         end
         item
           Color = 16705515
           MinWidth = 3000
           Options = [coAllowClick, coEnabled, coParentBidiMode, coResizable, coShowDropMark, coVisible, coAllowFocus]
           Position = 3
+          Text = 'Lines'
           Width = 3000
-          WideText = 'Lines'
         end>
     end
     object PanelTraceInfo: TPanel
@@ -125,7 +121,6 @@ inherited FrmEventLog: TFrmEventLog
         Height = 145
         Align = alClient
         BevelOuter = bvNone
-        CheckImageKind = ckDarkCheck
         Color = 16117479
         Colors.BorderColor = clWindowText
         Colors.HotColor = clBlack
@@ -138,15 +133,9 @@ inherited FrmEventLog: TFrmEventLog
         Font.Style = []
         Header.AutoSizeIndex = -1
         Header.DefaultHeight = 17
-        Header.Font.Charset = DEFAULT_CHARSET
-        Header.Font.Color = clWindowText
-        Header.Font.Height = -11
-        Header.Font.Name = 'MS Sans Serif'
-        Header.Font.Style = []
         Header.Height = 17
         Header.MainColumn = 1
         Header.Options = [hoAutoResize, hoColumnResize, hoDrag, hoVisible]
-        HintAnimation = hatNone
         HintMode = hmTooltip
         Indent = 15
         Margin = 0
@@ -163,10 +152,13 @@ inherited FrmEventLog: TFrmEventLog
         OnChange = VstDetailChange
         OnCreateEditor = VstDetailCreateEditor
         OnDblClick = VstDetailDblClick
+        OnEditing = VstDetailEditing
         OnFreeNode = VstDetailFreeNode
         OnGetText = VstDetailGetText
         OnPaintText = VstDetailPaintText
         OnMeasureItem = VstDetailMeasureItem
+        Touch.InteractiveGestures = [igPan, igPressAndTap]
+        Touch.InteractiveGestureOptions = [igoPanSingleFingerHorizontal, igoPanSingleFingerVertical, igoPanInertia, igoPanGutter, igoParentPassthrough]
         Columns = <
           item
             Color = 16117479
@@ -216,7 +208,6 @@ inherited FrmEventLog: TFrmEventLog
         Width = 22
         Height = 20
         Anchors = [akTop, akRight]
-        DoubleBuffered = True
         Glyph.Data = {
           36030000424D3603000000000000360000002800000010000000100000000100
           1800000000000003000000000000000000000000000000000000FF00FFFF00FF
@@ -244,7 +235,6 @@ inherited FrmEventLog: TFrmEventLog
           FF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00
           FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF
           00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FF}
-        ParentDoubleBuffered = False
         TabOrder = 0
         OnClick = butCloseClick
       end
@@ -255,8 +245,6 @@ inherited FrmEventLog: TFrmEventLog
         Height = 20
         Anchors = [akTop, akRight]
         Caption = 'Reload (50)'
-        DoubleBuffered = True
-        ParentDoubleBuffered = False
         TabOrder = 1
         OnClick = butReloadClick
       end
@@ -267,8 +255,6 @@ inherited FrmEventLog: TFrmEventLog
         Height = 20
         Anchors = [akTop, akRight]
         Caption = 'Get All messages'
-        DoubleBuffered = True
-        ParentDoubleBuffered = False
         TabOrder = 2
         OnClick = butGetAllClick
       end

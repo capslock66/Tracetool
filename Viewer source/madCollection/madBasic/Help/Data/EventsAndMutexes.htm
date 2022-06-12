@@ -1,0 +1,277 @@
+<html>
+
+  <head>
+    <title>mad* Help...</title>
+    <meta name="description" content="mad* Help...">
+    <meta name="keywords" content="madshi, components, delphi">
+    <meta http-equiv="expires" content="900">
+    <link rel=stylesheet type="text/css" href="style.css">
+  </head>
+
+  <body background="bcklight.gif" bgcolor=#F8F8F8>
+    <a name="IEvent"></a>
+    <a name="IMutex"></a>
+    <table border=0 cellpadding=0 callspacing=0><tr>
+      <td valign=bottom>
+        <table border=0 cellpadding=0 cellspacing=0><tr><td bgcolor=#D8D8D8>
+          <table cellpadding=3 border=0>
+            <tr><td bgcolor=#FFFFF0>
+              <div id="verySmall"><br></div>
+              <div id="bigTitle">&nbsp;Events and Mutexes&nbsp;</div>
+              <div id="verySmall"><br></div>
+              <div id="small">
+                <a class="small" href="Content.htm">Content</a> /
+                <a class="small" href="madKernel.htm">madKernel</a> /...
+              </div>
+            </td></tr>
+          </table>
+        </td></tr></table>
+      </td>
+      <td valign=bottom>
+        <table border=0 cellpadding=0 cellspacing=0><tr><td bgcolor=#D8D8D8>
+          <table cellpadding=7 border=0>
+            <tr><td bgcolor=#F4F4F8><a href="http://www.madshi.net">www.madshi.net</a></td></tr>
+          </table>
+        </td></tr></table>
+      </td>
+    </tr></table>
+    <p>madKernel encapsulates two different kernel synchronization objects, namely
+       events and mutexes. Both can have a name and both can synchronize even
+       threads of different processes. There's one big difference though: An event
+       is either locked or unlocked. When a thread waits for an event which is
+       locked, the thread will wait until someone (else) unlocks the event. So a
+       thread can easily deadlock itself by first locking an event and then waiting
+       for it. A mutex behaves differently. A mutex is not locked or unlocked.
+       Instead it is owned (by a specific thread) or not owned. A thread takes
+       ownership of a mutex simply by waiting for it. If a thread already owns a
+       mutex and then waits for it again, there is no deadlock, the wait function
+       returns without delay. So a thread can not deadlock itself by using a mutex.
+       In some situations a mutex makes more sense than an event and vice versa.
+       Simply choose what fits your needs better.</p>
+    <p>madKernel wraps the mentioned two objects up with the interfaces IEvent and
+       IMutex. See also the <a href="IEventRef.htm">IEvent Reference</a> and the <a href="IMutexRef.htm">IMutex Reference</a>.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>type</span><br>
+                  &nbsp;&nbsp;<span id='identifier'>IEvent</span>&nbsp;= <span id='bold'>interface</span>&nbsp;(<a class="pascal" href="KernelObjects.htm#IWaitableObj">IWaitableObj</a>) [<span id='string'>'{53F8CE41-2C8A-11D3-A52D-00005A180D69}'</span>];<br>
+                  &nbsp;&nbsp;<span id='identifier'>IMutex</span>&nbsp;= <span id='bold'>interface</span>&nbsp;(<a class="pascal" href="KernelObjects.htm#IWaitableObj">IWaitableObj</a>) [<span id='string'>'{7B7FE820-8E34-11D3-A52E-00005A180D69}'</span>];
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="NewEvent"></a>
+    <p>You can create a new event by calling "NewEvent". There are two different
+       types of events. If you set "auto" to "true" you have an automatic event,
+       otherwise you have a manual event. The manual event doesn't change it's
+       locking state automatically, you have to manually set it by calling the
+       appropriate methods (described a bit later). An automatic event gets locked
+       automatically as soon as someone successfully waited for it. As a result
+       with an automatic event you can make sure (if you want) that always only one
+       thread runs through a specific code block. You can't do that with a manual
+       event. On the other hand, with a manual event you can unlock a whole bunch
+       of waiting threads at once, which you can't do with an automatic event.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>NewEvent</span>&nbsp;(<span id='identifier'>auto</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>boolean</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= <span id='identifier'>false</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>locked</span>&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>boolean</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= <span id='identifier'>true</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>name</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='bold'>string</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= <span id='string'>''</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>eventAttr</span>&nbsp;: <span id='identifier'>PSecurityAttributes</span>&nbsp;= <span id='bold'>nil</span>&nbsp;) : <a class="pascal" href="#IEvent">IEvent</a>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="NewMutex"></a>
+    <p>Call "NewMutex" to create a new mutex. You can specify whether you want to
+       take immediate ownership of the mutex or not. Also you can give the mutex a
+       name to share it with other processes.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>NewMutex</span>&nbsp;(<span id='identifier'>name</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='bold'>string</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= <span id='string'>''</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>enter</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>boolean</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= <span id='identifier'>true</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>mutexAttr</span>&nbsp;: <span id='identifier'>PSecurityAttributes</span>&nbsp;= <span id='bold'>nil</span>&nbsp;) : <a class="pascal" href="#IMutex">IMutex</a>;<br>
+                  <br>
+                  <span id='comment'>// Example:</span><br>
+                  <span id='identifier'>mtx</span>&nbsp;:= <span id='identifier'>NewMutex</span>(<span id='string'>'MadshisUniqueMutexName'</span>);
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="OpenEvent"></a>
+    <a name="OpenMutex"></a>
+    <p>Use the following functions to open an already existing named mutex/event.
+       It doesn't matter to which process the existing synchronization object
+       belongs. So please make sure that you name your objects uniquely.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>OpenEvent</span>&nbsp;(<span id='identifier'>name</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='bold'>string</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>access</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>cardinal</span>&nbsp;= <span id='identifier'>EVENT_ALL_ACCESS</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>inheritHandles</span>&nbsp;: <span id='identifier'>boolean</span>&nbsp;&nbsp;= <span id='identifier'>true</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;) : <a class="pascal" href="#IEvent">IEvent</a>; <span id='bold'>overload</span>;<br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>OpenMutex</span>&nbsp;(<span id='identifier'>name</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='bold'>string</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>access</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>cardinal</span>&nbsp;= <span id='identifier'>MUTEX_ALL_ACCESS</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>inheritHandles</span>&nbsp;: <span id='identifier'>boolean</span>&nbsp;&nbsp;= <span id='identifier'>true</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;) : <a class="pascal" href="#IMutex">IMutex</a>; <span id='bold'>overload</span>;<br>
+                  <br>
+                  <span id='comment'>// Example:</span><br>
+                  <span id='identifier'>mtx</span>&nbsp;:= <span id='identifier'>OpenMutex</span>(<span id='string'>'MadshisUniqueMutexName'</span>);
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="Event"></a>
+    <a name="Mutex"></a>
+    <p>The following functions convert a win32 handle dword value or an IHandle
+       instance into a IEvent/IMutex interface instance:</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>Event</span>&nbsp;(<span id='bold'>const</span>&nbsp;<span id='identifier'>event</span>&nbsp;: <a class="pascal" href="Handles.htm#IHandle">IHandle</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;) : <a class="pascal" href="#IEvent">IEvent</a>; <span id='bold'>overload</span>;<br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>Mutex</span>&nbsp;(<span id='bold'>const</span>&nbsp;<span id='identifier'>mutex</span>&nbsp;: <a class="pascal" href="Handles.htm#IHandle">IHandle</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;) : <a class="pascal" href="#IMutex">IMutex</a>; <span id='bold'>overload</span>;<br>
+                  <br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>Event</span>&nbsp;(<span id='identifier'>event</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>cardinal</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>autoClose</span>&nbsp;&nbsp;&nbsp;: <span id='identifier'>boolean</span>&nbsp;= <span id='identifier'>true</span>) : <a class="pascal" href="#IEvent">IEvent</a>; <span id='bold'>overload</span>;<br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>Mutex</span>&nbsp;(<span id='identifier'>mutex</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>cardinal</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>autoClose</span>&nbsp;&nbsp;&nbsp;: <span id='identifier'>boolean</span>&nbsp;= <span id='identifier'>true</span>) : <a class="pascal" href="#IMutex">IMutex</a>; <span id='bold'>overload</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IEvent.Name"></a>
+    <a name="IMutex.Name"></a>
+    <p>The property "Name" tells you which name the event/mutex has (no kidding!).
+       This works only if you got the event/mutex instance from CreateEvent/Mutex
+       or OpenEvent/Mutex, though.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IEvent</span>.<img src="r.gif"><span id='identifier'>Name</span>&nbsp;: <span id='bold'>string</span>;<br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IMutex</span>.<img src="r.gif"><span id='identifier'>Name</span>&nbsp;: <span id='bold'>string</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IEvent.IsAuto"></a>
+    <p>Is this event an automatic or a manual event? This method works always,
+       regardless where the event instance came from.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>IEvent</span>.<img src="m.gif"><span id='identifier'>IsAuto</span>&nbsp;: <span id='identifier'>boolean</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IEvent.Lock"></a>
+    <a name="IEvent.Unlock"></a>
+    <a name="IEvent.Pulse"></a>
+    <p>With the following methods you can manually lock, unlock or pulse an event.
+       This works on both manual and automatic events. Pulsing an event is the same
+       as locking and unlocking it at the same time.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>IEvent</span>.<img src="m.gif"><span id='identifier'>Lock</span>&nbsp;&nbsp;&nbsp;: <span id='identifier'>boolean</span>;<br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>IEvent</span>.<img src="m.gif"><span id='identifier'>Unlock</span>&nbsp;: <span id='identifier'>boolean</span>;<br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>IEvent</span>.<img src="m.gif"><span id='identifier'>Pulse</span>&nbsp;&nbsp;: <span id='identifier'>boolean</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IMutex.Enter"></a>
+    <a name="IMutex.Leave"></a>
+    <a name="IMutex.TryEnter"></a>
+    <p>Calling "Enter" has the same effect as calling <a href="KernelObjects.htm#IWaitableObj.WaitFor">IWaitableObj.WaitFor</a>
+       with the "handleMessages" parameter set to "false". It makes not much sense
+       here to call <a href="KernelObjects.htm#IWaitableObj.WaitFor">IWaitableObj.WaitFor</a> with "handleMessages" set to "true",
+       because then an internal helper thread would gain ownership of the mutex.
+       "TryEnter" always returns at once. If the mutex is owned by another thread,
+       "TryEnter" returns "false" and does not take over ownership of the mutex. If
+       the mutex is not currently owned, "TryEnter" behaves like "Enter".</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>IMutex</span>.<img src="m.gif"><span id='identifier'>Enter</span>&nbsp;(<span id='identifier'>milliseconds</span>: <span id='identifier'>cardinal</span>&nbsp;= <span id='identifier'>INFINITE</span>) : <span id='identifier'>boolean</span>;<br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>IMutex</span>.<img src="m.gif"><span id='identifier'>Leave</span>&nbsp;: <span id='identifier'>boolean</span>;<br>
+                  <br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>IMutex</span>.<img src="m.gif"><span id='identifier'>TryEnter</span>&nbsp;: <span id='identifier'>boolean</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </body>
+
+</html>

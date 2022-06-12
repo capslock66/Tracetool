@@ -1,0 +1,122 @@
+<html>
+
+  <head>
+    <title>mad* Help...</title>
+    <meta name="description" content="mad* Help...">
+    <meta name="keywords" content="madshi, components, delphi">
+    <meta http-equiv="expires" content="900">
+    <link rel=stylesheet type="text/css" href="style.css">
+  </head>
+
+  <body background="bcklight.gif" bgcolor=#F8F8F8>
+    <table border=0 cellpadding=0 callspacing=0><tr>
+      <td valign=bottom>
+        <table border=0 cellpadding=0 cellspacing=0><tr><td bgcolor=#D8D8D8>
+          <table cellpadding=3 border=0>
+            <tr><td bgcolor=#FFFFF0>
+              <div id="verySmall"><br></div>
+              <div id="bigTitle">&nbsp;"ProcessFunc" Example&nbsp;</div>
+              <div id="verySmall"><br></div>
+              <div id="small">
+                <a class="small" href="Content.htm">Content</a> /
+                <a class="small" href="madCodeHook.htm">madCodeHook</a> /
+                <a class="small" href="ApiCodeHooking.htm">API/Code Hooking</a> /...
+              </div>
+            </td></tr>
+          </table>
+        </td></tr></table>
+      </td>
+      <td valign=bottom>
+        <table border=0 cellpadding=0 cellspacing=0><tr><td bgcolor=#D8D8D8>
+          <table cellpadding=7 border=0>
+            <tr><td bgcolor=#F4F4F8><a href="http://www.madshi.net">www.madshi.net</a></td></tr>
+          </table>
+        </td></tr></table>
+      </td>
+    </tr></table>
+    <p>The following project can also be found in the "Demo" folder:</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='comment'>// ***************************************************************</span><br>
+                  <span id='comment'>// &nbsp;ProcessFunc &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;version: &nbsp;1.0 &nbsp;&nbsp;· &nbsp;date: 2003-06-15</span><br>
+                  <span id='comment'>// &nbsp;-------------------------------------------------------------</span><br>
+                  <span id='comment'>// &nbsp;simple demo to show process wide function hooking</span><br>
+                  <span id='comment'>// &nbsp;-------------------------------------------------------------</span><br>
+                  <span id='comment'>// &nbsp;Copyright (C) 1999 - 2003 www.madshi.net, All Rights Reserved</span><br>
+                  <span id='comment'>// ***************************************************************</span><br>
+                  <br>
+                  <span id='comment'>// 2003-06-15 1.0 &nbsp;initial release</span><br>
+                  <br>
+                  <span id='bold'>program</span>&nbsp;<span id='identifier'>ProcessFunc</span>;<br>
+                  <br>
+                  <span id='comment'>{$R</span>&nbsp;..\<span id='comment'>mad</span>.<span id='comment'>res}</span><br>
+                  <br>
+                  <span id='bold'>uses</span>&nbsp;<span id='identifier'>Windows</span>, <a class="pascal" href="madCodeHook.htm">madCodeHook</a>, <a class="pascal" href="madStringsUnit.htm">madStrings</a>;<br>
+                  <br>
+                  <span id='comment'>// ***************************************************************</span><br>
+                  <br>
+                  <span id='comment'>// SomeFunc appends the 2 string parameters and returns the result</span><br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>SomeFunc</span>(<span id='identifier'>str1</span>, <span id='identifier'>str2</span>: <span id='bold'>string</span>) : <span id='bold'>string</span>;<br>
+                  <span id='bold'>begin</span><br>
+                  &nbsp;&nbsp;<span id='identifier'>result</span>&nbsp;:= <span id='identifier'>str1</span>&nbsp;+ <span id='identifier'>str2</span>;<br>
+                  <span id='bold'>end</span>;<br>
+                  <br>
+                  <span id='comment'>// ***************************************************************</span><br>
+                  <br>
+                  <span id='comment'>// variable for the "next hook", which we then call in the callback function</span><br>
+                  <span id='comment'>// it must have *exactly* the same parameters and calling convention as the</span><br>
+                  <span id='comment'>// original function</span><br>
+                  <span id='comment'>// besides, it's also the parameter that you need to undo the code hook again</span><br>
+                  <span id='bold'>var</span>&nbsp;<span id='identifier'>SomeFuncNextHook</span>&nbsp;: <span id='bold'>function</span>&nbsp;(<span id='identifier'>str1</span>, <span id='identifier'>str2</span>: <span id='bold'>string</span>) : <span id='bold'>string</span>;<br>
+                  <br>
+                  <span id='comment'>// this function is our hook callback function, which will receive</span><br>
+                  <span id='comment'>// all calls to the original SomeFunc function, as soon as we've hooked it</span><br>
+                  <span id='comment'>// the hook function must have *exactly* the same parameters and calling</span><br>
+                  <span id='comment'>// convention as the original function</span><br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>SomeFuncHookProc</span>(<span id='identifier'>str1</span>, <span id='identifier'>str2</span>: <span id='bold'>string</span>) : <span id='bold'>string</span>;<br>
+                  <span id='bold'>begin</span><br>
+                  &nbsp;&nbsp;<span id='comment'>// manipulate the input parameters</span><br>
+                  &nbsp;&nbsp;<span id='identifier'>str1</span>&nbsp;:= <span id='string'>'blabla'</span>;<br>
+                  &nbsp;&nbsp;<span id='identifier'>str2</span>&nbsp;:= <a class="pascal" href="StringManipulate.htm#UpStr">UpStr</a>(<span id='identifier'>str2</span>);<br>
+                  &nbsp;&nbsp;<span id='comment'>// now call the original function</span><br>
+                  &nbsp;&nbsp;<span id='identifier'>result</span>&nbsp;:= <span id='identifier'>SomeFuncNextHook</span>(<span id='identifier'>str1</span>, <span id='identifier'>str2</span>);<br>
+                  &nbsp;&nbsp;<span id='comment'>// now we can manipulate the result</span><br>
+                  &nbsp;&nbsp;<span id='identifier'>Delete</span>(<span id='identifier'>result</span>, <span id='number'>1</span>, <span id='number'>3</span>);<br>
+                  <span id='bold'>end</span>;<br>
+                  <br>
+                  <span id='comment'>// ***************************************************************</span><br>
+                  <br>
+                  <span id='bold'>begin</span><br>
+                  &nbsp;&nbsp;<span id='comment'>// call the original unhooked function and display the result</span><br>
+                  &nbsp;&nbsp;<span id='identifier'>MessageBox</span>(<span id='number'>0</span>, <span id='identifier'>pchar</span>(<span id='identifier'>SomeFunc</span>(<span id='string'>'str1'</span>, <span id='string'>'str2'</span>)), <span id='string'>'"str1" + "str2"'</span>, <span id='number'>0</span>);<br>
+                  &nbsp;&nbsp;<span id='comment'>// now we install our hook on the function ...</span><br>
+                  &nbsp;&nbsp;<span id='comment'>// the to-be-hooked function must fulfill 2 rules</span><br>
+                  &nbsp;&nbsp;<span id='comment'>// (1) the asm code it must be at least 6 bytes long</span><br>
+                  &nbsp;&nbsp;<span id='comment'>// (2) there must not be a jump into the 2-6th byte anywhere in the code</span><br>
+                  &nbsp;&nbsp;<span id='comment'>// if these rules are not fulfilled the hook is not installed</span><br>
+                  &nbsp;&nbsp;<span id='comment'>// because otherwise we would risk "wild" crashes</span><br>
+                  &nbsp;&nbsp;<a class="pascal" href="ApiCodeHooking.htm#HookCode">HookCode</a>(@<span id='identifier'>SomeFunc</span>, @<span id='identifier'>SomeFuncHookProc</span>, @<span id='identifier'>SomeFuncNextHook</span>);<br>
+                  &nbsp;&nbsp;<span id='comment'>// now call the original (but in the meanwhile hooked) function again</span><br>
+                  &nbsp;&nbsp;<span id='comment'>// the displayed result will be different because in our hook function</span><br>
+                  &nbsp;&nbsp;<span id='comment'>// we manipulated the input parameters (and also the result)</span><br>
+                  &nbsp;&nbsp;<span id='identifier'>MessageBox</span>(<span id='number'>0</span>, <span id='identifier'>pchar</span>(<span id='identifier'>SomeFunc</span>(<span id='string'>'str1'</span>, <span id='string'>'str2'</span>)), <span id='string'>'"str1" + "str2"'</span>, <span id='number'>0</span>);<br>
+                  &nbsp;&nbsp;<span id='comment'>// we like clean programming, don't we?</span><br>
+                  &nbsp;&nbsp;<span id='comment'>// so we cleanly unhook again</span><br>
+                  &nbsp;&nbsp;<a class="pascal" href="ApiCodeHooking.htm#UnhookCode">UnhookCode</a>(@<span id='identifier'>SomeFuncNextHook</span>);<br>
+                  <span id='bold'>end</span>.
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </body>
+
+</html>

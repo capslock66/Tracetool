@@ -1,0 +1,161 @@
+<html>
+
+  <head>
+    <title>mad* Help...</title>
+    <meta name="description" content="mad* Help...">
+    <meta name="keywords" content="madshi, components, delphi">
+    <meta http-equiv="expires" content="900">
+    <link rel=stylesheet type="text/css" href="style.css">
+  </head>
+
+  <body background="bcklight.gif" bgcolor=#F8F8F8>
+    <table border=0 cellpadding=0 callspacing=0><tr>
+      <td valign=bottom>
+        <table border=0 cellpadding=0 cellspacing=0><tr><td bgcolor=#D8D8D8>
+          <table cellpadding=3 border=0>
+            <tr><td bgcolor=#FFFFF0>
+              <div id="verySmall"><br></div>
+              <div id="bigTitle">&nbsp;Stack Tracing Methods&nbsp;</div>
+              <div id="verySmall"><br></div>
+              <div id="small">
+                <a class="small" href="Content.htm">Content</a> /
+                <a class="small" href="madExcept.htm">madExcept</a> /...
+              </div>
+            </td></tr>
+          </table>
+        </td></tr></table>
+      </td>
+      <td valign=bottom>
+        <table border=0 cellpadding=0 cellspacing=0><tr><td bgcolor=#D8D8D8>
+          <table cellpadding=7 border=0>
+            <tr><td bgcolor=#F4F4F8><a href="http://www.madshi.net">www.madshi.net</a></td></tr>
+          </table>
+        </td></tr></table>
+      </td>
+    </tr></table>
+    <p>How can you get the callstack of the current thread? There is no API for
+       that. Well, in theory it's not so difficult. Each time the CPU calls a
+       function, it puts the return address (the address of the instruction which
+       is behind the function call instruction) on the stack. So all we need to do
+       is look at our thread's stack. There we will find the full list of return
+       addresses. Now we just need to get the function name and line numbers which
+       belong to those return addresses.</p>
+    <p>But wait, unfortunately there are some complications. The stack is not only
+       used for storing return addresses, but it's also used for storing local
+       variables. And local variables can have any values, we just don't know that.
+       So the big problem is: Which items in the stack are *real* return addresses
+       and which items are local variables, which may or may not *look* like being
+       return addresses? There are 2 well known methods to filter out real return
+       addresses and local variables. Both methods have their own advantages and
+       disadvantages.</p>
+    <h3>Stack frame tracing</h3>
+    <p>If you look into your project's compiler settings, there's a switch to turn
+       "Stack frames" on/off. The same can be done through the "{$W}" switch. What
+       are stack frames?</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>SomeFunction</span>(...);<br>
+                  <span id='bold'>asm</span><span id='number'><br>
+                  &nbsp;&nbsp;<span id='number'>push</span>&nbsp;<span id='number'>ebp</span><br>
+                  &nbsp;&nbsp;<span id='number'>mov</span>&nbsp;<span id='number'>ebp</span>, <span id='number'>esp</span><br>
+                  &nbsp;&nbsp;[...] &nbsp;<span id='comment'>// real code here</span><br>
+                  &nbsp;&nbsp;<span id='number'>pop</span>&nbsp;<span id='number'>ebp</span><br>
+                  </span><span id='bold'>end</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <p>This is how stack frames look like on assembler level. The register "ebp"
+       is put on the stack, then the current stack pointer "esp" is stored into the
+       "ebp" register. At the end of the function, the "ebp" register is restored
+       from the stack. What is the sense of this logic? Well, one sense is that
+       this way the asm code can easily reach parameters and local variables by
+       simply addressing them via the "ebp" register. Another sense is that the
+       stack now contains a real stack frame chain, which anyone can walk through.
+       By using this stack frame chain, we can find the return addresses which
+       belong to all the stack frame chain items.</p>
+    <p>The big advantage of this method is that it's fast, easy and quite accurate
+       in most situations. However, if the stack frame chain is incomplete (for
+       whatever reasons) we will miss some potentially important call stack items.
+       Perhaps you're asking now: Why can the stack frame chain be incomplete?
+       Well, stack frames are normally only used if they're needed. So if you don't
+       force them to be used for each and every function (through the compiler
+       switch mentioned above), some smaller functions do not use stack frames.
+       Okay, you can force stack frames for all functions - but only for your own
+       functions. What about 3rd party components? Precompiled DCUs normally don't
+       contain forced stack frames. Also 3rd party DLLs and BPLs won't contain
+       stack frames for all functions. So there you have a lot of potential holes
+       in the stack frame chain. Besides, forcing stack frames for all functions
+       makes your binary file a bit larger and a bit slower. Well, not really
+       noticable in most situations, but we should at least mention it.</p>
+    <p>We've talked about incomplete stack frame chains. It can even get worse.
+       If the stack frame chain is broken at some point, we lose all call stack
+       items after the break point. The stack frame chain can break, if a function
+       uses the "ebp" register for other purposes than stack frames. This can
+       actually happen, e.g. it happens, when you use EnumWindows in win9x.</p>
+    <p>If you ask me, stack frame tracing looks promising at first, but after a
+       deep look it has a lot of potential problems, which let me not recommend
+       using this method - at least not in this pure form.</p>
+    <h3>Raw stack tracing</h3>
+    <p>Another approach is to put each double word on the stack to a hard test:
+       Can it really be a valid return address? If you know x86 assembler a bit,
+       there are several call instructions. Now we know that the return address has
+       to be located directly after a call instruction, if it's a real return
+       address. So we simply check the bytes before the return address. If they
+       look like a valid call instruction we accept the stack double word as a
+       *seemingly* real return address.</p>
+    <p>From the description you can probably already see the advantages and
+       disadvantages of raw stack tracing yourself. The big advantage is that this
+       logic can't be confused as easily as stack frame tracing. Also the risk of
+       losing important call stack items is very low. But - we will almost for sure
+       list some call stack items, which look to be valid, but are not in reality.
+       So real life raw call stack traces often look a bit wild, because there are
+       lots of invalid items in there.</p>
+    <h3>Improved methods</h3>
+    <p>The raw stack tracing filter can be further improved by adding some
+       intelligent checks. E.g. you can disassemble the call instruction which is
+       located before a return address to extract the call target (if available).
+       Then you can check whether the call target appears somewhere in the stack.
+       If it does, we have a direct link between two call stack items and thus can
+       (probably) delete the items in between.</p>
+    <p>The best filter is the programmer's intelligence. If you have a callstack
+       and try to follow it through your sources you will easily filter out valid
+       and invalid stack items.</p>
+    <h3>Which method is the best and why</h3>
+    <p>The perfect tracing method would show not even one item too much, also it
+       would not miss even one valid item. Unfortunately there is no perfect method
+       and I think there never will be. Now what is better? Showing too many items
+       or missing some items? I think it's *much* better to show too many items. As
+       I said above, the best filter is the programmer himself, so if he gets a
+       callstack which has too many items, he can quite easily filter out the wrong
+       items. But it will be much more difficult (or even impossible) to find out
+       missing items. So this makes me believe that the raw stack tracing method
+       is better in the end than a stack frame based tracing method.</p>
+    <h3>Which method does madExcept use</h3>
+    <p>Hah, I won't tell you...&nbsp; :-)&nbsp; Okay, okay, <a href="madExcept.htm" href="madExceptUnit.htm">madExcept</a>
+       basically uses a raw stack tracer. However, the filtering is much improved by
+       making extensive use of a disassembler. Also <a href="madExcept.htm" href="madExceptUnit.htm">madExcept</a> profits from
+       (but doesn't rely on) stack frames. I did my best to combine all available
+       methods and add some new ideas to build the best tracer, that I can imagine.</p>
+    <h3>Stack trace confuser</h3>
+    <p>I've written a little program, which I've called the "Stack trace confuser".
+       This tool tries to confuse stack tracers by hitting on the weak points of
+       both the stack frame tracing and raw stack tracing. If you're interested,
+       you can find this tool in the "Demos" folder of your <a href="madExcept.htm" href="madExceptUnit.htm">madExcept</a>
+       installation or you can directly download it
+       <a href="http://madshi.net/TraceConf.zip">here</a>. You'll see that
+       <a href="madExcept.htm" href="madExceptUnit.htm">madExcept</a> doesn't fall on either confusion tactics, but you might
+       want to test this tool on other stack tracing solutions, if you like...
+       &nbsp;:-)</p>
+  </body>
+
+</html>

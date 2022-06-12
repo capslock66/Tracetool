@@ -1,0 +1,525 @@
+<html>
+
+  <head>
+    <title>mad* Help...</title>
+    <meta name="description" content="mad* Help...">
+    <meta name="keywords" content="madshi, components, delphi">
+    <meta http-equiv="expires" content="900">
+    <link rel=stylesheet type="text/css" href="style.css">
+  </head>
+
+  <body background="bcklight.gif" bgcolor=#F8F8F8>
+    <a name="IThread"></a>
+    <a name="IThreads"></a>
+    <table border=0 cellpadding=0 callspacing=0><tr>
+      <td valign=bottom>
+        <table border=0 cellpadding=0 cellspacing=0><tr><td bgcolor=#D8D8D8>
+          <table cellpadding=3 border=0>
+            <tr><td bgcolor=#FFFFF0>
+              <div id="verySmall"><br></div>
+              <div id="bigTitle">&nbsp;Threads&nbsp;</div>
+              <div id="verySmall"><br></div>
+              <div id="small">
+                <a class="small" href="Content.htm">Content</a> /
+                <a class="small" href="madKernel.htm">madKernel</a> /...
+              </div>
+            </td></tr>
+          </table>
+        </td></tr></table>
+      </td>
+      <td valign=bottom>
+        <table border=0 cellpadding=0 cellspacing=0><tr><td bgcolor=#D8D8D8>
+          <table cellpadding=7 border=0>
+            <tr><td bgcolor=#F4F4F8><a href="http://www.madshi.net">www.madshi.net</a></td></tr>
+          </table>
+        </td></tr></table>
+      </td>
+    </tr></table>
+    <p>One quite important kernel object is the "Thread". You surely know, each
+       process has one or multiple threads. A process is done if all threads are
+       done. There are lots of kernel32.dll APIs for dealing with threads.
+       madKernel implements two interfaces, namely "IThread" to encapsulate a
+       single thread object and "IThreads" to work with a list of threads. See also
+       the <a href="IThreadRef.htm">IThread Reference</a> and the <a href="IThreadsRef.htm">IThreads Reference</a>.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>type</span><br>
+                  &nbsp;&nbsp;<span id='identifier'>IThread</span>&nbsp;&nbsp;= <span id='bold'>interface</span>&nbsp;(<a class="pascal" href="KernelObjects.htm#IWaitableObj">IWaitableObj</a>&nbsp;) [<span id='string'>'{A1DB3220-8EB8-11D3-A52E-00005A180D69}'</span>];<br>
+                  &nbsp;&nbsp;<span id='identifier'>IThreads</span>&nbsp;= <span id='bold'>interface</span>&nbsp;(<a class="pascal" href="KernelObjects.htm#IWaitableObjs">IWaitableObjs</a>) [<span id='string'>'{A1DB3221-8EB8-11D3-A52E-00005A180D69}'</span>];
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="NewThread"></a>
+    <a name="CurrentThread"></a>
+    <a name="MainThread"></a>
+    <a name="Thread"></a>
+    <a name="TThreadFunc"></a>
+    <a name="Threads"></a>
+    <p>There are multiple ways to get an IThread or an IThreads instance. You can
+       use <a href="Processes.htm#IProcess.Threads">IProcess.Threads</a> or <a href="Windows.htm#IWindow.OwnerThread">IWindow.OwnerThread</a> or one of the
+       following functions. You can create a "NewThread", you can get the
+       "CurrentThread" or the current process' "MainThread". Also you can convert
+       a win32 handle dword value or an <a href="Handles.htm#IHandle">IHandle</a> instance into an IThread
+       instance. Finally you can call "Threads" to get a list of the threads of our
+       process or of all processes system wide.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>type</span>&nbsp;<span id='identifier'>TThreadFunc</span>&nbsp;= <span id='bold'>function</span>&nbsp;(<span id='identifier'>param</span>: <span id='identifier'>pointer</span>) : <span id='identifier'>cardinal</span>; <span id='bold'>stdcall</span>;<br>
+                  <br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>NewThread</span>&nbsp;(<span id='identifier'>threadFunc</span>&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>TThreadFunc</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>parameter</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>pointer</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= <span id='bold'>nil</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>creationFlags</span>&nbsp;: <span id='identifier'>cardinal</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= <span id='number'>0</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>stackSize</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>cardinal</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= <span id='number'>0</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>threadAttr</span>&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>PSecurityAttributes</span>&nbsp;= <span id='bold'>nil</span>) : <a class="pascal" href="#IThread">IThread</a>;<br>
+                  <br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>CurrentThread</span>&nbsp;: <a class="pascal" href="#IThread">IThread</a>;<br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>MainThread</span>&nbsp;&nbsp;&nbsp;&nbsp;: <a class="pascal" href="#IThread">IThread</a>;<br>
+                  <br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>Thread</span>&nbsp;(<span id='bold'>const</span>&nbsp;<span id='identifier'>thread</span>&nbsp;: <a class="pascal" href="Handles.htm#IHandle">IHandle</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;) : <a class="pascal" href="#IThread">IThread</a>; <span id='bold'>overload</span>;<br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>Thread</span>&nbsp;(<span id='identifier'>thread</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>cardinal</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>autoClose</span>&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>boolean</span>&nbsp;&nbsp;= <span id='identifier'>true</span>) : <a class="pascal" href="#IThread">IThread</a>; <span id='bold'>overload</span>;<br>
+                  <br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>Threads</span>&nbsp;(<span id='identifier'>systemWide</span>: <span id='identifier'>boolean</span>&nbsp;= <span id='identifier'>false</span>) : <a class="pascal" href="#IThreads">IThreads</a>;<br>
+                  <br>
+                  <span id='comment'>// Example:</span><br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>TestThread</span>(<span id='identifier'>dummy</span>: <span id='identifier'>pointer</span>) : <span id='identifier'>cardinal</span>; <span id='bold'>stdcall</span>;<br>
+                  <span id='bold'>begin</span><br>
+                  &nbsp;&nbsp;<span id='identifier'>result</span>&nbsp;:= <span id='number'>0</span>;<br>
+                  &nbsp;&nbsp;<span id='identifier'>Assert</span>(<span id='identifier'>CurrentThread</span>&nbsp;<> <span id='identifier'>MainThread</span>);<br>
+                  <span id='bold'>end</span>;<br>
+                  <br>
+                  <span id='identifier'>NewThread</span>(<span id='identifier'>TestThread</span>).<a id="mono" href="KernelObjects.htm#IWaitableObj.WaitFor">WaitFor</a>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IThread.IsStillValid"></a>
+    <a name="IThread.IsStillRunning"></a>
+    <p>You can check whether the thread object represented by this <a href="#IThread">IThread</a>
+       instance is still valid. Also you can check whether the thread is still
+       running or whether it has finished its task.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>IThread</span>.<img src="m.gif"><span id='identifier'>IsStillValid</span>&nbsp;&nbsp;&nbsp;: <span id='identifier'>boolean</span>;<br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>IThread</span>.<img src="m.gif"><span id='identifier'>IsStillRunning</span>&nbsp;: <span id='identifier'>boolean</span>;<br>
+                  <br>
+                  <span id='comment'>// Example:</span><br>
+                  <span id='identifier'>Assert</span>(<a class="pascal" href="#CurrentThread">CurrentThread</a>.<span id='identifier'>IsStillRunning</span>);
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IThread.GetHandle"></a>
+    <p>To get a handle with full access rights, you can simply use the property
+       <a href="KernelObjects.htm#IKernelObj.Handle">IKernelObj.Handle</a>. If you need specific access rights, you can call
+       the method "GetHandle" and enter the access rights you need. Please note,
+       that madKernel takes your access wish as the minimum. That means it is
+       possible (due to handle caching) that you get a handle back, which has all
+       the access rights you need plus some more rights you didn't ask for.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>IThread</span>.<img src="m.gif"><span id='identifier'>GetHandle</span>&nbsp;(<span id='identifier'>access</span>: <span id='identifier'>cardinal</span>&nbsp;= <span id='identifier'>THREAD_ALL_ACCESS</span>) : <a class="pascal" href="Handles.htm#IHandle">IHandle</a>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IThread.StoreHandle"></a>
+    <a name="IThread.ReleaseHandle"></a>
+    <p>In win9x you can call "StoreHandle" to tell madKernel that the handles for
+       this thread should be cached. You can call "StoreHandle" as often as you
+       like, but please call "ReleaseHandle" once for each "StoreHandle" call. In
+       winNT handles are always cached, so there these properties are ignored.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>procedure</span>&nbsp;<span id='identifier'>IThread</span>.<img src="m.gif"><span id='identifier'>StoreHandle</span>; &nbsp;&nbsp;&nbsp;<span id='comment'>// win9x only</span><br>
+                  <span id='bold'>procedure</span>&nbsp;<span id='identifier'>IThread</span>.<img src="m.gif"><span id='identifier'>ReleaseHandle</span>; &nbsp;<span id='comment'>// win9x only</span>
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IThread.OwnerProcess"></a>
+    <p>To which process does this thread belong?</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IThread</span>.<img src="r.gif"><span id='identifier'>OwnerProcess</span>&nbsp;: <a class="pascal" href="Processes.htm#IProcess">IProcess</a>;<br>
+                  <br>
+                  <span id='comment'>// Example:</span><br>
+                  <span id='identifier'>Assert</span>(<a class="pascal" href="#CurrentThread">CurrentThread</a>.<span id='identifier'>OwnerProcess</span>&nbsp;= <a class="pascal" href="Processes.htm#CurrentProcess">CurrentProcess</a>);
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IThread.Windows_"></a>
+    <a name="IThread.TaskbarWindows"></a>
+    <p>"Windows_" lists all the windows which belong to this thread.
+       "TaskbarWindows" returns a subcount of this list, only those windows are
+       returned, which are visible in the taskbar.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IThread</span>.<img src="r.gif"><span id='identifier'>Windows_</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <a class="pascal" href="Windows.htm#IWindows">IWindows</a>;<br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IThread</span>.<img src="r.gif"><span id='identifier'>TaskbarWindows</span>&nbsp;: <a class="pascal" href="Windows.htm#IWindows">IWindows</a>;<br>
+                  <br>
+                  <span id='comment'>// Example:</span><br>
+                  <span id='identifier'>MessageBox</span>(<span id='number'>0</span>, <span id='identifier'>pchar</span>(<span id='identifier'>IntToStr</span>(<a class="pascal" href="#CurrentThread">CurrentThread</a>.<span id='identifier'>Windows_</span>.<span id='identifier'>ItemCount</span>) + <span id='string'>' windows belong to me!'</span>), <span id='string'>'info'</span>, <span id='number'>0</span>);
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IThread.Priority"></a>
+    <a name="IThread.PriorityBoost"></a>
+    <p>With these properties you can access the thread's priority parameters.
+       Please see the win32 APIs "GetThreadPriority" and "GetThreadPriorityBoost"
+       for more information.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IThread</span>.<img src="w.gif"><span id='identifier'>Priority</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>integer</span>;<br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IThread</span>.<img src="w.gif"><span id='identifier'>PriorityBoost</span>&nbsp;: <span id='identifier'>boolean</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IThread.SetAffinityMask"></a>
+    <a name="IThread.SetIdealProcessor"></a>
+    <p>Accesses the thread's affinity mask and ideal processor. Please look at the
+       documentation of the win32 APIs "GetThreadAffinityMask" and
+       "GetThreadIdealProcessor" for more information.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>IThread</span>.<img src="m.gif"><span id='identifier'>SetAffinityMask</span>&nbsp;&nbsp;&nbsp;(<span id='identifier'>affinityMask</span>&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>cardinal</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="e.gif">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>oldAffinityMask</span>&nbsp;: <a class="pascal" href="UnsignedTypes.htm#TPCardinal">TPCardinal</a>&nbsp;= <span id='bold'>nil</span>) : <span id='identifier'>boolean</span>;<br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>IThread</span>.<img src="m.gif"><span id='identifier'>SetIdealProcessor</span>&nbsp;(<span id='identifier'>processorNo</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>cardinal</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="e.gif">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>oldProcessorNo</span>&nbsp;&nbsp;: <a class="pascal" href="UnsignedTypes.htm#TPCardinal">TPCardinal</a>&nbsp;= <span id='bold'>nil</span>) : <span id='identifier'>boolean</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IThread.PostMessage"></a>
+    <p>Posts a message to the thread's message queue (see API "PostThreadMessage").</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>IThread</span>.<img src="m.gif"><span id='identifier'>PostMessage</span>&nbsp;(<span id='identifier'>msg</span>&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>cardinal</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="e.gif">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>wParam</span>&nbsp;: <span id='identifier'>integer</span>&nbsp;= <span id='number'>0</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="e.gif">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>lParam</span>&nbsp;: <span id='identifier'>integer</span>&nbsp;= <span id='number'>0</span>) : <span id='identifier'>boolean</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IThread.IsSuspended"></a>
+    <a name="IThread.Suspend"></a>
+    <a name="IThread.Resume"></a>
+    <p>Call these methods to suspend or resume the thread:</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>IThread</span>.<img src="m.gif"><span id='identifier'>IsSuspended</span>&nbsp;: <span id='identifier'>boolean</span>;<br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>IThread</span>.<img src="m.gif"><span id='identifier'>Suspend</span>&nbsp;(<span id='identifier'>oldSuspendCount</span>: <a class="pascal" href="UnsignedTypes.htm#TPCardinal">TPCardinal</a>&nbsp;= <span id='bold'>nil</span>) : <span id='identifier'>boolean</span>;<br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>IThread</span>.<img src="m.gif"><span id='identifier'>Resume</span>&nbsp;&nbsp;(<span id='identifier'>oldSuspendCount</span>: <a class="pascal" href="UnsignedTypes.htm#TPCardinal">TPCardinal</a>&nbsp;= <span id='bold'>nil</span>) : <span id='identifier'>boolean</span>;<br>
+                  <br>
+                  <span id='comment'>// Example:</span><br>
+                  <a class="pascal" href="#CurrentThread">CurrentThread</a>.<span id='identifier'>Suspend</span>; &nbsp;<span id='comment'>// freeze me</span>
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IThread.Context"></a>
+    <p>Use the following property to get or set the thread's context (see API
+       "GetThreadContext"):</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IThread</span>.<img src="w.gif"><span id='identifier'>Context</span>&nbsp;: <span id='identifier'>TContext</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IThread.AttachInput"></a>
+    <a name="IThread.DetachInput"></a>
+    <p>With the following methods you can attach the thread's input queue with the
+       input queue of another thread (and detach the queues again).
+       "thread&nbsp;=&nbsp;0" stands for the current thread.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>IThread</span>.<img src="m.gif"><span id='identifier'>AttachInput</span>&nbsp;(<span id='bold'>const</span>&nbsp;<span id='identifier'>thread</span>: <span id='identifier'>IThread</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;) : <span id='identifier'>boolean</span>; <span id='bold'>overload</span>;<br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>IThread</span>.<img src="m.gif"><span id='identifier'>AttachInput</span>&nbsp;(<span id='bold'>const</span>&nbsp;<span id='identifier'>thread</span>: <span id='identifier'>IHandle</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;) : <span id='identifier'>boolean</span>; <span id='bold'>overload</span>;<br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>IThread</span>.<img src="m.gif"><span id='identifier'>AttachInput</span>&nbsp;( &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>thread</span>: <span id='identifier'>cardinal</span>&nbsp;= <span id='number'>0</span>) : <span id='identifier'>boolean</span>; <span id='bold'>overload</span>;<br>
+                  <br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>IThread</span>.<img src="m.gif"><span id='identifier'>DetachInput</span>&nbsp;(<span id='bold'>const</span>&nbsp;<span id='identifier'>thread</span>: <span id='identifier'>IThread</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;) : <span id='identifier'>boolean</span>; <span id='bold'>overload</span>;<br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>IThread</span>.<img src="m.gif"><span id='identifier'>DetachInput</span>&nbsp;(<span id='bold'>const</span>&nbsp;<span id='identifier'>thread</span>: <span id='identifier'>IHandle</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;) : <span id='identifier'>boolean</span>; <span id='bold'>overload</span>;<br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>IThread</span>.<img src="m.gif"><span id='identifier'>DetachInput</span>&nbsp;( &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>thread</span>: <span id='identifier'>cardinal</span>&nbsp;= <span id='number'>0</span>) : <span id='identifier'>boolean</span>; <span id='bold'>overload</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IThread.PostQuitMessage"></a>
+    <a name="IThread.Terminate"></a>
+    <p>Call "PostQuitMessage" or "Terminate" to terminate the thread. This is not
+       recommended, please use it only if you know exactly what you're doing!</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>IThread</span>.<img src="m.gif"><span id='identifier'>PostQuitMessage</span>&nbsp;(<span id='identifier'>exitCode</span>: <span id='identifier'>cardinal</span>&nbsp;= <span id='number'>0</span>) : <span id='identifier'>boolean</span>;<br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>IThread</span>.<img src="m.gif"><span id='identifier'>Terminate</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span id='identifier'>exitCode</span>: <span id='identifier'>cardinal</span>&nbsp;= <span id='number'>0</span>) : <span id='identifier'>boolean</span>;<br>
+                  <br>
+                  <span id='comment'>// Example:</span><br>
+                  <a class="pascal" href="#CurrentThread">CurrentThread</a>.<span id='identifier'>Terminate</span>; &nbsp;<span id='comment'>// suicide</span>
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IThread.ExitCode"></a>
+    <p>Asks the thread's exit code. If the thread is still running, you'll get
+       "STILL_ACTIVE".</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IThread</span>.<img src="r.gif"><span id='identifier'>ExitCode</span>&nbsp;: <span id='identifier'>cardinal</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IThread.GetTimes"></a>
+    <p>The following method asks how much time the thread has spent with thread
+       creation, with thread exiting, in kernel land and in user land. This method
+       works only in winNT.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>IThread</span>.<img src="m.gif"><span id='identifier'>GetTimes</span>&nbsp;(<span id='bold'>var</span>&nbsp;<span id='identifier'>creation</span>, <span id='bold'>exit</span>, <span id='identifier'>kernel</span>, <span id='identifier'>user</span>: <span id='identifier'>int64</span>) : <span id='identifier'>boolean</span>; &nbsp;<span id='comment'>// only winNT</span>
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IThreads.Items"></a>
+    <a name="IThreads.RefreshItems"></a>
+    <p>Of course the <a href="#IThreads">IThreads</a> interface allows easy access to it's items.
+       Furthermore you can refresh the thread list, if you like (that is look for
+       new, deleted and changed threads).</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IThreads</span>.<img src="r.gif"><span id='identifier'>Items</span>&nbsp;[<span id='bold'>index</span>: <span id='identifier'>integer</span>] : <a class="pascal" href="#IThread">IThread</a>;<br>
+                  <br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>IThreads</span>.<img src="m.gif"><span id='identifier'>RefreshItems</span>&nbsp;: <span id='identifier'>boolean</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IThreads.Priority"></a>
+    <a name="IThreads.PriorityBoost"></a>
+    <a name="IThreads.SetAffinityMask"></a>
+    <a name="IThreads.SetIdealProcessor"></a>
+    <a name="IThreads.PostMessage"></a>
+    <a name="IThreads.IsStillRunning"></a>
+    <a name="IThreads.Suspend"></a>
+    <a name="IThreads.Resume"></a>
+    <a name="IThreads.PostQuitMessage"></a>
+    <a name="IThreads.Terminate"></a>
+    <p>The following <a href="#IThreads">IThreads</a> methods (and write only properties) are more
+       or less identical to the <a href="#IThread">IThread</a> methods with the same name. It's
+       just that if you call the <a href="#IThreads">IThreads</a> methods, they are called for all
+       threads in the list.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IThreads</span>.<img src="w.gif"><span id='identifier'>Priority</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>integer</span>; &nbsp;<span id='comment'>// write only</span><br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IThreads</span>.<img src="w.gif"><span id='identifier'>PriorityBoost</span>&nbsp;: <span id='identifier'>boolean</span>; &nbsp;<span id='comment'>// write only</span><br>
+                  <br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>IThreads</span>.<img src="m.gif"><span id='identifier'>SetAffinityMask</span>&nbsp;&nbsp;&nbsp;(<span id='identifier'>affinityMask</span>&nbsp;: <span id='identifier'>cardinal</span>) : <span id='identifier'>boolean</span>;<br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>IThreads</span>.<img src="m.gif"><span id='identifier'>SetIdealProcessor</span>&nbsp;(<span id='identifier'>processorNo</span>&nbsp;&nbsp;: <span id='identifier'>cardinal</span>) : <span id='identifier'>boolean</span>;<br>
+                  <br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>IThreads</span>.<img src="m.gif"><span id='identifier'>PostMessage</span>&nbsp;(<span id='identifier'>msg</span>&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>cardinal</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="e.gif">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>wParam</span>&nbsp;: <span id='identifier'>integer</span>&nbsp;&nbsp;= <span id='number'>0</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="e.gif">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>lParam</span>&nbsp;: <span id='identifier'>integer</span>&nbsp;&nbsp;= <span id='number'>0</span>) : <span id='identifier'>boolean</span>;<br>
+                  <br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>IThreads</span>.<img src="m.gif"><span id='identifier'>IsStillRunning</span>&nbsp;(<span id='identifier'>all</span>: <span id='identifier'>boolean</span>&nbsp;= <span id='identifier'>false</span>) : <span id='identifier'>boolean</span>;<br>
+                  <br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>IThreads</span>.<img src="m.gif"><span id='identifier'>Suspend</span>&nbsp;: <span id='identifier'>boolean</span>;<br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>IThreads</span>.<img src="m.gif"><span id='identifier'>Resume</span>&nbsp;&nbsp;: <span id='identifier'>boolean</span>;<br>
+                  <br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>IThreads</span>.<img src="m.gif"><span id='identifier'>PostQuitMessage</span>&nbsp;(<span id='identifier'>exitCode</span>: <span id='identifier'>cardinal</span>&nbsp;= <span id='number'>0</span>) : <span id='identifier'>boolean</span>;<br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>IThreads</span>.<img src="m.gif"><span id='identifier'>Terminate</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span id='identifier'>exitCode</span>: <span id='identifier'>cardinal</span>&nbsp;= <span id='number'>0</span>) : <span id='identifier'>boolean</span>;<br>
+                  <br>
+                  <span id='comment'>// Example:</span><br>
+                  <a id="mono" href="#Threads">Threads</a>(<span id='identifier'>true</span>).<span id='identifier'>Terminate</span>; &nbsp;<span id='comment'>// ouch, that's a bad idea!</span>
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="IThreads.OwnerProcess"></a>
+    <p>Does this <a href="#IThreads">IThreads</a> instance only enumerate threads of one specific
+       process?</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>IThreads</span>.<img src="r.gif"><span id='identifier'>OwnerProcess</span>&nbsp;: <a class="pascal" href="Processes.htm#IProcess">IProcess</a>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </body>
+
+</html>

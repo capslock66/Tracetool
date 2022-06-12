@@ -1,0 +1,73 @@
+<html>
+
+  <head>
+    <title>mad* Help...</title>
+    <meta name="description" content="mad* Help...">
+    <meta name="keywords" content="madshi, components, delphi">
+    <meta http-equiv="expires" content="900">
+    <link rel=stylesheet type="text/css" href="style.css">
+  </head>
+
+  <body background="bcklight.gif" bgcolor=#F8F8F8>
+    <a name="TPIUnknown"></a>
+    <a name="TAIUnknown"></a>
+    <a name="TPAIUnknown"></a>
+    <a name="TDAIUnknown"></a>
+    <a name="TPDAIUnknown"></a>
+    <table border=0 cellpadding=0 callspacing=0><tr>
+      <td valign=bottom>
+        <table border=0 cellpadding=0 cellspacing=0><tr><td bgcolor=#D8D8D8>
+          <table cellpadding=3 border=0>
+            <tr><td bgcolor=#FFFFF0>
+              <div id="verySmall"><br></div>
+              <div id="bigTitle">&nbsp;IUnknown Types&nbsp;</div>
+              <div id="verySmall"><br></div>
+              <div id="small">
+                <a class="small" href="Content.htm">Content</a> /
+                <a class="small" href="madBasic.htm">madBasic</a> /
+                <a class="small" href="madTypesUnit.htm">madTypes Unit</a> /...
+              </div>
+            </td></tr>
+          </table>
+        </td></tr></table>
+      </td>
+      <td valign=bottom>
+        <table border=0 cellpadding=0 cellspacing=0><tr><td bgcolor=#D8D8D8>
+          <table cellpadding=7 border=0>
+            <tr><td bgcolor=#F4F4F8><a href="http://www.madshi.net">www.madshi.net</a></td></tr>
+          </table>
+        </td></tr></table>
+      </td>
+    </tr></table>
+    <p>Some variations around the "IUnknown" type:</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>type</span><br>
+                  &nbsp;&nbsp;<span id='identifier'>TPIUnknown</span>&nbsp;&nbsp;&nbsp;= ^<span id='identifier'>IUnknown</span>;<br>
+                  <br>
+                  &nbsp;&nbsp;<span id='identifier'>TAIUnknown</span>&nbsp;&nbsp;&nbsp;= <span id='bold'>array</span>&nbsp;[<span id='number'>0</span>..<span id='identifier'>maxInt</span>&nbsp;<span id='bold'>shr</span>&nbsp;<span id='number'>2</span>-<span id='number'>1</span>] <span id='bold'>of</span>&nbsp;<span id='identifier'>IUnknown</span>;<br>
+                  &nbsp;&nbsp;<span id='identifier'>TPAIUnknown</span>&nbsp;&nbsp;= ^<span id='identifier'>TAIUnknown</span>;<br>
+                  <br>
+                  &nbsp;&nbsp;<span id='identifier'>TDAIUnknown</span>&nbsp;&nbsp;= <span id='bold'>array</span>&nbsp;<span id='bold'>of</span>&nbsp;<span id='identifier'>IUnknown</span>;<br>
+                  &nbsp;&nbsp;<span id='identifier'>TPDAIUnknown</span>&nbsp;= ^<span id='identifier'>TDAIUnknown</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <p>Please note, that allocating and freeing "TPIUnknown" or "TPAIUnknown"
+       variables is a bit dangerous. You have to know exactly what you're doing. So
+       please look at the examples in the <a href="StringTypes.htm">String Types</a> description. What I've
+       said there about allocating/freeing is true for every dynamic type, so it's
+       also true for "IUnknown".</p>
+  </body>
+
+</html>

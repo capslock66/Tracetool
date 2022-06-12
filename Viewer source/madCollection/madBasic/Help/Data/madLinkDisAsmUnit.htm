@@ -1,0 +1,77 @@
+<html>
+
+  <head>
+    <title>mad* Help...</title>
+    <meta name="description" content="mad* Help...">
+    <meta name="keywords" content="madshi, components, delphi">
+    <meta http-equiv="expires" content="900">
+    <link rel=stylesheet type="text/css" href="style.css">
+  </head>
+
+  <body background="bcklight.gif" bgcolor=#F8F8F8>
+    <table border=0 cellpadding=0 callspacing=0><tr>
+      <td valign=bottom>
+        <table border=0 cellpadding=0 cellspacing=0><tr><td bgcolor=#D8D8D8>
+          <table cellpadding=3 border=0>
+            <tr><td bgcolor=#FFFFF0>
+              <div id="verySmall"><br></div>
+              <div id="bigTitle">&nbsp;madLinkDisAsm Unit&nbsp;</div>
+              <div id="verySmall"><br></div>
+              <div id="small">
+                <a class="small" href="Content.htm">Content</a> /
+                <a class="small" href="madExcept.htm">madExcept</a> /...
+              </div>
+            </td></tr>
+          </table>
+        </td></tr></table>
+      </td>
+      <td valign=bottom>
+        <table border=0 cellpadding=0 cellspacing=0><tr><td bgcolor=#D8D8D8>
+          <table cellpadding=7 border=0>
+            <tr><td bgcolor=#F4F4F8><a href="http://www.madshi.net">www.madshi.net</a></td></tr>
+          </table>
+        </td></tr></table>
+      </td>
+    </tr></table>
+    <p>In the <a href="madExceptSettings.htm">madExcept settings</a> dialog you can choose whether you want
+       madExcept to add a disassembly of the exception location to the bug report.
+       Unfortunately the functionality to put out disassemblies costs ca 16kb of
+       additional footprint. Normally this would now be linked into every binary
+       which uses madExcept. Of course we don't like that, so madExcept doesn't
+       touch the 16kb function. But in case madExcept really needs it, we do a
+       manual link to it. This is exactly what this unit is doing. Here's the full
+       source code of the unit:</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>unit</span>&nbsp;<span id='identifier'>madLinkDisAsm</span>;<br>
+                  <br>
+                  <span id='bold'>interface</span><br>
+                  <br>
+                  <span id='bold'>implementation</span><br>
+                  <br>
+                  <span id='bold'>uses</span>&nbsp;<span id='identifier'>madExcept</span>, <span id='identifier'>madDisAsm</span>;<br>
+                  <br>
+                  <span id='bold'>initialization</span><br>
+                  &nbsp;&nbsp;<span id='comment'>// manually link madExcept to madDisAsm's internal disassembly function</span><br>
+                  &nbsp;&nbsp;<span id='identifier'>madExcept</span>.<span id='identifier'>DisAsmFunc</span>&nbsp;:= <span id='identifier'>madDisAsm</span>.<span id='identifier'>ParseFunctionEx</span>;<br>
+                  <span id='bold'>end</span>.
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <p>The IDE wizard automatically adds this unit to your project's uses clause if
+       your settings say that you want to have a disassembly in the bug report. By
+       using this dirty trick you only need to pay the 16kb footprint, if you
+       really want to a disassembly of the exception location in the bug report.</p>
+  </body>
+
+</html>

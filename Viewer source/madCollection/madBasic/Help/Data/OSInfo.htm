@@ -1,0 +1,110 @@
+<html>
+
+  <head>
+    <title>mad* Help...</title>
+    <meta name="description" content="mad* Help...">
+    <meta name="keywords" content="madshi, components, delphi">
+    <meta http-equiv="expires" content="900">
+    <link rel=stylesheet type="text/css" href="style.css">
+  </head>
+
+  <body background="bcklight.gif" bgcolor=#F8F8F8>
+    <a name="TOsEnum"></a>
+    <a name="TOS"></a>
+    <a name="OS"></a>
+    <table border=0 cellpadding=0 callspacing=0><tr>
+      <td valign=bottom>
+        <table border=0 cellpadding=0 cellspacing=0><tr><td bgcolor=#D8D8D8>
+          <table cellpadding=3 border=0>
+            <tr><td bgcolor=#FFFFF0>
+              <div id="verySmall"><br></div>
+              <div id="bigTitle">&nbsp;OS Information&nbsp;</div>
+              <div id="verySmall"><br></div>
+              <div id="small">
+                <a class="small" href="Content.htm">Content</a> /
+                <a class="small" href="madBasic.htm">madBasic</a> /
+                <a class="small" href="madToolsUnit.htm">madTools Unit</a> /...
+              </div>
+            </td></tr>
+          </table>
+        </td></tr></table>
+      </td>
+      <td valign=bottom>
+        <table border=0 cellpadding=0 cellspacing=0><tr><td bgcolor=#D8D8D8>
+          <table cellpadding=7 border=0>
+            <tr><td bgcolor=#F4F4F8><a href="http://www.madshi.net">www.madshi.net</a></td></tr>
+          </table>
+        </td></tr></table>
+      </td>
+    </tr></table>
+    <p>You probably know the API "GetVersionEx" or the SysUtils variables
+       "Win32Platform" etc. Unfortunately all the infos you're getting there are
+       quite abstract. You have to translate them to get "real" infos about the
+       operating system.</p>
+    <p>To make your (and my own) life a bit easier, I've written a little function,
+       which collects all important infos and translates them into a practicable
+       format. The function is named "OS" and returns the structure "TOS", which
+       contains all the infos. Here are the definitions:</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>type</span><br>
+                  &nbsp;&nbsp;<span id='identifier'>TOsEnum</span>&nbsp;= (<span id='identifier'>osNone</span>, <span id='identifier'>osWin95</span>, <span id='identifier'>osWin95osr2</span>, <span id='identifier'>osWin98</span>, <span id='identifier'>osWin98se</span>, <span id='identifier'>osWinME</span>, <span id='identifier'>osWin9xNew</span>,<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>osWinNtOld</span>, <span id='identifier'>osWinNt4</span>, <span id='identifier'>osWin2k</span>, <span id='identifier'>osWinXP</span>, <span id='identifier'>osWin2003</span>, <span id='identifier'>osWinVista</span>, <span id='identifier'>osWinNtNew</span>);<br>
+                  &nbsp;&nbsp;<span id='identifier'>TOS</span>&nbsp;= <span id='bold'>record</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>major</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>cardinal</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>minor</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>cardinal</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>build</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>cardinal</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>spStr</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='bold'>string</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>win9x</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>boolean</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>win9xEnum</span>&nbsp;&nbsp;&nbsp;: <span id='identifier'>osNone</span>..<span id='identifier'>osWin9xNew</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>winNt</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>boolean</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>winNtEnum</span>&nbsp;&nbsp;&nbsp;: <span id='identifier'>TOsEnum</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>Enum</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>TOsEnum</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='number'>x64</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>boolean</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>spNo</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>cardinal</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>description</span>&nbsp;: <span id='bold'>string</span>;<br>
+                  &nbsp;&nbsp;<span id='bold'>end</span>;<br>
+                  <br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>OS</span>&nbsp;: <span id='identifier'>TOS</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <p>Now if you want to ask whether you're running on a win9x based system or
+       whether the current system is either winME or win2k - such kind of checks
+       are really easy now. Let us see some examples:</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>if</span>&nbsp;<span id='identifier'>OS</span>.<span id='identifier'>win9x</span>&nbsp;<span id='bold'>then</span><br>
+                  &nbsp;&nbsp;<span id='identifier'>ShowMessage</span>(<span id='string'>'The current system is a win9x based one.'</span>);<br>
+                  <span id='bold'>if</span>&nbsp;<span id='identifier'>OS</span>.<span id='identifier'>winNt</span>&nbsp;<span id='bold'>then</span><br>
+                  &nbsp;&nbsp;<span id='identifier'>ShowMessage</span>(<span id='string'>'The current system is a winNt based one.'</span>);<br>
+                  <span id='bold'>if</span>&nbsp;<span id='identifier'>OS</span>.<span id='identifier'>enum</span>&nbsp;<span id='bold'>in</span>&nbsp;[<span id='identifier'>osWinME</span>..<span id='identifier'>osWin9xNew</span>, <span id='identifier'>osWin2k</span>..<span id='identifier'>osWinNtNew</span>] <span id='bold'>then</span><br>
+                  &nbsp;&nbsp;<span id='identifier'>ShowMessage</span>(<span id='string'>'The current system is either winME or win2k or something even newer.'</span>);<br>
+                  <span id='bold'>if</span>&nbsp;<span id='identifier'>OS</span>.<span id='identifier'>win9xEnum</span>&nbsp;>= <span id='identifier'>osWin98</span>&nbsp;<span id='bold'>then</span><br>
+                  &nbsp;&nbsp;<span id='identifier'>ShowMessage</span>(<span id='string'>'The current system is win98 or something newer, but win9x based.'</span>);
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </body>
+
+</html>

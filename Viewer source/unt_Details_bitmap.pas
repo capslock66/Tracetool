@@ -3,7 +3,7 @@ unit unt_Details_bitmap;
 interface
 
 uses
-  Windows, Messages, SysUtils, Variants, Classes, Graphics,
+  system.Contnrs, Windows, Messages, SysUtils, Variants, Classes, Graphics,
   Controls, Forms, ExtCtrls, StdCtrls, Dialogs, clipbrd, Menus ,
   unt_Details_base,
   unt_TraceWin,

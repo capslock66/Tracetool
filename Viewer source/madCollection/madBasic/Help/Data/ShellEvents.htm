@@ -1,0 +1,212 @@
+<html>
+
+  <head>
+    <title>mad* Help...</title>
+    <meta name="description" content="mad* Help...">
+    <meta name="keywords" content="madshi, components, delphi">
+    <meta http-equiv="expires" content="900">
+    <link rel=stylesheet type="text/css" href="style.css">
+  </head>
+
+  <body background="bcklight.gif" bgcolor=#F8F8F8>
+    <a name="TShellEvent"></a>
+    <a name="TShellEventOO"></a>
+    <a name="RegisterShellEvent"></a>
+    <table border=0 cellpadding=0 callspacing=0><tr>
+      <td valign=bottom>
+        <table border=0 cellpadding=0 cellspacing=0><tr><td bgcolor=#D8D8D8>
+          <table cellpadding=3 border=0>
+            <tr><td bgcolor=#FFFFF0>
+              <div id="verySmall"><br></div>
+              <div id="bigTitle">&nbsp;Shell Events&nbsp;</div>
+              <div id="verySmall"><br></div>
+              <div id="small">
+                <a class="small" href="Content.htm">Content</a> /
+                <a class="small" href="madShell.htm">madShell</a> /...
+              </div>
+            </td></tr>
+          </table>
+        </td></tr></table>
+      </td>
+      <td valign=bottom>
+        <table border=0 cellpadding=0 cellspacing=0><tr><td bgcolor=#D8D8D8>
+          <table cellpadding=7 border=0>
+            <tr><td bgcolor=#F4F4F8><a href="http://www.madshi.net">www.madshi.net</a></td></tr>
+          </table>
+        </td></tr></table>
+      </td>
+    </tr></table>
+    <p>Sometimes you would like to be notified about when specific changes occur,
+       e.g. when a new folder is created or when a file is renamed or when a share
+       is removed. There must be such notification funtionality available somewhere,
+       we can see that clearly in how the Windows Explorer refreshes itself
+       automatically without pushing the CPU because of steadily polling.</p>
+    <p>Perhaps you know the API "FindFirstChangeNotification", but this API only
+       tells us, *that* something happened. It doesn't tell us, *what* has
+       happended in detail. It's not really useless, but the wish for something
+       better keeps living. In winNT/2000 we can use "ReadDirectoryChangesW", but
+       that API is not supported in win9x, furthermore it only notifies us about
+       file/directory changes, not about share changes etc.</p>
+    <p>Recently I found infos about undocumented APIs, which do basically what I
+       was wishing for. Furthermore they work in all 32bit Windows versions. They
+       seem to be what the Explorer is using inside. However, they're not too
+       reliable. It might happen, that you get a "seShareAdded" notification,
+       although the share was removed in reality or such things. It also may happen
+       from time to time, that an event is missed. So don't rely on it. But it
+       works well for situations where it doesn't matter too much, when you miss an
+       event, e.g. when refreshing an Explorer like TListView.</p>
+    <p>Installing a shell event notification routine is very easy. Just write a
+       notification callback routine with the correct parameters, then pass it to
+       the function "RegisterShellEvent". That's it.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>type</span><br>
+                  &nbsp;&nbsp;<span id='identifier'>TShellEvent</span>&nbsp;&nbsp;&nbsp;= <span id='bold'>procedure</span>&nbsp;(<span id='identifier'>event</span>: <span id='identifier'>TShellEventType</span>; <span id='bold'>const</span>&nbsp;<span id='identifier'>obj1</span>, <span id='identifier'>obj2</span>: <a class="pascal" href="ShellObjs.htm#IShellObj">IShellObj</a>; <span id='identifier'>drive</span>: <span id='identifier'>char</span>; <span id='identifier'>value</span>: <span id='identifier'>cardinal</span>);<br>
+                  &nbsp;&nbsp;<span id='identifier'>TShellEventOO</span>&nbsp;= <span id='bold'>procedure</span>&nbsp;(<span id='identifier'>event</span>: <span id='identifier'>TShellEventType</span>; <span id='bold'>const</span>&nbsp;<span id='identifier'>obj1</span>, <span id='identifier'>obj2</span>: <a class="pascal" href="ShellObjs.htm#IShellObj">IShellObj</a>; <span id='identifier'>drive</span>: <span id='identifier'>char</span>; <span id='identifier'>value</span>: <span id='identifier'>cardinal</span>) <span id='bold'>of</span>&nbsp;<span id='bold'>object</span>;<br>
+                  <br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>RegisterShellEvent</span>&nbsp;(<span id='identifier'>eventProc</span>&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>TShellEvent</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>root</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='bold'>string</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= <span id='string'>'*'</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>watchSubtree</span>&nbsp;: <span id='identifier'>boolean</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= <span id='identifier'>true</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>eventTypes</span>&nbsp;&nbsp;&nbsp;: <a class="pascal" href="#TShellEventTypes">TShellEventTypes</a>&nbsp;= <a class="pascal" href="#CShellEvents_All">CShellEvents_All</a>) : <span id='identifier'>boolean</span>; <span id='bold'>overload</span>;<br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>RegisterShellEvent</span>&nbsp;(<span id='identifier'>eventProc</span>&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>TShellEventOO</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>root</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='bold'>string</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= <span id='string'>'*'</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>watchSubtree</span>&nbsp;: <span id='identifier'>boolean</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= <span id='identifier'>true</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>eventTypes</span>&nbsp;&nbsp;&nbsp;: <a class="pascal" href="#TShellEventTypes">TShellEventTypes</a>&nbsp;= <a class="pascal" href="#CShellEvents_All">CShellEvents_All</a>) : <span id='identifier'>boolean</span>; <span id='bold'>overload</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="UnregisterShellEvent"></a>
+    <p>Uninstalling a notification routine is as easy:</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>UnregisterShellEvent</span>&nbsp;(<span id='identifier'>event</span>: <span id='identifier'>TShellEvent</span>&nbsp;&nbsp;) : <span id='identifier'>boolean</span>; <span id='bold'>overload</span>;<br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>UnregisterShellEvent</span>&nbsp;(<span id='identifier'>event</span>: <span id='identifier'>TShellEventOO</span>) : <span id='identifier'>boolean</span>; <span id='bold'>overload</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="TShellEventType"></a>
+    <a name="TShellEventTypes"></a>
+    <a name="CShellEvents_Disk"></a>
+    <a name="CShellEvents_Share"></a>
+    <a name="CShellEvents_All"></a>
+    <p>There are a lot of different notification events, you can choose about which
+       events you actually want to be informed. The enumeration type
+       "TShellEventType" contains a list of all possible events:</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>type</span><br>
+                  &nbsp;&nbsp;<span id='identifier'>TShellEventType</span>&nbsp;= (<span id='identifier'>seItemCreated</span>, <span id='identifier'>seItemRenamed</span>, <span id='identifier'>seItemChanged</span>, <span id='identifier'>seItemDeleted</span>, &nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>// item</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>seDirCreated</span>, &nbsp;<span id='identifier'>seDirRenamed</span>, &nbsp;<span id='identifier'>seDirChanged</span>, &nbsp;<span id='identifier'>seDirDeleted</span>, &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>// dir</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>seAttributesChanged</span>, &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>// item & dir</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>seFreespaceChanged</span>, &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>// drive</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>seDriveAdded</span>, <span id='identifier'>seDriveAddedGui</span>, <span id='identifier'>seDriveRemoved</span>, &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>// drive</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>seMediaInserted</span>, <span id='identifier'>seMediaRemoved</span>, &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>// medium</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>seShareAdded</span>, <span id='identifier'>seShareRemoved</span>, <span id='identifier'>seServerDisconnect</span>, &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>// network</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>seImageChanged</span>, <span id='identifier'>seAssociationChanged</span>, &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>// etc.</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>seThemeChanged</span>, <span id='identifier'>seOrderChanged</span>, <span id='identifier'>seMsiChanged</span>, <span id='identifier'>seMsiUninstalled</span>&nbsp;&nbsp;<span id='comment'>// extended</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;);<br>
+                  &nbsp;&nbsp;<span id='identifier'>TShellEventTypes</span>&nbsp;= <span id='bold'>set</span>&nbsp;<span id='bold'>of</span>&nbsp;<span id='identifier'>TShellEventType</span>;<br>
+                  <br>
+                  <span id='bold'>const</span><br>
+                  &nbsp;&nbsp;<span id='identifier'>CShellEvents_Disk</span>&nbsp;&nbsp;= [<span id='identifier'>seItemCreated</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.. <span id='identifier'>seAttributesChanged</span>&nbsp;&nbsp;];<br>
+                  &nbsp;&nbsp;<span id='identifier'>CShellEvents_Share</span>&nbsp;= [<span id='identifier'>seShareAdded</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.. <span id='identifier'>seShareRemoved</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;];<br>
+                  &nbsp;&nbsp;<span id='identifier'>CShellEvents_All</span>&nbsp;&nbsp;&nbsp;= [<span id='identifier'>low</span>(<span id='identifier'>TShellEventType</span>) .. <span id='identifier'>high</span>(<span id='identifier'>TShellEventType</span>)];
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <p>Here comes a little example project, which logs file and directory changes
+       into a TMemo component:</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>unit</span>&nbsp;<span id='identifier'>ShellEvents</span>;<br>
+                  <br>
+                  <span id='bold'>interface</span><br>
+                  <br>
+                  <span id='bold'>uses</span><br>
+                  &nbsp;&nbsp;<span id='identifier'>Windows</span>, <span id='identifier'>Messages</span>, <span id='identifier'>SysUtils</span>, <span id='identifier'>Classes</span>, <span id='identifier'>Graphics</span>, <span id='identifier'>Controls</span>, <span id='identifier'>Forms</span>, <span id='identifier'>Dialogs</span>, <span id='identifier'>StdCtrls</span>, <span id='identifier'>madShell</span>;<br>
+                  <br>
+                  <span id='bold'>type</span><br>
+                  &nbsp;&nbsp;<span id='identifier'>TForm1</span>&nbsp;= <span id='bold'>class</span>(<span id='identifier'>TForm</span>)<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>Memo1</span>: <span id='identifier'>TMemo</span>;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='bold'>procedure</span>&nbsp;<span id='identifier'>FormCreate</span>(<span id='identifier'>Sender</span>: <span id='identifier'>TObject</span>);<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='bold'>procedure</span>&nbsp;<span id='identifier'>FormDestroy</span>(<span id='identifier'>Sender</span>: <span id='identifier'>TObject</span>);<br>
+                  &nbsp;&nbsp;<span id='bold'>private</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>{</span>&nbsp;<span id='comment'>Private</span>-<span id='comment'>Deklarationen</span>&nbsp;<span id='comment'>}</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='bold'>procedure</span>&nbsp;<span id='identifier'>ShellEvent</span>(<span id='identifier'>event</span>: <a class="pascal" href="#TShellEventType">TShellEventType</a>; <span id='bold'>const</span>&nbsp;<span id='identifier'>obj1</span>, <span id='identifier'>obj2</span>: <a class="pascal" href="ShellObjs.htm#IShellObj">IShellObj</a>; <span id='identifier'>drive</span>: <span id='identifier'>char</span>; <span id='identifier'>value</span>: <span id='identifier'>cardinal</span>);<br>
+                  &nbsp;&nbsp;<span id='bold'>public</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='comment'>{</span>&nbsp;<span id='comment'>Public</span>-<span id='comment'>Deklarationen</span>&nbsp;<span id='comment'>}</span><br>
+                  &nbsp;&nbsp;<span id='bold'>end</span>;<br>
+                  <br>
+                  <span id='bold'>var</span><br>
+                  &nbsp;&nbsp;<span id='identifier'>Form1</span>: <span id='identifier'>TForm1</span>;<br>
+                  <br>
+                  <span id='bold'>implementation</span><br>
+                  <br>
+                  <span id='comment'>{$R</span>&nbsp;*.<span id='comment'>DFM}</span><br>
+                  <br>
+                  <span id='bold'>procedure</span>&nbsp;<span id='identifier'>TForm1</span>.<span id='identifier'>ShellEvent</span>(<span id='identifier'>event</span>: <a class="pascal" href="#TShellEventType">TShellEventType</a>; <span id='bold'>const</span>&nbsp;<span id='identifier'>obj1</span>, <span id='identifier'>obj2</span>: <a class="pascal" href="ShellObjs.htm#IShellObj">IShellObj</a>; <span id='identifier'>drive</span>: <span id='identifier'>char</span>; <span id='identifier'>value</span>: <span id='identifier'>cardinal</span>);<br>
+                  <span id='bold'>begin</span><br>
+                  &nbsp;&nbsp;<span id='bold'>case</span>&nbsp;<span id='identifier'>event</span>&nbsp;<span id='bold'>of</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>seItemCreated</span>, <span id='identifier'>seDirCreated</span>&nbsp;: <span id='identifier'>Memo1</span>.<span id='identifier'>Lines</span>.<span id='identifier'>Add</span>(<span id='string'>'Add: '</span>&nbsp;+ <span id='identifier'>obj1</span>.<a class="pascal" href="ShellObjs.htm#IShellObj.Description">Description</a>);<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>seItemDeleted</span>, <span id='identifier'>seDirDeleted</span>&nbsp;: <span id='identifier'>Memo1</span>.<span id='identifier'>Lines</span>.<span id='identifier'>Add</span>(<span id='string'>'Del: '</span>&nbsp;+ <span id='identifier'>obj1</span>.<a class="pascal" href="ShellObjs.htm#IShellObj.Description">Description</a>);<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>seItemRenamed</span>, <span id='identifier'>seDirRenamed</span>&nbsp;: <span id='identifier'>Memo1</span>.<span id='identifier'>Lines</span>.<span id='identifier'>Add</span>(<span id='string'>'Ren: '</span>&nbsp;+ <span id='identifier'>obj1</span>.<a class="pascal" href="ShellObjs.htm#IShellObj.Description">Description</a>&nbsp;+ <span id='string'>' -> '</span>&nbsp;+ <span id='identifier'>obj2</span>.<a class="pascal" href="ShellObjs.htm#IShellObj.Description">Description</a>);<br>
+                  &nbsp;&nbsp;<span id='bold'>end</span>;<br>
+                  <span id='bold'>end</span>;<br>
+                  <br>
+                  <span id='bold'>procedure</span>&nbsp;<span id='identifier'>TForm1</span>.<span id='identifier'>FormCreate</span>(<span id='identifier'>Sender</span>: <span id='identifier'>TObject</span>);<br>
+                  <span id='bold'>begin</span><br>
+                  &nbsp;&nbsp;<a class="pascal" href="#RegisterShellEvent">RegisterShellEvent</a>(<span id='identifier'>ShellEvent</span>);<br>
+                  <span id='bold'>end</span>;<br>
+                  <br>
+                  <span id='bold'>procedure</span>&nbsp;<span id='identifier'>TForm1</span>.<span id='identifier'>FormDestroy</span>(<span id='identifier'>Sender</span>: <span id='identifier'>TObject</span>);<br>
+                  <span id='bold'>begin</span><br>
+                  &nbsp;&nbsp;<a class="pascal" href="#UnregisterShellEvent">UnregisterShellEvent</a>(<span id='identifier'>ShellEvent</span>);<br>
+                  <span id='bold'>end</span>;<br>
+                  <br>
+                  <span id='bold'>end</span>.
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </body>
+
+</html>

@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 //  TraceTool JavaScript API.
 //  Author : Thierry Parent
-//  Version : 13.2.5
+//  Version : 13.2.6
 //
 //   See http://www.codeproject.com/Articles/5498/TraceTool-The-Swiss-Army-Knife-of-Trace for full sample use
 //------------------------------------------------------------------------------
@@ -219,7 +219,7 @@ function sendToClientUsingScript(hostUrl)
     */
 
     // check every 20 seconds if msg is send
-    setTimeout(Worker, 20000);
+    setTimeout(worker, 20000);
 }
 
 //--------------------------------------------------------------------------------------------------------

@@ -1,0 +1,310 @@
+<html>
+
+  <head>
+    <title>mad* Help...</title>
+    <meta name="description" content="mad* Help...">
+    <meta name="keywords" content="madshi, components, delphi">
+    <meta http-equiv="expires" content="900">
+    <link rel=stylesheet type="text/css" href="style.css">
+  </head>
+
+  <body background="bcklight.gif" bgcolor=#F8F8F8>
+    <a name="ITrayIcon"></a>
+    <a name="ITrayIcons"></a>
+    <table border=0 cellpadding=0 callspacing=0><tr>
+      <td valign=bottom>
+        <table border=0 cellpadding=0 cellspacing=0><tr><td bgcolor=#D8D8D8>
+          <table cellpadding=3 border=0>
+            <tr><td bgcolor=#FFFFF0>
+              <div id="verySmall"><br></div>
+              <div id="bigTitle">&nbsp;Tray Icons&nbsp;</div>
+              <div id="verySmall"><br></div>
+              <div id="small">
+                <a class="small" href="Content.htm">Content</a> /
+                <a class="small" href="madKernel.htm">madKernel</a> /...
+              </div>
+            </td></tr>
+          </table>
+        </td></tr></table>
+      </td>
+      <td valign=bottom>
+        <table border=0 cellpadding=0 cellspacing=0><tr><td bgcolor=#D8D8D8>
+          <table cellpadding=7 border=0>
+            <tr><td bgcolor=#F4F4F8><a href="http://www.madshi.net">www.madshi.net</a></td></tr>
+          </table>
+        </td></tr></table>
+      </td>
+    </tr></table>
+    <p>With madKernel you can manage tray icons (see API "Shell_NotifyIcon") of any
+       application. This kind of functionality is totally undocumented, but works
+       well from win95 to winXP. A single tray icon is encapsulated in the
+       "ITrayIcon" interface, a group of tray icons is wrapped up in the
+       "ITrayIcons" interface. See also the <a href="ITrayIconRef.htm">ITrayIcon Reference</a> and the
+       <a href="ITrayIconsRef.htm">ITrayIcons Reference</a>.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>type</span><br>
+                  &nbsp;&nbsp;<span id='identifier'>ITrayIcon</span>&nbsp;&nbsp;= <span id='bold'>interface</span>&nbsp;(<a class="pascal" href="IBasicBaseInterface.htm#IBasic">IBasic</a>) &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[<span id='string'>'{4BFE6700-C522-11D3-A530-00005A180D69}'</span>];<br>
+                  &nbsp;&nbsp;<span id='identifier'>ITrayIcons</span>&nbsp;= <span id='bold'>interface</span>&nbsp;(<a class="pascal" href="ICustomBasicListBaseInterface.htm#ICustomBasicList">ICustomBasicList</a>) [<span id='string'>'{4BFE6701-C522-11D3-A530-00005A180D69}'</span>];
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="TrayIcons"></a>
+    <a name="ITrayIcons.Items"></a>
+    <a name="ITrayIcons.RefreshItems"></a>
+    <p>There are two ways to get an <a href="#ITrayIcons">ITrayIcons</a> instance, namely either by
+       calling <a href="Processes.htm#IProcess.TrayIcons">IProcess.TrayIcons</a> or by calling the function "TrayIcons",
+       which enumerates all tray icons of your application or all tray icons of all
+       processes system wide. Currently the only way to get an <a href="#ITrayIcon">ITrayIcon</a>
+       instance is to use the <a href="#ITrayIcons.Items">ITrayIcons.Items</a> property. The method
+       "RefreshItems" looks for new, deleted or changed tray icons.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>TrayIcons</span>&nbsp;(<span id='identifier'>systemWide</span>: <span id='identifier'>boolean</span>&nbsp;= <span id='identifier'>true</span>) : <a class="pascal" href="#ITrayIcons">ITrayIcons</a>;<br>
+                  <br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>ITrayIcons</span>.<img src="r.gif"><span id='identifier'>Items</span>&nbsp;[<span id='bold'>index</span>: <span id='identifier'>integer</span>] : <a class="pascal" href="#ITrayIcon">ITrayIcon</a>;<br>
+                  <br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>ITrayIcons</span>.<img src="m.gif"><span id='identifier'>RefreshItems</span>&nbsp;: <span id='identifier'>boolean</span>;<br>
+                  <br>
+                  <span id='comment'>// Example:</span><br>
+                  <span id='identifier'>MessageBox</span>(<span id='number'>0</span>, <span id='identifier'>pchar</span>(<span id='string'>'we have '</span>&nbsp;+ <span id='identifier'>IntToStr</span>(<span id='identifier'>TrayIcons</span>.<span id='identifier'>ItemCount</span>) + <span id='string'>' tray icons'</span>), <span id='string'>'info'</span>, <span id='number'>0</span>);;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="ITrayIcon.ID"></a>
+    <p>Each tray icon has an application defined identifier:</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>ITrayIcon</span>.<img src="m.gif"><span id='identifier'>ID</span>&nbsp;: <span id='identifier'>cardinal</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="ITrayIcon.Window"></a>
+    <a name="ITrayIcon.Message"></a>
+    <p>Which window is responsible to handle the messages of this tray icon? And
+       which private message number is used? You can get and also set those values.
+       This way you can even take over control of other process' tray icons.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>ITrayIcon</span>.<img src="w.gif"><span id='identifier'>Window</span>&nbsp;&nbsp;: <a class="pascal" href="Windows.htm#IWindow">IWindow</a>;<br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>ITrayIcon</span>.<img src="w.gif"><span id='bold'>Message</span>&nbsp;: <span id='identifier'>cardinal</span>;<br>
+                  <br>
+                  <span id='comment'>// Example:</span><br>
+                  <span id='identifier'>MessageBox</span>(<span id='number'>0</span>, <span id='identifier'>pchar</span>(<a class="pascal" href="#TrayIcons">TrayIcons</a>[<span id='number'>0</span>].<span id='identifier'>Window</span>.<a id="mono" href="Windows.htm#IWindow.OwnerProcess">OwnerProcess</a>.<a id="mono" href="Processes.htm#IProcess.ExeFile">ExeFile</a>), <span id='string'>'the first tray icon belongs to'</span>, <span id='number'>0</span>);
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="ITrayIcon.Hint"></a>
+    <a name="ITrayIcon.ImageIndex"></a>
+    <a name="ITrayIcon.Icon"></a>
+    <a name="ITrayIcons.ImageList"></a>
+    <p>Which hint is shown for this tray icon? Which graphical icon does it show?
+       The "ImageIndex" property only makes sense in connection with the
+       ITrayIcons.ImageList property:</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>ITrayIcon</span>.<img src="w.gif"><span id='identifier'>Hint</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='bold'>string</span>;<br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>ITrayIcon</span>.<img src="r.gif"><span id='identifier'>ImageIndex</span>&nbsp;: <span id='identifier'>integer</span>;<br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>ITrayIcon</span>.<img src="w.gif"><span id='identifier'>Icon</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>cardinal</span>;<br>
+                  <br>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>ITrayIcons</span>.<img src="r.gif"><span id='identifier'>ImageList</span>&nbsp;: <span id='identifier'>cardinal</span>;<br>
+                  <br>
+                  <span id='comment'>// Example:</span><br>
+                  <span id='identifier'>MessageBox</span>(<span id='number'>0</span>, <span id='identifier'>pchar</span>(<span id='string'>'"'</span>&nbsp;+ <a class="pascal" href="#TrayIcons">TrayIcons</a>[<span id='number'>0</span>].<span id='identifier'>Hint</span>&nbsp;+ <span id='string'>'"'</span>), <span id='string'>'the first tray icon'</span><span id='string'>'s hint is'</span>, <span id='number'>0</span>);
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="ITrayIcon.Rect"></a>
+    <p>Which position/size does the tray icon have on screen?</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>ITrayIcon</span>.<img src="r.gif"><span id='identifier'>Rect</span>&nbsp;: <span id='identifier'>TRect</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="ITrayIcon.MouseMove"></a>
+    <a name="ITrayIcon.MouseClick"></a>
+    <p>You can simulate tray icon mouse events:</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>procedure</span>&nbsp;<span id='identifier'>ITrayIcon</span>.<img src="m.gif"><span id='identifier'>MouseMove</span>;<br>
+                  <span id='bold'>procedure</span>&nbsp;<span id='identifier'>ITrayIcon</span>.<img src="m.gif"><span id='identifier'>MouseClick</span>&nbsp;(<span id='identifier'>right</span>: <span id='identifier'>boolean</span>&nbsp;= <span id='identifier'>true</span>; <span id='identifier'>double</span>: <span id='identifier'>boolean</span>&nbsp;= <span id='identifier'>false</span>);<br>
+                  <br>
+                  <span id='comment'>// Example:</span><br>
+                  <a class="pascal" href="#TrayIcons">TrayIcons</a>[<span id='number'>0</span>].<span id='identifier'>MouseClick</span>; &nbsp;<span id='comment'>// single right click on the first tray icon</span>
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="ITrayIcon.Visible"></a>
+    <a name="ITrayIcon.Hide"></a>
+    <a name="ITrayIcon.Show"></a>
+    <p>You can access the visibility change of the tray icons by using the
+       following methods. A hidden tray icon is automatically shown again in the
+       moment when the <a href="#ITrayIcon">ITrayIcon</a> instance gets freed. That means the
+       visibility is only changed temporarily.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>ITrayIcon</span>.<img src="w.gif"><span id='identifier'>Visible</span>&nbsp;: <span id='identifier'>boolean</span>;<br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>ITrayIcon</span>.<img src="m.gif"><span id='identifier'>Hide</span>&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>boolean</span>;<br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>ITrayIcon</span>.<img src="m.gif"><span id='identifier'>Show</span>&nbsp;&nbsp;&nbsp;&nbsp;: <span id='identifier'>boolean</span>;<br>
+                  <br>
+                  <span id='comment'>// Example:</span><br>
+                  <span id='bold'>with</span>&nbsp;<a class="pascal" href="#TrayIcons">TrayIcons</a>[<span id='number'>0</span>] <span id='bold'>do</span>&nbsp;<span id='bold'>begin</span><br>
+                  &nbsp;&nbsp;<span id='identifier'>Hide</span>;<br>
+                  &nbsp;&nbsp;<span id='identifier'>MessageBox</span>(<span id='number'>0</span>, <span id='string'>'first tray icon is temporarily hidden now'</span>, <span id='string'>'info'</span>, <span id='number'>0</span>);<br>
+                  &nbsp;&nbsp;<span id='identifier'>Show</span>;<br>
+                  <span id='bold'>end</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="ITrayIcon.Delete"></a>
+    <p>In order to delete this tray icon completely use:</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>ITrayIcon</span>.<img src="m.gif"><span id='identifier'>Delete</span>&nbsp;: <span id='identifier'>boolean</span>;<br>
+                  <br>
+                  <span id='comment'>// Example:</span><br>
+                  <a class="pascal" href="#TrayIcons">TrayIcons</a>[<span id='number'>0</span>].<span id='identifier'>Delete</span>; &nbsp;<span id='comment'>// delete the first tray icon</span>
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="ITrayIcons.Hide"></a>
+    <a name="ITrayIcons.Show"></a>
+    <a name="ITrayIcons.Delete"></a>
+    <p>The following <a href="#ITrayIcons">ITrayIcons</a> methods are more or less identical to the
+       <a href="#ITrayIcon">ITrayIcon</a> methods with the same name. It's just that if you call the
+       <a href="#ITrayIcons">ITrayIcons</a> methods, they are called for all tray icons in the list.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>ITrayIcons</span>.<img src="m.gif"><span id='identifier'>Hide</span>&nbsp;: <span id='identifier'>boolean</span>;<br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>ITrayIcons</span>.<img src="m.gif"><span id='identifier'>Show</span>&nbsp;: <span id='identifier'>boolean</span>;<br>
+                  <br>
+                  <span id='bold'>function</span>&nbsp;<span id='identifier'>ITrayIcons</span>.<img src="m.gif"><span id='identifier'>Delete</span>&nbsp;: <span id='identifier'>boolean</span>;<br>
+                  <br>
+                  <span id='comment'>// Example:</span><br>
+                  <a class="pascal" href="#TrayIcons">TrayIcons</a>.<span id='identifier'>Delete</span>; &nbsp;<span id='comment'>// delete all tray icons (ouch)</span>
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <a name="ITrayIcons.OwnerProcess"></a>
+    <p>Does this <a href="#ITrayIcons">ITrayIcons</a> instance only enumerate tray icons of a specific
+       process?</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>property</span>&nbsp;<span id='identifier'>ITrayIcons</span>.<img src="r.gif"><span id='identifier'>OwnerProcess</span>&nbsp;: <a class="pascal" href="Processes.htm#IProcess">IProcess</a>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </body>
+
+</html>

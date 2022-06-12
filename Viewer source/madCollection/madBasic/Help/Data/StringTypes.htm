@@ -1,0 +1,181 @@
+<html>
+
+  <head>
+    <title>mad* Help...</title>
+    <meta name="description" content="mad* Help...">
+    <meta name="keywords" content="madshi, components, delphi">
+    <meta http-equiv="expires" content="900">
+    <link rel=stylesheet type="text/css" href="style.css">
+  </head>
+
+  <body background="bcklight.gif" bgcolor=#F8F8F8>
+    <a name="UnicodeString"></a>
+    <a name="TPString"></a>
+    <a name="TAString"></a>
+    <a name="TPAString"></a>
+    <a name="TDAString"></a>
+    <a name="TPDAString"></a>
+    <a name="TPAnsiString"></a>
+    <a name="TAAnsiString"></a>
+    <a name="TPAAnsiString"></a>
+    <a name="TDAAnsiString"></a>
+    <a name="TPDAAnsiString"></a>
+    <a name="TPUnicodeString"></a>
+    <a name="TAUnicodeString"></a>
+    <a name="TPAUnicodeString"></a>
+    <a name="TDAUnicodeString"></a>
+    <a name="TPDAUnicodeString"></a>
+    <a name="TPWideString"></a>
+    <a name="TAWideString"></a>
+    <a name="TPAWideString"></a>
+    <a name="TDAWideString"></a>
+    <a name="TPDAWideString"></a>
+    <table border=0 cellpadding=0 callspacing=0><tr>
+      <td valign=bottom>
+        <table border=0 cellpadding=0 cellspacing=0><tr><td bgcolor=#D8D8D8>
+          <table cellpadding=3 border=0>
+            <tr><td bgcolor=#FFFFF0>
+              <div id="verySmall"><br></div>
+              <div id="bigTitle">&nbsp;String Types&nbsp;</div>
+              <div id="verySmall"><br></div>
+              <div id="small">
+                <a class="small" href="Content.htm">Content</a> /
+                <a class="small" href="madBasic.htm">madBasic</a> /
+                <a class="small" href="madTypesUnit.htm">madTypes Unit</a> /...
+              </div>
+            </td></tr>
+          </table>
+        </td></tr></table>
+      </td>
+      <td valign=bottom>
+        <table border=0 cellpadding=0 cellspacing=0><tr><td bgcolor=#D8D8D8>
+          <table cellpadding=7 border=0>
+            <tr><td bgcolor=#F4F4F8><a href="http://www.madshi.net">www.madshi.net</a></td></tr>
+          </table>
+        </td></tr></table>
+      </td>
+    </tr></table>
+    <p>Here is a list of "string" type definitions:</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>type</span><br>
+                  &nbsp;&nbsp;<span id='comment'>{$ifndef</span>&nbsp;<span id='comment'>d2009}</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span id='identifier'>UnicodeString</span>&nbsp;&nbsp;&nbsp;= <span id='identifier'>WideString</span>;<br>
+                  &nbsp;&nbsp;<span id='comment'>{$endif}</span><br>
+                  <br>
+                  &nbsp;&nbsp;<span id='identifier'>TPString</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= ^<span id='bold'>string</span>;<br>
+                  &nbsp;&nbsp;<span id='identifier'>TPAnsiString</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= ^<span id='identifier'>AnsiString</span>;<br>
+                  &nbsp;&nbsp;<span id='identifier'>TPWideString</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= ^<span id='identifier'>WideString</span>;<br>
+                  &nbsp;&nbsp;<span id='identifier'>TPUnicodeString</span>&nbsp;&nbsp;&nbsp;= ^<span id='identifier'>UnicodeString</span>;<br>
+                  <br>
+                  &nbsp;&nbsp;<span id='identifier'>TAString</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= <span id='bold'>array</span>&nbsp;[<span id='number'>0</span>..<span id='identifier'>maxInt</span>&nbsp;<span id='bold'>shr</span>&nbsp;<span id='number'>2</span>-<span id='number'>1</span>] <span id='bold'>of</span>&nbsp;<span id='bold'>string</span>;<br>
+                  &nbsp;&nbsp;<span id='identifier'>TAAnsiString</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= <span id='bold'>array</span>&nbsp;[<span id='number'>0</span>..<span id='identifier'>maxInt</span>&nbsp;<span id='bold'>shr</span>&nbsp;<span id='number'>2</span>-<span id='number'>1</span>] <span id='bold'>of</span>&nbsp;<span id='identifier'>AnsiString</span>;<br>
+                  &nbsp;&nbsp;<span id='identifier'>TAWideString</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= <span id='bold'>array</span>&nbsp;[<span id='number'>0</span>..<span id='identifier'>maxInt</span>&nbsp;<span id='bold'>shr</span>&nbsp;<span id='number'>2</span>-<span id='number'>1</span>] <span id='bold'>of</span>&nbsp;<span id='identifier'>WideString</span>;<br>
+                  &nbsp;&nbsp;<span id='identifier'>TAUnicodeString</span>&nbsp;&nbsp;&nbsp;= <span id='bold'>array</span>&nbsp;[<span id='number'>0</span>..<span id='identifier'>maxInt</span>&nbsp;<span id='bold'>shr</span>&nbsp;<span id='number'>2</span>-<span id='number'>1</span>] <span id='bold'>of</span>&nbsp;<span id='identifier'>UnicodeString</span>;<br>
+                  &nbsp;&nbsp;<span id='identifier'>TPAString</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= ^<span id='identifier'>TAString</span>;<br>
+                  &nbsp;&nbsp;<span id='identifier'>TPAAnsiString</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= ^<span id='identifier'>TAAnsiString</span>;<br>
+                  &nbsp;&nbsp;<span id='identifier'>TPAWideString</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= ^<span id='identifier'>TAWideString</span>;<br>
+                  &nbsp;&nbsp;<span id='identifier'>TPAUnicodeString</span>&nbsp;&nbsp;= ^<span id='identifier'>TAUnicodeString</span>;<br>
+                  <br>
+                  &nbsp;&nbsp;<span id='identifier'>TDAString</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= <span id='bold'>array</span>&nbsp;<span id='bold'>of</span>&nbsp;<span id='bold'>string</span>;<br>
+                  &nbsp;&nbsp;<span id='identifier'>TDAAnsiString</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= <span id='bold'>array</span>&nbsp;<span id='bold'>of</span>&nbsp;<span id='identifier'>AnsiString</span>;<br>
+                  &nbsp;&nbsp;<span id='identifier'>TDAWideString</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= <span id='bold'>array</span>&nbsp;<span id='bold'>of</span>&nbsp;<span id='identifier'>WideString</span>;<br>
+                  &nbsp;&nbsp;<span id='identifier'>TDAUnicodeString</span>&nbsp;&nbsp;= <span id='bold'>array</span>&nbsp;<span id='bold'>of</span>&nbsp;<span id='identifier'>UnicodeString</span>;<br>
+                  &nbsp;&nbsp;<span id='identifier'>TPDAString</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= ^<span id='identifier'>TDAString</span>;<br>
+                  &nbsp;&nbsp;<span id='identifier'>TPDAAnsiString</span>&nbsp;&nbsp;&nbsp;&nbsp;= ^<span id='identifier'>TDAAnsiString</span>;<br>
+                  &nbsp;&nbsp;<span id='identifier'>TPDAWideString</span>&nbsp;&nbsp;&nbsp;&nbsp;= ^<span id='identifier'>TDAWideString</span>;<br>
+                  &nbsp;&nbsp;<span id='identifier'>TPDAUnicodeString</span>&nbsp;= ^<span id='identifier'>TDAUnicodeString</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <p>Please note, that allocating and freeing "TPString" or "TPAString" variables
+       is a bit dangerous. You have to know exactly what you're doing. So please
+       look at the following examples, which show wrong and right ways.</p>
+    <table width=100% cellpadding=0 border=0>
+      <tr>
+        <td bgcolor=#D8D8D8>
+          <table width=100% cellpadding=10 border=0>
+            <tr>
+              <td bgcolor=#F8F0F0><img src='px.gif'></td>
+              <td width=100% bgcolor=#F4F4F8>
+                <span id='mono'>
+                  <span id='bold'>procedure</span>&nbsp;<span id='identifier'>Proc1</span>;<br>
+                  <span id='bold'>var</span>&nbsp;<span id='identifier'>pStrVar</span>&nbsp;: <span id='identifier'>TPString</span>;<br>
+                  <span id='bold'>begin</span><br>
+                  &nbsp;&nbsp;<span id='comment'>// you can do this, but note, that the memory is not initialized when using "GetMem"</span><br>
+                  &nbsp;&nbsp;<span id='identifier'>GetMem</span>(<span id='identifier'>pStrVar</span>, <span id='identifier'>sizeOf</span>(<span id='bold'>string</span>));<br>
+                  <br>
+                  &nbsp;&nbsp;<span id='comment'>// "pStrVar^" is not initialized</span><br>
+                  &nbsp;&nbsp;<span id='comment'>// -> Delphi thinks that "pStrVar^" references a valid string</span><br>
+                  &nbsp;&nbsp;<span id='comment'>// -> Delphi tries to free it before assigning the new value</span><br>
+                  &nbsp;&nbsp;<span id='comment'>// -> crash, because it is NOT a valid string, but a random value</span><br>
+                  &nbsp;&nbsp;<span id='identifier'>pStrVar</span>^ := <span id='string'>'test'</span>;<br>
+                  <span id='bold'>end</span>;<br>
+                  <br>
+                  <span id='bold'>procedure</span>&nbsp;<span id='identifier'>Proc2</span>;<br>
+                  <span id='bold'>var</span>&nbsp;<span id='identifier'>pStrVar</span>&nbsp;: <span id='identifier'>TPString</span>;<br>
+                  <span id='bold'>begin</span><br>
+                  &nbsp;&nbsp;<span id='comment'>// as you know already, "GetMem" does not initialize the memory</span><br>
+                  &nbsp;&nbsp;<span id='identifier'>GetMem</span>(<span id='identifier'>pStrVar</span>, <span id='identifier'>sizeOf</span>(<span id='bold'>string</span>));<br>
+                  <br>
+                  &nbsp;&nbsp;<span id='comment'>// so if you're doing it yourself, you're out of danger</span><br>
+                  &nbsp;&nbsp;<span id='identifier'>ZeroMemory</span>(<span id='identifier'>pStrVar</span>, <span id='identifier'>sizeOf</span>(<span id='bold'>string</span>));<br>
+                  <br>
+                  &nbsp;&nbsp;<span id='comment'>// "pStrVar^" is initialized this time</span><br>
+                  &nbsp;&nbsp;<span id='comment'>// -> Delphi knows that "pStrVar^" holds no string currently</span><br>
+                  &nbsp;&nbsp;<span id='comment'>// -> Delphi assigns the new value to "pStrVar^" successfully</span><br>
+                  &nbsp;&nbsp;<span id='identifier'>pStrVar</span>^ := <span id='string'>'test'</span>;<br>
+                  <br>
+                  &nbsp;&nbsp;<span id='comment'>// FreeMem frees the allocated memory, but the "test" string does NOT get freed</span><br>
+                  &nbsp;&nbsp;<span id='comment'>// this is at least a memory leak, sometimes it can even result in a crash</span><br>
+                  &nbsp;&nbsp;<span id='identifier'>FreeMem</span>(<span id='identifier'>pStrVar</span>);<br>
+                  <span id='bold'>end</span>;<br>
+                  <br>
+                  <span id='bold'>procedure</span>&nbsp;<span id='identifier'>Proc3</span>;<br>
+                  <span id='bold'>var</span>&nbsp;<span id='identifier'>pStrVar</span>&nbsp;: <span id='identifier'>TPString</span>;<br>
+                  <span id='bold'>begin</span><br>
+                  &nbsp;&nbsp;<span id='comment'>// "AllocMem" always initializes any allocated buffer</span><br>
+                  &nbsp;&nbsp;<span id='identifier'>pStrVar</span>&nbsp;:= <span id='identifier'>AllocMem</span>(<span id='identifier'>sizeOf</span>(<span id='bold'>string</span>));<br>
+                  <br>
+                  &nbsp;&nbsp;<span id='comment'>// so the string assignment makes no problems</span><br>
+                  &nbsp;&nbsp;<span id='identifier'>pStrVar</span>^ := <span id='string'>'test'</span>;<br>
+                  <br>
+                  &nbsp;&nbsp;<span id='comment'>// this time we reset the "pStrVar^" variable, so Delphi kills the string</span><br>
+                  &nbsp;&nbsp;<span id='identifier'>Finalize</span>(<span id='identifier'>pStrVar</span>);<br>
+                  <br>
+                  &nbsp;&nbsp;<span id='comment'>// now we can free the memory, no memory leak anymore</span><br>
+                  &nbsp;&nbsp;<span id='identifier'>FreeMem</span>(<span id='identifier'>pStrVar</span>);<br>
+                  <span id='bold'>end</span>;<br>
+                  <br>
+                  <span id='bold'>procedure</span>&nbsp;<span id='identifier'>Proc4</span>;<br>
+                  <span id='bold'>begin</span><br>
+                  &nbsp;&nbsp;<span id='comment'>// "New" knows that "pStrVar^" needs to be initialized and so does it automatically</span><br>
+                  &nbsp;&nbsp;<span id='identifier'>New</span>(<span id='identifier'>pStrVar</span>);<br>
+                  <br>
+                  &nbsp;&nbsp;<span id='comment'>// so again no problem with the string assignment</span><br>
+                  &nbsp;&nbsp;<span id='identifier'>pStrVar</span>^ := <span id='string'>'test'</span>;<br>
+                  <br>
+                  &nbsp;&nbsp;<span id='comment'>// "Dispose" knows that "pStrVar^" needs to be reset and so does it</span><br>
+                  &nbsp;&nbsp;<span id='comment'>// after that it also frees the allocated memory</span><br>
+                  &nbsp;&nbsp;<span id='identifier'>Dispose</span>(<span id='identifier'>pStrVar</span>);<br>
+                  <span id='bold'>end</span>;
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </body>
+
+</html>
