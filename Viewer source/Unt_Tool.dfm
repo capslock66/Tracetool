@@ -167,10 +167,6 @@ object Frm_Tool: TFrm_Tool
       object StayonTop1: TMenuItem
         Action = actViewStayOnTop
       end
-      object actDepends: TMenuItem
-        Caption = 'Dependency'
-        OnClick = actDependsClick
-      end
       object Options1: TMenuItem
         Action = actOptions
       end
@@ -1696,6 +1692,12 @@ object Frm_Tool: TFrm_Tool
       ImageIndex = 13
       OnExecute = actShowExecute
     end
+    object actShowOnMain: TAction
+      Category = 'Win'
+      Caption = '&Show on main screen'
+      ImageIndex = 13
+      OnExecute = actShowOnMainExecute
+    end
     object actHide: TAction
       Category = 'File'
       Caption = '&Hide Application'
@@ -1741,8 +1743,13 @@ object Frm_Tool: TFrm_Tool
       Left = 539
       Top = 303
     end
+    object Showat001: TMenuItem
+      Action = actShowOnMain
+    end
     object mitTrayShutdown: TMenuItem
       Action = actShutdown
+      Caption = '&Exit Tracetool'
+      Hint = 'Exit Tracetool'
       Left = 519
       Top = 283
     end

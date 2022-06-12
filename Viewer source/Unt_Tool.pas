@@ -91,13 +91,14 @@ type
     UtilityImages: TImageList;
     MadExceptionHandler1: TMadExceptionHandler;
     IdHTTPServer: TIdHTTPServer;
-    actDepends: TMenuItem;
     OpenFileDialog: TOpenDialog;
     MadExceptionHandler2: TMadExceptionHandler;
     TCPServer2: TIdTCPServer;
     SocketPolicyServer: TIdTCPServer;
     UDPServer1: TIdUDPServer;
     UDPServer2: TIdUDPServer;
+    Showat001: TMenuItem;
+    actShowOnMain: TAction;
     
     procedure FormCreate(Sender: TObject);
     procedure actShowExecute(Sender: TObject);
@@ -139,6 +140,7 @@ type
       AException: Exception);
     procedure SocketPolicyServerAfterBind(Sender: TObject);
     procedure FormShow(Sender: TObject);
+    procedure actShowOnMainExecute(Sender: TObject);
 
   private
 
@@ -1687,7 +1689,6 @@ begin
    actShow.Execute;
 end;
 
-
 //------------------------------------------------------------------------------
 
 // TaskBar / Show or double click (TrayIconDblClick) or ParseTraceMsg
@@ -1698,6 +1699,22 @@ begin
    Application.ShowMainForm := true ;
    TaskBarButton(true) ;
    Application.Restore ;
+   Show;
+   BringToFront;
+   Application.BringToFront;
+end;
+
+//------------------------------------------------------------------------------
+
+procedure TFrm_Tool.actShowOnMainExecute(Sender: TObject);
+begin
+   if TraceConfig.AppDisplay_HideViewer = true then
+      exit ;
+   Application.ShowMainForm := true ;
+   TaskBarButton(true) ;
+   Application.Restore ;
+   Left := 0;
+   Top := 0;
    Show;
    BringToFront;
    Application.BringToFront;
@@ -2504,6 +2521,7 @@ begin
 end ;
 
 //------------------------------------------------------------------------------
+
 
 procedure TFrm_Tool.ShowParsedForm(TraceForm : TForm) ;
 begin

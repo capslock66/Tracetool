@@ -71,20 +71,20 @@ object FrmAbout: TFrmAbout
   object Label12: TLabel
     Left = 16
     Top = 35
-    Width = 337
+    Width = 376
     Height = 13
     Caption = 
-      '- A Dot Net, Java, Javascript, C++, ActiveX and Delphi trace fra' +
-      'mework'
+      '- A Dot Net, Java, Python, Javascript, C++, ActiveX and Delphi t' +
+      'race framework'
   end
   object Label14: TLabel
     Left = 16
     Top = 50
-    Width = 346
+    Width = 377
     Height = 13
     Caption = 
-      '- Send traces, objects or dumps using windows message or socket ' +
-      'thread'
+      '- Send traces, objects or dumps using windows message, socket or' +
+      ' web socket '
   end
   object Label16: TLabel
     Left = 151
