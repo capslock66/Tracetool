@@ -124,6 +124,8 @@ object Frm_Tool: TFrm_Tool
   end
   object MainMenu: TMainMenu
     Images = ilActions
+    Left = 16
+    Top = 8
     object mnuFile: TMenuItem
       Caption = '&File'
       object N1: TMenuItem
@@ -181,8 +183,8 @@ object Frm_Tool: TFrm_Tool
     end
   end
   object ilActions: TImageList
-    Left = 176
-    Top = 104
+    Left = 160
+    Top = 8
     Bitmap = {
       494C01012A002C00040010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
       000000000000360000002800000040000000B0000000010020000000000000B0
@@ -1645,8 +1647,8 @@ object Frm_Tool: TFrm_Tool
   end
   object Actions: TActionList
     Images = ilActions
-    Left = 96
-    Top = 104
+    Left = 80
+    Top = 8
     object actViewMainTraces: TAction
       Category = 'Win'
       Caption = '&Show Main Traces'
