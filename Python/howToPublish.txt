@@ -1,0 +1,20 @@
+pip install --upgrade pip
+pip install --upgrade build
+pip install --upgrade twine
+
+rem clean and build
+rd dist /S /Q
+python -m build
+
+rem upload first to test testpypi and test it
+python -m twine upload --verbose --repository testpypi dist/*
+-> User and password
+-> test it with 
+->    python3 -m pip install --upgrade --index-url https://test.pypi.org/simple/ tracetool
+
+
+python -m twine upload --verbose dist/*
+-> User and password
+-> test it with 
+->    pip install --upgrade tracetool
+

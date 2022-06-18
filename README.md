@@ -289,10 +289,14 @@ See the [Samples](#Samples "Samples") section for more examples
 ## Python
 
 Python file ([tracetool.py](/Python/Src/tracetool.py "tracetool.py"))
-is included in the Python/Src folder.
+is included in the Python/Src folder. \
+Alternatively, your can install the library using the pip command (windows or lunix command line)
 
-The library is compatible with Python 2, Python 3, and Iron Python (.NET). \
-The library was also tested under Blender
+``` shell
+pip install --upgrade tracetool
+```
+
+The library is compatible with Python 2, Python 3, and Iron Python (.NET). Also tested under Blender
 
 Sample code
 
