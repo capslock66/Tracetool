@@ -156,6 +156,7 @@ type
     procedure RefreshView ; override ;
     procedure ShowFilter ;  override ;
     procedure ApplyFont ; override ;
+    procedure InsertRow ; override;
     function  getMembers(Node : PVirtualNode) : TMember ; override ;
     function  SearchNext(start:boolean) : boolean ; override ;
     function  SearchPrevious (atEnd:boolean) : boolean ;  override ;
@@ -546,6 +547,13 @@ begin
       VstDetail.TreeOptions.PaintOptions := VstDetail.TreeOptions.PaintOptions - [toShowRoot] ;
 
    VstDetail.FullExpand();
+end;
+
+//------------------------------------------------------------------------------
+
+procedure TFrmEventLog.InsertRow;
+begin
+   // vstTrace.InsertNode(Parent,amInsertBefore)  ;   // amInsertAfter
 end;
 
 //------------------------------------------------------------------------------

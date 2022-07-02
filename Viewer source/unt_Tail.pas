@@ -205,6 +205,7 @@ type
     procedure RefreshView ;       override ;
     procedure ShowFilter ;        override ;
     procedure ApplyFont ; override ;
+    procedure InsertRow ; override;
     function  getMembers(Node : PVirtualNode) : TMember ; override ;
     function  SearchNext(start:boolean) : boolean ;        override ;
     function  SearchPrevious (atEnd:boolean) : boolean ;  override ;
@@ -1240,6 +1241,13 @@ begin
 
       //TailRec.Columns := getDelimitedStringsfromWLine(pWidechar(TailRec.Msg)) ;  // use here the unicode version
 end ;
+
+//------------------------------------------------------------------------------
+
+procedure TFrmTail.InsertRow;
+begin
+   // vstTrace.InsertNode(Parent,amInsertBefore)  ;   // amInsertAfter
+end;
 
 //------------------------------------------------------------------------------
 

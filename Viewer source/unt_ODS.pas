@@ -170,6 +170,7 @@ type
     procedure RefreshView ;       override ;
     procedure ShowFilter ;        override ;
     procedure ApplyFont ; override ;
+    procedure InsertRow ; override;
     function  getMembers(Node : PVirtualNode) : TMember ; override ;
     function  SearchNext(start:boolean) : boolean ;        override ;
     function  SearchPrevious (atEnd:boolean) : boolean ;  override ;
@@ -374,6 +375,13 @@ begin
    AddOneLineDetail ('Process Name'   , ODSRec.ProcessName) ;
    AddOneLineDetail ('Time'           , ODSRec.Time) ;
    AddOneLineDetail ('Message'  , ODSRec.LeftMsg) ;
+end;
+
+//------------------------------------------------------------------------------
+
+procedure TFrm_ODS.InsertRow;
+begin
+   // vstTrace.InsertNode(Parent,amInsertBefore)  ;   // amInsertAfter
 end;
 
 //------------------------------------------------------------------------------
@@ -1479,8 +1487,7 @@ end;
 
 //----------------------------------------------------------------------------------------------------------------------
 
-procedure TFrm_ODS.VstDebugStringFreeNode(Sender: TBaseVirtualTree;
-  Node: PVirtualNode);
+procedure TFrm_ODS.VstDebugStringFreeNode(Sender: TBaseVirtualTree; Node: PVirtualNode);
 var
    ODSRec : PODSRec ;
    idx : integer ;

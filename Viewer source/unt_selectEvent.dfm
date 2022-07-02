@@ -1,9 +1,9 @@
 object FrmSelectEvent: TFrmSelectEvent
   Left = 508
   Top = 240
-  Width = 334
-  Height = 353
   Caption = 'Select Event log'
+  ClientHeight = 314
+  ClientWidth = 318
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -14,8 +14,8 @@ object FrmSelectEvent: TFrmSelectEvent
   OnCreate = FormCreate
   OnShow = FormShow
   DesignSize = (
-    326
-    319)
+    318
+    314)
   PixelsPerInch = 96
   TextHeight = 13
   object Label1: TLabel

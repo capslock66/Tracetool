@@ -98,6 +98,8 @@ type
     actPrint: TAction;
     actPrint1: TMenuItem;
     ToolButton1: TToolButton;
+    ToolButton2: TToolButton;
+    actInsert: TAction;
 
     procedure FormCreate(Sender: TObject);
     procedure actCopyExecute(Sender: TObject);
@@ -125,6 +127,7 @@ type
     procedure actCopyCurrentCellExecute(Sender: TObject);
     procedure actClearFilterExecute(Sender: TObject);
     procedure actPrintExecute(Sender: TObject);
+    procedure actInsertExecute(Sender: TObject);
   protected
     procedure CreateParams(var Params : TCreateParams) ; override ;
   private
@@ -184,8 +187,6 @@ begin
    DockingPagecontrol.container := self ;
    DockingPagecontrol.Parent := PanelPageControl ; // self ;
 end;
-
-
 //------------------------------------------------------------------------------
 
 procedure TFrmPageContainer.FormClose(Sender: TObject;  var Action: TCloseAction);
@@ -551,6 +552,18 @@ end;
 
 //------------------------------------------------------------------------------
 
+procedure TFrmPageContainer.actInsertExecute(Sender: TObject);
+var
+   Base : TFrmBase ;
+begin
+   if DockingPagecontrol.ActivePage = nil then
+      exit ;
+   Base := TFrmBase (DockingPagecontrol.ActivePage.controls[0]) ;
+   Base.InsertRow ;
+end;
+
+//------------------------------------------------------------------------------
+
 procedure TFrmPageContainer.actClearHighlightExecute(Sender: TObject);
 var
    Base : TFrmBase ;
@@ -598,7 +611,7 @@ begin
 
    notBookmark := false ;
    SelectedNodes := base.VST.GetSortedSelection(false);
-   // fisr check if one node is not yet bookmarked
+   // first check if one node is not yet bookmarked
    for c := 0 to High(SelectedNodes) do begin
       index := base.bookmarks.IndexOf(SelectedNodes[c]) ;
       if index = -1 then begin

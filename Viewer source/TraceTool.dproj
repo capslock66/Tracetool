@@ -238,6 +238,10 @@
         <DCCReference Include="Preview\Preview.pas"/>
         <DCCReference Include="Config.pas"/>
         <DCCReference Include="unt_TraceConfig.pas"/>
+        <DCCReference Include="unt_AddLine.pas">
+            <Form>Frm_AddLine</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
         <None Include="FastMM4Options.inc">
             <ContainerId>File</ContainerId>
         </None>
