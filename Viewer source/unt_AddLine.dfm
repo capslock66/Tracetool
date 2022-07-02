@@ -12,6 +12,7 @@ object Frm_AddLine: TFrm_AddLine
   Font.Style = []
   OldCreateOrder = False
   OnCreate = FormCreate
+  OnShow = FormShow
   DesignSize = (
     556
     336)
@@ -71,28 +72,28 @@ object Frm_AddLine: TFrm_AddLine
     DesignSize = (
       540
       186)
-    object Label9: TLabel
+    object LabelTime: TLabel
       Left = 3
       Top = 18
       Width = 22
       Height = 13
       Caption = 'Time'
     end
-    object Label1: TLabel
+    object LabelThId: TLabel
       Left = 3
       Top = 58
       Width = 22
       Height = 13
       Caption = 'ThId'
     end
-    object Label2: TLabel
+    object LabelTraces: TLabel
       Left = 3
       Top = 98
       Width = 32
       Height = 13
       Caption = 'Traces'
     end
-    object Label3: TLabel
+    object LabelComment: TLabel
       Left = 3
       Top = 138
       Width = 45

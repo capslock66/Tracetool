@@ -13,15 +13,16 @@ type
     PanelUnderline: TPanel;
     InsertWhere: TRadioGroup;
     GroupBoxTextToAdd: TGroupBox;
-    Label9: TLabel;
+    LabelTime: TLabel;
     editTime: TEdit;
-    Label1: TLabel;
+    LabelThId: TLabel;
     EditThId: TEdit;
-    Label2: TLabel;
+    LabelTraces: TLabel;
     EditTrace: TEdit;
-    Label3: TLabel;
+    LabelComment: TLabel;
     EditComment: TEdit;
     procedure FormCreate(Sender: TObject);
+    procedure FormShow(Sender: TObject);
   private
     { Private declarations }
   public
@@ -41,9 +42,14 @@ begin
    InsertWhere.ItemIndex := 1 ; // Before selected line
 end;
 
+procedure TFrm_AddLine.FormShow(Sender: TObject);
+begin
+   EditTrace.SetFocus;
+end;
+
 procedure TFrm_AddLine.SetTraceWinMode;
 begin
-
+   // show or hide , update labels
 end;
 
 end.
