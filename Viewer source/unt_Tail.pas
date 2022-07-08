@@ -30,18 +30,18 @@ type
 
   PTailRec = ^TTailRec ;
   TTailRec = record
-     OriginalOrder  : cardinal ;     // Original order when inserted. Used to Unsort nodes
+     OriginalOrder  : integer ;      // Original order when inserted. Used to Unsort nodes
      Msg            : string ;       // a line
      Time           : string ;       // time of read (nothing to do with time of file write)
      Columns        : TStringList ;  // multi columns strings
   end ;
 
-  TTail = class
-     OriginalOrder  : cardinal ;     // Original order when inserted. Used to Unsort nodes
-     Msg            : string ;       // a line
-     Time           : string ;       // time of read (nothing to do with time of file write)
-     Columns        : TStringList ;  // multi columns strings
-  end;
+//  TTail = class
+//     OriginalOrder  : cardinal ;     // Original order when inserted. Used to Unsort nodes
+//     Msg            : string ;       // a line
+//     Time           : string ;       // time of read (nothing to do with time of file write)
+//     Columns        : TStringList ;  // multi columns strings
+//  end;
 
   TBlockMem = class
     buf:array[1..BUFSIZE + 5] of byte;
@@ -134,7 +134,8 @@ type
       Column: TColumnIndex; var Allowed: Boolean);
   private
     Sorter : TVstSort ;
-    LastChildOrder : cardinal ;     // Order of the last child, used to insert sub nodes and unsort them
+    FirstChildOrder: integer; // Order of the last child, used to insert sub nodes and unsort them
+    LastChildOrder: integer; // Order of the last child, used to insert sub nodes and unsort them
     procedure WMStartEditingMember(var Message: TMessage); message WM_STARTEDITING_MEMBER;
     procedure WMStartEditingTrace(var Message: TMessage); message WM_STARTEDITING_TRACE;
     function AddTrace(PtrBeg,PtrEnd: PAnsiChar; Ontop,IsNotCompleted : boolean): pVirtualNode;
@@ -205,6 +206,7 @@ type
     procedure RefreshView ;       override ;
     procedure ShowFilter ;        override ;
     procedure ApplyFont ; override ;
+    procedure InsertRow ; override;
     function  getMembers(Node : PVirtualNode) : TMember ; override ;
     function  SearchNext(start:boolean) : boolean ;        override ;
     function  SearchPrevious (atEnd:boolean) : boolean ;  override ;
@@ -222,7 +224,7 @@ uses
   , unt_utility
   , Unt_TailProgress
   , unt_search
-  , unt_selectTail;
+  , unt_selectTail, unt_AddLine;
 
 
 {$R *.dfm}
@@ -241,6 +243,7 @@ begin
    end ;
 
    // initialize sort
+   FirstChildOrder := -1 ;
    LastChildOrder := 1 ;   // 0 is reserved for not yet ordered lines
    Sorter := TVstSort.create (self) ;
    Sorter.tree := VstTail ;
@@ -886,7 +889,7 @@ var
 
 
          // check if no more lines
-         if PtrEnd = PAnsiChar(@blockMem.buf) then begin
+         if PtrEnd < PAnsiChar(@blockMem.buf) then begin
          //if PtrEnd = blockMem.Ptr then begin
             if BeginBlock = 0 then  // begin of file (block start at zero)
                EndBlock := 0 ;      // force quit the 2 loops
@@ -1240,6 +1243,73 @@ begin
 
       //TailRec.Columns := getDelimitedStringsfromWLine(pWidechar(TailRec.Msg)) ;  // use here the unicode version
 end ;
+
+//------------------------------------------------------------------------------
+
+procedure TFrmTail.InsertRow;
+var
+   selectedNode: PVirtualNode;
+   selectedTreeRec: PTailRec;
+   newTreeNode: PVirtualNode;
+   newTailRec : PTailRec;
+   newOrder : integer ;
+   //newTime : string;
+begin
+
+   selectedNode := VstTail.GetFirstSelected;
+   selectedTreeRec := nil;
+
+   if selectedNode <> nil then begin
+      selectedTreeRec := VstTail.GetNodeData(selectedNode);
+      Frm_AddLine.EditTime.Text := selectedTreeRec.Time;
+   end;
+
+   Frm_AddLine.SetTailMode;
+   Frm_AddLine.ShowModal;
+   if Frm_AddLine.ModalResult = mrCancel then
+      exit;
+
+   if (Frm_AddLine.InsertWhere.ItemIndex = 0) then begin          // on first line
+      newTreeNode := VstTail.InsertNode(nil,amAddChildFirst);
+      dec (FirstChildOrder) ;
+      NewOrder := FirstChildOrder ;
+
+   end else if (Frm_AddLine.InsertWhere.ItemIndex = 1) then begin // Before selected line
+      if selectedNode = nil then begin
+         newTreeNode := VstTail.InsertNode(nil,amAddChildFirst);
+         dec (FirstChildOrder) ;
+         NewOrder := FirstChildOrder ;
+
+      end else begin
+         newTreeNode := VstTail.InsertNode(selectedNode,amInsertBefore);
+         newOrder := selectedTreeRec.originalOrder-1 ;
+         if newOrder = 0 then  // 0 is reserved
+            dec(newOrder);
+      end;
+
+   end else if (Frm_AddLine.InsertWhere.ItemIndex = 2) then begin  // After selected line
+      if selectedNode = nil then begin
+         newTreeNode := VstTail.AddChild(nil);
+         NewOrder := LastChildOrder ;
+         inc (LastChildOrder) ;
+
+      end else begin
+         newTreeNode := VstTail.InsertNode(selectedNode,amInsertAfter);
+         newOrder := selectedTreeRec.originalOrder+1 ;
+      end;
+
+   end else begin                                                 // 3: At the end
+      newTreeNode := VstTail.AddChild(nil);
+      NewOrder := LastChildOrder ;
+      inc (LastChildOrder) ;
+   end;
+
+   VstTail.ReinitNode(newTreeNode, false);
+   newTailRec := VstTail.GetNodeData(newTreeNode);
+   newTailRec.Msg  := Frm_AddLine.EditTrace.Text;
+   newTailRec.Time := Frm_AddLine.EditTime.Text;
+   newTailRec.OriginalOrder := NewOrder;
+end;
 
 //------------------------------------------------------------------------------
 

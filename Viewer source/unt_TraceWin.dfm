@@ -231,7 +231,7 @@ object Frm_Trace: TFrm_Trace
   end
   object PopupTree: TPopupMenu
     Images = Frm_Tool.ilActions
-    Left = 24
+    Left = 56
     Top = 46
     object Cut1: TMenuItem
       Action = FrmPageContainer.actCut

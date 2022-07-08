@@ -16,9 +16,9 @@
 	<AppDisplay>
 		<SmallBut Value="true"/>
 		<ApplicationTitle Value="socket: 8090 / 4502,  Http : 85, WebSocket:8091"/>
-		<Left Value="1016"/>
-		<Top Value="293"/>
-		<Width Value="924"/>
+		<Left Value="52"/>
+		<Top Value="52"/>
+		<Width Value="693"/>
 		<Height Value="635"/>
 		<StayOnTop Value="false"/>
 		<ShowOnstartup Value="true"/>
@@ -36,7 +36,7 @@
 		<DisableInternalLog Value="false"/>
 	</AppDisplay>
 	<Framework>
-		<ShowMembers Value="true"/>
+		<ShowMembers Value="false"/>
 		<AutoClear Value="false"/>
 		<MaxNode Value="20"/>
 		<MinNode Value="10"/>
@@ -62,7 +62,7 @@
 		</Orphans>
 	</Framework>
 	<Ods>
-		<Enabled Value="false"/>
+		<Enabled Value="true"/>
 		<AutoClear Value="true"/>
 		<MaxNode Value="2000"/>
 		<MinNode Value="1000"/>
@@ -105,7 +105,7 @@
 		<OpenFromFavorites Value="true"/>
 		<VisibleMenu Value="true"/>
 		<Favorites>
-			<FileName>C:\log.txt</FileName><FileName>C:\Temp\WCESCOMM.LOG</FileName><FileName>D:\TraceTool\TempTraces\CacheODBC_cand.log</FileName><FileName>C:\INSTALL.LOG</FileName><FileName>D:\TraceTool\TempTraces\TracetoolInternalLog.txt</FileName><FileName>D:\TraceTool\TempTraces\test.txt</FileName><FileName>C:\TracetoolInternalLog.txt</FileName><FileName>C:\Windows\System32\LogFiles\Firewall\pfirewall.log</FileName><FileName>\\192.168.1.15\pi\Log\Error.log</FileName><FileName>\\192.168.1.15\pi\Log\Info.log</FileName><FileName>C:\temp\TracetoolInternalLog.txt</FileName></Favorites>
+			<FileName>D:\TraceTool\TempTraces\CacheODBC_cand.log</FileName><FileName>C:\INSTALL.LOG</FileName><FileName>D:\TraceTool\TempTraces\TracetoolInternalLog.txt</FileName><FileName>D:\TraceTool\TempTraces\test.txt</FileName><FileName>C:\TracetoolInternalLog.txt</FileName><FileName>C:\Windows\System32\LogFiles\Firewall\pfirewall.log</FileName><FileName>\\192.168.1.15\pi\Log\Error.log</FileName><FileName>\\192.168.1.15\pi\Log\Info.log</FileName><FileName>C:\temp\TracetoolInternalLog.txt</FileName><FileName>C:\temp\log.txt</FileName></Favorites>
 		<Trace>
 			<FontName Value="MS Sans Serif"/>
 			<FontSize Value="8"/>

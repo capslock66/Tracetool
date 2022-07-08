@@ -86,32 +86,37 @@ object FrmPageContainer: TFrmPageContainer
         ImageIndex = 30
         Style = tbsSeparator
       end
-      object tbnToggleBookmark: TToolButton
+      object tbnInsertRow: TToolButton
         Left = 154
+        Top = 0
+        Action = actInsert
+      end
+      object tbnToggleBookmark: TToolButton
+        Left = 177
         Top = 0
         Action = actToggleBookmark
         AutoSize = True
       end
       object tbnBookmarkPrevious: TToolButton
-        Left = 177
+        Left = 200
         Top = 0
         Action = actPreviousBookmark
         AutoSize = True
       end
       object tbnBookmarkNext: TToolButton
-        Left = 200
+        Left = 223
         Top = 0
         Action = actNextBookmark
         AutoSize = True
       end
       object tbnClearBookmark: TToolButton
-        Left = 223
+        Left = 246
         Top = 0
         Action = actClearBookmarks
         AutoSize = True
       end
       object SepSearch: TToolButton
-        Left = 246
+        Left = 269
         Top = 0
         Width = 8
         Caption = 'SepSearch'
@@ -119,31 +124,31 @@ object FrmPageContainer: TFrmPageContainer
         Style = tbsSeparator
       end
       object tbnSearch: TToolButton
-        Left = 254
+        Left = 277
         Top = 0
         Action = actSearch
         AutoSize = True
       end
       object tbnSearchPrevious: TToolButton
-        Left = 277
+        Left = 300
         Top = 0
         Action = actFindPrevious
         AutoSize = True
       end
       object tbnSearchNext: TToolButton
-        Left = 300
+        Left = 323
         Top = 0
         Action = actFindNext
         AutoSize = True
       end
       object tbnClearHighlight: TToolButton
-        Left = 323
+        Left = 346
         Top = 0
         Action = actClearHighlight
         AutoSize = True
       end
       object SepFilter: TToolButton
-        Left = 346
+        Left = 369
         Top = 0
         Width = 8
         Caption = 'SepFilter'
@@ -151,13 +156,13 @@ object FrmPageContainer: TFrmPageContainer
         Style = tbsSeparator
       end
       object tbnFilter: TToolButton
-        Left = 354
+        Left = 377
         Top = 0
         Action = actFilter
         AutoSize = True
       end
       object tbnClearFilter: TToolButton
-        Left = 377
+        Left = 400
         Top = 0
         Action = actClearFilter
         AutoSize = True
@@ -349,6 +354,12 @@ object FrmPageContainer: TFrmPageContainer
       ImageIndex = 41
       ShortCut = 16464
       OnExecute = actPrintExecute
+    end
+    object actInsert: TAction
+      Category = 'Edit'
+      Caption = 'Add line'
+      ImageIndex = 42
+      OnExecute = actInsertExecute
     end
   end
   object MainMenu: TMainMenu

@@ -22,7 +22,7 @@ type
 
   PEvntLogRec = ^TEvntLogRec ;
   TEvntLogRec = record
-     EventRecordNum : cardinal ; // Original order when inserted. Used to Unsort nodes
+     EventRecordNum : integer ; // Original order when inserted. Used to Unsort nodes
      Time           : string ;   // time
      Source         : string ;   // EventLog.EventSource
      MessageText    : string ;   // EventLog.EventMessageText
@@ -124,7 +124,8 @@ type
     LastModified : tDateTime ;
     LastRead : integer ;
     Sorter : TVstSort ;
-    LastChildOrder : cardinal ;     // Order of the last child, used to insert sub nodes and unsort them
+    FirstChildOrder: integer; // Order of the last child, used to insert sub nodes and unsort them
+    LastChildOrder: integer; // Order of the last child, used to insert sub nodes and unsort them
     procedure WMStartEditingMember(var Message: TMessage); message WM_STARTEDITING_MEMBER;
     procedure WMStartEditingTrace(var Message: TMessage); message WM_STARTEDITING_TRACE;
     procedure OnEventLogMessage(Sender: TEventLog);
@@ -156,6 +157,7 @@ type
     procedure RefreshView ; override ;
     procedure ShowFilter ;  override ;
     procedure ApplyFont ; override ;
+    procedure InsertRow ; override;
     function  getMembers(Node : PVirtualNode) : TMember ; override ;
     function  SearchNext(start:boolean) : boolean ; override ;
     function  SearchPrevious (atEnd:boolean) : boolean ;  override ;
@@ -173,7 +175,7 @@ uses
    , DebugOptions
    , application6
    , unt_TraceConfig
-   , unt_search;
+   , unt_search, unt_AddLine;
 
 {$R *.dfm}
 
@@ -191,6 +193,7 @@ begin
    end ;
 
    // initialize sort
+   FirstChildOrder := -1;
    LastChildOrder := 1 ;   // 0 is reserved for not yet ordered lines
    Sorter := TVstSort.create (self) ;
    Sorter.tree := VstEvent ;
@@ -473,6 +476,7 @@ begin
    TreeRec.Source         := Sender.EventSource ;
    TreeRec.MessageText    := Sender.EventMessageText ;
    TreeRec.EventRecordNum := Sender.EventRecordNumber ;
+   LastChildOrder := TreeRec.EventRecordNum ;
 
    TreeRec.Members.SubMembers.Add(TMember.Create ('Time'     , DateTimeToStr(Sender.EventTime))) ;
    TreeRec.Members.SubMembers.Add(TMember.Create ('Source'   , Sender.EventSource )) ;
@@ -546,6 +550,75 @@ begin
       VstDetail.TreeOptions.PaintOptions := VstDetail.TreeOptions.PaintOptions - [toShowRoot] ;
 
    VstDetail.FullExpand();
+end;
+
+//------------------------------------------------------------------------------
+
+procedure TFrmEventLog.InsertRow;
+var
+   selectedNode: PVirtualNode;
+   selectedTreeRec: PEvntLogRec;
+   newTreeNode: PVirtualNode;
+   newTreeRec: PEvntLogRec;
+   newOrder : integer ;
+begin
+
+   selectedNode := VstEvent.GetFirstSelected;
+   selectedTreeRec := nil;
+
+   if selectedNode <> nil then begin
+      selectedTreeRec := VstEvent.GetNodeData(selectedNode);
+      Frm_AddLine.EditTime.Text := selectedTreeRec.Time;
+      Frm_AddLine.EditThId.Text := selectedTreeRec.Source;
+   end;
+
+   Frm_AddLine.SetEventLogMode;
+   Frm_AddLine.ShowModal;
+   if Frm_AddLine.ModalResult = mrCancel then
+      exit;
+
+   if (Frm_AddLine.InsertWhere.ItemIndex = 0) then begin          // on first line
+      newTreeNode := VstEvent.InsertNode(nil,amAddChildFirst);
+      dec (FirstChildOrder) ;
+      NewOrder := FirstChildOrder ;
+
+   end else if (Frm_AddLine.InsertWhere.ItemIndex = 1) then begin // Before selected line
+      if selectedNode = nil then begin
+         newTreeNode := VstEvent.InsertNode(nil,amAddChildFirst);
+         dec (FirstChildOrder) ;
+         NewOrder := FirstChildOrder ;
+
+      end else begin
+         newTreeNode := VstEvent.InsertNode(selectedNode,amInsertBefore);
+         newOrder := selectedTreeRec.EventRecordNum-1 ;
+         if newOrder = 0 then  // 0 is reserved
+            dec(newOrder);
+      end;
+
+   end else if (Frm_AddLine.InsertWhere.ItemIndex = 2) then begin  // After selected line
+      if selectedNode = nil then begin
+         newTreeNode := VstEvent.AddChild(nil);
+         NewOrder := LastChildOrder ;
+         inc (LastChildOrder) ;
+
+      end else begin
+         newTreeNode := VstEvent.InsertNode(selectedNode,amInsertAfter);
+         newOrder := selectedTreeRec.EventRecordNum+1 ;
+      end;
+
+   end else begin                                                 // 3: At the end
+      newTreeNode := VstEvent.AddChild(nil);
+      NewOrder := LastChildOrder ;
+      inc (LastChildOrder) ;
+   end;
+
+   VstEvent.ReinitNode(newTreeNode, false);
+   newTreeRec := VstEvent.GetNodeData(newTreeNode);
+   newTreeRec.MessageText := Frm_AddLine.EditTrace.Text;
+   newTreeRec.Source      := Frm_AddLine.EditThId.Text;
+   newTreeRec.Time        := Frm_AddLine.EditTime.Text;
+   newTreeRec.EventRecordNum := NewOrder;
+   newTreeRec.Members := TMember.Create;
 end;
 
 //------------------------------------------------------------------------------
