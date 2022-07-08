@@ -2,7 +2,7 @@ object Frm_AddLine: TFrm_AddLine
   Left = 0
   Top = 0
   Caption = 'Add Line'
-  ClientHeight = 336
+  ClientHeight = 346
   ClientWidth = 556
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -13,124 +13,184 @@ object Frm_AddLine: TFrm_AddLine
   OldCreateOrder = False
   OnCreate = FormCreate
   OnShow = FormShow
-  DesignSize = (
-    556
-    336)
   PixelsPerInch = 96
   TextHeight = 13
-  object butAddLine: TButton
-    Left = 40
-    Top = 309
-    Width = 75
-    Height = 25
-    Anchors = [akLeft, akBottom]
-    Caption = 'Add line'
-    ModalResult = 1
-    TabOrder = 0
-  end
-  object butCancel: TButton
-    Left = 455
-    Top = 309
-    Width = 75
-    Height = 25
-    Anchors = [akRight, akBottom]
-    Cancel = True
-    Caption = 'Cancel'
-    ModalResult = 2
-    TabOrder = 1
-  end
-  object PanelUnderline: TPanel
-    Left = -7
-    Top = 303
-    Width = 571
-    Height = 2
-    Anchors = [akLeft, akRight, akBottom]
-    TabOrder = 2
-    ExplicitTop = 326
-  end
   object InsertWhere: TRadioGroup
-    Left = 8
-    Top = 16
-    Width = 153
-    Height = 89
+    Left = 0
+    Top = 202
+    Width = 556
+    Height = 101
+    Align = alTop
     Caption = 'Insert'
     Items.Strings = (
       'On first Line'
       'Before selected line'
       'After selected line'
       'At the end')
-    TabOrder = 3
+    TabOrder = 0
   end
   object GroupBoxTextToAdd: TGroupBox
-    Left = 8
-    Top = 111
-    Width = 540
-    Height = 186
-    Anchors = [akLeft, akTop, akRight]
+    Left = 0
+    Top = 0
+    Width = 556
+    Height = 202
+    Align = alTop
     Caption = 'Text'
-    TabOrder = 4
+    TabOrder = 1
+    ExplicitLeft = 8
+    ExplicitTop = 103
+    ExplicitWidth = 540
+    object PanelTime: TPanel
+      Left = 2
+      Top = 15
+      Width = 552
+      Height = 45
+      Align = alTop
+      BevelOuter = bvNone
+      TabOrder = 0
+      ExplicitWidth = 536
+      DesignSize = (
+        552
+        45)
+      object LabelTime: TLabel
+        Left = 1
+        Top = 2
+        Width = 22
+        Height = 13
+        Caption = 'Time'
+      end
+      object editTime: TEdit
+        Left = 1
+        Top = 16
+        Width = 541
+        Height = 21
+        Anchors = [akLeft, akTop, akRight]
+        TabOrder = 0
+        ExplicitWidth = 525
+      end
+    end
+    object PanelThId: TPanel
+      Left = 2
+      Top = 60
+      Width = 552
+      Height = 45
+      Align = alTop
+      BevelOuter = bvNone
+      TabOrder = 1
+      ExplicitWidth = 536
+      DesignSize = (
+        552
+        45)
+      object LabelThId: TLabel
+        Left = 1
+        Top = 2
+        Width = 22
+        Height = 13
+        Caption = 'ThId'
+      end
+      object EditThId: TEdit
+        Left = 1
+        Top = 18
+        Width = 541
+        Height = 21
+        Anchors = [akLeft, akTop, akRight]
+        TabOrder = 0
+        ExplicitWidth = 525
+      end
+    end
+    object PanelLines: TPanel
+      Left = 2
+      Top = 105
+      Width = 552
+      Height = 45
+      Align = alTop
+      BevelOuter = bvNone
+      TabOrder = 2
+      ExplicitWidth = 536
+      DesignSize = (
+        552
+        45)
+      object LabelTraces: TLabel
+        Left = 1
+        Top = 2
+        Width = 32
+        Height = 13
+        Caption = 'Traces'
+      end
+      object EditTrace: TEdit
+        Left = 1
+        Top = 16
+        Width = 541
+        Height = 21
+        Anchors = [akLeft, akTop, akRight]
+        TabOrder = 0
+        ExplicitWidth = 525
+      end
+    end
+    object PanelComment: TPanel
+      Left = 2
+      Top = 150
+      Width = 552
+      Height = 45
+      Align = alTop
+      BevelOuter = bvNone
+      TabOrder = 3
+      ExplicitWidth = 536
+      DesignSize = (
+        552
+        45)
+      object LabelComment: TLabel
+        Left = 1
+        Top = 2
+        Width = 45
+        Height = 13
+        Caption = 'Comment'
+      end
+      object EditComment: TEdit
+        Left = 1
+        Top = 16
+        Width = 541
+        Height = 21
+        Anchors = [akLeft, akTop, akRight]
+        TabOrder = 0
+        ExplicitWidth = 525
+      end
+    end
+  end
+  object PanelButtons: TPanel
+    Left = 0
+    Top = 305
+    Width = 556
+    Height = 41
+    Align = alBottom
+    BevelOuter = bvNone
+    TabOrder = 2
+    ExplicitLeft = 160
+    ExplicitTop = 312
+    ExplicitWidth = 185
     DesignSize = (
-      540
-      186)
-    object LabelTime: TLabel
-      Left = 3
-      Top = 18
-      Width = 22
-      Height = 13
-      Caption = 'Time'
-    end
-    object LabelThId: TLabel
-      Left = 3
-      Top = 58
-      Width = 22
-      Height = 13
-      Caption = 'ThId'
-    end
-    object LabelTraces: TLabel
-      Left = 3
-      Top = 98
-      Width = 32
-      Height = 13
-      Caption = 'Traces'
-    end
-    object LabelComment: TLabel
-      Left = 3
-      Top = 138
-      Width = 45
-      Height = 13
-      Caption = 'Comment'
-    end
-    object editTime: TEdit
-      Left = 3
-      Top = 31
-      Width = 525
-      Height = 21
-      Anchors = [akLeft, akTop, akRight]
+      556
+      41)
+    object butAddLine: TButton
+      Left = 16
+      Top = 6
+      Width = 75
+      Height = 25
+      Anchors = [akLeft, akBottom]
+      Caption = 'Add line'
+      ModalResult = 1
       TabOrder = 0
     end
-    object EditThId: TEdit
-      Left = 3
-      Top = 70
-      Width = 525
-      Height = 21
-      Anchors = [akLeft, akTop, akRight]
+    object butCancel: TButton
+      Left = 469
+      Top = 6
+      Width = 75
+      Height = 25
+      Anchors = [akRight, akBottom]
+      Cancel = True
+      Caption = 'Cancel'
+      ModalResult = 2
       TabOrder = 1
-    end
-    object EditTrace: TEdit
-      Left = 3
-      Top = 110
-      Width = 525
-      Height = 21
-      Anchors = [akLeft, akTop, akRight]
-      TabOrder = 2
-    end
-    object EditComment: TEdit
-      Left = 3
-      Top = 150
-      Width = 525
-      Height = 21
-      Anchors = [akLeft, akTop, akRight]
-      TabOrder = 3
     end
   end
 end

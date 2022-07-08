@@ -41,30 +41,25 @@ object FrmPageContainer: TFrmPageContainer
         Action = actClear
         AutoSize = True
       end
-      object ToolButton2: TToolButton
-        Left = 23
-        Top = 0
-        Action = actInsert
-      end
       object tbnCopy: TToolButton
-        Left = 46
+        Left = 23
         Top = 0
         Action = actCopy
         AutoSize = True
       end
       object tbnSave: TToolButton
-        Left = 69
+        Left = 46
         Top = 0
         Action = actSaveToFile
         AutoSize = True
       end
       object ToolButton1: TToolButton
-        Left = 92
+        Left = 69
         Top = 0
         Action = actPrint
       end
       object SepStandard: TToolButton
-        Left = 115
+        Left = 92
         Top = 0
         Width = 8
         Caption = 'SepStandard'
@@ -72,24 +67,29 @@ object FrmPageContainer: TFrmPageContainer
         Style = tbsSeparator
       end
       object tbnPause: TToolButton
-        Left = 123
+        Left = 100
         Top = 0
         Action = actPause
         AutoSize = True
       end
       object tbnTraceInfo: TToolButton
-        Left = 146
+        Left = 123
         Top = 0
         Action = actViewTraceInfo
         AutoSize = True
       end
       object SepBookmark: TToolButton
-        Left = 169
+        Left = 146
         Top = 0
         Width = 8
         Caption = 'SepBookmark'
         ImageIndex = 30
         Style = tbsSeparator
+      end
+      object tbnInsertRow: TToolButton
+        Left = 154
+        Top = 0
+        Action = actInsert
       end
       object tbnToggleBookmark: TToolButton
         Left = 177

@@ -43,7 +43,7 @@ type
 
   PODSRec = ^TODSRec ;
   TODSRec = record
-     OriginalOrder  : cardinal ;     // Original order when inserted. Used to Unsort nodes
+     OriginalOrder : integer ; // Original order when inserted. Used to Unsort nodes
      Time        : string ;    // time of send
      ProcessName : string ;    // optional : the name of the process that send traces
      LeftMsg     : string ;    // Left col
@@ -52,7 +52,7 @@ type
   //---------------------------------------------------------------------------------
 
   TODSTemp = class
-     OriginalOrder  : cardinal ;     // Original order when inserted. Used to Unsort nodes
+     OriginalOrder : integer ; // Original order when inserted. Used to Unsort nodes
      Time        : string ;    // time of send
      ProcessName : string ;    // optional : the name of the process that send traces
      LeftMsg     : string ;    // Left col
@@ -178,7 +178,8 @@ type
 
 var
   Frm_ODS     : TFrm_ODS;
-  LastChildOrder : cardinal ;     // Order of the last child, used to insert sub nodes and unsort them
+  FirstChildOrder: integer; // Order of the last child, used to insert sub nodes and unsort them
+  LastChildOrder: integer; // Order of the last child, used to insert sub nodes and unsort them
 
 implementation
 
@@ -189,7 +190,7 @@ uses
    , unt_TraceWin
    , unt_utility
    , unt_TraceConfig
-   , unt_search; //,Unt_Tool;
+   , unt_search, unt_AddLine; //,Unt_Tool;
 
 
 {$R *.dfm}
@@ -209,6 +210,7 @@ begin
    end ;
 
    // initialize sort
+   FirstChildOrder := -1 ;
    LastChildOrder := 1 ;   // 0 is reserved for not yet ordered lines
    Sorter := TVstSort.create (self) ;
    Sorter.tree := VstDebugString ;
@@ -380,8 +382,70 @@ end;
 //------------------------------------------------------------------------------
 
 procedure TFrm_ODS.InsertRow;
+var
+   selectedNode: PVirtualNode;
+   selectedTreeRec: POdsRec;
+   newTreeNode: PVirtualNode;
+   newTreeRec: POdsRec;
+   newOrder : integer ;
 begin
-   // vstTrace.InsertNode(Parent,amInsertBefore)  ;   // amInsertAfter
+
+   selectedNode := VstDebugString.GetFirstSelected;
+   selectedTreeRec := nil;
+
+   if selectedNode <> nil then begin
+      selectedTreeRec := VstDebugString.GetNodeData(selectedNode);
+      Frm_AddLine.EditTime.Text := selectedTreeRec.Time;
+      Frm_AddLine.EditThId.Text := selectedTreeRec.ProcessName;
+   end;
+
+   Frm_AddLine.SetOdsMode;
+   Frm_AddLine.ShowModal;
+   if Frm_AddLine.ModalResult = mrCancel then
+      exit;
+
+   if (Frm_AddLine.InsertWhere.ItemIndex = 0) then begin          // on first line
+      newTreeNode := VstDebugString.InsertNode(nil,amAddChildFirst);
+      dec (FirstChildOrder) ;
+      NewOrder := FirstChildOrder ;
+
+   end else if (Frm_AddLine.InsertWhere.ItemIndex = 1) then begin // Before selected line
+      if selectedNode = nil then begin
+         newTreeNode := VstDebugString.InsertNode(nil,amAddChildFirst);
+         dec (FirstChildOrder) ;
+         NewOrder := FirstChildOrder ;
+
+      end else begin
+         newTreeNode := VstDebugString.InsertNode(selectedNode,amInsertBefore);
+         newOrder := selectedTreeRec.originalOrder-1 ;
+         if newOrder = 0 then  // 0 is reserved
+            dec(newOrder);
+      end;
+
+   end else if (Frm_AddLine.InsertWhere.ItemIndex = 2) then begin  // After selected line
+      if selectedNode = nil then begin
+         newTreeNode := VstDebugString.AddChild(nil);
+         NewOrder := LastChildOrder ;
+         inc (LastChildOrder) ;
+
+      end else begin
+         newTreeNode := VstDebugString.InsertNode(selectedNode,amInsertAfter);
+         newOrder := selectedTreeRec.originalOrder+1 ;
+      end;
+
+   end else begin                                                 // 3: At the end
+      newTreeNode := VstDebugString.AddChild(nil);
+      NewOrder := LastChildOrder ;
+      inc (LastChildOrder) ;
+   end;
+
+   VstDebugString.ReinitNode(newTreeNode, false);
+   //treeNode.Align := (vstTrace.DefaultNodeHeight div 2) - 2;
+   newTreeRec := VstDebugString.GetNodeData(newTreeNode);
+   newTreeRec.LeftMsg     := Frm_AddLine.EditTrace.Text;
+   newTreeRec.ProcessName := Frm_AddLine.EditThId.Text;
+   newTreeRec.Time        := Frm_AddLine.EditTime.Text;
+   newTreeRec.OriginalOrder := NewOrder;
 end;
 
 //------------------------------------------------------------------------------

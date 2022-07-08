@@ -821,10 +821,10 @@ var
    newTreeNode: PVirtualNode;
    newTreeRec: PTreeRec;
    newOrder : integer ;
-   newTime : string;
 begin
 
    selectedNode := vstTrace.GetFirstSelected;
+   selectedTreeRec := nil;
 
    if selectedNode <> nil then begin
       selectedTreeRec := vstTrace.GetNodeData(selectedNode);

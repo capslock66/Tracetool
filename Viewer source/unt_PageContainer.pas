@@ -98,7 +98,7 @@ type
     actPrint: TAction;
     actPrint1: TMenuItem;
     ToolButton1: TToolButton;
-    ToolButton2: TToolButton;
+    tbnInsertRow: TToolButton;
     actInsert: TAction;
 
     procedure FormCreate(Sender: TObject);
