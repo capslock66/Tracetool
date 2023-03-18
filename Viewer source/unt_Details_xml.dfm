@@ -33,10 +33,17 @@ inherited Frame_XML: TFrame_XML
     Left = 80
     Top = 120
   end
-  object XMLDoc: TXMLDocument
+  object XMLDocument: TXMLDocument
     Active = True
     Left = 168
     Top = 120
     DOMVendorDesc = 'MSXML'
+  end
+  object SynJSONSyn1: TSynJSONSyn
+    Options.AutoDetectEnabled = False
+    Options.AutoDetectLineLimit = 0
+    Options.Visible = False
+    Left = 80
+    Top = 48
   end
 end

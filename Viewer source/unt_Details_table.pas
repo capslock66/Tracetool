@@ -41,6 +41,10 @@ type
     procedure VstTableGetText(Sender: TBaseVirtualTree; Node: PVirtualNode;
       Column: TColumnIndex; TextType: TVSTTextType; var CellText: string);
     procedure VstTableChange(Sender: TBaseVirtualTree; Node: PVirtualNode);
+    procedure VstTableColumnClick(Sender: TBaseVirtualTree;
+      Column: TColumnIndex; Shift: TShiftState);
+    procedure VstTableFocusChanged(Sender: TBaseVirtualTree; Node: PVirtualNode;
+      Column: TColumnIndex);
   private
     procedure WMStartEditingMember(var Message: TMessage); message WM_STARTEDITING_MEMBER;
   public
@@ -59,7 +63,7 @@ var
 implementation
 
 uses
-unt_TraceConfig ;
+unt_TraceConfig, unt_Details_Classic ;
 
 {$R *.dfm}
 
@@ -91,10 +95,11 @@ begin
 
    VstTable.TreeOptions.SelectionOptions := TraceWin.vstTrace.TreeOptions.SelectionOptions
              + [toExtendedFocus]          // Entries other than in the main column can be selected, edited etc.
-             + [toFullRowSelect]          // selection highlight the whole line
+             - [toFullRowSelect]          // selection highlight the whole line
              + [toMultiselect] ;          // don't Allow more than one node to be selected.
 
    VstTable.TreeOptions.MiscOptions := TraceWin.vstTrace.TreeOptions.MiscOptions
+             + [toGridExtensions]
              - [toEditable]               // don't allow edition. Code is used to detect double click or F2 key
              - [toReportMode] ;           // Tree behaves like TListView in report mode.
 
@@ -112,6 +117,7 @@ begin
    // scroll into view
    sender.ScrollIntoView (node,false,false);     // center and horizontally false
 end;
+
 //------------------------------------------------------------------------------
 
 procedure Tframe_table.VstTableCreateEditor(Sender: TBaseVirtualTree;
@@ -274,6 +280,43 @@ end;
 
 //------------------------------------------------------------------------------
 
+procedure Tframe_table.VstTableFocusChanged(Sender: TBaseVirtualTree;  Node: PVirtualNode; Column: TColumnIndex);
+var
+   DetailRec : PTableRec ;
+   CellText: String;
+begin
+   DetailRec := Sender.GetNodeData(Node) ;
+   if DetailRec = nil then
+      exit ;
+   CellText := DetailRec.Columns[Column] ;
+   frame_Classic.SetMemoText(CellText,false,false);
+end;
+
+//------------------------------------------------------------------------------
+
+procedure Tframe_table.VstTableColumnClick(Sender: TBaseVirtualTree;  Column: TColumnIndex; Shift: TShiftState);
+var
+   DetailRec : PTableRec ;
+   CellText: String;
+   SelectedNode: PVirtualNode ;
+begin
+   SelectedNode := Sender.GetFirstSelected  ;
+
+   // no node selected
+   if SelectedNode = nil then
+     exit ;
+
+   DetailRec := Sender.GetNodeData(SelectedNode) ;
+   if DetailRec = nil then
+      exit ;
+
+   CellText := DetailRec.Columns[Column] ;
+
+   frame_Classic.SetMemoText(CellText,false,false);
+end;
+
+//------------------------------------------------------------------------------
+
 procedure Tframe_table.AddDetails(TreeRec: PTreeRec; RootMember: TMember);
 var
    cols : TStringList ;
@@ -282,7 +325,6 @@ var
    SubMember : TMember ;
    DetailNode :  PVirtualNode ;
    DetailRec : PTableRec ;
-
 begin
    VstTable.Clear ;
    VstTable.header.Columns.Clear ;

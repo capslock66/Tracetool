@@ -1,9 +1,24 @@
 inherited frame_Classic: Tframe_Classic
+  Width = 525
+  Height = 401
+  ExplicitWidth = 525
+  ExplicitHeight = 401
+  object SplitterH: TSplitter
+    Left = 0
+    Top = 253
+    Width = 525
+    Height = 3
+    Cursor = crVSplit
+    Align = alBottom
+    ExplicitLeft = -27
+    ExplicitTop = 213
+    ExplicitWidth = 347
+  end
   object VstDetail: TVirtualStringTree
     Left = 0
     Top = 0
-    Width = 320
-    Height = 240
+    Width = 525
+    Height = 253
     Align = alClient
     BevelInner = bvNone
     BevelOuter = bvNone
@@ -33,16 +48,18 @@ inherited frame_Classic: Tframe_Classic
     ShowHint = True
     TabOrder = 0
     TreeOptions.AnimationOptions = [toAnimatedToggle]
-    TreeOptions.MiscOptions = [toAcceptOLEDrop, toEditable, toFullRepaintOnResize, toInitOnSave, toToggleOnDblClick, toWheelPanning]
+    TreeOptions.MiscOptions = [toAcceptOLEDrop, toEditable, toFullRepaintOnResize, toGridExtensions, toInitOnSave, toToggleOnDblClick, toWheelPanning]
     TreeOptions.SelectionOptions = [toExtendedFocus]
     OnAfterCellPaint = VstDetailAfterCellPaint
     OnBeforeCellPaint = VstDetailBeforeCellPaint
     OnChange = VstDetailChange
+    OnColumnClick = VstDetailColumnClick
     OnCreateEditor = VstDetailCreateEditor
     OnDblClick = VstDetailDblClick
     OnEditCancelled = VstDetailEditCancelled
     OnEdited = VstDetailEdited
     OnEditing = VstDetailEditing
+    OnFocusChanged = VstDetailFocusChanged
     OnFreeNode = VstDetailFreeNode
     OnGetText = VstDetailGetText
     OnPaintText = VstDetailPaintText
@@ -70,6 +87,45 @@ inherited frame_Classic: Tframe_Classic
         Width = 300
       end>
   end
+  object PanelDetailBottom: TPanel
+    Left = 0
+    Top = 256
+    Width = 525
+    Height = 145
+    Align = alBottom
+    TabOrder = 1
+    object SynMemo: TSynEdit
+      Left = 1
+      Top = 42
+      Width = 523
+      Height = 102
+      Align = alClient
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -12
+      Font.Name = 'Courier New'
+      Font.Style = []
+      Font.Quality = fqClearTypeNatural
+      TabOrder = 0
+      UseCodeFolding = False
+      BorderStyle = bsNone
+      Gutter.Font.Charset = DEFAULT_CHARSET
+      Gutter.Font.Color = clWindowText
+      Gutter.Font.Height = -11
+      Gutter.Font.Name = 'Courier New'
+      Gutter.Font.Style = []
+      Gutter.Visible = False
+      Gutter.Width = 0
+    end
+    object Panel1: TPanel
+      Left = 1
+      Top = 1
+      Width = 523
+      Height = 41
+      Align = alTop
+      TabOrder = 1
+    end
+  end
   object PopupDetail: TPopupMenu
     Images = Frm_Tool.ilActions
     Left = 16
@@ -86,5 +142,22 @@ inherited frame_Classic: Tframe_Classic
     object SelectAll1: TMenuItem
       Action = FrmPageContainer.actSelectAll
     end
+  end
+  object SynXMLSyn1: TSynXMLSyn
+    Options.AutoDetectEnabled = False
+    Options.AutoDetectLineLimit = 0
+    Options.Visible = False
+    AttributeValueAttri.Style = []
+    TextAttri.Style = []
+    WantBracesParsed = False
+    Left = 200
+    Top = 32
+  end
+  object SynJSONSyn1: TSynJSONSyn
+    Options.AutoDetectEnabled = False
+    Options.AutoDetectLineLimit = 0
+    Options.Visible = False
+    Left = 120
+    Top = 32
   end
 end

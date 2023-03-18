@@ -21,10 +21,11 @@ interface
       Dialogs, StdCtrls, ExtCtrls, VirtualTrees, Menus, XMLDoc, XMLIntf,
       pscMenu, math, printers,
       ComCtrls, ToolWin, ImgList, TrayIcon, ActnList, clipbrd, SyncObjs,
-      Contnrs, unt_tool,
+      Contnrs, SynEdit, unt_tool,
       Application6, // the generated delphi code for the XML schema (Application6.xsd)
       unt_base, DebugOptions, Buttons, Unt_linkedList, unt_utility,
       MSXML2_TLB,
+
       unt_pageContainer, unt_editor, unt_search, vstSort, unt_filter, unt_addLine;
    {$INCLUDE TraceTool.Inc}
 
@@ -187,6 +188,7 @@ interface
          XmlFrame: TFrame;
          TreeDetailFrame: TFrame;
          VstDetail: TVirtualStringTree;
+         SynMemo:TSynEdit;
          VstDetailHaschildren: boolean;
 
          Gutter: TImage;
@@ -353,6 +355,7 @@ end;
 procedure TFrm_Trace.FormCreate(Sender: TObject);
 var
    res: TPlugResource;
+   temp_Classic: Tframe_Classic;
 begin
    inherited;
    IsDateTimeResized := false;
@@ -482,10 +485,11 @@ begin
 
    // ---------------------------------------------------------------------------
 
-   TreeDetailFrame := Tframe_Classic.Create(self);
-   Tframe_Classic(TreeDetailFrame).Splitter.Visible := false;
-   // no spliter for main detail
-   VstDetail := Tframe_Classic(TreeDetailFrame).VstDetail; // shortcut
+   temp_Classic := Tframe_Classic.Create(self);
+   TreeDetailFrame := temp_Classic;
+   temp_Classic.Splitter.Visible := false; // no spliter for main detail
+   VstDetail := temp_Classic.VstDetail;    // shortcut
+   SynMemo := temp_Classic.SynMemo;        // shortcut
 
    ApplyFont(); // set font name and size for the 2 trees (from XMLConfig)
    ShowLog(); // change the LabelLogFile caption
@@ -1429,44 +1433,43 @@ var
    SubMember: TMember;
 
    // show viewers if flags are enabled, hide if not
-procedure ShowViewers();
-var
-   c: Integer;
-   viewer: Tframe_BaseDetails;
-begin
+   procedure ShowViewers();
+   var
+      c: Integer;
+      viewer: Tframe_BaseDetails;
+   begin
 
-   // if one or more viewers visible display a smaller VSTDetail
-   if CurrentViewers.Count > 0 then begin
-      VstDetail.Align := alTop;
-      VstDetail.top := 0;
-      VstDetail.Height := 200;
-   end
-   else begin // else no viewer. use full space for VSTDetail
-      VstDetail.Align := alClient;
-   end;
-
-   for c := 0 to CurrentViewers.Count - 1 do begin
-      viewer := Tframe_BaseDetails(CurrentViewers.Items[c]);
-
-      viewer.Splitter.Align := alTop;
-      viewer.Splitter.top := 10000; // set as last viewer
-      viewer.Splitter.Visible := true;
-      // last viewer use client space
-      if c = CurrentViewers.Count - 1 then begin
-         viewer.Align := alClient;
-      end
-      else begin
-         // small viewer
-         viewer.Align := alTop;
-         viewer.Height := 200;
-         viewer.top := 10000;
+      // if one or more viewers visible display a smaller VSTDetail
+      if CurrentViewers.Count > 0 then begin
+         VstDetail.Align := alTop;
+         VstDetail.top := 0;
+         VstDetail.Height := 200;
+      end else begin // else no viewer. use full space for VSTDetail
+         VstDetail.Align := alClient;
       end;
-      viewer.Visible := true;
+
+      for c := 0 to CurrentViewers.Count - 1 do begin
+         viewer := Tframe_BaseDetails(CurrentViewers.Items[c]);
+
+         viewer.Splitter.Align := alTop;
+         viewer.Splitter.top := 10000; // set as last viewer
+         viewer.Splitter.Visible := true;
+         // last viewer use client space
+         if c = CurrentViewers.Count - 1 then begin
+            viewer.Align := alClient;
+         end else begin
+            // small viewer
+            viewer.Align := alTop;
+            viewer.Height := 200;
+            viewer.top := 10000;
+         end;
+         viewer.Visible := true;
+      end;
    end;
-end;
 
 begin
    SetCursor(Screen.Cursors[crHourGlass]);
+   frame_Classic.SetMemoText('',false,false);
    try
       // scroll into view
       if Node <> nil then
@@ -1611,7 +1614,7 @@ begin
                   begin
                      // since version 12.4 : reset col3 for all submembers if viewer kind is Dump
                      CalculateDump(SubMember) ;
-                     Tframe_Classic(TreeDetailFrame).AddDetails(TreeRec, SubMember);
+                     frame_Classic.AddDetails(TreeRec, SubMember);
                   end ;
 
                // CST_VIEWER_STACK :   // stack
@@ -1621,7 +1624,7 @@ begin
                // CST_VIEWER_EXIT  :   // exit method
                // CST_VIEWER_TXT   :   // text added to default viewer
             else
-               Tframe_Classic(TreeDetailFrame).AddDetails(TreeRec, SubMember);
+               frame_Classic.AddDetails(TreeRec, SubMember);
             end; // end case
          end; // next member
       end;
@@ -1646,6 +1649,7 @@ end;
 // Detect the double click.
 // To not allow editing on simple click, the vstTrace.TreeOptions.MiscOptions toEditable flag is not set.
 // When the F2 key is pressed or the user double click the node, the flag is set
+
 procedure TFrm_Trace.vstTraceDblClick(Sender: TObject);
 var
    P: TPoint;
@@ -1717,7 +1721,6 @@ begin
 end;
 
 // ------------------------------------------------------------------------------
-
 procedure TFrm_Trace.vstTraceCreateEditor(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex; out EditLink: IVTEditLink);
 begin
    if IVstEditor = nil then begin
@@ -2492,8 +2495,7 @@ begin
       Node := VstDetail.FocusedNode;
       if Node = nil then
          exit;
-      Tframe_Classic(TreeDetailFrame).VstDetailGetText
-         (VstDetail, Node, VstDetail.FocusedColumn, ttNormal, CellText);
+      frame_Classic.VstDetailGetText (VstDetail, Node, VstDetail.FocusedColumn, ttNormal, CellText);
       // ttNormal
    end
    else begin
@@ -4381,7 +4383,7 @@ begin
          CheckNode(vstTrace.RootNode); // check if the node or one of his child match the search text
 
    vstTrace.Refresh; // force repaint the gutter
-   Tframe_Classic(TreeDetailFrame).VstDetail.Refresh;
+   frame_Classic.VstDetail.Refresh;
    // repaint detail for highlight
 end;
 
@@ -4582,6 +4584,7 @@ end;
 
 // ----------------------------------------------------------------------------------------------------------------------
 // sort the tree. Compare 2 nodes on a specific column
+
 procedure TFrm_Trace.vstTraceCompareNodes(Sender: TBaseVirtualTree;
    Node1, Node2: PVirtualNode; Column: TColumnIndex; var Result: Integer);
 var

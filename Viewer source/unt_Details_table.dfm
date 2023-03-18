@@ -40,10 +40,12 @@ inherited frame_Table: Tframe_Table
     TreeOptions.MiscOptions = [toAcceptOLEDrop, toEditable, toFullRepaintOnResize, toInitOnSave, toToggleOnDblClick, toWheelPanning]
     TreeOptions.SelectionOptions = [toExtendedFocus]
     OnChange = VstTableChange
+    OnColumnClick = VstTableColumnClick
     OnCreateEditor = VstTableCreateEditor
     OnDblClick = VstTableDblClick
     OnEditCancelled = VstTableEditCancelled
     OnEdited = VstTableEdited
+    OnFocusChanged = VstTableFocusChanged
     OnFreeNode = VstTableFreeNode
     OnGetText = VstTableGetText
     OnPaintText = VstTablePaintText

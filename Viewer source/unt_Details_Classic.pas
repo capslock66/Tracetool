@@ -9,7 +9,8 @@ uses
   unt_TraceWin ,
   unt_search ,
   unt_tool,             // VstEditor, IVstEditor, TMember
-  unt_utility;          // IsSeparator
+  unt_utility, Vcl.ExtCtrls, SynEdit, SynEditHighlighter, SynHighlighterXML,
+  SynEditCodeFolding, SynHighlighterJSON;          // IsSeparator
 
 type
   Tframe_Classic = class(Tframe_BaseDetails)
@@ -19,6 +20,12 @@ type
     MenuItem3: TMenuItem;
     N2: TMenuItem;
     SelectAll1: TMenuItem;
+    PanelDetailBottom: TPanel;
+    SplitterH: TSplitter;
+    SynMemo: TSynEdit;
+    SynXMLSyn1: TSynXMLSyn;
+    SynJSONSyn1: TSynJSONSyn;
+    Panel1: TPanel;
     procedure VstDetailCreateEditor(Sender: TBaseVirtualTree;
       Node: PVirtualNode; Column: TColumnIndex; out EditLink: IVTEditLink);
     procedure VstDetailDblClick(Sender: TObject);
@@ -47,6 +54,10 @@ type
       CellPaintMode: TVTCellPaintMode; CellRect: TRect; var ContentRect: TRect);
     procedure VstDetailEditing(Sender: TBaseVirtualTree; Node: PVirtualNode;
       Column: TColumnIndex; var Allowed: Boolean);
+    procedure VstDetailColumnClick(Sender: TBaseVirtualTree;
+      Column: TColumnIndex; Shift: TShiftState);
+    procedure VstDetailFocusChanged(Sender: TBaseVirtualTree;
+      Node: PVirtualNode; Column: TColumnIndex);
   private
     procedure WMStartEditingMember(var Message: TMessage); message WM_STARTEDITING_MEMBER;
   public
@@ -57,6 +68,7 @@ type
     function HasFocus : boolean ; override;
     procedure SelectAll() ; override;
     procedure copySelected() ; override;
+    procedure SetMemoText(text : string; isXml:boolean; isJson : boolean);
   end;
 
 var
@@ -76,6 +88,13 @@ begin
    inherited create (AOwner) ;
    
    TraceWin := TFrm_Trace(owner);
+
+   PanelDetailBottom.parent := TraceWin.PanelRight ;
+   PanelDetailBottom.Align := alBottom;
+   PanelDetailBottom.Height := 120 ;
+
+   SplitterH.Parent := TraceWin.PanelRight ;
+   SplitterH.Align := alBottom;
 
    VstDetail.parent := TraceWin.PanelRight ;
    VstDetail.Align := alClient ;
@@ -102,10 +121,11 @@ begin
 
    VstDetail.TreeOptions.SelectionOptions := TraceWin.vstTrace.TreeOptions.SelectionOptions
              + [toExtendedFocus]          // Entries other than in the main column can be selected, edited etc.
-             + [toFullRowSelect]          // selection highlight the whole line
+             - [toFullRowSelect]          // selection highlight the whole line
              + [toMultiselect] ;          // don't Allow more than one node to be selected.
 
    VstDetail.TreeOptions.MiscOptions := TraceWin.vstTrace.TreeOptions.MiscOptions
+             + [toGridExtensions]
              - [toEditable]               // don't allow edition. Code is used to detect double click or F2 key
              - [toReportMode] ;           // Tree behaves like TListView in report mode.
 
@@ -122,6 +142,64 @@ procedure Tframe_Classic.VstDetailChange(Sender: TBaseVirtualTree;  Node: PVirtu
 begin
    // scroll into view
    Sender.ScrollIntoView (node,false,false);     // center and horizontally false
+end;
+
+//------------------------------------------------------------------------------
+
+procedure Tframe_Classic.VstDetailColumnClick(Sender: TBaseVirtualTree;
+  Column: TColumnIndex; Shift: TShiftState);
+var
+   DetailRec : PDetailRec ;
+   CellText: String;
+   SelectedNode, MouseNode : PVirtualNode ;
+begin
+
+   SelectedNode := VstDetail.GetFirstSelected  ;
+
+   // no node selected
+   if SelectedNode = nil then
+     exit ;
+
+   DetailRec := Sender.GetNodeData(SelectedNode) ;
+   if DetailRec = nil then
+      exit ;
+
+   case Column of
+      0 : CellText := DetailRec.Col1 ;
+      1 : CellText := DetailRec.Col2 ;
+      2 : CellText := DetailRec.Col3 ;
+   end ;
+
+   //TFrm_Trace.InternalTrace('VstDetailColumnClick', CellText) ;
+   SetMemoText(CellText,false,false);
+end;
+
+//------------------------------------------------------------------------------
+
+procedure Tframe_Classic.VstDetailFocusChanged(Sender: TBaseVirtualTree;  Node: PVirtualNode; Column: TColumnIndex);
+var
+   DetailRec : PDetailRec ;
+   CellText: String;
+begin
+   DetailRec := Sender.GetNodeData(Node) ;
+   if DetailRec = nil then
+      exit ;
+   case Column of
+      0 : CellText := DetailRec.Col1 ;
+      1 : CellText := DetailRec.Col2 ;
+      2 : CellText := DetailRec.Col3 ;
+   end ;
+   SetMemoText(CellText,false,false);
+end;
+
+//------------------------------------------------------------------------------
+
+procedure Tframe_Classic.SetMemoText(text: string; isXml:boolean; isJson : boolean);
+begin
+   // Is xml ?
+   // Is JSon ?
+
+   SynMemo.Text := text;
 end;
 
 //------------------------------------------------------------------------------

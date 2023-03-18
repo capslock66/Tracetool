@@ -261,7 +261,7 @@ implementation
 
 uses unt_receiver, unt_about, unt_tail,Unt_linkedList , unt_TraceWin, unt_parse, unt_base ,
      unt_ODS, unt_utility, unt_selectEvent , unt_eventLog, unt_SelectTail, unt_search, unt_TraceConfig,
-  unt_FrmPlugin;
+  unt_FrmPlugin, unt_Details_Classic;
 
 
 var
@@ -651,7 +651,7 @@ begin
 
    // create the internal trace window (invisible)
    //LowTrace('create internal trace window (invisible)') ;
-   FrmInternalTraces := TFrm_Trace.Create(nil);
+   FrmInternalTraces := TFrm_Trace.Create(nil);   // don't save  FrmInternalTraces.TreeDetailFrame as the main frame_Classic
    FrmInternalTraces.Name := 'FrmInternalTraces' ;
    FrmInternalTraces.ID := 'ERRID' ;
    FrmInternalTraces.Caption := 'Internal Trace' ;
@@ -666,6 +666,7 @@ begin
    // create the main Trace window
    //LowTrace('create the main Trace window') ;
    Frm_Trace := TFrm_Trace.Create(nil);
+   frame_Classic :=  Tframe_Classic(Frm_Trace.TreeDetailFrame);   //
    Frm_Trace.Id := '' ;  // main trace form don't have ID
    Frm_Trace.Caption := TraceConfig.Framework_MainTraceTitle ;
    Frm_Trace.DockToMainPanel();

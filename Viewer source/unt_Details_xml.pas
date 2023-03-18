@@ -6,14 +6,15 @@ uses
   system.Contnrs,Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, unt_Details_base, unt_TraceWin, ExtCtrls, StdCtrls, unt_tool,
   xmldom, XMLIntf, msxmldom, XMLDoc, SynEditHighlighter, SynHighlighterXML,
-  SynEdit;
+  SynEdit, SynEditCodeFolding, SynHighlighterJSON;
 
 
 type
   TFrame_XML = class(Tframe_BaseDetails)
     SynMemo: TSynEdit;
     SynXMLSyn1: TSynXMLSyn;
-    XMLDoc: TXMLDocument;
+    XMLDocument: TXMLDocument;
+    SynJSONSyn1: TSynJSONSyn;
   private
     { Private declarations }
   public
@@ -28,6 +29,8 @@ var
   Frame_XML: TFrame_XML;
 
 implementation
+
+uses unt_Details_Classic;
 
 {$R *.dfm}
 
@@ -103,16 +106,25 @@ begin
    //inc (TFrm_Trace(Owner).ViewerCount) ;    // need to know the number of viewer to display
 
    SynMemo.Lines.Clear ;
-   XMLDoc.Active   := False;
-   XMLDoc.XML.Text := RootMember.col1;
+
+
+   //SynMemo.Text := RootMember.col1;
+   //SynMemo.Text := xmlDoc.FormatXMLData() ;
+
+
+   XMLDocument.Active   := False;
+   XMLDocument.XML.Text := RootMember.col1;
+
+
    try
-      XMLDoc.Active   := True;
-      AddNode(XMLDoc.DocumentElement{, XMLDoc2.DocumentElement},0);
+      XMLDocument.Active   := True;
+      AddNode(XMLDocument.DocumentElement,0);    // , XMLDoc2.DocumentElement
    except
       on e : exception do
          SynMemo.Lines.Add(e.Message) ;
    end ;
-
+   TFrm_Trace(Owner).AddOneLineDetail(RootMember.col1,'','');
+   frame_Classic.SetMemoText(RootMember.col1,true,false);
 end;
 
 //------------------------------------------------------------------------------

@@ -523,7 +523,9 @@ begin
 
    // XML sample using Send
    // --------------------------------------------
-   TTrace.Debug.SendXml('xml', '<?xml version="1.0" ?><Data> Hello XML </Data>');
+   TTrace.Debug.SendXml('xml1', '<?xml version="1.0" ?><Data> Hello <Subnode> xml </Subnode></Data>');
+   TTrace.Debug.SendXml('xml2', '<Data> Hello <Subnode> Subnode <Subnode> sub sub node </Subnode> </Subnode></Data>');
+   TTrace.Debug.SendXml('Json', '{[{"prop1":"val1"},{"prop2":"val2"}]}');
 
    // Image sample using Send
    // --------------------------------------------
