@@ -651,7 +651,7 @@ begin
 
    // create the internal trace window (invisible)
    //LowTrace('create internal trace window (invisible)') ;
-   FrmInternalTraces := TFrm_Trace.Create(nil);   // don't save  FrmInternalTraces.TreeDetailFrame as the main frame_Classic
+   FrmInternalTraces := TFrm_Trace.Create(nil);                   // don't save FrmInternalTraces.TreeDetailFrame as the main frame_Classic
    FrmInternalTraces.Name := 'FrmInternalTraces' ;
    FrmInternalTraces.ID := 'ERRID' ;
    FrmInternalTraces.Caption := 'Internal Trace' ;
@@ -666,7 +666,7 @@ begin
    // create the main Trace window
    //LowTrace('create the main Trace window') ;
    Frm_Trace := TFrm_Trace.Create(nil);
-   frame_Classic :=  Tframe_Classic(Frm_Trace.TreeDetailFrame);   //
+   frame_Classic :=  Tframe_Classic(Frm_Trace.TreeDetailFrame);   // save the main Frm_Trace.TreeDetailFrame as the main frame_Classic
    Frm_Trace.Id := '' ;  // main trace form don't have ID
    Frm_Trace.Caption := TraceConfig.Framework_MainTraceTitle ;
    Frm_Trace.DockToMainPanel();

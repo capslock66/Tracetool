@@ -10,7 +10,10 @@ uses
   unt_search ,
   unt_tool,             // VstEditor, IVstEditor, TMember
   unt_utility, Vcl.ExtCtrls, SynEdit, SynEditHighlighter, SynHighlighterXML,
-  SynEditCodeFolding, SynHighlighterJSON;          // IsSeparator
+  SynEditCodeFolding, SynHighlighterJSON, Vcl.ToolWin, Vcl.ComCtrls,
+  System.JSON,     // , REST.Json
+  Xml.xmldom,
+  Xml.XMLIntf, Xml.Win.msxmldom, Xml.XMLDoc;          // IsSeparator
 
 type
   Tframe_Classic = class(Tframe_BaseDetails)
@@ -23,9 +26,19 @@ type
     PanelDetailBottom: TPanel;
     SplitterH: TSplitter;
     SynMemo: TSynEdit;
-    SynXMLSyn1: TSynXMLSyn;
-    SynJSONSyn1: TSynJSONSyn;
-    Panel1: TPanel;
+    SynXMLSyn: TSynXMLSyn;
+    SynJSONSyn: TSynJSONSyn;
+    ToolBar1: TToolBar;
+    ShowAsTextButton: TToolButton;
+    ShowAsXmlButton: TToolButton;
+    ShowAsJSonButton: TToolButton;
+    ToolButton4: TToolButton;
+    ShowFullButton: TToolButton;
+    FormatButton: TToolButton;
+    XMLDocument: TXMLDocument;
+    ShowPopupButton: TToolButton;
+    ToolButton3: TToolButton;
+    ToolButton5: TToolButton;
     procedure VstDetailCreateEditor(Sender: TBaseVirtualTree;
       Node: PVirtualNode; Column: TColumnIndex; out EditLink: IVTEditLink);
     procedure VstDetailDblClick(Sender: TObject);
@@ -58,6 +71,11 @@ type
       Column: TColumnIndex; Shift: TShiftState);
     procedure VstDetailFocusChanged(Sender: TBaseVirtualTree;
       Node: PVirtualNode; Column: TColumnIndex);
+    procedure ShowAsTextButtonClick(Sender: TObject);
+    procedure ShowAsXmlButtonClick(Sender: TObject);
+    procedure ShowAsJSonButtonClick(Sender: TObject);
+    procedure ShowFullButtonClick(Sender: TObject);
+    procedure FormatButtonClick(Sender: TObject);
   private
     procedure WMStartEditingMember(var Message: TMessage); message WM_STARTEDITING_MEMBER;
   public
@@ -136,6 +154,7 @@ begin
 
 end;
 
+
 //------------------------------------------------------------------------------
 
 procedure Tframe_Classic.VstDetailChange(Sender: TBaseVirtualTree;  Node: PVirtualNode);
@@ -151,7 +170,7 @@ procedure Tframe_Classic.VstDetailColumnClick(Sender: TBaseVirtualTree;
 var
    DetailRec : PDetailRec ;
    CellText: String;
-   SelectedNode, MouseNode : PVirtualNode ;
+   SelectedNode : PVirtualNode ;
 begin
 
    SelectedNode := VstDetail.GetFirstSelected  ;
@@ -196,10 +215,131 @@ end;
 
 procedure Tframe_Classic.SetMemoText(text: string; isXml:boolean; isJson : boolean);
 begin
-   // Is xml ?
-   // Is JSon ?
-
    SynMemo.Text := text;
+   if (isXml) then
+      SynMemo.Highlighter := SynXMLSyn
+   else if (isJson) then
+      SynMemo.Highlighter := SynJSONSyn
+   else
+      SynMemo.Highlighter := nil;
+end;
+
+//------------------------------------------------------------------------------
+
+procedure Tframe_Classic.ShowAsTextButtonClick(Sender: TObject);
+begin
+   SynMemo.Highlighter := nil;
+end;
+
+//------------------------------------------------------------------------------
+
+procedure Tframe_Classic.ShowAsJSonButtonClick(Sender: TObject);
+begin
+   SynMemo.Highlighter := SynJSONSyn;
+end;
+
+//------------------------------------------------------------------------------
+
+procedure Tframe_Classic.ShowAsXmlButtonClick(Sender: TObject);
+begin
+   SynMemo.Highlighter := SynXMLSyn;
+end;
+
+//------------------------------------------------------------------------------
+
+procedure Tframe_Classic.FormatButtonClick(Sender: TObject);
+  var
+     CurrentLine : string ;
+     tmpJson: TJsonValue;
+     tmpXml:string;
+
+  Procedure AddNode(SourceNode: IXMLNode{; DestNode: IXMLNode}; level : integer);
+  Var
+    //NewNode: IXMLNode;
+    I: Integer;
+    NodeName : string ;
+    indent : string ;
+    AttribName : string ;
+    AttribValue : OleVariant ;
+  Begin
+    indent := '' ;
+    for i := 0 to level-1 do
+       indent := indent + '   ';
+    NodeName := SourceNode.NodeName ;
+
+    if SourceNode.NodeType = ntText Then Begin
+      //If DestNode <> nil Then
+      //  DestNode.Text := SourceNode.Text ;
+
+      SynMemo.Lines.Add(indent + trim(SourceNode.Text)) ;
+    end else begin
+       //If DestNode = nil Then
+       //  NewNode := XMLDoc2.AddChild(NodeName)
+       //Else
+       //  NewNode := DestNode.AddChild(NodeName);
+
+       CurrentLine := indent + '<' + NodeName;
+
+       // add attributes
+       For I := 0 to SourceNode.AttributeNodes.Count - 1 do begin
+          AttribName := SourceNode.AttributeNodes[I].NodeName ;
+          AttribValue := SourceNode.AttributeNodes[I].NodeValue ;
+          if AttribValue = null then
+             AttribValue := '' ;
+         CurrentLine := CurrentLine + ' ' + AttribName + '="' + AttribValue + '"' ;
+         //NewNode.SetAttribute(SourceNode.AttributeNodes[I].NodeName, SourceNode.AttributeNodes[I].NodeValue);
+       end ;
+
+       if SourceNode.ChildNodes.Count = 0 then begin
+          SynMemo.Lines.Add(CurrentLine + '/>');
+       end else if (SourceNode.ChildNodes.Count = 1) and (SourceNode.ChildNodes[0].NodeType = ntText) then begin
+          // single text sub node : add to the same line
+          SynMemo.Lines.Add(CurrentLine + '>' + trim(SourceNode.ChildNodes[0].Text) + '</' + NodeName + '>') ;
+       end else begin
+          SynMemo.Lines.Add(CurrentLine + '>') ;
+          For I := 0 to SourceNode.ChildNodes.Count - 1 do
+            AddNode(SourceNode.ChildNodes[I]{, NewNode},level+1);
+          SynMemo.Lines.Add(indent +'</' + NodeName + '>') ;
+       end ;
+    end ;
+  end;
+
+begin
+   if (trim(SynMemo.text).StartsWith('<')) then begin
+      tmpXml := SynMemo.text;
+      SynMemo.Highlighter := SynXMLSyn;
+      XMLDocument.Active := False;
+      XMLDocument.XML.Text := SynMemo.text;
+      SynMemo.text := '';
+      try
+         XMLDocument.Active := True;
+         AddNode(XMLDocument.DocumentElement,0);    // , XMLDoc2.DocumentElement
+      except
+         on e : exception do begin
+            SynMemo.text := tmpXml;
+            Application.MessageBox (pchar('Invalid xml:' + e.Message),'Format xml', MB_OK);
+         end ;
+      end ;
+   end else if (trim(SynMemo.text).StartsWith('{')) then begin
+      SynMemo.Highlighter := SynJSONSyn;
+      tmpJson := TJSONObject.ParseJSONValue(SynMemo.text);
+      if tmpJson = nil then begin
+         Application.MessageBox (pchar('Invalid json'),'Format Json', MB_OK);
+
+      end else begin
+         SynMemo.text := tmpJson.Format(3);
+         FreeAndNil(tmpJson);
+      end;
+   end else
+      SynMemo.Highlighter := nil;
+end;
+
+//------------------------------------------------------------------------------
+
+procedure Tframe_Classic.ShowFullButtonClick(Sender: TObject);
+begin
+  inherited;
+
 end;
 
 //------------------------------------------------------------------------------

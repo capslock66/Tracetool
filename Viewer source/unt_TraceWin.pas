@@ -1578,13 +1578,22 @@ begin
             case SubMember.ViewerKind of
                CST_VIEWER_XML: // xml viewer
                   begin
-                     if XmlFrame = nil then begin
-                        XmlFrame := TFrame_XML.Create(self);
-                        // owner : self -> released by form
-                        XmlFrame.Parent := PanelRight;
-                        XmlFrame.Align := alClient;
-                     end;
-                     TFrame_XML(XmlFrame).AddDetails(TreeRec, SubMember);
+                     //if XmlFrame = nil then begin
+                     //   XmlFrame := TFrame_XML.Create(self);
+                     //   // owner : self -> released by form
+                     //   XmlFrame.Parent := PanelRight;
+                     //   XmlFrame.Align := alClient;
+                     //end;
+                     //TFrame_XML(XmlFrame).AddDetails(TreeRec, SubMember);
+
+                     frame_Classic.AddDetails(TreeRec, SubMember);
+                     if ( SubMember.col1.StartsWith('<')) then
+                        frame_Classic.SetMemoText(SubMember.col1,true,false)
+                     else if ( SubMember.col1.StartsWith('{')) then
+                        frame_Classic.SetMemoText(SubMember.col1,false,true)
+                     else
+                        frame_Classic.SetMemoText(SubMember.col1,false,false);
+
                      // add detail to frame and add frame to CurrentViewers
                   end;
                CST_VIEWER_BITMAP: // bitmap viewer . if many bitmap, only the last will be displayed

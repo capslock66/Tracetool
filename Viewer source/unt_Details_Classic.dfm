@@ -5,20 +5,18 @@ inherited frame_Classic: Tframe_Classic
   ExplicitHeight = 401
   object SplitterH: TSplitter
     Left = 0
-    Top = 253
+    Top = 251
     Width = 525
-    Height = 3
+    Height = 5
     Cursor = crVSplit
     Align = alBottom
-    ExplicitLeft = -27
-    ExplicitTop = 213
-    ExplicitWidth = 347
+    ExplicitTop = 253
   end
   object VstDetail: TVirtualStringTree
     Left = 0
     Top = 0
     Width = 525
-    Height = 253
+    Height = 251
     Align = alClient
     BevelInner = bvNone
     BevelOuter = bvNone
@@ -67,6 +65,7 @@ inherited frame_Classic: Tframe_Classic
     OnMeasureItem = VstDetailMeasureItem
     Touch.InteractiveGestures = [igPan, igPressAndTap]
     Touch.InteractiveGestureOptions = [igoPanSingleFingerHorizontal, igoPanSingleFingerVertical, igoPanInertia, igoPanGutter, igoParentPassthrough]
+    ExplicitHeight = 253
     Columns = <
       item
         Color = 16117479
@@ -96,9 +95,9 @@ inherited frame_Classic: Tframe_Classic
     TabOrder = 1
     object SynMemo: TSynEdit
       Left = 1
-      Top = 42
+      Top = 22
       Width = 523
-      Height = 102
+      Height = 122
       Align = alClient
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clWindowText
@@ -116,14 +115,96 @@ inherited frame_Classic: Tframe_Classic
       Gutter.Font.Style = []
       Gutter.Visible = False
       Gutter.Width = 0
+      ExplicitLeft = 2
+      ExplicitTop = 28
     end
-    object Panel1: TPanel
+    object ToolBar1: TToolBar
       Left = 1
       Top = 1
       Width = 523
-      Height = 41
-      Align = alTop
+      Height = 21
+      AutoSize = True
+      ButtonHeight = 21
+      ButtonWidth = 79
+      Caption = 'ToolBar1'
+      ShowCaptions = True
       TabOrder = 1
+      ExplicitTop = 3
+      object ShowAsTextButton: TToolButton
+        Left = 0
+        Top = 0
+        AutoSize = True
+        Caption = ' Text '
+        ImageIndex = 0
+        Visible = False
+        OnClick = ShowAsTextButtonClick
+      end
+      object ShowAsXmlButton: TToolButton
+        Left = 39
+        Top = 0
+        AutoSize = True
+        Caption = ' Xml '
+        ImageIndex = 1
+        Visible = False
+        OnClick = ShowAsXmlButtonClick
+      end
+      object ShowAsJSonButton: TToolButton
+        Left = 72
+        Top = 0
+        AutoSize = True
+        Caption = ' Json '
+        ImageIndex = 2
+        Visible = False
+        OnClick = ShowAsJSonButtonClick
+      end
+      object ToolButton4: TToolButton
+        Left = 111
+        Top = 0
+        Width = 8
+        Caption = 'ToolButton4'
+        ImageIndex = 3
+        Style = tbsSeparator
+        Visible = False
+      end
+      object FormatButton: TToolButton
+        Left = 119
+        Top = 0
+        AutoSize = True
+        Caption = ' Format '
+        ImageIndex = 4
+        OnClick = FormatButtonClick
+      end
+      object ToolButton5: TToolButton
+        Left = 170
+        Top = 0
+        Width = 8
+        Caption = 'ToolButton5'
+        ImageIndex = 5
+        Style = tbsSeparator
+      end
+      object ShowFullButton: TToolButton
+        Left = 178
+        Top = 0
+        AutoSize = True
+        Caption = ' Show full text '
+        ImageIndex = 3
+        OnClick = ShowFullButtonClick
+      end
+      object ToolButton3: TToolButton
+        Left = 261
+        Top = 0
+        Width = 8
+        Caption = 'ToolButton3'
+        ImageIndex = 5
+        Style = tbsSeparator
+      end
+      object ShowPopupButton: TToolButton
+        Left = 269
+        Top = 0
+        AutoSize = True
+        Caption = ' Show Popup'
+        ImageIndex = 4
+      end
     end
   end
   object PopupDetail: TPopupMenu
@@ -143,7 +224,7 @@ inherited frame_Classic: Tframe_Classic
       Action = FrmPageContainer.actSelectAll
     end
   end
-  object SynXMLSyn1: TSynXMLSyn
+  object SynXMLSyn: TSynXMLSyn
     Options.AutoDetectEnabled = False
     Options.AutoDetectLineLimit = 0
     Options.Visible = False
@@ -153,11 +234,17 @@ inherited frame_Classic: Tframe_Classic
     Left = 200
     Top = 32
   end
-  object SynJSONSyn1: TSynJSONSyn
+  object SynJSONSyn: TSynJSONSyn
     Options.AutoDetectEnabled = False
     Options.AutoDetectLineLimit = 0
     Options.Visible = False
     Left = 120
     Top = 32
+  end
+  object XMLDocument: TXMLDocument
+    Active = True
+    Left = 200
+    Top = 80
+    DOMVendorDesc = 'MSXML'
   end
 end

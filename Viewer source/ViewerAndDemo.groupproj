@@ -18,9 +18,6 @@
         <Projects Include="..\..\TTextEditor\Demos\Simple\TTextEditorDemo.dproj">
             <Dependencies/>
         </Projects>
-        <Projects Include="..\..\Virtual-TreeView\Demos\Advanced\Advanced.dproj">
-            <Dependencies/>
-        </Projects>
     </ItemGroup>
     <ProjectExtensions>
         <Borland.Personality>Default.Personality.12</Borland.Personality>
@@ -74,23 +71,14 @@
     <Target Name="TTextEditorDemo:Make">
         <MSBuild Projects="..\..\TTextEditor\Demos\Simple\TTextEditorDemo.dproj" Targets="Make"/>
     </Target>
-    <Target Name="Advanced">
-        <MSBuild Projects="..\..\Virtual-TreeView\Demos\Advanced\Advanced.dproj"/>
-    </Target>
-    <Target Name="Advanced:Clean">
-        <MSBuild Projects="..\..\Virtual-TreeView\Demos\Advanced\Advanced.dproj" Targets="Clean"/>
-    </Target>
-    <Target Name="Advanced:Make">
-        <MSBuild Projects="..\..\Virtual-TreeView\Demos\Advanced\Advanced.dproj" Targets="Make"/>
-    </Target>
     <Target Name="Build">
-        <CallTarget Targets="DelphiDemo;TraceTool;TextEditor_Delphi_Sydney_Designtime;TextEditor_Delphi_Sydney_Runtime;TTextEditorDemo;Advanced"/>
+        <CallTarget Targets="DelphiDemo;TraceTool;TextEditor_Delphi_Sydney_Designtime;TextEditor_Delphi_Sydney_Runtime;TTextEditorDemo"/>
     </Target>
     <Target Name="Clean">
-        <CallTarget Targets="DelphiDemo:Clean;TraceTool:Clean;TextEditor_Delphi_Sydney_Designtime:Clean;TextEditor_Delphi_Sydney_Runtime:Clean;TTextEditorDemo:Clean;Advanced:Clean"/>
+        <CallTarget Targets="DelphiDemo:Clean;TraceTool:Clean;TextEditor_Delphi_Sydney_Designtime:Clean;TextEditor_Delphi_Sydney_Runtime:Clean;TTextEditorDemo:Clean"/>
     </Target>
     <Target Name="Make">
-        <CallTarget Targets="DelphiDemo:Make;TraceTool:Make;TextEditor_Delphi_Sydney_Designtime:Make;TextEditor_Delphi_Sydney_Runtime:Make;TTextEditorDemo:Make;Advanced:Make"/>
+        <CallTarget Targets="DelphiDemo:Make;TraceTool:Make;TextEditor_Delphi_Sydney_Designtime:Make;TextEditor_Delphi_Sydney_Runtime:Make;TTextEditorDemo:Make"/>
     </Target>
     <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
 </Project>
