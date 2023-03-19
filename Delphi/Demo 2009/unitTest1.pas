@@ -570,7 +570,7 @@ begin
 
    // add second line
    table.AddRow();
-   table.AddRowData('aa'#9'data second column'#9'cc'#9'dd'#9'ee');
+   table.AddRowData('aa'#9'data second column'#9'{"minJson":true}'#9'dd'#9'ee');
    // add all columns data in a single step (tab separated)
 
    // finally send the table

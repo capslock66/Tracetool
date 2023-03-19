@@ -19,7 +19,7 @@ type
     { Private declarations }
   public
     { Public declarations }
-    Procedure AddDetails(TreeRec: PTreeRec; RootMember : TMember); override;
+    //Procedure AddDetails(TreeRec: PTreeRec; RootMember : TMember); override;
     function HasFocus : boolean ; override;
     procedure SelectAll() ; override;
     procedure copySelected() ; override;
@@ -36,96 +36,96 @@ uses unt_Details_Classic;
 
 { TFrame_XML }
 
-procedure TFrame_XML.AddDetails(TreeRec: PTreeRec; RootMember: TMember);
-  var
-     //target : TStringList ;
-     CurrentLine : string ;
-
-  Procedure AddNode(SourceNode: IXMLNode{; DestNode: IXMLNode}; level : integer);
-  Var
-    //NewNode: IXMLNode;
-    I: Integer;
-    NodeName : string ;
-    indent : string ;
-    AttribName : string ;
-    AttribValue : OleVariant ;
-  Begin
-
-    indent := '' ;
-    for i := 0 to level-1 do
-       indent := indent + '   ' ;
-
-    NodeName := SourceNode.NodeName ;
-
-    if SourceNode.NodeType = ntText Then Begin
-      //If DestNode <> nil Then
-      //  DestNode.Text := SourceNode.Text ;
-
-      SynMemo.Lines.Add(indent + SourceNode.Text) ;
-    end else begin
-       //If DestNode = nil Then
-       //  NewNode := XMLDoc2.AddChild(NodeName)
-       //Else
-       //  NewNode := DestNode.AddChild(NodeName);
-
-       CurrentLine := indent + '<' + NodeName;
-
-       // add attributes
-       For I := 0 to SourceNode.AttributeNodes.Count - 1 do begin
-          AttribName := SourceNode.AttributeNodes[I].NodeName ;
-          AttribValue := SourceNode.AttributeNodes[I].NodeValue ;
-          if AttribValue = null then
-             AttribValue := '' ;
-         CurrentLine := CurrentLine + ' ' + AttribName + '="' + AttribValue + '"' ;
-         //NewNode.SetAttribute(SourceNode.AttributeNodes[I].NodeName, SourceNode.AttributeNodes[I].NodeValue);
-       end ;
-
-       if SourceNode.ChildNodes.Count = 0 then begin
-          SynMemo.Lines.Add(CurrentLine + '/>') ;
-
-       end else if (SourceNode.ChildNodes.Count = 1) and (SourceNode.ChildNodes[0].NodeType = ntText) then begin
-          // single text sub node : add to the same line
-          SynMemo.Lines.Add(CurrentLine + '>' + SourceNode.ChildNodes[0].Text + '</' + NodeName + '>') ;
-
-       end else begin
-          SynMemo.Lines.Add(CurrentLine + '>') ;
-          For I := 0 to SourceNode.ChildNodes.Count - 1 do
-            AddNode(SourceNode.ChildNodes[I]{, NewNode},level+1);
-          SynMemo.Lines.Add(indent +'</' + NodeName + '>') ;
-       end ;
-
-    end ;
-
-  End;
-begin
-   inherited;
-
-   TFrm_Trace(Owner).CurrentViewers.add(self) ;
-
-   //TFrm_Trace(Owner).XmlVisible := true ;   // viewer will be visible
-   //inc (TFrm_Trace(Owner).ViewerCount) ;    // need to know the number of viewer to display
-
-   SynMemo.Lines.Clear ;
-
-
-   //SynMemo.Text := RootMember.col1;
-   //SynMemo.Text := xmlDoc.FormatXMLData() ;
-
-
-   XMLDocument.Active   := False;
-   XMLDocument.XML.Text := RootMember.col1;
-
-
-   try
-      XMLDocument.Active   := True;
-      AddNode(XMLDocument.DocumentElement,0);    // , XMLDoc2.DocumentElement
-   except
-      on e : exception do
-         SynMemo.Lines.Add(e.Message) ;
-   end ;
-   TFrm_Trace(Owner).AddOneLineDetail(RootMember.col1,'','');
-   frame_Classic.SetMemoText(RootMember.col1,true,false);
-end;
+//procedure TFrame_XML.AddDetails(TreeRec: PTreeRec; RootMember: TMember);
+//  var
+//     //target : TStringList ;
+//     CurrentLine : string ;
+//
+//  Procedure AddNode(SourceNode: IXMLNode{; DestNode: IXMLNode}; level : integer);
+//  Var
+//    //NewNode: IXMLNode;
+//    I: Integer;
+//    NodeName : string ;
+//    indent : string ;
+//    AttribName : string ;
+//    AttribValue : OleVariant ;
+//  Begin
+//
+//    indent := '' ;
+//    for i := 0 to level-1 do
+//       indent := indent + '   ' ;
+//
+//    NodeName := SourceNode.NodeName ;
+//
+//    if SourceNode.NodeType = ntText Then Begin
+//      //If DestNode <> nil Then
+//      //  DestNode.Text := SourceNode.Text ;
+//
+//      SynMemo.Lines.Add(indent + SourceNode.Text) ;
+//    end else begin
+//       //If DestNode = nil Then
+//       //  NewNode := XMLDoc2.AddChild(NodeName)
+//       //Else
+//       //  NewNode := DestNode.AddChild(NodeName);
+//
+//       CurrentLine := indent + '<' + NodeName;
+//
+//       // add attributes
+//       For I := 0 to SourceNode.AttributeNodes.Count - 1 do begin
+//          AttribName := SourceNode.AttributeNodes[I].NodeName ;
+//          AttribValue := SourceNode.AttributeNodes[I].NodeValue ;
+//          if AttribValue = null then
+//             AttribValue := '' ;
+//         CurrentLine := CurrentLine + ' ' + AttribName + '="' + AttribValue + '"' ;
+//         //NewNode.SetAttribute(SourceNode.AttributeNodes[I].NodeName, SourceNode.AttributeNodes[I].NodeValue);
+//       end ;
+//
+//       if SourceNode.ChildNodes.Count = 0 then begin
+//          SynMemo.Lines.Add(CurrentLine + '/>') ;
+//
+//       end else if (SourceNode.ChildNodes.Count = 1) and (SourceNode.ChildNodes[0].NodeType = ntText) then begin
+//          // single text sub node : add to the same line
+//          SynMemo.Lines.Add(CurrentLine + '>' + SourceNode.ChildNodes[0].Text + '</' + NodeName + '>') ;
+//
+//       end else begin
+//          SynMemo.Lines.Add(CurrentLine + '>') ;
+//          For I := 0 to SourceNode.ChildNodes.Count - 1 do
+//            AddNode(SourceNode.ChildNodes[I]{, NewNode},level+1);
+//          SynMemo.Lines.Add(indent +'</' + NodeName + '>') ;
+//       end ;
+//
+//    end ;
+//
+//  End;
+//begin
+//   inherited;
+//
+//   TFrm_Trace(Owner).CurrentViewers.add(self) ;
+//
+//   //TFrm_Trace(Owner).XmlVisible := true ;   // viewer will be visible
+//   //inc (TFrm_Trace(Owner).ViewerCount) ;    // need to know the number of viewer to display
+//
+//   SynMemo.Lines.Clear ;
+//
+//
+//   //SynMemo.Text := RootMember.col1;
+//   //SynMemo.Text := xmlDoc.FormatXMLData() ;
+//
+//
+//   XMLDocument.Active   := False;
+//   XMLDocument.XML.Text := RootMember.col1;
+//
+//
+//   try
+//      XMLDocument.Active   := True;
+//      AddNode(XMLDocument.DocumentElement,0);    // , XMLDoc2.DocumentElement
+//   except
+//      on e : exception do
+//         SynMemo.Lines.Add(e.Message) ;
+//   end ;
+//   TFrm_Trace(Owner).AddOneLineDetail(RootMember.col1,'','',false,false);
+//   frame_Classic.SetMemoText(RootMember.col1,true,false);
+//end;
 
 //------------------------------------------------------------------------------
 

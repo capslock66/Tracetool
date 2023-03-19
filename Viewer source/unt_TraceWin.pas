@@ -167,7 +167,7 @@ interface
          procedure CalculateDump(Member: TMember);
          procedure ResetDump(Member: TMember);
       public
-         procedure AddOneLineDetail(Col1, Col2, Col3: String);
+         procedure AddOneLineDetail(Col1, Col2, Col3: String; isXml:boolean=false; isJson : boolean=false);
          procedure AddToLog(ActiveNode, ParentCompoNode: PVirtualNode);
          procedure ShowLog;
          function CheckSearchRecord(TreeRec: PTreeRec): boolean;
@@ -185,7 +185,7 @@ interface
          CurrentViewers: TObjectList; // not Owner , array of Tframe_BaseDetails. Viewers that are currently displayed.
          TableFrame: TFrame;
          BitmapFrame: TFrame;
-         XmlFrame: TFrame;
+         //XmlFrame: TFrame;
          TreeDetailFrame: TFrame;
          VstDetail: TVirtualStringTree;
          SynMemo:TSynEdit;
@@ -290,7 +290,7 @@ uses
    //, unt_decode
    , unt_Details_base
    , unt_Details_bitmap
-   , unt_Details_xml
+   //, unt_Details_xml
    , unt_Details_table
    , unt_Details_Classic
    , Unt_TailProgress
@@ -1346,7 +1346,7 @@ end;
 
 // ------------------------------------------------------------------------------
 
-procedure TFrm_Trace.AddOneLineDetail(Col1, Col2, Col3: String);
+procedure TFrm_Trace.AddOneLineDetail(Col1, Col2, Col3: String; isXml: boolean=false; isJson: boolean=false);
 var
    DetailNode: PVirtualNode;
    DetailRec: PDetailRec;
@@ -1364,6 +1364,9 @@ begin
    setlength(DetailRec.FontDetails, 1);
    DetailRec.FontDetails[0] := BoldDetail;
    VstDetail.MultiLine[DetailNode] := true;
+
+   if (isXml or isJson) then
+      frame_Classic.SetMemoText(col1,isXml,isJson);
 end;
 
 // ------------------------------------------------------------------------------
