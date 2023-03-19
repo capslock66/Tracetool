@@ -253,9 +253,8 @@ procedure Tframe_Classic.FormatButtonClick(Sender: TObject);
      tmpJson: TJsonValue;
      tmpXml:string;
 
-  Procedure AddNode(SourceNode: IXMLNode{; DestNode: IXMLNode}; level : integer);
+  Procedure FormatNode(SourceNode: IXMLNode; level : integer);
   Var
-    //NewNode: IXMLNode;
     I: Integer;
     NodeName : string ;
     indent : string ;
@@ -268,18 +267,9 @@ procedure Tframe_Classic.FormatButtonClick(Sender: TObject);
     NodeName := SourceNode.NodeName ;
 
     if SourceNode.NodeType = ntText Then Begin
-      //If DestNode <> nil Then
-      //  DestNode.Text := SourceNode.Text ;
-
-      SynMemo.Lines.Add(indent + trim(SourceNode.Text)) ;
+       SynMemo.Lines.Add(indent + trim(SourceNode.Text)) ;
     end else begin
-       //If DestNode = nil Then
-       //  NewNode := XMLDoc2.AddChild(NodeName)
-       //Else
-       //  NewNode := DestNode.AddChild(NodeName);
-
        CurrentLine := indent + '<' + NodeName;
-
        // add attributes
        For I := 0 to SourceNode.AttributeNodes.Count - 1 do begin
           AttribName := SourceNode.AttributeNodes[I].NodeName ;
@@ -298,7 +288,7 @@ procedure Tframe_Classic.FormatButtonClick(Sender: TObject);
        end else begin
           SynMemo.Lines.Add(CurrentLine + '>') ;
           For I := 0 to SourceNode.ChildNodes.Count - 1 do
-            AddNode(SourceNode.ChildNodes[I]{, NewNode},level+1);
+            FormatNode(SourceNode.ChildNodes[I]{, NewNode},level+1);
           SynMemo.Lines.Add(indent +'</' + NodeName + '>') ;
        end ;
     end ;
@@ -313,7 +303,7 @@ begin
       SynMemo.text := '';
       try
          XMLDocument.Active := True;
-         AddNode(XMLDocument.DocumentElement,0);    // , XMLDoc2.DocumentElement
+         FormatNode(XMLDocument.DocumentElement,0);    // , XMLDoc2.DocumentElement
       except
          on e : exception do begin
             SynMemo.text := tmpXml;
@@ -325,7 +315,6 @@ begin
       tmpJson := TJSONObject.ParseJSONValue(SynMemo.text);
       if tmpJson = nil then begin
          Application.MessageBox (pchar('Invalid json'),'Format Json', MB_OK);
-
       end else begin
          SynMemo.text := tmpJson.Format(3);
          FreeAndNil(tmpJson);
