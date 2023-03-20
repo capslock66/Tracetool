@@ -149,7 +149,11 @@ begin
    VstDetail.Colors.UnfocusedSelectionBorderColor := TraceWin.vstTrace.Colors.UnfocusedSelectionBorderColor ;
 
    //VstDetail.OnDrawNode := DrawNode ;
-
+   ShowAsTextButton.visible := true;
+   ShowAsXmlButton.visible := true;
+   ShowAsJsonButton.visible := true;
+   FormatButton.visible := true;
+   ShowPopupButton.visible := true;
 end;
 
 
