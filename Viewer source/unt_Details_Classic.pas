@@ -28,7 +28,7 @@ type
     SynMemo: TSynEdit;
     SynXMLSyn: TSynXMLSyn;
     SynJSONSyn: TSynJSONSyn;
-    ToolBar1: TToolBar;
+    ToolBar: TToolBar;
     ShowAsTextButton: TToolButton;
     ShowAsXmlButton: TToolButton;
     ShowAsJSonButton: TToolButton;
@@ -73,6 +73,7 @@ type
     procedure ShowAsXmlButtonClick(Sender: TObject);
     procedure ShowAsJSonButtonClick(Sender: TObject);
     procedure FormatButtonClick(Sender: TObject);
+    procedure ShowPopupButtonClick(Sender: TObject);
   private
     procedure WMStartEditingMember(var Message: TMessage); message WM_STARTEDITING_MEMBER;
   public
@@ -92,7 +93,7 @@ var
 implementation
 
 uses
-unt_TraceConfig ;
+unt_TraceConfig, unt_detailPopup ;
 
 {$R *.dfm}
 
@@ -240,6 +241,15 @@ end;
 procedure Tframe_Classic.ShowAsXmlButtonClick(Sender: TObject);
 begin
    SynMemo.Highlighter := SynXMLSyn;
+end;
+
+procedure Tframe_Classic.ShowPopupButtonClick(Sender: TObject);
+var
+   popup : TDetailPopupForm;
+begin
+   popup := TDetailPopupForm.create(Application);
+   popup.SetMemoText(SynMemo.Text);
+   popup.show();
 end;
 
 //------------------------------------------------------------------------------

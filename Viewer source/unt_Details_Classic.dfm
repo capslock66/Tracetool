@@ -118,15 +118,15 @@ inherited frame_Classic: Tframe_Classic
       ExplicitLeft = 2
       ExplicitTop = 28
     end
-    object ToolBar1: TToolBar
+    object ToolBar: TToolBar
       Left = 1
       Top = 1
       Width = 523
       Height = 21
       AutoSize = True
       ButtonHeight = 21
-      ButtonWidth = 69
-      Caption = 'ToolBar1'
+      ButtonWidth = 80
+      Caption = 'ToolBar'
       ShowCaptions = True
       TabOrder = 1
       ExplicitTop = 3
@@ -186,8 +186,9 @@ inherited frame_Classic: Tframe_Classic
         Left = 178
         Top = 0
         AutoSize = True
-        Caption = ' Show Popup'
+        Caption = ' Show in popup'
         ImageIndex = 4
+        OnClick = ShowPopupButtonClick
       end
     end
   end

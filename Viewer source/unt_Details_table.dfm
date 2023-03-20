@@ -1,13 +1,13 @@
 inherited frame_Table: Tframe_Table
-  Width = 248
-  Height = 158
-  ExplicitWidth = 248
-  ExplicitHeight = 158
+  Width = 407
+  Height = 294
+  ExplicitWidth = 407
+  ExplicitHeight = 294
   object VstTable: TVirtualStringTree
     Left = 0
     Top = 0
-    Width = 248
-    Height = 158
+    Width = 407
+    Height = 294
     Align = alClient
     BevelInner = bvNone
     BevelOuter = bvNone
@@ -53,6 +53,8 @@ inherited frame_Table: Tframe_Table
     OnMeasureItem = VstTableMeasureItem
     Touch.InteractiveGestures = [igPan, igPressAndTap]
     Touch.InteractiveGestureOptions = [igoPanSingleFingerHorizontal, igoPanSingleFingerVertical, igoPanInertia, igoPanGutter, igoParentPassthrough]
+    ExplicitWidth = 248
+    ExplicitHeight = 158
     Columns = <
       item
         Color = 16117479

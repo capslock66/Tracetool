@@ -2,33 +2,37 @@ inherited FrmEventLog: TFrmEventLog
   Left = 314
   Top = 235
   Caption = 'FrmEventLog'
-  ClientHeight = 171
-  ClientWidth = 569
+  ClientHeight = 250
+  ClientWidth = 600
   OldCreateOrder = True
-  ExplicitWidth = 585
-  ExplicitHeight = 210
+  ExplicitWidth = 616
+  ExplicitHeight = 289
   PixelsPerInch = 96
   TextHeight = 13
   object GroupPanel: TPanel
     Left = 0
     Top = 0
-    Width = 569
-    Height = 171
+    Width = 600
+    Height = 250
     Align = alClient
     BevelOuter = bvNone
     Caption = 'GroupPanel'
     TabOrder = 0
+    ExplicitWidth = 569
+    ExplicitHeight = 171
     object VSplitter: TSplitter
-      Left = 196
+      Left = 227
       Top = 22
-      Height = 149
+      Height = 228
       Align = alRight
+      ExplicitLeft = 196
+      ExplicitHeight = 149
     end
     object VstEvent: TVirtualStringTree
       Left = 12
       Top = 22
-      Width = 184
-      Height = 149
+      Width = 215
+      Height = 228
       Align = alClient
       BevelInner = bvNone
       Colors.BorderColor = clWindowText
@@ -79,6 +83,8 @@ inherited FrmEventLog: TFrmEventLog
       OnMeasureItem = VstEventMeasureItem
       Touch.InteractiveGestures = [igPan, igPressAndTap]
       Touch.InteractiveGestureOptions = [igoPanSingleFingerHorizontal, igoPanSingleFingerVertical, igoPanInertia, igoPanGutter, igoParentPassthrough]
+      ExplicitWidth = 184
+      ExplicitHeight = 149
       Columns = <
         item
           Position = 0
@@ -105,20 +111,22 @@ inherited FrmEventLog: TFrmEventLog
         end>
     end
     object PanelTraceInfo: TPanel
-      Left = 199
+      Left = 230
       Top = 22
       Width = 370
-      Height = 149
+      Height = 228
       Align = alRight
       BevelInner = bvLowered
       ParentBackground = False
       ParentColor = True
       TabOrder = 1
+      ExplicitLeft = 199
+      ExplicitHeight = 149
       object VstDetail: TVirtualStringTree
         Left = 2
         Top = 2
         Width = 366
-        Height = 145
+        Height = 224
         Align = alClient
         BevelOuter = bvNone
         Color = 16117479
@@ -159,6 +167,7 @@ inherited FrmEventLog: TFrmEventLog
         OnMeasureItem = VstDetailMeasureItem
         Touch.InteractiveGestures = [igPan, igPressAndTap]
         Touch.InteractiveGestureOptions = [igoPanSingleFingerHorizontal, igoPanSingleFingerVertical, igoPanInertia, igoPanGutter, igoParentPassthrough]
+        ExplicitHeight = 145
         Columns = <
           item
             Color = 16117479
@@ -185,15 +194,16 @@ inherited FrmEventLog: TFrmEventLog
     object PanelTop: TPanel
       Left = 0
       Top = 0
-      Width = 569
+      Width = 600
       Height = 22
       Align = alTop
       BevelOuter = bvNone
       Color = clCream
       ParentBackground = False
       TabOrder = 2
+      ExplicitWidth = 569
       DesignSize = (
-        569
+        600
         22)
       object TracesInfo: TLabel
         Left = 3
@@ -203,7 +213,7 @@ inherited FrmEventLog: TFrmEventLog
         Caption = 'TracesInfo'
       end
       object butClose: TBitBtn
-        Left = 546
+        Left = 577
         Top = 0
         Width = 22
         Height = 20
@@ -237,9 +247,10 @@ inherited FrmEventLog: TFrmEventLog
           00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FF}
         TabOrder = 0
         OnClick = butCloseClick
+        ExplicitLeft = 546
       end
       object butReload: TBitBtn
-        Left = 478
+        Left = 509
         Top = 0
         Width = 65
         Height = 20
@@ -247,9 +258,10 @@ inherited FrmEventLog: TFrmEventLog
         Caption = 'Reload (50)'
         TabOrder = 1
         OnClick = butReloadClick
+        ExplicitLeft = 478
       end
       object butGetAll: TBitBtn
-        Left = 378
+        Left = 409
         Top = 0
         Width = 97
         Height = 20
@@ -257,17 +269,19 @@ inherited FrmEventLog: TFrmEventLog
         Caption = 'Get All messages'
         TabOrder = 2
         OnClick = butGetAllClick
+        ExplicitLeft = 378
       end
     end
     object PanelGutter: TPanel
       Left = 0
       Top = 22
       Width = 12
-      Height = 149
+      Height = 228
       Align = alLeft
       BevelOuter = bvNone
       TabOrder = 3
       OnDblClick = PanelGutterDblClick
+      ExplicitHeight = 149
     end
   end
   object PopupTree: TPopupMenu
