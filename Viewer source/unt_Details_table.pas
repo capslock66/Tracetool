@@ -291,7 +291,7 @@ begin
    if DetailRec = nil then
       exit ;
    CellText := DetailRec.Columns[Column] ;
-   frame_Classic.SetMemoText(CellText,false,false);
+   Tframe_Classic(TraceWin.TreeDetailFrame).SetMemoText(CellText,false,false);
 end;
 
 //------------------------------------------------------------------------------
@@ -314,7 +314,7 @@ begin
 
    CellText := DetailRec.Columns[Column] ;
 
-   frame_Classic.SetMemoText(CellText,false,false);
+   Tframe_Classic(TraceWin.TreeDetailFrame).SetMemoText(CellText,false,false);
 end;
 
 //------------------------------------------------------------------------------

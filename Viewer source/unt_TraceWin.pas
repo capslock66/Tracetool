@@ -1067,8 +1067,7 @@ begin
       if (TextType = ttNormal) and (IsSeparator(CellText)) then
          CellText := ' '
 
-   end
-   else begin
+   end else begin
       case Column of
          0: begin // image, no text
                if TextType = ttStatic then begin
@@ -1370,7 +1369,7 @@ begin
    VstDetail.MultiLine[DetailNode] := true;
 
    if (isXml or isJson) then
-      frame_Classic.SetMemoText(col1,isXml,isJson);
+      Tframe_Classic(TreeDetailFrame).SetMemoText(col1,isXml,isJson);
 end;
 
 // ------------------------------------------------------------------------------
@@ -1476,7 +1475,7 @@ var
 
 begin
    SetCursor(Screen.Cursors[crHourGlass]);
-   frame_Classic.SetMemoText('',false,false);
+   Tframe_Classic(TreeDetailFrame).SetMemoText('',false,false);
    try
       // scroll into view
       if Node <> nil then
@@ -1552,8 +1551,7 @@ begin
             AddOneLineDetail('', TreeRec.Columns[c], '');
          end;
 
-      end
-      else begin
+      end  else begin
          if TreeRec.ProcessName <> '' then
             AddOneLineDetail('Process Name', TreeRec.ProcessName, '');
 
@@ -1593,13 +1591,13 @@ begin
                      //end;
                      //TFrame_XML(XmlFrame).AddDetails(TreeRec, SubMember);
 
-                     frame_Classic.AddDetails(TreeRec, SubMember);
+                     Tframe_Classic(TreeDetailFrame).AddDetails(TreeRec, SubMember);
                      if ( SubMember.col1.StartsWith('<')) then
-                        frame_Classic.SetMemoText(SubMember.col1,true,false)
+                        Tframe_Classic(TreeDetailFrame).SetMemoText(SubMember.col1,true,false)
                      else if ( SubMember.col1.StartsWith('{')) then
-                        frame_Classic.SetMemoText(SubMember.col1,false,true)
+                        Tframe_Classic(TreeDetailFrame).SetMemoText(SubMember.col1,false,true)
                      else
-                        frame_Classic.SetMemoText(SubMember.col1,false,false);
+                        Tframe_Classic(TreeDetailFrame).SetMemoText(SubMember.col1,false,false);
 
                      // add detail to frame and add frame to CurrentViewers
                   end;
@@ -1630,7 +1628,7 @@ begin
                   begin
                      // since version 12.4 : reset col3 for all submembers if viewer kind is Dump
                      CalculateDump(SubMember) ;
-                     frame_Classic.AddDetails(TreeRec, SubMember);
+                     Tframe_Classic(TreeDetailFrame).AddDetails(TreeRec, SubMember);
                   end ;
 
                // CST_VIEWER_STACK :   // stack
@@ -1640,7 +1638,7 @@ begin
                // CST_VIEWER_EXIT  :   // exit method
                // CST_VIEWER_TXT   :   // text added to default viewer
             else
-               frame_Classic.AddDetails(TreeRec, SubMember);
+               Tframe_Classic(TreeDetailFrame).AddDetails(TreeRec, SubMember);
             end; // end case
          end; // next member
       end;
@@ -2511,7 +2509,7 @@ begin
       Node := VstDetail.FocusedNode;
       if Node = nil then
          exit;
-      frame_Classic.VstDetailGetText (VstDetail, Node, VstDetail.FocusedColumn, ttNormal, CellText);
+      Tframe_Classic(TreeDetailFrame).VstDetailGetText (VstDetail, Node, VstDetail.FocusedColumn, ttNormal, CellText);
       // ttNormal
    end
    else begin
@@ -4399,7 +4397,7 @@ begin
          CheckNode(vstTrace.RootNode); // check if the node or one of his child match the search text
 
    vstTrace.Refresh; // force repaint the gutter
-   frame_Classic.VstDetail.Refresh;
+   Tframe_Classic(TreeDetailFrame).VstDetail.Refresh;
    // repaint detail for highlight
 end;
 
