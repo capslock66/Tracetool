@@ -287,10 +287,8 @@ uses
    , unt_ODS
    , unt_traceWinProperty
    , unt_plugin
-   //, unt_decode
    , unt_Details_base
    , unt_Details_bitmap
-   //, unt_Details_xml
    , unt_Details_table
    , unt_Details_Classic
    , Unt_TailProgress
@@ -1087,18 +1085,22 @@ begin
                      CellText := inttostr(TreeRec.TreeIcon);
                end;
             end;
+
          1: begin
                CellText := TreeRec.Time;
                // LongTimeFormat := 'hh:mm:ss:zzz' ;
             end;
-         2:
-            CellText := TreeRec.ThreadID;
+
+         2: CellText := TreeRec.ThreadID;
+
          3: begin
                if TreeRec.LeftMsg = '' then
                   CellText := ' '
                else if (TextType = ttNormal) and
                   (IsSeparator(TreeRec.LeftMsg)) then
                   CellText := ' ' // check underline / TextType
+               else if Length(TreeRec.LeftMsg) > 400 then
+                  CellText := Copy(TreeRec.LeftMsg, 1, 400) + '...'
                else
                   CellText := TreeRec.LeftMsg;
             end;
@@ -1107,10 +1109,12 @@ begin
                if (TextType = ttNormal) and (IsSeparator(TreeRec.RightMsg))
                   then
                   CellText := ' ' // check underline / TextType
+               else if Length(TreeRec.RightMsg) > 400 then
+                  CellText := Copy(TreeRec.RightMsg, 1, 400) + '...'
                else
                   CellText := TreeRec.RightMsg;
-
             end;
+
          998: // used only by the filter : return the info
             begin
             end;

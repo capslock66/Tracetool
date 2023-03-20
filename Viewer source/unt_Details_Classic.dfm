@@ -125,7 +125,7 @@ inherited frame_Classic: Tframe_Classic
       Height = 21
       AutoSize = True
       ButtonHeight = 21
-      ButtonWidth = 79
+      ButtonWidth = 69
       Caption = 'ToolBar1'
       ShowCaptions = True
       TabOrder = 1
@@ -174,24 +174,8 @@ inherited frame_Classic: Tframe_Classic
         ImageIndex = 4
         OnClick = FormatButtonClick
       end
-      object ToolButton5: TToolButton
-        Left = 170
-        Top = 0
-        Width = 8
-        Caption = 'ToolButton5'
-        ImageIndex = 5
-        Style = tbsSeparator
-      end
-      object ShowFullButton: TToolButton
-        Left = 178
-        Top = 0
-        AutoSize = True
-        Caption = ' Show full text '
-        ImageIndex = 3
-        OnClick = ShowFullButtonClick
-      end
       object ToolButton3: TToolButton
-        Left = 261
+        Left = 170
         Top = 0
         Width = 8
         Caption = 'ToolButton3'
@@ -199,7 +183,7 @@ inherited frame_Classic: Tframe_Classic
         Style = tbsSeparator
       end
       object ShowPopupButton: TToolButton
-        Left = 269
+        Left = 178
         Top = 0
         AutoSize = True
         Caption = ' Show Popup'

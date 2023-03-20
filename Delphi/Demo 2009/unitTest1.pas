@@ -393,6 +393,19 @@ var
    myTlist: TList<TForm>;
 {$ENDIF COMPILER_12_UP}
 
+  function GetLongStr: string;
+  var
+    I,J: Integer;
+  begin
+    Result := '';
+    for I := 0 to 9 do begin
+       Result := Result + inttostr(I) + ' ';
+       for J := 1 to 1000 do
+          Result := Result + inttostr(J) + 's';
+       Result := Result + #13#10;
+    end;
+  end;
+
 begin
 
    // the euro char is coded in $AC $20 in unicode and $80 in single byte
@@ -424,7 +437,7 @@ begin
    TTrace.Debug.Send('Single byte string', String(SingleByteString));
 
    // long text
-   TTrace.Debug.Send('qwerty  qwerty qwerty qwerty qwerty qwerty qwerty qwerty qwerty qwerty ');
+   TTrace.Debug.Send('Long Text', GetLongStr());
    TTrace.Debug.Send('hello' + #13 + #10 + 'world');
 
    // single separator

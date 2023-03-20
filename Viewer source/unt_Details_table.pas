@@ -224,6 +224,8 @@ begin
 
    if Column >= DetailRec.Columns.count then
       CellText := ''
+   else if Length(DetailRec.Columns[Column]) > 400 then
+      CellText := Copy(DetailRec.Columns[Column], 1, 400) + '...'
    else
       CellText := DetailRec.Columns[Column] ;
 end;

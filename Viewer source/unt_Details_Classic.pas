@@ -33,12 +33,10 @@ type
     ShowAsXmlButton: TToolButton;
     ShowAsJSonButton: TToolButton;
     ToolButton4: TToolButton;
-    ShowFullButton: TToolButton;
     FormatButton: TToolButton;
     XMLDocument: TXMLDocument;
     ShowPopupButton: TToolButton;
     ToolButton3: TToolButton;
-    ToolButton5: TToolButton;
     procedure VstDetailCreateEditor(Sender: TBaseVirtualTree;
       Node: PVirtualNode; Column: TColumnIndex; out EditLink: IVTEditLink);
     procedure VstDetailDblClick(Sender: TObject);
@@ -74,7 +72,6 @@ type
     procedure ShowAsTextButtonClick(Sender: TObject);
     procedure ShowAsXmlButtonClick(Sender: TObject);
     procedure ShowAsJSonButtonClick(Sender: TObject);
-    procedure ShowFullButtonClick(Sender: TObject);
     procedure FormatButtonClick(Sender: TObject);
   private
     procedure WMStartEditingMember(var Message: TMessage); message WM_STARTEDITING_MEMBER;
@@ -325,14 +322,6 @@ end;
 
 //------------------------------------------------------------------------------
 
-procedure Tframe_Classic.ShowFullButtonClick(Sender: TObject);
-begin
-  inherited;
-
-end;
-
-//------------------------------------------------------------------------------
-
 procedure Tframe_Classic.VstDetailCreateEditor(Sender: TBaseVirtualTree;
   Node: PVirtualNode; Column: TColumnIndex; out EditLink: IVTEditLink);
 begin
@@ -453,9 +442,20 @@ begin
    end ;
 
    case Column of
-      0 : CellText := DetailRec.Col1 ;
-      1 : CellText := DetailRec.Col2 ;
-      2 : CellText := DetailRec.Col3 ;
+      0 : if Length(DetailRec.Col1) > 400 then
+             CellText := Copy(DetailRec.Col1, 1, 400) + '...'
+          else
+             CellText := Copy(DetailRec.Col1, 1, 400);
+
+      1 : if Length(DetailRec.Col2) > 400 then
+             CellText := Copy(DetailRec.Col2, 1, 400) + '...'
+          else
+             CellText := Copy(DetailRec.Col2, 1, 400);
+
+      2 : if Length(DetailRec.Col1) > 400 then
+             CellText := Copy(DetailRec.Col3, 1, 400) + '...'
+          else
+             CellText := Copy(DetailRec.Col3, 1, 400);
    end ;
 end;
 
@@ -586,6 +586,7 @@ procedure Tframe_Classic.AddDetails(TreeRec: PTreeRec; RootMember: TMember);
       VstDetail.ReinitNode(DetailNode,false);
       DetailNode.Align := (VstDetail.DefaultNodeHeight div 2)-2 ;
       DetailRec := VstDetail.GetNodeData(DetailNode) ;
+
       DetailRec.Col1 := Member.col1 ;
       DetailRec.Col2 := Member.col2 ;
       DetailRec.Col3 := Member.col3 ;
