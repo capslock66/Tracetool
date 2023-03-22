@@ -1096,18 +1096,13 @@ begin
                else if (TextType = ttNormal) and
                   (IsSeparator(TreeRec.LeftMsg)) then
                   CellText := ' ' // check underline / TextType
-               else if Length(TreeRec.LeftMsg) > 400 then
-                  CellText := Copy(TreeRec.LeftMsg, 1, 400) + '...'
                else
                   CellText := TreeRec.LeftMsg;
             end;
 
          4: begin
-               if (TextType = ttNormal) and (IsSeparator(TreeRec.RightMsg))
-                  then
+               if (TextType = ttNormal) and (IsSeparator(TreeRec.RightMsg)) then
                   CellText := ' ' // check underline / TextType
-               else if Length(TreeRec.RightMsg) > 400 then
-                  CellText := Copy(TreeRec.RightMsg, 1, 400) + '...'
                else
                   CellText := TreeRec.RightMsg;
             end;
@@ -1117,6 +1112,8 @@ begin
             end;
       end;
    end;
+   if Length(CellText) > 400 then
+      CellText := Copy(CellText, 1, 400) + '...'
 end;
 
 // ------------------------------------------------------------------------------

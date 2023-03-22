@@ -302,21 +302,12 @@ begin
    end ;
 
    case Column of
-      0 : if Length(DetailRec.Col1) > 400 then
-             CellText := Copy(DetailRec.Col1, 1, 400) + '...'
-          else
-             CellText := Copy(DetailRec.Col1, 1, 400);
-
-      1 : if Length(DetailRec.Col2) > 400 then
-             CellText := Copy(DetailRec.Col2, 1, 400) + '...'
-          else
-             CellText := Copy(DetailRec.Col2, 1, 400);
-
-      2 : if Length(DetailRec.Col1) > 400 then
-             CellText := Copy(DetailRec.Col3, 1, 400) + '...'
-          else
-             CellText := Copy(DetailRec.Col3, 1, 400);
+      0 : CellText := DetailRec.Col1;
+      1 : CellText := DetailRec.Col2;
+      2 : CellText := DetailRec.Col3;
    end ;
+   if Length(CellText) > 400 then
+      CellText := Copy(CellText, 1, 400) + '...'
 end;
 
 //------------------------------------------------------------------------------

@@ -313,6 +313,8 @@ begin
                 CellText := ODSRec.LeftMsg ;
           end ;
    end ;
+   if Length(CellText) > 400 then
+      CellText := Copy(CellText, 1, 400) + '...'
 end;
 
 //------------------------------------------------------------------------------
@@ -366,6 +368,7 @@ begin
    if Node <> nil then
       Sender.ScrollIntoView (Node,false,false);     // center and horizontally false
 
+   frameMemo.SetMemoText('',false,false);
    // get first then second. If second is not nil then it's multiselect : disable info panel
    FirstSelect := VstDebugString.GetNextSelected (nil) ;
    if FirstSelect = nil then
@@ -382,9 +385,10 @@ begin
    ODSRec := Sender.GetNodeData(FirstSelect) ;  // node
 
    // TraceInfo panel
-   AddOneLineDetail ('Process Name'   , ODSRec.ProcessName) ;
-   AddOneLineDetail ('Time'           , ODSRec.Time) ;
-   AddOneLineDetail ('Message'  , ODSRec.LeftMsg) ;
+   AddOneLineDetail ('Process Name' , ODSRec.ProcessName) ;
+   AddOneLineDetail ('Time'         , ODSRec.Time) ;
+   AddOneLineDetail ('Message'      , ODSRec.LeftMsg) ;
+   frameMemo.SetMemoText(ODSRec.LeftMsg,false,false);
 end;
 
 //------------------------------------------------------------------------------
@@ -573,6 +577,8 @@ begin
       1 : CellText := DetailRec.Col2 ;
       2 : CellText := DetailRec.Col3 ;
    end ;
+   if Length(CellText) > 400 then
+      CellText := Copy(CellText, 1, 400) + '...'
 end;
 
 //------------------------------------------------------------------------------

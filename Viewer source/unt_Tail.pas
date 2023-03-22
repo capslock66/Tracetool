@@ -1453,7 +1453,8 @@ begin
             CellText := ' ' ;
       end ;
    end ;
-
+   if Length(CellText) > 400 then
+      CellText := Copy(CellText, 1, 400) + '...'
 end;
 
 //------------------------------------------------------------------------------
@@ -1596,6 +1597,7 @@ begin
    if Node <> nil then
       Sender.ScrollIntoView (Node,false,false);     // center and horizontally false
 
+   frameMemo.SetMemoText('',false,false);
    // get first then second. If second is not nil then it's multiselect : disable info panel
    FirstSelect := VstTail.GetNextSelected (nil) ;
    if FirstSelect = nil then
@@ -1616,6 +1618,7 @@ begin
    if TailRec.Columns = nil then begin
       AddOneLineDetail ('Time '  , TailRec.Time) ;
       AddOneLineDetail ('Msg  '  , TailRec.Msg) ;
+      frameMemo.SetMemoText(TailRec.Msg,false,false);
    end else begin
 
       // -1 indicate a RED TailRec.Msg message
@@ -1648,9 +1651,10 @@ begin
             coltitle := col.Text ;
 
          // tailRec can contain less column than the tree
-         if ColIdx < TailRec.Columns.count then
-            AddOneLineDetail (coltitle , RemoveLastCRLF(TailRec.Columns[ColIdx]))
-         else
+         if ColIdx < TailRec.Columns.count then begin
+            AddOneLineDetail (coltitle , RemoveLastCRLF(TailRec.Columns[ColIdx]));
+            frameMemo.SetMemoText(TailRec.Columns[ColIdx],false,false);
+         end else
             AddOneLineDetail (coltitle, '') ;
          ColIdx := vstTail.Header.Columns.GetNextVisibleColumn(ColIdx) ;
       end ;
@@ -1658,8 +1662,8 @@ begin
       // if more TreeRec.Columns than vst.Header.Columns then add lines
       for c := vstTail.Header.Columns.Count to TailRec.Columns.count-1 do begin
          AddOneLineDetail ('', TailRec.Columns[c]) ;
+         frameMemo.SetMemoText(TailRec.Columns[c],false,false);
       end ;
-
    end ;
 end;
 
@@ -2185,6 +2189,8 @@ begin
       1 : CellText := DetailRec.Col2 ;
       2 : CellText := DetailRec.Col3 ;
    end ;
+   if Length(CellText) > 400 then
+      CellText := Copy(CellText, 1, 400) + '...'
 end;
 
 //------------------------------------------------------------------------------

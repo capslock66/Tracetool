@@ -528,6 +528,7 @@ begin
    if Node <> nil then
       Sender.ScrollIntoView (Node,false,false);     // center and horizontally false
 
+   frameMemo.SetMemoText('',false,false);
    // get first then second. If second is not nil then it's multiselect : disable info panel
    FirstSelect := VstEvent.GetNextSelected (nil) ;
    if FirstSelect = nil then
@@ -672,6 +673,8 @@ begin
       on e : exception do
          TFrm_Trace.InternalTrace(e.Message) ;
    end ;
+   if Length(CellText) > 400 then
+      CellText := Copy(CellText, 1, 400) + '...'
 end;
 
 //------------------------------------------------------------------------------
@@ -815,6 +818,8 @@ begin
       on e : exception do
          TFrm_Trace.InternalTrace(e.Message) ;
    end ;
+   if Length(CellText) > 400 then
+      CellText := Copy(CellText, 1, 400) + '...'
 end;
 
 //------------------------------------------------------------------------------

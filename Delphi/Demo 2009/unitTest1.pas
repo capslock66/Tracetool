@@ -242,6 +242,20 @@ implementation
 
 {$R *.DFM}
 
+
+function GetLongStr: string;
+var
+  I,J: Integer;
+begin
+  Result := 'My long text multi line'+ #13#10;
+  for I := 0 to 9 do begin
+     Result := Result + inttostr(I) + ' ';
+     for J := 1 to 700 do
+        Result := Result + inttostr(J) + 's';
+     Result := Result + #13#10;
+  end;
+end;
+
 // ------------------------------------------------------------------------------
 // ------------------------------------------------------------------------------
 // ------------------------------------------------------------------------------
@@ -393,18 +407,6 @@ var
    myTlist: TList<TForm>;
 {$ENDIF COMPILER_12_UP}
 
-  function GetLongStr: string;
-  var
-    I,J: Integer;
-  begin
-    Result := '';
-    for I := 0 to 9 do begin
-       Result := Result + inttostr(I) + ' ';
-       for J := 1 to 1000 do
-          Result := Result + inttostr(J) + 's';
-       Result := Result + #13#10;
-    end;
-  end;
 
 begin
 
@@ -812,29 +814,44 @@ end;
 var lastTest: integer = 0;
 
 procedure Tform1.btnODSClick(Sender: TObject);
+  function GetLongStr: string;
+  var
+    I,J: Integer;
+  begin
+    Result := 'My long text multi line'+ #13#10;
+    for I := 0 to 9 do begin
+       Result := Result + inttostr(I) + ' ';
+       for J := 1 to 500 do
+          Result := Result + inttostr(J) + 's';
+       Result := Result + #13#10;
+    end;
+    Result := Result + #13#10 + 'Last line';
+  end;
 begin
    inc(lastTest);
    // the native version of OutputDebugString is ASCII. So the A and W versions write messages as ansiString.
    OutputDebugStringA(pAnsiChar(AnsiString('test Ansi String ' + inttostr(lastTest))));
    OutputDebugStringW(pWideChar('test Unicode String ' + inttostr(lastTest)));
+   OutputDebugStringW(pWideChar(GetLongStr()));
 end;
 
 // ------------------------------------------------------------------------------
 
 procedure Tform1.butTail1Click(Sender: TObject);
 const
-   fName: string = 'c:\log.txt';
+   fName: string = 'c:\temp\log.txt';
 var
    f: textfile;
 begin
    assignfile(f, fName);
-   if fileexists(fName)
-   then
-         append(f)
+   if fileexists(fName) then
+      append(f)
    else
-         rewrite(f);
+      rewrite(f);
    inc(lastTest);
    writeln(f, 'test ' + inttostr(lastTest) + #0 + 'x');
+   writeln(f, GetLongStr() );
+
    closefile(f);
 end;
 
@@ -842,16 +859,15 @@ end;
 
 procedure Tform1.butTail2Click(Sender: TObject);
 const
-   fName: string = 'c:\log.txt';
+   fName: string = 'c:\temp\log.txt';
 var
    f: textfile;
 begin
    assignfile(f, fName);
-   if fileexists(fName)
-   then
-         append(f)
+   if fileexists(fName) then
+      append(f)
    else
-         rewrite(f);
+      rewrite(f);
    inc(lastTest);
    write(f, 'A ' + inttostr(lastTest) + #0 + 'x');
    closefile(f);
@@ -861,16 +877,15 @@ end;
 
 procedure Tform1.butTail3Click(Sender: TObject);
 const
-   fName: string = 'c:\log.txt';
+   fName: string = 'c:\temp\log.txt';
 var
    f: textfile;
 begin
    assignfile(f, fName);
-   if fileexists(fName)
-   then
-         append(f)
+   if fileexists(fName) then
+      append(f)
    else
-         rewrite(f);
+      rewrite(f);
 
    writeln(f, Memo2.lines.Text);
    closefile(f);
