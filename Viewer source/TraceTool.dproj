@@ -234,6 +234,11 @@
             <Form>DetailPopupForm</Form>
             <FormType>dfm</FormType>
         </DCCReference>
+        <DCCReference Include="unt_FrameMemo.pas">
+            <Form>FrameMemo</Form>
+            <FormType>dfm</FormType>
+            <DesignClass>TFrame</DesignClass>
+        </DCCReference>
         <None Include="FastMM4Options.inc">
             <ContainerId>File</ContainerId>
         </None>

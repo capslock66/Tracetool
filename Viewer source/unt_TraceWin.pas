@@ -188,7 +188,6 @@ interface
          //XmlFrame: TFrame;
          TreeDetailFrame: TFrame;
          VstDetail: TVirtualStringTree;
-         SynMemo:TSynEdit;
          VstDetailHaschildren: boolean;
 
          Gutter: TImage;
@@ -345,7 +344,6 @@ begin
    // result.vstTrace.OnDrawNode := result.DrawNode ;
 end;
 
-
 // ------------------------------------------------------------------------------
 // ------------------------------------------------------------------------------
 // ------------------------------------------------------------------------------
@@ -487,7 +485,7 @@ begin
    TreeDetailFrame := temp_Classic;
    temp_Classic.Splitter.Visible := false; // no spliter for main detail
    VstDetail := temp_Classic.VstDetail;    // shortcut
-   SynMemo := temp_Classic.SynMemo;        // shortcut
+//   SynMemo := temp_Classic.SynMemo;        // shortcut
 
    ApplyFont(); // set font name and size for the 2 trees (from XMLConfig)
    ShowLog(); // change the LabelLogFile caption
@@ -1369,7 +1367,7 @@ begin
    VstDetail.MultiLine[DetailNode] := true;
 
    if (isXml or isJson) then
-      Tframe_Classic(TreeDetailFrame).SetMemoText(col1,isXml,isJson);
+      Tframe_Classic(TreeDetailFrame).frameMemo.SetMemoText(col1,isXml,isJson);
 end;
 
 // ------------------------------------------------------------------------------
@@ -1475,7 +1473,7 @@ var
 
 begin
    SetCursor(Screen.Cursors[crHourGlass]);
-   Tframe_Classic(TreeDetailFrame).SetMemoText('',false,false);
+   Tframe_Classic(TreeDetailFrame).frameMemo.SetMemoText('',false,false);
    try
       // scroll into view
       if Node <> nil then
@@ -1593,11 +1591,11 @@ begin
 
                      Tframe_Classic(TreeDetailFrame).AddDetails(TreeRec, SubMember);
                      if ( SubMember.col1.StartsWith('<')) then
-                        Tframe_Classic(TreeDetailFrame).SetMemoText(SubMember.col1,true,false)
+                        Tframe_Classic(TreeDetailFrame).frameMemo.SetMemoText(SubMember.col1,true,false)
                      else if ( SubMember.col1.StartsWith('{')) then
-                        Tframe_Classic(TreeDetailFrame).SetMemoText(SubMember.col1,false,true)
+                        Tframe_Classic(TreeDetailFrame).frameMemo.SetMemoText(SubMember.col1,false,true)
                      else
-                        Tframe_Classic(TreeDetailFrame).SetMemoText(SubMember.col1,false,false);
+                        Tframe_Classic(TreeDetailFrame).frameMemo.SetMemoText(SubMember.col1,false,false);
 
                      // add detail to frame and add frame to CurrentViewers
                   end;

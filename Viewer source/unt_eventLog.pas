@@ -16,7 +16,7 @@ uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms, Clipbrd, xmldoc ,
   Dialogs, unt_base, StdCtrls, Buttons, VirtualTrees, Unt_Tool, pscMenu ,
   ExtCtrls, ComCtrls,Eventlog, unt_tracewin, unt_PageContainer, unt_editor, vstSort,unt_filter,
-  Menus, untPrintPreview;
+  Menus, untPrintPreview, Vcl.ToolWin, SynEdit, unt_FrameMemo;
 
 type
 
@@ -50,11 +50,8 @@ type
     N1: TMenuItem;
     mnuTogglebookmark: TMenuItem;
     SelectAll1: TMenuItem;
-    PopupDetail: TPopupMenu;
-    MenuItem2: TMenuItem;
-    MenuItem3: TMenuItem;
-    N2: TMenuItem;
-    MenuItem1: TMenuItem;
+    SplitterH: TSplitter;
+    FrameMemo: TFrameMemo;
     procedure FormCreate(Sender: TObject);
     procedure VstEventChange(Sender: TBaseVirtualTree; Node: PVirtualNode);
     procedure VstEventGetText(Sender: TBaseVirtualTree; Node: PVirtualNode;
@@ -117,6 +114,10 @@ type
       Column: TColumnIndex; var Allowed: Boolean);
     procedure VstEventEditing(Sender: TBaseVirtualTree; Node: PVirtualNode;
       Column: TColumnIndex; var Allowed: Boolean);
+    procedure VstDetailColumnClick(Sender: TBaseVirtualTree;
+      Column: TColumnIndex; Shift: TShiftState);
+    procedure VstDetailFocusChanged(Sender: TBaseVirtualTree;
+      Node: PVirtualNode; Column: TColumnIndex);
 
   private
     fLogName : string ;
@@ -184,6 +185,7 @@ uses
 procedure TFrmEventLog.FormCreate(Sender: TObject);
 begin
    inherited ;
+   FrameMemo.Height := 120 ;
    ApplyFont() ;  // set font name and size for the 2 trees (from XMLConfig)
 
    vst := VstEvent ;
@@ -740,6 +742,50 @@ end;
 
 //------------------------------------------------------------------------------
 
+procedure TFrmEventLog.VstDetailFocusChanged(Sender: TBaseVirtualTree;  Node: PVirtualNode; Column: TColumnIndex);
+var
+   CellText: String;
+   Member : TMember  ;
+begin
+   if (Node = nil) then
+      exit;
+   Member := TMember (TObject (Sender.GetNodeData(Node)^)) ;
+   if Member = nil then
+      exit ;
+   case Column of
+      0 : CellText := Member.Col1 ;
+      1 : CellText := Member.Col2 ;
+      2 : CellText := Member.Col3 ;
+      else  CellText := '' ;
+   end ;
+   frameMemo.SetMemoText(CellText,false,false);
+end;
+
+//------------------------------------------------------------------------------
+
+procedure TFrmEventLog.VstDetailColumnClick(Sender: TBaseVirtualTree;  Column: TColumnIndex; Shift: TShiftState);
+var
+   CellText: String;
+   SelectedNode : PVirtualNode ;
+   Member : TMember  ;
+begin
+   SelectedNode := VstDetail.GetFirstSelected  ;
+   if SelectedNode = nil then
+     exit ;
+   Member := TMember (TObject (Sender.GetNodeData(SelectedNode)^)) ;
+   if Member = nil then
+      exit ;
+   case Column of
+      0 : CellText := Member.Col1 ;
+      1 : CellText := Member.Col2 ;
+      2 : CellText := Member.Col3 ;
+      else  CellText := '' ;
+   end ;
+   frameMemo.SetMemoText(CellText,false,false);
+end;
+
+//------------------------------------------------------------------------------
+
 procedure TFrmEventLog.VstDetailGetText(Sender: TBaseVirtualTree;
   Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType;
   var CellText: String);
@@ -750,22 +796,21 @@ begin
 
    CellText := '' ;
    try
+     SelectedCompoNode := VstEvent.GetFirstSelected ;
+     if SelectedCompoNode = nil then
+        exit ;
 
-   SelectedCompoNode := VstEvent.GetFirstSelected ;
-   if SelectedCompoNode = nil then
-      exit ;
+     //ptr :=  ;
 
-   //ptr :=  ;
-
-   Member := TMember (TObject (Sender.GetNodeData(Node)^)) ;
-   if Member = nil then
-      exit ;
-   case Column of
-      0 : CellText := Member.Col1 ;
-      1 : CellText := Member.Col2 ;
-      2 : CellText := Member.Col3 ;
-      else  CellText := '' ;
-   end ;
+     Member := TMember (TObject (Sender.GetNodeData(Node)^)) ;
+     if Member = nil then
+        exit ;
+     case Column of
+        0 : CellText := Member.Col1 ;
+        1 : CellText := Member.Col2 ;
+        2 : CellText := Member.Col3 ;
+        else  CellText := '' ;
+     end ;
    except
       on e : exception do
          TFrm_Trace.InternalTrace(e.Message) ;
@@ -1682,7 +1727,6 @@ begin
    Filter.ShowModal() ;
 
 end;
-
 //------------------------------------------------------------------------------
 
 function TFrmEventLog.getMembers(Node: PVirtualNode): TMember;

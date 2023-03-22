@@ -55,7 +55,8 @@ uses
   Config in 'Config.pas',
   unt_TraceConfig in 'unt_TraceConfig.pas',
   unt_AddLine in 'unt_AddLine.pas' {Frm_AddLine},
-  unt_detailPopup in 'unt_detailPopup.pas' {DetailPopupForm};
+  unt_detailPopup in 'unt_detailPopup.pas' {DetailPopupForm},
+  unt_FrameMemo in 'unt_FrameMemo.pas' {FrameMemo: TFrame};
 
 {$R *.res}
 
@@ -80,16 +81,16 @@ begin
    Application.Initialize;
    Application.Title := 'TraceTool';
    Application.CreateForm(TFrm_Tool, Frm_Tool);
-   Application.CreateForm(TfrmDebugOptions, frmDebugOptions);
-   Application.CreateForm(TFormReceiver, FormReceiver);
-   Application.CreateForm(TFrmAbout, FrmAbout);
-   Application.CreateForm(TFrmSelectEvent, FrmSelectEvent);
-   Application.CreateForm(TFrmSave, FrmSave);
-    Application.CreateForm(TFrmTraceWinProp, FrmTraceWinProp);
-   Application.CreateForm(TFrmSearch, FrmSearch);
-   Application.CreateForm(TFrmPrintPreview, FrmPrintPreview);
-   Application.CreateForm(TFrm_AddLine, Frm_AddLine);
-   if Frm_Tool.InitError <> '' then
+  Application.CreateForm(TfrmDebugOptions, frmDebugOptions);
+  Application.CreateForm(TFormReceiver, FormReceiver);
+  Application.CreateForm(TFrmAbout, FrmAbout);
+  Application.CreateForm(TFrmSelectEvent, FrmSelectEvent);
+  Application.CreateForm(TFrmSave, FrmSave);
+  Application.CreateForm(TFrmTraceWinProp, FrmTraceWinProp);
+  Application.CreateForm(TFrmSearch, FrmSearch);
+  Application.CreateForm(TFrmPrintPreview, FrmPrintPreview);
+  Application.CreateForm(TFrm_AddLine, Frm_AddLine);
+  if Frm_Tool.InitError <> '' then
       exit ;
    //LowTrace ('Application.Run') ;
    Application.Run;

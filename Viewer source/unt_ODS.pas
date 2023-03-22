@@ -20,7 +20,8 @@ uses
   Dialogs, StdCtrls, ExtCtrls, VirtualTrees, Menus, XMLDoc, XMLIntf, pscMenu ,
   application6,  // the generated delphi code for the XML schema (Application6.xsd)
   ComCtrls, ToolWin, ImgList,  ActnList , clipbrd, SyncObjs, Contnrs, Unt_Tool,
-  DebugOptions , unt_base,  Buttons, unt_pageContainer, unt_editor , VstSort,unt_filter, untPrintPreview;
+  DebugOptions , unt_base,  Buttons, unt_pageContainer, unt_editor , VstSort,unt_filter, untPrintPreview,
+  unt_FrameMemo;
 
 {$Include TraceTool.Inc}
 
@@ -83,6 +84,8 @@ type
     MenuItem3: TMenuItem;
     N2: TMenuItem;
     MenuItem1: TMenuItem;
+    SplitterH: TSplitter;
+    FrameMemo: TFrameMemo;
     procedure FormCreate(Sender: TObject);
     procedure VstDebugStringGetText(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex;
     TextType: TVSTTextType; var CellText: String);
@@ -138,6 +141,10 @@ type
       CellPaintMode: TVTCellPaintMode; CellRect: TRect; var ContentRect: TRect);
     procedure VstDebugStringEditing(Sender: TBaseVirtualTree;
       Node: PVirtualNode; Column: TColumnIndex; var Allowed: Boolean);
+    procedure VstDetailColumnClick(Sender: TBaseVirtualTree;
+      Column: TColumnIndex; Shift: TShiftState);
+    procedure VstDetailFocusChanged(Sender: TBaseVirtualTree;
+      Node: PVirtualNode; Column: TColumnIndex);
 
   private
     Sorter : TVstSort ;
@@ -201,6 +208,7 @@ uses
 procedure TFrm_ODS.FormCreate(Sender: TObject);
 begin
    inherited ;
+   FrameMemo.Height := 120 ;
    ApplyFont() ;  // set font name and size for the 2 trees (from XMLConfig)
 
    vst := VstDebugString ;
@@ -509,8 +517,49 @@ end;
 
 //------------------------------------------------------------------------------
 
-procedure TFrm_ODS.VstDetailGetText(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex;
-    TextType: TVSTTextType; var CellText: String);
+procedure TFrm_ODS.VstDetailFocusChanged(Sender: TBaseVirtualTree;  Node: PVirtualNode; Column: TColumnIndex);
+var
+   DetailRec : PDetailRec ;
+   CellText: String;
+begin
+   if (Node = nil) then
+      exit;
+   DetailRec := Sender.GetNodeData(Node) ;
+   if DetailRec = nil then
+      exit ;
+   case Column of
+      0 : CellText := DetailRec.Col1 ;
+      1 : CellText := DetailRec.Col2 ;
+      2 : CellText := DetailRec.Col3 ;
+   end ;
+   frameMemo.SetMemoText(CellText,false,false);
+end;
+
+//------------------------------------------------------------------------------
+
+procedure TFrm_ODS.VstDetailColumnClick(Sender: TBaseVirtualTree;  Column: TColumnIndex; Shift: TShiftState);
+var
+   DetailRec : PDetailRec ;
+   CellText: String;
+   SelectedNode : PVirtualNode ;
+begin
+   SelectedNode := VstDetail.GetFirstSelected  ;
+   if SelectedNode = nil then
+     exit ;
+   DetailRec := Sender.GetNodeData(SelectedNode) ;
+   if DetailRec = nil then
+      exit ;
+   case Column of
+      0 : CellText := DetailRec.Col1 ;
+      1 : CellText := DetailRec.Col2 ;
+      2 : CellText := DetailRec.Col3 ;
+   end ;
+   frameMemo.SetMemoText(CellText,false,false);
+end;
+
+//------------------------------------------------------------------------------
+
+procedure TFrm_ODS.VstDetailGetText(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType; var CellText: String);
 var
    DetailRec : PDetailRec ;
 begin

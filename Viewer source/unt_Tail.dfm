@@ -117,11 +117,20 @@ object FrmTail: TFrmTail
       Visible = False
       ExplicitLeft = 165
       ExplicitHeight = 214
+      object SplitterH: TSplitter
+        Left = 1
+        Top = 155
+        Width = 401
+        Height = 5
+        Cursor = crVSplit
+        Align = alBottom
+        ExplicitTop = 1
+      end
       object VstDetail: TVirtualStringTree
         Left = 1
         Top = 1
         Width = 401
-        Height = 226
+        Height = 154
         Align = alClient
         BevelOuter = bvNone
         Color = 16117479
@@ -153,16 +162,18 @@ object FrmTail: TFrmTail
         TreeOptions.SelectionOptions = [toExtendedFocus]
         OnBeforeCellPaint = VstDetailBeforeCellPaint
         OnChange = VstDetailChange
+        OnColumnClick = VstDetailColumnClick
         OnCreateEditor = VstDetailCreateEditor
         OnDblClick = VstDetailDblClick
         OnEditing = VstDetailEditing
+        OnFocusChanged = VstDetailFocusChanged
         OnFreeNode = VstDetailFreeNode
         OnGetText = VstDetailGetText
         OnPaintText = VstDetailPaintText
         OnMeasureItem = VstDetailMeasureItem
         Touch.InteractiveGestures = [igPan, igPressAndTap]
         Touch.InteractiveGestureOptions = [igoPanSingleFingerHorizontal, igoPanSingleFingerVertical, igoPanInertia, igoPanGutter, igoParentPassthrough]
-        ExplicitHeight = 212
+        ExplicitHeight = 136
         Columns = <
           item
             Color = 16117479
@@ -176,6 +187,29 @@ object FrmTail: TFrmTail
             Position = 1
             Width = 300
           end>
+      end
+      inline FrameMemo: TFrameMemo
+        Left = 1
+        Top = 160
+        Width = 401
+        Height = 67
+        Align = alBottom
+        TabOrder = 1
+        ExplicitLeft = 1
+        ExplicitTop = 160
+        ExplicitWidth = 401
+        ExplicitHeight = 67
+        inherited SynMemo: TSynEdit
+          Width = 401
+          Height = 38
+          ExplicitTop = 29
+          ExplicitWidth = 360
+        end
+        inherited PanelTop: TPanel
+          Width = 401
+          ExplicitLeft = 0
+          ExplicitWidth = 360
+        end
       end
     end
     object PanelTop: TPanel
