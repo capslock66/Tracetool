@@ -2,7 +2,7 @@
     <PropertyGroup>
         <ProjectGuid>{DDE1B30F-3590-4AE9-953D-1919A1B24350}</ProjectGuid>
         <MainSource>TraceTool.dpr</MainSource>
-        <Config Condition="'$(Config)'==''">Debug</Config>
+        <Config Condition="'$(Config)'==''">Release</Config>
         <DCC_DCCCompiler>DCC32</DCC_DCCCompiler>
         <ProjectVersion>19.2</ProjectVersion>
         <Base>True</Base>
