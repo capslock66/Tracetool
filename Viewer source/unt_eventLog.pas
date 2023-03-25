@@ -673,6 +673,9 @@ begin
       on e : exception do
          TFrm_Trace.InternalTrace(e.Message) ;
    end ;
+   if toEditable in VstEvent.TreeOptions.MiscOptions then
+      exit;
+
    if Length(CellText) > 400 then
       CellText := Copy(CellText, 1, 400) + '...'
 end;
@@ -818,6 +821,9 @@ begin
       on e : exception do
          TFrm_Trace.InternalTrace(e.Message) ;
    end ;
+   if toEditable in VstDetail.TreeOptions.MiscOptions then
+      exit;
+
    if Length(CellText) > 400 then
       CellText := Copy(CellText, 1, 400) + '...'
 end;

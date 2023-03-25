@@ -1112,6 +1112,10 @@ begin
             end;
       end;
    end;
+
+   if toEditable in vstTrace.TreeOptions.MiscOptions then
+      exit;
+
    if Length(CellText) > 400 then
       CellText := Copy(CellText, 1, 400) + '...'
 end;

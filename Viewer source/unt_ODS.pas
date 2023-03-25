@@ -313,6 +313,9 @@ begin
                 CellText := ODSRec.LeftMsg ;
           end ;
    end ;
+   if toEditable in VstDebugString.TreeOptions.MiscOptions then
+      exit;
+
    if Length(CellText) > 400 then
       CellText := Copy(CellText, 1, 400) + '...'
 end;
@@ -577,6 +580,9 @@ begin
       1 : CellText := DetailRec.Col2 ;
       2 : CellText := DetailRec.Col3 ;
    end ;
+   if toEditable in VstDetail.TreeOptions.MiscOptions then
+      exit;
+
    if Length(CellText) > 400 then
       CellText := Copy(CellText, 1, 400) + '...'
 end;

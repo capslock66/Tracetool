@@ -2,7 +2,7 @@
     <PropertyGroup>
         <ProjectGuid>{DDE1B30F-3590-4AE9-953D-1919A1B24350}</ProjectGuid>
         <MainSource>TraceTool.dpr</MainSource>
-        <Config Condition="'$(Config)'==''">Release</Config>
+        <Config Condition="'$(Config)'==''">Debug</Config>
         <DCC_DCCCompiler>DCC32</DCC_DCCCompiler>
         <ProjectVersion>19.2</ProjectVersion>
         <Base>True</Base>
@@ -112,6 +112,8 @@
         <AppDPIAwarenessMode>PerMonitorV2</AppDPIAwarenessMode>
         <Debugger_RunParams>/Debug</Debugger_RunParams>
         <VerInfo_Locale>1033</VerInfo_Locale>
+        <VerInfo_Build>564</VerInfo_Build>
+        <VerInfo_Keys>CompanyName=Thierry Parent;FileDescription=TraceTool utility;FileVersion=13.3.0.564;InternalName=TraceTool;LegalCopyright=Thierry Parent;LegalTrademarks=Thierry Parent;OriginalFilename=none;ProductName=TraceTool;ProductVersion=13.1;Comments=Freeware Trace utility for  Dot Net, Javascript, Java, Delphi,  C++ and Python</VerInfo_Keys>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_1_Win64)'!=''">
         <AppEnableRuntimeThemes>true</AppEnableRuntimeThemes>
@@ -129,6 +131,8 @@
         <AppEnableRuntimeThemes>true</AppEnableRuntimeThemes>
         <AppDPIAwarenessMode>PerMonitorV2</AppDPIAwarenessMode>
         <VerInfo_Locale>1033</VerInfo_Locale>
+        <VerInfo_Build>564</VerInfo_Build>
+        <VerInfo_Keys>CompanyName=Thierry Parent;FileDescription=TraceTool utility;FileVersion=13.3.0.564;InternalName=TraceTool;LegalCopyright=Thierry Parent;LegalTrademarks=Thierry Parent;OriginalFilename=none;ProductName=TraceTool;ProductVersion=13.1;Comments=Freeware Trace utility for  Dot Net, Javascript, Java, Delphi,  C++ and Python</VerInfo_Keys>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_2_Win64)'!=''">
         <AppEnableRuntimeThemes>true</AppEnableRuntimeThemes>

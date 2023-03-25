@@ -16,10 +16,10 @@
 	<AppDisplay>
 		<SmallBut Value="true"/>
 		<ApplicationTitle Value="socket: 8090 / 4502,  Http : 85, WebSocket:8091"/>
-		<Left Value="214"/>
-		<Top Value="510"/>
-		<Width Value="729"/>
-		<Height Value="416"/>
+		<Left Value="338"/>
+		<Top Value="338"/>
+		<Width Value="693"/>
+		<Height Value="635"/>
 		<StayOnTop Value="false"/>
 		<ShowOnstartup Value="true"/>
 		<ShowOnMessageReceived Value="false"/>
