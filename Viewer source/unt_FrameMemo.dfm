@@ -35,47 +35,49 @@ object FrameMemo: TFrameMemo
     Width = 360
     Height = 29
     Align = alTop
+    BevelEdges = []
+    BevelOuter = bvNone
     TabOrder = 1
     ExplicitLeft = -66
     ExplicitWidth = 386
     object ShowAsTextButton: TBitBtn
       Left = 0
       Top = 1
-      Width = 50
+      Width = 45
       Height = 25
       Caption = 'Text'
       TabOrder = 0
       OnClick = ShowAsTextButtonClick
     end
     object ShowAsXmlButton: TBitBtn
-      Left = 56
+      Left = 48
       Top = 1
-      Width = 50
+      Width = 45
       Height = 25
       Caption = 'Xml'
       TabOrder = 1
       OnClick = ShowAsXmlButtonClick
     end
     object ShowAsJSonButton: TBitBtn
-      Left = 112
+      Left = 96
       Top = 1
-      Width = 50
+      Width = 45
       Height = 25
       Caption = 'Json'
       TabOrder = 2
       OnClick = ShowAsJSonButtonClick
     end
     object FormatButton: TBitBtn
-      Left = 179
+      Left = 150
       Top = 1
-      Width = 75
+      Width = 50
       Height = 25
       Caption = 'Format'
       TabOrder = 3
       OnClick = FormatButtonClick
     end
     object ShowPopupButton: TBitBtn
-      Left = 260
+      Left = 203
       Top = 1
       Width = 85
       Height = 25
