@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.29613.14
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.33516.290
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DotNetWrapper", "DotNetWrapper\DotNetWrapper.vcxproj", "{38D75967-A122-4FA8-94C7-60479533FDC9}"
 EndProject
@@ -12,7 +12,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		.editorconfig = .editorconfig
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lib_Standard_20", "..\DotNet\LibsAndDemos\Lib_Standard_20\Lib_Standard_20.csproj", "{E344C199-A65F-4ABC-9D0C-F8ABF60D8FDD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lib_Standard_20", "..\DotNet\Libraries\Lib_Standard_20\Lib_Standard_20.csproj", "{E344C199-A65F-4ABC-9D0C-F8ABF60D8FDD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
