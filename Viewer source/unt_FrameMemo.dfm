@@ -1,14 +1,14 @@
 object FrameMemo: TFrameMemo
   Left = 0
   Top = 0
-  Width = 360
-  Height = 240
+  Width = 290
+  Height = 221
   TabOrder = 0
   object SynMemo: TSynEdit
     Left = 0
-    Top = 29
-    Width = 360
-    Height = 211
+    Top = 25
+    Width = 290
+    Height = 196
     Align = alClient
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clWindowText
@@ -26,24 +26,24 @@ object FrameMemo: TFrameMemo
     Gutter.Font.Style = []
     Gutter.Visible = False
     Gutter.Width = 0
-    ExplicitTop = 32
-    ExplicitWidth = 346
+    ExplicitTop = 29
+    ExplicitWidth = 360
+    ExplicitHeight = 211
   end
   object PanelTop: TPanel
     Left = 0
     Top = 0
-    Width = 360
-    Height = 29
+    Width = 290
+    Height = 25
     Align = alTop
     BevelEdges = []
     BevelOuter = bvNone
     TabOrder = 1
-    ExplicitLeft = -66
-    ExplicitWidth = 386
+    OnResize = PanelTopResize
     object ShowAsTextButton: TBitBtn
       Left = 0
-      Top = 1
-      Width = 45
+      Top = 0
+      Width = 42
       Height = 25
       Caption = 'Text'
       TabOrder = 0
@@ -51,7 +51,7 @@ object FrameMemo: TFrameMemo
     end
     object ShowAsXmlButton: TBitBtn
       Left = 48
-      Top = 1
+      Top = 0
       Width = 45
       Height = 25
       Caption = 'Xml'
@@ -59,8 +59,8 @@ object FrameMemo: TFrameMemo
       OnClick = ShowAsXmlButtonClick
     end
     object ShowAsJSonButton: TBitBtn
-      Left = 96
-      Top = 1
+      Left = 99
+      Top = 0
       Width = 45
       Height = 25
       Caption = 'Json'
@@ -69,7 +69,7 @@ object FrameMemo: TFrameMemo
     end
     object FormatButton: TBitBtn
       Left = 150
-      Top = 1
+      Top = 0
       Width = 50
       Height = 25
       Caption = 'Format'
@@ -78,7 +78,7 @@ object FrameMemo: TFrameMemo
     end
     object ShowPopupButton: TBitBtn
       Left = 203
-      Top = 1
+      Top = 0
       Width = 85
       Height = 25
       Caption = 'Show in Popup'

@@ -92,14 +92,20 @@ inherited frame_Classic: Tframe_Classic
     Height = 240
     Align = alBottom
     TabOrder = 1
+    OnCanResize = FrameMemoCanResize
     ExplicitTop = 161
     ExplicitWidth = 525
+    ExplicitHeight = 240
     inherited SynMemo: TSynEdit
       Width = 525
+      Height = 215
+      ExplicitTop = 25
       ExplicitWidth = 525
+      ExplicitHeight = 215
     end
     inherited PanelTop: TPanel
       Width = 525
+      ExplicitWidth = 525
     end
   end
   object PopupDetail: TPopupMenu

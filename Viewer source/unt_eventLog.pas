@@ -225,7 +225,12 @@ begin
    VstEvent.TreeOptions.SelectionOptions := Frm_ODS.VstDebugString.TreeOptions.SelectionOptions ;
    VstEvent.TreeOptions.MiscOptions      := Frm_ODS.VstDebugString.TreeOptions.MiscOptions ;
 
-   VstDetail.NodeDataSize := 4 ;
+   {$IFDEF WIN64}
+     VstDetail.NodeDataSize := 16 ;
+   {$ELSE}
+     VstDetail.NodeDataSize := 4 ;
+   {$ENDIF}
+
    VstDetail.Header.MainColumn := 0 ;
 
    // header must be visible to enable resize !

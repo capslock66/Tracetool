@@ -18,8 +18,6 @@ inherited FrmEventLog: TFrmEventLog
     BevelOuter = bvNone
     Caption = 'GroupPanel'
     TabOrder = 0
-    ExplicitWidth = 569
-    ExplicitHeight = 171
     object VSplitter: TSplitter
       Left = 349
       Top = 22
@@ -211,13 +209,11 @@ inherited FrmEventLog: TFrmEventLog
         ExplicitHeight = 156
         inherited SynMemo: TSynEdit
           Width = 381
-          Height = 127
-          ExplicitTop = 29
-          ExplicitWidth = 360
+          Height = 131
+          ExplicitHeight = 127
         end
         inherited PanelTop: TPanel
           Width = 381
-          ExplicitLeft = 0
           ExplicitWidth = 360
         end
       end

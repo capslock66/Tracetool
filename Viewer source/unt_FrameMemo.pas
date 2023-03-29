@@ -26,6 +26,7 @@ type
     procedure ShowAsJSonButtonClick(Sender: TObject);
     procedure FormatButtonClick(Sender: TObject);
     procedure ShowPopupButtonClick(Sender: TObject);
+    procedure PanelTopResize(Sender: TObject);
   private
   public
     procedure SetMemoText(text: string; isXml, isJson: boolean);
@@ -38,6 +39,30 @@ uses unt_detailPopup;
 {$R *.dfm}
 
 //------------------------------------------------------------------------------
+
+procedure TFrameMemo.PanelTopResize(Sender: TObject);
+begin
+   if width >= 290 then begin
+      ShowAsTextButton.left :=   0 ; ShowAsTextButton.width := 45 ; ShowAsTextButton.caption := 'Text' ;
+      ShowAsXmlButton .left :=  48 ; ShowAsXmlButton .width := 45 ; ShowAsXmlButton .caption := 'Xml' ;
+      ShowAsJSonButton.left :=  99 ; ShowAsJSonButton.width := 45 ; ShowAsJSonButton.caption := 'Json' ;
+      FormatButton    .left := 150 ; FormatButton    .width := 50 ; FormatButton    .caption := 'Format' ;
+      ShowPopupButton .left := 203 ; ShowPopupButton .width := 85 ; ShowPopupButton .caption := 'Show in popup' ;
+   end else if width >= 156 then begin
+      ShowAsTextButton.left :=   0 ; ShowAsTextButton.width := 25 ; ShowAsTextButton.caption := 'Txt' ;
+      ShowAsXmlButton .left :=  28 ; ShowAsXmlButton .width := 25 ; ShowAsXmlButton .caption := 'Xml' ;
+      ShowAsJSonButton.left :=  56 ; ShowAsJSonButton.width := 28 ; ShowAsJSonButton.caption := 'Json' ;
+      FormatButton    .left :=  87 ; FormatButton    .width := 25 ; FormatButton    .caption := 'Fmt' ;
+      ShowPopupButton .left := 115 ; ShowPopupButton .width := 38 ; ShowPopupButton .caption := 'Popup' ;
+   end else begin
+      ShowAsTextButton.left :=   0 ; ShowAsTextButton.width := 14 ; ShowAsTextButton.caption := 'T' ;
+      ShowAsXmlButton .left :=  15 ; ShowAsXmlButton .width := 14 ; ShowAsXmlButton .caption := 'X' ;
+      ShowAsJSonButton.left :=  30 ; ShowAsJSonButton.width := 14 ; ShowAsJSonButton.caption := 'J' ;
+      FormatButton    .left :=  45 ; FormatButton    .width := 19 ; FormatButton    .caption := 'F.' ;
+      ShowPopupButton .left :=  65 ; ShowPopupButton .width := 19 ; ShowPopupButton .caption := 'P.' ;
+   end;
+
+end;
 
 procedure TFrameMemo.SetMemoText(text: string; isXml:boolean; isJson : boolean);
 begin

@@ -9,15 +9,6 @@
         <Projects Include="TraceTool.dproj">
             <Dependencies/>
         </Projects>
-        <Projects Include="..\..\TTextEditor\Packages\TextEditor.Delphi.Sydney.Designtime.dproj">
-            <Dependencies/>
-        </Projects>
-        <Projects Include="..\..\TTextEditor\Packages\TextEditor.Delphi.Sydney.Runtime.dproj">
-            <Dependencies/>
-        </Projects>
-        <Projects Include="..\..\TTextEditor\Demos\Simple\TTextEditorDemo.dproj">
-            <Dependencies/>
-        </Projects>
     </ItemGroup>
     <ProjectExtensions>
         <Borland.Personality>Default.Personality.12</Borland.Personality>
@@ -44,41 +35,14 @@
     <Target Name="TraceTool:Make">
         <MSBuild Projects="TraceTool.dproj" Targets="Make"/>
     </Target>
-    <Target Name="TextEditor_Delphi_Sydney_Designtime">
-        <MSBuild Projects="..\..\TTextEditor\Packages\TextEditor.Delphi.Sydney.Designtime.dproj"/>
-    </Target>
-    <Target Name="TextEditor_Delphi_Sydney_Designtime:Clean">
-        <MSBuild Projects="..\..\TTextEditor\Packages\TextEditor.Delphi.Sydney.Designtime.dproj" Targets="Clean"/>
-    </Target>
-    <Target Name="TextEditor_Delphi_Sydney_Designtime:Make">
-        <MSBuild Projects="..\..\TTextEditor\Packages\TextEditor.Delphi.Sydney.Designtime.dproj" Targets="Make"/>
-    </Target>
-    <Target Name="TextEditor_Delphi_Sydney_Runtime">
-        <MSBuild Projects="..\..\TTextEditor\Packages\TextEditor.Delphi.Sydney.Runtime.dproj"/>
-    </Target>
-    <Target Name="TextEditor_Delphi_Sydney_Runtime:Clean">
-        <MSBuild Projects="..\..\TTextEditor\Packages\TextEditor.Delphi.Sydney.Runtime.dproj" Targets="Clean"/>
-    </Target>
-    <Target Name="TextEditor_Delphi_Sydney_Runtime:Make">
-        <MSBuild Projects="..\..\TTextEditor\Packages\TextEditor.Delphi.Sydney.Runtime.dproj" Targets="Make"/>
-    </Target>
-    <Target Name="TTextEditorDemo">
-        <MSBuild Projects="..\..\TTextEditor\Demos\Simple\TTextEditorDemo.dproj"/>
-    </Target>
-    <Target Name="TTextEditorDemo:Clean">
-        <MSBuild Projects="..\..\TTextEditor\Demos\Simple\TTextEditorDemo.dproj" Targets="Clean"/>
-    </Target>
-    <Target Name="TTextEditorDemo:Make">
-        <MSBuild Projects="..\..\TTextEditor\Demos\Simple\TTextEditorDemo.dproj" Targets="Make"/>
-    </Target>
     <Target Name="Build">
-        <CallTarget Targets="DelphiDemo;TraceTool;TextEditor_Delphi_Sydney_Designtime;TextEditor_Delphi_Sydney_Runtime;TTextEditorDemo"/>
+        <CallTarget Targets="DelphiDemo;TraceTool"/>
     </Target>
     <Target Name="Clean">
-        <CallTarget Targets="DelphiDemo:Clean;TraceTool:Clean;TextEditor_Delphi_Sydney_Designtime:Clean;TextEditor_Delphi_Sydney_Runtime:Clean;TTextEditorDemo:Clean"/>
+        <CallTarget Targets="DelphiDemo:Clean;TraceTool:Clean"/>
     </Target>
     <Target Name="Make">
-        <CallTarget Targets="DelphiDemo:Make;TraceTool:Make;TextEditor_Delphi_Sydney_Designtime:Make;TextEditor_Delphi_Sydney_Runtime:Make;TTextEditorDemo:Make"/>
+        <CallTarget Targets="DelphiDemo:Make;TraceTool:Make"/>
     </Target>
     <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
 </Project>

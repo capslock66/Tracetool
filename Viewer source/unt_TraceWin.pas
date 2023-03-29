@@ -150,6 +150,9 @@ interface
             var ContentRect: TRect);
     procedure vstTraceEditing(Sender: TBaseVirtualTree; Node: PVirtualNode;
       Column: TColumnIndex; var Allowed: Boolean);
+    procedure PanelLeftResize(Sender: TObject);
+    procedure VSplitterCanResize(Sender: TObject; var NewSize: Integer;
+      var Accept: Boolean);
 
       private
          procedure WMStartEditingMember(var Message: TMessage);
@@ -4746,6 +4749,32 @@ begin
 
    vstTrace.InvalidateNode(Node);
 end;
+
+procedure TFrm_Trace.PanelLeftResize(Sender: TObject);
+begin
+//  InternalTrace('L-left: ' + inttostr(PanelLeft.Width) +
+//                ', Right: ' + inttostr(PanelRight.Width) +
+//                ', Form:' + inttostr(Width)
+//                ) ;
+
+   if (width < 300) then begin
+      PanelRight.Width := width div 2;
+   end else begin
+
+      if (PanelLeft.Width < 100) then
+         PanelRight.Width := width - 105 ; //PanelRight.Width + PanelLeft.Width - 100;
+
+      if (PanelRight.Width < 100) then
+         PanelRight.Width := 100;
+   end;
+end;
+
+procedure TFrm_Trace.VSplitterCanResize(Sender: TObject; var NewSize: Integer;  var Accept: Boolean);
+begin
+   if (Width - NewSize < 105) then
+      NewSize := Width - 105;
+end;
+
 
 // ------------------------------------------------------------------------------
 // apply font change and return true if at least one font change is detected

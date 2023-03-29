@@ -57,6 +57,8 @@ type
       Column: TColumnIndex; Shift: TShiftState);
     procedure VstDetailFocusChanged(Sender: TBaseVirtualTree;
       Node: PVirtualNode; Column: TColumnIndex);
+    procedure FrameMemoCanResize(Sender: TObject; var NewWidth,
+      NewHeight: Integer; var Resize: Boolean);
   private
     procedure WMStartEditingMember(var Message: TMessage); message WM_STARTEDITING_MEMBER;
   public
@@ -129,6 +131,13 @@ begin
 
    VstDetail.Colors.UnfocusedSelectionColor       := TraceWin.vstTrace.Colors.UnfocusedSelectionColor ;
    VstDetail.Colors.UnfocusedSelectionBorderColor := TraceWin.vstTrace.Colors.UnfocusedSelectionBorderColor ;
+end;
+
+procedure Tframe_Classic.FrameMemoCanResize(Sender: TObject; var NewWidth,
+  NewHeight: Integer; var Resize: Boolean);
+begin
+   if (NewHeight < 60) then
+      NewHeight := 60;
 end;
 
 //------------------------------------------------------------------------------
