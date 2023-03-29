@@ -119,7 +119,7 @@ Type
   // it's like win32Plugin, except that the plug name is passed in parameter to all functions
   TDotNetManager = class
   public
-     WrapperFileName : string ;  // DotNetWrapper.dll
+     WrapperFileName : string ;  // DotNetWrapper.dll or DotNetWrapper64.dll
      DllHandle : THandle ;
   private
      OnAction          : TWrapperOnAction  ;
@@ -676,6 +676,8 @@ end;
 //------------------------------------------------------------------------------
 
 procedure TDotNetManager.LoadDotNetWrapper;
+var
+   DllName : string;
 begin
    OnAction        := nil ;
    OnBeforeDelete  := nil ;
@@ -686,12 +688,18 @@ begin
    CheckPlugInFile := nil ;
    //AddPlugin       := nil ;
 
-   if FileExists(Frm_Tool.strRunPath + 'DotNetWrapper.dll') then
-      WrapperFileName := Frm_Tool.strRunPath + 'DotNetWrapper.dll'
+   {$IFDEF WIN64}
+     DllName := 'DotNetWrapper64.dll' ;
+   {$ELSE}
+     DllName := 'DotNetWrapper.dll' ;
+   {$ENDIF}
+
+   if FileExists(Frm_Tool.strRunPath + DllName) then
+      WrapperFileName := Frm_Tool.strRunPath + DllName
    //else if FileExists('c:\GitHub\Tracetool\Plugins\DotNetWrapper\Debug\DotNetWrapper.dll') then
    //   WrapperFileName := 'c:\GitHub\Tracetool\Plugins\DotNetWrapper\Debug\DotNetWrapper.dll'
    else
-      WrapperFileName := 'DotNetWrapper.dll' ;   // try to find it in the current path
+      WrapperFileName := DllName ;   // try to find it in the current path
 
    try
       DllHandle := LoadLibrary (pchar(WrapperFileName)) ;
@@ -707,7 +715,7 @@ begin
      TFrm_Trace.InternalTrace ('   Check EventLog System (In tracetool : Menu Windows/Open event log/sytem)') ;
      TFrm_Trace.InternalTrace ('   See SideBySide messages. Maybee some dependents libraries are missing') ;
      TFrm_Trace.InternalTrace ('   Install Microsoft Visual C++ 2008 Redistributable (vcredist_x86.exe) from microsoft side') ;
-     TFrm_Trace.InternalTrace ('   Also ensure DotNetWrapper.dll is compiled in release mode or install the debug runtime') ;
+     TFrm_Trace.InternalTrace ('   Also ensure DotNetWrapper[64].dll is compiled in release mode or install the debug runtime') ;
      DllHandle := 0;
      Exit;
    end;

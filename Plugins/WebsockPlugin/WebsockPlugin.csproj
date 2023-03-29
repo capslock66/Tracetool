@@ -32,7 +32,7 @@
     <UpgradeBackupLocation>
     </UpgradeBackupLocation>
     <OldToolsVersion>2.0</OldToolsVersion>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <TargetFrameworkProfile />
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
@@ -127,7 +127,7 @@
     <Analyzer Include="..\packages\Microsoft.NetFramework.Analyzers.2.9.8\analyzers\dotnet\cs\Microsoft.NetFramework.CSharp.Analyzers.dll" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\DotNet\LibsAndDemos\Lib_Standard_20\Lib_Standard_20.csproj">
+    <ProjectReference Include="..\..\DotNet\Libraries\Lib_Standard_20\Lib_Standard_20.csproj">
       <Project>{e344c199-a65f-4abc-9d0c-f8abf60d8fdd}</Project>
       <Name>Lib_Standard_20</Name>
     </ProjectReference>

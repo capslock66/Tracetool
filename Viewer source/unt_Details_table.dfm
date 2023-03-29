@@ -1,13 +1,13 @@
 inherited frame_Table: Tframe_Table
-  Width = 248
-  Height = 158
-  ExplicitWidth = 248
-  ExplicitHeight = 158
+  Width = 407
+  Height = 294
+  ExplicitWidth = 407
+  ExplicitHeight = 294
   object VstTable: TVirtualStringTree
     Left = 0
     Top = 0
-    Width = 248
-    Height = 158
+    Width = 407
+    Height = 294
     Align = alClient
     BevelInner = bvNone
     BevelOuter = bvNone
@@ -40,10 +40,12 @@ inherited frame_Table: Tframe_Table
     TreeOptions.MiscOptions = [toAcceptOLEDrop, toEditable, toFullRepaintOnResize, toInitOnSave, toToggleOnDblClick, toWheelPanning]
     TreeOptions.SelectionOptions = [toExtendedFocus]
     OnChange = VstTableChange
+    OnColumnClick = VstTableColumnClick
     OnCreateEditor = VstTableCreateEditor
     OnDblClick = VstTableDblClick
     OnEditCancelled = VstTableEditCancelled
     OnEdited = VstTableEdited
+    OnFocusChanged = VstTableFocusChanged
     OnFreeNode = VstTableFreeNode
     OnGetText = VstTableGetText
     OnPaintText = VstTablePaintText
@@ -51,6 +53,8 @@ inherited frame_Table: Tframe_Table
     OnMeasureItem = VstTableMeasureItem
     Touch.InteractiveGestures = [igPan, igPressAndTap]
     Touch.InteractiveGestureOptions = [igoPanSingleFingerHorizontal, igoPanSingleFingerVertical, igoPanInertia, igoPanGutter, igoParentPassthrough]
+    ExplicitWidth = 248
+    ExplicitHeight = 158
     Columns = <
       item
         Color = 16117479

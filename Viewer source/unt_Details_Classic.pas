@@ -9,7 +9,11 @@ uses
   unt_TraceWin ,
   unt_search ,
   unt_tool,             // VstEditor, IVstEditor, TMember
-  unt_utility;          // IsSeparator
+  unt_utility, Vcl.ExtCtrls, SynEdit, SynEditHighlighter, SynHighlighterXML,
+  SynEditCodeFolding, SynHighlighterJSON, Vcl.ToolWin, Vcl.ComCtrls,
+  System.JSON,     // , REST.Json
+  Xml.xmldom,
+  Xml.XMLIntf, Xml.Win.msxmldom, Xml.XMLDoc, unt_FrameMemo;          // IsSeparator
 
 type
   Tframe_Classic = class(Tframe_BaseDetails)
@@ -19,6 +23,8 @@ type
     MenuItem3: TMenuItem;
     N2: TMenuItem;
     SelectAll1: TMenuItem;
+    SplitterH: TSplitter;
+    FrameMemo: TFrameMemo;
     procedure VstDetailCreateEditor(Sender: TBaseVirtualTree;
       Node: PVirtualNode; Column: TColumnIndex; out EditLink: IVTEditLink);
     procedure VstDetailDblClick(Sender: TObject);
@@ -47,6 +53,12 @@ type
       CellPaintMode: TVTCellPaintMode; CellRect: TRect; var ContentRect: TRect);
     procedure VstDetailEditing(Sender: TBaseVirtualTree; Node: PVirtualNode;
       Column: TColumnIndex; var Allowed: Boolean);
+    procedure VstDetailColumnClick(Sender: TBaseVirtualTree;
+      Column: TColumnIndex; Shift: TShiftState);
+    procedure VstDetailFocusChanged(Sender: TBaseVirtualTree;
+      Node: PVirtualNode; Column: TColumnIndex);
+    procedure FrameMemoCanResize(Sender: TObject; var NewWidth,
+      NewHeight: Integer; var Resize: Boolean);
   private
     procedure WMStartEditingMember(var Message: TMessage); message WM_STARTEDITING_MEMBER;
   public
@@ -65,7 +77,7 @@ var
 implementation
 
 uses
-unt_TraceConfig ;
+   unt_TraceConfig, unt_detailPopup ;
 
 {$R *.dfm}
 
@@ -76,6 +88,13 @@ begin
    inherited create (AOwner) ;
    
    TraceWin := TFrm_Trace(owner);
+
+   FrameMemo.parent := TraceWin.PanelRight ;
+   FrameMemo.Align := alBottom;
+   FrameMemo.Height := 120 ;
+
+   SplitterH.Parent := TraceWin.PanelRight ;
+   SplitterH.Align := alBottom;
 
    VstDetail.parent := TraceWin.PanelRight ;
    VstDetail.Align := alClient ;
@@ -102,18 +121,23 @@ begin
 
    VstDetail.TreeOptions.SelectionOptions := TraceWin.vstTrace.TreeOptions.SelectionOptions
              + [toExtendedFocus]          // Entries other than in the main column can be selected, edited etc.
-             + [toFullRowSelect]          // selection highlight the whole line
+             - [toFullRowSelect]          // selection highlight the whole line
              + [toMultiselect] ;          // don't Allow more than one node to be selected.
 
    VstDetail.TreeOptions.MiscOptions := TraceWin.vstTrace.TreeOptions.MiscOptions
+             + [toGridExtensions]
              - [toEditable]               // don't allow edition. Code is used to detect double click or F2 key
              - [toReportMode] ;           // Tree behaves like TListView in report mode.
 
    VstDetail.Colors.UnfocusedSelectionColor       := TraceWin.vstTrace.Colors.UnfocusedSelectionColor ;
    VstDetail.Colors.UnfocusedSelectionBorderColor := TraceWin.vstTrace.Colors.UnfocusedSelectionBorderColor ;
+end;
 
-   //VstDetail.OnDrawNode := DrawNode ;
-
+procedure Tframe_Classic.FrameMemoCanResize(Sender: TObject; var NewWidth,
+  NewHeight: Integer; var Resize: Boolean);
+begin
+   if (NewHeight < 60) then
+      NewHeight := 60;
 end;
 
 //------------------------------------------------------------------------------
@@ -222,7 +246,48 @@ begin
          TFrm_Trace.InternalTrace('VstDetailFreeNode exception when resetting', e.message) ;
       end ;
    end ;
+end;
 
+//------------------------------------------------------------------------------
+
+procedure Tframe_Classic.VstDetailFocusChanged(Sender: TBaseVirtualTree;  Node: PVirtualNode; Column: TColumnIndex);
+var
+   DetailRec : PDetailRec ;
+   CellText: String;
+begin
+   if (Node = nil) then
+      exit;
+   DetailRec := Sender.GetNodeData(Node) ;
+   if DetailRec = nil then
+      exit ;
+   case Column of
+      0 : CellText := DetailRec.Col1 ;
+      1 : CellText := DetailRec.Col2 ;
+      2 : CellText := DetailRec.Col3 ;
+   end ;
+   frameMemo.SetMemoText(CellText,false,false);
+end;
+
+//------------------------------------------------------------------------------
+
+procedure Tframe_Classic.VstDetailColumnClick(Sender: TBaseVirtualTree; Column: TColumnIndex; Shift: TShiftState);
+var
+   DetailRec : PDetailRec ;
+   CellText: String;
+   SelectedNode : PVirtualNode ;
+begin
+   SelectedNode := VstDetail.GetFirstSelected  ;
+   if SelectedNode = nil then
+     exit ;
+   DetailRec := Sender.GetNodeData(SelectedNode) ;
+   if DetailRec = nil then
+      exit ;
+   case Column of
+      0 : CellText := DetailRec.Col1 ;
+      1 : CellText := DetailRec.Col2 ;
+      2 : CellText := DetailRec.Col3 ;
+   end ;
+   frameMemo.SetMemoText(CellText,false,false);
 end;
 
 //------------------------------------------------------------------------------
@@ -246,10 +311,15 @@ begin
    end ;
 
    case Column of
-      0 : CellText := DetailRec.Col1 ;
-      1 : CellText := DetailRec.Col2 ;
-      2 : CellText := DetailRec.Col3 ;
+      0 : CellText := DetailRec.Col1;
+      1 : CellText := DetailRec.Col2;
+      2 : CellText := DetailRec.Col3;
    end ;
+   if toEditable in VstDetail.TreeOptions.MiscOptions then
+      exit;
+
+   if Length(CellText) > 400 then
+      CellText := Copy(CellText, 1, 400) + '...'
 end;
 
 //------------------------------------------------------------------------------
@@ -379,6 +449,7 @@ procedure Tframe_Classic.AddDetails(TreeRec: PTreeRec; RootMember: TMember);
       VstDetail.ReinitNode(DetailNode,false);
       DetailNode.Align := (VstDetail.DefaultNodeHeight div 2)-2 ;
       DetailRec := VstDetail.GetNodeData(DetailNode) ;
+
       DetailRec.Col1 := Member.col1 ;
       DetailRec.Col2 := Member.col2 ;
       DetailRec.Col3 := Member.col3 ;

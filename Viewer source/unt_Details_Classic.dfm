@@ -1,9 +1,22 @@
 inherited frame_Classic: Tframe_Classic
+  Width = 525
+  Height = 401
+  ExplicitWidth = 525
+  ExplicitHeight = 401
+  object SplitterH: TSplitter
+    Left = 0
+    Top = 156
+    Width = 525
+    Height = 5
+    Cursor = crVSplit
+    Align = alBottom
+    ExplicitTop = 151
+  end
   object VstDetail: TVirtualStringTree
     Left = 0
     Top = 0
-    Width = 320
-    Height = 240
+    Width = 525
+    Height = 156
     Align = alClient
     BevelInner = bvNone
     BevelOuter = bvNone
@@ -33,16 +46,18 @@ inherited frame_Classic: Tframe_Classic
     ShowHint = True
     TabOrder = 0
     TreeOptions.AnimationOptions = [toAnimatedToggle]
-    TreeOptions.MiscOptions = [toAcceptOLEDrop, toEditable, toFullRepaintOnResize, toInitOnSave, toToggleOnDblClick, toWheelPanning]
+    TreeOptions.MiscOptions = [toAcceptOLEDrop, toEditable, toFullRepaintOnResize, toGridExtensions, toInitOnSave, toToggleOnDblClick, toWheelPanning]
     TreeOptions.SelectionOptions = [toExtendedFocus]
     OnAfterCellPaint = VstDetailAfterCellPaint
     OnBeforeCellPaint = VstDetailBeforeCellPaint
     OnChange = VstDetailChange
+    OnColumnClick = VstDetailColumnClick
     OnCreateEditor = VstDetailCreateEditor
     OnDblClick = VstDetailDblClick
     OnEditCancelled = VstDetailEditCancelled
     OnEdited = VstDetailEdited
     OnEditing = VstDetailEditing
+    OnFocusChanged = VstDetailFocusChanged
     OnFreeNode = VstDetailFreeNode
     OnGetText = VstDetailGetText
     OnPaintText = VstDetailPaintText
@@ -69,6 +84,29 @@ inherited frame_Classic: Tframe_Classic
         Position = 2
         Width = 300
       end>
+  end
+  inline FrameMemo: TFrameMemo
+    Left = 0
+    Top = 161
+    Width = 525
+    Height = 240
+    Align = alBottom
+    TabOrder = 1
+    OnCanResize = FrameMemoCanResize
+    ExplicitTop = 161
+    ExplicitWidth = 525
+    ExplicitHeight = 240
+    inherited SynMemo: TSynEdit
+      Width = 525
+      Height = 215
+      ExplicitTop = 25
+      ExplicitWidth = 525
+      ExplicitHeight = 215
+    end
+    inherited PanelTop: TPanel
+      Width = 525
+      ExplicitWidth = 525
+    end
   end
   object PopupDetail: TPopupMenu
     Images = Frm_Tool.ilActions

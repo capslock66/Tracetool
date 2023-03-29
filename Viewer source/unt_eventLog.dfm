@@ -2,33 +2,35 @@ inherited FrmEventLog: TFrmEventLog
   Left = 314
   Top = 235
   Caption = 'FrmEventLog'
-  ClientHeight = 171
-  ClientWidth = 569
+  ClientHeight = 380
+  ClientWidth = 737
   OldCreateOrder = True
-  ExplicitWidth = 585
-  ExplicitHeight = 210
+  ExplicitWidth = 753
+  ExplicitHeight = 419
   PixelsPerInch = 96
   TextHeight = 13
   object GroupPanel: TPanel
     Left = 0
     Top = 0
-    Width = 569
-    Height = 171
+    Width = 737
+    Height = 380
     Align = alClient
     BevelOuter = bvNone
     Caption = 'GroupPanel'
     TabOrder = 0
     object VSplitter: TSplitter
-      Left = 196
+      Left = 349
       Top = 22
-      Height = 149
+      Height = 358
       Align = alRight
+      ExplicitLeft = 196
+      ExplicitHeight = 149
     end
     object VstEvent: TVirtualStringTree
       Left = 12
       Top = 22
-      Width = 184
-      Height = 149
+      Width = 337
+      Height = 358
       Align = alClient
       BevelInner = bvNone
       Colors.BorderColor = clWindowText
@@ -79,6 +81,8 @@ inherited FrmEventLog: TFrmEventLog
       OnMeasureItem = VstEventMeasureItem
       Touch.InteractiveGestures = [igPan, igPressAndTap]
       Touch.InteractiveGestureOptions = [igoPanSingleFingerHorizontal, igoPanSingleFingerVertical, igoPanInertia, igoPanGutter, igoParentPassthrough]
+      ExplicitWidth = 184
+      ExplicitHeight = 149
       Columns = <
         item
           Position = 0
@@ -105,20 +109,29 @@ inherited FrmEventLog: TFrmEventLog
         end>
     end
     object PanelTraceInfo: TPanel
-      Left = 199
+      Left = 352
       Top = 22
-      Width = 370
-      Height = 149
+      Width = 385
+      Height = 358
       Align = alRight
       BevelInner = bvLowered
       ParentBackground = False
       ParentColor = True
       TabOrder = 1
+      object SplitterH: TSplitter
+        Left = 2
+        Top = 195
+        Width = 381
+        Height = 5
+        Cursor = crVSplit
+        Align = alBottom
+        ExplicitTop = 307
+      end
       object VstDetail: TVirtualStringTree
         Left = 2
         Top = 2
-        Width = 366
-        Height = 145
+        Width = 381
+        Height = 193
         Align = alClient
         BevelOuter = bvNone
         Color = 16117479
@@ -141,7 +154,6 @@ inherited FrmEventLog: TFrmEventLog
         Margin = 0
         ParentFont = False
         ParentShowHint = False
-        PopupMenu = PopupDetail
         ScrollBarOptions.AlwaysVisible = True
         ShowHint = True
         TabOrder = 0
@@ -150,15 +162,18 @@ inherited FrmEventLog: TFrmEventLog
         TreeOptions.PaintOptions = []
         OnBeforeCellPaint = VstDetailBeforeCellPaint
         OnChange = VstDetailChange
+        OnColumnClick = VstDetailColumnClick
         OnCreateEditor = VstDetailCreateEditor
         OnDblClick = VstDetailDblClick
         OnEditing = VstDetailEditing
+        OnFocusChanged = VstDetailFocusChanged
         OnFreeNode = VstDetailFreeNode
         OnGetText = VstDetailGetText
         OnPaintText = VstDetailPaintText
         OnMeasureItem = VstDetailMeasureItem
         Touch.InteractiveGestures = [igPan, igPressAndTap]
         Touch.InteractiveGestureOptions = [igoPanSingleFingerHorizontal, igoPanSingleFingerVertical, igoPanInertia, igoPanGutter, igoParentPassthrough]
+        ExplicitHeight = 167
         Columns = <
           item
             Color = 16117479
@@ -181,19 +196,41 @@ inherited FrmEventLog: TFrmEventLog
             Width = 3000
           end>
       end
+      inline FrameMemo: TFrameMemo
+        Left = 2
+        Top = 200
+        Width = 381
+        Height = 156
+        Align = alBottom
+        TabOrder = 1
+        ExplicitLeft = 2
+        ExplicitTop = 200
+        ExplicitWidth = 381
+        ExplicitHeight = 156
+        inherited SynMemo: TSynEdit
+          Width = 381
+          Height = 131
+          ExplicitHeight = 127
+        end
+        inherited PanelTop: TPanel
+          Width = 381
+          ExplicitWidth = 360
+        end
+      end
     end
     object PanelTop: TPanel
       Left = 0
       Top = 0
-      Width = 569
+      Width = 737
       Height = 22
       Align = alTop
       BevelOuter = bvNone
       Color = clCream
       ParentBackground = False
       TabOrder = 2
+      ExplicitWidth = 569
       DesignSize = (
-        569
+        737
         22)
       object TracesInfo: TLabel
         Left = 3
@@ -203,7 +240,7 @@ inherited FrmEventLog: TFrmEventLog
         Caption = 'TracesInfo'
       end
       object butClose: TBitBtn
-        Left = 546
+        Left = 714
         Top = 0
         Width = 22
         Height = 20
@@ -237,9 +274,10 @@ inherited FrmEventLog: TFrmEventLog
           00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FF}
         TabOrder = 0
         OnClick = butCloseClick
+        ExplicitLeft = 546
       end
       object butReload: TBitBtn
-        Left = 478
+        Left = 646
         Top = 0
         Width = 65
         Height = 20
@@ -247,9 +285,10 @@ inherited FrmEventLog: TFrmEventLog
         Caption = 'Reload (50)'
         TabOrder = 1
         OnClick = butReloadClick
+        ExplicitLeft = 478
       end
       object butGetAll: TBitBtn
-        Left = 378
+        Left = 546
         Top = 0
         Width = 97
         Height = 20
@@ -257,17 +296,19 @@ inherited FrmEventLog: TFrmEventLog
         Caption = 'Get All messages'
         TabOrder = 2
         OnClick = butGetAllClick
+        ExplicitLeft = 378
       end
     end
     object PanelGutter: TPanel
       Left = 0
       Top = 22
       Width = 12
-      Height = 149
+      Height = 358
       Align = alLeft
       BevelOuter = bvNone
       TabOrder = 3
       OnDblClick = PanelGutterDblClick
+      ExplicitHeight = 149
     end
   end
   object PopupTree: TPopupMenu
@@ -293,23 +334,6 @@ inherited FrmEventLog: TFrmEventLog
       Caption = '-'
     end
     object SelectAll1: TMenuItem
-      Action = FrmPageContainer.actSelectAll
-    end
-  end
-  object PopupDetail: TPopupMenu
-    Images = Frm_Tool.ilActions
-    Left = 416
-    Top = 78
-    object MenuItem2: TMenuItem
-      Action = FrmPageContainer.actCopy
-    end
-    object MenuItem3: TMenuItem
-      Action = FrmPageContainer.actCopyCurrentCell
-    end
-    object N2: TMenuItem
-      Caption = '-'
-    end
-    object MenuItem1: TMenuItem
       Action = FrmPageContainer.actSelectAll
     end
   end

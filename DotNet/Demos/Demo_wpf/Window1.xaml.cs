@@ -13,7 +13,7 @@ using System.Windows.Controls;
 using TraceTool;
 // ReSharper disable CollectionNeverQueried.Global
 
-namespace Vs2017_Wpf_Demo
+namespace Wpf_Demo
 {
     /// <summary>
     /// Interaction logic for Window1.xaml
