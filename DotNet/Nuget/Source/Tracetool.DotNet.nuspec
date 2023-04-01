@@ -2,7 +2,7 @@
 <package >
     <metadata>
         <id>Tracetool.DotNet.Api</id>
-        <version>13.0.1</version>
+        <version>13.1.0</version>
         <authors>Parent Thierry</authors>
         <owners>Parent Thierry</owners>
         <projectUrl>https://github.com/capslock66/Tracetool</projectUrl>
@@ -11,8 +11,8 @@
         <requireLicenseAcceptance>false</requireLicenseAcceptance>
         <license type="expression">MIT</license>
         <description>Tracetool Library for dot net</description>
-        <releaseNotes>Viewer added in viewer folder</releaseNotes>
-        <copyright>Copyright 2019</copyright>
+        <releaseNotes>Viewer 32 and 64 bits version added in viewer folder</releaseNotes>
+        <copyright>Copyright 2023</copyright>
         <tags>Tracetool Dot net trace log logs logger</tags>
         <dependencies>
             <!--
@@ -28,16 +28,8 @@
         <file src="..\..\Libraries\Lib_Standard_16\bin\release\**" target="lib" />
         <file src="..\..\Libraries\Lib_Standard_20\bin\release\netstandard2.0\*.*" target="lib\netstandard2.0" />
 
-        <file src="..\..\..\viewer\WebSock\*.*" target="tools\WebSock" />
-        <file src="..\..\..\viewer\clientaccesspolicy.xml" target="tools" />
-        <file src="..\..\..\viewer\crossdomain.xml" target="tools" />
-        <file src="..\..\..\viewer\DotNetWrapper.*" target="tools" />
-        <file src="..\..\..\viewer\FastMM_FullDebugMode.dll" target="tools" />
-        <file src="..\..\..\viewer\tracetool.exe" target="tools" />
-        <file src="..\..\..\viewer\TraceTool.map" target="tools" />
-        <file src="..\..\..\viewer\tracetool.js" target="tools" />
-        <file src="..\..\..\viewer\tracetool.jmin.js" target="tools" />
-        <file src="..\..\..\viewer\TracetoolConfigProd.xml" target="tools\TracetoolConfig.xml" />
+        <file src="..\..\..\GithubFiles\Viewer64.zip" target="tools\Viewer64.zip" />
+        <file src="..\..\..\GithubFiles\Viewer32.zip" target="tools\Viewer32.zip" />
 
         <file src="..\..\..\viewer\TraceTool_Icon.png" target="images" /> 
     </files>
