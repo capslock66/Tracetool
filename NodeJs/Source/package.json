@@ -1,6 +1,6 @@
 {
   "name": "tracetool",
-  "version": "13.2.5",
+  "version": "13.3.0",
   "description": "Send traces from your nodejs application to the windows tracetool viewer.",
   "main": "lib/tracetool",
   "typings": "lib/tracetool.d.ts",
