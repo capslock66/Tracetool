@@ -342,3 +342,5 @@ NodeJs/Sample/typings/
 Viewer/TraceTool.drc
 Viewer/TraceTool.map
 Viewer/TraceTool.rsm
+Viewer32/
+Viewer64/

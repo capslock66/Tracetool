@@ -63,7 +63,7 @@ https://www.codeproject.com/Articles/5498/TraceTool-The-Swiss-Army-Knife-of-Trac
 
 # Viewer Installation
 
-Download the [Viewer](/GithubFiles/Viewer.zip "Viewer.zip") and unpack the file into a folder of your chose(windows only).
+Download the [Viewer](/GithubFiles/Viewer64.zip "Viewer64.zip") and unpack the file into a folder of your chose(windows only).
 
 If you plan to use the "windows message" mode, you must start once the viewer to self register his location into the registry. For socket mode, the viewer must always be started manually
 
