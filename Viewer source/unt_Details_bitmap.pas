@@ -57,7 +57,7 @@ begin
    TFrm_Trace(Owner).CurrentViewers.add(self) ;
    //TFrm_Trace(Owner).BitmapVisible := true ;   // viewer will be visible
    //inc (TFrm_Trace(Owner).ViewerCount) ;       // need to know the number of viewer to display
-   TFrm_Trace(Owner).AddOneLineDetail('Image dimension',IntToStr(ImageViewer.Width)+'x'+IntToStr(ImageViewer.Height),'');
+   TFrm_Trace(Owner).AddOneLineDetail('Image dimension',IntToStr(ImageViewer.Width)+'x'+IntToStr(ImageViewer.Height),'',false,false);
 end;
 
 //------------------------------------------------------------------------------

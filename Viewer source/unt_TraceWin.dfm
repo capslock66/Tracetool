@@ -31,6 +31,7 @@ object Frm_Trace: TFrm_Trace
       Height = 303
       Align = alRight
       Visible = False
+      OnCanResize = VSplitterCanResize
     end
     object PanelLeft: TPanel
       Left = 0
@@ -40,6 +41,7 @@ object Frm_Trace: TFrm_Trace
       Align = alClient
       BevelOuter = bvNone
       TabOrder = 0
+      OnResize = PanelLeftResize
       object vstTrace: TVirtualStringTree
         Left = 12
         Top = 0
@@ -99,6 +101,8 @@ object Frm_Trace: TFrm_Trace
         OnMeasureItem = vstTraceMeasureItem
         Touch.InteractiveGestures = [igPan, igPressAndTap]
         Touch.InteractiveGestureOptions = [igoPanSingleFingerHorizontal, igoPanSingleFingerVertical, igoPanInertia, igoPanGutter, igoParentPassthrough]
+        ExplicitLeft = 11
+        ExplicitTop = 2
         Columns = <
           item
             Options = [coAllowClick, coDraggable, coEnabled, coParentBidiMode, coParentColor, coShowDropMark, coVisible]

@@ -261,7 +261,7 @@ implementation
 
 uses unt_receiver, unt_about, unt_tail,Unt_linkedList , unt_TraceWin, unt_parse, unt_base ,
      unt_ODS, unt_utility, unt_selectEvent , unt_eventLog, unt_SelectTail, unt_search, unt_TraceConfig,
-  unt_FrmPlugin;
+  unt_FrmPlugin, unt_Details_Classic;
 
 
 var

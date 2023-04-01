@@ -22,7 +22,7 @@ object form1: Tform1
     Top = 0
     Width = 683
     Height = 430
-    ActivePage = TabSheet1
+    ActivePage = TabSheet4
     Align = alClient
     TabOrder = 0
     object TabSheet1: TTabSheet
@@ -1778,10 +1778,6 @@ object form1: Tform1
     object TabSheet2: TTabSheet
       Caption = 'Nodes operations'
       ImageIndex = 1
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object butResend: TButton
         Left = 112
         Top = 24
@@ -1894,10 +1890,6 @@ object form1: Tform1
     object TabSheet3: TTabSheet
       Caption = 'Multi pages traces'
       ImageIndex = 2
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object butCreateTraceWin: TButton
         Left = 16
         Top = 24
@@ -1990,10 +1982,6 @@ object form1: Tform1
     object TabSheet5: TTabSheet
       Caption = 'Watches'
       ImageIndex = 4
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object Label6: TLabel
         Left = 24
         Top = 48
@@ -2081,10 +2069,6 @@ object form1: Tform1
     object TabSheet4: TTabSheet
       Caption = 'Other traces'
       ImageIndex = 3
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object Label2: TLabel
         Left = 248
         Top = 32
@@ -2134,9 +2118,9 @@ object form1: Tform1
       object butTail1: TButton
         Left = 16
         Top = 192
-        Width = 193
+        Width = 210
         Height = 25
-        Caption = 'Tail demo : Add lines to c:\log.txt'
+        Caption = 'Tail demo : Add lines to c:\temp\log.txt'
         TabOrder = 1
         OnClick = butTail1Click
       end
@@ -2159,18 +2143,18 @@ object form1: Tform1
       object butTail2: TButton
         Left = 16
         Top = 272
-        Width = 193
+        Width = 210
         Height = 25
-        Caption = 'Tail demo : Add chars to c:\log.txt'
+        Caption = 'Tail demo : Add chars to c:\temp\log.txt'
         TabOrder = 3
         OnClick = butTail2Click
       end
       object butTail3: TButton
         Left = 16
         Top = 232
-        Width = 193
+        Width = 210
         Height = 25
-        Caption = 'Tail demo : Add memo to c:\log.txt'
+        Caption = 'Tail demo : Add memo to c:\temp\log.txt'
         TabOrder = 2
         OnClick = butTail3Click
       end

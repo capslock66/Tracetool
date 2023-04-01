@@ -20,7 +20,7 @@ uses
   Dialogs, ExtCtrls, VirtualTrees, StdCtrls, ComCtrls , dirmon, ToolWin, unt_TraceWin,
   Buttons, Clipbrd, unt_base , unt_pageContainer ,  unt_editor , VstSort,unt_filter, unt_tool,
   generics.collections,
-  Menus, untPrintPreview;
+  Menus, untPrintPreview, unt_FrameMemo;
 
 const
    //BUFSIZE = 1024 {400h} ;
@@ -74,6 +74,8 @@ type
     MenuItem3: TMenuItem;
     N2: TMenuItem;
     MenuItem1: TMenuItem;
+    SplitterH: TSplitter;
+    FrameMemo: TFrameMemo;
     procedure FormCreate(Sender: TObject);
     procedure VstTailChange(Sender: TBaseVirtualTree; Node: PVirtualNode);
     procedure butReloadClick(Sender: TObject);
@@ -132,6 +134,10 @@ type
       CellPaintMode: TVTCellPaintMode; CellRect: TRect; var ContentRect: TRect);
     procedure VstTailEditing(Sender: TBaseVirtualTree; Node: PVirtualNode;
       Column: TColumnIndex; var Allowed: Boolean);
+    procedure VstDetailColumnClick(Sender: TBaseVirtualTree;
+      Column: TColumnIndex; Shift: TShiftState);
+    procedure VstDetailFocusChanged(Sender: TBaseVirtualTree;
+      Node: PVirtualNode; Column: TColumnIndex);
   private
     Sorter : TVstSort ;
     FirstChildOrder: integer; // Order of the last child, used to insert sub nodes and unsort them
@@ -234,6 +240,7 @@ uses
 procedure TFrmTail.FormCreate(Sender: TObject);
 begin
    inherited ;
+   FrameMemo.Height := 120 ;
    ApplyFont() ;  // set font name and size for the 2 trees (from XMLConfig)
 
    vst := VstTail ;
@@ -1446,7 +1453,11 @@ begin
             CellText := ' ' ;
       end ;
    end ;
+   if toEditable in vstDetail.TreeOptions.MiscOptions then
+      exit;
 
+   if Length(CellText) > 400 then
+      CellText := Copy(CellText, 1, 400) + '...'
 end;
 
 //------------------------------------------------------------------------------
@@ -1589,6 +1600,7 @@ begin
    if Node <> nil then
       Sender.ScrollIntoView (Node,false,false);     // center and horizontally false
 
+   frameMemo.SetMemoText('',false,false);
    // get first then second. If second is not nil then it's multiselect : disable info panel
    FirstSelect := VstTail.GetNextSelected (nil) ;
    if FirstSelect = nil then
@@ -1609,6 +1621,7 @@ begin
    if TailRec.Columns = nil then begin
       AddOneLineDetail ('Time '  , TailRec.Time) ;
       AddOneLineDetail ('Msg  '  , TailRec.Msg) ;
+      frameMemo.SetMemoText(TailRec.Msg,false,false);
    end else begin
 
       // -1 indicate a RED TailRec.Msg message
@@ -1641,9 +1654,10 @@ begin
             coltitle := col.Text ;
 
          // tailRec can contain less column than the tree
-         if ColIdx < TailRec.Columns.count then
-            AddOneLineDetail (coltitle , RemoveLastCRLF(TailRec.Columns[ColIdx]))
-         else
+         if ColIdx < TailRec.Columns.count then begin
+            AddOneLineDetail (coltitle , RemoveLastCRLF(TailRec.Columns[ColIdx]));
+            frameMemo.SetMemoText(TailRec.Columns[ColIdx],false,false);
+         end else
             AddOneLineDetail (coltitle, '') ;
          ColIdx := vstTail.Header.Columns.GetNextVisibleColumn(ColIdx) ;
       end ;
@@ -1651,8 +1665,8 @@ begin
       // if more TreeRec.Columns than vst.Header.Columns then add lines
       for c := vstTail.Header.Columns.Count to TailRec.Columns.count-1 do begin
          AddOneLineDetail ('', TailRec.Columns[c]) ;
+         frameMemo.SetMemoText(TailRec.Columns[c],false,false);
       end ;
-
    end ;
 end;
 
@@ -2121,6 +2135,48 @@ end;
 
 //------------------------------------------------------------------------------
 
+procedure TFrmTail.VstDetailFocusChanged(Sender: TBaseVirtualTree;  Node: PVirtualNode; Column: TColumnIndex);
+var
+   DetailRec : PDetailRec ;
+   CellText: String;
+begin
+   if (Node = nil) then
+      exit;
+   DetailRec := Sender.GetNodeData(Node) ;
+   if DetailRec = nil then
+      exit ;
+   case Column of
+      0 : CellText := DetailRec.Col1 ;
+      1 : CellText := DetailRec.Col2 ;
+      2 : CellText := DetailRec.Col3 ;
+   end ;
+   frameMemo.SetMemoText(CellText,false,false);
+end;
+
+//------------------------------------------------------------------------------
+
+procedure TFrmTail.VstDetailColumnClick(Sender: TBaseVirtualTree;  Column: TColumnIndex; Shift: TShiftState);
+var
+   DetailRec : PDetailRec ;
+   CellText: String;
+   SelectedNode : PVirtualNode ;
+begin
+   SelectedNode := VstDetail.GetFirstSelected  ;
+   if SelectedNode = nil then
+     exit ;
+   DetailRec := Sender.GetNodeData(SelectedNode) ;
+   if DetailRec = nil then
+      exit ;
+   case Column of
+      0 : CellText := DetailRec.Col1 ;
+      1 : CellText := DetailRec.Col2 ;
+      2 : CellText := DetailRec.Col3 ;
+   end ;
+   frameMemo.SetMemoText(CellText,false,false);
+end;
+
+//------------------------------------------------------------------------------
+
 procedure TFrmTail.VstDetailGetText(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex;
     TextType: TVSTTextType; var CellText: String);
 var
@@ -2136,6 +2192,11 @@ begin
       1 : CellText := DetailRec.Col2 ;
       2 : CellText := DetailRec.Col3 ;
    end ;
+   if toEditable in VstDetail.TreeOptions.MiscOptions then
+      exit;
+
+   if Length(CellText) > 400 then
+      CellText := Copy(CellText, 1, 400) + '...'
 end;
 
 //------------------------------------------------------------------------------

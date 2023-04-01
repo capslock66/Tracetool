@@ -1,48 +1,48 @@
-﻿	<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-		<PropertyGroup>
-			<ProjectGuid>{D2F45D1C-DBB9-41C7-B721-DC9A4907D15E}</ProjectGuid>
-		</PropertyGroup>
-		<ItemGroup>
-			<Projects Include="..\Delphi\Demo 2009\DelphiDemo.dproj">
-				<Dependencies/>
-			</Projects>
-			<Projects Include="TraceTool.dproj">
-				<Dependencies/>
-			</Projects>
-		</ItemGroup>
-		<ProjectExtensions>
-			<Borland.Personality>Default.Personality.12</Borland.Personality>
-			<Borland.ProjectType/>
-			<BorlandProject>
-				<Default.Personality/>
-			</BorlandProject>
-		</ProjectExtensions>
-		<Target Name="DelphiDemo">
-			<MSBuild Projects="..\Delphi\Demo 2009\DelphiDemo.dproj"/>
-		</Target>
-		<Target Name="DelphiDemo:Clean">
-			<MSBuild Targets="Clean" Projects="..\Delphi\Demo 2009\DelphiDemo.dproj"/>
-		</Target>
-		<Target Name="DelphiDemo:Make">
-			<MSBuild Targets="Make" Projects="..\Delphi\Demo 2009\DelphiDemo.dproj"/>
-		</Target>
-		<Target Name="TraceTool">
-			<MSBuild Projects="TraceTool.dproj"/>
-		</Target>
-		<Target Name="TraceTool:Clean">
-			<MSBuild Targets="Clean" Projects="TraceTool.dproj"/>
-		</Target>
-		<Target Name="TraceTool:Make">
-			<MSBuild Targets="Make" Projects="TraceTool.dproj"/>
-		</Target>
-		<Target Name="Build">
-			<CallTarget Targets="DelphiDemo;TraceTool"/>
-		</Target>
-		<Target Name="Clean">
-			<CallTarget Targets="DelphiDemo:Clean;TraceTool:Clean"/>
-		</Target>
-		<Target Name="Make">
-			<CallTarget Targets="DelphiDemo:Make;TraceTool:Make"/>
-		</Target>
-		<Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
-	</Project>
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <PropertyGroup>
+        <ProjectGuid>{D2F45D1C-DBB9-41C7-B721-DC9A4907D15E}</ProjectGuid>
+    </PropertyGroup>
+    <ItemGroup>
+        <Projects Include="..\Delphi\Demo 2009\DelphiDemo.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="TraceTool.dproj">
+            <Dependencies/>
+        </Projects>
+    </ItemGroup>
+    <ProjectExtensions>
+        <Borland.Personality>Default.Personality.12</Borland.Personality>
+        <Borland.ProjectType/>
+        <BorlandProject>
+            <Default.Personality/>
+        </BorlandProject>
+    </ProjectExtensions>
+    <Target Name="DelphiDemo">
+        <MSBuild Projects="..\Delphi\Demo 2009\DelphiDemo.dproj"/>
+    </Target>
+    <Target Name="DelphiDemo:Clean">
+        <MSBuild Projects="..\Delphi\Demo 2009\DelphiDemo.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="DelphiDemo:Make">
+        <MSBuild Projects="..\Delphi\Demo 2009\DelphiDemo.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="TraceTool">
+        <MSBuild Projects="TraceTool.dproj"/>
+    </Target>
+    <Target Name="TraceTool:Clean">
+        <MSBuild Projects="TraceTool.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="TraceTool:Make">
+        <MSBuild Projects="TraceTool.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="Build">
+        <CallTarget Targets="DelphiDemo;TraceTool"/>
+    </Target>
+    <Target Name="Clean">
+        <CallTarget Targets="DelphiDemo:Clean;TraceTool:Clean"/>
+    </Target>
+    <Target Name="Make">
+        <CallTarget Targets="DelphiDemo:Make;TraceTool:Make"/>
+    </Target>
+    <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
+</Project>

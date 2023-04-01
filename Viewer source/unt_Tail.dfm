@@ -1,8 +1,8 @@
 object FrmTail: TFrmTail
   Left = 357
   Top = 206
-  ClientHeight = 236
-  ClientWidth = 568
+  ClientHeight = 250
+  ClientWidth = 600
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -17,23 +17,27 @@ object FrmTail: TFrmTail
   object GroupPanel: TPanel
     Left = 0
     Top = 0
-    Width = 568
-    Height = 236
+    Width = 600
+    Height = 250
     Align = alClient
     BevelOuter = bvNone
     TabOrder = 0
+    ExplicitWidth = 568
+    ExplicitHeight = 236
     object VSplitter: TSplitter
-      Left = 162
+      Left = 194
       Top = 22
-      Height = 214
+      Height = 228
       Align = alRight
       Visible = False
+      ExplicitLeft = 162
+      ExplicitHeight = 214
     end
     object VstTail: TVirtualStringTree
       Left = 12
       Top = 22
-      Width = 150
-      Height = 214
+      Width = 182
+      Height = 228
       Align = alClient
       BevelInner = bvNone
       Colors.BorderColor = clWindowText
@@ -83,6 +87,8 @@ object FrmTail: TFrmTail
       OnMeasureItem = VstTailMeasureItem
       Touch.InteractiveGestures = [igPan, igPressAndTap]
       Touch.InteractiveGestureOptions = [igoPanSingleFingerHorizontal, igoPanSingleFingerVertical, igoPanInertia, igoPanGutter, igoParentPassthrough]
+      ExplicitWidth = 150
+      ExplicitHeight = 214
       Columns = <
         item
           Options = [coAllowClick, coDraggable, coEnabled, coParentBidiMode, coParentColor, coResizable, coShowDropMark, coVisible]
@@ -100,20 +106,31 @@ object FrmTail: TFrmTail
         end>
     end
     object PanelTraceInfo: TPanel
-      Left = 165
+      Left = 197
       Top = 22
       Width = 403
-      Height = 214
+      Height = 228
       Align = alRight
       ParentBackground = False
       ParentColor = True
       TabOrder = 1
       Visible = False
+      ExplicitLeft = 165
+      ExplicitHeight = 214
+      object SplitterH: TSplitter
+        Left = 1
+        Top = 155
+        Width = 401
+        Height = 5
+        Cursor = crVSplit
+        Align = alBottom
+        ExplicitTop = 1
+      end
       object VstDetail: TVirtualStringTree
         Left = 1
         Top = 1
         Width = 401
-        Height = 212
+        Height = 154
         Align = alClient
         BevelOuter = bvNone
         Color = 16117479
@@ -145,15 +162,18 @@ object FrmTail: TFrmTail
         TreeOptions.SelectionOptions = [toExtendedFocus]
         OnBeforeCellPaint = VstDetailBeforeCellPaint
         OnChange = VstDetailChange
+        OnColumnClick = VstDetailColumnClick
         OnCreateEditor = VstDetailCreateEditor
         OnDblClick = VstDetailDblClick
         OnEditing = VstDetailEditing
+        OnFocusChanged = VstDetailFocusChanged
         OnFreeNode = VstDetailFreeNode
         OnGetText = VstDetailGetText
         OnPaintText = VstDetailPaintText
         OnMeasureItem = VstDetailMeasureItem
         Touch.InteractiveGestures = [igPan, igPressAndTap]
         Touch.InteractiveGestureOptions = [igoPanSingleFingerHorizontal, igoPanSingleFingerVertical, igoPanInertia, igoPanGutter, igoParentPassthrough]
+        ExplicitHeight = 136
         Columns = <
           item
             Color = 16117479
@@ -168,19 +188,43 @@ object FrmTail: TFrmTail
             Width = 300
           end>
       end
+      inline FrameMemo: TFrameMemo
+        Left = 1
+        Top = 160
+        Width = 401
+        Height = 67
+        Align = alBottom
+        TabOrder = 1
+        ExplicitLeft = 1
+        ExplicitTop = 160
+        ExplicitWidth = 401
+        ExplicitHeight = 67
+        inherited SynMemo: TSynEdit
+          Width = 401
+          Height = 38
+          ExplicitTop = 29
+          ExplicitWidth = 360
+        end
+        inherited PanelTop: TPanel
+          Width = 401
+          ExplicitLeft = 0
+          ExplicitWidth = 360
+        end
+      end
     end
     object PanelTop: TPanel
       Left = 0
       Top = 0
-      Width = 568
+      Width = 600
       Height = 22
       Align = alTop
       BevelOuter = bvNone
       Color = clCream
       ParentBackground = False
       TabOrder = 2
+      ExplicitWidth = 568
       DesignSize = (
-        568
+        600
         22)
       object TracesInfo: TLabel
         Left = 3
@@ -190,7 +234,7 @@ object FrmTail: TFrmTail
         Caption = 'TracesInfo'
       end
       object butClose: TBitBtn
-        Left = 545
+        Left = 577
         Top = 0
         Width = 22
         Height = 20
@@ -224,9 +268,10 @@ object FrmTail: TFrmTail
           00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FF}
         TabOrder = 0
         OnClick = butCloseClick
+        ExplicitLeft = 545
       end
       object butReload: TBitBtn
-        Left = 490
+        Left = 522
         Top = 0
         Width = 52
         Height = 20
@@ -234,9 +279,10 @@ object FrmTail: TFrmTail
         Caption = 'Reload'
         TabOrder = 1
         OnClick = butReloadClick
+        ExplicitLeft = 490
       end
       object butClearContent: TBitBtn
-        Left = 380
+        Left = 412
         Top = 0
         Width = 97
         Height = 20
@@ -244,17 +290,19 @@ object FrmTail: TFrmTail
         Caption = 'Clear File Content'
         TabOrder = 2
         OnClick = butClearContentClick
+        ExplicitLeft = 380
       end
     end
     object PanelGutter: TPanel
       Left = 0
       Top = 22
       Width = 12
-      Height = 214
+      Height = 228
       Align = alLeft
       BevelOuter = bvNone
       TabOrder = 3
       OnDblClick = PanelGutterDblClick
+      ExplicitHeight = 214
     end
   end
   object PopupTree: TPopupMenu

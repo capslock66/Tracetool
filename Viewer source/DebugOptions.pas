@@ -309,7 +309,11 @@ begin
       FDeviceBMP := nil;
    end;
 
-   VSTOptions.NodeDataSize := 4 ;
+   {$IFDEF WIN64}
+     VSTOptions.NodeDataSize := 16 ;
+   {$ELSE}
+     VSTOptions.NodeDataSize := 4 ;
+   {$ENDIF}
 
    //VSTOptions.TreeOptions.SelectionOptions := Frm_Trace.vstTrace.TreeOptions.SelectionOptions ;
    //VSTOptions.TreeOptions.AutoOptions      := Frm_Trace.vstTrace.TreeOptions.AutoOptions ;
