@@ -16,7 +16,7 @@
   "author": "Thierry Parent",
   "license": "ISC",
   "dependencies": {
-    "stack-trace": "^0.0.9",
+    "stack-trace": "^0.0.10",
     "uuid": "^3.0.0"
   }
 }
