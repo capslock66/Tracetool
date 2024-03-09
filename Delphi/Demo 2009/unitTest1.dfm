@@ -10,21 +10,21 @@ object form1: Tform1
   Font.Height = -11
   Font.Name = 'MS Sans Serif'
   Font.Style = []
-  OldCreateOrder = True
   Position = poScreenCenter
   OnClose = FormClose
   OnCreate = FormCreate
   OnDblClick = FormDblClick
-  PixelsPerInch = 96
   TextHeight = 13
   object PageControl1: TPageControl
     Left = 0
     Top = 0
     Width = 683
     Height = 430
-    ActivePage = TabSheet4
+    ActivePage = TabSheet1
     Align = alClient
     TabOrder = 0
+    ExplicitWidth = 679
+    ExplicitHeight = 429
     object TabSheet1: TTabSheet
       Caption = 'Basic'
       object Image1: TImage
@@ -2177,6 +2177,8 @@ object form1: Tform1
     Height = 41
     Align = alBottom
     TabOrder = 1
+    ExplicitTop = 429
+    ExplicitWidth = 679
     object butShow: TButton
       Left = 32
       Top = 8

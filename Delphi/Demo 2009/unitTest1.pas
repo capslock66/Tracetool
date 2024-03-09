@@ -585,8 +585,13 @@ begin
 
    // add second line
    table.AddRow();
-   table.AddRowData('aa'#9'data second column'#9'{"minJson":true}'#9'dd'#9'ee');
+   table.AddRowData('z'#9'data second column'#9'{"minJson":true}'#9'dd'#9'ee');
    // add all columns data in a single step (tab separated)
+
+   // add third line
+   table.AddRow();
+   table.AddRowData('d'#9'data third column'#9'{"minJson":true}'#9'dd'#9'ee');
+
 
    // finally send the table
    TTrace.Debug.SendTable('Mytable', table);
