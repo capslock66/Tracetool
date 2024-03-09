@@ -1801,6 +1801,7 @@ begin
       if Am64OS then
         IsWow64Process := GetProcAddress(GetModuleHandle(kernel32), 'IsWow64Process');
     end;
+    Done64Init := true;
   end;
   result := Am64OS and ((@IsWow64Process = nil) or (not IsWow64Process(processHandle, b1)) or (not b1));
 end;

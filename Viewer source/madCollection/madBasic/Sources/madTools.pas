@@ -1,11 +1,12 @@
 // ***************************************************************
-//  madTools.pas              version: 1.3.6  ·  date: 2021-05-12
+//  madTools.pas              version: 1.3.7  ·  date: 2023-03-08
 //  -------------------------------------------------------------
 //  several basic tool functions
 //  -------------------------------------------------------------
-//  Copyright (C) 1999 - 2021 www.madshi.net, All Rights Reserved
+//  Copyright (C) 1999 - 2023 www.madshi.net, All Rights Reserved
 // ***************************************************************
 
+// 2023-03-08 1.3.7 added support for detecting Windows 11
 // 2021-05-12 1.3.6 added support for detecting Windows 2019
 // 2018-05-17 1.3.5 added "nil" detection in ExportToFunc helper function
 // 2017-03-13 1.3.4 fixed crash with Windows XP Black editions
@@ -60,7 +61,7 @@ uses Windows, madTypes;
 type
   // types for the "OS" function
   TOsEnum = (osNone, osWin95, osWin95osr2, osWin98, osWin98se, osWinME, osWin9xNew,
-                     osWinNtOld, osWinNt4, osWin2k, osWinXP, osWin2003, osWinVista, osWin2008, osWin7, osWin2008r2, osWin8, osWin2012, osWin81, osWin2012r2, osWin10, osWin2016, osWin2019, osWinNtNew);
+                     osWinNtOld, osWinNt4, osWin2k, osWinXP, osWin2003, osWinVista, osWin2008, osWin7, osWin2008r2, osWin8, osWin2012, osWin81, osWin2012r2, osWin10, osWin2016, osWin2019, osWin11, osWinNtNew);
   TOS = record
     major       : cardinal;
     minor       : cardinal;
@@ -83,7 +84,7 @@ const
                          'Windows ME', 'Windows 9x New',
                       'Windows NT 3', 'Windows NT 4', 'Windows 2000', 'Windows XP',
                          'Windows 2003', 'Windows Vista', 'Windows 2008', 'Windows 7', 'Windows 2008 R2',
-                         'Windows 8', 'Windows 2012', 'Windows 8.1', 'Windows 2012 R2', 'Windows 10', 'Windows 2016', 'Windows 2019', 'Windows NT New');
+                         'Windows 8', 'Windows 2012', 'Windows 8.1', 'Windows 2012 R2', 'Windows 10', 'Windows 2016', 'Windows 2019', 'Windows 11', 'Windows NT New');
 
 // Tests which system is running...
 function OS : TOS;
@@ -422,9 +423,12 @@ begin
                         else enum := osWin2012r2;
                    else enum := osWinNtNew;
                  end;
-          10   : if viW.wProductType = VER_NT_WORKSTATION then
-                   enum := osWin10
-                 else
+          10   : if viW.wProductType = VER_NT_WORKSTATION then begin
+                   if build >= 22000 then
+                     enum := osWin11
+                   else
+                     enum := osWin10;
+                 end else
                    if build >= 17763 then
                      enum := osWin2019
                    else

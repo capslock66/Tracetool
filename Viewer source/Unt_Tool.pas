@@ -33,7 +33,7 @@ uses
   , IdUDPServer //, IdCustomTCPServer;
   , Config, System.Actions, System.ImageList, system.UITypes ;
 
-// ensure the path the viewer is on the Options/delphi/library/Library Path
+// ensure the path the viewer is on the tools/Options/Language/delphi/library/Library Path (32 and 64 platform)
 // c:\GitHub\Tracetool\Delphi\Delphi Library\
 {$Include TraceTool.Inc}
 

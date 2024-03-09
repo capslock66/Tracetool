@@ -34,12 +34,7 @@
   {$endif}
   {$define UnicodeOverloads}
 {$endif}
-{$R-}{$Q-}{$T-}
-{$ifdef debugMadExcept}
-  {$D+}{$L+}
-{$else}
-  {$D-}{$L-}
-{$endif}
+{$R-}{$Q-}{$T-}{$D+}{$L+}
 {$O+}
 {$MINENUMSIZE 1}
 {$ALIGN ON}

@@ -11,19 +11,21 @@ without any parameters.
 
 madCompileBugReport
 -------------------
-When using the "include minimal debug info, only" option (first tab of the
-madExcept settings dialog), the bug reports your end users send you will lack
-all the important information like function names, unit names and line numbers.
-You need to "compile" such a bug report to get the full bug report you're used
-to. The tool "madCompileBugReport" will do that for you. It needs the original
-map files for that task. But it doesn't accept the map files in its original
-"map" form, but it wants the compressed "mad" files instead. So for each
-version you release to your end users, you should store the "mad" file to a
-specific storage folder. You may name the file as you want. However, the name
-must contain the project name (e.g. "Project1") somewhere and the extension
-must be ".mad". The madCompileBugReport tool will search through all folders
-you want and automatically find the "mad" files which belong to the bug report
-you want to have "compiled".
+If you disable the option "link in function names and line numbers", madExcept
+will only store the function addresses into your exe/dll file, but no unit
+names, function names and line numbers. In this situation, the bug reports
+your end users send you will lack all the important information like function
+names, unit names and line numbers. You need to "compile" such a bug report
+to get the full bug report you're used to. The tool "madCompileBugReport"
+will do that for you. It needs the original map files for that task. But it
+doesn't accept the map files in its original "map" form, but it wants the
+compressed "mad" files instead. So for each version you release to your end
+users, you should store the "mad" file to a specific storage folder. You may
+name the file as you want. However, the name must contain the project name
+(e.g. "Project1") somewhere and the extension must be ".mad". The
+madCompileBugReport tool will search through all folders you want and
+automatically find the "mad" files which belong to the bug report you want
+to have "compiled".
 
 Please note that you MUST compile your project with "show address offset to
 the beginning of the procedure" (see "bug report settings" tab of the madExcept

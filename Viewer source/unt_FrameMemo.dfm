@@ -24,11 +24,29 @@ object FrameMemo: TFrameMemo
     Gutter.Font.Height = -11
     Gutter.Font.Name = 'Courier New'
     Gutter.Font.Style = []
+    Gutter.Font.Quality = fqClearTypeNatural
     Gutter.Visible = False
-    Gutter.Width = 0
-    ExplicitTop = 29
-    ExplicitWidth = 360
-    ExplicitHeight = 211
+    Gutter.Bands = <
+      item
+        Kind = gbkMarks
+        Visible = False
+        Width = 1
+      end
+      item
+        Kind = gbkLineNumbers
+      end
+      item
+        Kind = gbkFold
+      end
+      item
+        Kind = gbkTrackChanges
+      end
+      item
+        Kind = gbkMargin
+        Visible = False
+        Width = 3
+      end>
+    SelectedColor.Alpha = 0.400000005960464500
   end
   object PanelTop: TPanel
     Left = 0
@@ -87,16 +105,10 @@ object FrameMemo: TFrameMemo
     end
   end
   object SynJSONSyn: TSynJSONSyn
-    Options.AutoDetectEnabled = False
-    Options.AutoDetectLineLimit = 0
-    Options.Visible = False
     Left = 24
     Top = 68
   end
   object SynXMLSyn: TSynXMLSyn
-    Options.AutoDetectEnabled = False
-    Options.AutoDetectLineLimit = 0
-    Options.Visible = False
     AttributeValueAttri.Style = []
     TextAttri.Style = []
     WantBracesParsed = False

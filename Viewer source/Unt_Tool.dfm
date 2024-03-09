@@ -11,12 +11,10 @@ object Frm_Tool: TFrm_Tool
   Font.Name = 'MS Sans Serif'
   Font.Style = []
   Menu = MainMenu
-  OldCreateOrder = False
   OnClose = FormClose
   OnCloseQuery = FormCloseQuery
   OnCreate = FormCreate
   OnShow = FormShow
-  PixelsPerInch = 96
   TextHeight = 13
   object imgMessage: TImage
     Left = 264
@@ -121,6 +119,8 @@ object Frm_Tool: TFrm_Tool
         Text = '0'
         Width = 50
       end>
+    ExplicitTop = 556
+    ExplicitWidth = 673
   end
   object MainMenu: TMainMenu
     Images = ilActions

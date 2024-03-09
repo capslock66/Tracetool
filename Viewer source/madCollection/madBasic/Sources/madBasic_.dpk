@@ -21,7 +21,7 @@ package madBasic_;
 {$WRITEABLECONST ON}
 {$MINENUMSIZE 1}
 {$IMAGEBASE $57000000}
-{$DESCRIPTION 'madBasic 1.2.7  -  www.madshi.net'}
+{$DESCRIPTION 'madBasic 1.2.8  -  www.madshi.net'}
 {$IMPLICITBUILD OFF}
 
 requires

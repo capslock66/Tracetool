@@ -10,10 +10,8 @@ object FrmPageContainer: TFrmPageContainer
   Font.Name = 'MS Sans Serif'
   Font.Style = []
   Menu = MainMenu
-  OldCreateOrder = False
   OnClose = FormClose
   OnCreate = FormCreate
-  PixelsPerInch = 96
   TextHeight = 13
   object PanelPageControl: TPanel
     Left = 0
@@ -23,6 +21,8 @@ object FrmPageContainer: TFrmPageContainer
     Align = alClient
     BevelOuter = bvNone
     TabOrder = 0
+    ExplicitWidth = 460
+    ExplicitHeight = 270
     object ToolBar: TToolBar
       Left = 0
       Top = 0
@@ -35,6 +35,7 @@ object FrmPageContainer: TFrmPageContainer
       ParentShowHint = False
       ShowHint = True
       TabOrder = 0
+      ExplicitWidth = 460
       object tbnClear: TToolButton
         Left = 0
         Top = 0
