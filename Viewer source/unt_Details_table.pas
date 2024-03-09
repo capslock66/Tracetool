@@ -240,24 +240,13 @@ procedure Tframe_table.VstTableBeforeCellPaint(Sender: TBaseVirtualTree;
   TargetCanvas: TCanvas; Node: PVirtualNode; Column: TColumnIndex;
   CellPaintMode: TVTCellPaintMode; CellRect: TRect; var ContentRect: TRect);
 var
-   DetailRec : PDetailRec ;
+   DetailRec : PTableRec ;
 begin
    DetailRec := Sender.GetNodeData(Node) ;
    if (SearchText <> '') {and (SearchKind = mrYesToAll)} then begin  //  mrYesToAll means Highlight all
-
-      case Column of
-         0 : if (MatchSearch (DetailRec.col1) <> 0) then DrawHighlight (TargetCanvas, CellRect,false) ;
-         1 : if (MatchSearch (DetailRec.col2) <> 0) then DrawHighlight (TargetCanvas, CellRect,false) ;
-         2 : if (MatchSearch (DetailRec.col3) <> 0) then DrawHighlight (TargetCanvas, CellRect,false) ;
-      end ;
-      //if (MatchSearch (DetailRec.col1) <> 0) or
-      //   (MatchSearch (DetailRec.col2) <> 0) or
-      //   (MatchSearch (DetailRec.col3) <> 0) then begin
-      //   DrawHighlight (TargetCanvas, CellRect,false) ;
-      //end ;
+      if (MatchSearch (DetailRec.Columns[Column]) <> 0) then
+         DrawHighlight (TargetCanvas, CellRect,false) ;
    end;
-
-
 end;
 
 //------------------------------------------------------------------------------

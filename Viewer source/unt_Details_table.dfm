@@ -12,8 +12,21 @@ inherited frame_Table: Tframe_Table
     BevelInner = bvNone
     BevelOuter = bvNone
     Color = 16117479
-    Colors.BorderColor = clWindowText
+    Colors.BorderColor = clBlack
+    Colors.DisabledColor = clGray
+    Colors.DropMarkColor = 15385233
+    Colors.DropTargetColor = 15385233
+    Colors.DropTargetBorderColor = 15385233
+    Colors.FocusedSelectionColor = 15385233
+    Colors.FocusedSelectionBorderColor = 15385233
+    Colors.GridLineColor = 15987699
+    Colors.HeaderHotColor = clBlack
     Colors.HotColor = clBlack
+    Colors.SelectionRectangleBlendColor = 15385233
+    Colors.SelectionRectangleBorderColor = 15385233
+    Colors.SelectionTextColor = clBlack
+    Colors.TreeLineColor = 9471874
+    Colors.UnfocusedColor = clGray
     Colors.UnfocusedSelectionColor = clGray
     Colors.UnfocusedSelectionBorderColor = clGray
     Font.Charset = ANSI_CHARSET
@@ -39,6 +52,7 @@ inherited frame_Table: Tframe_Table
     TreeOptions.AnimationOptions = [toAnimatedToggle]
     TreeOptions.MiscOptions = [toAcceptOLEDrop, toEditable, toFullRepaintOnResize, toInitOnSave, toToggleOnDblClick, toWheelPanning]
     TreeOptions.SelectionOptions = [toExtendedFocus]
+    OnBeforeCellPaint = VstTableBeforeCellPaint
     OnChange = VstTableChange
     OnColumnClick = VstTableColumnClick
     OnCreateEditor = VstTableCreateEditor
@@ -53,8 +67,6 @@ inherited frame_Table: Tframe_Table
     OnMeasureItem = VstTableMeasureItem
     Touch.InteractiveGestures = [igPan, igPressAndTap]
     Touch.InteractiveGestureOptions = [igoPanSingleFingerHorizontal, igoPanSingleFingerVertical, igoPanInertia, igoPanGutter, igoParentPassthrough]
-    ExplicitWidth = 248
-    ExplicitHeight = 158
     Columns = <
       item
         Color = 16117479
