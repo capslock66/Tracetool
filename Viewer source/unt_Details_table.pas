@@ -45,6 +45,9 @@ type
       Column: TColumnIndex; Shift: TShiftState);
     procedure VstTableFocusChanged(Sender: TBaseVirtualTree; Node: PVirtualNode;
       Column: TColumnIndex);
+    procedure VstTableBeforeCellPaint(Sender: TBaseVirtualTree;
+      TargetCanvas: TCanvas; Node: PVirtualNode; Column: TColumnIndex;
+      CellPaintMode: TVTCellPaintMode; CellRect: TRect; var ContentRect: TRect);
   private
     procedure WMStartEditingMember(var Message: TMessage); message WM_STARTEDITING_MEMBER;
   public
@@ -63,7 +66,7 @@ var
 implementation
 
 uses
-unt_TraceConfig, unt_Details_Classic ;
+unt_TraceConfig, unt_Details_Classic,  unt_search ;
 
 {$R *.dfm}
 
@@ -215,7 +218,6 @@ procedure Tframe_table.VstTableGetText(Sender: TBaseVirtualTree;
   var CellText: string);
 var
    DetailRec : PTableRec ;
-
 begin
    CellText := '' ;
    DetailRec := Sender.GetNodeData(Node) ;
@@ -233,6 +235,33 @@ begin
 end;
 
 //------------------------------------------------------------------------------
+
+procedure Tframe_table.VstTableBeforeCellPaint(Sender: TBaseVirtualTree;
+  TargetCanvas: TCanvas; Node: PVirtualNode; Column: TColumnIndex;
+  CellPaintMode: TVTCellPaintMode; CellRect: TRect; var ContentRect: TRect);
+var
+   DetailRec : PDetailRec ;
+begin
+   DetailRec := Sender.GetNodeData(Node) ;
+   if (SearchText <> '') {and (SearchKind = mrYesToAll)} then begin  //  mrYesToAll means Highlight all
+
+      case Column of
+         0 : if (MatchSearch (DetailRec.col1) <> 0) then DrawHighlight (TargetCanvas, CellRect,false) ;
+         1 : if (MatchSearch (DetailRec.col2) <> 0) then DrawHighlight (TargetCanvas, CellRect,false) ;
+         2 : if (MatchSearch (DetailRec.col3) <> 0) then DrawHighlight (TargetCanvas, CellRect,false) ;
+      end ;
+      //if (MatchSearch (DetailRec.col1) <> 0) or
+      //   (MatchSearch (DetailRec.col2) <> 0) or
+      //   (MatchSearch (DetailRec.col3) <> 0) then begin
+      //   DrawHighlight (TargetCanvas, CellRect,false) ;
+      //end ;
+   end;
+
+
+end;
+
+//------------------------------------------------------------------------------
+
 procedure Tframe_table.VstTableMeasureItem(Sender: TBaseVirtualTree;
   TargetCanvas: TCanvas; Node: PVirtualNode; var NodeHeight: Integer);
 var
