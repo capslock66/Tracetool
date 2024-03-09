@@ -2,33 +2,31 @@ object Frm_ODS: TFrm_ODS
   Left = 358
   Top = 200
   Caption = 'ODS'
-  ClientHeight = 250
-  ClientWidth = 600
+  ClientHeight = 249
+  ClientWidth = 596
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
   Font.Height = -11
   Font.Name = 'MS Sans Serif'
   Font.Style = []
-  OldCreateOrder = False
   OnClose = FormClose
   OnCreate = FormCreate
-  PixelsPerInch = 96
   TextHeight = 13
   object PanelOds: TPanel
     Left = 0
     Top = 0
-    Width = 600
-    Height = 250
+    Width = 596
+    Height = 249
     Align = alClient
     BevelOuter = bvNone
     TabOrder = 0
-    ExplicitWidth = 568
-    ExplicitHeight = 286
+    ExplicitWidth = 600
+    ExplicitHeight = 250
     object VSplitter: TSplitter
-      Left = 208
+      Left = 204
       Top = 22
-      Height = 228
+      Height = 227
       Align = alRight
       Visible = False
       ExplicitLeft = 176
@@ -37,14 +35,27 @@ object Frm_ODS: TFrm_ODS
     object VstDebugString: TVirtualStringTree
       Left = 12
       Top = 22
-      Width = 196
-      Height = 228
+      Width = 192
+      Height = 227
       Align = alClient
       BevelInner = bvNone
-      Colors.BorderColor = clWindowText
+      Colors.BorderColor = clBlack
+      Colors.DisabledColor = clGray
+      Colors.DropMarkColor = 15385233
+      Colors.DropTargetColor = 15385233
+      Colors.DropTargetBorderColor = 15385233
+      Colors.FocusedSelectionColor = 15385233
+      Colors.FocusedSelectionBorderColor = 15385233
+      Colors.GridLineColor = 15987699
+      Colors.HeaderHotColor = clBlack
       Colors.HotColor = clBlack
-      Colors.UnfocusedSelectionColor = clHighlight
-      Colors.UnfocusedSelectionBorderColor = clHighlight
+      Colors.SelectionRectangleBlendColor = 15385233
+      Colors.SelectionRectangleBorderColor = 15385233
+      Colors.SelectionTextColor = clBlack
+      Colors.TreeLineColor = 9471874
+      Colors.UnfocusedColor = clGray
+      Colors.UnfocusedSelectionColor = 15385233
+      Colors.UnfocusedSelectionBorderColor = 15385233
       DragOperations = []
       Font.Charset = ANSI_CHARSET
       Font.Color = clWindowText
@@ -112,21 +123,21 @@ object Frm_ODS: TFrm_ODS
         end>
     end
     object PanelTraceInfo: TPanel
-      Left = 211
+      Left = 207
       Top = 22
       Width = 389
-      Height = 228
+      Height = 227
       Align = alRight
       BevelInner = bvLowered
       ParentBackground = False
       ParentColor = True
       TabOrder = 1
       Visible = False
-      ExplicitLeft = 179
-      ExplicitHeight = 264
+      ExplicitLeft = 211
+      ExplicitHeight = 228
       object SplitterH: TSplitter
         Left = 2
-        Top = 139
+        Top = 138
         Width = 385
         Height = 5
         Cursor = crVSplit
@@ -137,14 +148,27 @@ object Frm_ODS: TFrm_ODS
         Left = 2
         Top = 2
         Width = 385
-        Height = 137
+        Height = 136
         Align = alClient
         BevelOuter = bvNone
         Color = 16117479
-        Colors.BorderColor = clWindowText
+        Colors.BorderColor = clBlack
+        Colors.DisabledColor = clGray
+        Colors.DropMarkColor = 15385233
+        Colors.DropTargetColor = 15385233
+        Colors.DropTargetBorderColor = 15385233
+        Colors.FocusedSelectionColor = 15385233
+        Colors.FocusedSelectionBorderColor = 15385233
+        Colors.GridLineColor = 15987699
+        Colors.HeaderHotColor = clBlack
         Colors.HotColor = clBlack
-        Colors.UnfocusedSelectionColor = clHighlight
-        Colors.UnfocusedSelectionBorderColor = clHighlight
+        Colors.SelectionRectangleBlendColor = 15385233
+        Colors.SelectionRectangleBorderColor = 15385233
+        Colors.SelectionTextColor = clBlack
+        Colors.TreeLineColor = 9471874
+        Colors.UnfocusedColor = clGray
+        Colors.UnfocusedSelectionColor = 15385233
+        Colors.UnfocusedSelectionBorderColor = 15385233
         Font.Charset = ANSI_CHARSET
         Font.Color = clWindowText
         Font.Height = -11
@@ -197,7 +221,7 @@ object Frm_ODS: TFrm_ODS
       end
       inline FrameMemo: TFrameMemo
         Left = 2
-        Top = 144
+        Top = 143
         Width = 385
         Height = 82
         Align = alBottom
@@ -208,13 +232,13 @@ object Frm_ODS: TFrm_ODS
         ExplicitHeight = 82
         inherited SynMemo: TSynEdit
           Width = 385
-          Height = 53
+          Height = 57
           ExplicitTop = 29
           ExplicitWidth = 360
+          ExplicitHeight = 53
         end
         inherited PanelTop: TPanel
           Width = 385
-          ExplicitLeft = 0
           ExplicitWidth = 360
         end
       end
@@ -222,7 +246,7 @@ object Frm_ODS: TFrm_ODS
     object PanelTop: TPanel
       Left = 0
       Top = 0
-      Width = 600
+      Width = 596
       Height = 22
       Align = alTop
       BevelOuter = bvNone
@@ -231,7 +255,7 @@ object Frm_ODS: TFrm_ODS
       TabOrder = 2
       ExplicitWidth = 568
       DesignSize = (
-        600
+        596
         22)
       object TracesInfo: TLabel
         Left = 3
@@ -241,7 +265,7 @@ object Frm_ODS: TFrm_ODS
         Caption = 'TracesInfo'
       end
       object butClose: TBitBtn
-        Left = 577
+        Left = 573
         Top = 0
         Width = 22
         Height = 20
@@ -282,7 +306,7 @@ object Frm_ODS: TFrm_ODS
       Left = 0
       Top = 22
       Width = 12
-      Height = 228
+      Height = 227
       Align = alLeft
       BevelOuter = bvNone
       TabOrder = 3

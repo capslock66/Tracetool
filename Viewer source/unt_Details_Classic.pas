@@ -129,6 +129,7 @@ begin
              - [toEditable]               // don't allow edition. Code is used to detect double click or F2 key
              - [toReportMode] ;           // Tree behaves like TListView in report mode.
 
+   VstDetail.Colors.UnfocusedColor                := TraceWin.vstTrace.Colors.UnfocusedColor ;
    VstDetail.Colors.UnfocusedSelectionColor       := TraceWin.vstTrace.Colors.UnfocusedSelectionColor ;
    VstDetail.Colors.UnfocusedSelectionBorderColor := TraceWin.vstTrace.Colors.UnfocusedSelectionBorderColor ;
 end;

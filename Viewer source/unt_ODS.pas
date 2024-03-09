@@ -233,6 +233,7 @@ begin
    // tips : don't forget to include the hoOwnerDraw in the VstDebugString.Header.Options
 
    // copy all options from main form
+   VstDebugString.Colors.UnfocusedColor                := Frm_Trace.vstTrace.Colors.UnfocusedColor ;
    VstDebugString.Colors.UnfocusedSelectionColor       := Frm_Trace.vstTrace.Colors.UnfocusedSelectionColor ;
    VstDebugString.Colors.UnfocusedSelectionBorderColor := Frm_Trace.vstTrace.Colors.UnfocusedSelectionBorderColor ;
    VstDebugString.NodeDataSize := sizeof (TODSRec) ;
@@ -258,6 +259,7 @@ begin
    VstDetail.TreeOptions.PaintOptions     := Frm_Trace.VstDetail.TreeOptions.PaintOptions ;
    VstDetail.TreeOptions.SelectionOptions := Frm_Trace.VstDetail.TreeOptions.SelectionOptions ;
    VstDetail.TreeOptions.MiscOptions      := Frm_Trace.VstDetail.TreeOptions.MiscOptions ;
+   VstDetail.Colors.UnfocusedColor                := Frm_Trace.vstTrace.Colors.UnfocusedColor ;
    VstDetail.Colors.UnfocusedSelectionColor       := Frm_Trace.vstTrace.Colors.UnfocusedSelectionColor ;
    VstDetail.Colors.UnfocusedSelectionBorderColor := Frm_Trace.vstTrace.Colors.UnfocusedSelectionBorderColor ;
 

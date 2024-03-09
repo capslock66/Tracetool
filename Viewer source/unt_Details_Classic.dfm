@@ -21,8 +21,21 @@ inherited frame_Classic: Tframe_Classic
     BevelInner = bvNone
     BevelOuter = bvNone
     Color = 16117479
-    Colors.BorderColor = clWindowText
+    Colors.BorderColor = clBlack
+    Colors.DisabledColor = clGray
+    Colors.DropMarkColor = 15385233
+    Colors.DropTargetColor = 15385233
+    Colors.DropTargetBorderColor = 15385233
+    Colors.FocusedSelectionColor = 15385233
+    Colors.FocusedSelectionBorderColor = 15385233
+    Colors.GridLineColor = 15987699
+    Colors.HeaderHotColor = clBlack
     Colors.HotColor = clBlack
+    Colors.SelectionRectangleBlendColor = 15385233
+    Colors.SelectionRectangleBorderColor = 15385233
+    Colors.SelectionTextColor = clBlack
+    Colors.TreeLineColor = 9471874
+    Colors.UnfocusedColor = clGray
     Colors.UnfocusedSelectionColor = clGray
     Colors.UnfocusedSelectionBorderColor = clGray
     Font.Charset = ANSI_CHARSET
@@ -99,7 +112,6 @@ inherited frame_Classic: Tframe_Classic
     inherited SynMemo: TSynEdit
       Width = 525
       Height = 215
-      ExplicitTop = 25
       ExplicitWidth = 525
       ExplicitHeight = 215
     end

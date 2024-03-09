@@ -267,6 +267,7 @@ begin
    TailList.Add (self) ;
 
    // copy all options from main form
+   VstTail.Colors.UnfocusedColor                := Frm_Trace.vstTrace.Colors.UnfocusedColor ;
    VstTail.Colors.UnfocusedSelectionColor       := Frm_Trace.vstTrace.Colors.UnfocusedSelectionColor ;
    VstTail.Colors.UnfocusedSelectionBorderColor := Frm_Trace.vstTrace.Colors.UnfocusedSelectionBorderColor ;
    VstTail.NodeDataSize := sizeof (TTailRec) ;
@@ -301,6 +302,7 @@ begin
    VstDetail.TreeOptions.PaintOptions     := Frm_Trace.VstDetail.TreeOptions.PaintOptions ;
    VstDetail.TreeOptions.SelectionOptions := Frm_Trace.VstDetail.TreeOptions.SelectionOptions ;
    VstDetail.TreeOptions.MiscOptions      := Frm_Trace.VstDetail.TreeOptions.MiscOptions ;
+   VstDetail.Colors.UnfocusedColor                := Frm_Trace.vstTrace.Colors.UnfocusedColor ;
    VstDetail.Colors.UnfocusedSelectionColor       := Frm_Trace.vstTrace.Colors.UnfocusedSelectionColor ;
    VstDetail.Colors.UnfocusedSelectionBorderColor := Frm_Trace.vstTrace.Colors.UnfocusedSelectionBorderColor ;
 

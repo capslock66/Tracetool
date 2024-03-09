@@ -210,6 +210,7 @@ begin
    // tips : don't forget to include the hoOwnerDraw in the VstEvent.Header.Options
 
    // copy all options from main form
+   VstEvent.Colors.UnfocusedColor                := Frm_Trace.vstTrace.Colors.UnfocusedColor ;
    VstEvent.Colors.UnfocusedSelectionColor       := Frm_Trace.vstTrace.Colors.UnfocusedSelectionColor ;
    VstEvent.Colors.UnfocusedSelectionBorderColor := Frm_Trace.vstTrace.Colors.UnfocusedSelectionBorderColor ;
    VstEvent.NodeDataSize := sizeof (TEvntLogRec) ;
@@ -243,6 +244,7 @@ begin
    VstDetail.TreeOptions.PaintOptions     := Frm_Trace.VstDetail.TreeOptions.PaintOptions ;
    VstDetail.TreeOptions.SelectionOptions := Frm_Trace.VstDetail.TreeOptions.SelectionOptions ;
    VstDetail.TreeOptions.MiscOptions      := Frm_Trace.VstDetail.TreeOptions.MiscOptions ;
+   VstDetail.Colors.UnfocusedColor                := Frm_Trace.vstTrace.Colors.UnfocusedColor ;
    VstDetail.Colors.UnfocusedSelectionColor       := Frm_Trace.vstTrace.Colors.UnfocusedSelectionColor ;
    VstDetail.Colors.UnfocusedSelectionBorderColor := Frm_Trace.vstTrace.Colors.UnfocusedSelectionBorderColor ;
 

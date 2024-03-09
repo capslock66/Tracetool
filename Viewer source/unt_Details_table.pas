@@ -8,6 +8,7 @@ uses
   unt_Editor, Menus , ExtCtrls, clipbrd,
   unt_TraceWin ,
   unt_utility,
+  vstSort,
   unt_tool;            // VstEditor, IVstEditor, TMember
 
 type
@@ -53,6 +54,7 @@ type
   public
     { Public declarations }
     TraceWin: TFrm_Trace;
+    Sorter: TVstSort;
     Constructor Create(AOwner: TComponent);  override ;
     Procedure AddDetails(TreeRec: PTreeRec; RootMember : TMember); override;
     function HasFocus : boolean ; override;
@@ -77,6 +79,18 @@ begin
    inherited create (AOwner) ;
    
    TraceWin := TFrm_Trace(owner);
+
+   // initialize sort
+   Sorter := TVstSort.Create(self);
+   Sorter.tree := VstTable;
+   Sorter.UtilityImages := Frm_Tool.UtilityImages;
+   Sorter.canUnsort := true;
+
+   // redirect some events to the sorter
+   VstTable.onHeaderClick := Sorter.onHeaderClick;
+   VstTable.OnKeyUp := Sorter.OnKeyUp;
+   VstTable.onHeaderDrawQueryElements := Sorter.onHeaderDrawQueryElements;
+   VstTable.onAdvancedHeaderDraw := Sorter.onAdvancedHeaderDraw;
 
    VstTable.NodeDataSize := sizeof (TTableRec) ;
    //VstTable.Header.SortColumn := 0 ;
@@ -106,6 +120,7 @@ begin
              - [toEditable]               // don't allow edition. Code is used to detect double click or F2 key
              - [toReportMode] ;           // Tree behaves like TListView in report mode.
 
+   VstTable.Colors.UnfocusedColor                := TraceWin.vstTrace.Colors.UnfocusedColor ;
    VstTable.Colors.UnfocusedSelectionColor       := TraceWin.vstTrace.Colors.UnfocusedSelectionColor ;
    VstTable.Colors.UnfocusedSelectionBorderColor := TraceWin.vstTrace.Colors.UnfocusedSelectionBorderColor ;
 

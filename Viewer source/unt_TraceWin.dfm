@@ -11,10 +11,8 @@ object Frm_Trace: TFrm_Trace
   Font.Height = -11
   Font.Name = 'MS Sans Serif'
   Font.Style = []
-  OldCreateOrder = False
   OnClose = FormClose
   OnCreate = FormCreate
-  PixelsPerInch = 96
   TextHeight = 13
   object PanelTTraces: TPanel
     Left = 0
@@ -24,6 +22,8 @@ object Frm_Trace: TFrm_Trace
     Align = alClient
     BevelOuter = bvNone
     TabOrder = 0
+    ExplicitWidth = 568
+    ExplicitHeight = 324
     object VSplitter: TSplitter
       Left = 220
       Top = 22
@@ -42,6 +42,8 @@ object Frm_Trace: TFrm_Trace
       BevelOuter = bvNone
       TabOrder = 0
       OnResize = PanelLeftResize
+      ExplicitWidth = 216
+      ExplicitHeight = 302
       object vstTrace: TVirtualStringTree
         Left = 12
         Top = 0
@@ -50,8 +52,21 @@ object Frm_Trace: TFrm_Trace
         Align = alClient
         BevelInner = bvLowered
         BevelOuter = bvRaised
-        Colors.BorderColor = clWindowText
+        Colors.BorderColor = clBlack
+        Colors.DisabledColor = clGray
+        Colors.DropMarkColor = 15385233
+        Colors.DropTargetColor = 15385233
+        Colors.DropTargetBorderColor = 15385233
+        Colors.FocusedSelectionColor = 15385233
+        Colors.FocusedSelectionBorderColor = 15385233
+        Colors.GridLineColor = 15987699
+        Colors.HeaderHotColor = clBlack
         Colors.HotColor = clBlack
+        Colors.SelectionRectangleBlendColor = 15385233
+        Colors.SelectionRectangleBorderColor = 15385233
+        Colors.SelectionTextColor = clBlack
+        Colors.TreeLineColor = 9471874
+        Colors.UnfocusedColor = clBlack
         Colors.UnfocusedSelectionColor = clGray
         Colors.UnfocusedSelectionBorderColor = clGray
         DragOperations = []
@@ -101,8 +116,6 @@ object Frm_Trace: TFrm_Trace
         OnMeasureItem = vstTraceMeasureItem
         Touch.InteractiveGestures = [igPan, igPressAndTap]
         Touch.InteractiveGestureOptions = [igoPanSingleFingerHorizontal, igoPanSingleFingerVertical, igoPanInertia, igoPanGutter, igoParentPassthrough]
-        ExplicitLeft = 11
-        ExplicitTop = 2
         Columns = <
           item
             Options = [coAllowClick, coDraggable, coEnabled, coParentBidiMode, coParentColor, coShowDropMark, coVisible]
@@ -145,6 +158,7 @@ object Frm_Trace: TFrm_Trace
         BevelOuter = bvNone
         TabOrder = 1
         OnDblClick = PanelGutterDblClick
+        ExplicitHeight = 302
       end
     end
     object PanelRight: TPanel
@@ -156,6 +170,8 @@ object Frm_Trace: TFrm_Trace
       BevelOuter = bvNone
       TabOrder = 1
       Visible = False
+      ExplicitLeft = 221
+      ExplicitHeight = 302
     end
     object PanelTop: TPanel
       Left = 0
@@ -167,6 +183,7 @@ object Frm_Trace: TFrm_Trace
       Color = clCream
       ParentBackground = False
       TabOrder = 2
+      ExplicitWidth = 568
       DesignSize = (
         572
         22)
@@ -230,6 +247,7 @@ object Frm_Trace: TFrm_Trace
           00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FF}
         TabOrder = 0
         OnClick = butCloseClick
+        ExplicitLeft = 545
       end
     end
   end

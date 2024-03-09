@@ -2,26 +2,26 @@ inherited FrmEventLog: TFrmEventLog
   Left = 314
   Top = 235
   Caption = 'FrmEventLog'
-  ClientHeight = 380
-  ClientWidth = 737
-  OldCreateOrder = True
-  ExplicitWidth = 753
-  ExplicitHeight = 419
-  PixelsPerInch = 96
+  ClientHeight = 379
+  ClientWidth = 733
+  ExplicitWidth = 749
+  ExplicitHeight = 418
   TextHeight = 13
   object GroupPanel: TPanel
     Left = 0
     Top = 0
-    Width = 737
-    Height = 380
+    Width = 733
+    Height = 379
     Align = alClient
     BevelOuter = bvNone
     Caption = 'GroupPanel'
     TabOrder = 0
+    ExplicitWidth = 737
+    ExplicitHeight = 380
     object VSplitter: TSplitter
-      Left = 349
+      Left = 345
       Top = 22
-      Height = 358
+      Height = 357
       Align = alRight
       ExplicitLeft = 196
       ExplicitHeight = 149
@@ -29,14 +29,27 @@ inherited FrmEventLog: TFrmEventLog
     object VstEvent: TVirtualStringTree
       Left = 12
       Top = 22
-      Width = 337
-      Height = 358
+      Width = 333
+      Height = 357
       Align = alClient
       BevelInner = bvNone
-      Colors.BorderColor = clWindowText
+      Colors.BorderColor = clBlack
+      Colors.DisabledColor = clGray
+      Colors.DropMarkColor = 15385233
+      Colors.DropTargetColor = 15385233
+      Colors.DropTargetBorderColor = 15385233
+      Colors.FocusedSelectionColor = 15385233
+      Colors.FocusedSelectionBorderColor = 15385233
+      Colors.GridLineColor = 15987699
+      Colors.HeaderHotColor = clBlack
       Colors.HotColor = clBlack
-      Colors.UnfocusedSelectionColor = clHighlight
-      Colors.UnfocusedSelectionBorderColor = clHighlight
+      Colors.SelectionRectangleBlendColor = 15385233
+      Colors.SelectionRectangleBorderColor = 15385233
+      Colors.SelectionTextColor = clBlack
+      Colors.TreeLineColor = 9471874
+      Colors.UnfocusedColor = clGray
+      Colors.UnfocusedSelectionColor = 15385233
+      Colors.UnfocusedSelectionBorderColor = 15385233
       DragOperations = []
       Font.Charset = ANSI_CHARSET
       Font.Color = clWindowText
@@ -109,18 +122,20 @@ inherited FrmEventLog: TFrmEventLog
         end>
     end
     object PanelTraceInfo: TPanel
-      Left = 352
+      Left = 348
       Top = 22
       Width = 385
-      Height = 358
+      Height = 357
       Align = alRight
       BevelInner = bvLowered
       ParentBackground = False
       ParentColor = True
       TabOrder = 1
+      ExplicitLeft = 352
+      ExplicitHeight = 358
       object SplitterH: TSplitter
         Left = 2
-        Top = 195
+        Top = 194
         Width = 381
         Height = 5
         Cursor = crVSplit
@@ -131,14 +146,27 @@ inherited FrmEventLog: TFrmEventLog
         Left = 2
         Top = 2
         Width = 381
-        Height = 193
+        Height = 192
         Align = alClient
         BevelOuter = bvNone
         Color = 16117479
-        Colors.BorderColor = clWindowText
+        Colors.BorderColor = clBlack
+        Colors.DisabledColor = clGray
+        Colors.DropMarkColor = 15385233
+        Colors.DropTargetColor = 15385233
+        Colors.DropTargetBorderColor = 15385233
+        Colors.FocusedSelectionColor = 15385233
+        Colors.FocusedSelectionBorderColor = 15385233
+        Colors.GridLineColor = 15987699
+        Colors.HeaderHotColor = clBlack
         Colors.HotColor = clBlack
-        Colors.UnfocusedSelectionColor = clHighlight
-        Colors.UnfocusedSelectionBorderColor = clHighlight
+        Colors.SelectionRectangleBlendColor = 15385233
+        Colors.SelectionRectangleBorderColor = 15385233
+        Colors.SelectionTextColor = clBlack
+        Colors.TreeLineColor = 9471874
+        Colors.UnfocusedColor = clGray
+        Colors.UnfocusedSelectionColor = 15385233
+        Colors.UnfocusedSelectionBorderColor = 15385233
         Font.Charset = ANSI_CHARSET
         Font.Color = clWindowText
         Font.Height = -11
@@ -198,7 +226,7 @@ inherited FrmEventLog: TFrmEventLog
       end
       inline FrameMemo: TFrameMemo
         Left = 2
-        Top = 200
+        Top = 199
         Width = 381
         Height = 156
         Align = alBottom
@@ -210,6 +238,7 @@ inherited FrmEventLog: TFrmEventLog
         inherited SynMemo: TSynEdit
           Width = 381
           Height = 131
+          ExplicitWidth = 381
           ExplicitHeight = 127
         end
         inherited PanelTop: TPanel
@@ -221,7 +250,7 @@ inherited FrmEventLog: TFrmEventLog
     object PanelTop: TPanel
       Left = 0
       Top = 0
-      Width = 737
+      Width = 733
       Height = 22
       Align = alTop
       BevelOuter = bvNone
@@ -230,7 +259,7 @@ inherited FrmEventLog: TFrmEventLog
       TabOrder = 2
       ExplicitWidth = 569
       DesignSize = (
-        737
+        733
         22)
       object TracesInfo: TLabel
         Left = 3
@@ -240,7 +269,7 @@ inherited FrmEventLog: TFrmEventLog
         Caption = 'TracesInfo'
       end
       object butClose: TBitBtn
-        Left = 714
+        Left = 710
         Top = 0
         Width = 22
         Height = 20
@@ -277,7 +306,7 @@ inherited FrmEventLog: TFrmEventLog
         ExplicitLeft = 546
       end
       object butReload: TBitBtn
-        Left = 646
+        Left = 642
         Top = 0
         Width = 65
         Height = 20
@@ -288,7 +317,7 @@ inherited FrmEventLog: TFrmEventLog
         ExplicitLeft = 478
       end
       object butGetAll: TBitBtn
-        Left = 546
+        Left = 542
         Top = 0
         Width = 97
         Height = 20
@@ -303,7 +332,7 @@ inherited FrmEventLog: TFrmEventLog
       Left = 0
       Top = 22
       Width = 12
-      Height = 358
+      Height = 357
       Align = alLeft
       BevelOuter = bvNone
       TabOrder = 3
