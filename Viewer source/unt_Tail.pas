@@ -2311,6 +2311,8 @@ procedure TFrmTail.VstTailKeyAction(Sender: TBaseVirtualTree;
 begin
    if CharCode = VK_F2 then
       VstTail.TreeOptions.MiscOptions := VstTail.TreeOptions.MiscOptions + [toEditable] ;
+   if CharCode = VK_DELETE then
+      DeleteSelected() ;
 end;
 
 //------------------------------------------------------------------------------

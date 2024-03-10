@@ -20,8 +20,6 @@ object FrmTail: TFrmTail
     Align = alClient
     BevelOuter = bvNone
     TabOrder = 0
-    ExplicitWidth = 600
-    ExplicitHeight = 250
     object VSplitter: TSplitter
       Left = 190
       Top = 22
@@ -98,8 +96,8 @@ object FrmTail: TFrmTail
       OnMeasureItem = VstTailMeasureItem
       Touch.InteractiveGestures = [igPan, igPressAndTap]
       Touch.InteractiveGestureOptions = [igoPanSingleFingerHorizontal, igoPanSingleFingerVertical, igoPanInertia, igoPanGutter, igoParentPassthrough]
-      ExplicitWidth = 150
-      ExplicitHeight = 214
+      ExplicitWidth = 174
+      ExplicitHeight = 226
       Columns = <
         item
           Options = [coAllowClick, coDraggable, coEnabled, coParentBidiMode, coParentColor, coResizable, coShowDropMark, coVisible]
@@ -126,8 +124,6 @@ object FrmTail: TFrmTail
       ParentColor = True
       TabOrder = 1
       Visible = False
-      ExplicitLeft = 197
-      ExplicitHeight = 228
       object SplitterH: TSplitter
         Left = 1
         Top = 154
@@ -197,7 +193,7 @@ object FrmTail: TFrmTail
         OnMeasureItem = VstDetailMeasureItem
         Touch.InteractiveGestures = [igPan, igPressAndTap]
         Touch.InteractiveGestureOptions = [igoPanSingleFingerHorizontal, igoPanSingleFingerVertical, igoPanInertia, igoPanGutter, igoParentPassthrough]
-        ExplicitHeight = 136
+        ExplicitHeight = 152
         Columns = <
           item
             Color = 16117479
@@ -220,19 +216,18 @@ object FrmTail: TFrmTail
         Align = alBottom
         TabOrder = 1
         ExplicitLeft = 1
-        ExplicitTop = 160
+        ExplicitTop = 159
         ExplicitWidth = 401
         ExplicitHeight = 67
         inherited SynMemo: TSynEdit
           Width = 401
           Height = 42
-          ExplicitTop = 29
-          ExplicitWidth = 360
-          ExplicitHeight = 38
+          ExplicitWidth = 401
+          ExplicitHeight = 42
         end
         inherited PanelTop: TPanel
           Width = 401
-          ExplicitWidth = 360
+          ExplicitWidth = 401
         end
       end
     end
@@ -246,6 +241,7 @@ object FrmTail: TFrmTail
       Color = clCream
       ParentBackground = False
       TabOrder = 2
+      ExplicitWidth = 592
       DesignSize = (
         596
         22)
@@ -291,7 +287,7 @@ object FrmTail: TFrmTail
           00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FF}
         TabOrder = 0
         OnClick = butCloseClick
-        ExplicitLeft = 545
+        ExplicitLeft = 569
       end
       object butReload: TBitBtn
         Left = 518
@@ -302,7 +298,7 @@ object FrmTail: TFrmTail
         Caption = 'Reload'
         TabOrder = 1
         OnClick = butReloadClick
-        ExplicitLeft = 490
+        ExplicitLeft = 514
       end
       object butClearContent: TBitBtn
         Left = 408
@@ -313,7 +309,7 @@ object FrmTail: TFrmTail
         Caption = 'Clear File Content'
         TabOrder = 2
         OnClick = butClearContentClick
-        ExplicitLeft = 380
+        ExplicitLeft = 404
       end
     end
     object PanelGutter: TPanel
@@ -325,7 +321,7 @@ object FrmTail: TFrmTail
       BevelOuter = bvNone
       TabOrder = 3
       OnDblClick = PanelGutterDblClick
-      ExplicitHeight = 214
+      ExplicitHeight = 226
     end
   end
   object PopupTree: TPopupMenu

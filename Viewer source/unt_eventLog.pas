@@ -1429,6 +1429,8 @@ procedure TFrmEventLog.VstEventKeyAction(Sender: TBaseVirtualTree;
 begin
    if CharCode = VK_F2 then
       VstEvent.TreeOptions.MiscOptions := VstEvent.TreeOptions.MiscOptions + [toEditable] ;
+   if CharCode = VK_DELETE then
+      DeleteSelected() ;
 end;
 
 //------------------------------------------------------------------------------

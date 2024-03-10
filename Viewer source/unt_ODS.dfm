@@ -21,8 +21,6 @@ object Frm_ODS: TFrm_ODS
     Align = alClient
     BevelOuter = bvNone
     TabOrder = 0
-    ExplicitWidth = 600
-    ExplicitHeight = 250
     object VSplitter: TSplitter
       Left = 204
       Top = 22
@@ -100,8 +98,8 @@ object Frm_ODS: TFrm_ODS
       OnMeasureItem = VstDebugStringMeasureItem
       Touch.InteractiveGestures = [igPan, igPressAndTap]
       Touch.InteractiveGestureOptions = [igoPanSingleFingerHorizontal, igoPanSingleFingerVertical, igoPanInertia, igoPanGutter, igoParentPassthrough]
-      ExplicitWidth = 164
-      ExplicitHeight = 264
+      ExplicitWidth = 188
+      ExplicitHeight = 226
       Columns = <
         item
           Position = 0
@@ -133,8 +131,6 @@ object Frm_ODS: TFrm_ODS
       ParentColor = True
       TabOrder = 1
       Visible = False
-      ExplicitLeft = 211
-      ExplicitHeight = 228
       object SplitterH: TSplitter
         Left = 2
         Top = 138
@@ -204,7 +200,7 @@ object Frm_ODS: TFrm_ODS
         OnMeasureItem = VstDetailMeasureItem
         Touch.InteractiveGestures = [igPan, igPressAndTap]
         Touch.InteractiveGestureOptions = [igoPanSingleFingerHorizontal, igoPanSingleFingerVertical, igoPanInertia, igoPanGutter, igoParentPassthrough]
-        ExplicitHeight = 111
+        ExplicitHeight = 135
         Columns = <
           item
             Color = 16117479
@@ -227,19 +223,18 @@ object Frm_ODS: TFrm_ODS
         Align = alBottom
         TabOrder = 1
         ExplicitLeft = 2
-        ExplicitTop = 144
+        ExplicitTop = 143
         ExplicitWidth = 385
         ExplicitHeight = 82
         inherited SynMemo: TSynEdit
           Width = 385
           Height = 57
-          ExplicitTop = 29
-          ExplicitWidth = 360
-          ExplicitHeight = 53
+          ExplicitWidth = 385
+          ExplicitHeight = 57
         end
         inherited PanelTop: TPanel
           Width = 385
-          ExplicitWidth = 360
+          ExplicitWidth = 385
         end
       end
     end
@@ -253,7 +248,7 @@ object Frm_ODS: TFrm_ODS
       Color = clCream
       ParentBackground = False
       TabOrder = 2
-      ExplicitWidth = 568
+      ExplicitWidth = 592
       DesignSize = (
         596
         22)
@@ -299,7 +294,7 @@ object Frm_ODS: TFrm_ODS
           00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FF}
         TabOrder = 0
         OnClick = butCloseClick
-        ExplicitLeft = 545
+        ExplicitLeft = 569
       end
     end
     object PanelGutter: TPanel
@@ -311,7 +306,7 @@ object Frm_ODS: TFrm_ODS
       BevelOuter = bvNone
       TabOrder = 3
       OnDblClick = PanelGutterDblClick
-      ExplicitHeight = 264
+      ExplicitHeight = 226
     end
   end
   object PopupTree: TPopupMenu

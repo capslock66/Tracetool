@@ -216,7 +216,6 @@ object FrmPageContainer: TFrmPageContainer
       Caption = '&Delete'
       Hint = 'Delete selected lines'
       ImageIndex = 9
-      ShortCut = 46
       OnExecute = actDeleteExecute
     end
     object actCut: TAction

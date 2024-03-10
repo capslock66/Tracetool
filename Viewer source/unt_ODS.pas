@@ -1293,6 +1293,8 @@ procedure TFrm_ODS.VstDebugStringKeyAction(Sender: TBaseVirtualTree;
 begin
    if CharCode = VK_F2 then
       VstDebugString.TreeOptions.MiscOptions := VstDebugString.TreeOptions.MiscOptions + [toEditable] ;
+   if CharCode = VK_DELETE then
+      DeleteSelected() ;
 end;
 
 //------------------------------------------------------------------------------

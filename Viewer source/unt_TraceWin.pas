@@ -1707,8 +1707,10 @@ procedure TFrm_Trace.vstTraceKeyAction(Sender: TBaseVirtualTree;
    var CharCode: Word; var Shift: TShiftState; var DoDefault: boolean);
 begin
    if CharCode = VK_F2 then
-      vstTrace.TreeOptions.MiscOptions := vstTrace.TreeOptions.MiscOptions +
-         [toEditable];
+      vstTrace.TreeOptions.MiscOptions := vstTrace.TreeOptions.MiscOptions +  [toEditable];
+
+   if CharCode = VK_DELETE then
+      DeleteSelected() ;
 end;
 
 // ------------------------------------------------------------------------------
