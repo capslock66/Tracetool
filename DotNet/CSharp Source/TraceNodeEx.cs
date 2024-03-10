@@ -2342,6 +2342,8 @@ namespace TraceTool
                 else
                     strMemberValue = memberValue.ToString();
 
+                strMemberValue = strMemberValue.Replace("\t","\\t");
+
                 if (isFirstCol)
                     fCurrentRow.Col1 = strMemberValue;
                 else
@@ -2392,6 +2394,7 @@ namespace TraceTool
                     strMemberValue = "null";
                 else
                     strMemberValue = memberValue.ToString();
+                strMemberValue = strMemberValue.Replace("\t", "\\t");
 
                 if (isFirstCol)
                     fCurrentRow.Col1 = strMemberValue;
