@@ -77,9 +77,9 @@
         <VerInfo_MajorVer>13</VerInfo_MajorVer>
         <VerInfo_Build>563</VerInfo_Build>
         <VerInfo_Locale>2060</VerInfo_Locale>
-        <VerInfo_Keys>CompanyName=Thierry Parent;FileDescription=TraceTool utility;FileVersion=13.3.0.563;InternalName=TraceTool;LegalCopyright=Thierry Parent;LegalTrademarks=Thierry Parent;OriginalFilename=none;ProductName=TraceTool;ProductVersion=13.3;Comments=Freeware Trace utility for  Dot Net, Javascript, Java, Delphi,  C++ and Python</VerInfo_Keys>
+        <VerInfo_Keys>CompanyName=Thierry Parent;FileDescription=TraceTool utility;FileVersion=13.4.0.563;InternalName=TraceTool;LegalCopyright=Thierry Parent;LegalTrademarks=Thierry Parent;OriginalFilename=none;ProductName=TraceTool;ProductVersion=13.4;Comments=Freeware Trace utility for  Dot Net, Javascript, Java, Delphi,  C++ and Python</VerInfo_Keys>
         <VerInfo_AutoIncVersion>true</VerInfo_AutoIncVersion>
-        <VerInfo_MinorVer>3</VerInfo_MinorVer>
+        <VerInfo_MinorVer>4</VerInfo_MinorVer>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Base_Win32)'!=''">
         <DCC_Namespace>Data.Win;Datasnap.Win;Web.Win;Soap.Win;Bde;$(DCC_Namespace)</DCC_Namespace>
@@ -88,8 +88,8 @@
         <Manifest_File>$(BDS)\bin\default_app.manifest</Manifest_File>
         <Debugger_RunParams>/NoDebug</Debugger_RunParams>
         <Icon_MainIcon>TraceTool_Icon2.ico</Icon_MainIcon>
-        <AppEnableRuntimeThemes>true</AppEnableRuntimeThemes>
         <UWP_DelphiLogo44>$(BDS)\bin\Artwork\Windows\UWP\delphi_UwpDefault_44.png</UWP_DelphiLogo44>
+        <AppDPIAwarenessMode>none</AppDPIAwarenessMode>
         <UWP_DelphiLogo150>$(BDS)\bin\Artwork\Windows\UWP\delphi_UwpDefault_150.png</UWP_DelphiLogo150>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Base_Win64)'!=''">
@@ -100,6 +100,7 @@
         <BT_BuildType>Debug</BT_BuildType>
         <VerInfo_Locale>1033</VerInfo_Locale>
         <Manifest_File>$(BDS)\bin\default_app.manifest</Manifest_File>
+        <AppDPIAwarenessMode>none</AppDPIAwarenessMode>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_1)'!=''">
         <DCC_ExeOutput>..\Viewer\</DCC_ExeOutput>
@@ -108,19 +109,19 @@
         <DCC_SymbolReferenceInfo>0</DCC_SymbolReferenceInfo>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_1_Win32)'!=''">
-        <AppEnableRuntimeThemes>true</AppEnableRuntimeThemes>
         <AppDPIAwarenessMode>PerMonitorV2</AppDPIAwarenessMode>
         <Debugger_RunParams>/Debug</Debugger_RunParams>
         <VerInfo_Locale>1033</VerInfo_Locale>
         <VerInfo_Build>569</VerInfo_Build>
-        <VerInfo_Keys>CompanyName=Thierry Parent;FileDescription=TraceTool utility;FileVersion=13.3.0.569;InternalName=TraceTool;LegalCopyright=Thierry Parent;LegalTrademarks=Thierry Parent;OriginalFilename=none;ProductName=TraceTool;ProductVersion=13.3;Comments=Freeware Trace utility for  Dot Net, Javascript, Java, Delphi,  C++ and Python</VerInfo_Keys>
+        <VerInfo_Keys>CompanyName=Thierry Parent;FileDescription=TraceTool utility;FileVersion=13.4.0.569;InternalName=TraceTool;LegalCopyright=Thierry Parent;LegalTrademarks=Thierry Parent;OriginalFilename=none;ProductName=TraceTool;ProductVersion=13.4;Comments=Freeware Trace utility for  Dot Net, Javascript, Java, Delphi,  C++ and Python</VerInfo_Keys>
+        <VerInfo_MinorVer>3</VerInfo_MinorVer>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_1_Win64)'!=''">
-        <AppEnableRuntimeThemes>true</AppEnableRuntimeThemes>
         <AppDPIAwarenessMode>PerMonitorV2</AppDPIAwarenessMode>
         <VerInfo_Locale>1033</VerInfo_Locale>
-        <VerInfo_Build>568</VerInfo_Build>
-        <VerInfo_Keys>CompanyName=Thierry Parent;FileDescription=TraceTool utility;FileVersion=13.3.0.568;InternalName=TraceTool;LegalCopyright=Thierry Parent;LegalTrademarks=Thierry Parent;OriginalFilename=none;ProductName=TraceTool;ProductVersion=13.3;Comments=Freeware Trace utility for  Dot Net, Javascript, Java, Delphi,  C++ and Python</VerInfo_Keys>
+        <VerInfo_Build>572</VerInfo_Build>
+        <VerInfo_Keys>CompanyName=Thierry Parent;FileDescription=TraceTool utility;FileVersion=13.4.0.572;InternalName=TraceTool;LegalCopyright=Thierry Parent;LegalTrademarks=Thierry Parent;OriginalFilename=none;ProductName=TraceTool;ProductVersion=13.4;Comments=Freeware Trace utility for  Dot Net, Javascript, Java, Delphi,  C++ and Python</VerInfo_Keys>
+        <VerInfo_MinorVer>3</VerInfo_MinorVer>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_2)'!=''">
         <DCC_ExeOutput>..\Viewer\</DCC_ExeOutput>
@@ -130,18 +131,18 @@
         <DCC_Define>DEBUG;madExcept;$(DCC_Define)</DCC_Define>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_2_Win32)'!=''">
-        <AppEnableRuntimeThemes>true</AppEnableRuntimeThemes>
         <AppDPIAwarenessMode>PerMonitorV2</AppDPIAwarenessMode>
         <VerInfo_Locale>1033</VerInfo_Locale>
         <VerInfo_Build>566</VerInfo_Build>
-        <VerInfo_Keys>CompanyName=Thierry Parent;FileDescription=TraceTool utility;FileVersion=13.3.0.566;InternalName=TraceTool;LegalCopyright=Thierry Parent;LegalTrademarks=Thierry Parent;OriginalFilename=none;ProductName=TraceTool;ProductVersion=13.3;Comments=Freeware Trace utility for  Dot Net, Javascript, Java, Delphi,  C++ and Python</VerInfo_Keys>
+        <VerInfo_Keys>CompanyName=Thierry Parent;FileDescription=TraceTool utility;FileVersion=13.4.0.566;InternalName=TraceTool;LegalCopyright=Thierry Parent;LegalTrademarks=Thierry Parent;OriginalFilename=none;ProductName=TraceTool;ProductVersion=13.4;Comments=Freeware Trace utility for  Dot Net, Javascript, Java, Delphi,  C++ and Python</VerInfo_Keys>
+        <VerInfo_MinorVer>3</VerInfo_MinorVer>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_2_Win64)'!=''">
-        <AppEnableRuntimeThemes>true</AppEnableRuntimeThemes>
         <AppDPIAwarenessMode>PerMonitorV2</AppDPIAwarenessMode>
         <VerInfo_Locale>1033</VerInfo_Locale>
         <VerInfo_Build>567</VerInfo_Build>
-        <VerInfo_Keys>CompanyName=Thierry Parent;FileDescription=TraceTool utility;FileVersion=13.3.0.567;InternalName=TraceTool;LegalCopyright=Thierry Parent;LegalTrademarks=Thierry Parent;OriginalFilename=none;ProductName=TraceTool;ProductVersion=13.3;Comments=Freeware Trace utility for  Dot Net, Javascript, Java, Delphi,  C++ and Python</VerInfo_Keys>
+        <VerInfo_Keys>CompanyName=Thierry Parent;FileDescription=TraceTool utility;FileVersion=13.4.0.567;InternalName=TraceTool;LegalCopyright=Thierry Parent;LegalTrademarks=Thierry Parent;OriginalFilename=none;ProductName=TraceTool;ProductVersion=13.4;Comments=Freeware Trace utility for  Dot Net, Javascript, Java, Delphi,  C++ and Python</VerInfo_Keys>
+        <VerInfo_MinorVer>3</VerInfo_MinorVer>
     </PropertyGroup>
     <ItemGroup>
         <DelphiCompile Include="$(MainSource)">
@@ -302,8 +303,8 @@
                     <VersionInfoKeys Name="Comments">Freeware Trace utility for  Dot Net, Javascript, Java, Delphi,  C++ and Python</VersionInfoKeys>
                 </VersionInfoKeys>
                 <Excluded_Packages>
-                    <Excluded_Packages Name="$(BDSBIN)\dcloffice2k270.bpl">Microsoft Office 2000 Sample Automation Server Wrapper Components</Excluded_Packages>
-                    <Excluded_Packages Name="$(BDSBIN)\dclofficexp270.bpl">Microsoft Office XP Sample Automation Server Wrapper Components</Excluded_Packages>
+                    <Excluded_Packages Name="$(BDSBIN)\dcloffice2k280.bpl">Microsoft Office 2000 Sample Automation Server Wrapper Components</Excluded_Packages>
+                    <Excluded_Packages Name="$(BDSBIN)\dclofficexp280.bpl">Microsoft Office XP Sample Automation Server Wrapper Components</Excluded_Packages>
                 </Excluded_Packages>
             </Delphi.Personality>
             <ModelSupport>False</ModelSupport>
