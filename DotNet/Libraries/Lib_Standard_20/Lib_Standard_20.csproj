@@ -5,7 +5,7 @@
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <AssemblyName>TraceTool</AssemblyName>
     <RootNamespace>TraceTool</RootNamespace>
-    <Version>13.0.1</Version>
+    <Version>13.2.0</Version>
     <Product>TraceTool library</Product>
     <Authors>Thierry Parent</Authors>
     <Company />
