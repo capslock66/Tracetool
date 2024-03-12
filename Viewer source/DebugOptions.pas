@@ -1089,6 +1089,7 @@ var
    newStrFontSize : string ;
    OldFontSize : integer ;
 begin
+   exit;
    FontCombo := TCombobox (sender) ;
    FontSizeCombo := TCombobox (FontCombo.tag) ;
    if FontSizeCombo.ItemIndex <> -1 then
@@ -1123,22 +1124,28 @@ var
    fontSize : integer ;
    c : integer ;
 begin
-   LogFont := EnumLogFont.elfLogFont;
-   FontDetail.lfCharSet := LogFont.lfCharSet ;
-   FontDetail.FontType := FontType ;
-   if (FontType = TRUETYPE_FONTTYPE) then begin
-      for c := 0 to szSizeArray-1 do
-         FontDetail.SizeList.Add(tObject(PointSizes[c]));
-      result := 0 ;    // stop enumerating fonts
-    end else begin
-      fontSize := MulDiv(EnumLogFont.elfLogFont.lfHeight, 72, Screen.PixelsPerInch { PPI});
+   try
+     LogFont := EnumLogFont.elfLogFont;
+     FontDetail.lfCharSet := LogFont.lfCharSet ;
+     FontDetail.FontType := FontType ;
+     if (FontType = TRUETYPE_FONTTYPE) then begin
+        for c := 0 to szSizeArray-1 do
+           FontDetail.SizeList.Add(tObject(PointSizes[c]));
+        result := 0 ;    // stop enumerating fonts
+     end else begin
+        fontSize := MulDiv(EnumLogFont.elfLogFont.lfHeight, 72, Screen.PixelsPerInch { PPI});
 
-      if FontDetail.SizeList.IndexOf (tObject(fontSize)) = -1 then begin
-         FontDetail.SizeList.Add(tObject(fontSize));  // TObjectList
-      end ;
-      result := 1 ;    // continue enumeration for font size
-   end ;
-end;
+        if FontDetail.SizeList.IndexOf (tObject(fontSize)) = -1 then begin
+           FontDetail.SizeList.Add(tObject(fontSize));  // TObjectList
+        end ;
+        result := 1 ;    // continue enumeration for font size
+     end ;
+   except
+      on e: exception do begin
+         //LowTrace ('FontDetailEnumProc exception: ' + e.message);
+         //TFrm_Trace.InternalTrace ('FontDetailEnumProc exception', e.message);
+      end;
+   end;end;
 
 //------------------------------------------------------------------------------
 
@@ -1158,7 +1165,7 @@ var
      ComboFonts.OnChange := FontsChange ;
      ComboFonts.OnDrawItem := FontsDrawItem ;
      ComboFonts.DropDownCount := 15 ;
-     FontsChange (ComboFonts) ;
+     //FontsChange (ComboFonts) ;
 
      // calculate node height
      {
@@ -1182,10 +1189,13 @@ begin
       FontDetail.FontName := Screen.Fonts[c];
       FontDetail.SizeList := TObjectList.create (false) ;
 
+      try
       EnumFontFamilies(Self.Canvas.Handle,
                        pchar(FontDetail.FontName),
                        @FontDetailEnumProc,
                        longint(FontDetail));
+      except
+      end;
       FontList.AddObject (FontDetail.FontName,FontDetail) ;
    end ;
    //LowTrace('TfrmDebugOptions.InitFonts FontList filled') ;

@@ -379,7 +379,8 @@ begin
    VstTable.Header.MainColumn := 0 ;
    VstTable.Header.AutoSizeIndex := -1 ;  // auto
    cols.Free ;
-
+   //LowTrace ('before add table');
+   //TFrm_Trace.InternalTrace (FormatDateTime('yyyymmdd hh:mm:ss:zzz',now) + ' before add table');
    // add lines
    for c := 0 to RootMember.SubMembers.Count -1 do begin
       SubMember := TMember (RootMember.SubMembers.Items[c]) ;
@@ -393,8 +394,10 @@ begin
       DetailRec.Columns := cols ; // free by OnFreeNodes
    end ;
 
-   // resize all columns, using the header text and all lines
-   AutosizeAll (VstTable) ;
+   //TFrm_Trace.InternalTrace (FormatDateTime('yyyymmdd hh:mm:ss:zzz',now) + ' after add table');
+
+   // resize all columns, using the header text and all visible (true) lines
+   AutosizeAll (VstTable,true) ;
 
    // force last column width to maximum
    VstTable.Header.Columns[VstTable.Header.Columns.Count-1].Width := 9000 ;

@@ -1,21 +1,19 @@
 object FrmTailProgress: TFrmTailProgress
   Left = 394
   Top = 252
-  Width = 492
-  Height = 159
   Caption = 'Progress...'
+  ClientHeight = 121
+  ClientWidth = 480
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
   Font.Height = -11
   Font.Name = 'MS Sans Serif'
   Font.Style = []
-  OldCreateOrder = False
   Position = poScreenCenter
   DesignSize = (
-    484
-    125)
-  PixelsPerInch = 96
+    480
+    121)
   TextHeight = 13
   object LabelCaptionLinesRead: TLabel
     Left = 16
@@ -34,10 +32,11 @@ object FrmTailProgress: TFrmTailProgress
   object ProgressBar: TProgressBar
     Left = 16
     Top = 48
-    Width = 449
+    Width = 453
     Height = 17
     Anchors = [akLeft, akTop, akRight]
     TabOrder = 0
+    ExplicitWidth = 449
   end
   object butCancel: TButton
     Left = 16

@@ -1,13 +1,13 @@
 inherited frame_Table: Tframe_Table
-  Width = 407
-  Height = 294
-  ExplicitWidth = 407
-  ExplicitHeight = 294
+  Width = 435
+  Height = 266
+  ExplicitWidth = 435
+  ExplicitHeight = 266
   object VstTable: TVirtualStringTree
     Left = 0
     Top = 0
-    Width = 407
-    Height = 294
+    Width = 435
+    Height = 266
     Align = alClient
     BevelInner = bvNone
     BevelOuter = bvNone

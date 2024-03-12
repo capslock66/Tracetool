@@ -36,7 +36,7 @@ uses
   //function BinaryEncode(const AStr: String): String;
   function BinaryDecode(const AStr: String): String;
 
-  procedure AutosizeAll (Sender: TVirtualStringTree) ;
+  procedure AutosizeAll (Sender: TVirtualStringTree; UseSmartColumnWidth: Boolean = False) ;
   function  StrRepeat(const S: AnsiString; Count: Integer): AnsiString; overload ;
   function  StrRepeat(const S: String; Count: Integer): String; overload ;
   function  getStrings(source: pchar; minchar:integer): TStringList;
@@ -361,7 +361,7 @@ end ;
 
 //------------------------------------------------------------------------------
 
-procedure AutosizeAll (Sender: TVirtualStringTree) ;
+procedure AutosizeAll (Sender: TVirtualStringTree; UseSmartColumnWidth: Boolean = False) ;
 var
    ColIdx : TColumnIndex ;
    bitmap : Tbitmap ;
@@ -377,7 +377,7 @@ begin
       if (coResizable in col.Options) then begin
          GetTextExtentPoint32W(bitmap.Canvas.Handle,PWideChar(col.text), Length (col.text),HeaderSize) ;
          inc (HeaderSize.cx,12) ;
-         MaxColWidth := sender.GetMaxColumnWidth(ColIdx) ;
+         MaxColWidth := sender.GetMaxColumnWidth(ColIdx,UseSmartColumnWidth) ;
          //MaxColWidth := 200 ;
          if MaxColWidth > HeaderSize.cx then
             col.Width := MaxColWidth

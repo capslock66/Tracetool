@@ -2,8 +2,8 @@ object Frm_Trace: TFrm_Trace
   Left = 323
   Top = 184
   Caption = 'TTRACE'
-  ClientHeight = 325
-  ClientWidth = 572
+  ClientHeight = 324
+  ClientWidth = 568
   Color = clBtnFace
   DragKind = dkDock
   Font.Charset = DEFAULT_CHARSET
@@ -17,33 +17,31 @@ object Frm_Trace: TFrm_Trace
   object PanelTTraces: TPanel
     Left = 0
     Top = 0
-    Width = 572
-    Height = 325
+    Width = 568
+    Height = 324
     Align = alClient
     BevelOuter = bvNone
     TabOrder = 0
-    ExplicitWidth = 568
-    ExplicitHeight = 324
     object VSplitter: TSplitter
-      Left = 220
+      Left = 216
       Top = 22
       Width = 5
-      Height = 303
+      Height = 302
       Align = alRight
       Visible = False
       OnCanResize = VSplitterCanResize
+      ExplicitLeft = 220
+      ExplicitHeight = 303
     end
     object PanelLeft: TPanel
       Left = 0
       Top = 22
-      Width = 220
-      Height = 303
+      Width = 216
+      Height = 302
       Align = alClient
       BevelOuter = bvNone
       TabOrder = 0
       OnResize = PanelLeftResize
-      ExplicitWidth = 216
-      ExplicitHeight = 302
       object vstTrace: TVirtualStringTree
         Left = 12
         Top = 0
@@ -162,30 +160,27 @@ object Frm_Trace: TFrm_Trace
       end
     end
     object PanelRight: TPanel
-      Left = 225
+      Left = 221
       Top = 22
       Width = 347
-      Height = 303
+      Height = 302
       Align = alRight
       BevelOuter = bvNone
       TabOrder = 1
       Visible = False
-      ExplicitLeft = 221
-      ExplicitHeight = 302
     end
     object PanelTop: TPanel
       Left = 0
       Top = 0
-      Width = 572
+      Width = 568
       Height = 22
       Align = alTop
       BevelOuter = bvNone
       Color = clCream
       ParentBackground = False
       TabOrder = 2
-      ExplicitWidth = 568
       DesignSize = (
-        572
+        568
         22)
       object TracesInfo: TLabel
         Left = 3
@@ -196,7 +191,7 @@ object Frm_Trace: TFrm_Trace
         OnClick = TracesInfoClick
       end
       object LabelLogFile: TLabel
-        Left = 487
+        Left = 483
         Top = 5
         Width = 60
         Height = 13
@@ -211,9 +206,10 @@ object Frm_Trace: TFrm_Trace
         Font.Style = [fsUnderline]
         ParentFont = False
         OnClick = LabelLogFileClick
+        ExplicitLeft = 487
       end
       object butClose: TBitBtn
-        Left = 549
+        Left = 545
         Top = 0
         Width = 22
         Height = 22
@@ -247,7 +243,6 @@ object Frm_Trace: TFrm_Trace
           00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FF}
         TabOrder = 0
         OnClick = butCloseClick
-        ExplicitLeft = 545
       end
     end
   end

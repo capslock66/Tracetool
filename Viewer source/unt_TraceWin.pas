@@ -2767,12 +2767,10 @@ begin
    Progress.Show;
    step := 0;
 
-   InternalTrace(FormatDateTime('hh:mm:ss:zzz', now),
-      'new : before parsing xml ');
+   InternalTrace(FormatDateTime('hh:mm:ss:zzz', now), 'new : before parsing xml ');
    LoadTitles(XMLRootData);
    loadNodeXML(nil, XMLRootData);
-   InternalTrace(FormatDateTime('hh:mm:ss:zzz', now),
-      'new : end parsing xml');
+   InternalTrace(FormatDateTime('hh:mm:ss:zzz', now), 'new : end parsing xml');
 
    Progress.Hide;
    Progress.Free;
