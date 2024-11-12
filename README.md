@@ -75,10 +75,10 @@ Hit ctrl - Alt - X to close it.
 
 You can chose the protocol to send traces to the viewer.
 
-* Socket connection (localhost or remote) This is the prefered mode. Work with many languages , except javascript / TypeSCript and node
+* Socket connection (localhost or remote). This is the prefered mode for many languages. Don't work for javascript / TypeScript and node
 * Windows message (same computer). Don't work with Java, javascript / TypeScript, node and python
-* Web socket connection. Work only with dotnet
-* http connection. Work only with javascript / Typescript
+* Web socket connection. Work only with dotnet (blazor client)
+* Http connection. Work only with javascript / Typescript
 
 Demo is provided for each client api \
 
@@ -89,7 +89,6 @@ The plugin is configured, but not activated by default. \
 Update the path to the WebsockPlugin.dll (require dotnet 4.8)\
 The following parameter tell the plugin to receive from web socket 0.0.0.0 on port 8091 and resend the trace to itself on port 8090
 WebSocketHost = 0.0.0.0, WebSocketPort = 8091, ViewerSocketHost = 127.0.0.1, ViewerSocketPort = 8090
-
 \
 On the view menu, select options... item, click on "WebsockPlugin.dll" item, click "Load at startup",
 click "Load and start" button then "Ok" button.
