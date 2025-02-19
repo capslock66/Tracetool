@@ -335,7 +335,7 @@ NodeJs/Sample/typings/
 *.dll
 *.tlb
 
-!Winget/Output/Setup.exe
+!GithubFiles/Setup.exe
 
 !Viewer/*
 !viewer/WebSock/*.*
