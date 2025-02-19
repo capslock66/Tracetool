@@ -64,9 +64,9 @@ Download the Viewer [here](https://github.com/capslock66/Tracetool/raw/Develop/G
 
 ## Viewer Installation
 
-Download the [Viewer](/GithubFiles/Viewer32.zip "Viewer32.zip") and unpack the file into a folder of your chose (windows only).
-Or Download and install the [Viewer](/GithubFiles/Setup.exe "Setup.exe") that unpack files on Program files (x86)\Tracetool.
-Winget is comming
+- Winget: comming soon...
+- Download and install the [Viewer Setup](/GithubFiles/Setup.exe "Setup.exe") that unpack files on Program files (x86)\Tracetool.\
+- Download the [Viewer Zip file](/GithubFiles/Viewer32.zip "Viewer32.zip") and unpack the file into a folder of your chose (windows only).\
 
 If you plan to use the "windows message" mode, you must start once the viewer to self register his location into the registry. For socket mode, the viewer must always be started manually
 
