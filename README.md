@@ -63,10 +63,11 @@ Download the Viewer [here](https://github.com/capslock66/Tracetool/raw/Develop/G
 * A native language client framework (Dotnet, Java, Javascript, C++ , Python, Delphi) to send simple traces, class and object viewer, dump, and call stack to the viewer. See [Working with the viewer](#Working-with-the-viewer "Working with the viewer") for user interface
 
 ## Viewer Installation
-
+Chose one of these methods :(windows only) \
 - Winget: comming soon...
-- Download and install the [Viewer Setup](/GithubFiles/Setup.exe "Setup.exe") that unpack files on Program files (x86)\Tracetool.\
-- Download the [Viewer Zip file](/GithubFiles/Viewer32.zip "Viewer32.zip") and unpack the file into a folder of your chose (windows only).\
+- Download and install the [Viewer Setup](/GithubFiles/Setup.exe "Setup.exe"). Installation path: Program files (x86)\Tracetool.
+- Download and install the [row Viewer Setup](https://raw.githubusercontent.com/capslock66/Tracetool/Develop/GithubFiles/Setup.exe "Setup.exe"). Installation path: Program files (x86)\Tracetool.
+- Download the [Viewer Zip file](/GithubFiles/Viewer32.zip "Viewer32.zip") and unpack the file into a folder of your chose .
 
 If you plan to use the "windows message" mode, you must start once the viewer to self register his location into the registry. For socket mode, the viewer must always be started manually
 
