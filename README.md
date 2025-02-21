@@ -14,8 +14,6 @@ https://www.codeproject.com/Articles/5498/TraceTool-The-Swiss-Army-Knife-of-Trac
 -->
 
 # Tracetool
-Download the Viewer [here](https://github.com/capslock66/Tracetool/raw/Develop/GithubFiles/Viewer32.zip "Viewer32.zip") 
-
 ![Viewer](/GithubFiles/Server1.jpg)
 
 * [What is TraceTool](#What-is-TraceTool "What is TraceTool")
@@ -59,13 +57,15 @@ Download the Viewer [here](https://github.com/capslock66/Tracetool/raw/Develop/G
 
 ## What is TraceTool
 
-* A viewer that displays multiple kinds of sources (from the tracetool framework, log file, event log, or OutputDebugString)
-* A native language client framework (Dotnet, Java, Javascript, C++ , Python, Delphi) to send simple traces, class and object viewer, dump, and call stack to the viewer. See [Working with the viewer](#Working-with-the-viewer "Working with the viewer") for user interface
+* A **windows only** viewer, that displays multiple kinds of sources (from the tracetool framework, log file, event log, or OutputDebugString)
+* Some native language client framework (Dotnet, Java, Javascript, C++ , Python, Delphi) to send simple traces, class and object viewer, dump, and call stack to the viewer. See [Working with the viewer](#Working-with-the-viewer "Working with the viewer") for user interface
 
 ## Viewer Installation
-Chose one of these methods: (windows only) \
-- Winget: comming soon...
-- Download and install the [Viewer Setup](https://github.com/capslock66/Tracetool/releases/download/Viewer_14_0/Setup.exe "Setup.exe"). Installation path: Program files (x86)\Tracetool.
+Chose one of these methods:
+- Winget: using a command prompt: **winget install Tracetool.Tracetool** \
+Installation path: Program files (x86)\Tracetool
+- Download and install the [Viewer Setup](https://github.com/capslock66/Tracetool/releases/download/Viewer_14_0/Setup.exe "Setup.exe")\
+Installation path: Program files (x86)\Tracetool.
 - Download the [Viewer Zip file](https://github.com/capslock66/Tracetool/archive/refs/tags/Viewer_14_0.zip "Viewer_14_0.zip") and unpack the file into a folder of your chose .
 
 If you plan to use the "windows message" mode, you must start once the viewer to self register his location into the registry. For socket mode, the viewer must always be started manually
@@ -82,13 +82,9 @@ You can chose the protocol to send traces to the viewer.
 * Web socket connection. Work only with dotnet (blazor client)
 * Http connection. Work only with javascript / Typescript
 
-Demo is provided for each client api \
-
-Blazor client support only Synchronous communication (Web socket connection) \
-\
-Note for Web socket connection: The viewer use a plugin to receive traces and display on the viewer. \
-The plugin is configured, but not activated by default. \
-Update the path to the WebsockPlugin.dll (require dotnet 4.8)\
+For Web socket connection (only for blazor webassembly): The viewer use a plugin to receive traces and display on the viewer. \
+The plugin is configured, and activated by default. \
+If not, update the path to the WebsockPlugin.dll (require dotnet 4.8)\
 The following parameter tell the plugin to receive from web socket 0.0.0.0 on port 8091 and resend the trace to itself on port 8090
 WebSocketHost = 0.0.0.0, WebSocketPort = 8091, ViewerSocketHost = 127.0.0.1, ViewerSocketPort = 8090
 \
