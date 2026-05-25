@@ -544,7 +544,7 @@ object frmDebugOptions: TfrmDebugOptions
             Top = 465
             Width = 337
             Height = 17
-            Caption = 'Put trace kind Icon next the trace level Icon'
+            Caption = 'Put trace kind Icon next to the trace level Icon'
             TabOrder = 5
           end
         end
