@@ -16,10 +16,10 @@
 	<AppDisplay>
 		<SmallBut Value="true"/>
 		<ApplicationTitle Value="socket: 8090 / 4502,  Http : 85, WebSocket:8091"/>
-		<Left Value="15"/>
-		<Top Value="49"/>
-		<Width Value="1064"/>
-		<Height Value="730"/>
+		<Left Value="233"/>
+		<Top Value="478"/>
+		<Width Value="697"/>
+		<Height Value="610"/>
 		<StayOnTop Value="false"/>
 		<ShowOnstartup Value="true"/>
 		<ShowOnMessageReceived Value="false"/>
@@ -36,7 +36,7 @@
 		<DisableInternalLog Value="true"/>
 	</AppDisplay>
 	<Framework>
-		<ShowMembers Value="true"/>
+		<ShowMembers Value="false"/>
 		<AutoClear Value="false"/>
 		<MaxNode Value="20"/>
 		<MinNode Value="10"/>
@@ -60,6 +60,7 @@
 			<LostAndFoundLeftText Value="Lost and found"/>
 			<LostAndFoundRightText Value=""/>
 		</Orphans>
+		<KindIconOnLeft Value="true"/>
 	</Framework>
 	<Ods>
 		<Enabled Value="true"/>

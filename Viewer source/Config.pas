@@ -338,6 +338,7 @@ type
     function Get_Enabled: IXMLBooleanTagValue;
     function Get_ShowMembers: IXMLBooleanTagValue;
     function Get_MainTraceTitle: IXMLStringTagValue;
+    function Get_KindIconOnLeft: IXMLBooleanTagValue;
     function Get_Trace: IXMLDisplayNode;
     function Get_Info: IXMLDisplayNode;
     function Get_Orphans: IXMLOrphans;
@@ -349,6 +350,8 @@ type
     property Enabled: IXMLBooleanTagValue read Get_Enabled;
     property ShowMembers: IXMLBooleanTagValue read Get_ShowMembers;
     property MainTraceTitle: IXMLStringTagValue read Get_MainTraceTitle;
+    property KindIconOnLeft: IXMLBooleanTagValue read Get_KindIconOnLeft;
+
     property Trace: IXMLDisplayNode read Get_Trace;
     property Info: IXMLDisplayNode read Get_Info;
     property Orphans: IXMLOrphans read Get_Orphans;
@@ -741,6 +744,7 @@ type
     function Get_Enabled: IXMLBooleanTagValue;
     function Get_ShowMembers: IXMLBooleanTagValue;
     function Get_MainTraceTitle: IXMLStringTagValue;
+    function Get_KindIconOnLeft: IXMLBooleanTagValue;
     function Get_Trace: IXMLDisplayNode;
     function Get_Info: IXMLDisplayNode;
     function Get_Orphans: IXMLOrphans;
@@ -1523,6 +1527,7 @@ begin
   RegisterChildNode('Enabled', TXMLBooleanTagValue);
   RegisterChildNode('ShowMembers', TXMLBooleanTagValue);
   RegisterChildNode('MainTraceTitle', TXMLStringTagValue);
+  RegisterChildNode('KindIconOnLeft', TXMLBooleanTagValue);
   RegisterChildNode('Trace', TXMLDisplayNode);
   RegisterChildNode('Info', TXMLDisplayNode);
   RegisterChildNode('Orphans', TXMLOrphans);
@@ -1557,6 +1562,11 @@ end;
 function TXMLFramework.Get_ShowMembers: IXMLBooleanTagValue;
 begin
   Result := ChildNodes['ShowMembers'] as IXMLBooleanTagValue;
+end;
+
+function TXMLFramework.Get_KindIconOnLeft: IXMLBooleanTagValue;
+begin
+  Result := ChildNodes['KindIconOnLeft'] as IXMLBooleanTagValue;
 end;
 
 function TXMLFramework.Get_MainTraceTitle: IXMLStringTagValue;

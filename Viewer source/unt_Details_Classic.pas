@@ -36,8 +36,7 @@ type
       Column: TColumnIndex);
     procedure VstDetailFreeNode(Sender: TBaseVirtualTree;
       Node: PVirtualNode);
-    procedure VstDetailMeasureItem(Sender: TBaseVirtualTree;
-      TargetCanvas: TCanvas; Node: PVirtualNode; var NodeHeight: Integer);
+    procedure VstDetailMeasureItem(Sender: TBaseVirtualTree; TargetCanvas: TCanvas; Node: PVirtualNode; var NodeHeight: TDimension);
     procedure VstDetailPaintText(Sender: TBaseVirtualTree;
       const TargetCanvas: TCanvas; Node: PVirtualNode;
       Column: TColumnIndex; TextType: TVSTTextType);
@@ -406,8 +405,7 @@ end;
 
 //------------------------------------------------------------------------------
 
-procedure Tframe_Classic.VstDetailMeasureItem(Sender: TBaseVirtualTree;
-  TargetCanvas: TCanvas; Node: PVirtualNode; var NodeHeight: Integer);
+procedure Tframe_Classic.VstDetailMeasureItem(Sender: TBaseVirtualTree; TargetCanvas: TCanvas; Node: PVirtualNode; var NodeHeight: TDimension);
 var
    h2,h3 : integer ;
    DetailRec : PDetailRec ;

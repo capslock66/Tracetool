@@ -75,7 +75,7 @@ type
       Node: PVirtualNode; Column: TColumnIndex; out EditLink: IVTEditLink);
     procedure VstDetailDblClick(Sender: TObject);
     procedure VstDetailMeasureItem(Sender: TBaseVirtualTree;
-      TargetCanvas: TCanvas; Node: PVirtualNode; var NodeHeight: Integer);
+      TargetCanvas: TCanvas; Node: PVirtualNode; var NodeHeight: TDimension);
     procedure VstDetailPaintText(Sender: TBaseVirtualTree;
       const TargetCanvas: TCanvas; Node: PVirtualNode;
       Column: TColumnIndex; TextType: TVSTTextType);
@@ -110,7 +110,7 @@ type
       Node: PVirtualNode);
     procedure PanelGutterDblClick(Sender: TObject);
     procedure VstTailMeasureItem(Sender: TBaseVirtualTree;
-      TargetCanvas: TCanvas; Node: PVirtualNode; var NodeHeight: Integer);
+      TargetCanvas: TCanvas; Node: PVirtualNode; var NodeHeight: TDimension);
     procedure VstDetailGetText(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex;
       TextType: TVSTTextType; var CellText: String);
     procedure VstTailGetText(Sender: TBaseVirtualTree; Node: PVirtualNode;  Column: TColumnIndex;
@@ -2452,7 +2452,7 @@ end;
 
 // main tree : fixed node height
 procedure TFrmTail.VstTailMeasureItem(Sender: TBaseVirtualTree;
-  TargetCanvas: TCanvas; Node: PVirtualNode; var NodeHeight: Integer);
+  TargetCanvas: TCanvas; Node: PVirtualNode; var NodeHeight: TDimension);
 begin
    NodeHeight := TraceConfig.Tail_Trace_NodeHeight ;
 end;
@@ -2480,7 +2480,7 @@ end;
 
 // member tree : node height depend of the number of lines (variable node height)
 procedure TFrmTail.VstDetailMeasureItem(Sender: TBaseVirtualTree;
-  TargetCanvas: TCanvas; Node: PVirtualNode; var NodeHeight: Integer);
+  TargetCanvas: TCanvas; Node: PVirtualNode; var NodeHeight: TDimension);
 var
    h2 : integer ;
 begin

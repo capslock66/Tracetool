@@ -107,7 +107,7 @@ begin
   i1 := Length(result);
   if i1 > 0 then begin
     if result[i1] = '\' then Delete(result, i1, 1);
-    if IsTextEqual(ExtractFileName(string(result)), 'win32') then begin
+    if IsTextEqual(ExtractFileName(string(result)), 'win32') or IsTextEqual(ExtractFileName(string(result)), 'win64') then begin
       result := AnsiString(ExtractFilePath(string(result)));
       result := Copy(result, 1, Length(result) - 1);
     end;

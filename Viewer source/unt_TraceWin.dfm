@@ -23,8 +23,6 @@ object Frm_Trace: TFrm_Trace
     BevelOuter = bvNone
     TabOrder = 0
     OnCanResize = PanelTTracesCanResize
-    ExplicitWidth = 564
-    ExplicitHeight = 323
     object VSplitter: TSplitter
       Left = 216
       Top = 22
@@ -45,8 +43,6 @@ object Frm_Trace: TFrm_Trace
       BevelOuter = bvNone
       TabOrder = 0
       OnResize = PanelLeftResize
-      ExplicitWidth = 212
-      ExplicitHeight = 301
       object vstMain: TVirtualStringTree
         Left = 12
         Top = 0
@@ -119,12 +115,14 @@ object Frm_Trace: TFrm_Trace
         OnMeasureItem = vstMainMeasureItem
         Touch.InteractiveGestures = [igPan, igPressAndTap]
         Touch.InteractiveGestureOptions = [igoPanSingleFingerHorizontal, igoPanSingleFingerVertical, igoPanInertia, igoPanGutter, igoParentPassthrough]
+        ExplicitLeft = 6
+        ExplicitTop = 2
         Columns = <
           item
             Options = [coAllowClick, coDraggable, coEnabled, coParentBidiMode, coParentColor, coShowDropMark, coVisible]
             Position = 0
             Style = vsOwnerDraw
-            Width = 20
+            Width = 40
           end
           item
             Position = 1
@@ -161,7 +159,6 @@ object Frm_Trace: TFrm_Trace
         BevelOuter = bvNone
         TabOrder = 1
         OnDblClick = PanelGutterDblClick
-        ExplicitHeight = 301
       end
     end
     object PanelRight: TPanel
@@ -173,8 +170,6 @@ object Frm_Trace: TFrm_Trace
       BevelOuter = bvNone
       TabOrder = 1
       Visible = False
-      ExplicitLeft = 217
-      ExplicitHeight = 301
     end
     object PanelTop: TPanel
       Left = 0
@@ -186,7 +181,6 @@ object Frm_Trace: TFrm_Trace
       Color = clCream
       ParentBackground = False
       TabOrder = 2
-      ExplicitWidth = 564
       DesignSize = (
         568
         22)
@@ -251,7 +245,6 @@ object Frm_Trace: TFrm_Trace
           00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FF}
         TabOrder = 0
         OnClick = butCloseClick
-        ExplicitLeft = 541
       end
     end
   end

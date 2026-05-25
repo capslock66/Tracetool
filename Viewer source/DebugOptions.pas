@@ -240,6 +240,7 @@ type
     chkUdp2: TCheckBox;
     Label60: TLabel;
     Label61: TLabel;
+    chkKindIconOnLeft: TCheckBox;
     procedure FormCreate(Sender: TObject);
     procedure btnOKClick(Sender: TObject);
     procedure butApplyClick(Sender: TObject);
@@ -502,6 +503,7 @@ begin
    EditMinNodesTraces.Text     := intToStr (TraceConfig.Framework_MinNode) ;
    chkShowMainformMenu.Checked := TraceConfig.Framework_VisibleMenu ;
    EditMainTrace.Text          := TraceConfig.Framework_MainTraceTitle ;  // 'Traces'
+   chkKindIconOnLeft.Checked   := TraceConfig.Framework_KindIconOnLeft;
 
    if TraceConfig.Framework_Orphans_DeletedNode = 'CreateOnRoot' then
       rbCreateOnRoot.Checked := true
@@ -594,6 +596,7 @@ procedure TfrmDebugOptions.butApplyClick(Sender: TObject);
 var
    c : integer ;
    FrmPageContainer : TFrmPageContainer ;
+   frm : TFrm_Trace ;
    Plugin : TPlugin ;
    FrmBase : TFrmBase ;
 begin
@@ -603,7 +606,8 @@ begin
    TraceConfig.Framework_MinNode          := StrToIntDef(EditMinNodesTraces.Text,1000) ;
    TraceConfig.Framework_MainTraceTitle   := EditMainTrace.Text ;  // 'Traces'
    TraceConfig.Framework_VisibleMenu      := chkShowMainformMenu.Checked ;
-   frm_tool.mnuViewMainTraces.Visible := TraceConfig.Framework_VisibleMenu ;
+   frm_tool.mnuViewMainTraces.Visible     := TraceConfig.Framework_VisibleMenu ;
+   TraceConfig.Framework_KindIconOnLeft   := chkKindIconOnLeft.Checked;
 
    if rbCreateOnRoot.Checked = true then
       TraceConfig.Framework_Orphans_DeletedNode := 'CreateOnRoot'
@@ -754,7 +758,20 @@ begin
    for c := 0 to BaseList.Count -1 do begin
       FrmBase := TFrmBase (BaseList[c]) ;
       FrmBase.ApplyFont ;
-   end ; 
+   end ;
+
+   for c := 0 to FormTraceList.Count-1 do begin
+        frm := TFrm_Trace (FormTraceList.Items[c]) ;
+        if frm.IsWatch then
+           continue;
+        if frm.IsMultiColTree then
+           continue;
+
+        if TraceConfig.Framework_KindIconOnLeft then
+           frm.vstMain.Header.columns[COL_LEVEL].Width := 40
+        else
+           frm.vstMain.Header.columns[COL_LEVEL].Width := 20;
+   end ;
 end;
 
 //------------------------------------------------------------------------------

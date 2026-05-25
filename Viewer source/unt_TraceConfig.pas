@@ -52,6 +52,7 @@ type
     Framework_Enabled                       : Boolean ;
     Framework_VisibleMenu                   : Boolean ;
     Framework_MainTraceTitle                : String ;
+    Framework_KindIconOnLeft                : Boolean ;
 
     Framework_Trace_FontName                : String ;
     Framework_Trace_FontSize                : Integer ;

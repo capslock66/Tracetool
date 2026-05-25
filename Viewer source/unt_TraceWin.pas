@@ -28,8 +28,16 @@ interface
       MSXML2_TLB,
 
       unt_pageContainer, unt_editor, unt_search, vstSort, unt_filter, unt_addLine,
-  VirtualTrees.BaseAncestorVCL, VirtualTrees.BaseTree, VirtualTrees.AncestorVCL;
+      VirtualTrees.BaseAncestorVCL, VirtualTrees.BaseTree, VirtualTrees.AncestorVCL;
    {$INCLUDE TraceTool.Inc}
+
+   const
+     // Columns
+     COL_LEVEL   = 0;
+     COL_TIME    = 1;
+     COL_THID    = 2;
+     COL_TRACE   = 3;
+     COL_COMMENT = 4;
 
    type
 
@@ -139,8 +147,6 @@ interface
             TargetCanvas: TCanvas; Node: PVirtualNode; Column: TColumnIndex;
             CellRect: TRect);
          procedure PanelGutterDblClick(Sender: TObject);
-         procedure vstMainMeasureItem(Sender: TBaseVirtualTree;
-            TargetCanvas: TCanvas; Node: PVirtualNode; var NodeHeight: Integer);
          procedure vstMainPaintText(Sender: TBaseVirtualTree;
             const TargetCanvas: TCanvas; Node: PVirtualNode;
             Column: TColumnIndex; TextType: TVSTTextType);
@@ -156,6 +162,8 @@ interface
         procedure VSplitterCanResize(Sender: TObject; var NewSize: Integer; var Accept: Boolean);
         procedure PanelTTracesCanResize(Sender: TObject; var NewWidth,
             NewHeight: Integer; var Resize: Boolean);
+        procedure vstMainMeasureItem(Sender: TBaseVirtualTree;
+            TargetCanvas: TCanvas; Node: PVirtualNode; var NodeHeight: TDimension);
 
       private
          procedure WMStartEditingMember(var Message: TMessage);
@@ -402,17 +410,12 @@ begin
    IsPaused := false;
    LastModified := now;
 
-   CurrentViewers := TObjectList.Create(false);
-   // viewer list. Current displayed viewers
+   CurrentViewers := TObjectList.Create(false);      // viewer list. Current displayed viewers
    LinkedPlugins := TObjectList.Create(true);
-   LeftResources := TObjectList.Create(true);
-   // left resources on the status bar
-   RightResources := TObjectList.Create(true);
-   // right resources on the status bar
-   ActionResources := TObjectList.Create(true);
-   // item menu in the action menu
-   WindowResources := TObjectList.Create(true);
-   // item menu in the window resource
+   LeftResources := TObjectList.Create(true);        // left resources on the status bar
+   RightResources := TObjectList.Create(true);       // right resources on the status bar
+   ActionResources := TObjectList.Create(true);      // item menu in the action menu
+   WindowResources := TObjectList.Create(true);      // item menu in the window resource
 
    // add the TracesInfo label to the LeftResources list
    TracesInfo.Tag := CST_ACTION_LABEL_INFO;
@@ -487,6 +490,10 @@ begin
       - [toEditable]                // don't allow edition. Code is used to detect double click
       - [toCheckSupport];           // no checkboxes
 
+   if TraceConfig.Framework_KindIconOnLeft then
+      vstMain.Header.columns[COL_LEVEL].Width := 40
+   else
+      vstMain.Header.columns[COL_LEVEL].Width := 20;
    //if assigned (FrmInternalTraces) then
    //   FrmInternalTraces.InternalTrace('TFrm_Trace.FormCreate ' + Caption +  ', VstMain=' +  inttostr(integer(VstMain)));
 
@@ -1182,7 +1189,7 @@ begin
 
    // Normal and selected
 
-   if Column = 3 then begin
+   if (Column = 3) and ( not TraceConfig.Framework_KindIconOnLeft ) then begin
       TreeRec := Sender.GetNodeData(Node);
       if TreeRec.Members <> nil then begin
          // get first SubMembers with special Viewer and display it
@@ -4425,8 +4432,7 @@ end;
 
 // if the paint area is modified, AfterPaint is called to redisplay the gutter
 
-procedure TFrm_Trace.vstMainAfterPaint(Sender: TBaseVirtualTree;
-   TargetCanvas: TCanvas);
+procedure TFrm_Trace.vstMainAfterPaint(Sender: TBaseVirtualTree; TargetCanvas: TCanvas);
 var
    Node: PVirtualNode;
    BaseOffset: Integer; // top position of the top node to draw given in absolute tree coordinates
@@ -4488,14 +4494,11 @@ begin
          BookmarkPos := bookmarks.IndexOf(Node);
          if BookmarkPos <> -1 then begin
             if (bookmarks.Count = 1) or (BookmarkPos > 9) then
-            // only one element or bookmark > 9
-               Frm_Tool.ilActions.Draw(gutterCanvas, 0, Yposition, 24)
-               // normal rectangle
+               // only one element or bookmark > 9
+               Frm_Tool.ilActions.Draw(gutterCanvas, 0, Yposition, 24)   // normal rectangle
             else
-               Frm_Tool.ilActions.Draw(gutterCanvas, 0, Yposition, 25);
-            // bottom right corner is empty
-         end
-         else begin
+               Frm_Tool.ilActions.Draw(gutterCanvas, 0, Yposition, 25);  // bottom right corner is empty
+         end else begin
             if (unt_search.SearchText <> '') and (unt_search.SearchKind = mrYesToAll) then
                if (unt_search.SearchInAllPages) or (ActiveTracePage = self) then
                   if CheckSearchRecord(TreeRec) then // check if the node or one of his child match the search text
@@ -4504,11 +4507,9 @@ begin
 
          // draw bookmark number or  '...' after the member icon
          if (bookmarks.Count > 1) and (BookmarkPos <= 9) then
-            Frm_Tool.UtilityImages.Draw(gutterCanvas, 6, Yposition + 8,
-               BookmarkPos) // write the number
+            Frm_Tool.UtilityImages.Draw(gutterCanvas, 6, Yposition + 8, BookmarkPos) // write the number
          else if BookmarkPos > 9 then
-            Frm_Tool.UtilityImages.Draw(gutterCanvas, 6, Yposition + 8, 12);
-         // write "..."
+            Frm_Tool.UtilityImages.Draw(gutterCanvas, 6, Yposition + 8, 12);  // write "..."
 
          inc(Yposition, NodeHeight);
          Node := VstMain.GetNextVisible(Node);
@@ -4564,8 +4565,7 @@ begin
    end;
 
    // Then apply API background color if exist
-   ChangeBackgroundColor(TargetCanvas, CellRect, Column,
-      TreeRec.FontDetails, (vsSelected in Node.States));
+   ChangeBackgroundColor(TargetCanvas, CellRect, Column, TreeRec.FontDetails, (vsSelected in Node.States));
 
 end;
 
@@ -4579,7 +4579,8 @@ var
    CellText: String;
    TreeRec: PTreeRec;
    middle: Integer;
-   ImageIndex: Integer;
+   c,ImageIndex: Integer;
+   member: TMember;
 
 begin
 
@@ -4594,6 +4595,65 @@ begin
          ImageIndex := TreeRec.TreeIcon;
 
       Frm_Tool.ImageList1.Draw(TargetCanvas, 0, 0, ImageIndex);
+
+
+      if TraceConfig.Framework_KindIconOnLeft then begin
+
+        ImageIndex := -1;
+        if TreeRec.Members <> nil then begin
+           // get first SubMembers with special Viewer and display it
+           for c := 0 to TreeRec.Members.SubMembers.Count - 1 do begin
+              member := TMember(TreeRec.Members.SubMembers[c]);
+              case member.ViewerKind of
+                 CST_VIEWER_DUMP: begin
+                       ImageIndex := 31;
+                       break;
+                    end; // dump viewer
+                 CST_VIEWER_XML: begin
+                       ImageIndex := 32;
+                       break;
+                    end; // xml viewer
+                 CST_VIEWER_TABLE: begin
+                       ImageIndex := 33;
+                       break;
+                    end; // table viewer
+                 CST_VIEWER_STACK: begin
+                       ImageIndex := 34;
+                       break;
+                    end; // stack
+                 CST_VIEWER_BITMAP: begin
+                       ImageIndex := 35;
+                       break;
+                    end; // bitmap viewer
+                 CST_VIEWER_OBJECT: begin
+                       ImageIndex := 36;
+                       break;
+                    end; // object structure
+                 CST_VIEWER_VALUE: begin
+                       ImageIndex := 37;
+                       break;
+                    end; // object value
+                 CST_VIEWER_ENTER: begin
+                       ImageIndex := 38;
+                       break;
+                    end; // enter method
+                 CST_VIEWER_EXIT: begin
+                       ImageIndex := 39;
+                       break;
+                    end; // exit method
+                 CST_VIEWER_TXT: begin
+                       ImageIndex := 40;
+                       break;
+                    end; // text added to default viewer
+                else
+                   begin ImageIndex := 15;
+                      break;
+                   end; // CST_VIEWER_NONE : draw the small dot indicate sub members
+              end;
+           end;
+        end;
+        Frm_Tool.ilActions.Draw(TargetCanvas, 20, 0, ImageIndex);
+      end;
    end;
 
    // TreeRec := VstMain.GetNodeData(Node) ;
@@ -4885,8 +4945,7 @@ end;
 
 // ------------------------------------------------------------------------------
 
-procedure TFrm_Trace.vstMainMeasureItem(Sender: TBaseVirtualTree;
-   TargetCanvas: TCanvas; Node: PVirtualNode; var NodeHeight: Integer);
+procedure TFrm_Trace.vstMainMeasureItem(Sender: TBaseVirtualTree; TargetCanvas: TCanvas; Node: PVirtualNode; var NodeHeight: TDimension);
 var
    TreeRec: PTreeRec;
    c: Integer;
@@ -4894,8 +4953,8 @@ var
    CellHeight: Integer;
    FontDetailChanged: boolean;
    NewDefaultNodeHeight: Integer;
-begin
 
+begin
    TreeRec := Sender.GetNodeData(Node);
    newNodeHeight := 0;
 
@@ -4907,7 +4966,7 @@ begin
    for c := 0 to TVirtualStringTree(Sender).Header.Columns.Count - 1 do begin
       // get font formatings for that colummn
       FontDetailChanged := ChangeFontDetail(
-         { trace } true, TargetCanvas, c, TreeRec.FontDetails, true);
+        true, TargetCanvas, c, TreeRec.FontDetails, true);
 
       if (FontDetailChanged = false) then begin
          // no special formating. newNodeHeight must be at least the default node height
@@ -4924,9 +4983,10 @@ begin
       NodeHeight := NewDefaultNodeHeight
    else
       NodeHeight := newNodeHeight;
+
 end;
 
-// ------------------------------------------------------------------------------
+
 
 // PaintText is used to apply font change
 procedure TFrm_Trace.vstMainPaintText(Sender: TBaseVirtualTree;

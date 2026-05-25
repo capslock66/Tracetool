@@ -189,6 +189,11 @@ type
       true:  (ExceptionInformation : array [0..14] of NativeUInt);
       false: (ExceptAddr, ExceptObject: pointer);
   end;
+
+  {$ifdef supportAggregrateExceptions}
+    MadException = class;
+    TMadExceptions = array of MadException;
+  {$endif}
   MadException = class
   public
     Message : string;
@@ -204,10 +209,24 @@ type
       class var
         CleanUpStackInfoProc: procedure (Self: TObject);
     {$endif}
+
+    {$ifdef supportAggregrateExceptions}
+      function GetInnerExceptions: TMadExceptions;
+    {$endif}
   end;
+
+  {$ifdef supportAggregrateExceptions}
+    TGetInnerExceptions = procedure (aException: MadException; var aInnerExceptions: TMadExceptions);
+    TExceptionAcquiredProc = procedure(aException: TObject);
+  {$endif}
 
 type
   TMethod = record code, data: pointer; end;
+
+{$ifdef supportAggregrateExceptions}
+  var
+    GetInnerExceptionsProc: TGetInnerExceptions;
+{$endif}
 
 // ***************************************************************
 
@@ -241,5 +260,23 @@ begin
 end;
 
 // ***************************************************************
+
+{$ifdef supportAggregrateExceptions}
+  function MadException.GetInnerExceptions: TMadExceptions;
+  begin
+    result := nil;
+    if not Assigned(self) then
+      exit;
+
+    {$ifdef d2009}
+      if Assigned(InnerException) then begin
+        SetLength(result, 1);
+        result[0] := InnerException;
+      end;
+    {$endif}
+    if Assigned(GetInnerExceptionsProc) then
+      GetInnerExceptionsProc(self, result);
+  end;
+{$endif}
 
 end.

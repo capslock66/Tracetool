@@ -36,7 +36,7 @@ type
     procedure VstDetailEditCancelled(Sender: TBaseVirtualTree;Column: TColumnIndex);
     procedure VstDetailEdited(Sender: TBaseVirtualTree; Node: PVirtualNode;Column: TColumnIndex);
     procedure VstDetailFreeNode(Sender: TBaseVirtualTree;Node: PVirtualNode);
-    procedure VstDetailMeasureItem(Sender: TBaseVirtualTree;TargetCanvas: TCanvas; Node: PVirtualNode; var NodeHeight: Integer);
+    procedure VstDetailMeasureItem(Sender: TBaseVirtualTree;TargetCanvas: TCanvas; Node: PVirtualNode; var NodeHeight: TDimension);
     procedure VstDetailPaintText(Sender: TBaseVirtualTree; const TargetCanvas: TCanvas; Node: PVirtualNode;Column: TColumnIndex; TextType: TVSTTextType);
     procedure VstDetailGetText(Sender: TBaseVirtualTree; Node: PVirtualNode;Column: TColumnIndex; TextType: TVSTTextType; var CellText: string);
     procedure VstDetailChange(Sender: TBaseVirtualTree; Node: PVirtualNode);
@@ -333,7 +333,7 @@ end;
 
 //------------------------------------------------------------------------------
 
-procedure Tframe_table.VstDetailMeasureItem(Sender: TBaseVirtualTree;  TargetCanvas: TCanvas; Node: PVirtualNode; var NodeHeight: Integer);
+procedure Tframe_table.VstDetailMeasureItem(Sender: TBaseVirtualTree;  TargetCanvas: TCanvas; Node: PVirtualNode; var NodeHeight: TDimension);
 var
 //   h2,h3 : integer ;
 //   DetailRec : PTableRec ;

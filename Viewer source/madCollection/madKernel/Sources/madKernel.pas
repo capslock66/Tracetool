@@ -9646,7 +9646,10 @@ end;
 
 function TIProcess.IsStillRunning : boolean;
 begin
-  result := CheckValid and (WaitForSingleObject(GetHandle2(SYNCHRONIZE).Handle, 0) = WAIT_TIMEOUT);
+  result := false;
+  if CheckValid then
+    with GetHandle2(SYNCHRONIZE) do
+      result := IsValid and (WaitForSingleObject(Handle, 0) = WAIT_TIMEOUT);
 end;
 
 function TIProcess.Close : boolean;

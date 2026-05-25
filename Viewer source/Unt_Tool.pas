@@ -814,7 +814,7 @@ var
    traceToolStrings : TStringList ;
    traceToolText : string ;
 begin
-   if FileExists (strConfigFile) then begin   
+   if FileExists (strConfigFile) then begin
       traceToolStrings := TStringList.Create ;
       traceToolStrings.LoadFromFile(strConfigFile);
       traceToolText := traceToolStrings.Text ;
@@ -1123,6 +1123,7 @@ begin
    TraceConfig.Framework_Enabled                        := XMLConfig.Framework.Enabled.Value ;
    TraceConfig.Framework_VisibleMenu                    := XMLConfig.Framework.VisibleMenu.value ;
    TraceConfig.Framework_MainTraceTitle                 := XMLConfig.Framework.MainTraceTitle.value ;
+   TraceConfig.Framework_KindIconOnLeft                 := XMLConfig.Framework.KindIconOnLeft.value ;
 
    TraceConfig.Framework_Trace_FontName                 := XMLConfig.Framework.Trace.FontName.Value ;
    TraceConfig.Framework_Trace_FontSize                 := XMLConfig.Framework.Trace.FontSize.Value ;
@@ -1355,6 +1356,7 @@ begin
       XMLConfig.Framework.Enabled.Value                       := TraceConfig.Framework_Enabled ;
       XMLConfig.Framework.VisibleMenu.value                   := TraceConfig.Framework_VisibleMenu ;
       XMLConfig.Framework.MainTraceTitle.value                := TraceConfig.Framework_MainTraceTitle ;
+      XMLConfig.Framework.KindIconOnLeft.value                := TraceConfig.Framework_KindIconOnLeft;
 
       XMLConfig.Framework.Trace.FontName.Value                := TraceConfig.Framework_Trace_FontName ;
       XMLConfig.Framework.Trace.FontSize.Value                := TraceConfig.Framework_Trace_FontSize ;

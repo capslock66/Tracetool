@@ -103,8 +103,7 @@ type
       Node: PVirtualNode; Column: TColumnIndex; var Allowed: Boolean);
     procedure VstDetailGetText(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex;
       TextType: TVSTTextType; var CellText: String);
-    procedure VstDetailMeasureItem(Sender: TBaseVirtualTree;
-      TargetCanvas: TCanvas; Node: PVirtualNode; var NodeHeight: Integer);
+    procedure VstDetailMeasureItem(Sender: TBaseVirtualTree;   TargetCanvas: TCanvas; Node: PVirtualNode; var NodeHeight: TDimension);
     procedure VstDetailPaintText(Sender: TBaseVirtualTree;
       const TargetCanvas: TCanvas; Node: PVirtualNode;
       Column: TColumnIndex; TextType: TVSTTextType);
@@ -134,8 +133,7 @@ type
     procedure VstDetailFreeNode(Sender: TBaseVirtualTree;
       Node: PVirtualNode);
     procedure PanelGutterDblClick(Sender: TObject);
-    procedure VstMainMeasureItem(Sender: TBaseVirtualTree;
-      TargetCanvas: TCanvas; Node: PVirtualNode; var NodeHeight: Integer);
+    procedure VstMainMeasureItem(Sender: TBaseVirtualTree; TargetCanvas: TCanvas; Node: PVirtualNode; var NodeHeight: TDimension);
     procedure VstMainPaintText(Sender: TBaseVirtualTree;
       const TargetCanvas: TCanvas; Node: PVirtualNode;
       Column: TColumnIndex; TextType: TVSTTextType);
@@ -1715,7 +1713,7 @@ end;
 //------------------------------------------------------------------------------
 
 // main tree : fixed node height
-procedure TFrm_ODS.VstMainMeasureItem(Sender: TBaseVirtualTree; TargetCanvas: TCanvas; Node: PVirtualNode; var NodeHeight: Integer);
+procedure TFrm_ODS.VstMainMeasureItem(Sender: TBaseVirtualTree; TargetCanvas: TCanvas; Node: PVirtualNode; var NodeHeight: TDimension);
 begin
    NodeHeight := TraceConfig.ods_Trace_NodeHeight ;
 end;
@@ -1734,8 +1732,7 @@ end;
 //------------------------------------------------------------------------------
 
 // member tree : node height depend of the number of lines (variable node height)
-procedure TFrm_ODS.VstDetailMeasureItem(Sender: TBaseVirtualTree;
-  TargetCanvas: TCanvas; Node: PVirtualNode; var NodeHeight: Integer);
+procedure TFrm_ODS.VstDetailMeasureItem(Sender: TBaseVirtualTree;  TargetCanvas: TCanvas; Node: PVirtualNode; var NodeHeight: TDimension);
 var
    h2 : integer ;
 begin
