@@ -2987,68 +2987,121 @@ begin
    end ;
 end;
 
-//procedure TFrm_Tool.ApplyTheme;
-//begin
-//   if DarkTheme then
-//   begin
-//     TFrm_Trace.InternalTrace('Dark');
-//     //TStyleManager.SetStyle('Carbon');
-//     //ImageCollection1.FixedColor := clWhite;
-//     //RefreshCollection(ImageCollection1, clWhite);
-//     //RefreshIcons(vilActions16, clWhite);
-//     //RefreshIcons(vilActions20, clWhite);
-//     //RefreshIcons(vilActions24, clWhite);
-//   end else begin
-//     TFrm_Trace.InternalTrace('Windows');
-//     //  TStyleManager.SetStyle('Windows');
-//     //ImageCollection1.FixedColor := clDefault;
-//     //RefreshCollection(ImageCollection1, clDefault);
-//     //RefreshIcons(vilActions16, clDefault);
-//     //RefreshIcons(vilActions20, clDefault);
-//     //RefreshIcons(vilActions24, clDefault);
-//   end;
-//end;
+//------------------------------------------------------------------------------
 
 procedure TFrm_Tool.ApplyTheme;
 const
-  // Styles dark bundled in Delphi — order of preference
   DarkCandidates: array[0..3] of string = (
-    'Windows10 Dark',
-    'Charcoal Dark Slate',
-    'Carbon',
-    'Slate'
+    'Carbon','Windows10 Dark', 'Charcoal Dark Slate',  'Slate'
   );
+  // Original light-theme accent colors (from .dfm)
+  LightColTraces = TColor(16705515);  // lavender, vstMain cols 3+4
+  LightColDetail = TColor(16117479);  // blue-gray, VstDetail + cols 0+1
+  // Dark-theme equivalents (subtle tint on Carbon ~$1E1E1E background)
+  DarkColTraces  = TColor($00201018);  // very dark warm-purple
+  DarkColDetail  = TColor($00151520);  // very dark blue-gray
+
+  procedure ApplyVstScheme(VST: TVirtualStringTree);
+  begin
+    if VST = nil then 
+        Exit;
+    if DarkTheme then
+    begin
+      VST.Colors.BorderColor                   := TColor($00606060);
+      VST.Colors.DisabledColor                 := clDkGray;
+      VST.Colors.DropMarkColor                 := TColor($00505050);
+      VST.Colors.DropTargetColor               := TColor($004D4400);
+      VST.Colors.DropTargetBorderColor         := TColor($004D4400);
+      VST.Colors.FocusedSelectionColor         := TColor($004D4400);
+      VST.Colors.FocusedSelectionBorderColor   := TColor($004D4400);
+      VST.Colors.GridLineColor                 := TColor($00383838);
+      VST.Colors.HeaderHotColor                := clWhite;
+      VST.Colors.HotColor                      := clWhite;
+      VST.Colors.SelectionRectangleBlendColor  := TColor($004D4400);
+      VST.Colors.SelectionRectangleBorderColor := TColor($004D4400);
+      VST.Colors.SelectionTextColor            := clWhite;
+      VST.Colors.TreeLineColor                 := TColor($00505050);
+      VST.Colors.UnfocusedColor                := clSilver;
+      VST.Colors.UnfocusedSelectionColor       := TColor($00404040);
+      VST.Colors.UnfocusedSelectionBorderColor := TColor($00404040);
+    end else begin
+      VST.Colors.BorderColor                   := clBlack;
+      VST.Colors.DisabledColor                 := clGray;
+      VST.Colors.DropMarkColor                 := TColor(15385233);
+      VST.Colors.DropTargetColor               := TColor(15385233);
+      VST.Colors.DropTargetBorderColor         := TColor(15385233);
+      VST.Colors.FocusedSelectionColor         := TColor(15385233);
+      VST.Colors.FocusedSelectionBorderColor   := TColor(15385233);
+      VST.Colors.GridLineColor                 := TColor(15987699);
+      VST.Colors.HeaderHotColor                := clBlack;
+      VST.Colors.HotColor                      := clBlack;
+      VST.Colors.SelectionRectangleBlendColor  := TColor(15385233);
+      VST.Colors.SelectionRectangleBorderColor := TColor(15385233);
+      VST.Colors.SelectionTextColor            := clBlack;
+      VST.Colors.TreeLineColor                 := TColor(9471874);
+      VST.Colors.UnfocusedColor                := clBlack;
+      VST.Colors.UnfocusedSelectionColor       := clGray;
+      VST.Colors.UnfocusedSelectionBorderColor := clGray;
+    end;
+    VST.Invalidate;
+  end;
+
 var
   StyleName: string;
+  I, J: Integer;
+  frm: TFrm_Trace;
+  ColTraces, ColDetail: TColor;
 begin
-   if DarkTheme then
-   begin
-     TFrm_Trace.InternalTrace('Dark');
-     //TStyleManager.SetStyle('Carbon');
-     //ImageCollection1.FixedColor := clWhite;
-     //RefreshCollection(ImageCollection1, clWhite);
-     //RefreshIcons(vilActions16, clWhite);
-     //RefreshIcons(vilActions20, clWhite);
-     //RefreshIcons(vilActions24, clWhite);
-   end else begin
-     TFrm_Trace.InternalTrace('Windows');
-     //  TStyleManager.SetStyle('Windows');
-     //ImageCollection1.FixedColor := clDefault;
-     //RefreshCollection(ImageCollection1, clDefault);
-     //RefreshIcons(vilActions16, clDefault);
-     //RefreshIcons(vilActions20, clDefault);
-     //RefreshIcons(vilActions24, clDefault);
-   end;
 
+   TFrm_Trace.InternalTrace('ApplyTheme'); //
+
+  // 1. Switch VCL style
   if DarkTheme then
   begin
     for StyleName in DarkCandidates do
       if TStyleManager.TrySetStyle(StyleName) then
-        Exit;
-    // No dark style registered: add one via Project > Options > Application > Appearance
-    TFrm_Trace.InternalTrace('ApplyTheme: no dark VCL style registered');
-  end else
+        Break;
+  end else 
     TStyleManager.SetStyle('Windows');
+
+  // 2. Pick accent colors for the active theme
+  if DarkTheme then
+  begin
+    ColTraces := DarkColTraces;
+    ColDetail := DarkColDetail;
+  end else begin
+    ColTraces := LightColTraces;
+    ColDetail := LightColDetail;
+  end;
+
+  // 3. Update every TFrm_Trace
+  for I := 0 to FormTraceList.Count - 1 do
+  begin
+    frm := TFrm_Trace(FormTraceList.Items[I]);
+
+    // vstMain: columns 3 (Traces) and 4 (Comment) carry the accent
+    if frm.vstMain.Header.Columns.Count > 3 then
+      frm.vstMain.Header.Columns[3].Color := ColTraces;
+    if frm.vstMain.Header.Columns.Count > 4 then
+      frm.vstMain.Header.Columns[4].Color := ColTraces;
+    ApplyVstScheme(frm.vstMain);
+
+    // PanelTop: clCream in light mode, dark accent in dark mode
+    if DarkTheme then
+      frm.PanelTop.Color := DarkColTraces
+    else
+      frm.PanelTop.Color := clCream;
+
+    // VstDetail + its explicitly-colored columns
+    if frm.VstDetail <> nil then
+    begin
+      frm.VstDetail.Color := ColDetail;
+      for J := 0 to frm.VstDetail.Header.Columns.Count - 1 do
+        if frm.VstDetail.Header.Columns[J].Color <> clDefault then
+          frm.VstDetail.Header.Columns[J].Color := ColDetail;
+      ApplyVstScheme(frm.VstDetail);
+    end;
+  end;
 end;
 
 //------------------------------------------------------------------------------

@@ -80,6 +80,7 @@
         <VerInfo_Locale>2060</VerInfo_Locale>
         <VerInfo_Keys>CompanyName=Thierry Parent;FileDescription=TraceTool utility;FileVersion=14.0.0.569;InternalName=TraceTool;LegalCopyright=Thierry Parent;LegalTrademarks=Thierry Parent;OriginalFilename=none;ProductName=TraceTool;ProductVersion=14.0;Comments=Freeware Trace utility for  Dot Net, Javascript, Java, Delphi,  C++ and Python</VerInfo_Keys>
         <VerInfo_AutoIncVersion>true</VerInfo_AutoIncVersion>
+        <Custom_Styles>Carbon|VCLSTYLE|$(BDSCOMMONDIR)\Styles\Carbon.vsf</Custom_Styles>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Base_Win32)'!=''">
         <DCC_Namespace>Data.Win;Datasnap.Win;Web.Win;Soap.Win;Bde;$(DCC_Namespace)</DCC_Namespace>
@@ -118,8 +119,8 @@
     <PropertyGroup Condition="'$(Cfg_1_Win64)'!=''">
         <AppDPIAwarenessMode>PerMonitorV2</AppDPIAwarenessMode>
         <VerInfo_Locale>1033</VerInfo_Locale>
-        <VerInfo_Build>571</VerInfo_Build>
-        <VerInfo_Keys>CompanyName=Thierry Parent;FileDescription=TraceTool utility;FileVersion=14.0.0.571;InternalName=TraceTool;LegalCopyright=Thierry Parent;LegalTrademarks=Thierry Parent;OriginalFilename=none;ProductName=TraceTool;ProductVersion=14.0;Comments=Freeware Trace utility for  Dot Net, Javascript, Java, Delphi,  C++ and Python</VerInfo_Keys>
+        <VerInfo_Build>572</VerInfo_Build>
+        <VerInfo_Keys>CompanyName=Thierry Parent;FileDescription=TraceTool utility;FileVersion=14.0.0.572;InternalName=TraceTool;LegalCopyright=Thierry Parent;LegalTrademarks=Thierry Parent;OriginalFilename=none;ProductName=TraceTool;ProductVersion=14.0;Comments=Freeware Trace utility for  Dot Net, Javascript, Java, Delphi,  C++ and Python</VerInfo_Keys>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_2)'!=''">
         <DCC_ExeOutput>..\Viewer\</DCC_ExeOutput>
@@ -297,8 +298,8 @@
                     <VersionInfoKeys Name="Comments">Freeware Trace utility for  Dot Net, Javascript, Java, Delphi,  C++ and Python</VersionInfoKeys>
                 </VersionInfoKeys>
                 <Excluded_Packages>
-                    <Excluded_Packages Name="$(BDSBIN)\dcloffice2k280.bpl">Microsoft Office 2000 Sample Automation Server Wrapper Components</Excluded_Packages>
-                    <Excluded_Packages Name="$(BDSBIN)\dclofficexp280.bpl">Microsoft Office XP Sample Automation Server Wrapper Components</Excluded_Packages>
+                    <Excluded_Packages Name="$(BDSBIN)\dcloffice2k370.bpl">Microsoft Office 2000 Sample Automation Server Wrapper Components</Excluded_Packages>
+                    <Excluded_Packages Name="$(BDSBIN)\dclofficexp370.bpl">Microsoft Office XP Sample Automation Server Wrapper Components</Excluded_Packages>
                 </Excluded_Packages>
             </Delphi.Personality>
             <ModelSupport>False</ModelSupport>
