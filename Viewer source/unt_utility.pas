@@ -375,7 +375,7 @@ begin
    ColIdx := Sender.Header.Columns.GetFirstVisibleColumn ;
    while ColIdx <> InvalidColumn do begin
       col := Sender.header.Columns[ColIdx] ;
-      if (coResizable in col.Options) then begin
+      if (TVTColumnOption.coResizable in col.Options) then begin
          GetTextExtentPoint32W(bitmap.Canvas.Handle,PWideChar(col.text), Length (col.text),HeaderSize) ;
          inc (HeaderSize.cx,12) ;
          MaxColWidth := sender.GetMaxColumnWidth(ColIdx,UseSmartColumnWidth) ;

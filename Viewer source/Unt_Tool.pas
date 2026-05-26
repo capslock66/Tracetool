@@ -163,6 +163,7 @@ type
     procedure UDPServerUDPRead(AThread: TIdUDPListenerThread; const AData: TIdBytes; ABinding: TIdSocketHandle);
 
    public
+    procedure ApplyTheme;
     property StayOnTop: Boolean read FStayOnTop write SetStayOnTop;
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
@@ -183,6 +184,8 @@ type
     XmlTraceFile : boolean ;
     IsInitMode : boolean ;
     componentHandle :integer ;
+
+    DarkTheme : boolean;   // false windows color, true dark theme
   public
     uniqueId : integer ;
   end;
@@ -261,7 +264,7 @@ implementation
 
 uses unt_receiver, unt_about, unt_tail,Unt_linkedList , unt_TraceWin, unt_parse, unt_base ,
      unt_ODS, unt_utility, unt_selectEvent , unt_eventLog, unt_SelectTail, unt_search, unt_TraceConfig,
-  unt_FrmPlugin, unt_Details_Classic;
+  unt_FrmPlugin, unt_Details_Classic, Vcl.Themes;
 
 
 var
@@ -736,6 +739,8 @@ begin
       FrmSelectTail.OpenFile(TailFileName);
       Frm_Tool.actShowExecute (nil) ;
    end ;
+
+      ApplyTheme;
    LowTrace('TFrm_Tool.FormCreate end') ;
 end;
 
@@ -2982,6 +2987,27 @@ begin
    end ;
 end;
 
+procedure TFrm_Tool.ApplyTheme;
+begin
+   if DarkTheme then
+   begin
+     TFrm_Trace.InternalTrace('Dark');
+     //TStyleManager.SetStyle('Carbon');
+     //ImageCollection1.FixedColor := clWhite;
+     //RefreshCollection(ImageCollection1, clWhite);
+     //RefreshIcons(vilActions16, clWhite);
+     //RefreshIcons(vilActions20, clWhite);
+     //RefreshIcons(vilActions24, clWhite);
+   end else begin
+     TFrm_Trace.InternalTrace('Windows');
+     //  TStyleManager.SetStyle('Windows');
+     //ImageCollection1.FixedColor := clDefault;
+     //RefreshCollection(ImageCollection1, clDefault);
+     //RefreshIcons(vilActions16, clDefault);
+     //RefreshIcons(vilActions20, clDefault);
+     //RefreshIcons(vilActions24, clDefault);
+   end;
+end;
 
 
 //------------------------------------------------------------------------------

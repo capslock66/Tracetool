@@ -16,10 +16,10 @@
 	<AppDisplay>
 		<SmallBut Value="true"/>
 		<ApplicationTitle Value="socket: 8090 / 4502,  Http : 85, WebSocket:8091"/>
-		<Left Value="233"/>
-		<Top Value="478"/>
+		<Left Value="-955"/>
+		<Top Value="303"/>
 		<Width Value="697"/>
-		<Height Value="610"/>
+		<Height Value="636"/>
 		<StayOnTop Value="false"/>
 		<ShowOnstartup Value="true"/>
 		<ShowOnMessageReceived Value="false"/>
@@ -33,10 +33,10 @@
 		<ToolbarBookmark Value="true"/>
 		<ToolbarFilter Value="true"/>
 		<HideViewer Value="false"/>
-		<DisableInternalLog Value="true"/>
+		<DisableInternalLog Value="false"/>
 	</AppDisplay>
 	<Framework>
-		<ShowMembers Value="false"/>
+		<ShowMembers Value="true"/>
 		<AutoClear Value="false"/>
 		<MaxNode Value="20"/>
 		<MinNode Value="10"/>

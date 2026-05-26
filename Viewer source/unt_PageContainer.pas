@@ -103,6 +103,8 @@ type
     actInsert: TAction;
     actFocus: TAction;
     tbnFocus: TToolButton;
+    actToggleTheme: TAction;
+    ToolButton2: TToolButton;
 
     procedure FormCreate(Sender: TObject);
     procedure actCopyExecute(Sender: TObject);
@@ -132,6 +134,7 @@ type
     procedure actPrintExecute(Sender: TObject);
     procedure actInsertExecute(Sender: TObject);
     procedure actFocusExecute(Sender: TObject);
+    procedure actToggleThemeExecute(Sender: TObject);
   protected
     procedure CreateParams(var Params : TCreateParams) ; override ;
   private
@@ -634,6 +637,26 @@ begin
    base.VST.Invalidate ;
 end;
 
+procedure TFrmPageContainer.actToggleThemeExecute(Sender: TObject);
+var
+  Form: TFrmBase;
+  I: integer;
+begin
+  //TraceConfig.AppDisplay_DarkTheme := not TraceConfig.AppDisplay_DarkTheme;
+
+  Frm_Tool.DarkTheme := not Frm_Tool.DarkTheme;
+
+  Frm_Tool.ApplyTheme;
+//  for I := 0 to self.DockingPagecontrol.PageCount - 1 do
+//  begin
+//    if DockingPagecontrol.Pages[I].Tag <> 0 then
+//      if TObject(DockingPagecontrol.Pages[I].Tag) is TFrmBase then
+//      begin
+//        Form := TFrmBase(DockingPagecontrol.Pages[I].Tag);
+//        Form.ApplyTheme;
+//      end;
+//  end;
+end;
 //------------------------------------------------------------------------------
 
 procedure TFrmPageContainer.actPreviousBookmarkExecute(Sender: TObject);

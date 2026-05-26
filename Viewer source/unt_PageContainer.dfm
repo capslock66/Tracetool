@@ -2,7 +2,7 @@ object FrmPageContainer: TFrmPageContainer
   Left = 756
   Top = 244
   ClientHeight = 270
-  ClientWidth = 460
+  ClientWidth = 558
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -16,17 +16,16 @@ object FrmPageContainer: TFrmPageContainer
   object PanelPageControl: TPanel
     Left = 0
     Top = 0
-    Width = 460
+    Width = 558
     Height = 270
     Align = alClient
     BevelOuter = bvNone
     TabOrder = 0
-    ExplicitWidth = 456
-    ExplicitHeight = 269
+    ExplicitWidth = 460
     object ToolBar: TToolBar
       Left = 0
       Top = 0
-      Width = 460
+      Width = 558
       Height = 36
       AutoSize = True
       ButtonHeight = 36
@@ -35,7 +34,7 @@ object FrmPageContainer: TFrmPageContainer
       ParentShowHint = False
       ShowHint = True
       TabOrder = 0
-      ExplicitWidth = 456
+      ExplicitWidth = 460
       object tbnClear: TToolButton
         Left = 0
         Top = 0
@@ -172,6 +171,11 @@ object FrmPageContainer: TFrmPageContainer
         Top = 0
         Action = actClearFilter
         AutoSize = True
+      end
+      object ToolButton2: TToolButton
+        Left = 446
+        Top = 0
+        Action = actToggleTheme
       end
     end
   end
@@ -372,6 +376,11 @@ object FrmPageContainer: TFrmPageContainer
       Caption = 'Add line'
       ImageIndex = 42
       OnExecute = actInsertExecute
+    end
+    object actToggleTheme: TAction
+      Caption = 'Toggle Theme'
+      ImageIndex = 45
+      OnExecute = actToggleThemeExecute
     end
   end
   object MainMenu: TMainMenu
