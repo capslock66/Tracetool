@@ -2987,7 +2987,39 @@ begin
    end ;
 end;
 
+//procedure TFrm_Tool.ApplyTheme;
+//begin
+//   if DarkTheme then
+//   begin
+//     TFrm_Trace.InternalTrace('Dark');
+//     //TStyleManager.SetStyle('Carbon');
+//     //ImageCollection1.FixedColor := clWhite;
+//     //RefreshCollection(ImageCollection1, clWhite);
+//     //RefreshIcons(vilActions16, clWhite);
+//     //RefreshIcons(vilActions20, clWhite);
+//     //RefreshIcons(vilActions24, clWhite);
+//   end else begin
+//     TFrm_Trace.InternalTrace('Windows');
+//     //  TStyleManager.SetStyle('Windows');
+//     //ImageCollection1.FixedColor := clDefault;
+//     //RefreshCollection(ImageCollection1, clDefault);
+//     //RefreshIcons(vilActions16, clDefault);
+//     //RefreshIcons(vilActions20, clDefault);
+//     //RefreshIcons(vilActions24, clDefault);
+//   end;
+//end;
+
 procedure TFrm_Tool.ApplyTheme;
+const
+  // Styles dark bundled in Delphi — order of preference
+  DarkCandidates: array[0..3] of string = (
+    'Windows10 Dark',
+    'Charcoal Dark Slate',
+    'Carbon',
+    'Slate'
+  );
+var
+  StyleName: string;
 begin
    if DarkTheme then
    begin
@@ -3007,8 +3039,17 @@ begin
      //RefreshIcons(vilActions20, clDefault);
      //RefreshIcons(vilActions24, clDefault);
    end;
-end;
 
+  if DarkTheme then
+  begin
+    for StyleName in DarkCandidates do
+      if TStyleManager.TrySetStyle(StyleName) then
+        Exit;
+    // No dark style registered: add one via Project > Options > Application > Appearance
+    TFrm_Trace.InternalTrace('ApplyTheme: no dark VCL style registered');
+  end else
+    TStyleManager.SetStyle('Windows');
+end;
 
 //------------------------------------------------------------------------------
 
