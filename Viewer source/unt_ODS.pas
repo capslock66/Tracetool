@@ -539,7 +539,9 @@ begin
    // to start a new edit operation if the last one is still in progress. So we post us a special message and
    // in the message handler we then can start editing the new node. This works because the posted message
    // is first executed *after* this event and the message, which triggered it is finished.
-   PostMessage(Self.Handle, WM_STARTEDITING_MEMBER, Integer(SelectedNode), 0);
+   PostMessage(Self.Handle, WM_STARTEDITING_MEMBER,
+      NativeUInt(SelectedNode) and $FFFFFFFF,
+      NativeUInt(SelectedNode) shr 32);
 end;
 
 //------------------------------------------------------------------------------
@@ -666,7 +668,9 @@ procedure TFrm_ODS.WMStartEditingMember(var Message: TMessage);
 var
    Node: PVirtualNode;
 begin
-   Node := Pointer(Message.WParam);
+   Node := PVirtualNode(Pointer(
+      (NativeUInt(Message.WParam) and $FFFFFFFF) or
+      (NativeUInt(Message.LParam) shl 32)));
    if Assigned(Node) then
       VstDetail.EditNode(Node, VstDetail.FocusedColumn);
 end;
@@ -677,7 +681,9 @@ procedure TFrm_ODS.WMStartEditingTrace(var Message: TMessage);
 var
    Node: PVirtualNode;
 begin
-   Node := Pointer(Message.WParam);
+   Node := PVirtualNode(Pointer(
+      (NativeUInt(Message.WParam) and $FFFFFFFF) or
+      (NativeUInt(Message.LParam) shl 32)));
    if Assigned(Node) then
       VstMain.EditNode(Node, VstMain.FocusedColumn);
 end;
@@ -1336,7 +1342,9 @@ begin
    // to start a new edit operation if the last one is still in progress. So we post us a special message and
    // in the message handler we then can start editing the new node. This works because the posted message
    // is first executed *after* this event and the message, which triggered it is finished.
-   PostMessage(Self.Handle, WM_STARTEDITING_TRACE, Integer(SelectedNode), 0);
+   PostMessage(Self.Handle, WM_STARTEDITING_TRACE,
+      NativeUInt(SelectedNode) and $FFFFFFFF,
+      NativeUInt(SelectedNode) shr 32);
 end;
 
 //------------------------------------------------------------------------------

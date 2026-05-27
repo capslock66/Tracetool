@@ -3053,8 +3053,6 @@ var
   ColTraces, ColDetail: TColor;
 begin
 
-   TFrm_Trace.InternalTrace('ApplyTheme'); //
-
   // 1. Switch VCL style
   if DarkTheme then
   begin

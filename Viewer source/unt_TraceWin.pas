@@ -18,7 +18,7 @@ interface
    uses
       system.types, system.UITypes,Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls,
       Forms, registry,
-      Dialogs, StdCtrls, ExtCtrls, VirtualTrees, VirtualTrees.Types, Menus, XMLDoc, XMLIntf,
+      Dialogs, StdCtrls, ExtCtrls,  Menus, XMLDoc, XMLIntf,
       pscMenu, math, printers,
       ComCtrls, ToolWin, ImgList, TrayIcon, ActnList, clipbrd, SyncObjs,
       Contnrs, SynEdit,
@@ -28,7 +28,7 @@ interface
       MSXML2_TLB,
 
       unt_pageContainer, unt_editor, unt_search, vstSort, unt_filter, unt_addLine,
-      VirtualTrees.BaseAncestorVCL, VirtualTrees.BaseTree, VirtualTrees.AncestorVCL;
+      VirtualTrees, VirtualTrees.Types, VirtualTrees.BaseAncestorVCL, VirtualTrees.BaseTree, VirtualTrees.AncestorVCL;
    {$INCLUDE TraceTool.Inc}
 
    const
@@ -166,10 +166,8 @@ interface
             TargetCanvas: TCanvas; Node: PVirtualNode; var NodeHeight: TDimension);
 
       private
-         procedure WMStartEditingMember(var Message: TMessage);
-         message WM_STARTEDITING_MEMBER;
-         procedure WMStartEditingTrace(var Message: TMessage);
-         message WM_STARTEDITING_TRACE;
+         procedure WMStartEditingMember(var Message: TMessage); message WM_STARTEDITING_MEMBER;
+         procedure WMStartEditingTrace(var Message: TMessage);  message WM_STARTEDITING_TRACE;
       public
          class procedure InternalTraceFromThread(LeftMsg: string);
          class function InternalTrace(LeftMsg: string; RightMsg: string = '') : PVirtualNode; overload;
@@ -1721,7 +1719,9 @@ begin
    // to start a new edit operation if the last one is still in progress. So we post us a special message and
    // in the message handler we then can start editing the new node. This works because the posted message
    // is first executed *after* this event and the message, which triggered it is finished.
-   PostMessage(self.Handle, WM_STARTEDITING_TRACE, Integer(SelectedNode), 0);
+   PostMessage(self.Handle, WM_STARTEDITING_TRACE,
+      NativeUInt(SelectedNode) and $FFFFFFFF,
+      NativeUInt(SelectedNode) shr 32);
 end;
 
 // ------------------------------------------------------------------------------
@@ -1773,7 +1773,9 @@ procedure TFrm_Trace.WMStartEditingMember(var Message: TMessage);
 var
    Node: PVirtualNode;
 begin
-   Node := pointer(Message.WParam);
+   Node := PVirtualNode(Pointer(
+      (NativeUInt(Message.WParam) and $FFFFFFFF) or
+      (NativeUInt(Message.LParam) shl 32)));
    if Assigned(Node) then
       VstDetail.EditNode(Node, VstDetail.FocusedColumn);
 end;
@@ -1784,7 +1786,9 @@ procedure TFrm_Trace.WMStartEditingTrace(var Message: TMessage);
 var
    Node: PVirtualNode;
 begin
-   Node := pointer(Message.WParam);
+   Node := PVirtualNode(Pointer(
+      (NativeUInt(Message.WParam) and $FFFFFFFF) or
+      (NativeUInt(Message.LParam) shl 32)));
    if Assigned(Node) then
       VstMain.EditNode(Node, VstMain.FocusedColumn);
 end;

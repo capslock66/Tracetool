@@ -1,8 +1,8 @@
 ﻿[ClosedView_QzpcVGhpZXJyeVxUcmFjZXRvb2xcVmlld2VyIHNvdXJjZVx1bnRfUGFnZUNvbnRhaW5lci5wYXM=]
 Module=C:\Thierry\Tracetool\Viewer source\unt_PageContainer.pas
-CursorX=16
-CursorY=649
-TopLine=627
+CursorX=10
+CursorY=985
+TopLine=966
 LeftCol=1
 Elisions=
 Bookmarks=
@@ -17,4 +17,45 @@ LeftCol=1
 Elisions=
 Bookmarks=
 EditViewName=C:\Thierry\Tracetool\Viewer source\Unt_Tool.pas
+
+[ClosedView_QzpcVGhpZXJyeVxUcmFjZXRvb2xcVmlld2VyIHNvdXJjZVx1bnRfVHJhY2VXaW4ucGFz]
+Module=C:\Thierry\Tracetool\Viewer source\unt_TraceWin.pas
+CursorX=95
+CursorY=169
+TopLine=151
+LeftCol=1
+Elisions=
+Bookmarks=
+EditViewName=C:\Thierry\Tracetool\Viewer source\unt_TraceWin.pas
+[ClosedView_YzpccHJvZ3JhbSBmaWxlcyAoeDg2KVxlbWJhcmNhZGVyb1xzdHVkaW9cMzcuMFxzb3VyY2VccnRs
+XHdpblxXaW5hcGkuV2luZG93cy5wYXM=]
+Module=c:\program files (x86)\embarcadero\studio\37.0\source\rtl\win\Winapi.Windows.pas
+CursorX=17
+CursorY=252
+TopLine=245
+LeftCol=1
+Elisions=
+Bookmarks=
+EditViewName=c:\program files (x86)\embarcadero\studio\37.0\source\rtl\win\Winapi.Windows.pas
+[ClosedView_YzpccHJvZ3JhbSBmaWxlcyAoeDg2KVxlbWJhcmNhZGVyb1xzdHVkaW9cMzcuMFxzb3VyY2VccnRs
+XHdpblxXaW5hcGkuV2luZG93cy5wYXM=]
+Module=c:\program files (x86)\embarcadero\studio\37.0\source\rtl\win\Winapi.Windows.pas
+CursorX=26
+CursorY=27351
+TopLine=27333
+LeftCol=1
+Elisions=
+Bookmarks=
+EditViewName=c:\program files (x86)\embarcadero\studio\37.0\source\rtl\win\Winapi.Windows.pas
+[ClosedView_QzpcVXNlcnNcdHBhcmVudFxPbmVEcml2ZSAtIEVPUlRDXE15IERvY3VtZW50c1xFbWJhcmNhZGVy
+b1xTdHVkaW9cMzcuMFxDYXRhbG9nUmVwb3NpdG9yeVxWaXJ0dWFsVHJlZXZpZXdfYnlfSmFtU29m
+dHdhcmUtMTNcOC4zXHNvdXJjZVxWaXJ0dWFsVHJlZXMuQmFzZVRyZWUucGFz]
+Module=C:\Users\tparent\OneDrive - EORTC\My Documents\Embarcadero\Studio\37.0\CatalogRepository\VirtualTreeview_by_JamSoftware-13\8.3\source\VirtualTrees.BaseTree.pas
+CursorX=1
+CursorY=1
+TopLine=1
+LeftCol=1
+Elisions=
+Bookmarks=
+EditViewName=C:\Users\tparent\OneDrive - EORTC\My Documents\Embarcadero\Studio\37.0\CatalogRepository\VirtualTreeview_by_JamSoftware-13\8.3\source\VirtualTrees.BaseTree.pas
 
