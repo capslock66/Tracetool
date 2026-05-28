@@ -8,7 +8,8 @@ unit unt_PageContainer;
 interface
 
 uses
-  system.Contnrs, types, Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  system.Contnrs, types, Windows, Messages, SysUtils, Variants,
+  Classes, Graphics, Controls, Forms, Vcl.Themes,
   VirtualTrees , VirtualTrees.Types, VirtualTrees.BaseTree,
   Dialogs, ComCtrls, ToolWin, ActnList, ImgList, ExtCtrls, Menus, CommCtrl,pscMenu,
   System.Actions;
@@ -137,6 +138,7 @@ type
   public
      DockingPagecontrol : TDockingPagecontrol ;
      procedure configureToolbar ;
+     procedure ApplyTheme;
   end;
 
   TDockingPagecontrol = class (TPageControl)
@@ -632,25 +634,44 @@ begin
    base.VST.Invalidate ;
 end;
 
+procedure TFrmPageContainer.ApplyTheme;
+const
+  DarkCandidates: array[0..3] of string = (
+    'Carbon','Windows10 Dark', 'Charcoal Dark Slate',  'Slate'
+  );
+  // Original light-theme accent colors (from .dfm)
+  LightColTraces = TColor(16705515);  // lavender, vstMain cols 3+4
+  LightColDetail = TColor(16117479);  // blue-gray, VstDetail + cols 0+1
+  // Dark-theme equivalents (subtle tint on Carbon ~$1E1E1E background)
+  DarkColTraces  = TColor($00201018);  // very dark warm-purple
+  DarkColDetail  = TColor($00151520);  // very dark blue-gray
+var
+  Form: TFrmBase;
+  I: integer;
+begin
+
+  for var pageContainerObject in unt_tool.ContainerList do begin
+    var pageContainer := TFrmPageContainer(pageContainerObject);
+
+    for I := 0 to pageContainer.DockingPagecontrol.PageCount - 1 do
+    begin
+      var page := pageContainer.DockingPagecontrol.Pages[I];
+      if page.Controls[0] is TFrmBase then
+        begin
+          Form := TFrmBase(page.Controls[0]);
+          Form.ApplyTheme;
+        end;
+    end;
+  end;
+end;
+
 procedure TFrmPageContainer.actToggleThemeExecute(Sender: TObject);
-//var
-//  Form: TFrmBase;
-//  I: integer;
 begin
 
   //TraceConfig.AppDisplay_DarkTheme := not TraceConfig.AppDisplay_DarkTheme; // TODO + save
   Frm_Tool.DarkTheme := not Frm_Tool.DarkTheme;
-  Frm_Tool.ApplyTheme;
+  ApplyTheme();
 
-//  for I := 0 to self.DockingPagecontrol.PageCount - 1 do
-//  begin
-//    if DockingPagecontrol.Pages[I].Tag <> 0 then
-//      if TObject(DockingPagecontrol.Pages[I].Tag) is TFrmBase then
-//      begin
-//        Form := TFrmBase(DockingPagecontrol.Pages[I].Tag);
-//        Form.ApplyTheme;
-//      end;
-//  end;
 end;
 //------------------------------------------------------------------------------
 

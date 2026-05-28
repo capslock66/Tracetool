@@ -156,7 +156,7 @@ type
     procedure UDPServerUDPRead(AThread: TIdUDPListenerThread; const AData: TIdBytes; ABinding: TIdSocketHandle);
 
    public
-    procedure ApplyTheme;
+    procedure ApplyVstScheme(VST: TVirtualStringTree);
     property StayOnTop: Boolean read FStayOnTop write SetStayOnTop;
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
@@ -733,7 +733,11 @@ begin
       Frm_Tool.actShowExecute (nil) ;
    end ;
 
-      ApplyTheme;
+   for c := 0 to ContainerList.Count-1 do begin
+      FrmPageContainer := TFrmPageContainer(ContainerList[c]) ;
+      FrmPageContainer.ApplyTheme();
+   end ;
+
    LowTrace('TFrm_Tool.FormCreate end') ;
 end;
 
@@ -2982,23 +2986,11 @@ end;
 
 //------------------------------------------------------------------------------
 
-procedure TFrm_Tool.ApplyTheme;
-const
-  DarkCandidates: array[0..3] of string = (
-    'Carbon','Windows10 Dark', 'Charcoal Dark Slate',  'Slate'
-  );
-  // Original light-theme accent colors (from .dfm)
-  LightColTraces = TColor(16705515);  // lavender, vstMain cols 3+4
-  LightColDetail = TColor(16117479);  // blue-gray, VstDetail + cols 0+1
-  // Dark-theme equivalents (subtle tint on Carbon ~$1E1E1E background)
-  DarkColTraces  = TColor($00201018);  // very dark warm-purple
-  DarkColDetail  = TColor($00151520);  // very dark blue-gray
-
-  procedure ApplyVstScheme(VST: TVirtualStringTree);
-  begin
-    if VST = nil then 
+procedure TFrm_Tool.ApplyVstScheme(VST: TVirtualStringTree);
+begin
+    if VST = nil then
         Exit;
-    if DarkTheme then
+    if Frm_Tool.DarkTheme then
     begin
       VST.Colors.BorderColor                   := TColor($00606060);
       VST.Colors.DisabledColor                 := clDkGray;
@@ -3037,63 +3029,8 @@ const
       VST.Colors.UnfocusedSelectionBorderColor := clGray;
     end;
     VST.Invalidate;
-  end;
-
-var
-  StyleName: string;
-  I, J: Integer;
-  frm: TFrm_Trace;
-  ColTraces, ColDetail: TColor;
-begin
-
-  // 1. Switch VCL style
-  if DarkTheme then
-  begin
-    for StyleName in DarkCandidates do
-      if TStyleManager.TrySetStyle(StyleName) then
-        Break;
-  end else 
-    TStyleManager.SetStyle('Windows');
-
-  // 2. Pick accent colors for the active theme
-  if DarkTheme then
-  begin
-    ColTraces := DarkColTraces;
-    ColDetail := DarkColDetail;
-  end else begin
-    ColTraces := LightColTraces;
-    ColDetail := LightColDetail;
-  end;
-
-  // 3. Update every TFrm_Trace
-  for I := 0 to FormTraceList.Count - 1 do
-  begin
-    frm := TFrm_Trace(FormTraceList.Items[I]);
-
-    // vstMain: columns 3 (Traces) and 4 (Comment) carry the accent
-    if frm.vstMain.Header.Columns.Count > 3 then
-      frm.vstMain.Header.Columns[3].Color := ColTraces;
-    if frm.vstMain.Header.Columns.Count > 4 then
-      frm.vstMain.Header.Columns[4].Color := ColTraces;
-    ApplyVstScheme(frm.vstMain);
-
-    // PanelTop: clCream in light mode, dark accent in dark mode
-    if DarkTheme then
-      frm.PanelTop.Color := DarkColTraces
-    else
-      frm.PanelTop.Color := clCream;
-
-    // VstDetail + its explicitly-colored columns
-    if frm.VstDetail <> nil then
-    begin
-      frm.VstDetail.Color := ColDetail;
-      for J := 0 to frm.VstDetail.Header.Columns.Count - 1 do
-        if frm.VstDetail.Header.Columns[J].Color <> clDefault then
-          frm.VstDetail.Header.Columns[J].Color := ColDetail;
-      ApplyVstScheme(frm.VstDetail);
-    end;
-  end;
 end;
+
 
 //------------------------------------------------------------------------------
 

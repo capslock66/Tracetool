@@ -180,6 +180,8 @@ type
     procedure ShowFilter ;        override ;
     procedure ApplyFont ; override ;
     procedure InsertRow ; override;
+    procedure ApplyTheme; override;
+
     function  getMembers(Node : PVirtualNode) : TMember ; override ;
     function  SearchNext(start:boolean) : boolean ;        override ;
     function  SearchPrevious (atEnd:boolean) : boolean ;  override ;
@@ -482,6 +484,12 @@ begin
    newTreeRec.ProcessName := Frm_AddLine.EditThId.Text;
    newTreeRec.Time        := Frm_AddLine.EditTime.Text;
    newTreeRec.OriginalOrder := NewOrder;
+end;
+
+procedure TFrm_ODS.ApplyTheme;
+begin
+    TFrm_Trace.InternalTrace ('TFrm_ODS.ApplyTheme ' + caption );
+
 end;
 
 //------------------------------------------------------------------------------

@@ -57,7 +57,7 @@ type
     procedure ApplyFont ;            virtual ; abstract ;
     procedure Print ;                virtual ; abstract ;
     procedure InsertRow;             virtual ; abstract ;
-    //     procedure ApplyTheme;         virtual ; abstract ;
+    procedure ApplyTheme;            virtual ; abstract ;
     function  getMembers (Node : PVirtualNode) : TMember ;  virtual ; abstract ;
     function  SearchNext (start:boolean) : boolean ;  virtual ; abstract ;
     function  SearchPrevious (start:boolean) : boolean ;  virtual ; abstract ;

@@ -218,6 +218,8 @@ type
     procedure ShowFilter ;        override ;
     procedure ApplyFont ; override ;
     procedure InsertRow ; override;
+    procedure ApplyTheme; override;
+
     function  getMembers(Node : PVirtualNode) : TMember ; override ;
     function  SearchNext(start:boolean) : boolean ;       override ;
     function  SearchPrevious (atEnd:boolean) : boolean ;  override ;
@@ -2789,6 +2791,28 @@ procedure TFrmTail.Print;
 begin
    FrmPrintPreview.initialize(VstMain, nil) ;
    FrmPrintPreview.ShowModal ;
+end;
+
+procedure TFrmTail.ApplyTheme;
+begin
+    TFrm_Trace.InternalTrace ('TFrmTail.ApplyTheme ' + caption );
+
+    // PanelTop
+    // -------
+    // TODO
+
+    // vstMain
+    // -------
+    // TODO
+
+    // VstDetail
+    // -------
+    // TODO
+
+    // Frame Memo
+    // -------
+    // TODO
+
 end;
 
 end.

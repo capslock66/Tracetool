@@ -9,7 +9,8 @@ unit unt_TraceWin;
 interface
 
    uses
-      system.types, system.UITypes,Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls,
+      system.types, system.UITypes,Windows, Messages, SysUtils, Variants,
+      Classes, Graphics, Controls,Vcl.Themes,
       Forms, registry,
       Dialogs, StdCtrls, ExtCtrls,  Menus, XMLDoc, XMLIntf,
       pscMenu, math, printers,
@@ -267,6 +268,8 @@ interface
          procedure ShowFilter; override;
          procedure ApplyFont; override;
          procedure InsertRow ; override;
+         procedure ApplyTheme; override;
+
          function getMembers(Node: PVirtualNode): TMember; override;
          function SearchNext(start: boolean): boolean; override;
          function SearchPrevious(atEnd: boolean): boolean; override;
@@ -5046,6 +5049,78 @@ begin
    VstDetail.ReinitChildren(nil, true);
    VstDetail.EndUpdate;
 
+end;
+
+procedure TFrm_Trace.ApplyTheme;
+const
+  DarkCandidates: array[0..3] of string = (
+    'Carbon','Windows10 Dark', 'Charcoal Dark Slate',  'Slate'
+  );
+  // Original light-theme accent colors (from .dfm)
+  LightColTraces = TColor(16705515);  // lavender
+  LightColDetail = TColor(16117479);  // blue-gray
+  // Dark-theme equivalents (subtle tint on Carbon ~$1E1E1E background)
+  DarkColTraces  = TColor($00201018);  // very dark warm-purple
+  DarkColDetail  = TColor($00151520);  // very dark blue-gray
+var
+  StyleName: string;
+  j : integer;
+  ColTraces, ColDetail: TColor;
+begin
+    TFrm_Trace.InternalTrace ('TFrm_Trace.ApplyTheme ' + caption );
+
+    // Switch VCL style
+    if Frm_Tool.DarkTheme then
+    begin
+      for StyleName in DarkCandidates do
+        if TStyleManager.TrySetStyle(StyleName) then
+          Break;
+        ColTraces := DarkColTraces;
+        ColDetail := DarkColDetail;
+    end else begin
+      TStyleManager.SetStyle('Windows');
+      ColTraces := LightColTraces;
+      ColDetail := LightColDetail;
+    end;
+
+    // vstMain
+    // -------
+
+    // column 3 (Traces)
+    if vstMain.Header.Columns.Count > 3 then
+      vstMain.Header.Columns[3].Color := ColTraces;
+
+    // column 4 (Comment)
+    if vstMain.Header.Columns.Count > 4 then
+      vstMain.Header.Columns[4].Color := ColTraces;
+
+    Frm_Tool.ApplyVstScheme(vstMain);
+
+    // PanelTop
+    // -------
+
+    //clCream in light mode, dark accent in dark mode
+    if Frm_Tool.DarkTheme then
+      PanelTop.Color := DarkColTraces
+    else
+      PanelTop.Color := clCream;
+
+    // VstDetail
+    // -------
+
+    if VstDetail <> nil then
+    begin
+      VstDetail.Color := ColDetail;
+      for J := 0 to VstDetail.Header.Columns.Count - 1 do
+        if VstDetail.Header.Columns[J].Color <> clDefault then
+          VstDetail.Header.Columns[J].Color := ColDetail;
+      Frm_Tool.ApplyVstScheme(VstDetail);
+    end;
+
+    // Frame Memo
+    // -------
+
+    // TODO
 end;
 
 // ------------------------------------------------------------------------------

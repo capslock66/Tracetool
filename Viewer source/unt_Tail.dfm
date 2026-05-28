@@ -227,9 +227,11 @@ object FrmTail: TFrmTail
         end
         inherited PanelTop: TPanel
           Width = 401
+          StyleElements = [seFont, seClient, seBorder]
           ExplicitWidth = 401
           inherited LabelSelect: TLabel
             Height = 13
+            StyleElements = [seFont, seClient, seBorder]
             ExplicitHeight = 13
           end
         end
@@ -290,7 +292,6 @@ object FrmTail: TFrmTail
           00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FF}
         TabOrder = 0
         OnClick = butCloseClick
-        ExplicitLeft = 561
       end
       object butReload: TBitBtn
         Left = 510
@@ -301,7 +302,6 @@ object FrmTail: TFrmTail
         Caption = 'Reload'
         TabOrder = 1
         OnClick = butReloadClick
-        ExplicitLeft = 506
       end
       object butClearContent: TBitBtn
         Left = 400
@@ -312,7 +312,6 @@ object FrmTail: TFrmTail
         Caption = 'Clear File Content'
         TabOrder = 2
         OnClick = butClearContentClick
-        ExplicitLeft = 396
       end
     end
     object PanelGutter: TPanel
@@ -324,7 +323,6 @@ object FrmTail: TFrmTail
       BevelOuter = bvNone
       TabOrder = 3
       OnDblClick = PanelGutterDblClick
-      ExplicitHeight = 224
     end
   end
   object PopupTree: TPopupMenu

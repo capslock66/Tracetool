@@ -234,9 +234,11 @@ object Frm_ODS: TFrm_ODS
         end
         inherited PanelTop: TPanel
           Width = 385
+          StyleElements = [seFont, seClient, seBorder]
           ExplicitWidth = 385
           inherited LabelSelect: TLabel
             Height = 13
+            StyleElements = [seFont, seClient, seBorder]
             ExplicitHeight = 13
           end
         end
@@ -297,7 +299,6 @@ object Frm_ODS: TFrm_ODS
           00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FF}
         TabOrder = 0
         OnClick = butCloseClick
-        ExplicitLeft = 561
       end
     end
     object PanelGutter: TPanel
@@ -309,7 +310,6 @@ object Frm_ODS: TFrm_ODS
       BevelOuter = bvNone
       TabOrder = 3
       OnDblClick = PanelGutterDblClick
-      ExplicitHeight = 224
     end
   end
   object PopupTree: TPopupMenu
