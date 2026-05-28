@@ -245,7 +245,6 @@ object FrmTail: TFrmTail
       Color = clCream
       ParentBackground = False
       TabOrder = 2
-      ExplicitWidth = 584
       DesignSize = (
         588
         22)

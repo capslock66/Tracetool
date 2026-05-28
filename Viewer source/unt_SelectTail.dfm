@@ -45,7 +45,6 @@ object FrmSelectTail: TFrmSelectTail
       'Show Approximative time and lines'
       'Show lines only'
       'Multi columns')
-    ExplicitWidth = 464
   end
   object butSelect: TBitBtn
     Left = 535
@@ -153,8 +152,6 @@ object FrmSelectTail: TFrmSelectTail
     TabOrder = 5
     OnClickCheck = FavoriteFilesClickCheck
     OnDblClick = FavoriteFilesDblClick
-    ExplicitWidth = 522
-    ExplicitHeight = 168
   end
   object Panel4: TPanel
     Left = 4

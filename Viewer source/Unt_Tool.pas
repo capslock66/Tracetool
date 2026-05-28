@@ -1,15 +1,8 @@
 {
-
   Main form : receive TraceNode messages (TraceTool framework) from clients (winmsg,socket,...)
-  =============================================================================================
-
-  Author : Thierry Parent
-
-  HomePage :  http://www.codeproject.com/csharp/TraceTool.asp
-  Download :  http://sourceforge.net/projects/tracetool/
-  See License.txt for license information
-
   Indy components must be installed.
+  Author : Thierry Parent
+  HomePage :  https://github.com/capslock66/Tracetool
 }
 
 unit Unt_Tool;

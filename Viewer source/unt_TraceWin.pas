@@ -1,14 +1,7 @@
 {
-
-  This is the Trace window that display TraceNode messages (TraceTool framework)
-  ==============================================================================
-
+  Trace window that display TraceNode messages (TraceTool framework)
   Author : Thierry Parent
-
-  HomePage :  http://www.codeproject.com/csharp/TraceTool.asp
-  Download :  http://sourceforge.net/projects/tracetool/
-  See License.txt for license information
-
+  HomePage :  https://github.com/capslock66/Tracetool
 }
 
 unit unt_TraceWin;

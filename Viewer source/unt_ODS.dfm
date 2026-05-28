@@ -252,7 +252,6 @@ object Frm_ODS: TFrm_ODS
       Color = clCream
       ParentBackground = False
       TabOrder = 2
-      ExplicitWidth = 584
       DesignSize = (
         588
         22)

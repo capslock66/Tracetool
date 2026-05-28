@@ -1,11 +1,8 @@
 {
   Receive windows messages from the client
-
   Author : Thierry Parent
+  HomePage :  https://github.com/capslock66/Tracetool
 
-  HomePage :  http://www.codeproject.com/csharp/TraceTool.asp
-  Download :  http://sourceforge.net/projects/tracetool/
-  See License.txt for license information   
 }
 
 unit Unt_receiver;

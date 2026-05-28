@@ -1,13 +1,7 @@
 {
   Base windows for all trace type
-  ===============================
-
   Author : Thierry Parent
-
-  HomePage :  http://www.codeproject.com/csharp/TraceTool.asp
-  Download :  http://sourceforge.net/projects/tracetool/
-  See License.txt for license information   
-
+  HomePage :  https://github.com/capslock66/Tracetool
 }
 
 unit unt_base;

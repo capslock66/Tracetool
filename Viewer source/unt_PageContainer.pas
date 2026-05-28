@@ -1,11 +1,6 @@
 {
-
   Author : Thierry Parent
-
-  HomePage :  http://www.codeproject.com/csharp/TraceTool.asp
-  Download :  http://sourceforge.net/projects/tracetool/
-  See License.txt for license information  
-
+  HomePage :  https://github.com/capslock66/Tracetool
 }
 
 unit unt_PageContainer;
@@ -638,15 +633,15 @@ begin
 end;
 
 procedure TFrmPageContainer.actToggleThemeExecute(Sender: TObject);
-var
-  Form: TFrmBase;
-  I: integer;
+//var
+//  Form: TFrmBase;
+//  I: integer;
 begin
-  //TraceConfig.AppDisplay_DarkTheme := not TraceConfig.AppDisplay_DarkTheme;
 
+  //TraceConfig.AppDisplay_DarkTheme := not TraceConfig.AppDisplay_DarkTheme; // TODO + save
   Frm_Tool.DarkTheme := not Frm_Tool.DarkTheme;
-
   Frm_Tool.ApplyTheme;
+
 //  for I := 0 to self.DockingPagecontrol.PageCount - 1 do
 //  begin
 //    if DockingPagecontrol.Pages[I].Tag <> 0 then
