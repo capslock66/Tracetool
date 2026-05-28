@@ -10,9 +10,9 @@ EditViewName=C:\Thierry\Tracetool\Viewer source\unt_PageContainer.pas
 
 [ClosedView_QzpcVGhpZXJyeVxUcmFjZXRvb2xcVmlld2VyIHNvdXJjZVxVbnRfVG9vbC5wYXM=]
 Module=C:\Thierry\Tracetool\Viewer source\Unt_Tool.pas
-CursorX=63
-CursorY=3062
-TopLine=3047
+CursorX=1
+CursorY=1
+TopLine=1
 LeftCol=1
 Elisions=
 Bookmarks=
@@ -20,9 +20,9 @@ EditViewName=C:\Thierry\Tracetool\Viewer source\Unt_Tool.pas
 
 [ClosedView_QzpcVGhpZXJyeVxUcmFjZXRvb2xcVmlld2VyIHNvdXJjZVx1bnRfVHJhY2VXaW4ucGFz]
 Module=C:\Thierry\Tracetool\Viewer source\unt_TraceWin.pas
-CursorX=95
-CursorY=169
-TopLine=151
+CursorX=1
+CursorY=1
+TopLine=1
 LeftCol=1
 Elisions=
 Bookmarks=
@@ -58,4 +58,75 @@ LeftCol=1
 Elisions=
 Bookmarks=
 EditViewName=C:\Users\tparent\OneDrive - EORTC\My Documents\Embarcadero\Studio\37.0\CatalogRepository\VirtualTreeview_by_JamSoftware-13\8.3\source\VirtualTrees.BaseTree.pas
+
+[ClosedView_QzpcVGhpZXJyeVxUcmFjZXRvb2xcVmlld2VyIHNvdXJjZVx1bnRfZXZlbnRMb2cucGFz]
+Module=C:\Thierry\Tracetool\Viewer source\unt_eventLog.pas
+CursorX=53
+CursorY=221
+TopLine=206
+LeftCol=1
+Elisions=
+Bookmarks=
+EditViewName=C:\Thierry\Tracetool\Viewer source\unt_eventLog.pas
+
+[ClosedView_QzpcVGhpZXJyeVxUcmFjZXRvb2xcVmlld2VyIHNvdXJjZVxFdmVudGxvZy5wYXM=]
+Module=C:\Thierry\Tracetool\Viewer source\Eventlog.pas
+CursorX=86
+CursorY=13
+TopLine=4
+LeftCol=1
+Elisions=
+Bookmarks=
+EditViewName=C:\Thierry\Tracetool\Viewer source\Eventlog.pas
+
+[ClosedView_QzpcVGhpZXJyeVxUcmFjZXRvb2xcVmlld2VyIHNvdXJjZVx1V2luZG93c0V2ZW50cy5wYXM=]
+Module=C:\Thierry\Tracetool\Viewer source\uWindowsEvents.pas
+CursorX=16
+CursorY=21
+TopLine=1
+LeftCol=1
+Elisions=
+Bookmarks=
+EditViewName=C:\Thierry\Tracetool\Viewer source\uWindowsEvents.pas
+[ClosedView_YzpccHJvZ3JhbSBmaWxlcyAoeDg2KVxlbWJhcmNhZGVyb1xzdHVkaW9cMzcuMFxzb3VyY2VccnRs
+XGNvbW1vblxTeXN0ZW0uR2VuZXJpY3MuQ29sbGVjdGlvbnMucGFz]
+Module=c:\program files (x86)\embarcadero\studio\37.0\source\rtl\common\System.Generics.Collections.pas
+CursorX=1
+CursorY=5551
+TopLine=5535
+LeftCol=1
+Elisions=
+Bookmarks=
+EditViewName=
+
+[ClosedView_QzpcVGhpZXJyeVxUcmFjZXRvb2xcVmlld2VyIHNvdXJjZVxUcmFjZVRvb2wuZHBy]
+Module=C:\Thierry\Tracetool\Viewer source\TraceTool.dpr
+CursorX=89
+CursorY=33
+TopLine=28
+LeftCol=1
+Elisions=
+Bookmarks=
+EditViewName=C:\Thierry\Tracetool\Viewer source\TraceTool.dpr
+[ClosedView_YzpccHJvZ3JhbSBmaWxlcyAoeDg2KVxlbWJhcmNhZGVyb1xzdHVkaW9cMzcuMFxzb3VyY2VccnRs
+XHdpblxXaW5hcGkuTWVzc2FnZXMucGFz]
+Module=c:\program files (x86)\embarcadero\studio\37.0\source\rtl\win\Winapi.Messages.pas
+CursorX=1
+CursorY=1059
+TopLine=1053
+LeftCol=1
+Elisions=
+Bookmarks=
+EditViewName=c:\program files (x86)\embarcadero\studio\37.0\source\rtl\win\Winapi.Messages.pas
+
+[ClosedView_YzpccHJvZ3JhbSBmaWxlcyAoeDg2KVxlbWJhcmNhZGVyb1xzdHVkaW9cMzcuMFxzb3VyY2VccnRs
+XHdpblxXaW5hcGkuTWVzc2FnZXMucGFz]
+Module=c:\program files (x86)\embarcadero\studio\37.0\source\rtl\win\Winapi.Messages.pas
+CursorX=1
+CursorY=1059
+TopLine=1053
+LeftCol=1
+Elisions=
+Bookmarks=
+EditViewName=c:\program files (x86)\embarcadero\studio\37.0\source\rtl\win\Winapi.Messages.pas
 

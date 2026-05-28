@@ -30,7 +30,6 @@ uses
   unt_utility in 'unt_utility.pas',
   unt_selectEvent in 'unt_selectEvent.pas' {FrmSelectEvent},
   unt_eventLog in 'unt_eventLog.pas' {FrmEventLog},
-  Eventlog in 'Eventlog.pas',
   unt_saveDlg in 'unt_saveDlg.pas' {FrmSave},
   unt_SelectTail in 'unt_SelectTail.pas' {FrmSelectTail},
   unt_traceWinProperty in 'unt_traceWinProperty.pas' {FrmTraceWinProp},
@@ -56,7 +55,6 @@ uses
   unt_AddLine in 'unt_AddLine.pas' {Frm_AddLine},
   unt_detailPopup in 'unt_detailPopup.pas' {DetailPopupForm},
   unt_FrameMemo in 'unt_FrameMemo.pas' {FrameMemo: TFrame},
-  uWindowsEvents in 'uWindowsEvents.pas',
   VstSelector in 'VstSelector.pas',
   Vcl.Themes,
   Vcl.Styles;

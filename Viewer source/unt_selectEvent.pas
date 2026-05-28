@@ -42,7 +42,7 @@ var
 
 implementation
 
-uses registry, EventLog , Unt_Tool;
+uses registry, Unt_Tool;
 
 {$R *.dfm}
 

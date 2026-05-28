@@ -1,10 +1,10 @@
-{
+﻿{
 
   Author : Thierry Parent
 
   HomePage :  http://www.codeproject.com/csharp/TraceTool.asp
   Download :  http://sourceforge.net/projects/tracetool/
-  See License.txt for license information  
+  See License.txt for license information
 
 }
 
@@ -13,13 +13,12 @@ unit unt_eventLog;
 interface
 
 uses
-  Windows, Messages, SysUtils, StrUtils, Variants, Classes, Graphics, Controls, Forms, Clipbrd, xmldoc , Menus,
-  Dialogs, unt_base, StdCtrls, Buttons,  ExtCtrls, ComCtrls, Vcl.ToolWin,
+  Windows, Messages, SysUtils, StrUtils, System.Variants, Generics.Collections, Classes, Graphics, Controls, Forms, Clipbrd, xmldoc , Menus,
+  Dialogs, unt_base, Vcl.StdCtrls, Buttons,  ExtCtrls, ComCtrls, Vcl.ToolWin,
   pscMenu ,
   SynEdit,
   VirtualTrees.BaseAncestorVCL, VirtualTrees.BaseTree, VirtualTrees.AncestorVCL,
   VirtualTrees, VirtualTrees.Types,
-  uWindowsEvents,
   Unt_Tool,
   unt_tracewin, unt_PageContainer, unt_editor,
   vstSort,
@@ -28,6 +27,49 @@ uses
   untPrintPreview, unt_FrameMemo ;
 
 type
+
+  tInsertionArray = array of string;
+  tDataArray = array of integer;
+
+  // Original code : https://delphi-bar.blogspot.com/2022/02/writing-to-and-reading-from-windows.html
+  TWindowsEvent = class
+  private
+    fCategory:         string;
+    fCategoryString:   string;
+    fComputerName:     string;
+    fTypeString:       string;
+    fEventType:        integer;
+    fEventCode:        integer;
+    fEventIdentifier:  integer;
+    fRecordNumber:     integer;
+    fMessage:          string;
+    fLogFile:          string;
+    fUser:             string;
+    fSourceName:       string;
+    fTimeWritten:      TDateTime;   // TimeGenerated is same as TimeWritten
+    fTimeGenerated:    TDateTime;
+    fInsertionStrings: tInsertionArray;
+    fDataArray :       tDataArray;
+  public
+    property Category:         string           read fCategory         write fCategory;
+    property CategoryString:   string           read fCategoryString   write fCategoryString;
+    property ComputerName:     string           read fComputerName     write fComputerName;
+    property TypeString:       string           read fTypeString       write fTypeString;
+    property EventType:        integer          read fEventType        write fEventType;
+    property EventCode:        integer          read fEventCode        write fEventCode;
+    property EventIdentifier:  integer          read fEventIdentifier  write fEventIdentifier;
+    property RecordNumber:     integer          read fRecordNumber     write fRecordNumber;
+    property Msg:              string           read fMessage          write fMessage;
+    property LogFile:          string           read fLogFile          write fLogFile;
+    property User:             string           read fUser             write fUser;
+    property SourceName:       string           read fSourceName       write fSourceName;
+    property TimeWritten:      TdateTime        read fTimeWritten      write fTimeWritten;
+    property TimeGenerated:    TdateTime        read fTimeGenerated    write fTimeGenerated;
+    property InsertionStrings: tInsertionArray  read fInsertionStrings write fInsertionStrings;
+    property DataArray:        tDataArray       read fDataArray        write fDataArray;
+
+    procedure PopulateFromOleVariant(aEvent: OLEVariant);
+  end;
 
   PEvntLogRec = ^TEvntLogRec ;
   TEvntLogRec = record
@@ -132,7 +174,6 @@ type
 
   private
     fLogName : string ;
-    fWindowsEventLogs: TRBWindowsEventLogs;
     LastModified : tDateTime ;
     LastRead : integer ;
     FirstChildOrder: integer; // Order of the last child, used to insert sub nodes and unsort them
@@ -141,7 +182,8 @@ type
     procedure WMStartEditingTrace(var Message: TMessage); message WM_STARTEDITING_TRACE;
     procedure VstDetailSelectorSelectionChanged(Sender: TVstSelector; selectionAsText: string);
 
-    procedure AddLogToTree(eventLog: TRBWindowsEvent); //overload;
+    procedure AddLogToTree(eventLog: TWindowsEvent);
+    function GetWindowsEventLogs(aApplicationName: string; MaxNumberOfEntries: integer): TObjectList<TWindowsEvent>;
     function CheckSearchRecord(EvntLogRec: PEvntLogRec): boolean;
     procedure AddWaitingMessage;
   public
@@ -177,19 +219,22 @@ type
     function  SearchPrevious (atEnd:boolean) : boolean ;  override ;
   end;
 
+
 var
   FrmEventLog: TFrmEventLog;
 
 implementation
 
 uses
-   unt_selectEvent
-   , unt_ODS
+   unt_selectEvent,
+   unt_ODS
    , unt_utility
    , DebugOptions
    , application6
    , unt_TraceConfig
-   , unt_search, unt_AddLine;
+   , unt_search, unt_AddLine
+   , ComObj, ActiveX, DateUtils
+   , SvcMgr, System.JSON;
 
 {$R *.dfm}
 
@@ -297,12 +342,11 @@ begin
 
    VstMain.Clear;
    AddWaitingMessage() ;
-   fWindowsEventLogs := TRBWindowsEventLogs.Create(LogName);
-   fWindowsEventLogs.Reader.GetWindowsEventLogs(LineToRead);
-   VstMain.Clear;
-   for var event in fWindowsEventLogs.Reader do
+   var logs := GetWindowsEventLogs(LogName, LineToRead);
+   VstMain.Clear;  // clear again to remove the 'Loading...'
+   for var event in logs do
       AddLogToTree(event);
-   freeAndNil(fWindowsEventLogs);
+   freeAndNil(logs);
 end ;
 
 procedure TFrmEventLog.AddWaitingMessage();
@@ -322,7 +366,7 @@ begin
    TreeRec.Source := 'Loading...';
 end;
 
-procedure TFrmEventLog.AddLogToTree (eventLog: TRBWindowsEvent) ;
+procedure TFrmEventLog.AddLogToTree (eventLog: TWindowsEvent) ;
 var
    TreeRec : PEvntLogRec ;
 const
@@ -986,7 +1030,7 @@ begin
       exit ;
    TraceConfig.General_LastSavedPath := ExtractFilePath(Frm_Tool.SaveDialog1.FileName) ;
 
-   application.ProcessMessages ;
+   Forms.Application.ProcessMessages ;
    SetCursor(Screen.Cursors[crHourGlass]);
 
    try
@@ -1863,5 +1907,224 @@ begin
    FrmPrintPreview.initialize(VstMain, nil) ;
    FrmPrintPreview.ShowModal ;
 end;
+
+
+function TFrmEventLog.GetWindowsEventLogs (aApplicationName: string; MaxNumberOfEntries: integer):TObjectList<TWindowsEvent>;
+const
+  wbemForwardOnly = 32;
+  wbemReturnImmediately = 16;
+  wbemFlagReturnWhenComplete = 0;
+var
+  event : TWindowsEvent;
+
+  function DateTimeToWMI(const ADateTime: TDateTime): string;
+  begin
+    Result := FormatDateTime('yyyymmddHHnnss', ADateTime) + '.000000+000';
+  end;
+
+begin
+  result := TObjectList<TWindowsEvent>.Create();
+  try
+    var iCount := 0;
+    // https://www.codeproject.com/Articles/42571/WMI-Windows-Event-Logs-and-User-Privileges
+    // https://learn.microsoft.com/en-us/windows/win32/wmisdk/swbemlocator-connectserver
+    // https://learn.microsoft.com/fr-be/windows/win32/wmisdk/privilege-constants?redirectedfrom=MSDN
+    // https://learn.microsoft.com/en-us/windows/win32/wmisdk/swbemservices-execquery
+    // https://learn.microsoft.com/en-us/windows/win32/wmisdk/querying-with-wql
+
+    var BindCtx: IBindCtx;
+    OleCheck(CreateBindCtx(0, bindCtx));
+
+    var Moniker: IMoniker;
+    var chEaten: Integer;
+    OleCheck(MkParseDisplayName(BindCtx, StringToOleStr('winmgmts:'), chEaten, Moniker));    // 'winmgmts:\\localhost\root\cimv2'  // {impersonationLevel=impersonate}
+
+    var dispatch: IDispatch;
+    OleCheck(Moniker.BindToObject(BindCtx, nil, IDispatch, dispatch));
+
+    var WMIService: OLEVariant := dispatch;
+
+    var eventQuery :=
+       'SELECT * FROM Win32_NTLogEvent '
+       + 'Where Logfile = "' + aApplicationName + '" '
+       + 'AND TimeGenerated >= "' + DateTimeToWMI(IncDay(Now(), -10)) + '"'  ;
+
+    var WbemObjectSet: OLEVariant := WMIService.ExecQuery(
+       EventQuery,    // text of the query
+       'WQL',         // the query language to be used.
+       wbemReturnImmediately + wbemForwardOnly); // wbemReturnImmediately + wbemForwardOnly);    // wbemFlagReturnWhenComplete
+
+    var WbemObject: OLEVariant;
+    var iValue: LongWord;
+    var oEnum: IEnumvariant := IUnknown(WbemObjectSet._NewEnum) as IEnumvariant;
+
+    while oEnum.Next(1, WbemObject, iValue) = 0 do begin
+       event := TWindowsEvent.Create;
+       event.PopulateFromOleVariant(WbemObject);
+       result.Add(event);
+       WbemObject := Unassigned;
+       inc(iCount);
+       if (MaxNumberOfEntries <> -1) and (iCount > MaxNumberOfEntries) then
+          Break;
+    end;
+  except
+    on E: EOleException do  begin
+      event := TWindowsEvent.Create;
+      event.Category := 'Error';
+      event.Msg := Format('EOleException %s %x', [E.Message, E.ErrorCode]);
+      result.Add(event);
+    end ;
+    on E: Exception do  begin
+      event := TWindowsEvent.Create;
+      event.Category := 'Error';
+      event.Msg := E.Classname + ':' + E.Message;
+      result.Add(event);
+    end ;
+  end;
+end;
+
+{ TWindowsEvent }
+
+procedure TWindowsEvent.PopulateFromOleVariant(aEvent: OLEVariant);
+var
+  localInsertionArray: array of String;
+  localDataArray: array of integer;
+  i: integer;
+
+  function WMIToDateTime(const AWMI: string): TDateTime;
+  // Parses WMI format: YYYYMMDDHHMMSS.mmmmmm±UUU  (e.g. '20260527085724.063702-000')
+  // Returns UTC TDateTime
+  var
+    Y, Mo, D, H, Mi, Se, Ms: Word;
+    OffsetSign, OffsetMins: Integer;
+  begin
+    Y  := StrToInt(Copy(AWMI,  1, 4));
+    Mo := StrToInt(Copy(AWMI,  5, 2));
+    D  := StrToInt(Copy(AWMI,  7, 2));
+    H  := StrToInt(Copy(AWMI,  9, 2));
+    Mi := StrToInt(Copy(AWMI, 11, 2));
+    Se := StrToInt(Copy(AWMI, 13, 2));
+    Ms := StrToInt(Copy(AWMI, 16, 6)) div 1000;   // microseconds → milliseconds
+    // Embedded UTC offset (±UUU in minutes) — subtract to get pure UTC
+    if AWMI[22] = '+' then
+      OffsetSign := 1
+    else
+      OffsetSign := -1;
+    OffsetMins := StrToInt(Copy(AWMI, 23, 3));
+    Result := EncodeDateTime(Y, Mo, D, H, Mi, Se, Ms) - OffsetSign * OffsetMins / (24 * 60);
+  end;
+
+begin
+  // Identifies the event within the Windows event log file. This is specific to the log file and is used together with the log file name to uniquely identify an instance of this class.
+
+  // Record numbers are always unique; they are not reset to 1 when an event log is cleared.
+  // As a result, the highest record number also indicates the number of records that have
+  // been written to the event log since the operating system was installed
+  fRecordNumber := integer(aEvent.RecordNumber);
+
+  //Classification of the event as determined by the source.
+  // This subcategory is source-specific.
+  fCategory := string (aEvent.Category);                // '0'
+
+  // Translation of the subcategory. The translation is source-specific
+  if not VarIsNull(aEvent.CategoryString) then
+     fCategoryString := string (aEvent.CategoryString); // 'Application Crashing Events'
+
+  // Type of event. This is an enumerated string.
+  // It is preferable to use the EventType property rather than the "Type" property.
+  // 1:Error,2:Warning,4:Information,8:Security Audit Success,16:Security Audit Failure
+  if not VarIsNull(aEvent.Type) then
+     fTypeString := string (aEvent.Type);               // 'Information'
+
+  // Type of event.
+  // 1:Error,2:Warning,3:Information,4:Security Audit Success,5:Security Audit Failure
+  if not VarIsNull(aEvent.EventType) then
+     fEventType := aEvent.EventType;
+
+  // User name of the logged-on user when the event occurred.
+  // If the user name cannot be determined, this will be NULL.
+  if not VarIsNull(aEvent.User) then
+     fUser := string (aEvent.User);                     // 'NT AUTHORITY\SYSTEM'
+
+  // Name of the source (application, service, driver, or subsystem) that generated the entry.
+  // It is used, together with EventIdentifier to uniquely identify a Windows event type.
+  if not VarIsNull(aEvent.SourceName) then
+     fSourceName := string (aEvent.SourceName);         // Microsoft-Windows-Security-SPP
+
+  // The time when the event is written to the log file
+  if not VarIsNull(aEvent.TimeWritten) then begin
+     var dateStr : string := aEvent.TimeWritten ;      // '20260527085724.063702-000'
+     fTimeWritten := WMIToDateTime(datestr);   // Utc
+     fTimeWritten := TTimeZone.Local.ToLocalTime(fTimeWritten);
+  end;
+
+  // The time when the event is generated.
+  if not VarIsNull(aEvent.TimeGenerated) then begin
+     var dateStr : string := aEvent.TimeGenerated ;      // '20240602101605.176003-000'
+     fTimeGenerated := WMIToDateTime(datestr);   // Utc
+     fTimeGenerated := TTimeZone.Local.ToLocalTime(fTimeGenerated);  // Local Time
+  end;
+
+  // Identifier of the event.
+  // This is specific to the source that generated the event log entry and is used, together with SourceName,
+  // to uniquely identify a Windows event type.
+  if not VarIsNull(aEvent.EventIdentifier) then
+     fEventIdentifier := aEvent.EventIdentifier;         // 1073758208
+
+  // Name of the computer that generated this event.
+  fComputerName := string (aEvent.ComputerName);
+
+  // Value of the lower 16-bits of the EventIdentifier property.
+  // It is present to match the value displayed in the Windows Event Viewer.
+  fEventCode := integer(aEvent.EventCode);
+
+  // Event message as it appears in the Windows event log.
+  // This is a standard message with zero or more insertion strings supplied by the source of the Windows event.
+  // The insertion strings are inserted into the standard message in a predefined format.
+  // If there are no insertion strings or there is a problem inserting the insertion strings,
+  // only the standard message will be present in this field.
+  if not VarIsNull(aEvent.Message) then
+     fMessage := string (aEvent.Message)
+  else
+     fMessage := '';
+
+  // Name of Windows event log file.
+  // Together with RecordNumber, this is used to uniquely identify an instance of this class.
+  fLogFile := string (aEvent.LogFile);             // Name of Windows event log file
+
+  // List of the insertion strings that accompanied the report of the Windows event.
+  if not VarIsNull(aEvent.InsertionStrings) then
+  begin
+     localInsertionArray := aEvent.InsertionStrings;
+     var low: integer := VarArrayLowBound(localInsertionArray, 1);
+     var high: integer := VarArrayHighBound(localInsertionArray, 1);
+     setLength (fInsertionStrings,High+1-low);
+     var index:integer := 0;
+
+     for i := low to High do
+     begin
+        fInsertionStrings[index] := localInsertionArray[i];
+        inc(index);
+     end;
+  end;
+
+  // List of the binary data that accompanied the report of the Windows event. (uint8 array)
+  if not VarIsNull(aEvent.Data) then
+  begin
+     localDataArray := aEvent.Data;
+     var low: integer := VarArrayLowBound(localDataArray, 1);
+     var high: integer := VarArrayHighBound(localDataArray, 1);
+     setLength (fDataArray,High+1-low);
+     var index:integer := 0;
+
+     for i := VarArrayLowBound(localDataArray, 1) to VarArrayHighBound(localDataArray, 1) do
+     begin
+        fDataArray[index] := localDataArray[i];
+        inc(index);
+     end;
+  end;
+
+end;
+
 
 end.

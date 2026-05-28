@@ -4,8 +4,9 @@ inherited FrmEventLog: TFrmEventLog
   Caption = 'FrmEventLog'
   ClientHeight = 378
   ClientWidth = 729
-  ExplicitWidth = 741
-  ExplicitHeight = 416
+  StyleElements = [seFont, seClient, seBorder]
+  ExplicitWidth = 745
+  ExplicitHeight = 417
   TextHeight = 13
   object GroupPanel: TPanel
     Left = 0
@@ -241,9 +242,11 @@ inherited FrmEventLog: TFrmEventLog
         end
         inherited PanelTop: TPanel
           Width = 381
+          StyleElements = [seFont, seClient, seBorder]
           ExplicitWidth = 381
           inherited LabelSelect: TLabel
             Height = 13
+            StyleElements = [seFont, seClient, seBorder]
             ExplicitHeight = 13
           end
         end
@@ -259,7 +262,6 @@ inherited FrmEventLog: TFrmEventLog
       Color = clCream
       ParentBackground = False
       TabOrder = 2
-      ExplicitWidth = 725
       DesignSize = (
         729
         22)
@@ -305,7 +307,6 @@ inherited FrmEventLog: TFrmEventLog
           00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FF}
         TabOrder = 0
         OnClick = butCloseClick
-        ExplicitLeft = 702
       end
       object butReload: TBitBtn
         Left = 595
@@ -316,7 +317,6 @@ inherited FrmEventLog: TFrmEventLog
         Caption = 'Reload 500 (10 days)'
         TabOrder = 1
         OnClick = butReloadClick
-        ExplicitLeft = 591
       end
       object butGetAll: TBitBtn
         Left = 441
@@ -327,7 +327,6 @@ inherited FrmEventLog: TFrmEventLog
         Caption = 'Get All messages (10 days)'
         TabOrder = 2
         OnClick = butGetAllClick
-        ExplicitLeft = 437
       end
     end
     object PanelGutter: TPanel
@@ -339,7 +338,6 @@ inherited FrmEventLog: TFrmEventLog
       BevelOuter = bvNone
       TabOrder = 3
       OnDblClick = PanelGutterDblClick
-      ExplicitHeight = 355
     end
   end
   object PopupTree: TPopupMenu

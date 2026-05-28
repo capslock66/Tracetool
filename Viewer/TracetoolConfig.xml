@@ -16,8 +16,8 @@
 	<AppDisplay>
 		<SmallBut Value="true"/>
 		<ApplicationTitle Value="socket: 8090 / 4502,  Http : 85, WebSocket:8091"/>
-		<Left Value="260"/>
-		<Top Value="260"/>
+		<Left Value="104"/>
+		<Top Value="104"/>
 		<Width Value="697"/>
 		<Height Value="636"/>
 		<StayOnTop Value="false"/>
@@ -92,7 +92,7 @@
 		</Info>
 	</EventLog>
 	<Tail>
-		<LastPath Value=""/>
+		<LastPath Value="C:\Users\tparent\OneDrive - EORTC\My Documents\temp\"/>
 		<AutoClear Value="false"/>
 		<MaxNode Value="25000"/>
 		<MinNode Value="20000"/>
@@ -103,7 +103,7 @@
 		<Separator Value="9"/>
 		<FirstcolIsTitle Value="false"/>
 		<FixedColCount Value="1"/>
-		<OpenFromFavorites Value="true"/>
+		<OpenFromFavorites Value="false"/>
 		<VisibleMenu Value="true"/>
 		<Favorites>
 			<FileName>C:\temp\log.txt</FileName></Favorites>
@@ -131,7 +131,7 @@
 	<Plugins>
 		<Plugin><Kind>DotNet</Kind><Enabled Value="true"/><FileName>WebSock\WebsockPlugin.dll</FileName><Param>WebSocketHost = 0.0.0.0, WebSocketPort = 8091, ViewerSocketHost = 127.0.0.1, ViewerSocketPort = 8090</Param></Plugin></Plugins>
 	<Watches>
-		<Enabled Value="false"/>
+		<Enabled Value="true"/>
 		<VisibleMenu Value="true"/>
 		<MainWatchesTitle Value="Watches"/>
 		<Trace>
