@@ -16,10 +16,10 @@
 	<AppDisplay>
 		<SmallBut Value="true"/>
 		<ApplicationTitle Value="socket: 8090 / 4502,  Http : 85, WebSocket:8091"/>
-		<Left Value="234"/>
-		<Top Value="234"/>
+		<Left Value="-3799"/>
+		<Top Value="172"/>
 		<Width Value="697"/>
-		<Height Value="636"/>
+		<Height Value="533"/>
 		<StayOnTop Value="false"/>
 		<ShowOnstartup Value="true"/>
 		<ShowOnMessageReceived Value="false"/>
@@ -92,7 +92,7 @@
 		</Info>
 	</EventLog>
 	<Tail>
-		<LastPath Value="C:\Users\tparent\OneDrive - EORTC\My Documents\temp\"/>
+		<LastPath Value="C:\Temp\"/>
 		<AutoClear Value="false"/>
 		<MaxNode Value="25000"/>
 		<MinNode Value="20000"/>
@@ -103,10 +103,10 @@
 		<Separator Value="9"/>
 		<FirstcolIsTitle Value="false"/>
 		<FixedColCount Value="1"/>
-		<OpenFromFavorites Value="false"/>
+		<OpenFromFavorites Value="true"/>
 		<VisibleMenu Value="true"/>
 		<Favorites>
-			<FileName>C:\temp\log.txt</FileName></Favorites>
+			<FileName>C:\temp\log.txt</FileName><FileName>C:\Temp\TracetoolInternalLog.txt</FileName></Favorites>
 		<Trace>
 			<FontName Value="MS Sans Serif"/>
 			<FontSize Value="8"/>

@@ -5083,6 +5083,15 @@ begin
       ColDetail := LightColDetail;
     end;
 
+    // PanelTop
+    // -------
+
+    //clCream in light mode, dark accent in dark mode
+    if Frm_Tool.DarkTheme then
+      PanelTop.Color := DarkColTraces
+    else
+      PanelTop.Color := clCream;
+
     // vstMain
     // -------
 
@@ -5094,16 +5103,7 @@ begin
     if vstMain.Header.Columns.Count > 4 then
       vstMain.Header.Columns[4].Color := ColTraces;
 
-    Frm_Tool.ApplyVstScheme(vstMain);
-
-    // PanelTop
-    // -------
-
-    //clCream in light mode, dark accent in dark mode
-    if Frm_Tool.DarkTheme then
-      PanelTop.Color := DarkColTraces
-    else
-      PanelTop.Color := clCream;
+    Frm_Tool.ApplyVstTheme(vstMain);
 
     // VstDetail
     // -------
@@ -5114,7 +5114,7 @@ begin
       for J := 0 to VstDetail.Header.Columns.Count - 1 do
         if VstDetail.Header.Columns[J].Color <> clDefault then
           VstDetail.Header.Columns[J].Color := ColDetail;
-      Frm_Tool.ApplyVstScheme(VstDetail);
+      Frm_Tool.ApplyVstTheme(VstDetail);
     end;
 
     // Frame Memo

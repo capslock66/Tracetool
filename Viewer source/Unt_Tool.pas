@@ -156,7 +156,7 @@ type
     procedure UDPServerUDPRead(AThread: TIdUDPListenerThread; const AData: TIdBytes; ABinding: TIdSocketHandle);
 
    public
-    procedure ApplyVstScheme(VST: TVirtualStringTree);
+    procedure ApplyVstTheme(VST: TVirtualStringTree);
     property StayOnTop: Boolean read FStayOnTop write SetStayOnTop;
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
@@ -2986,7 +2986,7 @@ end;
 
 //------------------------------------------------------------------------------
 
-procedure TFrm_Tool.ApplyVstScheme(VST: TVirtualStringTree);
+procedure TFrm_Tool.ApplyVstTheme(VST: TVirtualStringTree);
 begin
     if VST = nil then
         Exit;

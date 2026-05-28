@@ -10,9 +10,9 @@ EditViewName=C:\Thierry\Tracetool\Viewer source\unt_PageContainer.pas
 
 [ClosedView_QzpcVGhpZXJyeVxUcmFjZXRvb2xcVmlld2VyIHNvdXJjZVxVbnRfVG9vbC5wYXM=]
 Module=C:\Thierry\Tracetool\Viewer source\Unt_Tool.pas
-CursorX=11
-CursorY=2975
-TopLine=2970
+CursorX=34
+CursorY=2989
+TopLine=2987
 LeftCol=1
 Elisions=
 Bookmarks=
@@ -21,8 +21,8 @@ EditViewName=C:\Thierry\Tracetool\Viewer source\Unt_Tool.pas
 [ClosedView_QzpcVGhpZXJyeVxUcmFjZXRvb2xcVmlld2VyIHNvdXJjZVx1bnRfVHJhY2VXaW4ucGFz]
 Module=C:\Thierry\Tracetool\Viewer source\unt_TraceWin.pas
 CursorX=1
-CursorY=5099
-TopLine=5079
+CursorY=30
+TopLine=1
 LeftCol=1
 Elisions=
 Bookmarks=
