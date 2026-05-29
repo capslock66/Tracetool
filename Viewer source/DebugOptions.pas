@@ -784,9 +784,9 @@ begin
            continue;
 
         if TraceConfig.Framework_KindIconOnLeft then
-           frm.vstMain.Header.columns[COL_LEVEL].Width := 40
+           frm.vstMain.Header.columns[COL_LEVELANDTYPE].Width := 40
         else
-           frm.vstMain.Header.columns[COL_LEVEL].Width := 20;
+           frm.vstMain.Header.columns[COL_LEVELANDTYPE].Width := 20;
    end ;
 end;
 

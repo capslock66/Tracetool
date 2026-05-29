@@ -27,11 +27,20 @@ interface
 
    const
      // Columns
-     COL_LEVEL   = 0;
-     COL_TIME    = 1;
-     COL_THID    = 2;
-     COL_TRACE   = 3;
-     COL_COMMENT = 4;
+
+     // classic traces
+     COL_LEVELANDTYPE = 0;
+     COL_TIME         = 1;
+     COL_THID         = 2;
+     COL_TRACE        = 3;
+     COL_COMMENT      = 4;
+
+     // watches
+     COL_WATCH_TIME   = 0;
+     COL_WATCH_THID   = 1;
+     COL_WATCH_NAME   = 2;
+     COL_WATCH_VALUE  = 3;
+     COL_WATCH_TYPE   = 4;
 
    type
 
@@ -323,30 +332,31 @@ begin
 
    Result.IsMultiColTree := true;
 
-   Result.VstMain.Header.Columns.Delete(0); // remove ico column
+   Result.VstMain.Header.Columns.Delete(0); // remove ico column (level and Type)
 
-   // 0 is the Time column
-   // 1 is the thread id column
-   // 2 is the watch name column
-   Result.VstMain.Header.Columns[2].Text := 'Watch';
-   Result.VstMain.Header.Columns[2].Width := 220;
+   // new 0 is the Time column       : COL_WATCH_TIME = 0
+   // new 1 is the thread id column  : COL_WATCH_THID = 1
 
-   // 3 is the Value column
-   Result.VstMain.Header.Columns[3].Text := 'Value';
-   Result.VstMain.Header.Columns[3].MinWidth := 100;
-   Result.VstMain.Header.Columns[3].Width := 220;
+   // new 2 is the watch name column : COL_WATCH_NAME = 2
+   Result.VstMain.Header.Columns[COL_WATCH_NAME].Text := 'Watch';
+   Result.VstMain.Header.Columns[COL_WATCH_NAME].Width := 220;
 
-   // 4 id the Type column
+   // new 3 is the Value column      : COL_WATCH_VALUE = 3
+   Result.VstMain.Header.Columns[COL_WATCH_VALUE].Text := 'Value';
+   Result.VstMain.Header.Columns[COL_WATCH_VALUE].MinWidth := 100;
+   Result.VstMain.Header.Columns[COL_WATCH_VALUE].Width := 220;
+
+   // new 4 id the Type column       : COL_WATCH_TYPE = 4
    col := Result.VstMain.Header.Columns.Add;
    col.MinWidth := 3000;
    col.MaxWidth := 10000;
    col.Width := 9000; // force last column width to maximum
    col.Text := 'Type';
-   col.Color := Result.VstMain.Header.Columns[3].Color;
+   col.Color := Result.VstMain.Header.Columns[COL_WATCH_VALUE].Color;
    col.options := col.options + [coAllowFocus];
    // ensure user can focus to this column
 
-   Result.VstMain.Header.MainColumn := 2;
+   Result.VstMain.Header.MainColumn := COL_WATCH_NAME;
    Result.VstMain.Header.AutoSizeIndex := -1; // auto
    // result.VstMain.OnDrawNode := result.DrawNode ;
 end;
@@ -485,9 +495,9 @@ begin
       - [toCheckSupport];           // no checkboxes
 
    if TraceConfig.Framework_KindIconOnLeft then
-      vstMain.Header.columns[COL_LEVEL].Width := 40
+      vstMain.Header.columns[COL_LEVELANDTYPE].Width := 40
    else
-      vstMain.Header.columns[COL_LEVEL].Width := 20;
+      vstMain.Header.columns[COL_LEVELANDTYPE].Width := 20;
    //if assigned (FrmInternalTraces) then
    //   FrmInternalTraces.InternalTrace('TFrm_Trace.FormCreate ' + Caption +  ', VstMain=' +  inttostr(integer(VstMain)));
 
@@ -657,7 +667,6 @@ begin
       InternalTrace(InternalTraceMessageStack2.Strings[0]);
       InternalTraceMessageStack2.Delete(0);
    end;
-
 end;
 
 // ------------------------------------------------------------------------------
@@ -697,7 +706,6 @@ begin
    TreeRec := FrmInternalTraces.VstMain.GetNodeData(Result);
    TreeRec.LeftMsg := LeftMsg;
    TreeRec.RightMsg := RightMsg;
-
 end;
 
 class procedure TFrm_Trace.InternalClearTrace();
@@ -710,13 +718,13 @@ begin
       FrmInternalTraces.SetActivePage(); // PageControlChange() ;
    end;
    FrmInternalTraces.VstMain.clear();
-
 end;
 
 // ------------------------------------------------------------------------------
 
 // check if TreeRec.Columns contain more columns than the tree
 // if yes, add column to tree
+// called by the Parser
 procedure TFrm_Trace.CheckColumns(cols: TStringList);
 var
    c: Integer;
@@ -740,12 +748,12 @@ begin
 
       // force last column width to maximum
       VstMain.Header.Columns[VstMain.Header.Columns.Count - 1].Width := 9000;
-
    end;
 end;
 
 // ------------------------------------------------------------------------------
 
+// called by the parser (CST_TREE_COLUMNTITLE)
 procedure TFrm_Trace.GenerateCols(cols: String);
 var
    c: Integer;
@@ -783,6 +791,7 @@ end;
 
 // ------------------------------------------------------------------------------
 
+// called by the parse (CST_TREE_COLUMNWIDTH)
 procedure TFrm_Trace.ChangeColWidths(colWidths: String);
 var
    c: Integer;
@@ -817,8 +826,7 @@ end;
 // ------------------------------------------------------------------------------
 
 // return the node in the root where leftMsg is the watch name
-function TFrm_Trace.CheckWatch(rootVtNode: PVirtualNode; WatchName: string)
-   : PVirtualNode;
+function TFrm_Trace.CheckWatch(rootVtNode: PVirtualNode; WatchName: string) : PVirtualNode;
 var
    ChildVtNode: PVirtualNode;
    TreeRec: PTreeRec;
@@ -827,7 +835,7 @@ begin
    ChildVtNode := rootVtNode.FirstChild;
    while ChildVtNode <> nil do begin
       TreeRec := VstMain.GetNodeData(ChildVtNode);
-      if TreeRec.Columns[2] = WatchName then begin
+      if TreeRec.Columns[COL_WATCH_NAME] = WatchName then begin
          Result := ChildVtNode;
          exit;
       end;
@@ -1090,7 +1098,7 @@ begin
 
    end else begin
       case Column of
-         0: begin // image, no text
+         COL_LEVELANDTYPE: begin // image, no text
                if TextType = ttStatic then begin
                // ttStatic is used to get the real text
                   if TreeRec.TreeIcon = -1 then
@@ -1106,14 +1114,14 @@ begin
                end;
             end;
 
-         1: begin
+         COL_TIME: begin
                CellText := TreeRec.Time;
                // LongTimeFormat := 'hh:mm:ss:zzz' ;
             end;
 
-         2: CellText := TreeRec.ThreadID;
+         COL_THID: CellText := TreeRec.ThreadID;
 
-         3: begin
+         COL_TRACE: begin
                if TreeRec.LeftMsg = '' then
                   CellText := ' '
                else if (TextType = ttNormal) and
@@ -1123,7 +1131,7 @@ begin
                   CellText := TreeRec.LeftMsg;
             end;
 
-         4: begin
+         COL_COMMENT: begin
                if (TextType = ttNormal) and (IsSeparator(TreeRec.RightMsg)) then
                   CellText := ' ' // check underline / TextType
                else
@@ -1156,7 +1164,6 @@ begin
    // LineBreakStyle := hlbForceMultiLine ;
 end;
 
-
 //------------------------------------------------------------------------------
 
 procedure TFrm_Trace.vstMainGetImageIndex(Sender: TBaseVirtualTree;
@@ -1183,7 +1190,7 @@ begin
 
    // Normal and selected
 
-   if (Column = 3) and ( not TraceConfig.Framework_KindIconOnLeft ) then begin
+   if (Column = COL_TRACE) and ( not TraceConfig.Framework_KindIconOnLeft ) then begin
       TreeRec := Sender.GetNodeData(Node);
       if TreeRec.Members <> nil then begin
          // get first SubMembers with special Viewer and display it
@@ -1239,8 +1246,8 @@ begin
       end;
    end;
 
-   // Col0 icons (level) are draw in the AfterCellPaint event
-   if Column = 0 then begin
+   // Col0 icons (level and type) are draw in the AfterCellPaint event
+   if Column = COL_LEVELANDTYPE then begin
       // TreeRec := Sender.GetNodeData(Node) ;
       //
       // if TreeRec.TreeIcon = -1 then
@@ -1843,8 +1850,7 @@ var
 begin
    PageContainer := getPageContainer();
    if PageContainer = nil then begin
-      TFrm_Trace.InternalTrace('self:' + inttostr(Integer(self))
-            + '.' + 'PageContainer = nil');
+      TFrm_Trace.InternalTrace('self:' + inttostr(Integer(self)) + '.' + 'PageContainer = nil');
       exit;
    end;
    PageContainer.actClear.Enabled := true;
@@ -2294,9 +2300,7 @@ begin
                if IsFirst = false then
                   NewLine := NewLine + TraceConfig.TextExport_Separator;
                // Last column can contain CRLF
-               NewLine := NewLine + TraceConfig.TextExport_TextQualifier +
-                  RemoveLastCRLF(TreeRec.Columns[ColIdx])
-                  + TraceConfig.TextExport_TextQualifier;
+               NewLine := NewLine + TraceConfig.TextExport_TextQualifier + RemoveLastCRLF(TreeRec.Columns[ColIdx])+ TraceConfig.TextExport_TextQualifier;
                IsFirst := false;
             end;
             ColIdx := VstMain.Header.Columns.GetNextVisibleColumn(ColIdx);
@@ -2305,9 +2309,7 @@ begin
          // if more data than header : append data
          ColIdx := VstMain.Header.Columns.GetLastVisibleColumn;
          for c := ColIdx + 1 to TreeRec.Columns.Count - 1 do
-            NewLine := NewLine + TraceConfig.TextExport_TextQualifier +
-               RemoveLastCRLF(TreeRec.Columns[c])
-               + TraceConfig.TextExport_TextQualifier;
+            NewLine := NewLine + TraceConfig.TextExport_TextQualifier + RemoveLastCRLF(TreeRec.Columns[c]) + TraceConfig.TextExport_TextQualifier;
 
       end else begin
 
@@ -2322,16 +2324,14 @@ begin
          if TraceConfig.TextExport_ThreadId then begin
             if IsFirst = false then
                NewLine := NewLine + TraceConfig.TextExport_Separator;
-            NewLine := NewLine + TraceConfig.TextExport_TextQualifier +
-               TreeRec.ThreadID + TraceConfig.TextExport_TextQualifier;
+            NewLine := NewLine + TraceConfig.TextExport_TextQualifier + TreeRec.ThreadID + TraceConfig.TextExport_TextQualifier;
             IsFirst := false;
          end;
 
          if TraceConfig.TextExport_Time then begin
             if IsFirst = false then
                NewLine := NewLine + TraceConfig.TextExport_Separator;
-            NewLine := NewLine + TraceConfig.TextExport_TextQualifier +
-               TreeRec.Time + TraceConfig.TextExport_TextQualifier;
+            NewLine := NewLine + TraceConfig.TextExport_TextQualifier + TreeRec.Time + TraceConfig.TextExport_TextQualifier;
             IsFirst := false;
          end;
 
@@ -2339,19 +2339,15 @@ begin
             if IsFirst = false then
                NewLine := NewLine + TraceConfig.TextExport_Separator;
 
-            NewLine := NewLine + String
-               (StrRepeat(TreeIndentation, VstMain.GetNodeLevel(TestNode)));
-
-            NewLine := NewLine + TraceConfig.TextExport_TextQualifier +
-               LeftMsg + TraceConfig.TextExport_TextQualifier;
+            NewLine := NewLine + String(StrRepeat(TreeIndentation, VstMain.GetNodeLevel(TestNode)));
+            NewLine := NewLine + TraceConfig.TextExport_TextQualifier + LeftMsg + TraceConfig.TextExport_TextQualifier;
             IsFirst := false;
          end;
 
          if TraceConfig.TextExport_Col2 then begin
             if IsFirst = false then
                NewLine := NewLine + TraceConfig.TextExport_Separator;
-            NewLine := NewLine + TraceConfig.TextExport_TextQualifier +
-               TreeRec.RightMsg + TraceConfig.TextExport_TextQualifier;
+            NewLine := NewLine + TraceConfig.TextExport_TextQualifier + TreeRec.RightMsg + TraceConfig.TextExport_TextQualifier;
          end;
 
       end;
@@ -2397,53 +2393,45 @@ begin
 
          // note that last column can contain CRLF
          if NoTitle then
-            NewLine := NewLine + TraceConfig.TextExport_TextQualifier +
-               'Col ' + inttostr(ColIdx + 1)
+            NewLine := NewLine + TraceConfig.TextExport_TextQualifier +'Col ' + inttostr(ColIdx + 1)
                + TraceConfig.TextExport_TextQualifier
          else
-            NewLine := NewLine + TraceConfig.TextExport_TextQualifier +
-               RemoveLastCRLF(col.Text)
-               + TraceConfig.TextExport_TextQualifier;
+            NewLine := NewLine + TraceConfig.TextExport_TextQualifier + RemoveLastCRLF(col.Text) + TraceConfig.TextExport_TextQualifier;
          ColIdx := VstMain.Header.Columns.GetNextVisibleColumn(ColIdx);
       end;
 
    end
    else begin
       if TraceConfig.TextExport_ProcessName then begin
-         NewLine := TraceConfig.TextExport_TextQualifier + 'ProcessName' +
-            TraceConfig.TextExport_TextQualifier;
+         NewLine := TraceConfig.TextExport_TextQualifier + 'ProcessName' + TraceConfig.TextExport_TextQualifier;
          IsFirst := false;
       end;
 
       if TraceConfig.TextExport_ThreadId then begin
          if IsFirst = false then
             NewLine := NewLine + TraceConfig.TextExport_Separator;
-         NewLine := NewLine + TraceConfig.TextExport_TextQualifier +
-            'ThreadID' + TraceConfig.TextExport_TextQualifier;
+         NewLine := NewLine + TraceConfig.TextExport_TextQualifier + 'ThreadID' + TraceConfig.TextExport_TextQualifier;
          IsFirst := false;
       end;
 
       if TraceConfig.TextExport_Time then begin
          if IsFirst = false then
             NewLine := NewLine + TraceConfig.TextExport_Separator;
-         NewLine := NewLine + TraceConfig.TextExport_TextQualifier +
-            'Time' + TraceConfig.TextExport_TextQualifier;
+         NewLine := NewLine + TraceConfig.TextExport_TextQualifier + 'Time' + TraceConfig.TextExport_TextQualifier;
          IsFirst := false;
       end;
 
       if TraceConfig.TextExport_Col1 then begin
          if IsFirst = false then
             NewLine := NewLine + TraceConfig.TextExport_Separator;
-         NewLine := NewLine + TraceConfig.TextExport_TextQualifier + 'Msg' +
-            TraceConfig.TextExport_TextQualifier;
+         NewLine := NewLine + TraceConfig.TextExport_TextQualifier + 'Msg' + TraceConfig.TextExport_TextQualifier;
          IsFirst := false;
       end;
 
       if TraceConfig.TextExport_Col2 then begin
          if IsFirst = false then
             NewLine := NewLine + TraceConfig.TextExport_Separator;
-         NewLine := NewLine + TraceConfig.TextExport_TextQualifier +
-            'Right Msg' + TraceConfig.TextExport_TextQualifier;
+         NewLine := NewLine + TraceConfig.TextExport_TextQualifier + 'Right Msg' + TraceConfig.TextExport_TextQualifier;
       end;
    end;
    CopyStrings.Add(NewLine);
@@ -2804,7 +2792,6 @@ begin
 
    if IsMultiColTree then
       AutosizeAll(VstMain);
-
 end;
 
 // ------------------------------------------------------------------------------
@@ -2848,7 +2835,6 @@ begin
 
       ParentMember.SubMembers.Add(member);
       recurMembers(member, XMLMember);
-
    end;
 end;
 
@@ -3056,50 +3042,49 @@ var
    // pi : IDOMProcessingInstruction ;
 
    // recursive
-procedure recurMembers(ParentMember: TMember;
-   ParentMemberTag: IXMLMemberType);
-var
-   c: Integer;
-   SubMember: TMember;
-   SubMemberTag: IXMLMemberType;
-begin
-   if ParentMember <> nil then begin
-      for c := 0 to ParentMember.SubMembers.Count - 1 do begin
-         // note : the generateNodeXML method differ here : we add member from a MemberType
-         SubMember := TMember(ParentMember.SubMembers.Items[c]);
-         SubMemberTag := ParentMemberTag.member.Add;
-         SubMemberTag.Text := SubMember.Col1;
+  procedure recurMembers(ParentMember: TMember; ParentMemberTag: IXMLMemberType);
+  var
+     c: Integer;
+     SubMember: TMember;
+     SubMemberTag: IXMLMemberType;
+  begin
+     if ParentMember <> nil then begin
+        for c := 0 to ParentMember.SubMembers.Count - 1 do begin
+           // note : the generateNodeXML method differ here : we add member from a MemberType
+           SubMember := TMember(ParentMember.SubMembers.Items[c]);
+           SubMemberTag := ParentMemberTag.member.Add;
+           SubMemberTag.Text := SubMember.Col1;
 
-         if SubMember.Col2 <> '' then
-            SubMemberTag.colb := SubMember.Col2;
+           if SubMember.Col2 <> '' then
+              SubMemberTag.colb := SubMember.Col2;
 
-         if SubMember.Col3 <> '' then
-            SubMemberTag.colc := SubMember.Col3;
+           if SubMember.Col3 <> '' then
+              SubMemberTag.colc := SubMember.Col3;
 
-         if SubMember.ViewerKind <> CST_VIEWER_NONE then
-            SubMemberTag.ViewerKind := SubMember.ViewerKind;
-         // save all sub members
-         recurMembers(SubMember, SubMemberTag);
-      end;
-   end;
-end;
+           if SubMember.ViewerKind <> CST_VIEWER_NONE then
+              SubMemberTag.ViewerKind := SubMember.ViewerKind;
+           // save all sub members
+           recurMembers(SubMember, SubMemberTag);
+        end;
+     end;
+  end;
 
-procedure SaveHeaders();
-var
-   ColIdx: TColumnIndex;
-   col: IXMLColumn;
-begin
-   if IsMultiColTree then begin
-      XMLLogFile.MainColumn := inttostr(VstMain.Header.MainColumn);
-      ColIdx := VstMain.Header.Columns.GetFirstVisibleColumn;
-      while ColIdx <> InvalidColumn do begin
-         col := XMLLogFile.coltitle.Add;
-         col.Text := VstMain.Header.Columns.Items[ColIdx].Text;
-         col.order := ColIdx;
-         ColIdx := VstMain.Header.Columns.GetNextVisibleColumn(ColIdx);
-      end;
-   end;
-end;
+  procedure SaveHeaders();
+  var
+     ColIdx: TColumnIndex;
+     col: IXMLColumn;
+  begin
+     if IsMultiColTree then begin
+        XMLLogFile.MainColumn := inttostr(VstMain.Header.MainColumn);
+        ColIdx := VstMain.Header.Columns.GetFirstVisibleColumn;
+        while ColIdx <> InvalidColumn do begin
+           col := XMLLogFile.coltitle.Add;
+           col.Text := VstMain.Header.Columns.Items[ColIdx].Text;
+           col.order := ColIdx;
+           ColIdx := VstMain.Header.Columns.GetNextVisibleColumn(ColIdx);
+        end;
+     end;
+  end;
 
 begin
 
@@ -3165,7 +3150,6 @@ begin
       // don't save default
       if (TreeRec.TreeIcon <> -1) and (TreeRec.TreeIcon <> 24) then
          ChildXmlNode.Icon := inttostr(TreeRec.TreeIcon);
-
    end;
 
    // add parent relation if not root
@@ -3247,8 +3231,7 @@ begin
          // end ;
 
          textToWrite := XMLLogFile.XML;
-         textToWrite := copy(textToWrite, 0, length(textToWrite) - 7)
-            + #13 + '</Data>';
+         textToWrite := copy(textToWrite, 0, length(textToWrite) - 7) + #13 + '</Data>';
          buf := Utf8Encode(textToWrite); // XMLLogFile.OwnerDocument.XML : tStrings ;
          toWrite := length(buf);
          BlockWrite(f, pointer(buf)^, toWrite);
@@ -3300,8 +3283,7 @@ begin
    try
       if FrmSave.rbXML.Checked = true then
          if trim(FrmSave.EditStyleSheet.Text) <> '' then
-            SaveToXML(FrmSave.EditXml.Text + '|' + trim
-                  (FrmSave.EditStyleSheet.Text))
+            SaveToXML(FrmSave.EditXml.Text + '|' + trim (FrmSave.EditStyleSheet.Text))
          else
             SaveToXML(FrmSave.EditXml.Text)
          else
@@ -3344,8 +3326,7 @@ begin
          if SubMember.Col3 <> '' then
             SubMemberTag.colc := SubMember.Col3;
 
-         if SubMember.ViewerKind <> CST_VIEWER_NONE then
-         // viewer kind are awailable only for top members.
+         if SubMember.ViewerKind <> CST_VIEWER_NONE then  // viewer kind are awailable only for top members.
             SubMemberTag.ViewerKind := SubMember.ViewerKind;
          // should not happens
          // save all sub members
@@ -3572,7 +3553,6 @@ begin
    Progress.Free;
 end;
 
-
 // ------------------------------------------------------------------------------
 
 procedure TFrm_Trace.SaveToTextFile(filename: string;
@@ -3584,188 +3564,170 @@ var
    TreeRec: PTreeRec;
    TreeIndentation: string;
 
-procedure recurSave(TestNode: PVirtualNode);
-var
-   ChildVtNode: PVirtualNode;
-   LeftMsg: string;
-   ColIdx: TColumnIndex;
-   c: Integer;
-begin
+  procedure recurSave(TestNode: PVirtualNode);
+  var
+     ChildVtNode: PVirtualNode;
+     LeftMsg: string;
+     ColIdx: TColumnIndex;
+     c: Integer;
+  begin
 
-   TreeRec := VstMain.GetNodeData(TestNode);
-   if TreeRec <> nil then begin // treeRec can be nil the first time when VtNode is vst.RootNode
+     TreeRec := VstMain.GetNodeData(TestNode);
+     if TreeRec <> nil then begin // treeRec can be nil the first time when VtNode is vst.RootNode
 
-      IsFirst := true;
-      NewLine := '';
+        IsFirst := true;
+        NewLine := '';
 
-      if IsMultiColTree then begin
-         // set indentation on first col  (no way to know the 'master col')
-         NewLine := StrRepeat(TreeIndentation, VstMain.GetNodeLevel
-               (TestNode));
-         ColIdx := VstMain.Header.Columns.GetFirstVisibleColumn;
-         while ColIdx <> InvalidColumn do begin
-            if ColIdx < TreeRec.Columns.Count then begin
-               // note that last column can contain CRLF
-               if IsFirst = false then
-                  NewLine := NewLine + TraceConfig.TextExport_Separator;
-               NewLine := NewLine + TraceConfig.TextExport_TextQualifier +
-                  RemoveLastCRLF(TreeRec.Columns[ColIdx])
-                  + TraceConfig.TextExport_TextQualifier;
-               IsFirst := false;
-            end;
-            ColIdx := VstMain.Header.Columns.GetNextVisibleColumn(ColIdx);
-         end;
-         // if more data than header : append data
-         ColIdx := VstMain.Header.Columns.GetLastVisibleColumn;
-         for c := ColIdx + 1 to TreeRec.Columns.Count - 1 do
-            NewLine := NewLine + TraceConfig.TextExport_TextQualifier +
-               RemoveLastCRLF(TreeRec.Columns[c])
-               + TraceConfig.TextExport_TextQualifier;
-      end
-      else begin
-         LeftMsg := TreeRec.LeftMsg;
-         if SaveOptions.Copy_ProcessName then begin
-            NewLine := TraceConfig.TextExport_TextQualifier +
-               TreeRec.ProcessName + TraceConfig.TextExport_TextQualifier;
-            IsFirst := false;
-         end;
+        if IsMultiColTree then begin
+           // set indentation on first col  (no way to know the 'master col')
+           NewLine := StrRepeat(TreeIndentation, VstMain.GetNodeLevel
+                 (TestNode));
+           ColIdx := VstMain.Header.Columns.GetFirstVisibleColumn;
+           while ColIdx <> InvalidColumn do begin
+              if ColIdx < TreeRec.Columns.Count then begin
+                 // note that last column can contain CRLF
+                 if IsFirst = false then
+                    NewLine := NewLine + TraceConfig.TextExport_Separator;
+                 NewLine := NewLine + TraceConfig.TextExport_TextQualifier + RemoveLastCRLF(TreeRec.Columns[ColIdx])
+                    + TraceConfig.TextExport_TextQualifier;
+                 IsFirst := false;
+              end;
+              ColIdx := VstMain.Header.Columns.GetNextVisibleColumn(ColIdx);
+           end;
+           // if more data than header : append data
+           ColIdx := VstMain.Header.Columns.GetLastVisibleColumn;
+           for c := ColIdx + 1 to TreeRec.Columns.Count - 1 do
+              NewLine := NewLine + TraceConfig.TextExport_TextQualifier + RemoveLastCRLF(TreeRec.Columns[c])
+                 + TraceConfig.TextExport_TextQualifier;
+        end
+        else begin
+           LeftMsg := TreeRec.LeftMsg;
+           if SaveOptions.Copy_ProcessName then begin
+              NewLine := TraceConfig.TextExport_TextQualifier + TreeRec.ProcessName + TraceConfig.TextExport_TextQualifier;
+              IsFirst := false;
+           end;
 
-         if SaveOptions.Copy_ThreadID then begin
-            if IsFirst = false then
-               NewLine := NewLine + TraceConfig.TextExport_Separator;
-            NewLine := NewLine + TraceConfig.TextExport_TextQualifier +
-               TreeRec.ThreadID + TraceConfig.TextExport_TextQualifier;
-            IsFirst := false;
-         end;
+           if SaveOptions.Copy_ThreadID then begin
+              if IsFirst = false then
+                 NewLine := NewLine + TraceConfig.TextExport_Separator;
+              NewLine := NewLine + TraceConfig.TextExport_TextQualifier + TreeRec.ThreadID + TraceConfig.TextExport_TextQualifier;
+              IsFirst := false;
+           end;
 
-         if SaveOptions.Copy_Time then begin
-            if IsFirst = false then
-               NewLine := NewLine + TraceConfig.TextExport_Separator;
-            NewLine := NewLine + TraceConfig.TextExport_TextQualifier +
-               TreeRec.Time + TraceConfig.TextExport_TextQualifier;
-            IsFirst := false;
-         end;
+           if SaveOptions.Copy_Time then begin
+              if IsFirst = false then
+                 NewLine := NewLine + TraceConfig.TextExport_Separator;
+              NewLine := NewLine + TraceConfig.TextExport_TextQualifier + TreeRec.Time + TraceConfig.TextExport_TextQualifier;
+              IsFirst := false;
+           end;
 
-         if SaveOptions.Copy_col1 then begin
-            if IsFirst = false then
-               NewLine := NewLine + TraceConfig.TextExport_Separator;
+           if SaveOptions.Copy_col1 then begin
+              if IsFirst = false then
+                 NewLine := NewLine + TraceConfig.TextExport_Separator;
 
-            NewLine := NewLine + StrRepeat
-               (TreeIndentation, VstMain.GetNodeLevel(TestNode));
+              NewLine := NewLine + StrRepeat
+                 (TreeIndentation, VstMain.GetNodeLevel(TestNode));
 
-            NewLine := NewLine + TraceConfig.TextExport_TextQualifier +
-               LeftMsg + TraceConfig.TextExport_TextQualifier;
-            IsFirst := false;
-         end;
+              NewLine := NewLine + TraceConfig.TextExport_TextQualifier + LeftMsg + TraceConfig.TextExport_TextQualifier;
+              IsFirst := false;
+           end;
 
-         if SaveOptions.Copy_Col2 then begin
-            if IsFirst = false then
-               NewLine := NewLine + TraceConfig.TextExport_Separator;
-            NewLine := NewLine + TraceConfig.TextExport_TextQualifier +
-               TreeRec.RightMsg + TraceConfig.TextExport_TextQualifier;
-         end;
+           if SaveOptions.Copy_Col2 then begin
+              if IsFirst = false then
+                 NewLine := NewLine + TraceConfig.TextExport_Separator;
+              NewLine := NewLine + TraceConfig.TextExport_TextQualifier + TreeRec.RightMsg + TraceConfig.TextExport_TextQualifier;
+           end;
 
-         // members are not saved.
+           // members are not saved.
+        end;
 
-      end;
+        writeln(f, NewLine);
+     end;
 
-      writeln(f, NewLine);
-   end;
+     ChildVtNode := TestNode.FirstChild;
+     while ChildVtNode <> nil do begin
+        recurSave(ChildVtNode);
+        ChildVtNode := ChildVtNode.NextSibling;
+     end;
+  end;
 
-   ChildVtNode := TestNode.FirstChild;
-   while ChildVtNode <> nil do begin
-      recurSave(ChildVtNode);
-      ChildVtNode := ChildVtNode.NextSibling;
-   end;
-end;
+  procedure AddTitle;
+  var
+     NoTitle: boolean;
+     col: TVirtualTreeColumn;
+     ColIdx: TColumnIndex;
+  begin
+     if SaveOptions.Copy_ColumnTitle = false then
+        exit;
 
-procedure AddTitle;
-var
-   NoTitle: boolean;
-   col: TVirtualTreeColumn;
-   ColIdx: TColumnIndex;
-begin
-   if SaveOptions.Copy_ColumnTitle = false then
-      exit;
+     IsFirst := true;
+     NewLine := '';
 
-   IsFirst := true;
-   NewLine := '';
+     if IsMultiColTree then begin
+        // check if titles are all empty
+        NoTitle := true;
+        ColIdx := VstMain.Header.Columns.GetFirstVisibleColumn;
+        while ColIdx <> InvalidColumn do begin
+           col := VstMain.Header.Columns[ColIdx];
+           if col.Text <> '' then begin
+              NoTitle := false;
+              break;
+           end;
+           ColIdx := VstMain.Header.Columns.GetNextVisibleColumn(ColIdx);
+        end;
 
-   if IsMultiColTree then begin
-      // check if titles are all empty
-      NoTitle := true;
-      ColIdx := VstMain.Header.Columns.GetFirstVisibleColumn;
-      while ColIdx <> InvalidColumn do begin
-         col := VstMain.Header.Columns[ColIdx];
-         if col.Text <> '' then begin
-            NoTitle := false;
-            break;
-         end;
-         ColIdx := VstMain.Header.Columns.GetNextVisibleColumn(ColIdx);
-      end;
+        ColIdx := VstMain.Header.Columns.GetFirstVisibleColumn;
+        while ColIdx <> InvalidColumn do begin
+           col := VstMain.Header.Columns[ColIdx];
 
-      ColIdx := VstMain.Header.Columns.GetFirstVisibleColumn;
-      while ColIdx <> InvalidColumn do begin
-         col := VstMain.Header.Columns[ColIdx];
+           if IsFirst = false then
+              NewLine := NewLine + TraceConfig.TextExport_Separator;
+           IsFirst := false;
 
-         if IsFirst = false then
-            NewLine := NewLine + TraceConfig.TextExport_Separator;
-         IsFirst := false;
+           // note that last column can contain CRLF
+           if NoTitle then
+              NewLine := NewLine + TraceConfig.TextExport_TextQualifier + 'Col ' + inttostr(ColIdx + 1)
+                 + TraceConfig.TextExport_TextQualifier
+           else
+              NewLine := NewLine + TraceConfig.TextExport_TextQualifier +RemoveLastCRLF(col.Text) + TraceConfig.TextExport_TextQualifier;
+           ColIdx := VstMain.Header.Columns.GetNextVisibleColumn(ColIdx);
+        end;
+     end
+     else begin
+        if SaveOptions.Copy_ProcessName then begin
+           NewLine := TraceConfig.TextExport_TextQualifier + 'ProcessName' + TraceConfig.TextExport_TextQualifier;
+           IsFirst := false;
+        end;
 
-         // note that last column can contain CRLF
-         if NoTitle then
-            NewLine := NewLine + TraceConfig.TextExport_TextQualifier +
-               'Col ' + inttostr(ColIdx + 1)
-               + TraceConfig.TextExport_TextQualifier
-         else
-            NewLine := NewLine + TraceConfig.TextExport_TextQualifier +
-               RemoveLastCRLF(col.Text)
-               + TraceConfig.TextExport_TextQualifier;
-         ColIdx := VstMain.Header.Columns.GetNextVisibleColumn(ColIdx);
-      end;
-   end
-   else begin
-      if SaveOptions.Copy_ProcessName then begin
-         NewLine := TraceConfig.TextExport_TextQualifier + 'ProcessName' +
-            TraceConfig.TextExport_TextQualifier;
-         IsFirst := false;
-      end;
+        if SaveOptions.Copy_ThreadID then begin
+           if IsFirst = false then
+              NewLine := NewLine + TraceConfig.TextExport_Separator;
+           NewLine := NewLine + TraceConfig.TextExport_TextQualifier + 'ThreadID' + TraceConfig.TextExport_TextQualifier;
+           IsFirst := false;
+        end;
 
-      if SaveOptions.Copy_ThreadID then begin
-         if IsFirst = false then
-            NewLine := NewLine + TraceConfig.TextExport_Separator;
-         NewLine := NewLine + TraceConfig.TextExport_TextQualifier +
-            'ThreadID' + TraceConfig.TextExport_TextQualifier;
-         IsFirst := false;
-      end;
+        if SaveOptions.Copy_Time then begin
+           if IsFirst = false then
+              NewLine := NewLine + TraceConfig.TextExport_Separator;
+           NewLine := NewLine + TraceConfig.TextExport_TextQualifier + 'Time' + TraceConfig.TextExport_TextQualifier;
+           IsFirst := false;
+        end;
 
-      if SaveOptions.Copy_Time then begin
-         if IsFirst = false then
-            NewLine := NewLine + TraceConfig.TextExport_Separator;
-         NewLine := NewLine + TraceConfig.TextExport_TextQualifier +
-            'Time' + TraceConfig.TextExport_TextQualifier;
-         IsFirst := false;
-      end;
+        if SaveOptions.Copy_col1 then begin
+           if IsFirst = false then
+              NewLine := NewLine + TraceConfig.TextExport_Separator;
+           NewLine := NewLine + TraceConfig.TextExport_TextQualifier + 'Msg' + TraceConfig.TextExport_TextQualifier;
+           IsFirst := false;
+        end;
 
-      if SaveOptions.Copy_col1 then begin
-         if IsFirst = false then
-            NewLine := NewLine + TraceConfig.TextExport_Separator;
-         NewLine := NewLine + TraceConfig.TextExport_TextQualifier + 'Msg' +
-            TraceConfig.TextExport_TextQualifier;
-         IsFirst := false;
-      end;
-
-      if SaveOptions.Copy_Col2 then begin
-         if IsFirst = false then
-            NewLine := NewLine + TraceConfig.TextExport_Separator;
-         NewLine := NewLine + TraceConfig.TextExport_TextQualifier +
-            'Right Msg' + TraceConfig.TextExport_TextQualifier;
-      end;
-   end;
-
-   writeln(f, NewLine);
-
-end;
+        if SaveOptions.Copy_Col2 then begin
+           if IsFirst = false then
+              NewLine := NewLine + TraceConfig.TextExport_Separator;
+           NewLine := NewLine + TraceConfig.TextExport_TextQualifier + 'Right Msg' + TraceConfig.TextExport_TextQualifier;
+        end;
+     end;
+     writeln(f, NewLine);
+  end;
 
 begin
    TreeIndentation := StrRepeat(' ', TraceConfig.TextExport_TreeIndentation);
@@ -3773,7 +3735,6 @@ begin
    assignFile(f, filename);
    rewrite(f);
    try
-
       // add title if needed.
       AddTitle;
 
@@ -3807,10 +3768,8 @@ begin
          for d := 0 to LinkedPlugins.Count - 1 do begin
             LinkedPlugin := TLinkedPlugin(LinkedPlugins.Items[d]);
             if LinkedPlugin.plugin = plugin then begin
-               LinkedPlugin.NeedOnAction := (flags and CST_PLUG_ONACTION)
-                  <> 0;
-               LinkedPlugin.NeedOnbeforeDelete :=
-                  (flags and CST_PLUG_ONBEFOREDELETE) <> 0;
+               LinkedPlugin.NeedOnAction := (flags and CST_PLUG_ONACTION) <> 0;
+               LinkedPlugin.NeedOnbeforeDelete := (flags and CST_PLUG_ONBEFOREDELETE) <> 0;
                LinkedPlugin.NeedTimer := (flags and CST_PLUG_ONTIMER) <> 0;
                exit;
             end;
@@ -3819,8 +3778,7 @@ begin
          LinkedPlugin := TLinkedPlugin.Create;
          LinkedPlugin.plugin := plugin;
          LinkedPlugin.NeedOnAction := (flags and CST_PLUG_ONACTION) <> 0;
-         LinkedPlugin.NeedOnbeforeDelete :=
-            (flags and CST_PLUG_ONBEFOREDELETE) <> 0;
+         LinkedPlugin.NeedOnbeforeDelete := (flags and CST_PLUG_ONBEFOREDELETE) <> 0;
          LinkedPlugin.NeedTimer := (flags and CST_PLUG_ONTIMER) <> 0;
          LinkedPlugins.Add(LinkedPlugin); // owner
          exit;
@@ -4566,15 +4524,12 @@ begin
 
    // Then apply API background color if exist
    ChangeBackgroundColor(TargetCanvas, CellRect, Column, TreeRec.FontDetails, (vsSelected in Node.States));
-
 end;
 
 // ----------------------------------------------------------------------------------------------------------------------
 
 // AfterCellPaint is used to draw the level icon (warning/error/debug/...) and separator
-procedure TFrm_Trace.vstMainAfterCellPaint(Sender: TBaseVirtualTree;
-   TargetCanvas: TCanvas; Node: PVirtualNode; Column: TColumnIndex;
-   CellRect: TRect);
+procedure TFrm_Trace.vstMainAfterCellPaint(Sender: TBaseVirtualTree; TargetCanvas: TCanvas; Node: PVirtualNode; Column: TColumnIndex; CellRect: TRect);
 var
    CellText: String;
    TreeRec: PTreeRec;
@@ -4586,7 +4541,7 @@ begin
 
    // draw the level icon (warning/error/debug/...) here.
    // This cannot be done using the OnGetImageIndex because another imagelist is used for other column
-   if (Column = 0) and (IsMultiColTree = false) then begin
+   if (Column = COL_LEVELANDTYPE) and (IsMultiColTree = false) then begin
       TreeRec := Sender.GetNodeData(Node);
 
       if TreeRec.TreeIcon = -1 then
@@ -4595,7 +4550,6 @@ begin
          ImageIndex := TreeRec.TreeIcon;
 
       Frm_Tool.ImageList1.Draw(TargetCanvas, 0, 0, ImageIndex);
-
 
       if TraceConfig.Framework_KindIconOnLeft then begin
 
@@ -4679,41 +4633,40 @@ end;
 // ----------------------------------------------------------------------------------------------------------------------
 // sort the tree. Compare 2 nodes on a specific column
 
-procedure TFrm_Trace.vstMainCompareNodes(Sender: TBaseVirtualTree;
-   Node1, Node2: PVirtualNode; Column: TColumnIndex; var Result: Integer);
+procedure TFrm_Trace.vstMainCompareNodes(Sender: TBaseVirtualTree; Node1, Node2: PVirtualNode; Column: TColumnIndex; var Result: Integer);
 var
-   TreeRec1, TreeRec2: PTreeRec;
-   str1, str2: string;
-   // ImageIndex1, ImageIndex2 : integer ;
+    TreeRec1, TreeRec2: PTreeRec;
+    str1, str2: string;
+    // ImageIndex1, ImageIndex2 : integer ;
 
-   // --------------------
-function GetText(TreeRec: PTreeRec): string;
-var
-   c: Integer;
-begin
-   Result := '';
-   if TreeRec.Columns = nil then
-      exit;
-   // number of substring can be less than the number of column
-   if Column < TreeRec.Columns.Count then begin
-      Result := TreeRec.Columns[Column];
-      // if last col and remaining strings...
-      if (Column = VstMain.Header.Columns.Count - 1) then begin
-         for c := Column + 1 to TreeRec.Columns.Count - 1 do
-            Result := Result + ' ' + #9 + TreeRec.Columns[c];
-      end;
-   end;
-end;
+    // --------------------
+    function GetText(TreeRec: PTreeRec): string;
+    var
+       c: Integer;
+    begin
+       Result := '';
+       if TreeRec.Columns = nil then
+          exit;
+       // number of substring can be less than the number of column
+       if Column < TreeRec.Columns.Count then begin
+          Result := TreeRec.Columns[Column];
+          // if last col and remaining strings...
+          if (Column = VstMain.Header.Columns.Count - 1) then begin
+             for c := Column + 1 to TreeRec.Columns.Count - 1 do
+                Result := Result + ' ' + #9 + TreeRec.Columns[c];
+          end;
+       end;
+    end;
 
-// --------------------
-function CompareInteger(int1, int2: Integer): Integer;
-begin
-   if int1 <= int2 then
-      Result := -1
-   else
-      Result := 1;
-end;
-// --------------------
+    // --------------------
+    function CompareInteger(int1, int2: Integer): Integer;
+    begin
+       if int1 <= int2 then
+          Result := -1
+       else
+          Result := 1;
+    end;
+    // --------------------
 
 begin
    TreeRec1 := Sender.GetNodeData(Node1);
@@ -4735,16 +4688,16 @@ begin
    end
    else begin
       case Column of
-         0:
+         COL_LEVELANDTYPE:
             Result := CompareInteger(TreeRec1.TreeIcon, TreeRec2.TreeIcon);
          // image
-         1:
+         COL_TIME:
             Result := CompareText(TreeRec1.Time, TreeRec2.Time);
-         2:
+         COL_THID:
             Result := CompareText(TreeRec1.ThreadID, TreeRec2.ThreadID);
-         3:
+         COL_TRACE:
             Result := CompareText(TreeRec1.LeftMsg, TreeRec2.LeftMsg);
-         4:
+         COL_COMMENT:
             Result := CompareText(TreeRec1.RightMsg, TreeRec2.RightMsg);
       end;
    end;
@@ -4776,10 +4729,10 @@ begin
    filter.ColumnNameList.Clear;
    if IsMultiColTree = false then begin
       filter.ColumnNameList.AddObject('Trace Kind', TObject(999)); // same as col 0, but force fill with predefined debug,warning,error
-      filter.ColumnNameList.AddObject('Time', TObject(1));
-      filter.ColumnNameList.AddObject('Thread Id', TObject(2));
-      filter.ColumnNameList.AddObject('Traces', TObject(3));
-      filter.ColumnNameList.AddObject('Comment', TObject(4));
+      filter.ColumnNameList.AddObject('Time'      , TObject(COL_TIME));
+      filter.ColumnNameList.AddObject('Thread Id' , TObject(COL_THID));
+      filter.ColumnNameList.AddObject('Traces'    , TObject(COL_TRACE));
+      filter.ColumnNameList.AddObject('Comment'   , TObject(COL_COMMENT));
       filter.ColumnNameList.AddObject('Trace Info', TObject(998));
       // search in members
    end else begin
@@ -4862,8 +4815,7 @@ end;
 // ------------------------------------------------------------------------------
 // apply font change and return true if at least one font change is detected
 // called by VstMainMeasureItem, VstMainPaintText, VstDetailMeasureItem and VstDetailPaintText
-function TFrm_Trace.ChangeFontDetail(const IsTrace: boolean;
-   const TargetCanvas: TCanvas; const Column: TColumnIndex;
+function TFrm_Trace.ChangeFontDetail(const IsTrace: boolean; const TargetCanvas: TCanvas; const Column: TColumnIndex;
    const FontDetails: TFontDetailArray; const selected: boolean): boolean;
 var
    FontDetail: TFontDetail;
@@ -4943,7 +4895,6 @@ begin
          // TargetCanvas.font.Color := FontDetail.Color ;
       end;
    end;
-
 end;
 
 // ------------------------------------------------------------------------------
@@ -4986,15 +4937,11 @@ begin
       NodeHeight := NewDefaultNodeHeight
    else
       NodeHeight := newNodeHeight;
-
 end;
-
-
 
 // PaintText is used to apply font change
 procedure TFrm_Trace.vstMainPaintText(Sender: TBaseVirtualTree;
-   const TargetCanvas: TCanvas; Node: PVirtualNode; Column: TColumnIndex;
-   TextType: TVSTTextType);
+   const TargetCanvas: TCanvas; Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType);
 var
    TreeRec: PTreeRec;
 begin
@@ -5016,10 +4963,8 @@ var
    FontName: string;
    FontSize: Integer;
    NodeHeight: Integer;
-
    InfoFontName: string;
    InfoFontSize: Integer;
-
 begin
    if IsWatch then begin
       FontName := TraceConfig.Watches_Trace_FontName;
@@ -5051,7 +4996,6 @@ begin
       VstDetail.DefaultNodeHeight := TraceConfig.Framework_Info_NodeHeight;
    VstDetail.ReinitChildren(nil, true);
    VstDetail.EndUpdate;
-
 end;
 
 procedure TFrm_Trace.ApplyTheme;
@@ -5069,6 +5013,15 @@ var
 begin
     //TFrm_Trace.InternalTrace ('TFrm_Trace.ApplyTheme ' + caption );
 
+
+
+    // TODO !!!!!!!!!!!!!!!!!!!!!!!
+    //IsMultiColTree: boolean;
+    //IsWatch: boolean;
+
+
+
+
     if TraceConfig.Dark_Enabled then
     begin
       ColTraces := DarkColTraces;
@@ -5078,25 +5031,16 @@ begin
       ColDetail := LightColDetail;
     end;
 
-    // PanelTop
-    // -------
-
-    //clCream in light mode, dark accent in dark mode
-//    if TraceConfig.Dark_Enabled then
-//      PanelTop.Color := DarkColTraces
-//    else
-//      PanelTop.Color := clCream;
-
     // vstMain
     // -------
 
     // column 3 (Traces)
-    if vstMain.Header.Columns.Count > 3 then
-      vstMain.Header.Columns[3].Color := ColTraces;
+    if vstMain.Header.Columns.Count > COL_TRACE then
+      vstMain.Header.Columns[COL_TRACE].Color := ColTraces;
 
     // column 4 (Comment)
-    if vstMain.Header.Columns.Count > 4 then
-      vstMain.Header.Columns[4].Color := ColTraces;
+    if vstMain.Header.Columns.Count > COL_COMMENT then
+      vstMain.Header.Columns[COL_COMMENT].Color := ColTraces;
 
     Frm_Tool.ApplyVstTheme(vstMain);
 
