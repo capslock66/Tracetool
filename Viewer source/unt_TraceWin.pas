@@ -323,14 +323,13 @@ begin
    Result := TFrm_Trace.Create(nil);
    Result.ID := ID;
    Result.IsWatch := true;
+   Result.IsMultiColTree := true;
    Result.Caption := name;
    Result.DockToMainPanel();
    Result.getPageContainer().actViewTraceInfo.Checked := false;
    Result.ViewTraceInfo;
    if Result.getPageContainer().DockingPagecontrol.GetVisibleClientCount() = 1 then
       Result.SetActivePage;
-
-   Result.IsMultiColTree := true;
 
    Result.VstMain.Header.Columns.Delete(0); // remove ico column (level and Type)
 
@@ -359,6 +358,8 @@ begin
    Result.VstMain.Header.MainColumn := COL_WATCH_NAME;
    Result.VstMain.Header.AutoSizeIndex := -1; // auto
    // result.VstMain.OnDrawNode := result.DrawNode ;
+
+   Result.ApplyTheme();
 end;
 
 // ------------------------------------------------------------------------------
@@ -378,6 +379,7 @@ begin
 
    IsDateTimeResized := false;
    IsWatch := false;
+   IsMultiColTree := false;
 
    vst := VstMain;
    with TPSCMenu.Create(self) do begin
@@ -508,8 +510,9 @@ begin
    //if assigned (FrmInternalTraces) then
    //   FrmInternalTraces.InternalTrace('TFrm_Trace.FormCreate ' + Caption +  ', VstDetail=' +  inttostr(integer(VstDetail)));
 
-   ApplyFont(); // set font name and size for the 2 trees (from XMLConfig)
-   ShowLog(); // change the LabelLogFile caption
+   ApplyFont();  // set font name and size for the 2 trees (from XMLConfig)
+   ShowLog();    // change the LabelLogFile caption
+   ApplyTheme(); // display dark theme
 end;
 
 // ------------------------------------------------------------------------------
@@ -1063,9 +1066,7 @@ end;
 
 // ------------------------------------------------------------------------------
 
-procedure TFrm_Trace.vstMainGetText(Sender: TBaseVirtualTree;
-   Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType;
-   var CellText: String);
+procedure TFrm_Trace.vstMainGetText(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType; var CellText: String);
 var
    TreeRec: PTreeRec;
    c: Integer;
@@ -1079,7 +1080,7 @@ begin
    if TreeRec = nil then
       exit;
 
-   if IsMultiColTree then begin
+   if IsMultiColTree then begin   // then IsWatch
 
       if TreeRec.Columns = nil then
          exit;
@@ -1182,7 +1183,7 @@ begin
    //   ikState,
    //   ikOverlay
    //);
-   if IsMultiColTree then
+   if IsMultiColTree then   // then IsWatch too
       exit;
 
    if (Kind = ikOverlay) or (Kind = ikState) then
@@ -1359,20 +1360,17 @@ end;
 
 // ------------------------------------------------------------------------------
 
-procedure TFrm_Trace.vstMainHeaderDragged(Sender: TVTHeader;
-   Column: TColumnIndex; OldPosition: Integer);
+procedure TFrm_Trace.vstMainHeaderDragged(Sender: TVTHeader;  Column: TColumnIndex; OldPosition: Integer);
 var
    c: Integer;
 begin
    VstMainChange(VstMain, nil);
-   if IsMultiColTree then
-      VstMain.Header.MainColumn :=
-         VstMain.Header.Columns.GetFirstVisibleColumn
+   if IsMultiColTree then    // then isWatch too
+      VstMain.Header.MainColumn := VstMain.Header.Columns.GetFirstVisibleColumn
    else begin
       for c := 0 to 4 do
          VstMain.Header.Columns[c].MinWidth := 10;
-      VstMain.Header.Columns[VstMain.Header.Columns.GetLastVisibleColumn]
-         .MinWidth := 3000;
+      VstMain.Header.Columns[VstMain.Header.Columns.GetLastVisibleColumn].MinWidth := 3000;
    end;
    AutosizeAll(VstMain);
 end;
@@ -1544,7 +1542,7 @@ begin
       if FirstSelect.ChildCount <> 0 then
          AddOneLineDetail('Sub nodes count', inttostr(FirstSelect.ChildCount) , '');
 
-      if IsMultiColTree then begin
+      if IsMultiColTree then begin  // the isWatch too
          // check if all titles are empty
          NoTitle := true;
          ColIdx := VstMain.Header.Columns.GetFirstVisibleColumn;
@@ -2289,7 +2287,7 @@ begin
       IsFirst := true;
       NewLine := '';
 
-      if IsMultiColTree then begin
+      if IsMultiColTree then begin     // then IsWatch too
 
          // set indentation on first col  (no way to know the 'master col')
          NewLine := String(StrRepeat(TreeIndentation, VstMain.GetNodeLevel (TestNode)));
@@ -2370,7 +2368,7 @@ begin
    IsFirst := true;
    NewLine := '';
 
-   if IsMultiColTree then begin
+   if IsMultiColTree then begin    // then isWatch too
       // check if titles are all empty
       NoTitle := true;
       ColIdx := VstMain.Header.Columns.GetFirstVisibleColumn;
@@ -3017,7 +3015,6 @@ begin
 
    if IsMultiColTree then
       AutosizeAll(VstMain);
-
 end;
 
 // ------------------------------------------------------------------------------
@@ -3107,7 +3104,7 @@ begin
    TreeRec := VstMain.GetNodeData(ActiveNode);
    ChildXmlNode := XMLLogFile.Node.Add;
 
-   if IsMultiColTree then begin
+   if IsMultiColTree then begin // then isWatch too
       ColIdx := VstMain.Header.Columns.GetFirstVisibleColumn;
       while ColIdx <> InvalidColumn do begin
          if ColIdx < TreeRec.Columns.Count then begin
@@ -3271,7 +3268,7 @@ begin
    if DoPlugAction(CST_ACTION_SAVE, '') = false then
       exit;
 
-   FrmSave.IsMultiColTree := IsMultiColTree;
+   FrmSave.IsMultiColTree := IsMultiColTree;  // then isWatch too
    FrmSave.CheckOptionsList.Enabled := not IsMultiColTree;
    FrmSave.ShowModal;
    if FrmSave.ModalResult = mrCancel then
@@ -3340,7 +3337,7 @@ var
    ColIdx: TColumnIndex;
    col: IXMLColumn;
 begin
-   if IsMultiColTree then begin
+   if IsMultiColTree then begin // then isWatch too
       NodeTag.MainColumn := inttostr(VstMain.Header.MainColumn);
       ColIdx := VstMain.Header.Columns.GetFirstVisibleColumn;
       while ColIdx <> InvalidColumn do begin
@@ -3578,7 +3575,7 @@ var
         IsFirst := true;
         NewLine := '';
 
-        if IsMultiColTree then begin
+        if IsMultiColTree then begin  // then isWatch too
            // set indentation on first col  (no way to know the 'master col')
            NewLine := StrRepeat(TreeIndentation, VstMain.GetNodeLevel
                  (TestNode));
@@ -3663,7 +3660,7 @@ var
      IsFirst := true;
      NewLine := '';
 
-     if IsMultiColTree then begin
+     if IsMultiColTree then begin   // then isWatch too
         // check if titles are all empty
         NoTitle := true;
         ColIdx := VstMain.Header.Columns.GetFirstVisibleColumn;
@@ -4681,7 +4678,7 @@ begin
       exit;
    end;
 
-   if IsMultiColTree then begin
+   if IsMultiColTree then begin  // then isWatch too
       str1 := GetText(TreeRec1);
       str2 := GetText(TreeRec2);
       Result := CompareText(str1, str2);
@@ -4735,7 +4732,7 @@ begin
       filter.ColumnNameList.AddObject('Comment'   , TObject(COL_COMMENT));
       filter.ColumnNameList.AddObject('Trace Info', TObject(998));
       // search in members
-   end else begin
+   end else begin  // IsMultiColTree or isWatch
       for c := 0 to VstMain.Header.Columns.Count - 1 do begin
          title := VstMain.Header.Columns[c].Text;
          if title = '' then
@@ -5007,20 +5004,11 @@ const
   DarkColTraces  = TColor($00201018);  // very dark warm-purple
   DarkColDetail  = TColor($00151520);  // very dark blue-gray
 var
-  //StyleName: string;
-  j : integer;
-  ColTraces, ColDetail: TColor;
+    //StyleName: string;
+    j : integer;
+    ColTraces, ColDetail: TColor;
 begin
-    //TFrm_Trace.InternalTrace ('TFrm_Trace.ApplyTheme ' + caption );
-
-
-
-    // TODO !!!!!!!!!!!!!!!!!!!!!!!
-    //IsMultiColTree: boolean;
-    //IsWatch: boolean;
-
-
-
+    TFrm_Trace.InternalTrace ('TFrm_Trace.ApplyTheme ' + caption );
 
     if TraceConfig.Dark_Enabled then
     begin
@@ -5034,13 +5022,24 @@ begin
     // vstMain
     // -------
 
-    // column 3 (Traces)
-    if vstMain.Header.Columns.Count > COL_TRACE then
-      vstMain.Header.Columns[COL_TRACE].Color := ColTraces;
 
-    // column 4 (Comment)
-    if vstMain.Header.Columns.Count > COL_COMMENT then
-      vstMain.Header.Columns[COL_COMMENT].Color := ColTraces;
+    // TODO !!!!!!!!!!!!!!!!!!!!!!!
+    //IsMultiColTree: boolean;   // Watch forms are also tagged IsMultiColTree True
+
+    if IsMultiColTree then begin
+        for j := 0 to vstMain.Header.Columns.Count-1 do
+          vstMain.Header.Columns[j].Color := ColDetail;
+
+    end else begin
+        // column 3 (Traces)
+        if vstMain.Header.Columns.Count > COL_TRACE then
+          vstMain.Header.Columns[COL_TRACE].Color := ColTraces;
+
+        // column 4 (Comment)
+        if vstMain.Header.Columns.Count > COL_COMMENT then
+          vstMain.Header.Columns[COL_COMMENT].Color := ColTraces;
+    end;
+
 
     Frm_Tool.ApplyVstTheme(vstMain);
 
