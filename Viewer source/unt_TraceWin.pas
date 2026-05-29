@@ -5082,10 +5082,10 @@ begin
     // -------
 
     //clCream in light mode, dark accent in dark mode
-    if TraceConfig.Dark_Enabled then
-      PanelTop.Color := DarkColTraces
-    else
-      PanelTop.Color := clCream;
+//    if TraceConfig.Dark_Enabled then
+//      PanelTop.Color := DarkColTraces
+//    else
+//      PanelTop.Color := clCream;
 
     // vstMain
     // -------

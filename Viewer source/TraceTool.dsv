@@ -1,7 +1,7 @@
 ﻿[ClosedView_QzpcVGhpZXJyeVxUcmFjZXRvb2xcVmlld2VyIHNvdXJjZVx1bnRfUGFnZUNvbnRhaW5lci5wYXM=]
 Module=C:\Thierry\Tracetool\Viewer source\unt_PageContainer.pas
 CursorX=1
-CursorY=657
+CursorY=669
 TopLine=643
 LeftCol=1
 Elisions=
@@ -10,9 +10,9 @@ EditViewName=C:\Thierry\Tracetool\Viewer source\unt_PageContainer.pas
 
 [ClosedView_QzpcVGhpZXJyeVxUcmFjZXRvb2xcVmlld2VyIHNvdXJjZVxVbnRfVG9vbC5wYXM=]
 Module=C:\Thierry\Tracetool\Viewer source\Unt_Tool.pas
-CursorX=1
-CursorY=591
-TopLine=584
+CursorX=49
+CursorY=733
+TopLine=708
 LeftCol=1
 Elisions=
 Bookmarks=
@@ -20,9 +20,9 @@ EditViewName=C:\Thierry\Tracetool\Viewer source\Unt_Tool.pas
 
 [ClosedView_QzpcVGhpZXJyeVxUcmFjZXRvb2xcVmlld2VyIHNvdXJjZVx1bnRfVHJhY2VXaW4ucGFz]
 Module=C:\Thierry\Tracetool\Viewer source\unt_TraceWin.pas
-CursorX=22
-CursorY=5071
-TopLine=5047
+CursorX=30
+CursorY=271
+TopLine=255
 LeftCol=1
 Elisions=
 Bookmarks=
@@ -62,8 +62,8 @@ EditViewName=C:\Users\tparent\OneDrive - EORTC\My Documents\Embarcadero\Studio\3
 [ClosedView_QzpcVGhpZXJyeVxUcmFjZXRvb2xcVmlld2VyIHNvdXJjZVx1bnRfZXZlbnRMb2cucGFz]
 Module=C:\Thierry\Tracetool\Viewer source\unt_eventLog.pas
 CursorX=1
-CursorY=5
-TopLine=1
+CursorY=1902
+TopLine=1899
 LeftCol=1
 Elisions=
 Bookmarks=
@@ -131,9 +131,9 @@ EditViewName=c:\program files (x86)\embarcadero\studio\37.0\source\rtl\win\Winap
 
 [ClosedView_QzpcVGhpZXJyeVxUcmFjZXRvb2xcVmlld2VyIHNvdXJjZVx1bnRfVGFpbC5wYXM=]
 Module=C:\Thierry\Tracetool\Viewer source\unt_Tail.pas
-CursorX=1
-CursorY=2800
-TopLine=2786
+CursorX=79
+CursorY=229
+TopLine=227
 LeftCol=1
 Elisions=
 Bookmarks=
@@ -141,9 +141,9 @@ EditViewName=C:\Thierry\Tracetool\Viewer source\unt_Tail.pas
 
 [ClosedView_QzpcVGhpZXJyeVxUcmFjZXRvb2xcVmlld2VyIHNvdXJjZVx1bnRfT0RTLnBhcw==]
 Module=C:\Thierry\Tracetool\Viewer source\unt_ODS.pas
-CursorX=12
-CursorY=507
-TopLine=469
+CursorX=1
+CursorY=491
+TopLine=470
 LeftCol=1
 Elisions=
 Bookmarks=
@@ -171,7 +171,7 @@ EditViewName=
 
 [ClosedView_QzpcVGhpZXJyeVxUcmFjZXRvb2xcVmlld2VyIHNvdXJjZVx1bnRfU2VsZWN0VGFpbC5wYXM=]
 Module=C:\Thierry\Tracetool\Viewer source\unt_SelectTail.pas
-CursorX=19
+CursorX=29
 CursorY=339
 TopLine=320
 LeftCol=1
@@ -181,9 +181,9 @@ EditViewName=C:\Thierry\Tracetool\Viewer source\unt_SelectTail.pas
 
 [ClosedView_QzpcVGhpZXJyeVxUcmFjZXRvb2xcVmlld2VyIHNvdXJjZVx1bnRfYmFzZS5wYXM=]
 Module=C:\Thierry\Tracetool\Viewer source\unt_base.pas
-CursorX=1
-CursorY=1
-TopLine=1
+CursorX=20
+CursorY=60
+TopLine=46
 LeftCol=1
 Elisions=
 Bookmarks=

@@ -212,6 +212,7 @@ type
     function  getMembers(Node : PVirtualNode) : TMember ; override ;
     function  SearchNext(start:boolean) : boolean ; override ;
     function  SearchPrevious (atEnd:boolean) : boolean ;  override ;
+    procedure ApplyTheme; override;
   end;
 
 
@@ -1893,6 +1894,27 @@ begin
    VstDetail.Font.Size         := TraceConfig.EventLog_Info_FontSize ;
    VstDetail.ReinitChildren (nil,true);
    VstDetail.EndUpdate ;
+end;
+
+procedure TFrmEventLog.ApplyTheme;
+begin
+    TFrm_Trace.InternalTrace ('TFrmEventLog.ApplyTheme ' + caption );
+
+    // PanelTop
+    // -------
+    // TODO
+
+    // vstMain
+    // -------
+    // TODO
+
+    // VstDetail
+    // -------
+    // TODO
+
+    // Frame Memo
+    // -------
+    // TODO
 end;
 
 //------------------------------------------------------------------------------

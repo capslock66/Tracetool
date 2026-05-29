@@ -4,7 +4,6 @@ inherited FrmEventLog: TFrmEventLog
   Caption = 'FrmEventLog'
   ClientHeight = 378
   ClientWidth = 729
-  StyleElements = [seFont, seClient, seBorder]
   ExplicitWidth = 745
   ExplicitHeight = 417
   TextHeight = 13
@@ -242,11 +241,9 @@ inherited FrmEventLog: TFrmEventLog
         end
         inherited PanelTop: TPanel
           Width = 381
-          StyleElements = [seFont, seClient, seBorder]
           ExplicitWidth = 381
           inherited LabelSelect: TLabel
             Height = 13
-            StyleElements = [seFont, seClient, seBorder]
             ExplicitHeight = 13
           end
         end
