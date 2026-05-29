@@ -4893,6 +4893,9 @@ begin
 
    // then check for special font name, size and color
    Result := false;
+   if TraceConfig.Dark_Enabled and selected then  // Focused or not
+       TargetCanvas.Font.Color := TraceConfig.Dark_SelectedTextColor;   //  clYellow, White , ...
+
    for c := 0 to length(FontDetails) - 1 do begin
       FontDetail := FontDetails[c];
       if (FontDetail.ColId = Column) or (FontDetail.ColId = -1) then begin
@@ -5053,8 +5056,8 @@ end;
 
 procedure TFrm_Trace.ApplyTheme;
 const
-  DarkCandidates: array[0..3] of string = (
-    'Carbon','Windows10 Dark', 'Charcoal Dark Slate',  'Slate'
+  DarkCandidates: array[0..2] of string = (
+     'Carbon', 'Windows10 SlateGray', 'Slate Classico'
   );
   // Original light-theme accent colors (from .dfm)
   LightColTraces = TColor(16705515);  // lavender
@@ -5070,7 +5073,7 @@ begin
     TFrm_Trace.InternalTrace ('TFrm_Trace.ApplyTheme ' + caption );
 
     // Switch VCL style
-    if Frm_Tool.DarkTheme then
+    if TraceConfig.Dark_Enabled then
     begin
       for StyleName in DarkCandidates do
         if TStyleManager.TrySetStyle(StyleName) then
@@ -5087,7 +5090,7 @@ begin
     // -------
 
     //clCream in light mode, dark accent in dark mode
-    if Frm_Tool.DarkTheme then
+    if TraceConfig.Dark_Enabled then
       PanelTop.Color := DarkColTraces
     else
       PanelTop.Color := clCream;

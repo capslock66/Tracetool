@@ -636,8 +636,8 @@ end;
 
 procedure TFrmPageContainer.ApplyTheme;
 const
-  DarkCandidates: array[0..3] of string = (
-    'Carbon','Windows10 Dark', 'Charcoal Dark Slate',  'Slate'
+  DarkCandidates: array[0..2] of string = (
+    'Slate Classico', 'Windows10 SlateGray', 'Carbon'
   );
   // Original light-theme accent colors (from .dfm)
   LightColTraces = TColor(16705515);  // lavender, vstMain cols 3+4
@@ -669,7 +669,7 @@ procedure TFrmPageContainer.actToggleThemeExecute(Sender: TObject);
 begin
 
   //TraceConfig.AppDisplay_DarkTheme := not TraceConfig.AppDisplay_DarkTheme; // TODO + save
-  Frm_Tool.DarkTheme := not Frm_Tool.DarkTheme;
+  TraceConfig.Dark_Enabled := not TraceConfig.Dark_Enabled;
   ApplyTheme();
 
 end;

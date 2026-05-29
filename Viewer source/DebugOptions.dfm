@@ -35,7 +35,7 @@ object frmDebugOptions: TfrmDebugOptions
       Top = 1
       Width = 416
       Height = 544
-      ActivePage = TabSheetFramework
+      ActivePage = TabSheetGeneral
       Align = alLeft
       TabOrder = 1
       object TabSheetGeneral: TTabSheet
@@ -140,8 +140,8 @@ object frmDebugOptions: TfrmDebugOptions
             end
           end
           object GroupBox3: TGroupBox
-            Left = 8
-            Top = 237
+            Left = 6
+            Top = 323
             Width = 395
             Height = 89
             Anchors = [akLeft, akTop, akRight]
@@ -189,8 +189,8 @@ object frmDebugOptions: TfrmDebugOptions
             end
           end
           object GroupBox4: TGroupBox
-            Left = 8
-            Top = 336
+            Left = 6
+            Top = 418
             Width = 395
             Height = 97
             Anchors = [akLeft, akTop, akRight]
@@ -217,6 +217,71 @@ object frmDebugOptions: TfrmDebugOptions
               Height = 17
               Caption = 'Enable internal log'
               TabOrder = 0
+            end
+          end
+          object GroupBox15: TGroupBox
+            Left = 6
+            Top = 231
+            Width = 395
+            Height = 86
+            Caption = 'Dark mode'
+            TabOrder = 3
+            object Label20: TLabel
+              Left = 16
+              Top = 24
+              Width = 88
+              Height = 13
+              Caption = 'Selected text color'
+            end
+            object Label22: TLabel
+              Left = 16
+              Top = 43
+              Width = 128
+              Height = 13
+              Caption = 'Selected background color'
+            end
+            object Label62: TLabel
+              Left = 16
+              Top = 62
+              Width = 181
+              Height = 13
+              Caption = 'Unfocused selected background color'
+            end
+            object ComboSelectedTextColor: TJvColorComboBox
+              Left = 210
+              Top = 21
+              Width = 180
+              Height = 20
+              ColorValue = clYellow
+              ColorDialogText = 'Custom...'
+              DroppedDownWidth = 180
+              NewColorText = 'Custom'
+              ParentColor = True
+              TabOrder = 0
+            end
+            object ComboSelectedBackgroundColor: TJvColorComboBox
+              Left = 210
+              Top = 40
+              Width = 180
+              Height = 20
+              ColorValue = clTeal
+              ColorDialogText = 'Custom...'
+              DroppedDownWidth = 180
+              NewColorText = 'Custom'
+              ParentColor = True
+              TabOrder = 1
+            end
+            object ComboUnfocusedSelectedBackgroundColor: TJvColorComboBox
+              Left = 210
+              Top = 59
+              Width = 180
+              Height = 20
+              ColorValue = clDarkgray
+              ColorDialogText = 'Custom...'
+              DroppedDownWidth = 180
+              NewColorText = 'Custom'
+              ParentColor = True
+              TabOrder = 2
             end
           end
         end
@@ -296,11 +361,11 @@ object frmDebugOptions: TfrmDebugOptions
               Caption = 'Socket port 2'
             end
             object Label58: TLabel
-              Left = 7
-              Top = 170
-              Width = 270
+              Left = 8
+              Top = 174
+              Width = 242
               Height = 13
-              Caption = 'Flash crossdomain.xml or Microsoft clientaccesspolicy.xml'
+              Caption = 'crossdomain.xml or Microsoft clientaccesspolicy.xml'
             end
             object Label59: TLabel
               Left = 7
@@ -431,6 +496,7 @@ object frmDebugOptions: TfrmDebugOptions
               Height = 22
               Style = csOwnerDrawVariable
               Anchors = [akLeft, akTop, akRight]
+              Color = clBtnFace
               TabOrder = 0
               OnChange = FontsChange
               OnDrawItem = FontsDrawItem

@@ -9,20 +9,19 @@ unit DebugOptions;
 interface
 
 uses
-  Windows, Messages, SysUtils, AnsiStrings,
+  Windows, Messages, SysUtils, AnsiStrings, Vcl.Themes,
   Classes, Graphics, Controls, Forms, Dialogs, Contnrs,
   StdCtrls, ComCtrls, variants, CheckLst, ExtCtrls, ImgList
   , VirtualTrees, VirtualTrees.Types
   ,ColorPickerButton
   ,unt_TraceConfig, VirtualTrees.BaseAncestorVCL, VirtualTrees.BaseTree,
-  VirtualTrees.AncestorVCL
+  VirtualTrees.AncestorVCL, JvExStdCtrls, JvCombobox, JvColorCombo
   ;
 
 const
   UM_MEASUREFONTS = WM_USER;
   szSizeArray = 16;
-  PointSizes: array[0..szSizeArray-1] of Integer =
-                   (8, 9, 10, 11, 12, 14, 16, 18, 20, 22, 24, 26, 28, 36, 48, 72);
+  PointSizes: array[0..szSizeArray-1] of Integer = (8, 9, 10, 11, 12, 14, 16, 18, 20, 22, 24, 26, 28, 36, 48, 72);
 
 type
 
@@ -236,6 +235,13 @@ type
     Label60: TLabel;
     Label61: TLabel;
     chkKindIconOnLeft: TCheckBox;
+    GroupBox15: TGroupBox;
+    Label20: TLabel;
+    Label22: TLabel;
+    Label62: TLabel;
+    ComboSelectedTextColor: TJvColorComboBox;
+    ComboSelectedBackgroundColor: TJvColorComboBox;
+    ComboUnfocusedSelectedBackgroundColor: TJvColorComboBox;
     procedure FormCreate(Sender: TObject);
     procedure btnOKClick(Sender: TObject);
     procedure butApplyClick(Sender: TObject);
@@ -492,6 +498,11 @@ begin
    EvntLogTraceNodeHeight.Text   := intToStr(TraceConfig.EventLog_Trace_NodeHeight) ;
    EvntLogInfoFontSize.Text      := intToStr(TraceConfig.EventLog_Info_FontSize) ;
 
+   // dark theme
+   ComboSelectedTextColor.colorValue                := TraceConfig.Dark_SelectedTextColor;
+   ComboSelectedBackgroundColor.colorValue          := TraceConfig.Dark_SelectedBackgroundColor;
+   ComboUnfocusedSelectedBackgroundColor.colorValue := TraceConfig.Dark_UnfocusedSelectedBackgroundColor;
+
    // framework
    chkAutoClearTraces.Checked  := TraceConfig.Framework_AutoClear ;
    editMaxNodesTraces.Text     := intToStr (TraceConfig.Framework_MaxNode) ;
@@ -595,6 +606,11 @@ var
    Plugin : TPlugin ;
    FrmBase : TFrmBase ;
 begin
+   // dark theme
+   TraceConfig.Dark_SelectedTextColor := ComboSelectedTextColor.colorValue;
+   TraceConfig.Dark_SelectedBackgroundColor := ComboSelectedBackgroundColor.colorValue;
+   TraceConfig.Dark_UnfocusedSelectedBackgroundColor := ComboUnfocusedSelectedBackgroundColor.colorValue;
+
    // framework
    TraceConfig.Framework_AutoClear        := chkAutoClearTraces.Checked ;
    TraceConfig.Framework_MaxNode          := StrToIntDef(editMaxNodesTraces.Text,2000) ;
@@ -748,6 +764,11 @@ begin
    TraceConfig.EventLog_Info_FontSize      := StrToIntDef (EvntLogInfoFontSize.Text      , 8 ) ;
 
    Frm_Tool.SaveSettings() ;
+
+   for c := 0 to ContainerList.Count-1 do begin
+      FrmPageContainer := TFrmPageContainer(ContainerList[c]) ;
+      FrmPageContainer.ApplyTheme();
+   end ;
 
    // change font in every base form
    for c := 0 to BaseList.Count -1 do begin
@@ -1042,8 +1063,12 @@ begin
       // fixed height and drawing a bunch of symbols if the selected
       // font is Symbol etc. is not very informative for the user.
       cb.Canvas.Font := cb.Font;
-      If odSelected In State Then
-         cb.Canvas.Font.Color := clHighlightText;
+
+      if TraceConfig.Dark_Enabled then
+         cb.Canvas.Font.Color := TStyleManager.ActiveStyle.GetSystemColor(clWindowText);
+
+      //If odSelected In State Then
+      //   cb.Canvas.Font.Color := clHighlightText;
 
       cb.Canvas.TextRect( Rect, rect.left+2, rect.top, cb.Items[index]);
    end else begin
@@ -1056,6 +1081,10 @@ begin
       TargetRect := Rect ;
       TargetRect.Right := TargetRect.left + 150 ;
       cb.Canvas.Font := cb.Font;
+
+      if TraceConfig.Dark_Enabled then
+         cb.Canvas.Font.Color := TStyleManager.ActiveStyle.GetSystemColor(clWindowText);
+
       cb.Canvas.TextRect( Rect, rect.left+22, rect.top, cb.Items[index]);   // skip 22 pixels for TTF bitmap
 
       // draw the symbol part

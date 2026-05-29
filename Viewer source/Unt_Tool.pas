@@ -177,8 +177,6 @@ type
     XmlTraceFile : boolean ;
     IsInitMode : boolean ;
     componentHandle :integer ;
-
-    DarkTheme : boolean;   // false windows color, true dark theme
   public
     uniqueId : integer ;
   end;
@@ -865,16 +863,16 @@ begin
    if FileExists (strConfigFile) then begin   
       XMLConfig := LoadTracetoolConfig() ;
    end else begin
-      strConfigFile := strRunPath + 'TraceTool.xml' ; 
+      strConfigFile := strRunPath + 'TraceTool.xml' ;
       XMLConfig := LoadTracetoolConfig() ;
-      DeleteFile(strConfigFile) ;  // delete old TraceTool.xml file, if exist. 'TraceToolConfig.xml' will be recreated later   
-      strConfigFile := strRunPath + 'TraceToolConfig.xml' ; 
+      DeleteFile(strConfigFile) ;  // delete old TraceTool.xml file, if exist. 'TraceToolConfig.xml' will be recreated later
+      strConfigFile := strRunPath + 'TraceToolConfig.xml' ;
    end;
-   
+
    CheckXml(XMLConfig) ;     // check if all options are valid
    XmlToLocal(XMLConfig) ;   // convert Xml to local config
-   SaveSettings() ;          // save missing default settings 
-   
+   SaveSettings() ;          // save missing default settings
+
    XMLConfig := nil ;
 end;
 
@@ -886,7 +884,7 @@ var
    Reg: TRegistry;
    Buf: array[0..MAX_PATH + 1] of Char;
    c : integer ;
-//   jvms : TStringList ;
+
 begin
    Reg := TRegistry.Create;
    try try
@@ -941,6 +939,14 @@ begin
    if XMLConfig.AppDisplay.Maximized.Attributes             ['Value'] = Null then XMLConfig.AppDisplay.Maximized.Value := false ;
    if XMLConfig.AppDisplay.IconFile.Attributes              ['Value'] = Null then XMLConfig.AppDisplay.IconFile.Value := '' ;
    if XMLConfig.AppDisplay.MinimizeToSystray.Attributes     ['Value'] = Null then XMLConfig.AppDisplay.MinimizeToSystray.Value := false ;
+
+   // dark theme
+   // -----------------------------------------------------------------------
+
+   if XMLConfig.AppDisplay.Dark_Enabled.Attributes                          ['Value'] = Null then XMLConfig.AppDisplay.Dark_Enabled.Value := false;
+   if XMLConfig.AppDisplay.Dark_SelectedTextColor.Attributes                ['Value'] = Null then XMLConfig.AppDisplay.Dark_SelectedTextColor.Value := Integer(clYellow);
+   if XMLConfig.AppDisplay.Dark_SelectedBackgroundColor.Attributes          ['Value'] = Null then XMLConfig.AppDisplay.Dark_SelectedBackgroundColor.Value := Integer(clTeal);
+   if XMLConfig.AppDisplay.Dark_UnfocusedSelectedBackgroundColor.Attributes ['Value'] = Null then XMLConfig.AppDisplay.Dark_UnfocusedSelectedBackgroundColor.Value := Integer(TColors.DarkGray);
 
    // Trace Framework
    // autoclear, MaxNode and MinNode are used for trace framework
@@ -1114,6 +1120,14 @@ begin
    TraceConfig.AppDisplay_Maximized                     := XMLConfig.AppDisplay.Maximized.Value ;
    TraceConfig.AppDisplay_IconFile                      := XMLConfig.AppDisplay.IconFile.Value ;
    TraceConfig.AppDisplay_MinimizeToSystray             := XMLConfig.AppDisplay.MinimizeToSystray.Value ;
+
+   // dark theme
+   // -----------------------------------------------------------------------
+
+   TraceConfig.Dark_Enabled                          := XMLConfig.AppDisplay.Dark_Enabled.Value;
+   TraceConfig.Dark_SelectedTextColor                := XMLConfig.AppDisplay.Dark_SelectedTextColor.Value;
+   TraceConfig.Dark_SelectedBackgroundColor          := XMLConfig.AppDisplay.Dark_SelectedBackgroundColor.Value;
+   TraceConfig.Dark_UnfocusedSelectedBackgroundColor := XMLConfig.AppDisplay.Dark_UnfocusedSelectedBackgroundColor.Value;
 
    // Trace Framework
    // -----------------------------------------------------------------------
@@ -1347,6 +1361,14 @@ begin
       //XMLConfig.AppDisplay.Maximized.Value                    := TraceConfig.AppDisplay_Maximized ;
       XMLConfig.AppDisplay.IconFile.Value                     := TraceConfig.AppDisplay_IconFile ;
       XMLConfig.AppDisplay.MinimizeToSystray.Value            := TraceConfig.AppDisplay_MinimizeToSystray ;
+
+      // dark theme
+      // -----------------------------------------------------------------------
+
+      XMLConfig.AppDisplay.Dark_Enabled.Value                 := TraceConfig.Dark_Enabled;
+      XMLConfig.AppDisplay.Dark_SelectedTextColor.Value       := TraceConfig.Dark_SelectedTextColor;
+      XMLConfig.AppDisplay.Dark_SelectedBackgroundColor.Value := TraceConfig.Dark_SelectedBackgroundColor;
+      XMLConfig.AppDisplay.Dark_UnfocusedSelectedBackgroundColor.Value := TraceConfig.Dark_UnfocusedSelectedBackgroundColor;
 
       // Trace Framework
       // -----------------------------------------------------------------------
@@ -2990,40 +3012,40 @@ procedure TFrm_Tool.ApplyVstTheme(VST: TVirtualStringTree);
 begin
     if VST = nil then
         Exit;
-    if Frm_Tool.DarkTheme then
+    if TraceConfig.Dark_Enabled then
     begin
-      VST.Colors.BorderColor                   := TColor($00606060);
+      VST.Colors.BorderColor                   := TColor($00606060);  // medium gray       RGB(96,96,96)
       VST.Colors.DisabledColor                 := clDkGray;
-      VST.Colors.DropMarkColor                 := TColor($00505050);
-      VST.Colors.DropTargetColor               := TColor($004D4400);
-      VST.Colors.DropTargetBorderColor         := TColor($004D4400);
-      VST.Colors.FocusedSelectionColor         := TColor($004D4400);
-      VST.Colors.FocusedSelectionBorderColor   := TColor($004D4400);
-      VST.Colors.GridLineColor                 := TColor($00383838);
+      VST.Colors.DropMarkColor                 := TColor($00505050);  // dark gray         RGB(80,80,80)
+      VST.Colors.DropTargetColor               := TColor($004D4400);  // dark teal         RGB(0,68,77)
+      VST.Colors.DropTargetBorderColor         := TColor($004D4400);  // dark teal         RGB(0,68,77)
+      VST.Colors.GridLineColor                 := TColor($00383838);  // very dark gray    RGB(56,56,56)
+      VST.Colors.TreeLineColor                 := TColor($00505050);  // dark gray         RGB(80,80,80)
       VST.Colors.HeaderHotColor                := clWhite;
       VST.Colors.HotColor                      := clWhite;
-      VST.Colors.SelectionRectangleBlendColor  := TColor($004D4400);
-      VST.Colors.SelectionRectangleBorderColor := TColor($004D4400);
-      VST.Colors.SelectionTextColor            := clWhite;
-      VST.Colors.TreeLineColor                 := TColor($00505050);
-      VST.Colors.UnfocusedColor                := clSilver;
-      VST.Colors.UnfocusedSelectionColor       := TColor($00404040);
-      VST.Colors.UnfocusedSelectionBorderColor := TColor($00404040);
+      VST.Colors.SelectionRectangleBlendColor  := TColor($004D4400);  // dark teal         RGB(0,68,77)
+      VST.Colors.SelectionRectangleBorderColor := TColor($004D4400);  // dark teal         RGB(0,68,77)
+      VST.Colors.SelectionTextColor            := TraceConfig.Dark_SelectedTextColor;        // Text color for selected node. See ChangeFontDetail()
+      VST.Colors.FocusedSelectionColor         := TraceConfig.Dark_SelectedBackgroundColor;
+      VST.Colors.FocusedSelectionBorderColor   := TColor($004D4400);  // dark teal         RGB(0,68,77)
+      VST.Colors.UnfocusedColor                := clSilver;           // Text color
+      VST.Colors.UnfocusedSelectionColor       := TraceConfig.Dark_UnfocusedSelectedBackgroundColor; // background color
+      VST.Colors.UnfocusedSelectionBorderColor := TColor($00404040);  // dark gray         RGB(64,64,64)
     end else begin
       VST.Colors.BorderColor                   := clBlack;
       VST.Colors.DisabledColor                 := clGray;
-      VST.Colors.DropMarkColor                 := TColor(15385233);
-      VST.Colors.DropTargetColor               := TColor(15385233);
-      VST.Colors.DropTargetBorderColor         := TColor(15385233);
-      VST.Colors.FocusedSelectionColor         := TColor(15385233);
-      VST.Colors.FocusedSelectionBorderColor   := TColor(15385233);
-      VST.Colors.GridLineColor                 := TColor(15987699);
+      VST.Colors.DropMarkColor                 := TColor(15385233);   // light steel blue  RGB(145,194,234)
+      VST.Colors.DropTargetColor               := TColor(15385233);   // light steel blue  RGB(145,194,234)
+      VST.Colors.DropTargetBorderColor         := TColor(15385233);   // light steel blue  RGB(145,194,234)
+      VST.Colors.GridLineColor                 := TColor(15987699);   // near-white gray   RGB(243,243,243)
+      VST.Colors.TreeLineColor                 := TColor(9471874);    // slate gray        RGB(130,135,144)
       VST.Colors.HeaderHotColor                := clBlack;
       VST.Colors.HotColor                      := clBlack;
-      VST.Colors.SelectionRectangleBlendColor  := TColor(15385233);
-      VST.Colors.SelectionRectangleBorderColor := TColor(15385233);
+      VST.Colors.SelectionRectangleBlendColor  := TColor(15385233);   // light steel blue  RGB(145,194,234)
+      VST.Colors.SelectionRectangleBorderColor := TColor(15385233);   // light steel blue  RGB(145,194,234)
       VST.Colors.SelectionTextColor            := clBlack;
-      VST.Colors.TreeLineColor                 := TColor(9471874);
+      VST.Colors.FocusedSelectionColor         := TColor(15385233);   // light steel blue  RGB(145,194,234)
+      VST.Colors.FocusedSelectionBorderColor   := TColor(15385233);   // light steel blue  RGB(145,194,234)
       VST.Colors.UnfocusedColor                := clBlack;
       VST.Colors.UnfocusedSelectionColor       := clGray;
       VST.Colors.UnfocusedSelectionBorderColor := clGray;

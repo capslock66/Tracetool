@@ -4,6 +4,7 @@ interface
 
 uses
    Contnrs
+   , Vcl.Graphics
    , classes
    , unt_plugin ;
 
@@ -24,6 +25,11 @@ type
     General_ShowSocketWarning         : boolean ;
     General_SocketPolicyServer        : boolean ;
     General_HttpPolicyServer          : boolean ;
+
+    Dark_Enabled                      : boolean;
+    Dark_SelectedTextColor            : TColor ;
+    Dark_SelectedBackgroundColor      : TColor ;
+    Dark_UnfocusedSelectedBackgroundColor : TColor ;
 
     AppDisplay_SmallBut               : Boolean ;
     AppDisplay_ToolbarStandard        : Boolean ;

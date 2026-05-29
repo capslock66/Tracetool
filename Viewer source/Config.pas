@@ -159,6 +159,12 @@ type
     function Get_ToolbarFilter: IXMLBooleanTagValue;
     function Get_HideViewer: IXMLBooleanTagValue;
     function Get_DisableInternalLog: IXMLBooleanTagValue;
+
+    function Get_Dark_Enabled: IXMLBooleanTagValue;
+    function Get_Dark_SelectedTextColor:IXMLIntegerTagValue;
+    function Get_Dark_SelectedBackgroundColor:IXMLIntegerTagValue;
+    function Get_Dark_UnfocusedSelectedBackgroundColor:IXMLIntegerTagValue;
+
     { Methods & Properties }
     property Left: IXMLIntegerTagValue read Get_Left;
     property Top: IXMLIntegerTagValue read Get_Top;
@@ -180,6 +186,11 @@ type
     property ToolbarFilter: IXMLBooleanTagValue read Get_ToolbarFilter;
     property HideViewer: IXMLBooleanTagValue read Get_HideViewer;
     property DisableInternalLog: IXMLBooleanTagValue read Get_DisableInternalLog;
+
+    property Dark_Enabled                          : IXMLBooleanTagValue read Get_Dark_Enabled;
+    property Dark_SelectedTextColor                : IXMLIntegerTagValue read Get_Dark_SelectedTextColor;
+    property Dark_SelectedBackgroundColor          : IXMLIntegerTagValue read Get_Dark_SelectedBackgroundColor;
+    property Dark_UnfocusedSelectedBackgroundColor : IXMLIntegerTagValue read Get_Dark_UnfocusedSelectedBackgroundColor;
   end;
 
 { IXMLTail }
@@ -621,6 +632,12 @@ type
     function Get_ToolbarFilter: IXMLBooleanTagValue;
     function Get_HideViewer: IXMLBooleanTagValue;
     function Get_DisableInternalLog: IXMLBooleanTagValue;
+
+    function Get_Dark_Enabled                          : IXMLBooleanTagValue;
+    function Get_Dark_SelectedTextColor                : IXMLIntegerTagValue;
+    function Get_Dark_SelectedBackgroundColor          : IXMLIntegerTagValue;
+    function Get_Dark_UnfocusedSelectedBackgroundColor : IXMLIntegerTagValue;
+
   public
     procedure AfterConstruction; override;
   end;
@@ -1096,6 +1113,12 @@ begin
   RegisterChildNode('ToolbarFilter', TXMLBooleanTagValue);
   RegisterChildNode('HideViewer', TXMLBooleanTagValue);
   RegisterChildNode('DisableInternalLog', TXMLBooleanTagValue);
+
+  RegisterChildNode('DarkEnabled',TXMLBooleanTagValue);
+  RegisterChildNode('DarkSelectedTextColor',TXMLIntegerTagValue);
+  RegisterChildNode('DarkSelectedBackgroundColor',TXMLIntegerTagValue);
+  RegisterChildNode('DarkUnfocusedSelectedBackgroundColor',TXMLIntegerTagValue);
+
   inherited;
 end;
 
@@ -1198,6 +1221,27 @@ function TXMLAppDisplay.Get_DisableInternalLog: IXMLBooleanTagValue;
 begin
   Result := ChildNodes['DisableInternalLog'] as IXMLBooleanTagValue;
 end;
+
+function TXMLAppDisplay.Get_Dark_Enabled: IXMLBooleanTagValue;
+begin
+  Result := ChildNodes['DarkEnabled'] as IXMLBooleanTagValue;
+end;
+
+function TXMLAppDisplay.Get_Dark_SelectedTextColor:IXMLIntegerTagValue;
+begin
+  Result := ChildNodes['DarkSelectedTextColor'] as IXMLIntegerTagValue;
+end;
+
+function TXMLAppDisplay.Get_Dark_SelectedBackgroundColor:IXMLIntegerTagValue;
+begin
+  Result := ChildNodes['DarkSelectedBackgroundColor'] as IXMLIntegerTagValue;
+end;
+
+function TXMLAppDisplay.Get_Dark_UnfocusedSelectedBackgroundColor:IXMLIntegerTagValue;
+begin
+  Result := ChildNodes['DarkUnfocusedSelectedBackgroundColor'] as IXMLIntegerTagValue;
+end;
+
 
 { TXMLTail }
 
