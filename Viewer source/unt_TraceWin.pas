@@ -307,6 +307,7 @@ uses
    , unt_Details_bitmap
    , unt_Details_table
    , unt_Details_Classic
+   , unt_FrameMemo
    , Unt_TailProgress
    , untPrintPreview
    , Preview
@@ -5022,10 +5023,6 @@ begin
     // vstMain
     // -------
 
-
-    // TODO !!!!!!!!!!!!!!!!!!!!!!!
-    //IsMultiColTree: boolean;   // Watch forms are also tagged IsMultiColTree True
-
     if IsMultiColTree then begin
         for j := 0 to vstMain.Header.Columns.Count-1 do
           vstMain.Header.Columns[j].Color := ColDetail;
@@ -5058,7 +5055,8 @@ begin
     // Frame Memo
     // -------
 
-    // TODO
+    if TreeDetailFrame is Tframe_Classic then
+       Tframe_Classic(TreeDetailFrame).frameMemo.ApplySynMemoTheme ();
 end;
 
 // ------------------------------------------------------------------------------

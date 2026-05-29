@@ -7,7 +7,8 @@ uses
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, SynEdit, Vcl.ComCtrls, Vcl.ToolWin,
   Xml.xmldom, Xml.XMLIntf, Xml.Win.msxmldom, Xml.XMLDoc,
   SynHighlighterXML, SynEditHighlighter, SynEditCodeFolding, SynHighlighterJSON,
-  System.JSON, Vcl.StdCtrls, Vcl.Buttons, Vcl.ExtCtrls, unt_FrameMemo;
+  System.JSON, Vcl.StdCtrls, Vcl.Buttons, Vcl.ExtCtrls, unt_FrameMemo,
+  System.Generics.Collections;
 
 
 type
@@ -18,6 +19,7 @@ type
   private
     { Private declarations }
   public
+    class var Instances: TList<TDetailPopupForm>;
     procedure SetMemoText(text : string);
   end;
 
@@ -30,18 +32,21 @@ implementation
 
 //------------------------------------------------------------------------------
 
-procedure TDetailPopupForm.FormClose(Sender: TObject; var Action: TCloseAction);
+procedure TDetailPopupForm.FormCreate(Sender: TObject);
 begin
-   Action := caFree;
+   TDetailPopupForm.Instances.Add(Self);
+   frameMemo.WordWrapButton.Left := frameMemo.ShowPopupButton.left;
+   frameMemo.ShowPopupButton.visible := false;
+   frameMemo.LabelSelect.visible := false;
+   frameMemo.ApplySynMemoTheme();
 end;
 
 //------------------------------------------------------------------------------
 
-procedure TDetailPopupForm.FormCreate(Sender: TObject);
+procedure TDetailPopupForm.FormClose(Sender: TObject; var Action: TCloseAction);
 begin
-   frameMemo.WordWrapButton.Left := frameMemo.ShowPopupButton.left;
-   frameMemo.ShowPopupButton.visible := false;
-   frameMemo.LabelSelect.visible := false;
+   TDetailPopupForm.Instances.Remove(Self);
+   Action := caFree;
 end;
 
 //------------------------------------------------------------------------------
@@ -59,5 +64,12 @@ begin
    frameMemo.SetMemoText(text,isXml,isJson);
 end;
 
+
+initialization
+   TDetailPopupForm.Instances := TList<TDetailPopupForm>.Create;
+
+finalization
+   TDetailPopupForm.Instances.Free;
+   TDetailPopupForm.Instances := nil;
 
 end.

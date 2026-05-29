@@ -25,12 +25,12 @@ object DetailPopupForm: TDetailPopupForm
     inherited SynMemo: TSynEdit
       Width = 386
       Height = 344
-      ExplicitWidth = 382
-      ExplicitHeight = 343
+      ExplicitWidth = 386
+      ExplicitHeight = 344
     end
     inherited PanelTop: TPanel
       Width = 386
-      ExplicitWidth = 382
+      ExplicitWidth = 386
       inherited LabelSelect: TLabel
         Height = 13
         ExplicitHeight = 13

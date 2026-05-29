@@ -227,11 +227,9 @@ object FrmTail: TFrmTail
         end
         inherited PanelTop: TPanel
           Width = 401
-          StyleElements = [seFont, seClient, seBorder]
           ExplicitWidth = 401
           inherited LabelSelect: TLabel
             Height = 13
-            StyleElements = [seFont, seClient, seBorder]
             ExplicitHeight = 13
           end
         end

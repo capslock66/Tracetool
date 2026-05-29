@@ -170,7 +170,7 @@ type
 
 implementation
 
-uses unt_base , unt_tail , unt_tool , unt_TraceWin , unt_search
+uses unt_base , unt_tail , unt_tool , unt_TraceWin , unt_search, unt_detailPopup
   ,unt_filter
   ,unt_TraceConfig;
 
@@ -668,6 +668,10 @@ begin
          end;
       end;
    end;
+
+   // apply theme to all detail popup form
+   for var popup in TDetailPopupForm.Instances do
+     popup.FrameMemo.ApplySynMemoTheme;
 end;
 
 procedure TFrmPageContainer.actToggleThemeExecute(Sender: TObject);

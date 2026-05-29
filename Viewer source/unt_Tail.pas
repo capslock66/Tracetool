@@ -2811,7 +2811,7 @@ begin
 
     // Frame Memo
     // -------
-    // TODO
+    frameMemo.ApplySynMemoTheme ();
 
 end;
 

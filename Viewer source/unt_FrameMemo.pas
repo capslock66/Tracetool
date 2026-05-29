@@ -36,11 +36,13 @@ type
   private
   public
     procedure SetMemoText(text: string; isXml, isJson: boolean);
+    //procedure ApplyTheme;
+    procedure ApplySynMemoTheme ();
   end;
 
 implementation
 
-uses unt_detailPopup, unt_TraceWin;
+uses unt_detailPopup, unt_TraceWin, unt_TraceConfig;
 
 {$R *.dfm}
 
@@ -241,5 +243,30 @@ procedure TFrameMemo.WordWrapButtonClick(Sender: TObject);
 begin
    SynMemo.WordWrap := WordWrapButton.Down;
 end;
+
+procedure TFrameMemo.ApplySynMemoTheme();
+begin
+   if TraceConfig.Dark_Enabled then
+   begin
+      SynMemo.Color                        := TColor($001E1E1E);  // dark background
+      SynMemo.Font.Color                   := TColor($00D4D4D4);  // light gray text
+      SynMemo.Gutter.Color                 := TColor($00252526);  // slightly lighter than editor bg
+      SynMemo.Gutter.Font.Color            := TColor($00858585);  // muted gray line numbers
+      SynMemo.ActiveLineColor              := TColor($00282828);  // subtle current-line highlight
+      SynMemo.SelectedColor.Background     := TraceConfig.Dark_SelectedBackgroundColor;
+      SynMemo.SelectedColor.Foreground     := TraceConfig.Dark_SelectedTextColor;
+   end else begin
+      SynMemo.Color                        := clWindow;
+      SynMemo.Font.Color                   := clWindowText;
+      SynMemo.Gutter.Color                 := TColor($00F0F0F0);
+      SynMemo.Gutter.Font.Color            := clGrayText;
+      SynMemo.ActiveLineColor              := clNone;
+      SynMemo.SelectedColor.Background     := clHighlight;
+      SynMemo.SelectedColor.Foreground     := clHighlightText;
+   end;
+end;
+
+//------------------------------------------------------------------------------
+
 
 end.
