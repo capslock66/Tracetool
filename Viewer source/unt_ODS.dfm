@@ -234,11 +234,9 @@ object Frm_ODS: TFrm_ODS
         end
         inherited PanelTop: TPanel
           Width = 385
-          StyleElements = [seFont, seClient, seBorder]
           ExplicitWidth = 385
           inherited LabelSelect: TLabel
             Height = 13
-            StyleElements = [seFont, seClient, seBorder]
             ExplicitHeight = 13
           end
         end

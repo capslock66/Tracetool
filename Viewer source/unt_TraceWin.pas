@@ -5056,9 +5056,6 @@ end;
 
 procedure TFrm_Trace.ApplyTheme;
 const
-  DarkCandidates: array[0..2] of string = (
-     'Carbon', 'Windows10 SlateGray', 'Slate Classico'
-  );
   // Original light-theme accent colors (from .dfm)
   LightColTraces = TColor(16705515);  // lavender
   LightColDetail = TColor(16117479);  // blue-gray
@@ -5066,22 +5063,17 @@ const
   DarkColTraces  = TColor($00201018);  // very dark warm-purple
   DarkColDetail  = TColor($00151520);  // very dark blue-gray
 var
-  StyleName: string;
+  //StyleName: string;
   j : integer;
   ColTraces, ColDetail: TColor;
 begin
-    TFrm_Trace.InternalTrace ('TFrm_Trace.ApplyTheme ' + caption );
+    //TFrm_Trace.InternalTrace ('TFrm_Trace.ApplyTheme ' + caption );
 
-    // Switch VCL style
     if TraceConfig.Dark_Enabled then
     begin
-      for StyleName in DarkCandidates do
-        if TStyleManager.TrySetStyle(StyleName) then
-          Break;
-        ColTraces := DarkColTraces;
-        ColDetail := DarkColDetail;
+      ColTraces := DarkColTraces;
+      ColDetail := DarkColDetail;
     end else begin
-      TStyleManager.SetStyle('Windows');
       ColTraces := LightColTraces;
       ColDetail := LightColDetail;
     end;

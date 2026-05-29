@@ -490,6 +490,21 @@ procedure TFrm_ODS.ApplyTheme;
 begin
     TFrm_Trace.InternalTrace ('TFrm_ODS.ApplyTheme ' + caption );
 
+    // PanelTop
+    // -------
+    // TODO
+
+    // vstMain
+    // -------
+    // TODO
+
+    // VstDetail
+    // -------
+    // TODO
+
+    // Frame Memo
+    // -------
+    // TODO
 end;
 
 //------------------------------------------------------------------------------

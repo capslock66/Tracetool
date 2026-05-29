@@ -593,7 +593,6 @@ var
    FrmPageContainer : TFrmPageContainer ;
    mnuItem : TMenuItem ;
    Trace : TFrm_Trace ;
-
 begin
    //LowTrace('TFrm_Tool.FormCreate begin') ;
 
@@ -731,11 +730,7 @@ begin
       Frm_Tool.actShowExecute (nil) ;
    end ;
 
-   for c := 0 to ContainerList.Count-1 do begin
-      FrmPageContainer := TFrmPageContainer(ContainerList[c]) ;
-      FrmPageContainer.ApplyTheme();
-   end ;
-
+   MainPageContainer.ApplyTheme();
    LowTrace('TFrm_Tool.FormCreate end') ;
 end;
 

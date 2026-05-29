@@ -636,9 +636,8 @@ end;
 
 procedure TFrmPageContainer.ApplyTheme;
 const
-  DarkCandidates: array[0..2] of string = (
-    'Slate Classico', 'Windows10 SlateGray', 'Carbon'
-  );
+  DarkStyle: string = 'Carbon'; //  'Carbon', 'Windows10 SlateGray', 'Slate Classico'
+
   // Original light-theme accent colors (from .dfm)
   LightColTraces = TColor(16705515);  // lavender, vstMain cols 3+4
   LightColDetail = TColor(16117479);  // blue-gray, VstDetail + cols 0+1
@@ -649,20 +648,26 @@ var
   Form: TFrmBase;
   I: integer;
 begin
+   // Switch VCL style
+   if TraceConfig.Dark_Enabled then
+      TStyleManager.TrySetStyle(DarkStyle)
+   else
+      TStyleManager.SetStyle('Windows');
 
-  for var pageContainerObject in unt_tool.ContainerList do begin
-    var pageContainer := TFrmPageContainer(pageContainerObject);
+   // apply theme on each pageContainer and sub page
+   for var pageContainerObject in unt_tool.ContainerList do begin
+      var pageContainer := TFrmPageContainer(pageContainerObject);
 
-    for I := 0 to pageContainer.DockingPagecontrol.PageCount - 1 do
-    begin
-      var page := pageContainer.DockingPagecontrol.Pages[I];
-      if page.Controls[0] is TFrmBase then
-        begin
-          Form := TFrmBase(page.Controls[0]);
-          Form.ApplyTheme;
-        end;
-    end;
-  end;
+      for I := 0 to pageContainer.DockingPagecontrol.PageCount - 1 do
+      begin
+         var page := pageContainer.DockingPagecontrol.Pages[I];
+         if page.Controls[0] is TFrmBase then
+         begin
+            Form := TFrmBase(page.Controls[0]);
+            Form.ApplyTheme;
+         end;
+      end;
+   end;
 end;
 
 procedure TFrmPageContainer.actToggleThemeExecute(Sender: TObject);
