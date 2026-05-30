@@ -84,6 +84,10 @@ Write-Host "rsvars   : $rsvars"
 Write-Host "BDS ver  : $bdsVersion"
 Write-Host "env:BDS  : $env:BDS"
 Write-Host ""
+Write-Host "--- rsvars.bat content ---"
+Get-Content $rsvars | Write-Host
+Write-Host "--------------------------"
+Write-Host ""
 
 # Escape semicolons in the path list so cmd.exe doesn't split on them
 $escapedPaths = $extraPaths -replace ';', '^^^;'
@@ -97,11 +101,35 @@ $cmd = "`"$rsvars`" && msbuild `"$projectFile`" $msbuildArgs"
 
 cmd.exe /c $cmd
 
-if ($LASTEXITCODE -eq 0) {
-    Write-Host ""
-    Write-Host "Build succeeded -> ..\Viewer\TraceTool.exe"
-} else {
+if ($LASTEXITCODE -ne 0) {
     Write-Host ""
     Write-Error "Build FAILED (exit code $LASTEXITCODE)"
     exit $LASTEXITCODE
 }
+
+# --------------------------------------------------------------------------
+# 5. Post-build: set file permissions (replaces afterBuild.bat / xcacls)
+# --------------------------------------------------------------------------
+$exe = Join-Path $PSScriptRoot '..\Viewer\TraceTool.exe'
+Write-Host ""
+Write-Host "Setting permissions on $exe"
+
+$acl = New-Object System.Security.AccessControl.FileSecurity
+$acl.SetAccessRuleProtection($true, $false)  # disable inheritance, remove inherited ACEs
+
+foreach ($identity in @('SYSTEM', 'Everyone', 'Users', 'Administrators')) {
+    $acl.AddAccessRule([System.Security.AccessControl.FileSystemAccessRule]::new(
+        $identity,
+        [System.Security.AccessControl.FileSystemRights]::FullControl,
+        [System.Security.AccessControl.AccessControlType]::Allow
+    ))
+}
+
+Set-Acl -Path $exe -AclObject $acl
+
+$applied = (Get-Acl -Path $exe).Access
+Write-Host ""
+Write-Host "Permissions on $exe :"
+$applied | Format-Table -AutoSize IdentityReference, FileSystemRights, AccessControlType, IsInherited
+
+Write-Host "Build succeeded -> ..\Viewer\TraceTool.exe"

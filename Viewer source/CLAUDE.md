@@ -13,7 +13,7 @@ TraceTool is a Windows desktop trace viewer built in Delphi (Object Pascal) usin
 - **Output directory:** `..\Viewer\`
 - **Configurations:** Release (optimized, no debug symbols) and Debug (full symbols)
 - **Targets:** Win32 and Win64
-- **Post-build:** `afterBuild.bat` sets file permissions on the compiled executable
+- **Post-build:** `build.ps1` sets Full Control permissions on the compiled executable for SYSTEM, Everyone, Users, and Administrators via `Set-Acl`
 
 Build from the command line using the provided script (defaults to Release Win64):
 
