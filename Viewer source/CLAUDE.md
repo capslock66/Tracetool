@@ -15,7 +15,16 @@ TraceTool is a Windows desktop trace viewer built in Delphi (Object Pascal) usin
 - **Targets:** Win32 and Win64
 - **Post-build:** `afterBuild.bat` sets file permissions on the compiled executable
 
-There is no command-line build shortcut configured; builds are done through the Delphi IDE or `msbuild TraceTool.dproj`.
+Build from the command line using the provided script (defaults to Release Win64):
+
+```powershell
+.\build.ps1                          # Release Win64 (default)
+.\build.ps1 -Platform Win32          # Release Win32
+.\build.ps1 -Config Debug            # Debug Win64
+.\build.ps1 -Config Debug -Platform Win32
+```
+
+The script reads IDE library search paths from the registry (`HKCU:\Software\Embarcadero\BDS\<ver>\Library\<Platform>`) so third-party units (madExcept, JCL, VirtualTrees, etc.) are found without manual path configuration. Alternatively, build directly from the Delphi IDE.
 
 ## Architecture
 
