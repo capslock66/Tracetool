@@ -10,7 +10,7 @@ interface
 
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms, registry,
-  Dialogs, StdCtrls, ExtCtrls, VirtualTrees, VirtualTrees.Types, Menus, XMLDoc, XMLIntf, pscMenu ,
+  Dialogs, StdCtrls, ExtCtrls, VirtualTrees, VirtualTrees.Types, Menus, XMLDoc, XMLIntf,
   application6,  // the generated delphi code for the XML schema (Application6.xsd)
   ComCtrls, ToolWin, ImgList,  ActnList , clipbrd, SyncObjs, Contnrs, Unt_Tool,
   DebugOptions , unt_base,  Buttons, unt_pageContainer, unt_editor ,
@@ -222,10 +222,6 @@ begin
    VSplitterCanResize(self,size,accept); // calculated once left and right percent
 
    vst := VstMain ;
-   with TPSCMenu.create (self) do begin
-      DimLevel := 0 ;    // don't gray icon
-      Active := true ;
-   end ;
 
    // initialize sort
    FirstChildOrder := -1 ;

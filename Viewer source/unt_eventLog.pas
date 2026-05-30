@@ -10,7 +10,6 @@ interface
 uses
   Windows, Messages, SysUtils, StrUtils, System.Variants, Generics.Collections, Classes, Graphics, Controls, Forms, Clipbrd, xmldoc , Menus,
   Dialogs, unt_base, Vcl.StdCtrls, Buttons,  ExtCtrls, ComCtrls, Vcl.ToolWin,
-  pscMenu ,
   SynEdit,
   VirtualTrees.BaseAncestorVCL, VirtualTrees.BaseTree, VirtualTrees.AncestorVCL,
   VirtualTrees, VirtualTrees.Types,
@@ -250,10 +249,6 @@ begin
    VSplitterCanResize(self,size,accept); // calculated once left and right percent
 
    vst := VstMain ;
-   with TPSCMenu.create (self) do begin
-      DimLevel := 0 ;    // don't gray icon
-      Active := true ;
-   end ;
 
    // initialize sort
    FirstChildOrder := -1;

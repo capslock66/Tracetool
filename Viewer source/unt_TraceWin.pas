@@ -13,7 +13,7 @@ interface
       Classes, Graphics, Controls,Vcl.Themes,
       Forms, registry,
       Dialogs, StdCtrls, ExtCtrls,  Menus, XMLDoc, XMLIntf,
-      pscMenu, math, printers,
+      math, printers,
       ComCtrls, ToolWin, ImgList, TrayIcon, ActnList, clipbrd, SyncObjs,
       Contnrs, SynEdit,
       unt_tool, VstSelector,
@@ -383,11 +383,6 @@ begin
    IsMultiColTree := false;
 
    vst := VstMain;
-   with TPSCMenu.Create(self) do begin
-      DimLevel := 0; // don't gray icon
-      Active := true;
-   end;
-
    Gutter := nil;
 
    // initialize sort

@@ -11,7 +11,7 @@ uses
   system.Contnrs, types, Windows, Messages, SysUtils, Variants,
   Classes, Graphics, Controls, Forms, Vcl.Themes,
   VirtualTrees , VirtualTrees.Types, VirtualTrees.BaseTree,
-  Dialogs, ComCtrls, ToolWin, ActnList, ImgList, ExtCtrls, Menus, CommCtrl,pscMenu,
+  Dialogs, ComCtrls, ToolWin, ActnList, ImgList, ExtCtrls, Menus, CommCtrl,
   System.Actions;
 
 type
@@ -181,10 +181,6 @@ uses unt_base , unt_tail , unt_tool , unt_TraceWin , unt_search, unt_detailPopup
 
 procedure TFrmPageContainer.FormCreate(Sender: TObject);
 begin
-   with TPSCMenu.create (self) do begin
-      DimLevel := 0 ;    // don't gray icon
-      Active := true ;
-   end ;
    ContainerList.add (self) ;
    DockingPagecontrol := TDockingPagecontrol.create (self);
    DockingPagecontrol.Toolbar := ToolBar ;

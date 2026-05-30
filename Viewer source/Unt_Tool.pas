@@ -18,7 +18,7 @@ uses
   IdBaseComponent, IdComponent, IdSocketHandle, IdTCPServer, IdExceptionCore,
   MSXML2_TLB, IdCustomHTTPServer, IdCookie,
   IdThread, idGlobal, IdException, idstack, IdTCPConnection ,  idContext , unt_PageContainer,
-  pscMenu, madExceptVcl,
+  madExceptVcl,
   IdHTTPServer,
   //FileViewer,
   IdCustomTCPServer, IdRawBase, IdRawClient, IdURI,
@@ -597,12 +597,6 @@ begin
    //LowTrace('TFrm_Tool.FormCreate begin') ;
 
    uniqueId := 0 ;
-
-   with TPSCMenu.create (self) do begin     // main page
-      DimLevel := 0 ;    // don't gray icon
-      Active := true ;
-   end ;
-
    Application.ProcessMessages ;
 
    // connection should be actived in TFrm_Tool.Create procedure

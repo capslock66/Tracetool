@@ -10,7 +10,7 @@ unit unt_Tail;
 interface
 
 uses
-  system.Contnrs , system.types, Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms, pscMenu ,
+  system.Contnrs , system.types, Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, ExtCtrls, VirtualTrees, VirtualTrees.Types, StdCtrls, ComCtrls , dirmon, ToolWin, unt_TraceWin,
   Buttons, Clipbrd, unt_base , unt_pageContainer ,  unt_editor ,
   VstSort,
@@ -255,12 +255,7 @@ begin
    var accept : boolean;
    var size := PanelTraceInfo.Width;
    VSplitterCanResize(self,size,accept); // calculated once left and right percent
-
    vst := VstMain ;
-   with TPSCMenu.create (self) do begin
-      DimLevel := 0 ;    // don't gray icon
-      Active := true ;
-   end ;
 
    // initialize sort
    FirstChildOrder := -1 ;

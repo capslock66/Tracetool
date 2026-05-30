@@ -9,7 +9,7 @@ interface
 
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms ,unt_utility,
-  Dialogs, StdCtrls, ExtCtrls, Menus, ComCtrls, ToolWin, Contnrs,VirtualTrees.BaseTree, VirtualTrees, VirtualTrees.Types, pscMenu;
+  Dialogs, StdCtrls, ExtCtrls, Menus, ComCtrls, ToolWin, Contnrs,VirtualTrees.BaseTree, VirtualTrees, VirtualTrees.Types;
 
 type
   TFrmFilter = class(TForm)
@@ -71,10 +71,6 @@ uses unt_tool , unt_base ;
 
 procedure TFrmFilter.FormCreate(Sender: TObject);
 begin
-   //with TFSSMenu.create (self) do begin        TPSCMenu
-   //   DimLevel := 0 ;    // don't gray icon
-   //   Active := true ;
-   //end ;
    nbFilters := 0 ;
    ComboColumnList  := tObjectList.create(false) ;  // not owner
    ComboCompareList := tObjectList.create(false) ;  // not owner
