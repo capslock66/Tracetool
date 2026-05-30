@@ -318,6 +318,7 @@ begin
 
    LastModified := now ;
    LastRead := -1 ;
+   ApplyTheme();
 end;
 
 //------------------------------------------------------------------------------
@@ -1897,20 +1898,42 @@ begin
 end;
 
 procedure TFrmEventLog.ApplyTheme;
+const
+  LightColTraces = TColor(16705515);  // lavender
+  LightColDetail = TColor(16117479);  // blue-gray
+  DarkColTraces  = TColor($00201018); // very dark warm-purple
+  DarkColDetail  = TColor($00151520); // very dark blue-gray
+var
+  J: integer;
+  ColTraces, ColDetail: TColor;
 begin
     TFrm_Trace.InternalTrace ('TFrmEventLog.ApplyTheme ' + caption );
 
-    // PanelTop
-    // -------
-    // TODO
+    if TraceConfig.Dark_Enabled then begin
+      ColTraces := DarkColTraces;
+      ColDetail := DarkColDetail;
+    end else begin
+      ColTraces := LightColTraces;
+      ColDetail := LightColDetail;
+    end;
 
-    // vstMain
+    // vstMain — only update columns that carry a known theme color (Lines column);
+    // other columns (icon, Time, Source) use clWindow and must not be touched
     // -------
-    // TODO
+    for J := 0 to VstMain.Header.Columns.Count - 1 do
+      if (VstMain.Header.Columns[J].Color = LightColTraces) or
+         (VstMain.Header.Columns[J].Color = DarkColTraces) then
+        VstMain.Header.Columns[J].Color := ColTraces;
+    Frm_Tool.ApplyVstTheme(VstMain);
 
     // VstDetail
     // -------
-    // TODO
+    VstDetail.Color := ColDetail;
+    for J := 0 to VstDetail.Header.Columns.Count - 1 do
+      if (VstDetail.Header.Columns[J].Color = LightColDetail) or
+         (VstDetail.Header.Columns[J].Color = DarkColDetail) then
+        VstDetail.Header.Columns[J].Color := ColDetail;
+    Frm_Tool.ApplyVstTheme(VstDetail);
 
     // Frame Memo
     // -------

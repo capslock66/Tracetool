@@ -16,10 +16,10 @@
 	<AppDisplay>
 		<SmallBut Value="true"/>
 		<ApplicationTitle Value="socket: 8090 / 4502,  Http : 85, WebSocket:8091"/>
-		<Left Value="-1825"/>
-		<Top Value="290"/>
-		<Width Value="697"/>
-		<Height Value="633"/>
+		<Left Value="-1726"/>
+		<Top Value="375"/>
+		<Width Value="874"/>
+		<Height Value="636"/>
 		<StayOnTop Value="false"/>
 		<ShowOnstartup Value="true"/>
 		<ShowOnMessageReceived Value="false"/>
@@ -34,7 +34,7 @@
 		<ToolbarFilter Value="true"/>
 		<HideViewer Value="false"/>
 		<DisableInternalLog Value="false"/>
-		<DarkEnabled Value="false"/><DarkSelectedTextColor Value="65535"/><DarkSelectedBackgroundColor Value="8421376"/><DarkUnfocusedSelectedBackgroundColor Value="10789024"/></AppDisplay>
+		<DarkEnabled Value="true"/><DarkSelectedTextColor Value="65535"/><DarkSelectedBackgroundColor Value="8421376"/><DarkUnfocusedSelectedBackgroundColor Value="10789024"/></AppDisplay>
 	<Framework>
 		<ShowMembers Value="true"/>
 		<AutoClear Value="false"/>

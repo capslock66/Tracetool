@@ -80,8 +80,7 @@ begin
    end ;
 
    Application.Initialize;
-   TStyleManager.TrySetStyle('Slate Classico');
-  Application.Title := 'TraceTool';
+   Application.Title := 'TraceTool';
    Application.CreateForm(TFrm_Tool, Frm_Tool);
   Application.CreateForm(TfrmDebugOptions, frmDebugOptions);
   Application.CreateForm(TFormReceiver, FormReceiver);
