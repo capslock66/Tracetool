@@ -143,56 +143,48 @@ object frmDebugOptions: TfrmDebugOptions
             Left = 6
             Top = 323
             Width = 395
-            Height = 89
+            Height = 70
             Anchors = [akLeft, akTop, akRight]
             Caption = 'Toolbar'
             TabOrder = 1
-            object ChkSmallIcons: TCheckBox
-              Left = 7
-              Top = 20
-              Width = 360
-              Height = 17
-              Caption = 'Show small toolbar Icons '
-              TabOrder = 0
-            end
             object chkStandardToolbar: TCheckBox
-              Left = 7
-              Top = 44
+              Left = 16
+              Top = 20
               Width = 145
               Height = 17
               Caption = 'Standard Toolbar'
-              TabOrder = 1
+              TabOrder = 0
             end
             object chkSearchToolbar: TCheckBox
-              Left = 7
-              Top = 66
+              Left = 16
+              Top = 42
               Width = 145
               Height = 17
               Caption = 'Search Toolbar'
-              TabOrder = 2
+              TabOrder = 1
             end
             object chkBookmarkToolbar: TCheckBox
-              Left = 176
-              Top = 44
+              Left = 185
+              Top = 20
               Width = 185
               Height = 17
               Caption = 'Bookmark Toolbar'
-              TabOrder = 3
+              TabOrder = 2
             end
             object chkFilterToolbar: TCheckBox
-              Left = 176
-              Top = 66
+              Left = 185
+              Top = 42
               Width = 177
               Height = 17
               Caption = 'Filter Toolbar'
-              TabOrder = 4
+              TabOrder = 3
             end
           end
           object GroupBox4: TGroupBox
-            Left = 6
-            Top = 418
+            Left = 2
+            Top = 399
             Width = 395
-            Height = 97
+            Height = 99
             Anchors = [akLeft, akTop, akRight]
             Caption = 'Special options'
             TabOrder = 2

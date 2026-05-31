@@ -144,7 +144,6 @@ type
     function Get_Width: IXMLIntegerTagValue;
     function Get_Height: IXMLIntegerTagValue;
     function Get_StayOnTop: IXMLBooleanTagValue;
-    function Get_SmallBut: IXMLBooleanTagValue;
     function Get_ApplicationTitle: IXMLStringTagValue;
     function Get_ShowOnstartup: IXMLBooleanTagValue;
     function Get_ShowOnMessageReceived: IXMLBooleanTagValue;
@@ -171,7 +170,6 @@ type
     property Width: IXMLIntegerTagValue read Get_Width;
     property Height: IXMLIntegerTagValue read Get_Height;
     property StayOnTop: IXMLBooleanTagValue read Get_StayOnTop;
-    property SmallBut: IXMLBooleanTagValue read Get_SmallBut;
     property ApplicationTitle: IXMLStringTagValue read Get_ApplicationTitle;
     property ShowOnstartup: IXMLBooleanTagValue read Get_ShowOnstartup;
     property ShowOnMessageReceived: IXMLBooleanTagValue read Get_ShowOnMessageReceived;
@@ -617,7 +615,6 @@ type
     function Get_Width: IXMLIntegerTagValue;
     function Get_Height: IXMLIntegerTagValue;
     function Get_StayOnTop: IXMLBooleanTagValue;
-    function Get_SmallBut: IXMLBooleanTagValue;
     function Get_ApplicationTitle: IXMLStringTagValue;
     function Get_ShowOnstartup: IXMLBooleanTagValue;
     function Get_ShowOnMessageReceived: IXMLBooleanTagValue;
@@ -1098,7 +1095,6 @@ begin
   RegisterChildNode('Width', TXMLIntegerTagValue);
   RegisterChildNode('Height', TXMLIntegerTagValue);
   RegisterChildNode('StayOnTop', TXMLBooleanTagValue);
-  RegisterChildNode('SmallBut', TXMLBooleanTagValue);
   RegisterChildNode('ApplicationTitle', TXMLStringTagValue);
   RegisterChildNode('ShowOnstartup', TXMLBooleanTagValue);
   RegisterChildNode('ShowOnMessageReceived', TXMLBooleanTagValue);
@@ -1145,11 +1141,6 @@ end;
 function TXMLAppDisplay.Get_StayOnTop: IXMLBooleanTagValue;
 begin
   Result := ChildNodes['StayOnTop'] as IXMLBooleanTagValue;
-end;
-
-function TXMLAppDisplay.Get_SmallBut: IXMLBooleanTagValue;
-begin
-  Result := ChildNodes['SmallBut'] as IXMLBooleanTagValue;
 end;
 
 function TXMLAppDisplay.Get_ApplicationTitle: IXMLStringTagValue;

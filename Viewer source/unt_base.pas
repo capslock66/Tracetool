@@ -291,13 +291,8 @@ begin
       NewContainer.Top    := y ; // - offset.y;
       NewContainer.Show ;
 
-      // set toolbar buttons size and caption
-      NewContainer.ToolBar.ShowCaptions := not TraceConfig.AppDisplay_SmallBut;
-      if TraceConfig.AppDisplay_SmallBut = true then
-         NewContainer.ToolBar.ButtonHeight := 22
-      else
-         NewContainer.ToolBar.ButtonHeight := 36 ;
-
+      // set toolbar captions
+      NewContainer.ToolBar.ButtonHeight := 22;
       ManualDock (NewContainer.DockingPagecontrol, nil, alClient);
    end ;
 

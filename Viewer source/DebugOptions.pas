@@ -121,7 +121,6 @@ type
     chkMinmizeSystray: TCheckBox;
     EditIconFile: TEdit;
     GroupBox3: TGroupBox;
-    ChkSmallIcons: TCheckBox;
     chkStandardToolbar: TCheckBox;
     chkSearchToolbar: TCheckBox;
     chkBookmarkToolbar: TCheckBox;
@@ -558,7 +557,6 @@ begin
    chkHttpPolicyServer.Checked   := TraceConfig.General_HttpPolicyServer ;
 
    EditDebugTitle.text        := TraceConfig.AppDisplay_ApplicationTitle ;
-   ChkSmallIcons.Checked      := TraceConfig.AppDisplay_smallBut ;
    chkStandardToolbar.Checked := TraceConfig.AppDisplay_ToolbarStandard ;
    chkSearchToolbar.Checked   := TraceConfig.AppDisplay_ToolbarSearch ;
    chkBookmarkToolbar.Checked := TraceConfig.AppDisplay_ToolbarBookmark ;
@@ -697,7 +695,6 @@ begin
    TraceConfig.AppDisplay_ShowOnMessageReceived  := chkShowOnMessage.Checked  ;
    TraceConfig.AppDisplay_FocusToReceivedMessage := chkFocus_OnMessage.Checked  ;
    TraceConfig.AppDisplay_MinimizeToSystray      := chkMinmizeSystray.Checked ;
-   TraceConfig.AppDisplay_smallBut               := ChkSmallIcons.Checked ;
 
    TraceConfig.AppDisplay_ToolbarStandard        := chkStandardToolbar.Checked ;
    TraceConfig.AppDisplay_ToolbarSearch          := chkSearchToolbar.Checked   ;

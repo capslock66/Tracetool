@@ -797,13 +797,8 @@ begin
    end ;
 
    Toolbar.Visible := true ;
-
-   ToolBar.ShowCaptions := not TraceConfig.AppDisplay_SmallBut ;
-
-   if TraceConfig.AppDisplay_SmallBut = true then
-      ToolBar.ButtonHeight := 22
-   else
-      ToolBar.ButtonHeight := 36 ;
+   ToolBar.ShowCaptions := false;
+   ToolBar.ButtonHeight := 22;
 
    IsFirst := true ;
    if ToolbarStandard then

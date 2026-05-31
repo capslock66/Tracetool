@@ -909,7 +909,6 @@ begin
    // display options
    // -----------------------------------------------------------------------
 
-   if XMLConfig.AppDisplay.SmallBut.Attributes              ['Value'] = Null then XMLConfig.AppDisplay.SmallBut.Value := true ;
    if XMLConfig.AppDisplay.ToolbarStandard.Attributes       ['Value'] = Null then XMLConfig.AppDisplay.ToolbarStandard.Value := true ;
    if XMLConfig.AppDisplay.ToolbarSearch.Attributes         ['Value'] = Null then XMLConfig.AppDisplay.ToolbarSearch.Value   := true ;
    if XMLConfig.AppDisplay.ToolbarBookmark.Attributes       ['Value'] = Null then XMLConfig.AppDisplay.ToolbarBookmark.Value := true ;
@@ -1090,7 +1089,6 @@ begin
    // display options
    // -----------------------------------------------------------------------
 
-   TraceConfig.AppDisplay_SmallBut                      := XMLConfig.AppDisplay.SmallBut.Value ;
    TraceConfig.AppDisplay_ToolbarStandard               := XMLConfig.AppDisplay.ToolbarStandard.Value ;
    TraceConfig.AppDisplay_ToolbarSearch                 := XMLConfig.AppDisplay.ToolbarSearch.Value   ;
    TraceConfig.AppDisplay_ToolbarBookmark               := XMLConfig.AppDisplay.ToolbarBookmark.Value ;
@@ -1331,7 +1329,6 @@ begin
       // display options
       // -----------------------------------------------------------------------
 
-      XMLConfig.AppDisplay.SmallBut.Value                     := TraceConfig.AppDisplay_SmallBut ;
       XMLConfig.AppDisplay.ToolbarStandard.Value              := TraceConfig.AppDisplay_ToolbarStandard ;
       XMLConfig.AppDisplay.ToolbarSearch.Value                := TraceConfig.AppDisplay_ToolbarSearch ;
       XMLConfig.AppDisplay.ToolbarBookmark.Value              := TraceConfig.AppDisplay_ToolbarBookmark ;

@@ -31,7 +31,6 @@ type
     Dark_SelectedBackgroundColor      : TColor ;
     Dark_UnfocusedSelectedBackgroundColor : TColor ;
 
-    AppDisplay_SmallBut               : Boolean ;
     AppDisplay_ToolbarStandard        : Boolean ;
     AppDisplay_ToolbarSearch          : Boolean ;
     AppDisplay_ToolbarBookmark        : Boolean ;
