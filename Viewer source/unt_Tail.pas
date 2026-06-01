@@ -2806,7 +2806,7 @@ var
   J: integer;
   ColTraces, ColDetail: TColor;
 begin
-    TFrm_Trace.InternalTrace ('TFrmTail.ApplyTheme ' + caption );
+    //TFrm_Trace.InternalTrace ('TFrmTail.ApplyTheme ' + caption );
 
     if TraceConfig.Dark_Enabled then begin
       ColTraces := DarkColTraces;

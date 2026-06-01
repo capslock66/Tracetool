@@ -2723,8 +2723,7 @@ end;
 
 //------------------------------------------------------------------------------
 
-procedure TFrm_Tool.IdHTTPServerException(AContext: TIdContext;
-  AException: Exception);
+procedure TFrm_Tool.IdHTTPServerException(AContext: TIdContext;  AException: Exception);
 begin
    TFrm_Trace.internalTrace (AException.Message) ;
 end;

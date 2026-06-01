@@ -4048,31 +4048,33 @@ object Frm_Tool: TFrm_Tool
       item
         IconName = 'fluent-Arrow_Previous'
         SVGText = 
-          '<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><pat' +
-          'h d="M5.75 3C5.3703 3 5.05651 3.28215 5.00685 3.64823L5 3.75V20.' +
-          '25C5 20.6642 5.33579 21 5.75 21C6.1297 21 6.44349 20.7178 6.4931' +
-          '5 20.3518L6.5 20.25V3.75C6.5 3.33579 6.16421 3 5.75 3ZM18.7803 3' +
-          '.21967C18.5141 2.9534 18.0974 2.9292 17.8038 3.14705L17.7197 3.2' +
-          '1967L9.46967 11.4697C9.2034 11.7359 9.1792 12.1526 9.39705 12.44' +
-          '62L9.46967 12.5303L17.7197 20.7803C18.0126 21.0732 18.4874 21.07' +
-          '32 18.7803 20.7803C19.0466 20.5141 19.0708 20.0974 18.8529 19.80' +
-          '38L18.7803 19.7197L11.0607 12L18.7803 4.28033C19.0732'#13#10' 3.98744 ' +
-          '19.0732 3.51256 18.7803 3.21967Z"/></svg>'
+          '<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">'#10'  <' +
+          'path d="M6.19094 21.8547C5.6948 22.2117 5.00293 21.8571 5.00293 ' +
+          '21.2459V6.25C5.00293 4.45507 6.458 3 8.25293 3H15.7513C17.5462 3' +
+          ' 19.0013 4.45507 19.0013 6.25V21.2459C19.0013 21.8571 18.3094 22' +
+          '.2117 17.8133 21.8547L12.0021 17.6738L6.19094 21.8547ZM17.5013 6' +
+          '.25C17.5013 5.2835 16.7178 4.5 15.7513 4.5H8.25293C7.28643 4.5 6' +
+          '.50293 5.2835 6.50293 6.25V19.7824L11.5641 16.141C11.8258 15.952' +
+          '8 12.1785 15.9528 12.4401 16.141L17.5013 19.7824V6.25Z"/>'#10'  <pat' +
+          'h d="M14 7L10 11L14 15" stroke="currentColor" stroke-width="1.5"' +
+          ' stroke-linecap="round" stroke-linejoin="round" fill="none"/>'#10'</' +
+          'svg>'#10
         FixedColor = clGreen
       end
       item
         IconName = 'fluent-Arrow_Next'
         SVGText = 
-          '<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><pat' +
-          'h d="M18.25 3C18.6297 3 18.9435 3.28215 18.9932 3.64823L19 3.75V' +
-          '20.25C19 20.6642 18.6642 21 18.25 21C17.8703 21 17.5565 20.7178 ' +
-          '17.5068 20.3518L17.5 20.25V3.75C17.5 3.33579 17.8358 3 18.25 3ZM' +
-          '5.21967 3.21967C5.48594 2.9534 5.9026 2.9292 6.19621 3.14705L6.2' +
-          '8033 3.21967L14.5303 11.4697C14.7966 11.7359 14.8208 12.1526 14.' +
-          '6029 12.4462L14.5303 12.5303L6.28033 20.7803C5.98744 21.0732 5.5' +
-          '1256 21.0732 5.21967 20.7803C4.9534 20.5141 4.9292 20.0974 5.147' +
-          '05 19.8038L5.21967 19.7197L12.9393 12L5.21967'#13#10' 4.28033C4.92678 ' +
-          '3.98744 4.92678 3.51256 5.21967 3.21967Z"/></svg>'
+          '<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">'#10'  <' +
+          'path d="M6.19094 21.8547C5.6948 22.2117 5.00293 21.8571 5.00293 ' +
+          '21.2459V6.25C5.00293 4.45507 6.458 3 8.25293 3H15.7513C17.5462 3' +
+          ' 19.0013 4.45507 19.0013 6.25V21.2459C19.0013 21.8571 18.3094 22' +
+          '.2117 17.8133 21.8547L12.0021 17.6738L6.19094 21.8547ZM17.5013 6' +
+          '.25C17.5013 5.2835 16.7178 4.5 15.7513 4.5H8.25293C7.28643 4.5 6' +
+          '.50293 5.2835 6.50293 6.25V19.7824L11.5641 16.141C11.8258 15.952' +
+          '8 12.1785 15.9528 12.4401 16.141L17.5013 19.7824V6.25Z"/>'#10'  <pat' +
+          'h d="M10 7L14 11L10 15" stroke="currentColor" stroke-width="1.5"' +
+          ' stroke-linecap="round" stroke-linejoin="round" fill="none"/>'#10'</' +
+          'svg>'#10
         FixedColor = clGreen
       end
       item
@@ -4558,7 +4560,6 @@ object Frm_Tool: TFrm_Tool
       end
       item
         CollectionIndex = 45
-        CollectionName = 'Theme'
         Name = 'Theme'
       end>
     ImageCollection = imActionsCollectionDefault
@@ -4580,232 +4581,186 @@ object Frm_Tool: TFrm_Tool
     Images = <
       item
         CollectionIndex = 0
-        CollectionName = 'fluent-Document_Copy'
         Name = 'fluent-Document_Copy'
       end
       item
         CollectionIndex = 1
-        CollectionName = 'fluent-Delete'
         Name = 'fluent-Delete'
       end
       item
         CollectionIndex = 2
-        CollectionName = 'fluent-Save'
         Name = 'fluent-Save'
       end
       item
         CollectionIndex = 3
-        CollectionName = 'fluent-Settings'
         Name = 'fluent-Settings'
       end
       item
         CollectionIndex = 4
-        CollectionName = 'fluent-Pause'
         Name = 'fluent-Pause'
       end
       item
         CollectionIndex = 5
-        CollectionName = 'fluent-Text_Clear_Formatting'
         Name = 'fluent-Text_Clear_Formatting'
       end
       item
         CollectionIndex = 6
-        CollectionName = 'fluent-Layout_Column_One_Third_Right'
         Name = 'fluent-Layout_Column_One_Third_Right'
       end
       item
         CollectionIndex = 7
-        CollectionName = 'tabler-x'
         Name = 'tabler-x'
       end
       item
         CollectionIndex = 8
-        CollectionName = 'fluent-Cut'
         Name = 'fluent-Cut'
       end
       item
         CollectionIndex = 9
-        CollectionName = 'fluent-Dismiss'
         Name = 'fluent-Dismiss'
       end
       item
         CollectionIndex = 10
-        CollectionName = 'exit-stroke-16'
         Name = 'exit-stroke-16'
       end
       item
         CollectionIndex = 11
-        CollectionName = 'fluent-Slide_Hide'
         Name = 'fluent-Slide_Hide'
       end
       item
         CollectionIndex = 12
-        CollectionName = 'tabler-folder-open'
         Name = 'tabler-folder-open'
       end
       item
         CollectionIndex = 13
-        CollectionName = 'window-new-28-regular'
         Name = 'window-new-28-regular'
       end
       item
         CollectionIndex = 14
-        CollectionName = 'tabler-info-small'
         Name = 'tabler-info-small'
       end
       item
         CollectionIndex = 15
-        CollectionName = 'scan-circle-sharp'
         Name = 'scan-circle-sharp'
       end
       item
         CollectionIndex = 16
-        CollectionName = 'battery-vertical-off'
         Name = 'battery-vertical-off'
       end
       item
         CollectionIndex = 17
-        CollectionName = 'battery-vertical-4'
         Name = 'battery-vertical-4'
       end
       item
         CollectionIndex = 18
-        CollectionName = 'battery-vertical-4'
         Name = 'battery-vertical-4'
       end
       item
         CollectionIndex = 19
-        CollectionName = 'search'
         Name = 'search'
       end
       item
         CollectionIndex = 20
-        CollectionName = 'clearFilter'
         Name = 'clearFilter'
       end
       item
         CollectionIndex = 21
-        CollectionName = 'square'
         Name = 'square'
       end
       item
         CollectionIndex = 22
-        CollectionName = 'cancelSquare'
         Name = 'cancelSquare'
       end
       item
         CollectionIndex = 23
-        CollectionName = 'filter'
         Name = 'filter'
       end
       item
         CollectionIndex = 24
-        CollectionName = 'fluent-Bookmark'
         Name = 'fluent-Bookmark'
       end
       item
         CollectionIndex = 25
-        CollectionName = 'fluent-Bookmark'
         Name = 'fluent-Bookmark'
       end
       item
         CollectionIndex = 26
-        CollectionName = 'fluent-Arrow_Previous'
         Name = 'fluent-Arrow_Previous'
       end
       item
         CollectionIndex = 27
-        CollectionName = 'fluent-Arrow_Next'
         Name = 'fluent-Arrow_Next'
       end
       item
         CollectionIndex = 28
-        CollectionName = 'fluent-Bookmark_Off'
         Name = 'fluent-Bookmark_Off'
       end
       item
         CollectionIndex = 29
-        CollectionName = 'navigate-back'
         Name = 'navigate-back'
       end
       item
         CollectionIndex = 30
-        CollectionName = 'navigate-forward'
         Name = 'navigate-forward'
       end
       item
         CollectionIndex = 31
-        CollectionName = 'tabler-brand-hexo'
         Name = 'tabler-brand-hexo'
       end
       item
         CollectionIndex = 32
-        CollectionName = 'tabler-file-type-xml'
         Name = 'tabler-file-type-xml'
       end
       item
         CollectionIndex = 33
-        CollectionName = 'fluent-Table'
         Name = 'fluent-Table'
       end
       item
         CollectionIndex = 34
-        CollectionName = 'fluent-Stack'
         Name = 'fluent-Stack'
       end
       item
         CollectionIndex = 35
-        CollectionName = 'fluent-Image'
         Name = 'fluent-Image'
       end
       item
         CollectionIndex = 36
-        CollectionName = 'tabler-triangle-square-circle'
         Name = 'tabler-triangle-square-circle'
       end
       item
         CollectionIndex = 37
-        CollectionName = 'tabler-triangle-square-circle'
         Name = 'tabler-triangle-square-circle'
       end
       item
         CollectionIndex = 38
-        CollectionName = 'tabler-arrow-big-right'
         Name = 'tabler-arrow-big-right'
       end
       item
         CollectionIndex = 39
-        CollectionName = 'tabler-arrow-big-left'
         Name = 'tabler-arrow-big-left'
       end
       item
         CollectionIndex = 40
-        CollectionName = 'fluent-TextBox'
         Name = 'fluent-TextBox'
       end
       item
         CollectionIndex = 41
-        CollectionName = 'fluent-Print'
         Name = 'fluent-Print'
       end
       item
         CollectionIndex = 42
-        CollectionName = 'add-text-line'
         Name = 'add-text-line'
       end
       item
         CollectionIndex = 43
-        CollectionName = 'focus'
         Name = 'focus'
       end
       item
         CollectionIndex = 44
-        CollectionName = 'text-wrap'
         Name = 'text-wrap'
       end
       item
         CollectionIndex = 45
-        CollectionName = 'Theme'
         Name = 'Theme'
       end>
     ImageCollection = SVGIconImageCollectionWhite
@@ -5254,30 +5209,32 @@ object Frm_Tool: TFrm_Tool
       item
         IconName = 'fluent-Arrow_Previous'
         SVGText = 
-          '<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><pat' +
-          'h d="M5.75 3C5.3703 3 5.05651 3.28215 5.00685 3.64823L5 3.75V20.' +
-          '25C5 20.6642 5.33579 21 5.75 21C6.1297 21 6.44349 20.7178 6.4931' +
-          '5 20.3518L6.5 20.25V3.75C6.5 3.33579 6.16421 3 5.75 3ZM18.7803 3' +
-          '.21967C18.5141 2.9534 18.0974 2.9292 17.8038 3.14705L17.7197 3.2' +
-          '1967L9.46967 11.4697C9.2034 11.7359 9.1792 12.1526 9.39705 12.44' +
-          '62L9.46967 12.5303L17.7197 20.7803C18.0126 21.0732 18.4874 21.07' +
-          '32 18.7803 20.7803C19.0466 20.5141 19.0708 20.0974 18.8529 19.80' +
-          '38L18.7803 19.7197L11.0607 12L18.7803 4.28033C19.0732'#13#10' 3.98744 ' +
-          '19.0732 3.51256 18.7803 3.21967Z"/></svg>'
+          '<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">'#10'  <' +
+          'path d="M6.19094 21.8547C5.6948 22.2117 5.00293 21.8571 5.00293 ' +
+          '21.2459V6.25C5.00293 4.45507 6.458 3 8.25293 3H15.7513C17.5462 3' +
+          ' 19.0013 4.45507 19.0013 6.25V21.2459C19.0013 21.8571 18.3094 22' +
+          '.2117 17.8133 21.8547L12.0021 17.6738L6.19094 21.8547ZM17.5013 6' +
+          '.25C17.5013 5.2835 16.7178 4.5 15.7513 4.5H8.25293C7.28643 4.5 6' +
+          '.50293 5.2835 6.50293 6.25V19.7824L11.5641 16.141C11.8258 15.952' +
+          '8 12.1785 15.9528 12.4401 16.141L17.5013 19.7824V6.25Z"/>'#10'  <pat' +
+          'h d="M14 7L10 11L14 15" stroke="currentColor" stroke-width="1.5"' +
+          ' stroke-linecap="round" stroke-linejoin="round" fill="none"/>'#10'</' +
+          'svg>'#10
       end
       item
         IconName = 'fluent-Arrow_Next'
         SVGText = 
-          '<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><pat' +
-          'h d="M18.25 3C18.6297 3 18.9435 3.28215 18.9932 3.64823L19 3.75V' +
-          '20.25C19 20.6642 18.6642 21 18.25 21C17.8703 21 17.5565 20.7178 ' +
-          '17.5068 20.3518L17.5 20.25V3.75C17.5 3.33579 17.8358 3 18.25 3ZM' +
-          '5.21967 3.21967C5.48594 2.9534 5.9026 2.9292 6.19621 3.14705L6.2' +
-          '8033 3.21967L14.5303 11.4697C14.7966 11.7359 14.8208 12.1526 14.' +
-          '6029 12.4462L14.5303 12.5303L6.28033 20.7803C5.98744 21.0732 5.5' +
-          '1256 21.0732 5.21967 20.7803C4.9534 20.5141 4.9292 20.0974 5.147' +
-          '05 19.8038L5.21967 19.7197L12.9393 12L5.21967'#13#10' 4.28033C4.92678 ' +
-          '3.98744 4.92678 3.51256 5.21967 3.21967Z"/></svg>'
+          '<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">'#10'  <' +
+          'path d="M6.19094 21.8547C5.6948 22.2117 5.00293 21.8571 5.00293 ' +
+          '21.2459V6.25C5.00293 4.45507 6.458 3 8.25293 3H15.7513C17.5462 3' +
+          ' 19.0013 4.45507 19.0013 6.25V21.2459C19.0013 21.8571 18.3094 22' +
+          '.2117 17.8133 21.8547L12.0021 17.6738L6.19094 21.8547ZM17.5013 6' +
+          '.25C17.5013 5.2835 16.7178 4.5 15.7513 4.5H8.25293C7.28643 4.5 6' +
+          '.50293 5.2835 6.50293 6.25V19.7824L11.5641 16.141C11.8258 15.952' +
+          '8 12.1785 15.9528 12.4401 16.141L17.5013 19.7824V6.25Z"/>'#10'  <pat' +
+          'h d="M10 7L14 11L10 15" stroke="currentColor" stroke-width="1.5"' +
+          ' stroke-linecap="round" stroke-linejoin="round" fill="none"/>'#10'</' +
+          'svg>'#10
       end
       item
         IconName = 'fluent-Bookmark_Off'
