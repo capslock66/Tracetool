@@ -146,7 +146,6 @@ type
   protected
     procedure CreateParams(var Params : TCreateParams) ; override ;
   private
-    procedure RefreshCollection(Collection: TSVGIconImageCollection; Color: TColor);
     { Private declarations }
   public
      DockingPagecontrol : TDockingPagecontrol ;
@@ -200,6 +199,7 @@ begin
    DockingPagecontrol.Toolbar := ToolBar ;
    DockingPagecontrol.container := self ;
    DockingPagecontrol.Parent := PanelPageControl ; // self ;
+   ApplyTheme;
 end;
 
 //------------------------------------------------------------------------------
@@ -643,46 +643,20 @@ begin
    base.VST.Invalidate ;
 end;
 
-procedure TFrmPageContainer.RefreshCollection(Collection: TSVGIconImageCollection;  Color: TColor);
-var
-  I: Integer;
-begin
-  for I := 0 to Collection.SVGIconItems.Count - 1 do begin
-     if (i >= 24) and (i<=28) and (Color = clDefault) then
-        Collection.SVGIconItems[I].FixedColor := clGreen
-     else
-        Collection.SVGIconItems[I].FixedColor := Color;
-     //Collection.SVGIconItems[I].FixedColor := Color;
-  end;
-end;
-
 procedure TFrmPageContainer.ApplyTheme;
-const
-  DarkStyle: string = 'Carbon'; //  'Carbon', 'Windows10 SlateGray', 'Slate Classico'
-
-  // Original light-theme accent colors (from .dfm)
-  LightColTraces = TColor(16705515);  // lavender, vstMain cols 3+4
-  LightColDetail = TColor(16117479);  // blue-gray, VstDetail + cols 0+1
-  // Dark-theme equivalents (subtle tint on Carbon ~$1E1E1E background)
-  DarkColTraces  = TColor($00201018);  // very dark warm-purple
-  DarkColDetail  = TColor($00151520);  // very dark blue-gray
-var
-   Form: TFrmBase;
-   I: integer;
 begin
    // Switch VCL style
    if TraceConfig.Dark_Enabled then begin
-      TStyleManager.TrySetStyle(DarkStyle);    // carbon
       toolbar.Images := Frm_Tool.vilActions16White;
       actions.Images := Frm_Tool.vilActions16White;
+      Mainmenu.Images := Frm_Tool.vilActions16White;
    end else begin
-      TStyleManager.SetStyle('Windows');
       toolbar.Images := Frm_Tool.vilActions16;
       actions.Images := Frm_Tool.vilActions16;
+      Mainmenu.Images := Frm_Tool.vilActions16;
    end;
 
-
-   for i := 0 to toolbar.ButtonCount-1 do begin
+   for var i := 0 to toolbar.ButtonCount-1 do begin
       var button := toolbar.Buttons[i];
       //TFrm_Trace.InternalTrace ('button ' + inttostr(i));
       //TFrm_Trace.InternalTrace ('   .name: ' + button.Name);
@@ -698,33 +672,17 @@ begin
       end;
    end;
 
-   // apply theme on each pageContainer and sub page
-   for var pageContainerObject in unt_tool.ContainerList do begin
-      var pageContainer := TFrmPageContainer(pageContainerObject);
-      for I := 0 to pageContainer.DockingPagecontrol.PageCount - 1 do
-      begin
-         var page := pageContainer.DockingPagecontrol.Pages[I];
-         if page.Controls[0] is TFrmBase then
-         begin
-            Form := TFrmBase(page.Controls[0]);
-            Form.ApplyTheme;
-         end;
-      end;
-   end;
-
    // apply theme to all detail popup form
    for var popup in TDetailPopupForm.Instances do
-     popup.FrameMemo.ApplySynMemoTheme;
+      popup.FrameMemo.ApplySynMemoTheme;
 end;
 
 procedure TFrmPageContainer.actToggleThemeExecute(Sender: TObject);
 begin
-
-  //TraceConfig.AppDisplay_DarkTheme := not TraceConfig.AppDisplay_DarkTheme; // TODO + save
   TraceConfig.Dark_Enabled := not TraceConfig.Dark_Enabled;
-  ApplyTheme();
-
+  Frm_Tool.ApplyTheme;  // will call later ApplyTheme on this form
 end;
+
 //------------------------------------------------------------------------------
 
 procedure TFrmPageContainer.actPreviousBookmarkExecute(Sender: TObject);

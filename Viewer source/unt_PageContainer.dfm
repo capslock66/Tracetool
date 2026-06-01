@@ -252,9 +252,9 @@ object FrmPageContainer: TFrmPageContainer
     end
     object actViewProperty: TAction
       Category = 'Edit'
-      Caption = 'View Properties'
+      Caption = 'View Log Properties'
       Enabled = False
-      Hint = 'View Properties'
+      Hint = 'View Log Properties'
       OnExecute = actViewPropertyExecute
     end
     object actFocus: TAction

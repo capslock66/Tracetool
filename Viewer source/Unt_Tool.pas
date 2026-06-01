@@ -164,6 +164,7 @@ type
     procedure UDPServerUDPRead(AThread: TIdUDPListenerThread; const AData: TIdBytes; ABinding: TIdSocketHandle);
 
    public
+    procedure ApplyTheme;
     procedure ApplyVstTheme(VST: TVirtualStringTree);
     property StayOnTop: Boolean read FStayOnTop write SetStayOnTop;
     constructor Create(AOwner: TComponent); override;
@@ -732,9 +733,45 @@ begin
       Frm_Tool.actShowExecute (nil) ;
    end ;
 
-   MainPageContainer.ApplyTheme();
+   ApplyTheme();
    LowTrace('TFrm_Tool.FormCreate end') ;
 end;
+
+procedure TFrm_Tool.ApplyTheme();
+const
+  DarkStyle: string = 'Carbon'; //  'Carbon', 'Windows10 SlateGray', 'Slate Classico'
+  WhiteStyle: string = 'Windows';
+begin
+
+   // Switch VCL style
+   if TraceConfig.Dark_Enabled then begin
+      if not SameText(TStyleManager.ActiveStyle.Name, DarkStyle, loUserLocale) then
+        TStyleManager.TrySetStyle(DarkStyle);    // carbon
+      actions.Images := Frm_Tool.vilActions16White;
+      Mainmenu.Images := Frm_Tool.vilActions16White;
+   end else begin
+      if not SameText(TStyleManager.ActiveStyle.Name, WhiteStyle, loUserLocale) then
+        TStyleManager.TrySetStyle(WhiteStyle);    // Windows
+      actions.Images := Frm_Tool.vilActions16;
+      Mainmenu.Images := Frm_Tool.vilActions16;
+   end;
+
+   // apply theme on each pageContainer and sub page
+   for var pageContainerObject in unt_tool.ContainerList do begin
+      var pageContainer := TFrmPageContainer(pageContainerObject);
+      pageContainer.ApplyTheme();
+      for var I := 0 to pageContainer.DockingPagecontrol.PageCount - 1 do
+      begin
+         var page := pageContainer.DockingPagecontrol.Pages[I];
+         if page.Controls[0] is TFrmBase then
+         begin
+            var Form := TFrmBase(page.Controls[0]);
+            Form.ApplyTheme;
+         end;
+      end;
+   end;
+end;
+
 
 //------------------------------------------------------------------------------
 

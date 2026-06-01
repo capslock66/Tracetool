@@ -4109,6 +4109,7 @@ object Frm_Tool: TFrm_Tool
           't-130 168t-84 199t-30 221q0 115 30 221t84 198t130 169t168 130t19' +
           '9 84t221 30M727 896h681v128H727l278 274l-90 92l-434-430l434-430l' +
           '90 92z"/></svg>'
+        FixedColor = clBlue
       end
       item
         IconName = 'navigate-forward'
@@ -4124,6 +4125,7 @@ object Frm_Tool: TFrm_Tool
           '130t-130 168t-84 199t-30 221q0 115 30 221t84 198t130 169t168 130' +
           't199 84t221 30M915 622l90-92l434 430l-434 430l-90-92l278-274H512' +
           'V896h681z"/></svg>'
+        FixedColor = clBlue
       end
       item
         IconName = 'tabler-brand-hexo'

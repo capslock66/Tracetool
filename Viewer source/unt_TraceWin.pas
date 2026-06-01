@@ -4466,9 +4466,6 @@ begin
                   if CheckSearchRecord(TreeRec) then // check if the node or one of his child match the search text
                      Frm_Tool.ilActions.Draw(gutterCanvas, 0, Yposition, 21);
          end;
-
-
-
          inc(Yposition, NodeHeight);
          Node := VstMain.GetNextVisible(Node);
       end;
