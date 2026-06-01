@@ -27,7 +27,6 @@ type
     Label18: TLabel;
     Label6: TLabel;
     LabelVersion: TLabel;
-    Image1: TImage;
     Label2: TLabel;
     procedure lblWebPageClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);

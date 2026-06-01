@@ -75,10 +75,10 @@
         <SanitizedProjectName>TraceTool</SanitizedProjectName>
         <DCC_Namespace>Vcl;Vcl.Imaging;Vcl.Touch;Vcl.Samples;Vcl.Shell;System;Xml;Data;Datasnap;Web;Soap;Winapi;System.Win;Xml.Win;$(DCC_Namespace)</DCC_Namespace>
         <VerInfo_IncludeVerInfo>true</VerInfo_IncludeVerInfo>
-        <VerInfo_MajorVer>14</VerInfo_MajorVer>
+        <VerInfo_MajorVer>15</VerInfo_MajorVer>
         <VerInfo_Build>569</VerInfo_Build>
         <VerInfo_Locale>2060</VerInfo_Locale>
-        <VerInfo_Keys>CompanyName=Thierry Parent;FileDescription=TraceTool utility;FileVersion=14.0.0.569;InternalName=TraceTool;LegalCopyright=Thierry Parent;LegalTrademarks=Thierry Parent;OriginalFilename=none;ProductName=TraceTool;ProductVersion=14.0;Comments=Freeware Trace utility for  Dot Net, Javascript, Java, Delphi,  C++ and Python</VerInfo_Keys>
+        <VerInfo_Keys>CompanyName=Thierry Parent;FileDescription=TraceTool utility;FileVersion=15.0.0.569;InternalName=TraceTool;LegalCopyright=Thierry Parent;LegalTrademarks=Thierry Parent;OriginalFilename=none;ProductName=TraceTool;ProductVersion=14.0;Comments=Freeware Trace utility for  Dot Net, Javascript, Java, Delphi,  C++ and Python</VerInfo_Keys>
         <VerInfo_AutoIncVersion>true</VerInfo_AutoIncVersion>
         <Custom_Styles>&quot;Slate Classico|VCLSTYLE|$(BDSCOMMONDIR)\Styles\SlateClassico.vsf&quot;;&quot;Windows10 SlateGray|VCLSTYLE|$(BDSCOMMONDIR)\Styles\Windows10SlateGray.vsf&quot;;Carbon|VCLSTYLE|$(BDSCOMMONDIR)\Styles\Carbon.vsf</Custom_Styles>
     </PropertyGroup>
@@ -120,7 +120,8 @@
         <AppDPIAwarenessMode>PerMonitorV2</AppDPIAwarenessMode>
         <VerInfo_Locale>1033</VerInfo_Locale>
         <VerInfo_Build>588</VerInfo_Build>
-        <VerInfo_Keys>CompanyName=Thierry Parent;FileDescription=TraceTool utility;FileVersion=14.0.0.588;InternalName=TraceTool;LegalCopyright=Thierry Parent;LegalTrademarks=Thierry Parent;OriginalFilename=none;ProductName=TraceTool;ProductVersion=14.0;Comments=Freeware Trace utility for  Dot Net, Javascript, Java, Delphi,  C++ and Python</VerInfo_Keys>
+        <VerInfo_Keys>CompanyName=Thierry Parent;FileDescription=TraceTool utility;FileVersion=15.0.0.588;InternalName=TraceTool;LegalCopyright=Thierry Parent;LegalTrademarks=Thierry Parent;OriginalFilename=none;ProductName=TraceTool;ProductVersion=14.0;Comments=Freeware Trace utility for  Dot Net, Javascript, Java, Delphi,  C++ and Python</VerInfo_Keys>
+        <VerInfo_MajorVer>15</VerInfo_MajorVer>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_2)'!=''">
         <DCC_ExeOutput>..\Viewer\</DCC_ExeOutput>
