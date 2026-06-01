@@ -743,8 +743,7 @@ const
   WhiteStyle: string = 'Windows';
 begin
 
-
-   // apply theme on each pageContainer and sub page
+   // apply specific theme on each pageContainer and sub page
    for var pageContainerObject in unt_tool.ContainerList do begin
       var pageContainer := TFrmPageContainer(pageContainerObject);
       pageContainer.ApplyTheme();
@@ -758,6 +757,7 @@ begin
          end;
       end;
    end;
+
    // Switch VCL style
    if TraceConfig.Dark_Enabled then begin
       if not SameText(TStyleManager.ActiveStyle.Name, DarkStyle, loUserLocale) then
