@@ -4043,7 +4043,7 @@ object Frm_Tool: TFrm_Tool
           'C17.5013 5.2835 16.7178 4.5 15.7513 4.5H8.25293C7.28643 4.5 6.50' +
           '293 5.2835 6.50293 6.25V19.7824L11.5641 16.141C11.8258 15.9528 1' +
           '2.1785 15.9528 12.4401 16.141L17.5013 19.7824V6.25Z"/></svg>'
-        FixedColor = clGreen
+        FixedColor = clGray
       end
       item
         IconName = 'fluent-Arrow_Previous'
@@ -5205,6 +5205,7 @@ object Frm_Tool: TFrm_Tool
           'C17.5013 5.2835 16.7178 4.5 15.7513 4.5H8.25293C7.28643 4.5 6.50' +
           '293 5.2835 6.50293 6.25V19.7824L11.5641 16.141C11.8258 15.9528 1' +
           '2.1785 15.9528 12.4401 16.141L17.5013 19.7824V6.25Z"/></svg>'
+        FixedColor = clGray
       end
       item
         IconName = 'fluent-Arrow_Previous'
