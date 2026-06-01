@@ -72,7 +72,7 @@ object FrameMemo: TFrameMemo
       AllowAllUp = True
       GroupIndex = 1
       ImageIndex = 44
-      Images = Frm_Tool.ilActions
+      Images = Frm_Tool.vilActions16
       OnClick = WordWrapButtonClick
     end
     object FormatButton: TBitBtn

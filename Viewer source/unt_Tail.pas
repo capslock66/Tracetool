@@ -2591,20 +2591,28 @@ begin
 
          BookmarkPos := bookmarks.IndexOf(Node) ;
          if BookmarkPos <> -1 then begin
-            if (bookmarks.Count = 1) or (BookmarkPos > 9) then begin    // only one element or bookmark > 9
-               Frm_Tool.ilActions.Draw(gutterCanvas, 0 , Yposition , 24) ;               // normal rectangle
-               if BookmarkPos > 9 then
-                  Frm_Tool.UtilityImages.Draw(gutterCanvas, 6 , Yposition+8 ,12) ;       // write "..."
-            end else begin    //
-               Frm_Tool.ilActions.Draw(gutterCanvas, 0 , Yposition , 25) ;               // bottom right corner is empty
-               Frm_Tool.UtilityImages.Draw(gutterCanvas, 6 , Yposition+8 ,BookmarkPos);  // write the number
-            end ;
-         end else begin
-            if (SearchText <> '') and (SearchKind = mrYesToAll) then
-               if (unt_search.SearchInAllPages) or (ActiveTracePage = self) then
-                  if CheckSearchRecord (TailRec) then     // check if the node or one of his child match the search text
-                     Frm_Tool.ilActions.Draw(gutterCanvas, 0 , Yposition , 21);
 
+            // if line is bookmarked
+
+            // use original color in light and dark mode
+            Frm_Tool.vilActionBookmark16.Draw(gutterCanvas, -2, Yposition-1, 0);
+            // draw bookmark number or '...' after the bookmark icon
+            if (bookmarks.Count > 1) then begin
+               gutterCanvas.Font.Size  := 7;
+               gutterCanvas.Font.Style := [fsBold];
+               gutterCanvas.Font.Color := ClBlack;
+               gutterCanvas.Brush.Style := bsClear;
+               if BookmarkPos <= 99 then
+                  gutterCanvas.TextOut(2, Yposition, IntToStr(BookmarkPos))
+               else
+                  gutterCanvas.TextOut(2, Yposition-3, #$2026);    // ellipse Unicode
+            end;
+         end else begin
+            // else if line contains the search text with hightlight all
+            if (unt_search.SearchText <> '') and (unt_search.SearchKind = mrYesToAll) then
+               if (unt_search.SearchInAllPages) or (ActiveTracePage = self) then
+                  if CheckSearchRecord(TailRec) then // check if the node or one of his child match the search text
+                     Frm_Tool.ilActions.Draw(gutterCanvas, 0, Yposition, 21);
          end ;
 
          // draw the small dot indicate sub members

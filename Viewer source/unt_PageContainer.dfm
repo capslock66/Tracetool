@@ -28,8 +28,9 @@ object FrmPageContainer: TFrmPageContainer
       Height = 36
       AutoSize = True
       ButtonHeight = 36
+      ButtonWidth = 31
       GradientEndColor = 11319229
-      Images = Frm_Tool.ilActions
+      Images = Frm_Tool.vilActions16
       ParentShowHint = False
       ShowHint = True
       TabOrder = 0
@@ -51,134 +52,138 @@ object FrmPageContainer: TFrmPageContainer
         Action = actSaveToFile
         AutoSize = True
       end
-      object ToolButton1: TToolButton
+      object tbnPrint: TToolButton
         Left = 69
         Top = 0
         Action = actPrint
       end
       object SepStandard: TToolButton
-        Left = 92
+        Left = 100
         Top = 0
         Width = 8
         Caption = 'SepStandard'
         ImageIndex = 3
+        ImageName = 'fluent-Settings'
         Style = tbsSeparator
       end
       object tbnFocus: TToolButton
-        Left = 100
+        Left = 108
         Top = 0
         Action = actFocus
       end
+      object tbnInsertRow: TToolButton
+        Left = 139
+        Top = 0
+        Action = actInsert
+      end
       object tbnPause: TToolButton
-        Left = 123
+        Left = 170
         Top = 0
         Action = actPause
         AutoSize = True
       end
       object tbnTraceInfo: TToolButton
-        Left = 146
+        Left = 193
         Top = 0
         Action = actViewTraceInfo
         AutoSize = True
       end
       object SepBookmark: TToolButton
-        Left = 169
+        Left = 216
         Top = 0
         Width = 8
         Caption = 'SepBookmark'
         ImageIndex = 30
+        ImageName = 'tabler-square-arrow-right'
         Style = tbsSeparator
       end
-      object tbnInsertRow: TToolButton
-        Left = 177
-        Top = 0
-        Action = actInsert
-      end
       object tbnToggleBookmark: TToolButton
-        Left = 200
+        Left = 224
         Top = 0
         Action = actToggleBookmark
         AutoSize = True
       end
       object tbnBookmarkPrevious: TToolButton
-        Left = 223
+        Left = 247
         Top = 0
         Action = actPreviousBookmark
         AutoSize = True
       end
       object tbnBookmarkNext: TToolButton
-        Left = 246
+        Left = 270
         Top = 0
         Action = actNextBookmark
         AutoSize = True
       end
       object tbnClearBookmark: TToolButton
-        Left = 269
+        Left = 293
         Top = 0
         Action = actClearBookmarks
         AutoSize = True
       end
       object SepSearch: TToolButton
-        Left = 292
+        Left = 316
         Top = 0
         Width = 8
         Caption = 'SepSearch'
         ImageIndex = 7
+        ImageName = 'tabler-x'
         Style = tbsSeparator
       end
       object tbnSearch: TToolButton
-        Left = 300
+        Left = 324
         Top = 0
         Action = actSearch
         AutoSize = True
       end
       object tbnSearchPrevious: TToolButton
-        Left = 323
+        Left = 347
         Top = 0
         Action = actFindPrevious
         AutoSize = True
       end
       object tbnSearchNext: TToolButton
-        Left = 346
+        Left = 370
         Top = 0
         Action = actFindNext
         AutoSize = True
       end
       object tbnClearHighlight: TToolButton
-        Left = 369
+        Left = 393
         Top = 0
         Action = actClearHighlight
         AutoSize = True
       end
       object SepFilter: TToolButton
-        Left = 392
+        Left = 416
         Top = 0
         Width = 8
         Caption = 'SepFilter'
         ImageIndex = 29
+        ImageName = 'tabler-square-arrow-left'
         Style = tbsSeparator
       end
       object tbnFilter: TToolButton
-        Left = 400
+        Left = 424
         Top = 0
         Action = actFilter
         AutoSize = True
       end
       object tbnClearFilter: TToolButton
-        Left = 423
+        Left = 447
         Top = 0
         Action = actClearFilter
         AutoSize = True
       end
-      object ToolButton2: TToolButton
-        Left = 446
+      object tbnTheme: TToolButton
+        Left = 470
         Top = 0
         Action = actToggleTheme
       end
     end
   end
   object Actions: TActionList
-    Images = Frm_Tool.ilActions
+    Images = Frm_Tool.vilActions16
     Left = 96
     Top = 104
     object actCopy: TAction
@@ -186,6 +191,7 @@ object FrmPageContainer: TFrmPageContainer
       Caption = '&Copy'
       Hint = 'Copy selected lines'
       ImageIndex = 0
+      ImageName = 'fluent-Document_Copy'
       ShortCut = 16451
       OnExecute = actCopyExecute
     end
@@ -200,6 +206,7 @@ object FrmPageContainer: TFrmPageContainer
       Caption = 'C&lear All'
       Hint = 'Clear window'
       ImageIndex = 1
+      ImageName = 'fluent-Delete'
       ShortCut = 16460
       OnExecute = actClearExecute
     end
@@ -215,6 +222,7 @@ object FrmPageContainer: TFrmPageContainer
       Caption = '&Save to File...'
       Hint = 'Save to file...'
       ImageIndex = 2
+      ImageName = 'fluent-Save'
       ShortCut = 16467
       OnExecute = actSaveToFileExecute
     end
@@ -223,6 +231,7 @@ object FrmPageContainer: TFrmPageContainer
       Caption = '&Delete'
       Hint = 'Delete selected lines'
       ImageIndex = 9
+      ImageName = 'fluent-Dismiss'
       OnExecute = actDeleteExecute
     end
     object actCut: TAction
@@ -230,6 +239,7 @@ object FrmPageContainer: TFrmPageContainer
       Caption = 'Cu&t'
       Hint = 'Cut selected lines'
       ImageIndex = 8
+      ImageName = 'fluent-Cut'
       ShortCut = 16472
       OnExecute = actCutExecute
     end
@@ -253,6 +263,7 @@ object FrmPageContainer: TFrmPageContainer
       Caption = '&Focus'
       Hint = 'Focus to last received'
       ImageIndex = 43
+      ImageName = 'focus'
       OnExecute = actFocusExecute
     end
     object actPause: TAction
@@ -260,6 +271,7 @@ object FrmPageContainer: TFrmPageContainer
       Caption = '&Pause'
       Hint = 'Pause'
       ImageIndex = 4
+      ImageName = 'fluent-Pause'
       ShortCut = 113
       OnExecute = actPauseExecute
     end
@@ -268,6 +280,7 @@ object FrmPageContainer: TFrmPageContainer
       Caption = 'View Trace &Info'
       Hint = 'View Trace Info'
       ImageIndex = 6
+      ImageName = 'fluent-Layout_Column_One_Third_Right'
       ShortCut = 16457
       OnExecute = actViewTraceInfoExecute
     end
@@ -290,6 +303,7 @@ object FrmPageContainer: TFrmPageContainer
       Caption = 'Toggle Bookmark'
       Hint = 'Toggle bookmark'
       ImageIndex = 24
+      ImageName = 'fluent-Bookmark'
       ShortCut = 16450
       OnExecute = actToggleBookmarkExecute
     end
@@ -298,6 +312,7 @@ object FrmPageContainer: TFrmPageContainer
       Caption = 'P&revious Bookmark'
       Hint = 'Go to previous bookmark'
       ImageIndex = 26
+      ImageName = 'fluent-Arrow_Previous'
       ShortCut = 8307
       OnExecute = actPreviousBookmarkExecute
     end
@@ -306,6 +321,7 @@ object FrmPageContainer: TFrmPageContainer
       Caption = 'Next &Bookmark'
       Hint = 'Go to next bookmark'
       ImageIndex = 27
+      ImageName = 'fluent-Arrow_Next'
       ShortCut = 115
       OnExecute = actNextBookmarkExecute
     end
@@ -314,6 +330,7 @@ object FrmPageContainer: TFrmPageContainer
       Caption = 'Clear Bookmarks'
       Hint = 'Clear all bookmarks'
       ImageIndex = 28
+      ImageName = 'fluent-Bookmark_Off'
       OnExecute = actClearBookmarksExecute
     end
     object actSearch: TAction
@@ -321,6 +338,7 @@ object FrmPageContainer: TFrmPageContainer
       Caption = '&Find...'
       Hint = 'Find...'
       ImageIndex = 19
+      ImageName = 'search'
       ShortCut = 16454
       OnExecute = actSearchExecute
     end
@@ -329,6 +347,7 @@ object FrmPageContainer: TFrmPageContainer
       Caption = 'Find &Next'
       Hint = 'Find next'
       ImageIndex = 30
+      ImageName = 'tabler-square-arrow-right'
       ShortCut = 114
       OnExecute = actFindNextExecute
     end
@@ -337,6 +356,7 @@ object FrmPageContainer: TFrmPageContainer
       Caption = 'Find Previous'
       Hint = 'Find previous'
       ImageIndex = 29
+      ImageName = 'tabler-square-arrow-left'
       ShortCut = 8306
       OnExecute = actFindPreviousExecute
     end
@@ -345,6 +365,7 @@ object FrmPageContainer: TFrmPageContainer
       Caption = 'Clear Search &Highlight'
       Hint = 'Clear search highlight'
       ImageIndex = 22
+      ImageName = 'cancel-square'
       OnExecute = actClearHighlightExecute
     end
     object actFilter: TAction
@@ -352,6 +373,7 @@ object FrmPageContainer: TFrmPageContainer
       Caption = 'Filte&r...'
       Hint = 'Filter...'
       ImageIndex = 23
+      ImageName = 'filter'
       ShortCut = 16455
       OnExecute = actFilterExecute
     end
@@ -360,29 +382,33 @@ object FrmPageContainer: TFrmPageContainer
       Caption = 'Clear Filter'
       Hint = 'Clear filter'
       ImageIndex = 20
+      ImageName = 'filterClear'
       OnExecute = actClearFilterExecute
     end
     object actPrint: TAction
       Category = 'Edit'
       Caption = 'actPrint'
       ImageIndex = 41
+      ImageName = 'fluent-Print'
       ShortCut = 16464
       OnExecute = actPrintExecute
     end
     object actInsert: TAction
       Category = 'Edit'
-      Caption = 'Add line'
+      Caption = 'Toggle Theme'
       ImageIndex = 42
+      ImageName = 'add-text-line'
       OnExecute = actInsertExecute
     end
     object actToggleTheme: TAction
       Caption = 'Toggle Theme'
       ImageIndex = 45
+      ImageName = 'Theme'
       OnExecute = actToggleThemeExecute
     end
   end
   object MainMenu: TMainMenu
-    Images = Frm_Tool.ilActions
+    Images = Frm_Tool.vilActions16
     Left = 24
     Top = 104
     object MnuAction: TMenuItem

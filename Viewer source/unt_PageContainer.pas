@@ -11,8 +11,9 @@ uses
   system.Contnrs, types, Windows, Messages, SysUtils, Variants,
   Classes, Graphics, Controls, Forms, Vcl.Themes,
   VirtualTrees , VirtualTrees.Types, VirtualTrees.BaseTree,
-  Dialogs, ComCtrls, ToolWin, ActnList, ImgList, ExtCtrls, Menus, CommCtrl,
-  System.Actions;
+  Dialogs, ComCtrls, ToolWin, ActnList, ImgList, ExtCtrls, Menus, CommCtrl
+  , SVGIconImageCollection, SVGIconVirtualImageList
+  , System.Actions;
 
 type
   TDockingPagecontrol = class ;
@@ -94,13 +95,13 @@ type
     tbnClearFilter: TToolButton;
     actPrint: TAction;
     actPrint1: TMenuItem;
-    ToolButton1: TToolButton;
+    tbnPrint: TToolButton;
     tbnInsertRow: TToolButton;
     actInsert: TAction;
     actFocus: TAction;
     tbnFocus: TToolButton;
     actToggleTheme: TAction;
-    ToolButton2: TToolButton;
+    tbnTheme: TToolButton;
 
     procedure FormCreate(Sender: TObject);
     procedure actCopyExecute(Sender: TObject);
@@ -134,9 +135,11 @@ type
   protected
     procedure CreateParams(var Params : TCreateParams) ; override ;
   private
+    procedure RefreshCollection(Collection: TSVGIconImageCollection; Color: TColor);
     { Private declarations }
   public
      DockingPagecontrol : TDockingPagecontrol ;
+     ActionsImages : TSVGIconVirtualImageList;
      procedure configureToolbar ;
      procedure ApplyTheme;
   end;
@@ -630,6 +633,19 @@ begin
    base.VST.Invalidate ;
 end;
 
+procedure TFrmPageContainer.RefreshCollection(Collection: TSVGIconImageCollection;  Color: TColor);
+var
+  I: Integer;
+begin
+  for I := 0 to Collection.SVGIconItems.Count - 1 do begin
+     if (i >= 24) and (i<=28) and (Color = clDefault) then
+        Collection.SVGIconItems[I].FixedColor := clGreen
+     else
+        Collection.SVGIconItems[I].FixedColor := Color;
+     //Collection.SVGIconItems[I].FixedColor := Color;
+  end;
+end;
+
 procedure TFrmPageContainer.ApplyTheme;
 const
   DarkStyle: string = 'Carbon'; //  'Carbon', 'Windows10 SlateGray', 'Slate Classico'
@@ -641,19 +657,31 @@ const
   DarkColTraces  = TColor($00201018);  // very dark warm-purple
   DarkColDetail  = TColor($00151520);  // very dark blue-gray
 var
-  Form: TFrmBase;
-  I: integer;
+   Form: TFrmBase;
+   I: integer;
 begin
    // Switch VCL style
-   if TraceConfig.Dark_Enabled then
-      TStyleManager.TrySetStyle(DarkStyle)
-   else
+   if TraceConfig.Dark_Enabled then begin
+      TStyleManager.TrySetStyle(DarkStyle);    // carbon
+      Frm_Tool.imActionsCollection.FixedColor := clWhite;
+      RefreshCollection(Frm_Tool.imActionsCollection, clWhite);
+   end else begin
       TStyleManager.SetStyle('Windows');
+      Frm_Tool.imActionsCollection.FixedColor := clDefault;
+      RefreshCollection(Frm_Tool.imActionsCollection, clDefault);
+   end;
+
+   Frm_Tool.vilActions16.AutoFill := False;
+   Frm_Tool.vilActions16.Clear;
+   Frm_Tool.vilActions16.AutoFill := True;
+
+   tbnSearchPrevious.ImageIndex := 29;
+   tbnSearchNext.ImageIndex := 30;
+   tbnClearFilter.ImageIndex := 20;
 
    // apply theme on each pageContainer and sub page
    for var pageContainerObject in unt_tool.ContainerList do begin
       var pageContainer := TFrmPageContainer(pageContainerObject);
-
       for I := 0 to pageContainer.DockingPagecontrol.PageCount - 1 do
       begin
          var page := pageContainer.DockingPagecontrol.Pages[I];

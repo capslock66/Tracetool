@@ -24,7 +24,10 @@ uses
   IdCustomTCPServer, IdRawBase, IdRawClient, IdURI,
   IdUDPBase
   , IdUDPServer //, IdCustomTCPServer;
-  , Config, System.Actions, System.ImageList, system.UITypes ;
+  , Config, System.Actions, System.ImageList, system.UITypes
+  , Vcl.VirtualImageList
+  , SVGIconImageCollection, SVGIconVirtualImageList
+  , Vcl.BaseImageCollection   ;
 
 // ensure the path the viewer is on the tools/Options/Language/delphi/library/Library Path (32 and 64 platform)
 // c:\GitHub\Tracetool\Delphi\Delphi Library\
@@ -92,6 +95,9 @@ type
     UDPServer2: TIdUDPServer;
     Showat001: TMenuItem;
     actShowOnMain: TAction;
+    imActionsCollection: TSVGIconImageCollection;
+    vilActions16: TSVGIconVirtualImageList;
+    vilActionBookmark16: TSVGIconVirtualImageList;
     
     procedure FormCreate(Sender: TObject);
     procedure actShowExecute(Sender: TObject);
