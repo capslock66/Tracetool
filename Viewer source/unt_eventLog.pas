@@ -1671,10 +1671,6 @@ begin
                      Frm_Tool.ilActions.Draw(gutterCanvas, 0, Yposition, 21);
          end ;
 
-         // draw the small dot indicate sub members
-         //if (treeRec.Members <> nil) and (treeRec.Members.SubMembers.Count <> 0) then
-         //   Frm_Tool.ilActions.Draw(gutterCanvas, 0 , Yposition , 15);
-
          inc (Yposition , NodeHeight) ;
          Node := VstMain.GetNextVisible(Node) ;
       end ;
@@ -1915,9 +1911,13 @@ begin
     if TraceConfig.Dark_Enabled then begin
       ColTraces := DarkColTraces;
       ColDetail := DarkColDetail;
+      vstMain.Images := Frm_Tool.vilActions16White;
+      PopupTree.Images := Frm_Tool.vilActions16White;
     end else begin
       ColTraces := LightColTraces;
       ColDetail := LightColDetail;
+      vstMain.Images := Frm_Tool.vilActions16;
+      PopupTree.Images := Frm_Tool.vilActions16;
     end;
 
     // vstMain — only update columns that carry a known theme color (Lines column);

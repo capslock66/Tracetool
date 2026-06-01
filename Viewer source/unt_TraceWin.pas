@@ -5014,9 +5014,13 @@ begin
     begin
       ColTraces := DarkColTraces;
       ColDetail := DarkColDetail;
+      PopupTree.Images := Frm_Tool.vilActions16White;
+      vstMain.Images := Frm_Tool.vilActions16White;
     end else begin
       ColTraces := LightColTraces;
       ColDetail := LightColDetail;
+      PopupTree.Images := Frm_Tool.vilActions16;
+      vstMain.Images := Frm_Tool.vilActions16;
     end;
 
     // vstMain
@@ -5036,7 +5040,6 @@ begin
           vstMain.Header.Columns[COL_COMMENT].Color := ColTraces;
     end;
 
-
     Frm_Tool.ApplyVstTheme(vstMain);
 
     // VstDetail
@@ -5044,11 +5047,30 @@ begin
 
     if VstDetail <> nil then
     begin
-      VstDetail.Color := ColDetail;
-      for J := 0 to VstDetail.Header.Columns.Count - 1 do
-        if VstDetail.Header.Columns[J].Color <> clDefault then
-          VstDetail.Header.Columns[J].Color := ColDetail;
-      Frm_Tool.ApplyVstTheme(VstDetail);
+       VstDetail.Color := ColDetail;
+       for J := 0 to VstDetail.Header.Columns.Count - 1 do
+           if VstDetail.Header.Columns[J].Color <> clDefault then
+              VstDetail.Header.Columns[J].Color := ColDetail;
+       Frm_Tool.ApplyVstTheme(VstDetail);
+
+       if TraceConfig.Dark_Enabled then
+          Tframe_Classic(TreeDetailFrame).PopupDetail.Images := Frm_Tool.vilActions16White
+       else
+          Tframe_Classic(TreeDetailFrame).PopupDetail.Images := Frm_Tool.vilActions16;
+    end;
+
+    if BitmapFrame <> nil then begin
+       if TraceConfig.Dark_Enabled then
+          Tframe_BitmapDetails(BitmapFrame).PopupDetail.Images := Frm_Tool.vilActions16White
+       else
+          Tframe_BitmapDetails(BitmapFrame).PopupDetail.Images := Frm_Tool.vilActions16;
+    end;
+
+    if TableFrame <> nil then begin
+       if TraceConfig.Dark_Enabled then
+          Tframe_table(TableFrame).PopupDetail.Images := Frm_Tool.vilActions16White
+       else
+          Tframe_table(TableFrame).PopupDetail.Images := Frm_Tool.vilActions16
     end;
 
     // Frame Memo

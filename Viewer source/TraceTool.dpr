@@ -94,6 +94,6 @@ begin
   if Frm_Tool.InitError <> '' then
       exit ;
    //LowTrace ('Application.Run') ;
-   //Application.MainFormOnTaskBar := true;
+   Application.MainFormOnTaskBar := true;
    Application.Run;
 end.

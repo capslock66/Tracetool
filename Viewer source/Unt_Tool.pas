@@ -684,7 +684,7 @@ begin
       Frm_Watches.Hide ;
 
    // create the ODS window
-   LowTrace('create the ODS window') ;
+   //LowTrace('create the ODS window') ;
    Frm_ODS := TFrm_ODS.Create(nil);  // start if ConfigInfo.EnableODS ;
    Frm_ODS.Caption := TraceConfig.Ods_Title  ;  // 'ODS'
 
@@ -734,7 +734,7 @@ begin
    end ;
 
    ApplyTheme();
-   LowTrace('TFrm_Tool.FormCreate end') ;
+   //LowTrace('TFrm_Tool.FormCreate end') ;
 end;
 
 procedure TFrm_Tool.ApplyTheme();
@@ -742,6 +742,9 @@ const
   DarkStyle: string = 'Carbon'; //  'Carbon', 'Windows10 SlateGray', 'Slate Classico'
   WhiteStyle: string = 'Windows';
 begin
+
+   if assigned (frmDebugOptions) then
+      frmDebugOptions.ApplyTheme;
 
    // apply specific theme on each pageContainer and sub page
    for var pageContainerObject in unt_tool.ContainerList do begin
@@ -777,7 +780,7 @@ end;
 
 procedure TFrm_Tool.FormShow(Sender: TObject);
 begin
-   LowTrace('TFrm_Tool.FormShow') ;
+   //LowTrace('TFrm_Tool.FormShow') ;
 end;
 
 //------------------------------------------------------------------------------

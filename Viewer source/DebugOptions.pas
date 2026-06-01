@@ -259,6 +259,7 @@ type
       Rect: TRect; State: TOwnerDrawState);
     procedure FontsChange(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
+    procedure ApplyTheme;
   private
     //XMLConfig : IXMLConfig ;
 
@@ -347,6 +348,7 @@ begin
    PnlGeneral.BringToFront ;
    PageControl.Visible := false ;
 
+   ApplyTheme;
 
    //FillPlugins() ;
    //VSTOptionsChange (VSTOptions, VSTOptions.GetFirst) ;
@@ -878,6 +880,14 @@ begin
       TPlugin (obj).frmPlugin.BringToFront ;
       TfrmPlugin(TPlugin (obj).frmPlugin).Display() ; 
    end ;
+end;
+
+procedure TfrmDebugOptions.ApplyTheme;
+begin
+   //if TraceConfig.Dark_Enabled then
+   //   VSTOptions.Images := Frm_Tool.vilActions16White
+   //else
+      VSTOptions.Images := Frm_Tool.vilActions16;
 end;
 
 //------------------------------------------------------------------------------
