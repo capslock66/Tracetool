@@ -95,9 +95,11 @@ type
     UDPServer2: TIdUDPServer;
     Showat001: TMenuItem;
     actShowOnMain: TAction;
-    imActionsCollection: TSVGIconImageCollection;
+    imActionsCollectionDefault: TSVGIconImageCollection;
     vilActions16: TSVGIconVirtualImageList;
     vilActionBookmark16: TSVGIconVirtualImageList;
+    vilActions16White: TSVGIconVirtualImageList;
+    SVGIconImageCollectionWhite: TSVGIconImageCollection;
     
     procedure FormCreate(Sender: TObject);
     procedure actShowExecute(Sender: TObject);

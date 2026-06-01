@@ -19,26 +19,66 @@ type
   TDockingPagecontrol = class ;
 
   TFrmPageContainer = class(TForm)
+
+    tbnClear: TToolButton;
+    tbnCopy: TToolButton;
+    tbnInsertRow: TToolButton;
+    tbnSave: TToolButton;
+    tbnPrint: TToolButton;
+    SepStandard: TToolButton;
+
+    tbnFocus: TToolButton;
+    tbnPause: TToolButton;
+    tbnTraceInfo: TToolButton;
+    SepSearch: TToolButton;
+
+    tbnToggleBookmark: TToolButton;
+    tbnBookmarkPrevious: TToolButton;
+    tbnBookmarkNext: TToolButton;
+    tbnClearBookmark: TToolButton;
+    SepFilter: TToolButton;
+
+    tbnSearch: TToolButton;
+    tbnSearchPrevious: TToolButton;
+    tbnSearchNext: TToolButton;
+    tbnClearHighlight: TToolButton;
+    SepBookmark: TToolButton;
+
+    tbnFilter: TToolButton;
+    tbnClearFilter: TToolButton;
+    tbnTheme: TToolButton;
+
     Actions: TActionList;
-    actCopy: TAction;
+
     actClear: TAction;
-    actSelectAll: TAction;
+    actCopy: TAction;
+    actInsert: TAction;
     actSaveToFile: TAction;
+    actPrint: TAction;
+    actFocus: TAction;
+    actPause: TAction;
+    actViewTraceInfo: TAction;
+    actToggleBookmark: TAction;
+    actPreviousBookmark: TAction;
+    actNextBookmark: TAction;
+    actClearBookmarks: TAction;
+    actSearch: TAction;
+    actFindPrevious: TAction;
+    actFindNext: TAction;
+    actClearHighlight: TAction;
+    actFilter: TAction;
+    actClearFilter: TAction;
+    actToggleTheme: TAction;
+
+    actSelectAll: TAction;
     actDelete: TAction;
     actCut: TAction;
     actClearFileContent: TAction;
     actViewProperty: TAction;
-    PanelPageControl: TPanel;
-    ToolBar: TToolBar;
-    tbnClear: TToolButton;
-    tbnCopy: TToolButton;
-    tbnSave: TToolButton;
-    SepStandard: TToolButton;
-    tbnPause: TToolButton;
-    tbnTraceInfo: TToolButton;
-    actPause: TAction;
-    actViewTraceInfo: TAction;
     actResizeCols: TAction;
+    actCloseWin: TAction;
+    actCopyCurrentCell: TAction;
+
     MainMenu: TMainMenu;
     MnuAction: TMenuItem;
     CutSelectedLines1: TMenuItem;
@@ -55,53 +95,24 @@ type
     Save1: TMenuItem;
     ClearWindow1: TMenuItem;
     Close1: TMenuItem;
-    actCloseWin: TAction;
-    actSearch: TAction;
-    actFindNext: TAction;
     actSearch1: TMenuItem;
     actFindNext1: TMenuItem;
-    actClearHighlight: TAction;
     ClearHighlight1: TMenuItem;
-    actFilter: TAction;
     actFilter1: TMenuItem;
-    actClearBookmarks: TAction;
-    actPreviousBookmark: TAction;
-    actNextBookmark: TAction;
     N1: TMenuItem;
     N2: TMenuItem;
     N5: TMenuItem;
     actNextBookmark1: TMenuItem;
     actClearBookmarks1: TMenuItem;
-    actToggleBookmark: TAction;
     oggleBookmark1: TMenuItem;
-    actFindPrevious: TAction;
     actFindPrevious1: TMenuItem;
     PreviousBookmark1: TMenuItem;
-    actCopyCurrentCell: TAction;
-    actClearFilter: TAction;
     ClearFilter1: TMenuItem;
-    SepSearch: TToolButton;
-    tbnSearch: TToolButton;
-    tbnSearchNext: TToolButton;
-    tbnSearchPrevious: TToolButton;
-    SepBookmark: TToolButton;
-    tbnClearHighlight: TToolButton;
-    tbnToggleBookmark: TToolButton;
-    tbnBookmarkNext: TToolButton;
-    tbnBookmarkPrevious: TToolButton;
-    tbnClearBookmark: TToolButton;
-    SepFilter: TToolButton;
-    tbnFilter: TToolButton;
-    tbnClearFilter: TToolButton;
-    actPrint: TAction;
     actPrint1: TMenuItem;
-    tbnPrint: TToolButton;
-    tbnInsertRow: TToolButton;
-    actInsert: TAction;
-    actFocus: TAction;
-    tbnFocus: TToolButton;
-    actToggleTheme: TAction;
-    tbnTheme: TToolButton;
+
+
+    PanelPageControl: TPanel;
+    ToolBar: TToolBar;
 
     procedure FormCreate(Sender: TObject);
     procedure actCopyExecute(Sender: TObject);
@@ -585,7 +596,6 @@ begin
    base.VST.Invalidate ;
 end;
 
-
 //------------------------------------------------------------------------------
 
 procedure TFrmPageContainer.actToggleBookmarkExecute(Sender: TObject);
@@ -663,21 +673,30 @@ begin
    // Switch VCL style
    if TraceConfig.Dark_Enabled then begin
       TStyleManager.TrySetStyle(DarkStyle);    // carbon
-      Frm_Tool.imActionsCollection.FixedColor := clWhite;
-      RefreshCollection(Frm_Tool.imActionsCollection, clWhite);
+      toolbar.Images := Frm_Tool.vilActions16White;
+      actions.Images := Frm_Tool.vilActions16White;
    end else begin
       TStyleManager.SetStyle('Windows');
-      Frm_Tool.imActionsCollection.FixedColor := clDefault;
-      RefreshCollection(Frm_Tool.imActionsCollection, clDefault);
+      toolbar.Images := Frm_Tool.vilActions16;
+      actions.Images := Frm_Tool.vilActions16;
    end;
 
-   Frm_Tool.vilActions16.AutoFill := False;
-   Frm_Tool.vilActions16.Clear;
-   Frm_Tool.vilActions16.AutoFill := True;
 
-   tbnSearchPrevious.ImageIndex := 29;
-   tbnSearchNext.ImageIndex := 30;
-   tbnClearFilter.ImageIndex := 20;
+   for i := 0 to toolbar.ButtonCount-1 do begin
+      var button := toolbar.Buttons[i];
+      //TFrm_Trace.InternalTrace ('button ' + inttostr(i));
+      //TFrm_Trace.InternalTrace ('   .name: ' + button.Name);
+      //TFrm_Trace.InternalTrace ('   .Imageindex: ' + inttostr(button.Imageindex ));
+      //TFrm_Trace.InternalTrace ('   .ImageName: ' + button.ImageName);
+      //TFrm_Trace.InternalTrace ('   .Action.Enabled: ' + booltostr(button.Enabled));
+      if button.Action is TAction then begin
+         //TFrm_Trace.InternalTrace ('   .Action.name: ' + button.Action.Name );
+         //TFrm_Trace.InternalTrace ('   .Action.Imageindex: ' + inttostr(TAction(button.Action).ImageIndex));
+         //TFrm_Trace.InternalTrace ('   .Action.ImageName: ' + TAction(button.Action).ImageName);
+         //TFrm_Trace.InternalTrace ('   .Action.Enabled: ' + booltostr(TAction(button.Action).Enabled));
+         button.ImageIndex := TAction(button.Action).ImageIndex ;  // somethime the imageindex is reset to -1 :(
+      end;
+   end;
 
    // apply theme on each pageContainer and sub page
    for var pageContainerObject in unt_tool.ContainerList do begin

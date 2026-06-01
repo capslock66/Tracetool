@@ -28,7 +28,6 @@ object FrmPageContainer: TFrmPageContainer
       Height = 36
       AutoSize = True
       ButtonHeight = 36
-      ButtonWidth = 31
       GradientEndColor = 11319229
       Images = Frm_Tool.vilActions16
       ParentShowHint = False
@@ -46,19 +45,24 @@ object FrmPageContainer: TFrmPageContainer
         Action = actCopy
         AutoSize = True
       end
-      object tbnSave: TToolButton
+      object tbnInsertRow: TToolButton
         Left = 46
+        Top = 0
+        Action = actInsert
+      end
+      object tbnSave: TToolButton
+        Left = 69
         Top = 0
         Action = actSaveToFile
         AutoSize = True
       end
       object tbnPrint: TToolButton
-        Left = 69
+        Left = 92
         Top = 0
         Action = actPrint
       end
       object SepStandard: TToolButton
-        Left = 100
+        Left = 115
         Top = 0
         Width = 8
         Caption = 'SepStandard'
@@ -67,29 +71,24 @@ object FrmPageContainer: TFrmPageContainer
         Style = tbsSeparator
       end
       object tbnFocus: TToolButton
-        Left = 108
+        Left = 123
         Top = 0
         Action = actFocus
       end
-      object tbnInsertRow: TToolButton
-        Left = 139
-        Top = 0
-        Action = actInsert
-      end
       object tbnPause: TToolButton
-        Left = 170
+        Left = 146
         Top = 0
         Action = actPause
         AutoSize = True
       end
       object tbnTraceInfo: TToolButton
-        Left = 193
+        Left = 169
         Top = 0
         Action = actViewTraceInfo
         AutoSize = True
       end
       object SepBookmark: TToolButton
-        Left = 216
+        Left = 192
         Top = 0
         Width = 8
         Caption = 'SepBookmark'
@@ -98,31 +97,31 @@ object FrmPageContainer: TFrmPageContainer
         Style = tbsSeparator
       end
       object tbnToggleBookmark: TToolButton
-        Left = 224
+        Left = 200
         Top = 0
         Action = actToggleBookmark
         AutoSize = True
       end
       object tbnBookmarkPrevious: TToolButton
-        Left = 247
+        Left = 223
         Top = 0
         Action = actPreviousBookmark
         AutoSize = True
       end
       object tbnBookmarkNext: TToolButton
-        Left = 270
+        Left = 246
         Top = 0
         Action = actNextBookmark
         AutoSize = True
       end
       object tbnClearBookmark: TToolButton
-        Left = 293
+        Left = 269
         Top = 0
         Action = actClearBookmarks
         AutoSize = True
       end
       object SepSearch: TToolButton
-        Left = 316
+        Left = 292
         Top = 0
         Width = 8
         Caption = 'SepSearch'
@@ -131,31 +130,31 @@ object FrmPageContainer: TFrmPageContainer
         Style = tbsSeparator
       end
       object tbnSearch: TToolButton
-        Left = 324
+        Left = 300
         Top = 0
         Action = actSearch
         AutoSize = True
       end
       object tbnSearchPrevious: TToolButton
-        Left = 347
+        Left = 323
         Top = 0
         Action = actFindPrevious
         AutoSize = True
       end
       object tbnSearchNext: TToolButton
-        Left = 370
+        Left = 346
         Top = 0
         Action = actFindNext
         AutoSize = True
       end
       object tbnClearHighlight: TToolButton
-        Left = 393
+        Left = 369
         Top = 0
         Action = actClearHighlight
         AutoSize = True
       end
       object SepFilter: TToolButton
-        Left = 416
+        Left = 392
         Top = 0
         Width = 8
         Caption = 'SepFilter'
@@ -164,19 +163,19 @@ object FrmPageContainer: TFrmPageContainer
         Style = tbsSeparator
       end
       object tbnFilter: TToolButton
-        Left = 424
+        Left = 400
         Top = 0
         Action = actFilter
         AutoSize = True
       end
       object tbnClearFilter: TToolButton
-        Left = 447
+        Left = 423
         Top = 0
         Action = actClearFilter
         AutoSize = True
       end
       object tbnTheme: TToolButton
-        Left = 470
+        Left = 446
         Top = 0
         Action = actToggleTheme
       end
@@ -402,6 +401,7 @@ object FrmPageContainer: TFrmPageContainer
     end
     object actToggleTheme: TAction
       Caption = 'Toggle Theme'
+      Hint = 'Toggle theme'
       ImageIndex = 45
       ImageName = 'Theme'
       OnExecute = actToggleThemeExecute
