@@ -4916,8 +4916,7 @@ begin
 
    for c := 0 to TVirtualStringTree(Sender).Header.Columns.Count - 1 do begin
       // get font formatings for that colummn
-      FontDetailChanged := ChangeFontDetail(
-        true, TargetCanvas, c, TreeRec.FontDetails, true);
+      FontDetailChanged := ChangeFontDetail(true, TargetCanvas, c, TreeRec.FontDetails, true);
 
       if (FontDetailChanged = false) then begin
          // no special formating. newNodeHeight must be at least the default node height
@@ -4925,8 +4924,7 @@ begin
       end
       else begin
          // get the cell height
-         CellHeight := TVirtualStringTree(Sender).ComputeNodeHeight
-            (TargetCanvas, Node, c);
+         CellHeight := TVirtualStringTree(Sender).ComputeNodeHeight(TargetCanvas, Node, c);
          newNodeHeight := Max(newNodeHeight, CellHeight);
       end;
    end;

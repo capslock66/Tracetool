@@ -35,7 +35,7 @@ object frmDebugOptions: TfrmDebugOptions
       Top = 1
       Width = 416
       Height = 544
-      ActivePage = TabSheetPlugins
+      ActivePage = TabSheetGeneral
       Align = alLeft
       TabOrder = 1
       object TabSheetGeneral: TTabSheet

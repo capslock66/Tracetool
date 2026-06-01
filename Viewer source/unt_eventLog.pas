@@ -1832,6 +1832,8 @@ begin
    // force font
    TargetCanvas.Font.Name := TraceConfig.EventLog_Trace_FontName ;
    TargetCanvas.Font.size := TraceConfig.EventLog_Trace_FontSize ;
+   if TraceConfig.Dark_Enabled and (vsSelected in Node.States) then  // Focused or not
+       TargetCanvas.Font.Color := TraceConfig.Dark_SelectedTextColor;   //  clYellow, White , ...
 end;
 
 //------------------------------------------------------------------------------
@@ -1876,6 +1878,8 @@ begin
    if Column = 0 then
       if node.Parent = VstDetail.RootNode then
          TargetCanvas.font.Style := [fsBold] ;
+   if TraceConfig.Dark_Enabled and (vsSelected in Node.States) then  // Focused or not
+       TargetCanvas.Font.Color := TraceConfig.Dark_SelectedTextColor;   //  clYellow, White , ...
 end;
 
 //------------------------------------------------------------------------------

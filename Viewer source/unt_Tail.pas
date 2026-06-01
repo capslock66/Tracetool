@@ -2724,6 +2724,9 @@ begin
 
    TailRec := Sender.GetNodeData(Node) ;
 
+   if TraceConfig.Dark_Enabled and (vsSelected in Node.States) then  // Focused or not
+     TargetCanvas.Font.Color := TraceConfig.Dark_SelectedTextColor;   //  clYellow, White , ...
+
    // -1 indicate a RED TailRec.Msg message
    if integer (tailrec.Columns) = -1 then
       TargetCanvas.Font.Color := clRed ;
@@ -2765,6 +2768,8 @@ begin
    if Column = 0 then
       if node.Parent = VstDetail.RootNode then
          TargetCanvas.font.Style := [fsBold] ;
+   if TraceConfig.Dark_Enabled and (vsSelected in Node.States) then  // Focused or not
+       TargetCanvas.Font.Color := TraceConfig.Dark_SelectedTextColor;   //  clYellow, White , ...
 end;
 
 //------------------------------------------------------------------------------

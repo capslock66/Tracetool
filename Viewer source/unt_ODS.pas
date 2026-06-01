@@ -521,8 +521,8 @@ begin
     // -------
     VstDetail.Color := ColDetail;
     for J := 0 to VstDetail.Header.Columns.Count - 1 do
-      if (VstDetail.Header.Columns[J].Color = LightColDetail) or
-         (VstDetail.Header.Columns[J].Color = DarkColDetail) then
+//      if (VstDetail.Header.Columns[J].Color = LightColDetail) or
+//         (VstDetail.Header.Columns[J].Color = DarkColDetail) then
         VstDetail.Header.Columns[J].Color := ColDetail;
     Frm_Tool.ApplyVstTheme(VstDetail);
 
@@ -1779,6 +1779,9 @@ begin
    // force font
    TargetCanvas.Font.Name := TraceConfig.Ods_Trace_FontName ;
    TargetCanvas.Font.size := TraceConfig.Ods_Trace_FontSize ;
+
+   if TraceConfig.Dark_Enabled and (vsSelected in Node.States) then  // Focused or not
+       TargetCanvas.Font.Color := TraceConfig.Dark_SelectedTextColor;   //  clYellow, White , ...
 end;
 
 //------------------------------------------------------------------------------
@@ -1814,6 +1817,8 @@ begin
    if Column = 0 then
       if node.Parent = VstDetail.RootNode then
          TargetCanvas.font.Style := [fsBold] ;
+   if TraceConfig.Dark_Enabled and (vsSelected in Node.States) then  // Focused or not
+       TargetCanvas.Font.Color := TraceConfig.Dark_SelectedTextColor;   //  clYellow, White , ...
 end;
 
 //------------------------------------------------------------------------------

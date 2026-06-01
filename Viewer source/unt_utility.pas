@@ -704,11 +704,17 @@ begin
    TargetCanvas.LineTo(CellRect.Right, CellRect.Bottom - 3 );
    }
 
-   // fill line with a light blue color
-   if IsBookmark then
-      TargetCanvas.Brush.Color :=  clTeal  //    TColor($BDFEB4)  -> light green
-   else
-      TargetCanvas.Brush.Color := TColor($FED0B9) ;
+   if TraceConfig.Dark_Enabled then begin
+      if IsBookmark then
+         TargetCanvas.Brush.Color := clTeal
+      else
+         TargetCanvas.Brush.Color := TColor($8B4513) ; // medium orange-brown
+   end else begin
+      if IsBookmark then
+         TargetCanvas.Brush.Color := clTeal
+      else
+         TargetCanvas.Brush.Color := TColor($FED0B9) ; // light blue
+   end ;
    TargetCanvas.FillRect(CellRect);
 
 end ;
