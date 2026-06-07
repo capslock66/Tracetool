@@ -313,7 +313,7 @@ object Frm_ODS: TFrm_ODS
     end
   end
   object PopupTree: TPopupMenu
-    Images = Frm_Tool.ilActions
+    Images = Frm_Tool.vilActions16
     Left = 24
     Top = 46
     object Cut1: TMenuItem
