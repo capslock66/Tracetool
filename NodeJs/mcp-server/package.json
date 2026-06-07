@@ -1,0 +1,17 @@
+{
+  "name": "tracetool-mcp-server",
+  "version": "1.0.0",
+  "description": "MCP server exposing TraceTool tracing library as Claude tools",
+  "main": "server.js",
+  "type": "commonjs",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.12.0",
+    "request": "^2.88.2",
+    "stack-trace": "^0.0.10",
+    "uuid": "^9.0.1",
+    "zod": "^3.22.4"
+  }
+}
