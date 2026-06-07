@@ -1,0 +1,16 @@
+{
+  "name": "tracetool-plugins",
+  "owner": {
+    "name": "Thierry Parent",
+    "email": "thierry.parent@eortc.org",
+    "url": "https://github.com/capslock66"
+  },
+  "description": "Claude Code plugins for the TraceTool trace viewer",
+  "plugins": [
+    {
+      "name": "tracetool",
+      "source": "./ClaudePlugin",
+      "description": "Send structured traces to the TraceTool viewer from Claude Code. Supports debug/warning/error messages, indented scopes, object trees, XML, tables and watches."
+    }
+  ]
+}

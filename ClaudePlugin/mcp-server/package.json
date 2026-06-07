@@ -1,0 +1,14 @@
+{
+  "name": "tracetool-mcp-server",
+  "version": "15.0.0",
+  "description": "MCP server for the TraceTool Claude Code plugin",
+  "main": "server.js",
+  "type": "commonjs",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.12.0",
+    "request": "^2.88.2",
+    "stack-trace": "^0.0.10",
+    "uuid": "^9.0.0",
+    "zod": "^3.22.4"
+  }
+}
