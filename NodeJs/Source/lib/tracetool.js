@@ -103,6 +103,13 @@ if (isNodeJs)
 // Private helpers : extend, getFormattedTime, ...
 //--------------------------------------------------------------------------------------------------------
 
+function safeLog(...args) {
+  if (typeof process !== "undefined" && process.stderr)
+    process.stderr.write(args.join(' ') + '\n');
+  else if (typeof console !== "undefined")
+    console.warn(...args);  // browser : warn va dans DevTools sans bloquer stdout
+}
+
 function detectEnvironment() 
 {
     // Note : Trying to detect SystemJS to call register is not possible
@@ -117,14 +124,14 @@ function detectEnvironment()
     isCommonJS        = false;
     isSystemJS        = false;
 
-    //console.log("chrome         (Chrome)    " , typeof chrome);
-    //console.log("require        (AMD,NodeJs)" , typeof require);
-    //console.log("define         (AMD)       " , typeof define);
-    //console.log("process        (NodeJs)    " , typeof process);
-    //console.log("module         (NodeJs)    " , typeof module);
-    //console.log("System         (System JS) " , typeof System);
-    //if (typeof module === "object") 
-    //    console.log("module.exports (CommonJs) " , typeof module.exports);
+    safeLog("chrome         (Chrome)    " , typeof chrome);
+    safeLog("require        (AMD,NodeJs)" , typeof require);
+    safeLog("define         (AMD)       " , typeof define);
+    safeLog("process        (NodeJs)    " , typeof process);
+    safeLog("module         (NodeJs)    " , typeof module);
+    safeLog("System         (System JS) " , typeof System);
+    if (typeof module === "object") 
+        safeLog("module.exports (CommonJs) " , typeof module.exports);
 
     try {
 
@@ -150,7 +157,7 @@ function detectEnvironment()
         // ReSharper restore UndeclaredGlobalVariableUsing
     }
     catch (e) {
-        console.log("detectEnvironment exception", e);
+        safeLog("detectEnvironment exception", e);
     }
 }
 
@@ -240,9 +247,12 @@ function sendToWinWatchClient(commandList, winWatchId , dateTime)
 */
 function sendToClient (commandList)
 {
+   safeLog("tracetool:sendToClient. commandList lenght: " + commandList.length) ;
+
    var msgId = newGuid() ;
    var msg = commandList.join("\0") ;
    var msgLenth = msg.length ;
+   safeLog("tracetool:sendToClient. msgLenth lenght: " + msgLenth) ;
    if (msgLenth > 1000)
    {
       var part ;
@@ -285,13 +295,16 @@ function addMessage(objMessage)
 */
 function worker()
 {
-    //console.log("tracetool:worker " + toSend.length) ;
+    safeLog("tracetool:worker stack count: " + toSend.length) ;
     var objMessage;
     if (toSend.length !== 0)
     {
         // no script is running.
         objMessage = toSend.shift(); // get first
-        var hostUrl = "http://" + host + "/" + objMessage.command + "?msgId=" + objMessage.msgId + "&msg=" + encodeURIComponent(objMessage.msg);  // escape is deprecated. Generate bad encoding.
+        var encodedMsg = encodeURIComponent(objMessage.msg);
+        safeLog("tracetool:worker send message to viewer. command: " + objMessage.command + ", msgId: " + objMessage.msgId + ", msg encoded: " + encodedMsg) ;
+
+        var hostUrl = "http://" + host + "/" + objMessage.command + "?msgId=" + objMessage.msgId + "&msg=" + encodedMsg;  // escape is deprecated. Generate bad encoding.
         if (objMessage.partNum !== "")
             hostUrl = hostUrl + "&partNum=" + objMessage.partNum;
 
@@ -372,11 +385,11 @@ function sendToClientUsingXmlHttpRequest(hostUrl)
     }
 
     //xhr.addEventListener("load", function(e) {
-    //  console.log("tracetool:load callback");
+    //  safeLog("tracetool:load callback");
     //  }, false);
 
     xhr.addEventListener("error", function ( /*errorEvent*/) {
-        //console.log("tracetool:error callback " + toSend.length);
+        //safeLog("tracetool:error callback " + toSend.length);
         setTimeout(worker, 0);    // send next
     }, false);
 
@@ -394,7 +407,7 @@ function sendToClientUsingXmlHttpRequest(hostUrl)
         var script = onloadRequest.responseText;
         if (script.startsWith("ttrace.setClientID("))
             clientId = script.match(/\d+/)[0];  // extract first number anywhere in the string. Result is an array of string. first : 123
-        //console.log("tracetool:onload " + toSend.length);
+        //safeLog("tracetool:onload " + toSend.length);
         setTimeout(worker, 0);    // send next
     }
     xhr.open("GET", hostUrl, true);     // xhrReq.open(method, url, async, user, password); 
@@ -3887,8 +3900,8 @@ if (isCommonJS)
 //if (isSystemJS) {
 //  System.register(["tracetool"], function (exports_1, context_1) {
 //    "use strict";
-//    console.log("exports_1", exports_1);
-//    console.log("context_1", context_1);
+//    safeLog("exports_1", exports_1);
+//    safeLog("context_1", context_1);
 //    var __moduleName = context_1 && context_1.id;
 //    return {
 //      setters: [
@@ -3896,7 +3909,7 @@ if (isCommonJS)
 //        }
 //      ],
 //      execute: function () {
-//          console.log("System.register execute");
+//          safeLog("System.register execute");
 //          exports_1("default", ttrace);
 //      }
 //    };

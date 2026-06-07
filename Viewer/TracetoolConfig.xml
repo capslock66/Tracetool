@@ -16,15 +16,15 @@
 	<AppDisplay>
 		<SmallBut Value="false"/>
 		<ApplicationTitle Value="socket: 8090 / 4502,  Http : 85, WebSocket:8091"/>
-		<Left Value="208"/>
-		<Top Value="208"/>
+		<Left Value="-1894"/>
+		<Top Value="142"/>
 		<Width Value="697"/>
 		<Height Value="636"/>
 		<StayOnTop Value="false"/>
 		<ShowOnstartup Value="true"/>
 		<ShowOnMessageReceived Value="false"/>
 		<FocusToReceivedMessage Value="false"/>
-		<Maximized Value="false"/>
+		<Maximized Value="true"/>
 		<IconFile Value=""/>
 		<MinimizeToSystray Value="true"/>
 		<SearchUnderline Value="True"/>
@@ -34,9 +34,9 @@
 		<ToolbarFilter Value="true"/>
 		<HideViewer Value="false"/>
 		<DisableInternalLog Value="false"/>
-		<DarkEnabled Value="true"/><DarkSelectedTextColor Value="65535"/><DarkSelectedBackgroundColor Value="8421376"/><DarkUnfocusedSelectedBackgroundColor Value="10789024"/></AppDisplay>
+		<DarkEnabled Value="false"/><DarkSelectedTextColor Value="65535"/><DarkSelectedBackgroundColor Value="8421376"/><DarkUnfocusedSelectedBackgroundColor Value="10789024"/></AppDisplay>
 	<Framework>
-		<ShowMembers Value="true"/>
+		<ShowMembers Value="false"/>
 		<AutoClear Value="false"/>
 		<MaxNode Value="20"/>
 		<MinNode Value="10"/>
@@ -106,7 +106,7 @@
 		<OpenFromFavorites Value="true"/>
 		<VisibleMenu Value="true"/>
 		<Favorites>
-			<FileName>C:\temp\log.txt</FileName><FileName>C:\Temp\TracetoolInternalLog.txt</FileName></Favorites>
+			<FileName>C:\temp\log.txt</FileName><FileName>C:\Temp\TracetoolInternalLog.txt</FileName><FileName>C:\Thierry\Tracetool\NodeJs\mcp-server\debug.log</FileName></Favorites>
 		<Trace>
 			<FontName Value="MS Sans Serif"/>
 			<FontSize Value="8"/>

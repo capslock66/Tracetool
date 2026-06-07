@@ -9,6 +9,15 @@ const { McpServer } = require("@modelcontextprotocol/sdk/server/mcp.js");
 const { StdioServerTransport } = require("@modelcontextprotocol/sdk/server/stdio.js");
 const { z } = require("zod");
 const path = require("path");
+const fs = require("fs");
+
+const _log = fs.createWriteStream(path.join(__dirname, "debug.log"), { flags: "a" });
+process.stderr.write = (msg) => { _log.write(msg); return true; };
+
+process.stderr.write("Starting TraceTool MCP server...\n");
+
+// redirect all console.log to process. stdout can't used !!!
+console.log = (...args) => process.stderr.write(args.join(' ') + '\n');
 
 // Load the tracetool library from the sibling source folder
 const ttrace = require(path.join(__dirname, "../Source/lib/tracetool.js"));
@@ -193,6 +202,28 @@ server.tool(
   async ({ level, method, right }) => {
     ttrace[level].exitMethod(method, right);
     return { content: [{ type: "text", text: `Exit: ${method}` }] };
+  }
+);
+
+// -----------------------------------------------------------------------
+// Tool: get_config
+// -----------------------------------------------------------------------
+server.tool(
+  "tracetool_get_config",
+  "Return the current TraceTool runtime configuration: viewer host and the environment detection flags from tracetool.js (isChromeExtension, isBrowser, isNodeJs, isRequireJs, isCommonJS, isSystemJS).",
+  {},
+  async () => {
+    // ttrace.environment exposes the private closure vars as a comma-separated string:
+    // "isBrowser:true,isNodeJs:false,isRequireJs:false,isCommonJS:false,isSystemJS:false,isChromeExtension:false"
+    
+    process.stderr.write(`tracetool_get_config\n`);
+    
+    const config = { host: ttrace.host };
+    for (const pair of ttrace.environment.split(",")) {
+      const [key, val] = pair.split(":");
+      config[key.trim()] = val.trim() === "true";
+    }
+    return { content: [{ type: "text", text: JSON.stringify(config, null, 2) }] };
   }
 );
 
