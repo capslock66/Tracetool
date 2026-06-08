@@ -1,7 +1,7 @@
 ﻿//------------------------------------------------------------------------------
 //  TraceTool JavaScript API.
 //  Author : Thierry Parent
-//  Version : 13.2.6
+//  Version : 15.0.0
 //
 //  sample use for NodeJs:    
 //     var ttrace = require('tracetool') ;
@@ -18,11 +18,11 @@
 //     import 'tracetool';  
 //     var ttrace:any ;
 //     ttrace = window["ttrace"] ;
-//     ttrace.host = "127.0.0.1:85"; 
+//     ttrace.host = "127.0.0.1:81"; 
 //     ttrace.debug.send("Hello world");
 //
 //
-//   See http://www.codeproject.com/Articles/5498/TraceTool-The-Swiss-Army-Knife-of-Trace for full sample use
+//   See https://github.com/capslock66/tracetool for full sample use
 //------------------------------------------------------------------------------
 
 // NodeJs v6.x, v7.x use Chrome V8 JavaScript engine (ES5), but support some ES6 features (ECMAScript 2015)
