@@ -6,8 +6,8 @@
 
 "use strict";
 
-const ttrace = require('tracetool');    // default host is 127.0.0.1:81
-ttrace.host = "127.0.0.1:85";
+const ttrace = require('../Source/lib/tracetool');    // default host is 127.0.0.1:81
+ttrace.host = "127.0.0.1:81";
 ttrace.options.objectTreeDepth = 5;
 
 // clear all traces on the viewer (main traces)
@@ -59,6 +59,11 @@ ttrace.debug.send("Italic").setFontDetail(FontDetail) ;
 
 //----------------------------------------------------------------------------------
 
+
+/*
+
+// test server
+
 // http://127.0.0.1:3000
 
 const http = require('http');
@@ -80,3 +85,5 @@ server.listen(port, hostname, () =>
     ttrace.debug.send(`Server running at http://${hostname}:${port}/`);
     console.log(`Server running at http://${hostname}:${port}/`);
 });
+
+*/

@@ -5,7 +5,7 @@
 		<SocketPort Value="8090"/>
 		<ShowSocketWarning Value="false"/>
 		<LastStyleSheet Value=""/>
-		<HTTPPort Value="85"/>
+		<HTTPPort Value="81"/>
 		<SocketPort2 Value="4502"/>
 		<SocketPolicyServer Value="true"/>
 		<HttpPolicyServer Value="true"/>
@@ -15,9 +15,9 @@
 	</General>
 	<AppDisplay>
 		<SmallBut Value="false"/>
-		<ApplicationTitle Value="socket: 8090 / 4502,  Http : 85, WebSocket:8091"/>
-		<Left Value="-1894"/>
-		<Top Value="142"/>
+		<ApplicationTitle Value="socket: 8090 / 4502,  Http : 81, WebSocket:8091"/>
+		<Left Value="260"/>
+		<Top Value="260"/>
 		<Width Value="697"/>
 		<Height Value="636"/>
 		<StayOnTop Value="false"/>

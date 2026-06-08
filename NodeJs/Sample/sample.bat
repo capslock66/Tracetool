@@ -1,3 +1,3 @@
 rem npm install
-start node example
-rem pause
+start node.exe example.js
+pause
