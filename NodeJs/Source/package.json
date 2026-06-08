@@ -1,18 +1,15 @@
 {
-  "name": "@tracetool/webpack",
+  "name": "tracetool",
   "version": "15.0.0",
-  "description": "Webpack version ",
+  "description": "Send traces from your nodejs application to the windows tracetool viewer.",
   "main": "lib/tracetool",
   "typings": "lib/tracetool.d.ts",
+  "scripts": {
+    "test": "echo \"no test specified\" && exit 1"
+  },
   "keywords": [
     "tracetool"
   ],
-  "directories": {
-    "lib": "lib"
-  },
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
   "author": "Thierry Parent",
   "license": "ISC",
   "dependencies": {
