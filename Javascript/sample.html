@@ -12,15 +12,15 @@
 <!-- <script type="text/javascript" src="dom-drag.js"></script>-->
 
 <!-- Not the best way to load the tracetool library : put the library on your server then set the host and ask for an unique client id -->
-<script type="text/javascript" src="tracetool.js" no-cache></script>
+<!-- <script type="text/javascript" src="tracetool.js" no-cache></script>  -->
 
 <!-- Best way to load the client API : Ask the viewer to send it. 
      Change the src tag to specify compression, viewer location and port -->
-<!-- <script type="text/javascript" src="http://localHost:85/tracetool.js?Compressed=false" no-cache></script> -->
+<script type="text/javascript" src="http://127.0.0.1:81/tracetool.js?Compressed=false" no-cache></script>  
 
 <script>
 
-ttrace.host="localHost:85";
+ttrace.host="127.0.0.1:81";
 //ttrace.queryClientId() ;
 
 function SendObjectTest()
@@ -48,11 +48,11 @@ function butSample()
    ttrace.debug.send('hello','world') ;
    var hello = ttrace.debug.send('hello') ;
    hello.send('world') ;  // send traces under another node
-   ttrace.debug.send('>test é & = ? à<','ampersand') ;   // send any kind of chars
+   ttrace.debug.send('>test ï¿½ & = ? ï¿½<','ampersand') ;   // send any kind of chars
    ttrace.debug.send('----------') ;  //separator
    ttrace.error.sendStack("stack") ;
    ttrace.warning.sendCaller() ;  // default trace is "Caller"
-   ttrace.debug.sendDump("Dump sample", "dump", "sample text with special chars >test é & = ? à< ") ; // , 30
+   ttrace.debug.sendDump("Dump sample", "dump", "sample text with special chars >test ï¿½ & = ? ï¿½< ") ; // , 30
 
    // send array. 
    var sampleArray = [] ;
@@ -270,7 +270,7 @@ function butShowStatus()
    var msg ;
 
    if (!window.ttrace)
-      msg = 'TraceTool client API not loaded. check if viewer is running and host and port (85 ?) are matching' ;
+      msg = 'TraceTool client API not loaded. check if viewer is running and host and port (81 ?) are matching' ;
    else {
       msg  = '<br/>' + 'Client Id : ' + ttrace.clientId ;
       msg += '<br/>' + 'Host : ' + ttrace.host ;
@@ -286,6 +286,17 @@ setTimeout(butShowStatus, 0);
 //-------------------------------------------
 
 </script>
+
+
+
+<div style="background-color:#fff3cd;border:2px solid #ffc107;border-radius:6px;padding:10px 14px;margin-bottom:10px;max-width:540px;font-family:sans-serif;font-size:13px;color:#333;">
+    <strong>&#9888; Important:</strong> If requests to <code>localhost</code> are blocked (<code>net::ERR_BLOCKED_BY_CLIENT</code>),
+    browser extensions such as <strong>uBlock Origin</strong>, <strong>Privacy Badger</strong>, or other ad blockers
+    may be intercepting the calls.<br>
+    <span style="margin-top:6px;display:inline-block;">
+        Test in <strong>Incognito / Private mode</strong> with extensions disabled        
+    </span>
+</div>
 
 <div style="background-color:Silver;height:24px;width:540px;">
     tracetool information

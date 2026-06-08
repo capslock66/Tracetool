@@ -1,32 +1,63 @@
-//------------------------------------------------------------------------------
+﻿//------------------------------------------------------------------------------
 //  TraceTool JavaScript API.
 //  Author : Thierry Parent
-//  Version : 13.2.6
+//  Version : 15.0.0
 //
-//   See http://www.codeproject.com/Articles/5498/TraceTool-The-Swiss-Army-Knife-of-Trace for full sample use
+//  sample use for NodeJs:    
+//     var ttrace = require('tracetool') ;
+//     ttrace.clearAll();
+//     ttrace.debug.send("Hello world");
+//
+//  sample use for typescript using SystemJs:
+//     systemjs.config.js : (assuming here tracetool.js is installed via nodeJs/Npm). Ensure format is set to 'global'
+//     paths   : {..., 'npm:': 'node_modules/'                           , ...},
+//     map     : {..., 'tracetool': 'npm:tracetool/lib/tracetool.js'     , ...},
+//     packages: {..., tracetool: {format: 'global', exports: 'ttrace' } , ...}   
+//
+//     sample.ts :
+//     import 'tracetool';  
+//     var ttrace:any ;
+//     ttrace = window["ttrace"] ;
+//     ttrace.host = "127.0.0.1:81"; 
+//     ttrace.debug.send("Hello world");
+//
+//
+//   See https://github.com/capslock66/tracetool for full sample use
 //------------------------------------------------------------------------------
+
+// NodeJs v6.x, v7.x use Chrome V8 JavaScript engine (ES5), but support some ES6 features (ECMAScript 2015)
+// https://kangax.github.io/compat-table/es6/
+// http://node.green/
+// https://nodejs.org/dist/latest-v6.x/docs/api/
+// https://nodejs.org/dist/latest-v7.x/docs/api/
+
+// Loader competitive (I will never finish with all of them)
+// http://benmccormick.org/2015/05/28/moving-past-requirejs
+// https://github.com/systemjs/systemjs/blob/master/docs/module-formats.md
+
 // https://nodejs.org/docs/latest/api/modules.html   (CommonJS = NodeJs)
 // http://requirejs.org                              (Asynchronous Module Definition = AMD)
 // https://github.com/systemjs/systemjs              (AMD, CommonJS, ES6 , using promise) 
 // http://browserify.org                             (CommonJS on browser)
 // http://webpack.github.io                          (AMD, CommonJS)
+// ...
 
 "use strict";
 
-(function (global){
+// ReSharper disable once InconsistentNaming
+var define;        // in case RequireJs is not used. Remove warning for use strict
+
+(function (global)
+{
 
 // private tracetool vars 
 
-var ttrace = null;                         /** the tracetool api instance                               */ 
+//--------------------------------------------------------------------------------------------------------
 
+var ttrace = null ;                        /** the tracetool api instance                               */ 
 var ttraceScript = null;                   /** current trace script. Used by sendToClientUsingScript()  */
 var headId = null;                         /** Shortcut to head. Used by sendToClientUsingScript()      */
-
-var request;                               /** nodejs library                                           */
-var stackTrace;                            /** nodejs library                                           */
-var uuid;                                  /** nodejs library                                           */
-
-
+var http ;                                 /** require('http')                                          */
 var requestId = 0;                         /** number of request                                        */
 var toSend = [];                           /** array of script to run.                                  */
 var nbDone = 0;                            /** number of message send                                   */ 
@@ -36,14 +67,148 @@ var clientId = "";                         /** Communication ID with the viewer 
 var host = "127.0.0.1:81";                 /** Full Url to TraceTool viewer (localhost:81 for example)  */
 var traceClasses = {};                     /** Contains all tracetool classes                           */
 
+var isChromeExtension ;                    /** library run under chrome as an extension                 */
+var isBrowser;                             /** library run in a browser                                 */
+var isNodeJs;                              /** library run in Node Js                                   */
+var isRequireJs;                           /** library load by require.js                               */
+var isCommonJS;                            /** library load by CommonJS                                 */
+var isSystemJS;                            /** library load by SystemJS                                 */
 
 //--------------------------------------------------------------------------------------------------------
     
-ttraceScript = null;                                       
-headId = global.document.getElementsByTagName("head")[0];
+detectEnvironment() ;
+
+if (isRequireJs)
+{
+  clientId   = (typeof crypto !== "undefined" && crypto.randomUUID)
+               ? crypto.randomUUID().replace(/-/g, '')
+               : Math.random().toString(36).slice(2) + Date.now().toString(36);
+}
+
+if (isNodeJs)
+{
+    http = require('http');
+} else if (isBrowser) {
+    ttraceScript = null;                                       
+    headId = global.document.getElementsByTagName("head")[0];
+}
 
 //--------------------------------------------------------------------------------------------------------
 // Private helpers : extend, getFormattedTime, ...
+//--------------------------------------------------------------------------------------------------------
+
+/** Native replacement for the 'stack-trace' npm package.
+ *  Returns an array of V8 CallSite objects (same API: getFileName, getFunctionName, getLineNumber, toString).
+ *  belowFn: the function whose frame and everything above it is excluded (like stackTrace.get(belowFn)).
+ */
+function getCallStack(belowFn) {
+    if (typeof Error.captureStackTrace === 'function') {
+        // V8 (Node.js, Chrome) : returns native CallSite objects
+        var oldPrepare = Error.prepareStackTrace;
+        Error.prepareStackTrace = function(_, stack) { return stack; };
+        var err = new Error();
+        Error.captureStackTrace(err, belowFn || getCallStack);
+        var stack = err.stack;
+        Error.prepareStackTrace = oldPrepare;
+        return stack;
+    }
+    // Firefox / Safari : parse new Error().stack and return mock CallSite objects
+    var lines = (new Error().stack || '').split('\n');
+    var result = [];
+    var belowFnName = belowFn ? belowFn.name : null;
+    var foundBelowFn = !belowFnName;
+    for (var i = 0; i < lines.length; i++) {
+        var line = lines[i].trim();
+        if (!line) continue;
+        var fileName = '', funcName = '', lineNumber = 0, colNumber = 0;
+        // Firefox format:  "funcName@file:line:col"  or  "@file:line:col"
+        // Safari format :  "funcName@file:line:col"  (same)
+        var atIdx = line.lastIndexOf('@');
+        if (atIdx !== -1) {
+            funcName = line.substring(0, atIdx) || '<anonymous>';
+            var loc = line.substring(atIdx + 1);
+            var parts = loc.split(':');
+            // loc = "http://host/path/file.js:42:10" → split gives [..., '42', '10']
+            colNumber  = parseInt(parts.pop(), 10) || 0;
+            lineNumber = parseInt(parts.pop(), 10) || 0;
+            fileName   = parts.join(':');
+        } else {
+            funcName = line;
+        }
+        if (!foundBelowFn) {
+            if (funcName === belowFnName) foundBelowFn = true;
+            continue;
+        }
+        (function(fn, file, ln) {
+            result.push({
+                getFunctionName: function() { return fn; },
+                getFileName:     function() { return file; },
+                getLineNumber:   function() { return ln; },
+                toString:        function() { return fn + ' (' + file + ':' + ln + ')'; }
+            });
+        })(funcName, fileName, lineNumber);
+    }
+    return result;
+}
+
+function safeLog(...args) {
+  if (typeof process !== "undefined" && process.stderr)
+    process.stderr.write(args.join(' ') + '\n');
+  else if (typeof console !== "undefined")
+    console.warn(...args);  // browser : warn va dans DevTools sans bloquer stdout
+}
+
+function detectEnvironment() 
+{
+    // Note : Trying to detect SystemJS to call register is not possible
+    // because SystemJs transpile tracetool.js to detect the call to register as the FIRST statement (comments on top are ignored)
+    // This will break the single file solution
+    // The only solution is to configure systemJS to load tracetool.js as a 'global' format (ttrace is saved in global window object)
+
+    isChromeExtension = false;
+    isBrowser         = false;
+    isNodeJs          = false;
+    isRequireJs       = false;
+    isCommonJS        = false;
+    isSystemJS        = false;
+
+    //safeLog("chrome         (Chrome)    " , typeof chrome);
+    //safeLog("require        (AMD,NodeJs)" , typeof require);
+    //safeLog("define         (AMD)       " , typeof define);
+    //safeLog("process        (NodeJs)    " , typeof process);
+    //safeLog("module         (NodeJs)    " , typeof module);
+    //safeLog("System         (System JS) " , typeof System);
+    //if (typeof module === "object") 
+    //    safeLog("module.exports (CommonJs) " , typeof module.exports);
+
+    try {
+
+        // ReSharper disable UndeclaredGlobalVariableUsing
+
+        if (typeof require === "function") 
+            isRequireJs = true;  // AMD module
+
+        if ((typeof module === "object") && (typeof module.exports === "object"))
+            isCommonJS = true ;  
+
+        if ((typeof chrome === "object") && (typeof chrome.extension === "object"))
+            isChromeExtension = true;
+        else if ((typeof require === "function")       
+            &&(typeof process === "object") 
+            &&(typeof process.release === "object") 
+            &&(typeof process.release.name === "string") 
+            &&(process.release.name.search(/node|io.js/) !== -1) // process.release.name = 'node'
+            )
+            isNodeJs = true;  
+        else
+            isBrowser = true;
+        // ReSharper restore UndeclaredGlobalVariableUsing
+    }
+    catch (e) {
+        safeLog("detectEnvironment exception", e);
+    }
+}
+
 //--------------------------------------------------------------------------------------------------------
 
 /** extend object with another 
@@ -57,7 +222,7 @@ function extend(target,source)
     for (var property in source)
         target[property] = source[property];
     return target;
-}
+} ;
 
 //--------------------------------------------------------------------------------------------------------
 /** Create a time and an optional date string 
@@ -65,18 +230,18 @@ function extend(target,source)
 */
 function getFormattedTime()
 {
-    var currentDate = new Date();
-    var date = "";
+    var currentDate = new Date() ;
+    var date = "" ;
 
     if (ttrace.options.sendDate === true)
-        date = "" + currentDate.getFullYear() + intToStr(currentDate.getMonth(),2,'0') + intToStr(currentDate.getDay(),2,'0') + " ";
+        date = "" + currentDate.getFullYear() + intToStr(currentDate.getMonth(),2,'0') + intToStr(currentDate.getDay(),2,'0') + " " ;
 
-    var h = currentDate.getHours();
-    var m = currentDate.getMinutes();
-    var s = currentDate.getSeconds();
-    var n = currentDate.getMilliseconds();
-    return date + intToStr(h,2,'0') + ':' + intToStr(m,2,'0') + ':' + intToStr(s,2,'0') + ':' + intToStr(n,3,'0');
-}
+    var h = currentDate.getHours() ;
+    var m = currentDate.getMinutes() ;
+    var s = currentDate.getSeconds() ;
+    var n = currentDate.getMilliseconds() ;
+    return date + intToStr(h,2,'0') + ':' + intToStr(m,2,'0') + ':' + intToStr(s,2,'0') + ':' + intToStr(n,3,'0') ;
+} ;
 
 //--------------------------------------------------------------------------------------------------------
 /** Send the wintrace ArrayList to the viewer  
@@ -88,17 +253,17 @@ function getFormattedTime()
 function sendToWinTraceClient (commandList, winTraceId , dateTime)
 {
     // add current time.
-    if (typeof dateTime === "undefined" || dateTime === null || dateTime === '')
-        commandList.unshift (intToStr5(/*CST_MESSAGE_TIME*/ 304) + getFormattedTime()); // "HH:mm:ss:fff"
+    if (typeof(dateTime) == "undefined" || dateTime === null || dateTime === '')
+        commandList.unshift (intToStr5(/*CST_MESSAGE_TIME*/ 304) + getFormattedTime()) ; // "HH:mm:ss:fff"
     else
         commandList.unshift (intToStr5(/*CST_MESSAGE_TIME*/ 304) + dateTime );
 
     // CST_USE_TREE MUST be inserted at the first position
-    if (winTraceId !== null && winTraceId !== "")
+    if (winTraceId != null && winTraceId !== "")
         commandList.unshift (intToStr5(/*CST_USE_TREE*/ 99) +  winTraceId);
 
     sendToClient (commandList);
-}
+} ;
 
 //--------------------------------------------------------------------------------------------------------
 /** send the winwatch ArrayList to the viewer 
@@ -110,8 +275,8 @@ function sendToWinTraceClient (commandList, winTraceId , dateTime)
 function sendToWinWatchClient(commandList, winWatchId , dateTime)
 {
     // add current time.
-    if (typeof dateTime === "undefined" || dateTime === null || dateTime === '')
-        commandList.unshift (intToStr5(/*CST_MESSAGE_TIME*/ 304) + getFormattedTime()); // "HH:mm:ss:fff"
+    if (typeof(dateTime) == "undefined" || dateTime === null || dateTime === '')
+        commandList.unshift (intToStr5(/*CST_MESSAGE_TIME*/ 304) + getFormattedTime()) ; // "HH:mm:ss:fff"
     else
         commandList.unshift (intToStr5(/*CST_MESSAGE_TIME*/ 304) + dateTime );
 
@@ -120,8 +285,9 @@ function sendToWinWatchClient(commandList, winWatchId , dateTime)
     commandList.unshift (intToStr5(/*CST_WINWATCH_ID*/ 111) +  winWatchId);
 
     sendToClient (commandList);
-}
-    
+} ;
+
+
 //--------------------------------------------------------------------------------------------------------
 /** Convert the command list array to one or more string messages and add to queue
 * @param {Array} commandList Messages list to send
@@ -129,31 +295,34 @@ function sendToWinWatchClient(commandList, winWatchId , dateTime)
 */
 function sendToClient (commandList)
 {
-   var msgId = newGuid();
-   var msg = commandList.join("\0");
-   var msgLenth = msg.length;
+   //safeLog("tracetool:sendToClient. commandList lenght: " + commandList.length) ;
+
+   var msgId = newGuid() ;
+   var msg = commandList.join("\0") ;
+   var msgLenth = msg.length ;
+   //safeLog("tracetool:sendToClient. msgLenth lenght: " + msgLenth) ;
    if (msgLenth > 1000)
    {
-      var part;
-      var partNum = 1;
-      var partLen;
+      var part ;
+      var partNum = 1 ;
+      var partLen ;
       while (msgLenth > 0)
       {
-         part = msg.substring(0, 1000);  // 0..999
-         msg = msg.substring(1000);      // 1000..end
+         part = msg.substring(0, 1000) ;  // 0..999
+         msg = msg.substring(1000) ;      // 1000..end
 
-         msgLenth -= 1000;
-         partLen = part.length;
+         msgLenth -= 1000 ;
+         partLen = part.length ;
          if (partLen >= 1000)
-            addMessage ({msgId:msgId, msg:part, partNum:partNum});
+            addMessage ({msgId:msgId, msg:part, partNum:partNum}) ;
          else
-            addMessage ({msgId:msgId, msg:part, partNum:'Last'} );
+            addMessage ({msgId:msgId, msg:part, partNum:'Last'} ) ;
          partNum++;
       }
    } else {
-      addMessage ({msgId:msgId, msg:msg, partNum:''});
+      addMessage ({msgId:msgId, msg:msg, partNum:''}) ;
    }
-}
+} ;
    
 //--------------------------------------------------------------------------------------------------------
 /** Add a message to the waiting queue list. Run it if no other scripts are waiting 
@@ -162,11 +331,11 @@ function sendToClient (commandList)
 */
 function addMessage(objMessage)
 {
-   objMessage.command = objMessage.command || "WMD";
-   toSend.push(objMessage);          // add to end
+   objMessage.command = objMessage.command || "WMD" ;
+   toSend.push(objMessage) ;          // add to end
    if (toSend.length === 1) 
       setTimeout(worker, 0);
-}
+} ;
 
 //--------------------------------------------------------------------------------------------------------
 /** Callback Timer function 
@@ -174,18 +343,26 @@ function addMessage(objMessage)
 */
 function worker()
 {
-    //console.log("tracetool:worker " + toSend.length);
+    //safeLog("tracetool:worker stack count: " + toSend.length) ;
     var objMessage;
     if (toSend.length !== 0)
     {
         // no script is running.
         objMessage = toSend.shift(); // get first
-        var hostUrl = "http://" + host + "/" + objMessage.command + "?msgId=" + objMessage.msgId + "&msg=" + encodeURIComponent(objMessage.msg);  // escape is deprecated. Generate bad encoding.
+        var encodedMsg = encodeURIComponent(objMessage.msg);
+        //safeLog("tracetool:worker send message to viewer. command: " + objMessage.command + ", msgId: " + objMessage.msgId + ", msg encoded: " + encodedMsg) ;
+
+        var hostUrl = "http://" + host + "/" + objMessage.command + "?msgId=" + objMessage.msgId + "&msg=" + encodedMsg;  // escape is deprecated. Generate bad encoding.
         if (objMessage.partNum !== "")
             hostUrl = hostUrl + "&partNum=" + objMessage.partNum;
 
         nbDone++;
-        sendToClientUsingScript(hostUrl);
+        if (isNodeJs)
+            sendToClientUsingHttp(hostUrl);
+        else if (isBrowser)
+            sendToClientUsingScript(hostUrl);
+        else // if (IsChromeExtension)
+            sendToClientUsingXmlHttpRequest(hostUrl);
     }
 }
 
@@ -234,34 +411,90 @@ function afterRun()
     headId.removeChild(ttraceScript);
     ttraceScript = null;
     setTimeout(worker, 0);    // send next
+};
+
+//--------------------------------------------------------------------------------------------------------
+/** send message to the viewer using XMLHttpRequest (Chrome extension solution)
+* @param {string} hostUrl message
+* @returns {void}
+*/
+function sendToClientUsingXmlHttpRequest(hostUrl)
+{
+
+    var xhr;
+    try {
+        xhr = new XMLHttpRequest();
+    } catch (e1) {
+        try {
+            xhr = new ActiveXObject("Microsoft.XMLHTTP");
+        } catch (e2) {
+            xhr = new ActiveXObject("Msxml2.XMLHTTP");
+        }
+    }
+
+    //xhr.addEventListener("load", function(e) {
+    //  safeLog("tracetool:load callback");
+    //  }, false);
+
+    xhr.addEventListener("error", function ( /*errorEvent*/) {
+        //safeLog("tracetool:error callback " + toSend.length);
+        setTimeout(worker, 0);    // send next
+    }, false);
+
+    xhr.onload = function (onloadEvent) {
+        // e : ProgressEvent
+        // e.currentTarget : XMLHttpRequest
+        var onloadRequest = onloadEvent.currentTarget;
+
+        // With the js tracetool API for browser, the response for "UniqueClientId" command is a single line script 
+        // Sample script for "UniqueClientId" : ttrace.setclientId("123");
+        // Sample script for other messages   : ttrace._done("_1",""); 
+        // On the browser, this script is executed.
+        // For compatibility, on NodeJs , the Id is extracted from this script
+
+        var script = onloadRequest.responseText;
+        if (script.startsWith("ttrace.setClientID("))
+            clientId = script.match(/\d+/)[0];  // extract first number anywhere in the string. Result is an array of string. first : 123
+        //safeLog("tracetool:onload " + toSend.length);
+        setTimeout(worker, 0);    // send next
+    }
+    xhr.open("GET", hostUrl, true);     // xhrReq.open(method, url, async, user, password); 
+    //xhr.setRequestHeader("Content-Type", "text/javascript");
+
+    //xhr.setRequestHeader('Access-Control-Allow-Headers', '*');
+    //xhr.setRequestHeader('Content-type', 'application/ecmascript');
+    //xhr.setRequestHeader('Content-type', 'text/plain');
+    //xhr.setRequestHeader('Access-Control-Allow-Origin', '*');
+
+    xhr.send();                     // fire onload
+
+    // check every 20 seconds if msg is send
+    //setTimeout(worker, 20000);
 }
 
 //--------------------------------------------------------------------------------------------------------
 
-/** send message to the viewer using nodeJs request
+/** send message to the viewer using nodeJs http
 * @param {string} hostUrl message
 * @returns {void}
-*/  
-function sendToClientUsingRequest (hostUrl)
+*/
+function sendToClientUsingHttp (hostUrl)
 {
-
-   request(hostUrl, function (error, response) //, body)
+   var req = http.get(hostUrl, function (response)
    {
-       if (!error && response.statusCode === 200) 
+       var body = '';
+       response.on('data', function (chunk) { body += chunk; });
+       response.on('end', function ()
        {
-           // With the js tracetool API for browser, the response for "UniqueClientId" command is a single line script 
            // Sample script for "UniqueClientId" : ttrace.setClientID("123");
-           // Sample script for other messages   : ttrace._done("_1",""); 
-           // On browser, this script is executed.
-           // For compatibility, on NodeJs , the Id is extracted from this script
-
-           var script = response.body;
-           if (script.startsWith("ttrace.setClientID("))
-               clientId = script.match(/\d+/)[0];  // extract first number anywhere in the string. Result is an array of string. first : 123
-               
+           // Sample script for other messages   : ttrace._done("_1","");
+           if (body.startsWith("ttrace.setClientID("))
+               clientId = body.match(/\d+/)[0];
            setTimeout(worker, 0);
-       }
+       });
    });
+
+   req.on('error', function () { setTimeout(worker, 0); });
 
    // check every 20 seconds if msg is send
    setTimeout(worker, 20000);
@@ -274,8 +507,8 @@ function sendToClientUsingRequest (hostUrl)
 */
 function lTrim(str)
 {
-    var k = 0;
-    while( k<str.length && str.charAt(k)<=" ") k++;
+    var k = 0 ;
+    while( k<str.length && str.charAt(k)<=" ") k++ ;
     return str.substring(k, str.length);
 }
 
@@ -286,8 +519,8 @@ function lTrim(str)
 */
 function rTrim(str)
 {
-    var k = str.length-1;
-    while (k>=0 && str.charAt(k)<=" ") k--;
+    var k = str.length-1 ;
+    while (k>=0 && str.charAt(k)<=" ") k-- ;
     return str.substring(0, k+1);
 }
 
@@ -298,21 +531,21 @@ function rTrim(str)
 */
 function getFunctionName(fctName)
 {
-    fctName = rTrim(lTrim(fctName));
+    fctName = rTrim(lTrim(fctName)) ;
     // [ecmascript code] or function MyClass()...
     if (fctName.indexOf('[ecmascript code]') === 0)
-        return '?';
+        return '?' ;
 
     if (fctName.indexOf('function ') === 0)// 0..8 (include space)
     {
-        var p = 9;
-        var endClassName = 1000;
+        var p = 9 ;
+        var endClassName = 1000 ;
         while (fctName.charAt(p) === ' ')
         p++;
         // search '(' char
-        for(var c = p; c < fctName.length; c++)
+        for(var c = p ; c < fctName.length; c++)
         {
-        var ch = fctName.charAt(c);
+        var ch = fctName.charAt(c) ;
         if (ch==='(') {
             endClassName = c;
             break;
@@ -323,26 +556,26 @@ function getFunctionName(fctName)
 
         return fctName.substring(9,endClassName);
     }
-    var pos = fctName.indexOf("{");   // search for function body
+    var pos = fctName.indexOf("{") ;   // search for function body
     if (pos >= 0)
     {
         if (pos ===0)
-        return "<unnamed function>";
+        return "<unnamed function>" ;
 
         // remove function body
-        fctName = fctName.substr(0,pos);
+        fctName = fctName.substr(0,pos) ;
 
-        pos = fctName.indexOf("(");   // remove function parameters
+        pos = fctName.indexOf("(") ;   // remove function parameters
         if (pos !== -1)
-        fctName = fctName.substr(0,pos);
+        fctName = fctName.substr(0,pos) ;
 
         if (fctName.substr(0,8) === "function")
-        fctName = fctName.substr(8,fctName.length);
+        fctName = fctName.substr(8,fctName.length) ;
 
-        return fctName;
+        return fctName ;
     }
 
-    return fctName;
+    return fctName ;
 }
 
 //--------------------------------------------------------------------------------------------------------
@@ -353,44 +586,44 @@ function getFunctionName(fctName)
 */   
 function rgbToBgr(color)
 {
-    var r;
-    var g;
-    var b;
+    var r ;
+    var g ;
+    var b ;
 
-    var hexString = rTrim(lTrim(color)).toUpperCase();
+    var hexString = rTrim(lTrim(color)).toUpperCase() ;
     if (hexString.charAt(0) === '#')
     {
         // decompose #RRGGBB
         //           0123456
-        r = parseInt(hexString.substring (1,3),16);   //  1,2 (char 3 is not included)
-        g = parseInt(hexString.substring (3,5),16);   //  3,4 (char 5 is not included)
-        b = parseInt(hexString.substring (5,7),16);   //  5,6 (char 7 is not included)
+        r = parseInt(hexString.substring (1,3),16) ;   //  1,2 (char 3 is not included)
+        g = parseInt(hexString.substring (3,5),16) ;   //  3,4 (char 5 is not included)
+        b = parseInt(hexString.substring (5,7),16) ;   //  5,6 (char 7 is not included)
     } else if (hexString.indexOf('RGB') === 0) {
         // decompose RGB(r,g,b) or RGB (r,g,b)
         //           0123          01234
 
         // start after the RGB word and skip spaces
-        var p = 3;
+        var p = 3 ;
         while (hexString.charAt(p) === ' ')
         p++;
 
         // check the '(' and the ')'
         if (hexString.charAt(p) !== '(' &&
             hexString.charAt(hexString.length-1) !== ')')
-        return 0;  // error : use black
+        return 0 ;  // error : use black
 
         // remove '(' and ')'
-        var block = hexString.substring(p+1,hexString.length-1); // r,g,b
+        var block = hexString.substring(p+1,hexString.length-1) ; // r,g,b
         var rgb = block.split(',');
         if (rgb.length !== 3)
-        return 0;  // error : use black (0,0,0)
-        r = parseInt(rgb[0]);
-        g = parseInt(rgb[1]);
-        b = parseInt(rgb[2]);
+        return 0 ;  // error : use black (0,0,0)
+        r = parseInt(rgb[0]) ;
+        g = parseInt(rgb[1]) ;
+        b = parseInt(rgb[2]) ;
     } else {
-        return 0;  // unknow color , use black (0,0,0)
+        return 0 ;  // unknow color , use black (0,0,0)
     }
-    return (b << 16) + (g  << 8) + r;
+    return (b << 16) + (g  << 8) + r ;
 }
 
 //--------------------------------------------------------------------------------------------------------
@@ -399,9 +632,9 @@ function rgbToBgr(color)
 */
 function newGuid ()
 {
-    requestId++;
-    return clientId + '_' + requestId;
-}
+    requestId++ ;
+    return clientId + '_' + requestId ;
+} ;
 
 //--------------------------------------------------------------------------------------------------------
 
@@ -412,27 +645,27 @@ function newGuid ()
 */
 function intToHex(param,len)
 {
-    var str = param.toString(16);
+    var str = (param).toString(16) ;
     while (str.length < len) 
-        str = '0' + str;
-    return str;
+        str = '0' + str ;
+    return str ;
 }
 
 //--------------------------------------------------------------------------------------------------------
 /** Convert an integer to chars 
 * @param {integer} param An integer to convert
 * @param {integer} len result width
-* @param {character} padding character
+* @param padding caracter padding
 * @returns {string} String representation
 */
 function intToStr (param,len,padding)
 {
-    var str = '' + param;
-    padding = padding || ' ';
+    var str = '' + param ;
+    padding = padding || ' ' ;
     while (str.length < len) 
-        str = padding + str;
-    return str;
-}
+        str = padding + str ;
+    return str ;
+} ;
 
 //--------------------------------------------------------------------------------------------------------
 /** convert an integer to 5 chars
@@ -441,11 +674,11 @@ function intToStr (param,len,padding)
 */
 function intToStr3 (param)
 {
-    var str = '' + param;
+    var str = '' + param ;
     while (str.length < 3) 
-        str = ' ' + str;
-    return str;
-}
+        str = ' ' + str ;
+    return str ;
+} ;
 
 //--------------------------------------------------------------------------------------------------------
 /** convert an integer to 5 chars
@@ -454,11 +687,11 @@ function intToStr3 (param)
 */
 function intToStr5 (param)
 {
-    var str = '' + param;
+    var str = '' + param ;
     while (str.length < 5) 
-        str = ' ' + str;
-    return str;
-}
+        str = ' ' + str ;
+    return str ;
+} ;
 
 //--------------------------------------------------------------------------------------------------------
 /** convert an integer to 11 chars
@@ -467,11 +700,11 @@ function intToStr5 (param)
 */
 function intToStr11 (param)
 {
-    var str = '' + param;
+    var str = '' + param ;
     while (str.length < 11) 
-        str = ' ' + str;
-    return str;
-}
+        str = ' ' + str ;
+    return str ;
+} ;
 
 //--------------------------------------------------------------------------------------------------------
 /** Get the class name of an object
@@ -481,18 +714,18 @@ function intToStr11 (param)
 function getClassName(obj)
 {
     if (obj === null)
-        return "null";
+        return "null" ;
 
-    var type = typeof obj;
+    var type = typeof (obj) ;
 
-    // if not vague, return typeof obj
+    // if not vague, return typeof(obj)
     if (type !== "object")
-        return type;
+        return type ;
 
-    // if a property "classname" or "className" of type string exist, return it 
+    // if a property "classname" or "className" of type string exist, return it ;
     var objClassname = obj.classname || obj.className;
-    if (typeof objClassname  === "string") 
-        return objClassname;
+    if (typeof(objClassname) == "string") 
+        return objClassname ;
 
     try {
         // HTML DOM nodeName Property : http://www.w3schools.com/jsref/prop_node_nodename.asp
@@ -500,23 +733,23 @@ function getClassName(obj)
         {
             switch(obj.nodeType)
             {
-                case  0 : return 'NODE_INVALID';
-                case  1 : return 'NODE_ELEMENT';
-                case  2 : return 'NODE_ATTRIBUTE';
-                case  3 : return 'NODE_TEXT';
-                case  4 : return 'NODE_CDATA_SECTION';
-                case  5 : return 'NODE_ENTITY_REFERENCE';
-                case  6 : return 'NODE_ENTITY';
-                case  7 : return 'NODE_PROCESSING_INSTRUCTION';
-                case  8 : return 'NODE_COMMENT';
-                case  9 : return 'NODE_DOCUMENT';
-                case 10 : return 'NODE_DOCUMENT_TYPE';
-                case 11 : return 'NODE_DOCUMENT_FRAGMENT';
-                case 12 : return 'NODE_NOTATION';
+                case  0 : return 'NODE_INVALID' ;
+                case  1 : return 'NODE_ELEMENT' ;
+                case  2 : return 'NODE_ATTRIBUTE' ;
+                case  3 : return 'NODE_TEXT' ;
+                case  4 : return 'NODE_CDATA_SECTION' ;
+                case  5 : return 'NODE_ENTITY_REFERENCE' ;
+                case  6 : return 'NODE_ENTITY' ;
+                case  7 : return 'NODE_PROCESSING_INSTRUCTION' ;
+                case  8 : return 'NODE_COMMENT' ;
+                case  9 : return 'NODE_DOCUMENT' ;
+                case 10 : return 'NODE_DOCUMENT_TYPE' ;
+                case 11 : return 'NODE_DOCUMENT_FRAGMENT' ;
+                case 12 : return 'NODE_NOTATION' ;
             }
         }
 
-        if (typeof obj.length === 'number') 
+        if (typeof obj.length == 'number') 
         {
             if (obj.item)   return 'collection';
             if (obj.callee) return 'arguments';
@@ -525,7 +758,7 @@ function getClassName(obj)
         return e.message;
     }
 
-    var protoString = Object.prototype.toString.apply(obj);
+    var protoString = Object.prototype.toString.apply(obj) ;
     if (protoString.substr(0,7) === "[object" ||
         protoString.substr(0,7) === "[Object")
     {
@@ -533,11 +766,11 @@ function getClassName(obj)
         protoString = protoString.replace(/^\s*|\s*$/g, "");  // // Strip leading and trailing white-space
 
         if (protoString === "")
-        protoString = "Object";
+        protoString = "Object" ;
 
         // if not vague, return protoString
         if (protoString.toLowerCase() !== "object")
-        return protoString;
+        return protoString ;
     }
 
     try   // getting "constructor" property can generate exception under firefox
@@ -545,8 +778,8 @@ function getClassName(obj)
         if ("constructor" in obj)
         {
             // if constructor don't have prototype : unknow type
-            if (typeof obj.constructor === "undefined")
-                return protoString;
+            if (typeof(obj.constructor) == "undefined")
+                return protoString ;
 
             switch(obj.constructor){
                 case Array:  return 'Array';
@@ -555,37 +788,37 @@ function getClassName(obj)
             }
             // constructor sould be a function. if constructor is an object, return protoString
             if (obj.constructor === Object)
-                return protoString;
+                return protoString ;
 
             // if constructor don't have prototype : unknow type
-            if (typeof obj.constructor.prototype === "undefined")
-                return protoString;
+            if (typeof(obj.constructor.prototype) == "undefined")
+                return protoString ;
 
-            var propType = obj.constructor.toString();
+            var propType = obj.constructor.toString() ;
             if (propType.length === 0)
-                return protoString;
+                return protoString ;
 
-            var pos = propType.indexOf("{");   // search for function body
+            var pos = propType.indexOf("{") ;   // search for function body
             if (pos ===-1)
-                return propType;
+                return propType ;
             if (pos ===0)
-                return "<unnamed constructor>" + protoString;
+                return "<unnamed constructor>" + protoString ;
 
-            propType = propType.substr(0,pos);
+            propType = propType.substr(0,pos) ;
 
-            pos = propType.indexOf("(");   // remove function parameters
+            pos = propType.indexOf("(") ;   // remove function parameters
             if (pos !== -1)
-                propType = propType.substr(0,pos);
+                propType = propType.substr(0,pos) ;
 
             if (propType.substr(0,8) === "function")
-                propType = propType.substr(8,propType.length);
+                propType = propType.substr(8,propType.length) ;
 
-            return propType;
+            return propType ;
         }
     } catch (e) {
-        return protoString;
+        return protoString ;
     }
-    return protoString;
+    return protoString ;
 }
 
 //--------------------------------------------------------------------------------------------------------
@@ -598,10 +831,10 @@ function getClassName(obj)
 */
 function prepareNewNode(parentNode, leftMsg, newId)
 {
-    var parentContext = parentNode.context.getLast();  // {Context}
-    var parentContextId = parentNode.id;
+    var parentContext = parentNode.context.getLast() ;  // {Context}
+    var parentContextId = parentNode.id ;
     if (parentContext !== '')
-        parentContextId = parentContext;
+        parentContextId = parentContext ;
     var commandList = new Array();
     commandList.push( intToStr5(/*CST_NEW_NODE*/ 550)+ parentContextId);               // param : parent Node id (string)
     commandList.push( intToStr5(/*CST_TRACE_ID*/ 101)+ newId);                         // param : guid(string)
@@ -624,16 +857,16 @@ ttrace =
    * ask an unique client id to the viewer.
    * Use this function only in Browser mode and if you don't load the javascript Api from the viewer.
    * For NodeJs, an unique id is generated
-   * Alternatively, you can give yourself an unique id : ttrace.clientId = "NodeJsServer1";  
+   * Alternatively, you can give yourself an unique id : ttrace.clientId = "NodeJsServer1" ;  
    * NOTE : result is Asynchrone !!! You must ensure the viewer has returned an Id before sending traces.
    * @function
    * @returns {void}
    */
    queryClientId : function()
    {
-       addMessage ({msgId:"", msg:"", partNum:"",command:"UniqueClientId" });
+       addMessage ({msgId:"", msg:"", partNum:"",command:"UniqueClientId" }) ;
        // the viewer will return a script that is executed by the browser.
-       // sample script : ttrace.setClientID(newid);
+       // sample script : ttrace.setClientID(newid) ;
        // On NodeJs, the newid will be extracted.
    } ,
 
@@ -647,8 +880,8 @@ ttrace =
    {
        var commandList = new Array();
 
-       if (typeof isVisible === "undefined")
-          isVisible = true;
+       if (typeof(isVisible) == "undefined")
+          isVisible = true ;
        if (isVisible)
           commandList.push( intToStr5(/*CST_SHOW*/ 102)+ '1');
        else
@@ -676,7 +909,7 @@ ttrace =
    */
    clearAll : function()
    {
-       ttrace.winTrace.clearAll();
+       ttrace.winTrace.clearAll() ;
    } ,
    
    //--------------------------------------------------------------------------------------------------
@@ -692,13 +925,13 @@ ttrace =
    find : function (text, sensitive, wholeWord , highlight, searchInAllPages) 
    {
        var commandList = new Array();
-       var flags = 0;
+       var flags = 0 ;
        // Sensitive<<3+WholeWord<<2+highlight<<1+SearchInAllPages
 
-       sensitive         = sensitive || false;
-       wholeWord         = wholeWord || false;
-       highlight         = highlight || false;
-       searchInAllPages  = searchInAllPages || false;
+       sensitive         = sensitive || false ;
+       wholeWord         = wholeWord || false ;
+       highlight         = highlight || false ;
+       searchInAllPages  = searchInAllPages || false ;
 
        if (sensitive)
            flags += 8;
@@ -748,6 +981,24 @@ Object.defineProperties(ttrace,
         configurable : false
     },
 
+    /** 
+    *  How tracetool is loaded
+    */
+    "environment" : {
+        get: function () { 
+            var result = '' ;
+            result += 'isBrowser:'         ; if (isBrowser        ) result += 'true'; else result += 'false' ;                             
+            result += ',isNodeJs:'         ; if (isNodeJs         ) result += 'true'; else result += 'false' ;                             
+            result += ',isRequireJs:'      ; if (isRequireJs      ) result += 'true'; else result += 'false' ;                            
+            result += ',isCommonJS:'       ; if (isCommonJS       ) result += 'true'; else result += 'false' ;                           
+            result += ',isSystemJS:'       ; if (isSystemJS       ) result += 'true'; else result += 'false' ; 
+            result += ',isChromeExtension:'; if (isChromeExtension) result += 'true'; else result += 'false' ;                           
+            return result; 
+        },
+        enumerable : true,
+        configurable : false
+    },
+    
     /** 
     *  messages already send to the viewer
     */
@@ -867,37 +1118,37 @@ Object.defineProperties(ttrace,
 
 //=============================================================================================================
 
-/* eslint-disable valid-jsdoc *//**
+/**
 * @class Define a specific font for a cell or for a whole trace line .
 * @constructor
 */
-/* eslint-enable valid-jsdoc */
-traceClasses.FontDetail = function () {
-    /** {integer} column id. -1 for the whole line */
-    this.colId = 0;
+traceClasses.FontDetail = function ()
+{
+   /** {integer} column id. -1 for the whole line */
+   this.colId = 0 ;
 
-    /** {boolean} bold */
-    this.bold = false;
+   /** {boolean} bold */
+   this.bold = false ;
 
-    /** {boolean} italic*/
-    this.italic = false;
+   /** {boolean} italic*/
+   this.italic = false;
 
-    /** {string} font color */
-    this.color = "";
+   /** {string} font color */
+   this.color = "" ;
 
-    /** {integer} font size */
-    this.size = 0;
+   /** {integer} font size */
+   this.size = 0 ;
 
-    /** {string} font name */
-    this.fontName = "";
+   /** {string} font name */
+   this.fontName = "" ;
 
-    Object.defineProperty(this, 'classname', {
-        enumerable: true,
-        configurable: false,
-        writable: false,
-        value: 'TraceClasses.FontDetail'
-    });
-};
+   Object.defineProperty(this, 'classname', {
+     enumerable: true,     
+     configurable: false,  
+     writable: false,      
+     value: 'TraceClasses.FontDetail'
+   });
+}
 
 
 // add prototype to FontDetail
@@ -911,29 +1162,29 @@ Object.defineProperty(traceClasses.FontDetail.prototype, 'classname', {
 
 
 //=============================================================================================================
-/* eslint-disable valid-jsdoc */
+
 /**
 * @class Used internaly to handle indent() and unindent() functions .
 * @description You should not create instance of this class
 * @constructor
 * @returns {void}
 */
-/* eslint-enable valid-jsdoc */
-traceClasses.Context = function () {
-    /** {Array} context queue */
-    this.contextList = [];
+traceClasses.Context = function()
+{
+   /** {Array} context queue */
+   this.contextList = [] ;
 
-    /** {Context} context for Wintrace */
-    this.winTraceContext = null;
+   /** {Context} context for Wintrace */
+   this.winTraceContext = null ;
 
-    Object.defineProperty(this, 'classname', {
-        enumerable: true,
-        configurable: false,
-        writable: false,
-        value: 'TraceClasses.Context'
-    });
+   Object.defineProperty(this, 'classname', {
+     enumerable: true,     
+     configurable: false,  
+     writable: false,       
+     value: 'TraceClasses.Context'
+   });
 
-};
+}
 
 // add prototype to Context
 
@@ -949,15 +1200,15 @@ traceClasses.Context.prototype =
       */
       getLast : function ()
       {
-         var cList;
-         if (this.winTraceContext !== null)
+         var cList ;
+         if (this.winTraceContext != null)
             cList = this.winTraceContext;
          else
             cList = this.contextList;
 
          if (cList.length === 0)
-            return "";
-         return cList[0]; // get first
+            return "" ;
+         return cList[0] ; // get first
       } ,
 
       //------------------------------------------------------------------------------
@@ -970,8 +1221,8 @@ traceClasses.Context.prototype =
       */
       push : function (newContext)
       {
-         var cList;
-         if (this.winTraceContext !== null)
+         var cList ;
+         if (this.winTraceContext != null)
             cList = this.winTraceContext;
          else
             cList = this.contextList;
@@ -989,8 +1240,8 @@ traceClasses.Context.prototype =
       */
       level : function ()
       {
-         var cList;
-         if (this.winTraceContext !== null)
+         var cList ;
+         if (this.winTraceContext != null)
             cList = this.winTraceContext;
          else
             cList = this.contextList;
@@ -1007,15 +1258,15 @@ traceClasses.Context.prototype =
       */
       deleteLast : function ()
       {
-         var cList;
-         if (this.winTraceContext !== null)
+         var cList ;
+         if (this.winTraceContext != null)
             cList = this.winTraceContext;
          else
             cList = this.contextList;
 
          if (cList.length === 0)
-            return "";
-         return cList.shift(); // get first and remove it
+            return "" ;
+         return cList.shift() ; // get first and remove it
       }
    }
 ;
@@ -1029,30 +1280,29 @@ Object.defineProperty(traceClasses.Context.prototype, 'classname', {
 
 
 //=============================================================================================================
-/* eslint-disable valid-jsdoc */
+
 /**
 * @class Common base class for TraceNode and WinTrace. Don't create yourself an instance of this class
 * @description TraceToSend methodes create new traces and send it to the viewer
 * @constructor
 */
-/* eslint-enable valid-jsdoc */
 traceClasses.TraceToSend = function ()
 {
    /** {string} Unique node id */
-   this.id           = '';
+   this.id           = '' ;
 
    /** {integer} Icon index */
-   this.iconIndex    = /*CST_ICO_DEFAULT*/ -1;
+   this.iconIndex    = /*CST_ICO_DEFAULT*/ -1 ;
 
    /** {boolean} Enable methods on this node*/
-   this.enabled      = true;
+   this.enabled      = true ;
 
    /** {string} Wintrace id */
-   this.winTraceId   = '';
+   this.winTraceId   = '' ;
 
    /** {Context} Tell what is the current node for sub traces. Default is self */
-   this.context      = new traceClasses.Context();
-   this.context.list = {};
+   this.context      = new traceClasses.Context() ;
+   this.context.list = {} ;
 
    Object.defineProperty(this, 'classname', {
      enumerable: true,      
@@ -1062,7 +1312,7 @@ traceClasses.TraceToSend = function ()
    });
 
 
-}; // TraceToSend abstract class
+} ; // TraceToSend abstract class
 
 //--------------------------------------------------------------------------------------------------------
 
@@ -1086,7 +1336,7 @@ traceClasses.TraceToSend.prototype =
          // create a node with same properties as "this" with new ID
          var result = new traceClasses.TraceNode(this, true);
          var commandList = prepareNewNode(this, leftMsg, result.id);
-         if (typeof rightMsg !== "undefined" && "" + rightMsg !== "")
+         if (typeof (rightMsg) != "undefined" && ("" + rightMsg) !== "")
             commandList.push( intToStr5(/*CST_RIGHT_MSG*/ 552)+ rightMsg);                   // param : right string
 
          sendToWinTraceClient(commandList, this.winTraceId);
@@ -1112,10 +1362,10 @@ traceClasses.TraceToSend.prototype =
          var newId = newGuid ();
          var commandList = prepareNewNode(this, leftMsg, newId);
 
-         if (typeof rightMsg !== "undefined" && "" + rightMsg !== "" && rightMsg !== null)
+         if (typeof (rightMsg) != "undefined" && ("" + rightMsg) !== "" && rightMsg != null)
             commandList.push( intToStr5(/*CST_RIGHT_MSG*/ 552)+ rightMsg);                   // param : right string
 
-         if (backGroundColor !== null)
+         if (backGroundColor != null)
          {
             var colorValue = rgbToBgr(backGroundColor);
             commandList.push( intToStr5( /*CST_BACKGROUND_COLOR*/ 568) + intToStr11(colorValue) + "-1"); // param : color, colId
@@ -1150,15 +1400,15 @@ traceClasses.TraceToSend.prototype =
 
          this.context.deleteLast();
 
-         if (typeof leftMsg !== "undefined"  || typeof rightMsg !== "undefined")
+         if (typeof (leftMsg) != "undefined"  || typeof (rightMsg) != "undefined")
          {
             var newId = newGuid ();
             var commandList = prepareNewNode(this, leftMsg, newId);
 
-            if (typeof rightMsg !== "undefined" && "" + rightMsg !== "" && rightMsg !== null)
+            if (typeof (rightMsg) != "undefined" && ("" + rightMsg) !== "" && rightMsg != null)
                commandList.push( intToStr5(/*CST_RIGHT_MSG*/ 552)+ rightMsg);                   // param : right string
 
-            if (backGroundColor !== null) {
+            if (backGroundColor != null) {
                var colorValue = rgbToBgr(backGroundColor);
                commandList.push( intToStr5( /*CST_BACKGROUND_COLOR*/ 568) + intToStr11(colorValue) + "-1"); // param : color, colId
             }
@@ -1227,7 +1477,7 @@ traceClasses.TraceToSend.prototype =
       exitMethod : function (leftMsg, rightMsg, backGroundColor)
       {
          if (!this.enabled)
-            return;
+            return ;
          this.unIndent("Exit " + leftMsg, rightMsg, backGroundColor, true);
       } ,
          
@@ -1401,7 +1651,7 @@ traceClasses.TraceToSend.prototype =
       */
       indentLevel : function ()
       {
-         return this.context.level();
+         return this.context.level() ;
       }
    }
 ;
@@ -1413,7 +1663,7 @@ Object.defineProperty(traceClasses.TraceToSend.prototype, 'classname', {
   value: 'TraceClasses.TraceToSend.prototype'
 });
 //=============================================================================================================
-/* eslint-disable valid-jsdoc */
+
 /**
 * @class TraceNode represent a node on the viewer.
 * @extends TraceClasses.TraceToSend
@@ -1422,7 +1672,6 @@ Object.defineProperty(traceClasses.TraceToSend.prototype, 'classname', {
 * @param {string} parentNode Parent node id
 * @param {boolean} generateUniqueId If true, Generate the node id
 */
-/* eslint-enable valid-jsdoc */
 traceClasses.TraceNode = function (parentNode, generateUniqueId)
 {
    Object.defineProperty(this, 'classname', {
@@ -1433,23 +1682,23 @@ traceClasses.TraceNode = function (parentNode, generateUniqueId)
    });
 
    // fix default parameters
-   parentNode = parentNode || null;
-   if (typeof generateUniqueId === "undefined")
+   parentNode = parentNode || null ;
+   if (typeof (generateUniqueId) == "undefined")
        generateUniqueId = true;
 
    /** {string} Unique node id */
-   this.id = '';
+   this.id = '' ;
    if (generateUniqueId)
       this.id = newGuid();
 
    /** {integer} Icon index */
-   this.iconIndex = /*CST_ICO_DEFAULT*/ -1;
+   this.iconIndex = /*CST_ICO_DEFAULT*/ -1 ;
 
    /** {boolean} Enable methods on this node*/
-   this.enabled = true;
+   this.enabled = true ;
 
    /** {string} Wintrace id */
-   this.winTraceId = '';
+   this.winTraceId = '' ;
 
    if (parentNode !== null)
    {
@@ -1457,12 +1706,12 @@ traceClasses.TraceNode = function (parentNode, generateUniqueId)
       this.enabled    = parentNode.enabled;
       this.winTraceId = parentNode.winTraceId;
    }
-}; // TraceNode class
+} ; // TraceNode class
 
 //--------------------------------------------------------------------------------------------------------
 
 // TraceNode prototype. Inherit from TraceToSend class
-var traceNodePrototype = new traceClasses.TraceToSend();  // create a new prototype based on TraceToSend
+var traceNodePrototype = new traceClasses.TraceToSend() ;  // create a new prototype based on TraceToSend
 traceClasses.TraceNode.prototype = traceNodePrototype;
 
 extend(traceNodePrototype,
@@ -1488,9 +1737,9 @@ extend(traceNodePrototype,
          var commandList = new Array();
          commandList.push( intToStr5( /* TraceConst.CST_USE_NODE */ 555)+ this.id); // param : id (this)
 
-         if (typeof newLeftMsg !== "undefined" )
+         if (typeof (newLeftMsg) != "undefined" )
             commandList.push( intToStr5(/*CST_LEFT_MSG*/ 551) + newLeftMsg); // param : new left string
-         if (typeof newRightMsg !== "undefined" )
+         if (typeof (newRightMsg) != "undefined" )
             commandList.push( intToStr5(/*CST_RIGHT_MSG*/ 552)+ newRightMsg); // param : new right string
 
          // don't resend members and icon
@@ -1596,8 +1845,8 @@ extend(traceNodePrototype,
       /**
       * Append text to a previous send message (both column)
       * @function
-      * @param {string} [leftMsgtoAdd] The new Left message to append
-      * @param {string} [rightMsgtoAdd] The new Right message to append
+      * @param {string} [newLeftMsg] The new Left message to append
+      * @param {string} [newRightMsg] The new Right message to append
       * @returns {TraceNode} The trace node
       */
       append : function(leftMsgtoAdd, rightMsgtoAdd)
@@ -1611,9 +1860,9 @@ extend(traceNodePrototype,
 
          var commandList = new Array();
          commandList.push( intToStr5(/*CST_USE_NODE */ 555)+ this.id); // param : id (this)
-         if (typeof leftMsgtoAdd !== "undefined" )
+         if (typeof (leftMsgtoAdd) != "undefined" )
             commandList.push( intToStr5(/*CST_APPEND_LEFT_MSG */ 556) + leftMsgtoAdd); // param : new left string
-         if (typeof rightMsgtoAdd !== "undefined" )
+         if (typeof (rightMsgtoAdd) != "undefined" )
             commandList.push( intToStr5(/*CST_APPEND_RIGHT_MSG */ 557) + rightMsgtoAdd); // param : new right string
          sendToWinTraceClient(commandList, this.winTraceId);
          return this;
@@ -1623,7 +1872,7 @@ extend(traceNodePrototype,
       /**
       * Append text to a previous send message
       * @function
-      * @param {string} leftMsgtoAdd The new Left message to append
+      * @param {string} newLeftMsg The new Left message to append
       * @returns {TraceNode} The trace node
       */
       appendLeft : function(leftMsgtoAdd)
@@ -1646,7 +1895,7 @@ extend(traceNodePrototype,
       /**
       * Append text to a previous send message
       * @function
-      * @param {string} rightMsgtoAdd The new Right message to append
+      * @param {string} newRightMsg The new Right message to append
       * @returns {TraceNode} The trace node
       */
       appendRight : function(rightMsgtoAdd)
@@ -1824,7 +2073,7 @@ extend(traceNodePrototype,
             return this;
 
          var commandList = new Array();
-         commandList.push( intToStr5(/*CST_GOTO_NEXTSIBLING */ 114) + this.id);
+         commandList.push( intToStr5(/*CST_GOTO_NEXTSIBLING */ 114) + this.id) ;
          sendToWinTraceClient(commandList, this.winTraceId);
          return this;
       } ,
@@ -1846,7 +2095,7 @@ extend(traceNodePrototype,
             return this;
 
          var commandList = new Array();
-         commandList.push( intToStr5(/*CST_GOTO_PREVSIBLING */ 115) + this.id);
+         commandList.push( intToStr5(/*CST_GOTO_PREVSIBLING */ 115) + this.id) ;
 
          sendToWinTraceClient(commandList, this.winTraceId);
          return this;
@@ -1869,7 +2118,7 @@ extend(traceNodePrototype,
             return this;
 
          var commandList = new Array();
-         commandList.push( intToStr5(/*CST_GOTO_FIRST_CHILD */ 116) + this.id);
+         commandList.push( intToStr5(/*CST_GOTO_FIRST_CHILD */ 116) + this.id) ;
 
          sendToWinTraceClient(commandList, this.winTraceId);
          return this;
@@ -1892,7 +2141,7 @@ extend(traceNodePrototype,
             return this;
 
          var commandList = new Array();
-         commandList.push( intToStr5(/*CST_GOTO_LAST_CHILD */ 117) + this.id);
+         commandList.push( intToStr5(/*CST_GOTO_LAST_CHILD */ 117) + this.id) ;
          sendToWinTraceClient(commandList, this.winTraceId);
          return this;
       } ,
@@ -1921,25 +2170,25 @@ extend(traceNodePrototype,
          var commandList = new Array();
          commandList.push( intToStr5(/*CST_USE_NODE */ 555)+ this.id); // param : id (this)
 
-         var tempStr = "";
+         var tempStr = "" ;
 
          if (colId instanceof traceClasses.FontDetail)
          {
-            var fontDetail = colId;
-            bold     = fontDetail.bold;
-            italic   = fontDetail.italic;
-            color    = fontDetail.color;
-            size     = fontDetail.size;
-            fontName = fontDetail.fontName;
-            colId    = fontDetail.colId; // set as last to don't lose object
+            var fontDetail = colId ;
+            bold     = fontDetail.bold ;
+            italic   = fontDetail.italic ;
+            color    = fontDetail.color ;
+            size     = fontDetail.size ;
+            fontName = fontDetail.fontName ;
+            colId    = fontDetail.colId ; // set as last to don't lose object
 
          } else {
-            if (typeof colId    === "undefined") colId = -1;
-            if (typeof bold     === "undefined") bold  = true;
-            if (typeof italic   === "undefined") italic = false;
-            if (typeof color    === "undefined") color = null;
-            if (typeof size     === "undefined") size = 0;
-            if (typeof fontName === "undefined") fontName = '';
+            if (typeof(colId)    == "undefined") colId = -1 ;
+            if (typeof(bold)     == "undefined") bold  = true ;
+            if (typeof (italic)  == "undefined") italic = false;
+            if (typeof(color)    == "undefined") color = null ;
+            if (typeof(size)     == "undefined") size = 0 ;
+            if (typeof(fontName) == "undefined") fontName = '' ;
          }
          tempStr += intToStr5(/*CST_FONT_DETAIL*/ 567) + intToStr3(colId);
 
@@ -1956,11 +2205,11 @@ extend(traceNodePrototype,
          // Color is coded as RGB. convert to BGR
          var colorValue;
          if (color === null)
-            colorValue = -1;
+            colorValue = -1 ;
          else
             colorValue = rgbToBgr(color);
 
-         tempStr += intToStr11(colorValue) + intToStr11(size) + fontName;
+         tempStr += intToStr11(colorValue) + intToStr11(size) + fontName ;
          commandList.push(tempStr);
 
 
@@ -1968,7 +2217,7 @@ extend(traceNodePrototype,
          return this;
       } // setFontDetail
    }
-);
+) ;
 
 Object.defineProperty(traceClasses.TraceNode.prototype, 'classname', {
   enumerable: true,     
@@ -1995,34 +2244,34 @@ traceClasses.WinTrace = function (winTraceId, winTraceText) // inherit from Trac
    // private vars, accessible only by privileged method
    //-------------
 
-   var that            = null;        // used by createNodes 
-   var debugInstance   = null;        // TraceClasses.TraceToSend object
-   var warningInstance = null;        // TraceClasses.TraceToSend object
-   var errorInstance   = null;        // TraceClasses.TraceToSend object
-   var contextInstance = new Array();
+   var that            = null ;        // used by createNodes 
+   var debugInstance   = null ;        // TraceClasses.TraceToSend object
+   var warningInstance = null ;        // TraceClasses.TraceToSend object
+   var errorInstance   = null ;        // TraceClasses.TraceToSend object
+   var contextInstance = new Array() ;
 
    // public vars
    //-------------
 
    /** {string} Unique node id */
-   this.id = '';
+   this.id = '' ;
 
    /** {integer} Icon index */
-   this.iconIndex = /*CST_ICO_DEFAULT*/ -1;    // WinTrace don't have icon (for now)
+   this.iconIndex = /*CST_ICO_DEFAULT*/ -1 ;    // WinTrace don't have icon (for now)
 
    /** {boolean} Enable methods on this node*/
-   this.enabled = true;
+   this.enabled = true ;
 
    /** {string} Parent node id (sould always be an emty string) */
-   this.parentNodeId = '';
+   this.parentNodeId = '' ;
 
    /** {string} Wintrace id */
-   this.winTraceId = '';
+   this.winTraceId = '' ;
 
    /** {string} members (always empty for Wintrace object)*/
-   this.members = null;
+   this.members = null ;
 
-   that = this;
+   that = this ;
    Object.defineProperty(this, 'classname', {
      enumerable: true,     
      configurable: false,  
@@ -2035,21 +2284,21 @@ traceClasses.WinTrace = function (winTraceId, winTraceText) // inherit from Trac
       // no arguments : Represent an existing wintrace on the viewer.
       // The user must assign itself the id
       // Nothing is send to the viewer.
-      createNodes();
+      createNodes() ;
    } else {
       // create a new WinTrace window on the viewer
-      if (typeof winTraceId === "undefined" || winTraceId === "")
-         that.id = newGuid();
+      if (typeof (winTraceId) == "undefined" || winTraceId === "")
+         that.id = newGuid() ;
       else
-         that.id = winTraceId;
+         that.id = winTraceId ;
 
-      createNodes();
+      createNodes() ;
 
-      if (typeof winTraceId !== "undefined" && winTraceId !== null && winTraceId === "_")
-         return;  // don't create new window on the viewer
+      if (typeof (winTraceId) != "undefined" && winTraceId != null && winTraceId === "_")
+         return ;  // don't create new window on the viewer
 
-      if (typeof winTraceText === "undefined" || winTraceText === null || winTraceText === "")
-         winTraceText = that.id;
+      if (typeof (winTraceText) == "undefined" || winTraceText === null || winTraceText === "")
+         winTraceText = that.id ;
 
       // create the trace window
       var commandList = new Array();
@@ -2098,27 +2347,27 @@ traceClasses.WinTrace = function (winTraceId, winTraceText) // inherit from Trac
    // visibility : internal
    function createNodes()
    {
-      that.winTraceId = that.id;    // winTraceId need to be the same as 'id' if we want to call sendXxx() directly on WinTrace object
+      that.winTraceId = that.id ;    // winTraceId need to be the same as 'id' if we want to call sendXxx() directly on WinTrace object
 
-      debugInstance = new traceClasses.TraceToSend(); // (null,false,contextInstance);    // no parentNode, don't generate id, winTraceContext
-      debugInstance.iconIndex = /*CST_ICO_INFO*/ 24;
-      debugInstance.winTraceId = that.id;
-      debugInstance.enabled = true;
+      debugInstance = new traceClasses.TraceToSend() ; // (null,false,contextInstance) ;    // no parentNode, don't generate id, winTraceContext
+      debugInstance.iconIndex = /*CST_ICO_INFO*/ 24 ;
+      debugInstance.winTraceId = that.id ;
+      debugInstance.enabled = true ;
 
-      warningInstance = new traceClasses.TraceToSend(); // (null,false,contextInstance);  // no parentNode, don't generate id, winTraceContext
-      warningInstance.iconIndex = /*CST_ICO_WARNING*/ 22;
-      warningInstance.winTraceId = that.id;
-      warningInstance.enabled = true;
+      warningInstance = new traceClasses.TraceToSend() ; // (null,false,contextInstance) ;  // no parentNode, don't generate id, winTraceContext
+      warningInstance.iconIndex = /*CST_ICO_WARNING*/ 22 ;
+      warningInstance.winTraceId = that.id ;
+      warningInstance.enabled = true ;
 
-      errorInstance = new traceClasses.TraceToSend(); // (null,false,contextInstance);    // no parentNode, don't generate id, winTraceContext
-      errorInstance.iconIndex = /*CST_ICO_ERROR*/ 23;
-      errorInstance.winTraceId = that.id;
-      errorInstance.enabled = true;
-   }
-};   // WinTrace class
+      errorInstance = new traceClasses.TraceToSend() ; // (null,false,contextInstance) ;    // no parentNode, don't generate id, winTraceContext
+      errorInstance.iconIndex = /*CST_ICO_ERROR*/ 23 ;
+      errorInstance.winTraceId = that.id ;
+      errorInstance.enabled = true ;
+   } ;
+} ;   // WinTrace class
 
 // WinTrace prototype. Inherit from TraceToSend class
-var winTracePrototype = new traceClasses.TraceToSend();           // create a new prototype based on TraceToSend
+var winTracePrototype = new traceClasses.TraceToSend() ;           // create a new prototype based on TraceToSend
 traceClasses.WinTrace.prototype = winTracePrototype;
 
 extend(winTracePrototype,
@@ -2135,7 +2384,7 @@ extend(winTracePrototype,
       saveToTextFile : function(fileName)
       {
          var commandList = new Array();
-         commandList.unshift ( intToStr5(/*CST_SAVETOTEXT*/ 559) + fileName);
+         commandList.unshift ( intToStr5(/*CST_SAVETOTEXT*/ 559) + fileName) ;
          sendToWinTraceClient (commandList,this.id);
       } ,
 
@@ -2150,8 +2399,8 @@ extend(winTracePrototype,
       saveToXml : function(fileName,styleSheet)
       {
          var commandList = new Array();
-         if (typeof styleSheet === "undefined")
-            commandList.unshift (intToStr5(/*CST_SAVETOXML*/ 560) + fileName);
+         if (typeof(styleSheet) == "undefined")
+            commandList.unshift (intToStr5(/*CST_SAVETOXML*/ 560) + fileName) ;
          else
             commandList.unshift (intToStr5(/*CST_SAVETOXML*/ 560) + fileName + '|' + styleSheet);
          sendToWinTraceClient(commandList, this.id);
@@ -2167,7 +2416,7 @@ extend(winTracePrototype,
       loadXml : function(fileName)
       {
          var commandList = new Array();
-         commandList.unshift (intToStr5(/*CST_LOADXML*/ 561) + fileName);
+         commandList.unshift (intToStr5(/*CST_LOADXML*/ 561) + fileName) ;
          sendToWinTraceClient(commandList, this.id);
       } ,
 
@@ -2178,16 +2427,16 @@ extend(winTracePrototype,
       * @param {string} fileName target filename.(Path is relative to the viewer)
       * @param {integer} [mode] <p>When 0, Log is disabled. <p>When 1, Enabled.<p>
       * When 2, a new file is create each day (CCYYMMDD is appended to the filename)
-      * @param {integer} [maxLines] Number of lines before starting a new file (default : -1 = unlimited)
+      * @param {integer} [MaxLines] Number of lines before starting a new file (default : -1 = unlimited)
       * @returns {void}
       */
       setLogFile : function(fileName, mode, maxLines)
       {
          var commandList = new Array();
 
-         mode = mode || 1;
-         maxLines = maxLines || -1;
-         commandList.unshift (intToStr5(/*CST_LOGFILE*/ 562) + intToStr11(mode) + intToStr11(maxLines) + fileName);
+         mode = mode || 1 ;
+         maxLines = maxLines || -1 ;
+         commandList.unshift (intToStr5(/*CST_LOGFILE*/ 562) + intToStr11(mode) + intToStr11(maxLines) + fileName) ;
          sendToWinTraceClient(commandList, this.id);
       } ,
 
@@ -2200,7 +2449,7 @@ extend(winTracePrototype,
       displayWin : function()
       {
          var commandList = new Array();
-         commandList.unshift (intToStr5(/*CST_DISPLAY_TREE*/ 97));
+         commandList.unshift (intToStr5(/*CST_DISPLAY_TREE*/ 97)) ;
          sendToWinTraceClient(commandList, this.id);
       } ,
 
@@ -2213,7 +2462,7 @@ extend(winTracePrototype,
       */
       setMultiColumn : function (mainColIndex)
       {
-         mainColIndex = mainColIndex || 0;
+         mainColIndex = mainColIndex || 0 ;
          var commandList = new Array();
          commandList.unshift (intToStr5(/*CST_TREE_MULTI_COLUMN*/ 95) +intToStr11(mainColIndex));
          sendToWinTraceClient(commandList, this.id);
@@ -2408,7 +2657,7 @@ extend(winTracePrototype,
       clearAll : function()
       {
          var commandList = new Array();
-         commandList.unshift (intToStr5(/*CST_CLEAR_ALL*/ 104));
+         commandList.unshift (intToStr5(/*CST_CLEAR_ALL*/ 104)) ;
          sendToWinTraceClient(commandList, this.id);
       } ,
 
@@ -2425,7 +2674,7 @@ extend(winTracePrototype,
          sendToWinTraceClient(commandList, this.id);
       }
    }
-);
+) ;
 
 Object.defineProperty(traceClasses.WinTrace.prototype, 'classname', {
   enumerable: true,     
@@ -2435,14 +2684,13 @@ Object.defineProperty(traceClasses.WinTrace.prototype, 'classname', {
 });
 
 //=============================================================================================================
-/* eslint-disable valid-jsdoc */
+
 /**
 * @class Alternate way to send traces : prepare a TraceNode with all properties then send it
 * @constructor
 * @param {string} [parentNode] The parent node where to place that trace. The IconIndex and the enabled properties are also recopied Parameters can be null : the root tree become the parent node, enabled is true and the default icon is used
 * @param {string} [generateUniqueId] if true, the id is generated automatically, else set the empty string
 */
-/* eslint-enable valid-jsdoc */
 traceClasses.TraceNodeEx = function (parentNode, generateUniqueId)
 {
    Object.defineProperty(this, 'classname', {
@@ -2477,7 +2725,7 @@ traceClasses.TraceNodeEx = function (parentNode, generateUniqueId)
    this.parentNodeId = "";
 
    /** {integer} The index of the icon to use. You can then show an icon for Warning traces different for Error traces */
-   this.iconIndex = /*CST_ICO_DEFAULT*/ -1;
+   this.iconIndex = /*CST_ICO_DEFAULT*/ -1 ;
 
    /** {boolean} When enabled is false, all traces are disabled. Default is true.
     All node have a enabled property, that lets you define group of enabled trace.
@@ -2490,8 +2738,8 @@ traceClasses.TraceNodeEx = function (parentNode, generateUniqueId)
    /** {string} The unique ID. Normally it's a GUID, but can be replaced by something else for inter process traces. */
    this.id = '';
 
-   if (typeof generateUniqueId === "undefined")
-      generateUniqueId = true;
+   if (typeof(generateUniqueId) == "undefined")
+      generateUniqueId = true ;
    if (generateUniqueId)
       this.id = newGuid();
 
@@ -2502,11 +2750,11 @@ traceClasses.TraceNodeEx = function (parentNode, generateUniqueId)
       this.enabled      = parentNode.enabled;
       this.winTraceId   = parentNode.winTraceId;
 
-      var parentContext = parentNode.context.getLast();
+      var parentContext = parentNode.context.getLast() ;
       if (parentContext !== '')
-         this.parentNodeId = parentContext;
+         this.parentNodeId = parentContext ;
    }
-};
+} ;
 
 //--------------------------------------------------------
 
@@ -2525,7 +2773,7 @@ traceClasses.TraceNodeEx.prototype =
          if (!this.enabled)
             return;
 
-         if (typeof xml === "undefined") xml = "";
+         if (typeof(xml) == "undefined") xml = "" ;
          var member = this.members.add(xml);
          member.viewerKind = /* TraceConst.CST_VIEWER_XML */ 2;
       } ,
@@ -2544,7 +2792,7 @@ traceClasses.TraceNodeEx.prototype =
          if (!this.enabled)
             return;
 
-         count = count || buffer.length;
+         count = count || buffer.length ;
          var dumpGroup = new traceClasses.MemberNode(shortTitle).setFontDetail(0, true);
          dumpGroup.viewerKind = /* TraceConst.CST_VIEWER_DUMP */ 1;
          this.members.add(dumpGroup);
@@ -2553,34 +2801,34 @@ traceClasses.TraceNodeEx.prototype =
          var c = 0;
 
 
-         while (byteDumped < count && c < buffer.length)
+         while (byteDumped < count && (c < buffer.length))
          {
             var d = 0; // inner loop. From 0 to 15 max
             var beginLine = c; // used to print the offset
             var hexaRepresentation = '';
-            //var strRepresentation = '';
+            //var strRepresentation = '' ;
 
             // 8 integers per line
-            while (byteDumped < count && d < 16 && c < buffer.length)
+            while ((byteDumped < count) && (d < 16) && (c < buffer.length))
             {
-               //var oneChar = buffer.charAt(c);
-               var oneInt = buffer.charCodeAt(c);
-               var str = intToHex(oneInt,2);  // minimum 2 but can be more
+               //var oneChar = buffer.charAt(c) ;
+               var oneInt = buffer.charCodeAt(c) ;
+               var str = intToHex(oneInt,2) ;  // minimum 2 but can be more
                hexaRepresentation += str + ' ';
 
                // only the zero cannot be copied to the stream
                //if (oneInt == 0)
-               //   strRepresentation += '.';
+               //   strRepresentation += '.' ;
                //else
-               //   strRepresentation += oneChar;
+               //   strRepresentation += oneChar ;
 
                byteDumped++;
                d++;
                c++;
             }
-            var adr = intToHex (beginLine,6);
+            var adr = intToHex (beginLine,6) ;
 
-            dumpGroup.add(adr, hexaRepresentation); // , strRepresentation);
+            dumpGroup.add(adr, hexaRepresentation) ; // , strRepresentation);
          }
          dumpGroup.col2 = '' + byteDumped + " char(s) dumped";
 
@@ -2623,7 +2871,7 @@ traceClasses.TraceNodeEx.prototype =
                //var itemClassName = getClassName(itemObject);
                
                // if itemObject primitive
-               if (typeof itemObject !== "object") {
+               if (typeof(itemObject) != "object") {
                
                   if (isFirst === true) 
                      tableMembers.col1 += "\t" + "Value";
@@ -2721,7 +2969,7 @@ traceClasses.TraceNodeEx.prototype =
          fontDetail.colId = colId;
          fontDetail.color = color;    // store the color and convert it to BGR when the node is send
          fontDetail.fontName = "BackgroundColor";  // special name. Indicate that color is for background, not font itself //$NON-NLS-1$
-         if (typeof this.fontDetails === "undefined" || this.fontDetails === null)   // private var fontDetails
+         if (typeof(this.fontDetails) == "undefined" || this.fontDetails === null)   // private var fontDetails
             this.fontDetails = new Array();
          this.fontDetails.push(fontDetail);
       } ,
@@ -2741,18 +2989,18 @@ traceClasses.TraceNodeEx.prototype =
       addFontDetail : function (colId, bold, italic, color, size, fontName)
       {
          if (!this.enabled)
-            return this;
-         var fontDetail;
+            return this ;
+         var fontDetail ;
          if (colId instanceof traceClasses.FontDetail) {     
-            fontDetail = colId;
+            fontDetail = colId ;
          } else {
             fontDetail = new traceClasses.FontDetail();
-            if (typeof colId    === "undefined") colId = -1;
-            if (typeof bold     === "undefined") bold  = true;
-            if (typeof italic   === "undefined") italic = false;
-            if (typeof color    === "undefined") color = null;
-            if (typeof size     === "undefined") size = 0;
-            if (typeof fontName === "undefined") fontName = '';
+            if (typeof(colId)    == "undefined") colId = -1 ;
+            if (typeof(bold)     == "undefined") bold  = true ;
+            if (typeof(italic)   == "undefined") italic = false;
+            if (typeof(color)    == "undefined") color = null ;
+            if (typeof(size)     == "undefined") size = 0 ;
+            if (typeof(fontName) == "undefined") fontName = '' ;
 
             fontDetail.colId    = colId;
             fontDetail.bold     = bold;
@@ -2762,7 +3010,7 @@ traceClasses.TraceNodeEx.prototype =
             fontDetail.fontName = fontName;
          }
 
-         if (typeof this.fontDetails === "undefined" || this.fontDetails === null)   // private var fontDetails
+         if (typeof(this.fontDetails) == "undefined" || this.fontDetails === null)   // private var fontDetails
             this.fontDetails = new Array();
 
          this.fontDetails.push(fontDetail);
@@ -2781,14 +3029,7 @@ traceClasses.TraceNodeEx.prototype =
       */
       addValue : function (objToSend, maxLevel, title)
       {
-         /**
-         * @function
-         * @param {Object} objToSend the object to examine
-         * @param {Object} upperNode parent node
-         * @param {integer} [maxLevel] The number of sub element to display. Default is 3
-         * @param {array} [alreadyParsedObject] list of already parsed object
-         * @returns {void}
-         */
+         /** @ignore */
          function innerAddValue (objToSend, upperNode, maxLevel, alreadyParsedObject)
          {
             try
@@ -2799,7 +3040,7 @@ traceClasses.TraceNodeEx.prototype =
                   return;
                }
 
-               if (typeof objToSend === "undefined")
+               if (typeof (objToSend) === "undefined")
                {
                   upperNode.col2 = "undefined";
                   return;
@@ -2808,12 +3049,12 @@ traceClasses.TraceNodeEx.prototype =
                var objClass = getClassName(objToSend);
 
                // display the modifier and type name in upper node (col 3). Old col3 content is keept
-               upperNode.col3 = upperNode.col3 + objClass;
+               upperNode.col3 = upperNode.col3 + objClass ;
 
                // display value in upper node (col2)
 
                // check primitive and well know type
-               if (typeof objToSend !== "object" )
+               if (typeof (objToSend) != "object" )
                {
                   upperNode.col2 = '' + objToSend.toString();
                   return;
@@ -2823,8 +3064,8 @@ traceClasses.TraceNodeEx.prototype =
                for(var i = 0; i < alreadyParsedObject.length; i++)
                   if (alreadyParsedObject[i] === objToSend)
                   {
-                     upperNode.col2 = "...";
-                     return;
+                     upperNode.col2 = "..." ;
+                     return ;
                   }
 
                // max level reached
@@ -2835,8 +3076,8 @@ traceClasses.TraceNodeEx.prototype =
                // this is the only place where object is added to alreadyParsedObject list
                alreadyParsedObject.push(objToSend);
 
-               var memberValue;
-               var propType;
+               var memberValue ;
+               var propType ;
                // ReSharper disable once MissingHasOwnPropertyInForeach
                for (var memberName in objToSend)
                {
@@ -2860,7 +3101,7 @@ traceClasses.TraceNodeEx.prototype =
                          memberName === "DOCUMENT_POSITION_CONTAINS" ||
                          memberName === "DOCUMENT_POSITION_CONTAINED_BY" ||
                          memberName === "DOCUMENT_POSITION_IMPLEMENTATION_SPECIFIC")
-                         continue;
+                         continue ;
 
 
                      memberValue = objToSend[memberName];
@@ -2868,10 +3109,10 @@ traceClasses.TraceNodeEx.prototype =
                      if (objClass === "Array")
                         memberName = "[" + memberName + "]";
 
-                     propType = getClassName(memberValue);
+                     propType = getClassName(memberValue) ;
 
                      if (propType === "function")
-                        continue;
+                        continue ;
 
 
                      var node = new traceClasses.MemberNode(memberName, "", "");
@@ -2879,8 +3120,8 @@ traceClasses.TraceNodeEx.prototype =
                      innerAddValue(memberValue, node, maxLevel - 1, alreadyParsedObject);
 
                   } catch (e) {
-                     var nodeEx;
-                     var msg = "" + e;
+                     var nodeEx ;
+                     var msg = "" + e ;
                      if (msg === e.message)
                         nodeEx = new traceClasses.MemberNode(memberName, e);
                      else
@@ -2893,7 +3134,7 @@ traceClasses.TraceNodeEx.prototype =
                var nodeEx2 = new traceClasses.MemberNode(e2.message);
                upperNode.add(nodeEx2);
             }
-         } // innerAddValue()
+         } ; // innerAddValue()
 
          if (!this.enabled)
             return;
@@ -2904,15 +3145,15 @@ traceClasses.TraceNodeEx.prototype =
             return;
          }
 
-         if (typeof maxLevel === "undefined") maxLevel = ttrace.options.objectTreeDepth;
-         if (typeof title === "undefined") title = "Object Value";
+         if (typeof(maxLevel) == "undefined") maxLevel = ttrace.options.objectTreeDepth ;
+         if (typeof(title) == "undefined") title = "Object Value" ;
 
-         var alreadyParsedObject = new Array();
+         var alreadyParsedObject = new Array() ;
 
          // create the top node using only title.
          // Value (col2) and Type (col3) will be added by inner_addValue
          var result = new traceClasses.MemberNode(title);
-         result.viewerKind = /* TraceConst.CST_VIEWER_VALUE */ 7;
+         result.viewerKind = /* TraceConst.CST_VIEWER_VALUE */ 7 ;
 
          // add top node to trace
          this.members.add(result);
@@ -2929,20 +3170,20 @@ traceClasses.TraceNodeEx.prototype =
       * @param {boolean} [displayFunctions] Display functions if true
       * @returns {void}
       */
-      addObject : function (objToSend, displayFunctions)
+      addObject : function (objName, displayFunctions)
       {
          if (!this.enabled)
             return;
 
-         var oProp;
-         var propType;
-         var propCount = 0;
-         var propertiesGroup = null;
-         var functionsGroup = null;
-         var classGroup = null;
+         var oProp ;
+         var propType ;
+         var propCount = 0 ;
+         var propertiesGroup = null ;
+         var functionsGroup = null ;
+         var classGroup = null ;
 
          classGroup = new traceClasses.MemberNode("Class information").setFontDetail(0, true);
-         classGroup.viewerKind = /* CST_VIEWER_OBJECT */ 6;
+         classGroup.viewerKind = /* CST_VIEWER_OBJECT */ 6 ;
          this.members.add(classGroup);
 
          propertiesGroup = new traceClasses.MemberNode("Properties").setFontDetail(0, true);
@@ -2951,28 +3192,28 @@ traceClasses.TraceNodeEx.prototype =
 
          try
          {
-            if (typeof objToSend === "undefined")
+            if (typeof(objName) == "undefined")
             {
                this.members.add("undefined");
                return;
             }
 
-            if (typeof displayFunctions === "undefined")
-               displayFunctions = ttrace.options.sendFunctions;
+            if (typeof(displayFunctions) == "undefined")
+               displayFunctions = ttrace.options.sendFunctions ;
 
-            var obj;
-            if (typeof objToSend === "string")
-               obj = eval(objToSend);
+            var obj ;
+            if (typeof(objName) == "string")
+               obj = eval(objName) ;
             else
-               obj = objToSend;
+               obj = objName ;
 
-            classGroup.add('Class name',getClassName(obj));
+            classGroup.add('Class name',getClassName(obj)) ;
 
             // Loop through properties/functions of the object
             // ReSharper disable once MissingHasOwnPropertyInForeach
             for (var sProp in obj)
             {
-               propCount++;
+               propCount++ ;
                // sProp is the name of the property (string)
                try
                {
@@ -2994,12 +3235,12 @@ traceClasses.TraceNodeEx.prototype =
                       sProp === "DOCUMENT_POSITION_CONTAINS" ||
                       sProp === "DOCUMENT_POSITION_CONTAINED_BY" ||
                       sProp === "DOCUMENT_POSITION_IMPLEMENTATION_SPECIFIC")
-                      continue;
+                      continue ;
 
                   oProp = obj[sProp];
-                  propType = typeof oProp;  // get type as usual in case of the getClassName() generate exception
+                  propType = typeof(oProp) ;  // get type as usual in case of the getClassName() generate exception
 
-                  propType = getClassName(oProp);
+                  propType = getClassName(oProp) ;
 
                   if (propType === "function")
                   {
@@ -3011,13 +3252,13 @@ traceClasses.TraceNodeEx.prototype =
                            functionsGroup.viewerKind = /* CST_VIEWER_OBJECT */ 6;
                            this.members.add(functionsGroup);
                         }
-                        functionsGroup.add(getFunctionName(sProp));
+                        functionsGroup.add(getFunctionName(sProp)) ;
                      }
                   } else {
-                     propertiesGroup.add(sProp,oProp , propType);
+                     propertiesGroup.add(sProp,oProp , propType) ;
                   }
                } catch (e) {
-                  var msgEx = "" + e;
+                  var msgEx = "" + e ;
                   if (msgEx === e.message)
                      propertiesGroup.add(sProp,e);
                   else
@@ -3027,10 +3268,10 @@ traceClasses.TraceNodeEx.prototype =
             // if no functions or properties : add a warning message
             if (propCount === 0)
             {
-               propertiesGroup.add("No properties !");
+               propertiesGroup.add("No properties !") ;
             }
          } catch (e2) {
-            var msgExg = "" + e2;
+            var msgExg = "" + e2 ;
             if (msgExg === e2.message)
                classGroup.add(e2);
             else
@@ -3051,43 +3292,62 @@ traceClasses.TraceNodeEx.prototype =
          if (!this.enabled)
             return;
 
-         var stack;
-         var stackList;
-         var stackLength;
-         var callObj;
-         var callName;
+         var stack ;
+         var stackList ;
+         var stackLength ;
+         var callObj ;
+         var callName ;
 
-         level = level || 0;
+         level = level || 0 ;
 
          var group = new traceClasses.MemberNode("Call stack").setFontDetail(0, true);
-         group.viewerKind =  /* CST_VIEWER_STACK */ 4;
+         group.viewerKind =  /* CST_VIEWER_STACK */ 4 ;
          this.members.add(group);
 
+         if (isRequireJs)  // isNodeJs
+         {
+             stack = getCallStack(this.addCaller);
+             stackLength = stack.length;
+             for (let i = 0; i < stackLength; i++)
+             {
+                callObj = stack[i];
+                if (callObj.getFileName().includes("tracetool.js") === false)
+                {
+                   if (level > 0)
+                      level-- ;
+                   else {
+                      callName = callObj.toString();
+                      group.add(callName);
+                      return;
+                   }
+                }
+             }
+         } else {
            
-            stack = new Error().stack;
-            stackList = stack.split('\n');
+            stack = new Error().stack ;
+            stackList = stack.split('\n') ;
             stackLength = stackList.length;
             for (let i = 0; i < stackLength; i++)
             {
                callObj = stackList[i].trim();
                if (callObj === "Error")
-                   continue;
+                   continue ;
                
                if (callObj.includes("tracetool.js") === true)
-                   continue;
+                   continue ;
 
                if (callObj.startsWith("at ")) // other fancy lines are ignored
                {
                   if (level > 0)
-                     level--;
+                     level-- ;
                   else {
                      callName = callObj.substring(3);
                      group.add(callName);
-                     return;
+                     return ;
                   }
                }  
             }
-         
+         }
       } ,
 
       //--------------------------------------------------------
@@ -3101,38 +3361,38 @@ traceClasses.TraceNodeEx.prototype =
       {
          if (!this.enabled)
             return;
-         level = level || 0;
+         level = level || 0 ;
 
          var group = new traceClasses.MemberNode("Call stack").setFontDetail(0, true);
-         group.viewerKind =  /* CST_VIEWER_STACK */ 4;
+         group.viewerKind =  /* CST_VIEWER_STACK */ 4 ;
          this.members.add(group);
          
-         var stack;
-         var stackList;
-         var stackLength;
-         var callObj;
-         var callName;
+         var stack ;
+         var stackList ;
+         var stackLength ;
+         var callObj ;
+         var callName ;
          
 
-         //if (isNodeJs)
-         //{
-         //   stack = stackTrace.get(this.addStackTrace);
-         //   stackLength = stack.length;
-         //   for (let i = 0; i < stackLength; i++)
-         //   {
-         //      callObj = stack[i];
-         //      if (callObj.getFileName().includes("tracetool.js") === false)
-         //      {
-         //         if (level > 0)
-         //            level--;
-         //         else {
-         //            callName = callObj.toString();
-         //            group.add(callName);
-         //         }
-         //      }
-         //   }
-         //} else {
-            stack = new Error().stack;
+         if (isNodeJs)
+         {
+            stack = getCallStack(this.addStackTrace);
+            stackLength = stack.length;
+            for (let i = 0; i < stackLength; i++)
+            {
+               callObj = stack[i];
+               if (callObj.getFileName().includes("tracetool.js") === false)
+               {
+                  if (level > 0)
+                     level-- ;
+                  else {
+                     callName = callObj.toString();
+                     group.add(callName);
+                  }
+               }
+            }
+         } else {
+            stack = new Error().stack ;
             
             /*
             typeof stack : string 
@@ -3143,28 +3403,28 @@ traceClasses.TraceNodeEx.prototype =
                 at HTMLInputElement.onclick (file:///C:/Thierry/ChromeExtensions/Page%20checker/components/tracetool/sample.html:302:94)
             */
             
-            stackList = stack.split('\n');
+            stackList = stack.split('\n') ;
             stackLength = stackList.length;
             for (let i = 0; i < stackLength; i++)
             {
                callObj = stackList[i].trim();
                if (callObj === "Error")
-                   continue;
+                   continue ;
                
                if (callObj.includes("tracetool.js") === true)
-                   continue;
+                   continue ;
 
                if (callObj.startsWith("at ")) // other fancy lines are ignored
                {
                   if (level > 0)
-                     level--;
+                     level-- ;
                   else {
                      callName = callObj.substring(3);
                      group.add(callName);
                   }
                }  
             }           
-         //}
+         }
       } ,
 
       //--------------------------------------------------------
@@ -3184,25 +3444,25 @@ traceClasses.TraceNodeEx.prototype =
             commandList.push(intToStr5(/*TraceConst.CST_THREAD_NAME*/305) + this.threadName);
          commandList.push( intToStr5(/*CST_NEW_NODE*/ 550)+ this.parentNodeId); // param : parent Node id (this)
          commandList.push( intToStr5(/*CST_TRACE_ID*/ 101)+ this.id);           // param : Node id
-         if (typeof this.leftMsg !== "undefined" && "" + this.leftMsg !== "")
+         if (typeof (this.leftMsg) != "undefined" && ("" + this.leftMsg) !== "")
             commandList.push( intToStr5(/*CST_LEFT_MSG*/ 551)+ this.leftMsg);   // param : left string
-         if (typeof this.rightMsg !== "undefined" && "" + this.rightMsg !== "")
+         if (typeof (this.rightMsg) != "undefined" && ("" + this.rightMsg) !== "")
             commandList.push( intToStr5(/*CST_RIGHT_MSG*/ 552)+ this.rightMsg); // param : right string
 
          commandList.push( intToStr5(/*CST_ICO_INDEX*/ 103) + intToStr11(this.iconIndex)); // param : Icon index
 
          // add font detail (private var)
-         if (this.fontDetails !== null)
+         if (this.fontDetails != null)
          {
             for (var c = 0; c < this.fontDetails.length; c++)
             {
                var fontDetail = this.fontDetails[c];
-               var colorValue;
-               if (typeof fontDetail.color === "undefined" || fontDetail.color === null)
-                  colorValue = -1;
+               var colorValue ;
+               if (typeof(fontDetail.color) == "undefined" || fontDetail.color === null)
+                  colorValue = -1 ;
                else
                   colorValue = rgbToBgr(fontDetail.color);
-               var tempStr = "";
+               var tempStr = "" ;
 
                if (fontDetail.fontName === "BackgroundColor") //$NON-NLS-1$
                {
@@ -3221,7 +3481,7 @@ traceClasses.TraceNodeEx.prototype =
                   else
                      tempStr += "0";
 
-                  tempStr += intToStr11(colorValue) + intToStr11(fontDetail.size) + fontDetail.fontName;
+                  tempStr += intToStr11(colorValue) + intToStr11(fontDetail.size) + fontDetail.fontName ;
                   commandList.push(tempStr);
                }
             }
@@ -3244,28 +3504,28 @@ Object.defineProperty(traceClasses.TraceNodeEx.prototype, 'classname', {
 });
 
 //=============================================================================================================
-/* eslint-disable valid-jsdoc */
+
 /**
 * @class Construct a table of row to display in the viewer on a node.
 * @description The table must be associated with a node. See TraceNodeEx.AddTable() and TraceSend.SendTable()
 * @constructor
 */
-/* eslint-enable valid-jsdoc */
-traceClasses.TraceTable = function () {
-    Object.defineProperty(this, 'classname', {
-        enumerable: true,
-        configurable: false,
-        writable: false,
-        value: 'TraceClasses.TraceTable'
-    });
+traceClasses.TraceTable = function ()
+{
+   Object.defineProperty(this, 'classname', {
+     enumerable: true,     
+     configurable: false,  
+     writable: false,       
+     value: 'TraceClasses.TraceTable'
+   });
 
-    /** {MemberNode} the root for the Member tree */
-    this.members = new traceClasses.MemberNode();
-    this.members.viewerKind = 3; /*CST_VIEWER_TABLE*/
+   /** {MemberNode} the root for the Member tree */
+   this.members = new traceClasses.MemberNode();
+   this.members.viewerKind = 3 ; /*CST_VIEWER_TABLE*/;
 
-    /** {string} the current row */
-    this.currentRow = null;
-};
+   /** {string} the current row */
+   this.currentRow= null;
+}
 
 //--------------------------------------------------------
 // TraceTable prototype
@@ -3340,7 +3600,7 @@ Object.defineProperty(traceClasses.TraceTable.prototype, 'classname', {
 });
 
 //=============================================================================================================
-/* eslint-disable valid-jsdoc */
+
 /**
  * @class WinWatch represent a windows tree where you put watches.
  * @description Windows watch. The Window watch is create on the viewer (if not already done). Sample code : TTrace.watches().send("test2", mySet);
@@ -3348,43 +3608,43 @@ Object.defineProperty(traceClasses.TraceTable.prototype, 'classname', {
  * @param {string} [winWatchId] Required window trace Id. If empty, a guid will be generated
  * @param {string} [winWatchText] The Window Title on the viewer.If empty, a default name will be used
  */
-/* eslint-enable valid-jsdoc */
-traceClasses.WinWatch = function (winWatchId, winWatchText) {
-    Object.defineProperty(this, 'classname', {
-        enumerable: true,
-        configurable: false,
-        writable: false,
-        value: 'TraceClasses.WinWatch'
-    });
+traceClasses.WinWatch = function (winWatchId , winWatchText)
+{
+   Object.defineProperty(this, 'classname', {
+     enumerable: true,     
+     configurable: false,  
+     writable: false,       
+     value: 'TraceClasses.WinWatch'
+   });
 
-    /** {boolean} When enabled is false, all traces are disabled. Default is true. */
-    this.enabled = true;
+   /** {boolean} When enabled is false, all traces are disabled. Default is true. */
+   this.enabled = true ;
 
-    /**
-    * {string} The "Required" Id of the window tree, can be any string, or a guid.
-    * The Main window watch Id is empty
-    */
-    this.id = "";  //$NON-NLS-1$
+   /**
+   * {string} The "Required" Id of the window tree, can be any string, or a guid.
+   * The Main window watch Id is empty
+   */
+   this.id = "" ;  //$NON-NLS-1$
 
-    // case of the main WinWatch
-    if (typeof winWatchId === "undefined")
-        return;
+   // case of the main WinWatch
+   if (typeof(winWatchId) == "undefined")
+      return ;
 
-    if (winWatchId === null || winWatchId === "")
-        this.id = newGuid();
-    else
-        this.id = winWatchId;
+   if (winWatchId === null || winWatchId === "")
+      this.id = newGuid();
+   else
+      this.id = winWatchId ;
 
-    // create the trace window
-    var commandList = new Array();
+   // create the trace window
+   var commandList = new Array();
 
-    if (winWatchText === null || winWatchText === "") //$NON-NLS-1$
-        commandList.unshift(intToStr5(/*CST_WINWATCH_NAME*/ 110) + "Watches " + this.id);
-    else
-        commandList.unshift(intToStr5(/*CST_WINWATCH_NAME*/ 110) + winWatchText);
+   if (winWatchText === null || winWatchText === "") //$NON-NLS-1$
+      commandList.unshift (intToStr5(/*CST_WINWATCH_NAME*/ 110) + "Watches " + this.id);
+   else
+      commandList.unshift (intToStr5(/*CST_WINWATCH_NAME*/ 110) + winWatchText);
 
-    sendToWinWatchClient(commandList, this.id);
-};
+   sendToWinWatchClient  (commandList, this.id);
+}
 
 //--------------------------------------------------------
 
@@ -3399,7 +3659,7 @@ traceClasses.WinWatch.prototype =
        displayWin : function ()
        {
           var commandList = new Array();
-          commandList.unshift (intToStr5(/*CST_DISPLAY_TREE*/ 97));
+          commandList.unshift (intToStr5(/*CST_DISPLAY_TREE*/ 97)) ;
           sendToWinWatchClient(commandList, this.id);
        } ,
 
@@ -3412,7 +3672,7 @@ traceClasses.WinWatch.prototype =
        clearAll : function ()
        {
           var commandList = new Array();
-          commandList.unshift (intToStr5(/*CST_CLEAR_ALL*/ 104));
+          commandList.unshift (intToStr5(/*CST_CLEAR_ALL*/ 104)) ;
           sendToWinWatchClient(commandList, this.id);
        } ,
 
@@ -3440,7 +3700,7 @@ traceClasses.WinWatch.prototype =
        send : function (watchName ,watchValue)
        {
           if (!this.enabled)
-             return;
+             return ;
 
           var commandList = new Array();
           commandList.push(intToStr5(/*CST_WATCH_NAME*/ 112) + watchName);
@@ -3449,7 +3709,7 @@ traceClasses.WinWatch.prototype =
           var node = new traceClasses.TraceNodeEx(null, false);  // no parent, don't generate node id
 
           node.addValue(watchValue  ,  ttrace.options.objectTreeDepth , "");    // no title
-          node.members.addToStringList(commandList);   // convert all groups and nested items/group to strings
+          node.members.addToStringList(commandList) ;   // convert all groups and nested items/group to strings
 
           sendToWinWatchClient(commandList, this.id);
        }
@@ -3463,7 +3723,7 @@ Object.defineProperty(traceClasses.WinWatch.prototype, 'classname', {
   value: 'TraceClasses.WinWatch.prototype'
 });
 //=============================================================================================================
-/* eslint-disable valid-jsdoc */
+
 /**
 * @class Create a TMemberNode with text for the 3 columns
 * @constructor
@@ -3471,7 +3731,6 @@ Object.defineProperty(traceClasses.WinWatch.prototype, 'classname', {
 * @param {string} [col2] text of second col
 * @param {string} [col3] text of third col
 */
-/* eslint-enable valid-jsdoc */
 traceClasses.MemberNode = function (col1, col2, col3)
 {
    Object.defineProperty(this, 'classname', {
@@ -3482,23 +3741,23 @@ traceClasses.MemberNode = function (col1, col2, col3)
    });
 
    /** {integer} Indicate the type of viewer to use do display the member */
-   this.viewerKind = 0;
+   this.viewerKind = 0 ;
 
    /** {string} first column */
-   this.col1 = "" + (col1 || "");
+   this.col1 = "" + (col1 || "") ;
 
    /** {string} second column */
-   this.col2 = "" + (col2 || "");
+   this.col2 = "" + (col2 || "") ;
 
    /** {string} third column */
-   this.col3 = "" + (col3 || "");
+   this.col3 = "" + (col3 || "") ;
 
    /** {Array} sub members */
-   this.members = new Array();
+   this.members = new Array() ;
 
    /** {Array} fonts details applied to the member. Don't use it directly. Use the setFontDetail function in place */
-   this.fontDetails = new Array();
-};   // MemberNode class
+   this.fontDetails = new Array() ;
+} ;   // MemberNode class
 
 //--------------------------------------------------------------------------------------------------------
 
@@ -3515,12 +3774,12 @@ traceClasses.MemberNode.prototype =
    */
    add : function (col1, col2, col3)
    {
-      var member;
+      var member ;
       if (col1 instanceof traceClasses.MemberNode)    
       {
-         member = col1; // strCol1 is already a MemberNode object. Add to array and return it
+         member = col1 ; // strCol1 is already a MemberNode object. Add to array and return it
       } else {
-         member = new traceClasses.MemberNode(col1, col2, col3);  // create a Member object
+         member = new traceClasses.MemberNode(col1, col2, col3) ;  // create a Member object
       }
       this.members.push(member);
       return member;
@@ -3540,29 +3799,29 @@ traceClasses.MemberNode.prototype =
    */
    setFontDetail : function (colId, bold, italic, color, size, fontName)
    {
-      var fontDetail;
+      var fontDetail ;
 
       if (getClassName(colId) === "TraceClasses.FontDetail") 
       {
-         fontDetail = colId;
+         fontDetail = colId ;
       } else {
          fontDetail = new traceClasses.FontDetail();
 
-         if (typeof colId    === "undefined") colId = -1;     // default : whole line
-         if (typeof bold     === "undefined") bold  = false;  // default : not bold
-         if (typeof italic   === "undefined") italic = false;  // default : not italic
-         if (typeof color    === "undefined") color = null;   // store color string. Will be converted to "BGR" before sending. default : black
-         if (typeof size     === "undefined") size = 0;       // default : use default viewer font size
-         if (typeof fontName === "undefined") fontName = '';  // default : no font name
+         if (typeof(colId)    == "undefined") colId = -1 ;     // default : whole line
+         if (typeof(bold)     == "undefined") bold  = false ;  // default : not bold
+         if (typeof(italic)   == "undefined") italic = false;  // default : not italic
+         if (typeof(color)    == "undefined") color = null ;   // store color string. Will be converted to "BGR" before sending. default : black
+         if (typeof(size)     == "undefined") size = 0 ;       // default : use default viewer font size
+         if (typeof(fontName) == "undefined") fontName = '' ;  // default : no font name
 
-         fontDetail.colId    = colId;
-         fontDetail.bold     = bold;
-         fontDetail.italic   = italic;
-         fontDetail.color    = color;
-         fontDetail.size     = size;
-         fontDetail.fontName = fontName;
+         fontDetail.colId    = colId    ;
+         fontDetail.bold     = bold     ;
+         fontDetail.italic   = italic   ;
+         fontDetail.color    = color    ;
+         fontDetail.size     = size     ;
+         fontDetail.fontName = fontName ;
       }
-      if (typeof this.fontDetails === "undefined" || this.fontDetails === null)
+      if (typeof(this.fontDetails) == "undefined" || this.fontDetails === null)
          this.fontDetails = new Array();
 
       this.fontDetails.push(fontDetail);
@@ -3573,17 +3832,12 @@ traceClasses.MemberNode.prototype =
    /**
    * recursively add members to the node commandList
    * @function
-   * @param {array} commandList Where to store members
+   * @param commandList Where to store members
    * @returns {void}
    */
    addToStringList : function(commandList)
    {
-      /**
-      * internal
-      * @function
-      * @param {array} subnode subnode
-      * @returns {void}
-      */
+      /** @ignore */
       function internalAddToStringList(subnode)
       {
          var c;
@@ -3601,16 +3855,16 @@ traceClasses.MemberNode.prototype =
             commandList.push( intToStr5( /*CST_MEMBER_VIEWER_KIND*/ 503) + subnode.viewerKind);     // 3/11 ?
 
          // add font detail
-         if (subnode.fontDetails !== null)
+         if (subnode.fontDetails != null)
          {
             for (c = 0; c < subnode.fontDetails.length; c++)
             {
                var fontDetail = subnode.fontDetails[c];
 
-               var tempStr = "";
+               var tempStr = "" ;
 
-               tempStr += intToStr5(/*CST_MEMBER_FONT_DETAIL*/ 501);
-               tempStr += intToStr3(fontDetail.colId);
+               tempStr += intToStr5(/*CST_MEMBER_FONT_DETAIL*/ 501) ;
+               tempStr += intToStr3(fontDetail.colId) ;
 
                if (fontDetail.bold)
                   tempStr += "1";
@@ -3623,16 +3877,16 @@ traceClasses.MemberNode.prototype =
                   tempStr += "0";
 
                // Color is coded as RGB. convert to BGR
-               var colorValue;
-            if (typeof fontDetail.color === "undefined" || fontDetail.color === null)
-                  colorValue = -1;
+               var colorValue ;
+            if (typeof(fontDetail.color) == "undefined" || fontDetail.color === null)
+                  colorValue = -1 ;
                else
                   colorValue = rgbToBgr(fontDetail.color);
 
-               tempStr += intToStr11(colorValue) + intToStr11(fontDetail.size) + fontDetail.fontName;
+               tempStr += intToStr11(colorValue) + intToStr11(fontDetail.size) + fontDetail.fontName ;
                commandList.push(tempStr);
             }
-            subnode.fontDetails = null;   // once copied to commandlist, clear the array
+            subnode.fontDetails = null ;   // once copied to commandlist, clear the array
          }
 
          // recursive add sub nodes, if any
@@ -3644,7 +3898,7 @@ traceClasses.MemberNode.prototype =
 
           // close the member group
          commandList.push( intToStr5( /*CST_ADD_MEMBER*/ 505));
-      } // end of internalAddToStringList
+      } ; // end of internalAddToStringList
 
 
       // the root node node itself is not send for now.
@@ -3658,7 +3912,7 @@ traceClasses.MemberNode.prototype =
       }
 
       // once copied to Commandlist, clear the array
-      this.members= new Array();
+      this.members= new Array() ;
    }  // addToStringList
 };  // TraceClasses.MemberNode.prototype
 
@@ -3671,10 +3925,48 @@ Object.defineProperty(traceClasses.MemberNode.prototype, 'classname', {
 
 //--------------------------------------------------------------------------------------------------------
 
-module.exports = ttrace;
+// http://benmccormick.org/2015/05/28/moving-past-requirejs/
 
-//put it global (window)
-global.ttrace = ttrace;
+// CommonJS syntax (synchronous nodejs)
+if (isCommonJS)
+{
+   module.exports = ttrace;
+} else if (isRequireJs) {
+
+   // AMD modules syntaxe . RequireJS requires developers to use AMD modules (asynchronous)
+   define({
+      ttrace: ttrace
+   });
+}
+
+// ES6 syntax :
+//export default ttrace ;
+
+//if (isSystemJS) {
+//  System.register(["tracetool"], function (exports_1, context_1) {
+//    "use strict";
+//    safeLog("exports_1", exports_1);
+//    safeLog("context_1", context_1);
+//    var __moduleName = context_1 && context_1.id;
+//    return {
+//      setters: [
+//        function (_1) {
+//        }
+//      ],
+//      execute: function () {
+//          safeLog("System.register execute");
+//          exports_1("default", ttrace);
+//      }
+//    };
+//  });  
+//}
+
+
+// simple browser mode : put it global (window)
+if (isBrowser)
+{
+   global.ttrace = ttrace;
+}
 
 // ReSharper disable once ThisInGlobalContext
 })(typeof window !== "undefined" ? window : this);

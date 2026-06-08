@@ -8,7 +8,7 @@
 		<HTTPPort Value="81"/>
 		<SocketPort2 Value="4502"/>
 		<SocketPolicyServer Value="true"/>
-		<HttpPolicyServer Value="true"/>
+		<HttpPolicyServer Value="false"/>
 		<Udp1 Value="false"/>
 		<Udp2 Value="false"/>
 		<InternalLog Value="c:\temp\TracetoolInternalLog.txt"/>
@@ -16,15 +16,15 @@
 	<AppDisplay>
 		<SmallBut Value="false"/>
 		<ApplicationTitle Value="socket: 8090 / 4502,  Http : 81, WebSocket:8091"/>
-		<Left Value="260"/>
-		<Top Value="260"/>
+		<Left Value="130"/>
+		<Top Value="130"/>
 		<Width Value="697"/>
 		<Height Value="636"/>
 		<StayOnTop Value="false"/>
 		<ShowOnstartup Value="true"/>
 		<ShowOnMessageReceived Value="false"/>
 		<FocusToReceivedMessage Value="false"/>
-		<Maximized Value="true"/>
+		<Maximized Value="false"/>
 		<IconFile Value=""/>
 		<MinimizeToSystray Value="true"/>
 		<SearchUnderline Value="True"/>

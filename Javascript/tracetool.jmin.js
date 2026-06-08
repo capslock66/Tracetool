@@ -1,9 +1,17 @@
 
 ﻿"use strict";var define;(function(global)
-{var ttrace=null;var ttraceScript=null;var headId=null;var request;var stackTrace;var uuid;var requestId=0;var toSend=[];var nbDone=0;var winTraceSingeton=null;var watchesSingeton=null;var clientId="";var host="127.0.0.1:81";var traceClasses={};var isChromeExtension;var isBrowser;var isNodeJs;var isRequireJs;var isCommonJS;var isSystemJS;detectEnvironment();if(isRequireJs)
-{stackTrace=require('stack-trace');uuid=require('uuid');clientId=uuid().replace(/-/g,'');}
+{var ttrace=null;var ttraceScript=null;var headId=null;var http;var requestId=0;var toSend=[];var nbDone=0;var winTraceSingeton=null;var watchesSingeton=null;var clientId="";var host="127.0.0.1:81";var traceClasses={};var isChromeExtension;var isBrowser;var isNodeJs;var isRequireJs;var isCommonJS;var isSystemJS;detectEnvironment();if(isRequireJs)
+{clientId=(typeof crypto!=="undefined"&&crypto.randomUUID)?crypto.randomUUID().replace(/-/g,''):Math.random().toString(36).slice(2)+Date.now().toString(36);}
 if(isNodeJs)
-{request=require('request');}else if(isBrowser){ttraceScript=null;headId=global.document.getElementsByTagName("head")[0];}
+{http=require('http');}else if(isBrowser){ttraceScript=null;headId=global.document.getElementsByTagName("head")[0];}
+function getCallStack(belowFn){if(typeof Error.captureStackTrace==='function'){var oldPrepare=Error.prepareStackTrace;Error.prepareStackTrace=function(_,stack){return stack;};var err=new Error();Error.captureStackTrace(err,belowFn||getCallStack);var stack=err.stack;Error.prepareStackTrace=oldPrepare;return stack;}
+var lines=(new Error().stack||'').split('\n');var result=[];var belowFnName=belowFn?belowFn.name:null;var foundBelowFn=!belowFnName;for(var i=0;i<lines.length;i++){var line=lines[i].trim();if(!line)continue;var fileName='',funcName='',lineNumber=0,colNumber=0;var atIdx=line.lastIndexOf('@');if(atIdx!==-1){funcName=line.substring(0,atIdx)||'<anonymous>';var loc=line.substring(atIdx+1);var parts=loc.split(':');colNumber=parseInt(parts.pop(),10)||0;lineNumber=parseInt(parts.pop(),10)||0;fileName=parts.join(':');}else{funcName=line;}
+if(!foundBelowFn){if(funcName===belowFnName)foundBelowFn=true;continue;}
+(function(fn,file,ln){result.push({getFunctionName:function(){return fn;},getFileName:function(){return file;},getLineNumber:function(){return ln;},toString:function(){return fn+' ('+file+':'+ln+')';}});})(funcName,fileName,lineNumber);}
+return result;}
+function safeLog(...args){if(typeof process!=="undefined"&&process.stderr)
+process.stderr.write(args.join(' ')+'\n');else if(typeof console!=="undefined")
+console.warn(...args);}
 function detectEnvironment()
 {isChromeExtension=false;isBrowser=false;isNodeJs=false;isRequireJs=false;isCommonJS=false;isSystemJS=false;try{if(typeof require==="function")
 isRequireJs=true;if((typeof module==="object")&&(typeof module.exports==="object"))
@@ -11,7 +19,7 @@ isCommonJS=true;if((typeof chrome==="object")&&(typeof chrome.extension==="objec
 isChromeExtension=true;else if((typeof require==="function")&&(typeof process==="object")&&(typeof process.release==="object")&&(typeof process.release.name==="string")&&(process.release.name.search(/node|io.js/)!==-1))
 isNodeJs=true;else
 isBrowser=true;}
-catch(e){console.log("detectEnvironment exception",e);}}
+catch(e){safeLog("detectEnvironment exception",e);}}
 function extend(target,source)
 {for(var property in source)
 target[property]=source[property];return target;};function getFormattedTime()
@@ -32,9 +40,9 @@ addMessage({msgId:msgId,msg:part,partNum:'Last'});partNum++;}}else{addMessage({m
 {objMessage.command=objMessage.command||"WMD";toSend.push(objMessage);if(toSend.length===1)
 setTimeout(worker,0);};function worker()
 {var objMessage;if(toSend.length!==0)
-{objMessage=toSend.shift();var hostUrl="http://"+host+"/"+objMessage.command+"?msgId="+objMessage.msgId+"&msg="+encodeURIComponent(objMessage.msg);if(objMessage.partNum!=="")
+{objMessage=toSend.shift();var encodedMsg=encodeURIComponent(objMessage.msg);var hostUrl="http://"+host+"/"+objMessage.command+"?msgId="+objMessage.msgId+"&msg="+encodedMsg;if(objMessage.partNum!=="")
 hostUrl=hostUrl+"&partNum="+objMessage.partNum;nbDone++;if(isNodeJs)
-sendToClientUsingRequest(hostUrl);else if(isBrowser)
+sendToClientUsingHttp(hostUrl);else if(isBrowser)
 sendToClientUsingScript(hostUrl);else
 sendToClientUsingXmlHttpRequest(hostUrl);}}
 function sendToClientUsingScript(hostUrl)
@@ -46,11 +54,11 @@ return;headId.removeChild(ttraceScript);ttraceScript=null;setTimeout(worker,0);}
 xhr.addEventListener("error",function(){setTimeout(worker,0);},false);xhr.onload=function(onloadEvent){var onloadRequest=onloadEvent.currentTarget;var script=onloadRequest.responseText;if(script.startsWith("ttrace.setClientID("))
 clientId=script.match(/\d+/)[0];setTimeout(worker,0);}
 xhr.open("GET",hostUrl,true);xhr.send();}
-function sendToClientUsingRequest(hostUrl)
-{request(hostUrl,function(error,response)
-{if(!error&&response.statusCode===200)
-{var script=response.body;if(script.startsWith("ttrace.setClientID("))
-clientId=script.match(/\d+/)[0];setTimeout(worker,0);}});setTimeout(worker,20000);}
+function sendToClientUsingHttp(hostUrl)
+{var req=http.get(hostUrl,function(response)
+{var body='';response.on('data',function(chunk){body+=chunk;});response.on('end',function()
+{if(body.startsWith("ttrace.setClientID("))
+clientId=body.match(/\d+/)[0];setTimeout(worker,0);});});req.on('error',function(){setTimeout(worker,0);});setTimeout(worker,20000);}
 function lTrim(str)
 {var k=0;while(k<str.length&&str.charAt(k)<=" ")k++;return str.substring(k,str.length);}
 function rTrim(str)
@@ -380,7 +388,7 @@ classGroup.add(e2);else
 classGroup.add(e2,e2.message);}},addCaller:function(level)
 {if(!this.enabled)
 return;var stack;var stackList;var stackLength;var callObj;var callName;level=level||0;var group=new traceClasses.MemberNode("Call stack").setFontDetail(0,true);group.viewerKind=4;this.members.add(group);if(isRequireJs)
-{stack=stackTrace.get(this.addCaller);stackLength=stack.length;for(let i=0;i<stackLength;i++)
+{stack=getCallStack(this.addCaller);stackLength=stack.length;for(let i=0;i<stackLength;i++)
 {callObj=stack[i];if(callObj.getFileName().includes("tracetool.js")===false)
 {if(level>0)
 level--;else{callName=callObj.toString();group.add(callName);return;}}}}else{stack=new Error().stack;stackList=stack.split('\n');stackLength=stackList.length;for(let i=0;i<stackLength;i++)
@@ -391,7 +399,7 @@ continue;if(callObj.startsWith("at "))
 level--;else{callName=callObj.substring(3);group.add(callName);return;}}}}},addStackTrace:function(level)
 {if(!this.enabled)
 return;level=level||0;var group=new traceClasses.MemberNode("Call stack").setFontDetail(0,true);group.viewerKind=4;this.members.add(group);var stack;var stackList;var stackLength;var callObj;var callName;if(isNodeJs)
-{stack=stackTrace.get(this.addStackTrace);stackLength=stack.length;for(let i=0;i<stackLength;i++)
+{stack=getCallStack(this.addStackTrace);stackLength=stack.length;for(let i=0;i<stackLength;i++)
 {callObj=stack[i];if(callObj.getFileName().includes("tracetool.js")===false)
 {if(level>0)
 level--;else{callName=callObj.toString();group.add(callName);}}}}else{stack=new Error().stack;stackList=stack.split('\n');stackLength=stackList.length;for(let i=0;i<stackLength;i++)

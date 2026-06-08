@@ -386,7 +386,7 @@ object FrmPageContainer: TFrmPageContainer
     end
     object actPrint: TAction
       Category = 'Edit'
-      Caption = 'actPrint'
+      Caption = 'Print'
       ImageIndex = 41
       ImageName = 'fluent-Print'
       ShortCut = 16464
@@ -394,7 +394,8 @@ object FrmPageContainer: TFrmPageContainer
     end
     object actInsert: TAction
       Category = 'Edit'
-      Caption = 'Toggle Theme'
+      Caption = 'Insert'
+      Hint = 'Insert manual line'
       ImageIndex = 42
       ImageName = 'add-text-line'
       OnExecute = actInsertExecute
@@ -524,7 +525,6 @@ object FrmPageContainer: TFrmPageContainer
       end
       object actPrint1: TMenuItem
         Action = actPrint
-        Caption = '&Print'
         GroupIndex = 1
         ShortCut = 49232
       end
