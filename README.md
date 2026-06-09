@@ -7,7 +7,7 @@
 # Tracetool
 ![Viewer](/GithubFiles/Server1.jpg)
 
-# What's new
+# What's new in version 15
 
 * Dark mode (click last button to switch)
 * 64 bits and 32 bits
