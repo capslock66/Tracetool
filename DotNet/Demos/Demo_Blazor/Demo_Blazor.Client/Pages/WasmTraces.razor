@@ -1,0 +1,36 @@
+﻿@page "/WasmTraces"
+@rendermode InteractiveWebAssembly
+@using TraceTool
+
+<PageTitle>WebAssembly traces</PageTitle>
+
+<h3>Current Render Mode: @RendererInfo.Name</h3>
+<p>Is Interactive? @RendererInfo.IsInteractive</p>
+
+<h1>Blazor WebAssembly traces</h1>
+
+<button class="btn btn-primary" @onclick="SimpleTraces">Simple traces</button>
+
+@code {
+
+    protected override void OnInitialized()
+    {
+        TTrace.Options.SendMode = SendMode.WebSocket;
+        TTrace.Options.UseWorkerThread = false; // Async communication for blazor client
+        TTrace.Options.SocketHost = "127.0.0.1";
+        TTrace.Options.SocketPort = 8091;  // important : use the plugin port (8091), not the viewer port (8090) 
+    }
+
+    private async Task SimpleTraces()
+    {
+        TTrace.Show(true);
+        TTrace.Debug.Send("trace from blazor web assembly", TTrace.Debug.GetType().Assembly.Location);
+        TTrace.Debug.Send($"Current time : {DateTime.Now} (Preview always return UTC time in preview)");
+        TTrace.Debug.SendValue("Value", TTrace.Debug);
+        TTrace.Debug.SendObject("Object", TTrace.Debug);
+
+        await TTrace.FlushAsync();   // give thread to the browser and wait for all message send
+        TTrace.Debug.Send("done").Show();
+    }
+
+}
