@@ -68,15 +68,14 @@ Chose one of these methods:
 - Winget: using a command prompt: **winget install Tracetool.Tracetool** \
 Installation path: Program files (x86)\Tracetool
 
-- Download and install the [Viewer 64 Setup](https://github.com/capslock66/Tracetool/releases/download/Viewer_15_0/Setup64.exe "Setup64.exe")\
+- Download and install the [Viewer 64 Setup](https://github.com/capslock66/Tracetool/releases/download/VIEWER_15_0/Setup64.exe "Setup64.exe")\
+Installation path: Program files (x86)\Tracetool.
+- Download and install the [Viewer 32 Setup](https://github.com/capslock66/Tracetool/releases/download/VIEWER_15_0/Setup32.exe "Setup32.exe")\
 Installation path: Program files (x86)\Tracetool.
 
-- Download and install the [Viewer 32 Setup](https://github.com/capslock66/Tracetool/releases/download/Viewer_15_0/Setup32.exe "Setup32.exe")\
-Installation path: Program files (x86)\Tracetool.
+- Download the [Viewer 64 bits Zip file](https://github.com/capslock66/Tracetool/archive/refs/tags/VIEWER_15_0./Viewer64.zip "Viewer64.zip") and unpack the file into a folder of your chose .
 
-- Download the [Viewer 64 bits Zip file](https://github.com/capslock66/Tracetool/archive/refs/tags/Viewer_15_0./Viewer64.zip "Viewer64.zip") and unpack the file into a folder of your chose .
-
-- Download the [Viewer 32 bits Zip file](https://github.com/capslock66/Tracetool/archive/refs/tags/Viewer_15_0./Viewer32.zip "Viewer32.zip") and unpack the file into a folder of your chose .
+- Download the [Viewer 32 bits Zip file](https://github.com/capslock66/Tracetool/archive/refs/tags/VIEWER_15_0./Viewer32.zip "Viewer32.zip") and unpack the file into a folder of your chose .
 
 If you plan to use the "windows message" mode, you must start once the viewer to self register his location into the registry. For socket mode, the viewer must always be started manually
 
