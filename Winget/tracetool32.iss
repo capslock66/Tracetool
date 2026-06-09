@@ -2,10 +2,10 @@
 
 [Setup]
 AppName=Tracetool
-AppVersion=14.0
+AppVersion=15.0
 DefaultDirName={commonpf}\Tracetool
 DefaultGroupName=Tracetool
-OutputBaseFilename=Setup
+OutputBaseFilename=Setup32
 Compression=lzma
 SolidCompression=yes
 OutputDir="..\GithubFiles"
@@ -15,9 +15,7 @@ Source: "..\Viewer\clientaccesspolicy.xml";     DestDir: "{app}";
 Source: "..\Viewer\crossdomain.xml";            DestDir: "{app}";
 Source: "..\Viewer\debug.bat";                  DestDir: "{app}";
 Source: "..\Viewer\DotNetWrapper.dll";          DestDir: "{app}";
-Source: "..\Viewer\DotNetWrapper64.dll";        DestDir: "{app}";
 Source: "..\Viewer\FastMM_FullDebugMode.dll";   DestDir: "{app}";
-Source: "..\Viewer\FastMM_FullDebugMode64.dll"; DestDir: "{app}";
 Source: "..\Viewer\TraceTool_Icon.png";         DestDir: "{app}";
 Source: "..\Viewer\TraceTool.exe";              DestDir: "{app}";
 Source: "..\Viewer\TracetoolConfig.xml";        DestDir: "{app}"; Flags: onlyifdoesntexist
