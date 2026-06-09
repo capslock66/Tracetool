@@ -68,7 +68,8 @@ Chose one of these methods:
 Installation path: Program files (x86)\Tracetool
 - Download and install the [Viewer Setup](https://github.com/capslock66/Tracetool/releases/download/Viewer_14_0/Setup.exe "Setup.exe")\
 Installation path: Program files (x86)\Tracetool.
-- Download the [Viewer Zip file](https://github.com/capslock66/Tracetool/archive/refs/tags/Viewer_14_0.zip "Viewer_14_0.zip") and unpack the file into a folder of your chose .
+- Download the [64 bits Viewer Zip file](https://github.com/capslock66/Tracetool/GithubFiles/Viewer64.zip "Viewer64.zip") and unpack the file into a folder of your chose .
+- Or download the [32 bits Viewer Zip file](https://github.com/capslock66/Tracetool/GithubFiles/Viewer32.zip "Viewer32.zip") and unpack the file into a folder of your chose .
 
 If you plan to use the "windows message" mode, you must start once the viewer to self register his location into the registry. For socket mode, the viewer must always be started manually
 
