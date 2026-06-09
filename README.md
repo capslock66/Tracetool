@@ -1,13 +1,4 @@
 <!--
-https://code.visualstudio.com/docs/languages/markdown
-
-Tip: You can also right-click on the editor Tab and select Open Preview (Ctrl+Shift+V) or use the Command Palette (Ctrl+Shift+P) to run the Markdown: Open Preview to the Side command (Ctrl+K V).
-
-https://guides.github.com/features/mastering-markdown/
-https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet
-
-https://www.codeproject.com/Articles/5498/TraceTool-The-Swiss-Army-Knife-of-Trace
-
 <a name="What-is-TraceTool"></a>
 <a name="Installation"></a>
 <a name="ClientAPI"></a>
@@ -15,6 +6,17 @@ https://www.codeproject.com/Articles/5498/TraceTool-The-Swiss-Army-Knife-of-Trac
 
 # Tracetool
 ![Viewer](/GithubFiles/Server1.jpg)
+
+# What's new
+
+* Dark mode (click last button to switch)
+* 64 bits and 32 bits
+* More modern toolbar icons
+* Option to move the trace type from the Traces column to the Level column
+* Add Claude plugin and Mcp server. \
+  See https://github.com/capslock66/tracetool-claude-plugin
+
+# Content
 
 * [What is TraceTool](#What-is-TraceTool "What is TraceTool")
 * [Viewer Installation](#Viewer-Installation "Installation")
@@ -131,11 +133,13 @@ TTrace.Options.SocketPort = 8090;
 
 See the [Samples](#Samples "Samples") section for more examples
 
-## Blazor client / server
+# Blazor 
 
-You can use tracetool on client site. Add a reference to Tracetool.DotNet.Api, specify websocket mode and async communication.
-Don't forget to enable plugin ! \
-Here is a simple razor page
+Add a reference to Tracetool.DotNet.Api as for normal dotnet project
+
+## Client site (web assembly)
+Web assembly can't use classic socket. The viewer has a plugin that can receive web socket call\
+On that mode, tou have to specify the plugin port and set the UseWorkerThread to false :
 
 ``` c#
 @page "/"
@@ -150,25 +154,55 @@ Here is a simple razor page
 
     protected override void OnInitialized()
     {
-        TTrace.Options.SendMode = SendMode.WebSocket;
-        TTrace.Options.UseWorkerThread = false; // Async communication for blazor client
         TTrace.Options.SocketHost = "127.0.0.1";
-        TTrace.Options.SocketPort = 8091;
+        TTrace.Options.UseWorkerThread = false;         // Wasm mode : no multi threading
+        TTrace.Options.SendMode = SendMode.WebSocket;   // Wasm mode : use web socket
+        TTrace.Options.SocketPort = 8091;               // Wasm mode : use the plugin port (8091), not the viewer port (8090)
     }
 
-    private async void SimpleTraces()
+    private async Task SimpleTraces()
     {
-
-        TTrace.Debug.Send($"trace from blazor client");
+        TTrace.Debug.Send("trace from blazor web assembly", TTrace.Debug.GetType().Assembly.Location);
+        TTrace.Debug.Send($"Current time : {DateTime.Now} (Preview always return UTC time in preview)");
+        await Task.Delay(100);
         TTrace.Debug.SendValue("Value", TTrace.Debug);
         TTrace.Debug.SendObject("Object", TTrace.Debug);
+        await TTrace.FlushAsync();   // give thread to the browser and wait for all message send
+        TTrace.Debug.Send("done").Show();
+    }
+```
+## Server site 
 
-        // not necessary to flush. If you don't need to wait for traces, just remove the "async" before SimpleTraces()
+Work as a normal dotnet project\
+Use the server port (8090) and set UseWorkerThread to true :
+
+``` c#
+
+@code {
+
+    protected override void OnInitialized()
+    {
+        TTrace.Options.SocketHost = "127.0.0.1";
+        TTrace.Options.UseWorkerThread = true;          // Server site mode : multi threading
+        TTrace.Options.SendMode = SendMode.Socket;      // Server site mode : use classic socket mode
+        TTrace.Options.SocketPort = 8090;               // Server site mode : use the viewer port (8090) not the plugin port (8091)
+    }
+
+    private async Task SimpleTraces()
+    {
+        TTrace.Debug.Send("trace from blazor server site", TTrace.Debug.GetType().Assembly.Location);
+        TTrace.Debug.Send($"Current time : {DateTime.Now} (Preview always return UTC time in preview)");
+        await Task.Delay(100);
+        TTrace.Debug.SendValue("Value", TTrace.Debug);
+        TTrace.Debug.SendObject("Object", TTrace.Debug);
         await TTrace.FlushAsync();   // wait for all message send
+        TTrace.Debug.Send("done").Show();
     }
 ```
 
-Here is the result:
+Here is the result of both client and server site.
+For Wasm, the Thread id is always 1.\
+For server site, the thread id can have multiple values (0x16 and 0x17 here)
 
 ![blazor](/GithubFiles/Blazor.png)
 
@@ -215,7 +249,7 @@ The node package contains typings tracetool.d.ts for typescript
 <script type="text/javascript" src="tracetool.js" no-cache></script>
 ...
 <script>
-ttrace.host="localHost:85";
+ttrace.host="localHost:81";
 
 function butSample()
 {
@@ -246,7 +280,7 @@ app.component.ts
 ``` Typescript
 import '@tracetool/webpack';   // import once. ttrace is saved in global
 
-ttrace.host = "127.0.0.1:85";  // Must be done once
+ttrace.host = "127.0.0.1:81";  // Must be done once
 
 ...
 
@@ -265,7 +299,7 @@ example.js
 "use strict";
 
 const ttrace = require('tracetool');    // default host is 127.0.0.1:81
-ttrace.host = "127.0.0.1:85";
+ttrace.host = "127.0.0.1:81";
 
 ttrace.debug.send("Hello", "world");
 ```

@@ -15,20 +15,19 @@
 
     protected override void OnInitialized()
     {
-        TTrace.Options.SendMode = SendMode.WebSocket;
-        TTrace.Options.UseWorkerThread = false; // Async communication for blazor client
         TTrace.Options.SocketHost = "127.0.0.1";
-        TTrace.Options.SocketPort = 8091;  // important : use the plugin port (8091), not the viewer port (8090) 
+        TTrace.Options.UseWorkerThread = false;         // Wasm mode : no multi threading
+        TTrace.Options.SendMode = SendMode.WebSocket;   // Wasm mode : use web socket
+        TTrace.Options.SocketPort = 8091;               // Wasm mode : use the plugin port (8091), not the viewer port (8090)
     }
 
     private async Task SimpleTraces()
     {
-        TTrace.Show(true);
         TTrace.Debug.Send("trace from blazor web assembly", TTrace.Debug.GetType().Assembly.Location);
         TTrace.Debug.Send($"Current time : {DateTime.Now} (Preview always return UTC time in preview)");
+        await Task.Delay(100);
         TTrace.Debug.SendValue("Value", TTrace.Debug);
         TTrace.Debug.SendObject("Object", TTrace.Debug);
-
         await TTrace.FlushAsync();   // give thread to the browser and wait for all message send
         TTrace.Debug.Send("done").Show();
     }
