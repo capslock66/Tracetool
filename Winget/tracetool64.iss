@@ -8,7 +8,7 @@ DefaultGroupName=Tracetool
 OutputBaseFilename=Setup64
 Compression=lzma
 SolidCompression=yes
-OutputDir="..\GithubFiles"
+OutputDir="..\Dist"
 
 [Files]
 Source: "..\Viewer\clientaccesspolicy.xml";     DestDir: "{app}";

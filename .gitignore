@@ -336,7 +336,6 @@ NodeJs/Sample/typings/
 *.dll
 *.tlb
 
-!GithubFiles/Setup.exe
 
 !Viewer/*
 !viewer/WebSock/*.*
@@ -348,3 +347,4 @@ Viewer/TraceTool.rsm
 Viewer32/
 Viewer64/
 Viewer/TraceTool.exe
+Dist/

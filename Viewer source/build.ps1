@@ -161,12 +161,14 @@ $content = $content -replace '(<Top\s+Value=")[^"]*(")', '${1}200${2}'
 Add-Type -AssemblyName System.IO.Compression.FileSystem
 
 $viewerDir  = Join-Path $PSScriptRoot '..\Viewer'
-$githubDir  = Join-Path $PSScriptRoot '..\GithubFiles'
+$distDir    = Join-Path $PSScriptRoot '..\Dist'
 $zipName    = if ($Platform -eq 'Win64') { 'Viewer64.zip' } else { 'Viewer32.zip' }
-$zipPath    = Join-Path $githubDir $zipName
+$zipPath    = Join-Path $distDir $zipName
+
+if (-not (Test-Path $distDir)) { New-Item -ItemType Directory -Path $distDir | Out-Null }
 
 Write-Host ""
-Write-Host "Creating $zipName in GithubFiles\"
+Write-Host "Creating $zipName in Dist\"
 
 if (Test-Path $zipPath) { Remove-Item $zipPath -Force }
 
@@ -219,7 +221,7 @@ if (Test-Path $webSockDir) {
 }
 
 $zip.Dispose()
-Write-Host "$zipName created -> GithubFiles\"
+Write-Host "$zipName created -> Dist\"
 
 # --------------------------------------------------------------------------
 # 8. Package with Inno Setup 6
@@ -268,5 +270,36 @@ if (-not $iscc) {
         Write-Error "Inno Setup FAILED (exit code $LASTEXITCODE)"
         exit $LASTEXITCODE
     }
-    Write-Host "Installer created -> ..\GithubFiles\"
+    Write-Host "Installer created -> ..\Dist\"
+}
+
+# --------------------------------------------------------------------------
+# 9. Upload assets to the latest GitHub release
+# --------------------------------------------------------------------------
+$latestTag = gh release list --limit 1 --json tagName --jq '.[0].tagName' 2>$null
+if (-not $latestTag) {
+    Write-Warning "Could not determine latest GitHub release — skipping upload."
+} else {
+    Write-Host ""
+    Write-Host "Uploading assets to GitHub release '$latestTag'"
+
+    $suffix = if ($Platform -eq 'Win64') { '64' } else { '32' }
+    $assets = @(
+        Join-Path $distDir "Viewer$suffix.zip"
+        Join-Path $distDir "Setup$suffix.exe"
+    )
+
+    foreach ($asset in $assets) {
+        if (Test-Path $asset) {
+            Write-Host "  -> $asset"
+            gh release upload $latestTag $asset --clobber
+            if ($LASTEXITCODE -ne 0) {
+                Write-Error "Upload failed for $asset (exit $LASTEXITCODE)"
+                exit $LASTEXITCODE
+            }
+        } else {
+            Write-Warning "  Asset not found, skipping: $asset"
+        }
+    }
+    Write-Host "Assets uploaded to release '$latestTag'"
 }
