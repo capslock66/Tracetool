@@ -1,6 +1,6 @@
 {
   "name": "@tracetool/webpack",
-  "version": "15.0.0",
+  "version": "15.0.1",
   "description": "Webpack version ",
   "main": "lib/tracetool",
   "typings": "lib/tracetool.d.ts",
