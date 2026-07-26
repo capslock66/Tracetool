@@ -1413,16 +1413,13 @@ namespace TraceTool
                 if (endPoint == null)
                     return;
 
-                try
-                {
-                    await _socket.ConnectAsync(endPoint);
-                }
-                catch (Exception ex)
+                SocketError connectError = await ConnectSocketNoThrowAsync(_socket, endPoint);
+                if (connectError != SocketError.Success)
                 {
                     _socket = null; // force recreate socket
                     _isSocketError = true;
                     _errorTime = DateTime.Now.Ticks;
-                    _lastError = ex.Message;         // for debug purpose
+                    _lastError = connectError.ToString();         // for debug purpose
                     return;
                 }
 
@@ -1517,16 +1514,13 @@ namespace TraceTool
                 if (endPoint == null)
                     return;
 
-                try
-                {
-                    _socket.Connect(endPoint);    // Sync
-                }
-                catch (Exception ex)
+                SocketError connectError = ConnectSocketNoThrow(_socket, endPoint);    // Sync
+                if (connectError != SocketError.Success)
                 {
                     _socket = null; // force recreate socket
                     _isSocketError = true;
                     _errorTime = DateTime.Now.Ticks;
-                    _lastError = ex.Message;         // for debug purpose
+                    _lastError = connectError.ToString();         // for debug purpose
                     return;
                 }
 
@@ -1544,6 +1538,51 @@ namespace TraceTool
                 _lastError = ex.Message;         // for debug purpose
             }
         } // SendToSocketSync function
+
+        //------------------------------------------------------------------------------
+        // Low level SocketAsyncEventArgs based connect : never throws on failure,
+        // the result is only reported through SocketAsyncEventArgs.SocketError.
+        // This avoids the cost of throwing/catching a SocketException on connection failure.
+
+        private static SocketError ConnectSocketNoThrow(Socket socket, EndPoint endPoint)
+        {
+            void OnConnectCompleted(object sender, SocketAsyncEventArgs socketAsyncEventArgs)
+            {
+                ((ManualResetEventSlim)socketAsyncEventArgs.UserToken).Set();
+            }
+
+            ManualResetEventSlim manualResetEvent = new ManualResetEventSlim(false);
+            SocketAsyncEventArgs saArgs = new SocketAsyncEventArgs { RemoteEndPoint = endPoint, UserToken = manualResetEvent };
+            saArgs.Completed += OnConnectCompleted;
+
+            if (socket.ConnectAsync(saArgs))
+                manualResetEvent.Wait();  // pending : wait for the Completed event
+
+            SocketError result = saArgs.SocketError;
+            saArgs.Dispose();   // not async mode, socketAsyncEventArgs can be disposed directly
+            manualResetEvent.Dispose(); 
+            return result;
+        }
+
+        private static Task<SocketError> ConnectSocketNoThrowAsync(Socket socket, EndPoint endPoint)
+        {
+            TaskCompletionSource<SocketError> tcs = new TaskCompletionSource<SocketError>(TaskCreationOptions.RunContinuationsAsynchronously);
+            SocketAsyncEventArgs saArgs = new SocketAsyncEventArgs { RemoteEndPoint = endPoint };
+            saArgs.Completed += (sender, socketAsyncEventArgs) =>
+            {
+                tcs.TrySetResult(socketAsyncEventArgs.SocketError);
+                socketAsyncEventArgs.Dispose();  // on async mode, dispose socketAsyncEventArgs when the operation is completed
+            };
+
+            if (!socket.ConnectAsync(saArgs))
+            {
+                // completed synchronously : the Completed event is not raised
+                SocketError result = saArgs.SocketError;
+                saArgs.Dispose();   // dispose now in case of error. the args will be disposed in the Completed event if the operation is pending
+                tcs.TrySetResult(result);
+            }
+            return tcs.Task;
+        }
 
         //------------------------------------------------------------------------------
         internal static InternalWinTrace GetInternalTraceForm(string traceWinId, bool doCreate)
