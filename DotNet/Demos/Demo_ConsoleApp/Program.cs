@@ -98,7 +98,10 @@ foreach (var counter in new[] { 0, 1, 2, 3, 4, 5 })
         {
             await Task.Delay(500);
             TTrace.Debug.Send("under Indent B [3], after Async Delay() then another thread is possible");
-            await TTrace.FlushAsync();
+            if (TTrace.Options.UseWorkerThread)
+                TTrace.Flush();
+            else
+                await TTrace.FlushAsync();
         });
     else
         TTrace.Debug.Send($"under Indent B : [{counter}]").Show();
